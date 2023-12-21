@@ -16,23 +16,26 @@ class LinkStreamModel {
   int? totalFollower;
   String? username;
   String? title;
+  String? email;
 
-  LinkStreamModel(
-      {this.status,
-      this.userId,
-      this.expireTime,
-      this.startLive,
-      this.urlStream,
-      this.urlIngest,
-      this.createAt,
-      this.sId,
-      this.avatar,
-      this.interest,
-      this.totalView,
-      this.totalLike,
-      this.totalFollower,
-      this.username,
-      this.title});
+  LinkStreamModel({
+    this.status,
+    this.userId,
+    this.expireTime,
+    this.startLive,
+    this.urlStream,
+    this.urlIngest,
+    this.createAt,
+    this.sId,
+    this.avatar,
+    this.interest,
+    this.totalView,
+    this.totalLike,
+    this.totalFollower,
+    this.username,
+    this.title,
+    this.email,
+  });
 
   LinkStreamModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -51,5 +54,6 @@ class LinkStreamModel {
     totalFollower = json['totalFollower'];
     username = json['username'];
     title = json['title'];
+    email = json['email'];
   }
 }

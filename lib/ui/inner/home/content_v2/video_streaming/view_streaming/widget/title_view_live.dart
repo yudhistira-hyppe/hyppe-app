@@ -11,7 +11,6 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -34,7 +33,7 @@ class TitleViewLive extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(flex: 2, child: leftTitle(tn)),
+          Expanded(flex: 2, child: leftTitle(context, tn)),
           sixteenPx,
           Expanded(flex: 2, child: rightTitle(context)),
         ],
@@ -42,20 +41,25 @@ class TitleViewLive extends StatelessWidget {
     ));
   }
 
-  Widget leftTitle(LocalizationModelV2 tn) {
+  Widget leftTitle(BuildContext context, LocalizationModelV2 tn) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CustomProfileImage(
-          cacheKey: data.avatar?.imageKey,
-          following: true,
-          forStory: false,
-          width: 36 * SizeConfig.scaleDiagonal,
-          height: 36 * SizeConfig.scaleDiagonal,
-          imageUrl: System().showUserPicture(data.avatar?.mediaEndpoint ?? ''),
-          // badge: notifier.user.profile?.urluserBadge,
-          allwaysUseBadgePadding: false,
+        GestureDetector(
+          onTap: () {
+            ShowBottomSheet.onWatcherStatus(context, data.email ?? '', data.sId ?? '');
+          },
+          child: CustomProfileImage(
+            cacheKey: data.avatar?.imageKey,
+            following: true,
+            forStory: false,
+            width: 36 * SizeConfig.scaleDiagonal,
+            height: 36 * SizeConfig.scaleDiagonal,
+            imageUrl: System().showUserPicture(data.avatar?.mediaEndpoint ?? ''),
+            // badge: notifier.user.profile?.urluserBadge,
+            allwaysUseBadgePadding: false,
+          ),
         ),
         sixPx,
         Expanded(
@@ -113,6 +117,7 @@ class TitleViewLive extends StatelessWidget {
             print('testing see views');
             final ref = context.read<StreamerNotifier>();
             ref.dataStream = data;
+            print('testing see views ${ref.dataStream}');
             ShowBottomSheet.onStreamWatchersStatus(context, ref);
           },
           child: Container(

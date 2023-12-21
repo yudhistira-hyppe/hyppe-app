@@ -37,7 +37,7 @@ class ListCommentLive extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             GestureDetector(
-                              onTap: () => ShowBottomSheet.onWatcherStatus(context, notifier.comment[index].email ?? ''),
+                              onTap: () => ShowBottomSheet.onWatcherStatus(context, notifier.comment[index].email ?? '', notifier.dataStream.sId ?? ''),
                               child: CustomProfileImage(
                                 cacheKey: '',
                                 following: true,

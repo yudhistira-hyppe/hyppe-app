@@ -16,6 +16,7 @@ import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/love_lottie.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/love_lottie.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/pauseLive.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/title_view_live.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/viewer_comment.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -235,6 +236,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
           case FlutterAvpdef.AVPStatus_AVPStatusError:
             WakelockPlus.disable();
             break;
+
           default:
         }
       } catch (e) {
@@ -470,6 +472,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                     width: SizeConfig.screenWidth,
                   ),
                 ),
+                if (isPause) const PauseLiveView(),
                 Positioned.fill(
                   bottom: -90,
                   right: 10,
@@ -640,6 +643,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                     right: 16,
                     child: ViewerComment(
                       commentFocusNode: commentFocusNode,
+                      data: widget.args.data,
                     ))
               ],
             ),

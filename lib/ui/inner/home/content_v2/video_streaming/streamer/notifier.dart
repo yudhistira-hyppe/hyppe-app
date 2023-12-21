@@ -95,6 +95,7 @@ class StreamerNotifier with ChangeNotifier {
   String _titleLive = '';
   String get titleLive => _titleLive;
   String pushURL = "rtmp://ingest.hyppe.cloud/Hyppe/hdstream?auth_key=1700732018-0-0-580e7fb4d21585a87315470a335513c1";
+
   ///Status => Offline - Prepare - StandBy - Ready - Online
   StatusStream statusLive = StatusStream.offline;
 
@@ -711,13 +712,19 @@ class StreamerNotifier with ChangeNotifier {
     }
   }
 
-  Future getViewer(BuildContext context, mounted, {String? idStream, bool end = false}) async {
+  Future getViewer(BuildContext context, mounted, {String? idStream, bool end = false, bool isMore = false}) async {
     if (pageViewers == 0) isloadingViewers = true;
     notifyListeners();
     bool connect = await System().checkConnections();
     if (connect) {
       try {
         final notifier = LiveStreamBloc();
+        if (!isMore) {
+          pageViewers = 0;
+          dataViewers = [];
+          notifyListeners();
+        }
+
         Map data = {
           "_id": idStream ?? dataStream.sId,
           "page": pageViewers,
@@ -755,7 +762,7 @@ class StreamerNotifier with ChangeNotifier {
       isloadingViewersMore = true;
       notifyListeners();
       pageViewers++;
-      await getViewer(context, mounted, idStream: idStream);
+      await getViewer(context, mounted, idStream: idStream, isMore: true);
       isloadingViewersMore = false;
       notifyListeners();
     }
@@ -806,7 +813,7 @@ class StreamerNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future followUser(BuildContext context, email, {isUnFollow = false}) async {
+  Future followUser(BuildContext context, email, {isUnFollow = false, String? idMediaStreaming}) async {
     try {
       // _system.actionReqiredIdCard(
       //   context,
@@ -819,6 +826,7 @@ class StreamerNotifier with ChangeNotifier {
         data: FollowUserArgument(
           receiverParty: email ?? '',
           eventType: isUnFollow ? InteractiveEventType.unfollow : InteractiveEventType.following,
+          idMediaStreaming: idMediaStreaming,
         ),
       );
       final fetch = notifier.followFetch;
