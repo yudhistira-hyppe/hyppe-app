@@ -47,3 +47,15 @@ class CountViewLiveModel {
     viewCount = json['viewCount'];
   }
 }
+
+class StatusStreamLiveModel {
+  String? idStream;
+  bool? pause;
+
+  StatusStreamLiveModel({this.idStream, this.pause});
+
+  StatusStreamLiveModel.fromJson(Map<String, dynamic> json) {
+    idStream = json['idStream'];
+    pause = json['pause'];
+  }
+}

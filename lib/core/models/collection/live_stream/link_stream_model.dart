@@ -46,7 +46,7 @@ class LinkStreamModel {
     urlIngest = json['urlIngest'];
     createAt = json['createAt'];
     sId = json['_id'];
-    avatar = UserProfileAvatarModel.fromJson(json['avatar']);
+    avatar = json['avatar'] != null ? UserProfileAvatarModel.fromJson(json['avatar']) : null;
 
     interest = json['interest'];
     totalView = json['totalView'];

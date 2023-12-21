@@ -89,7 +89,7 @@ class FormCommentLive extends StatelessWidget {
                   child: IconButtonLive(
                       widget: const RotationTransition(
                         turns: AlwaysStoppedAnimation(90 / 360),
-                        child: CustomIconWidget(iconData: "${AssetPath.vectorPath}more.svg", color: Colors.white, defaultColor: false),
+                        child: Align(alignment: Alignment.center, child: CustomIconWidget(width: 24, iconData: "${AssetPath.vectorPath}more.svg", color: Colors.white, defaultColor: false)),
                       ),
                       onPressed: () {
                         ShowBottomSheet.onStreamingOptions(context, notifier);

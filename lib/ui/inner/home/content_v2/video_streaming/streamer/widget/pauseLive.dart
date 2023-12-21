@@ -74,7 +74,7 @@ class PauseLive extends StatelessWidget {
                     sixteenPx,
                     CustomTextButton(
                       onPressed: () {
-                        context.read<StreamerNotifier>().resumeLive();
+                        context.read<StreamerNotifier>().resumeLive(context);
                       },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(kHyppePrimary),

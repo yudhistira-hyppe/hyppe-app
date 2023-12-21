@@ -70,8 +70,10 @@ class _PhotoEditorScreenState extends State<PhotoEditorScreen> {
           child: Scaffold(
             backgroundColor: kHyppeBackground,
             body: Column(
+              mainAxisSize: MainAxisSize.max,
               children: [
                 EditPhotoTopWidget(notifier: notifier, paintKey: paintKey),
+                
                 EditPhotoBodyWidget(notifier: notifier, paintKey: paintKey),
                 Stack(children: [
                   EditPhotoCollectionWidget(notifier: notifier),
@@ -101,8 +103,9 @@ class EditPhotoTopWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
+    return Container(
+      padding: const EdgeInsets.only(top: 32.0, left: 8.0, right: 8.0),
+      height: kToolbarHeight * 1.5,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,

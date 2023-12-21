@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/models/collection/live_stream/streaming_model.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
@@ -39,8 +40,11 @@ class ViewStreamingNotifier with ChangeNotifier {
   static const String eventViewStream = 'VIEW_STREAM';
   static const String eventLikeStream = 'LIKE_STREAM';
   static const String eventCommentDisable = 'COMMENT_STREAM_DISABLED';
+  static const String eventStatusStream = 'STATUS_STREAM';
 
   String userName = '';
+
+  StreamingModel dataStreaming = StreamingModel();
 
   ///Status => Offline - Prepare - StandBy - Ready - Online
   StatusStream statusLive = StatusStream.offline;
@@ -65,6 +69,13 @@ class ViewStreamingNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _isClicked = false;
+  bool get isClicked => _isClicked;
+  set isClicked(bool state) {
+    _isClicked = state;
+    notifyListeners();
+  }
+
   List<LinkStreamModel> _listStreamers = [];
   List<LinkStreamModel> get listStreamers => _listStreamers;
   set listStreamers(List<LinkStreamModel> data) {
@@ -83,6 +94,7 @@ class ViewStreamingNotifier with ChangeNotifier {
     totLikes = data.totalLike ?? 0;
     totViews = data.totalView ?? 0;
     streamerData = data;
+    isOver = false;
   }
 
   sendComment(BuildContext context, LinkStreamModel model, String comment) async {
@@ -129,11 +141,10 @@ class ViewStreamingNotifier with ChangeNotifier {
 
   List<String> likeList = [];
 
-  bool _notYet = true;
-  bool get notYet => _notYet;
-  set notYet(bool state) {
-    _notYet = state;
-    notifyListeners();
+  bool _isOver = false;
+  bool get isOver => _isOver;
+  set isOver(bool state) {
+    _isOver = state;
   }
 
   bool _now = true;
@@ -253,6 +264,7 @@ class ViewStreamingNotifier with ChangeNotifier {
         }
         final fetch = notifier.liveStreamFetch;
         if (fetch.postsState == LiveStreamState.getApiSuccess) {
+          dataStreaming = StreamingModel.fromJson(fetch.data);
           returnNext = true;
         }
       } catch (e) {
@@ -314,6 +326,7 @@ class ViewStreamingNotifier with ChangeNotifier {
       _connectAndListenToSocket(eventComment, data);
       _connectAndListenToSocket(eventLikeStream, data);
       _connectAndListenToSocket(eventViewStream, data);
+      _connectAndListenToSocket(eventStatusStream, data);
 
       // _alivcLivePusher.startPushWithURL(pushURL);
     } else {
@@ -382,7 +395,13 @@ class ViewStreamingNotifier with ChangeNotifier {
       if (messages.idStream == dataStream.sId) {
         totViews = messages.viewCount ?? 0;
       }
+    } else if (event == eventStatusStream) {
+      var messages = StatusStreamLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
+      if (messages.idStream == dataStream.sId) {
+        dataStreaming.pause = messages.pause;
+      }
     }
+
     notifyListeners();
   }
 

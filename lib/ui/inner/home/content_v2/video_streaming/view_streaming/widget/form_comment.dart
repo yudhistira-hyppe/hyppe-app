@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
-import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
-import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/iconButton.dart';
 import 'package:provider/provider.dart';
@@ -89,13 +85,16 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                   child: IconButtonLive(
                       widget: Align(
                         alignment: Alignment.center,
-                        child: const CustomIconWidget(
-                          iconData: "${AssetPath.vectorPath}ic_like_stroke.svg",
-                          color: Colors.white,
+                        child: CustomIconWidget(
+                          iconData: "${AssetPath.vectorPath}${notifier.isClicked ? 'ic_like_red.svg' : 'ic_like_stroke.svg'}",
+                          // color: Colors.white,
                           defaultColor: false,
                           height: 24,
                         ),
                       ),
+                      onClicked: (state) {
+                        notifier.isClicked = state;
+                      },
                       onPressed: () {
                         notifier.likeAdd();
                         _debouncer.run(() {

@@ -6,7 +6,6 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:provider/provider.dart';
 
@@ -34,15 +33,18 @@ class PauseLiveView extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      tn.liveBroadcastIsPausedViewersCannotCurrentlySeeYou ?? 'Siaran LIVE dijeda, penonton saat ini tidak dapat melihatmu',
+                      'Siaran LIVE dijeda',
+                      // tn.liveBroadcastIsPausedViewersCannotCurrentlySeeYou ?? 'Siaran LIVE dijeda, penonton saat ini tidak dapat melihatmu',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
                       ),
                       textAlign: TextAlign.center,
                     ),
+                    sixteenPx,
                     Text(
-                      tn.theLiveBroadcastWillEndAfterTheCountdown ?? 'Siaran LIVE akan berakhir setelah hitung mundur',
+                      'Host akan segera kembali',
+                      // tn.theLiveBroadcastWillEndAfterTheCountdown ?? 'Siaran LIVE akan berakhir setelah hitung mundur',
                       style: const TextStyle(
                         color: kHyppeBurem,
                         fontSize: 16,
@@ -50,24 +52,6 @@ class PauseLiveView extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                     sixteenPx,
-                    CustomTextButton(
-                      onPressed: () {
-                        context.read<StreamerNotifier>().resumeLive();
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(kHyppePrimary),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 48),
-                        child: Text(
-                          tn.continueLive ?? 'Lanjutkan LIVE',
-                          style: const TextStyle(
-                            color: kHyppeTextPrimary,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),

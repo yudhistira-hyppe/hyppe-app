@@ -472,6 +472,7 @@ class StreamerNotifier with ChangeNotifier {
     timeReady = 3;
     totLikes = 0;
     totViews = 0;
+    totPause = 0;
     pageViewers = 0;
     rowViewers = 10;
     isloadingPreview = true;
@@ -564,17 +565,25 @@ class StreamerNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> pauseLive() async {
-    mute = true;
-    _alivcLivePusher.pause();
-    totPause++;
-    notifyListeners();
+  Future<void> pauseLive(BuildContext context, mounted) async {
+    var pause = await pauseSendStatus(context);
+    if (pause) {
+      mute = true;
+      _alivcLivePusher.setMute(true);
+      _alivcLivePusher.pause();
+      totPause++;
+      notifyListeners();
+    }
   }
 
-  Future<void> resumeLive() async {
-    mute = false;
-    _alivcLivePusher.resume();
-    notifyListeners();
+  Future<void> resumeLive(BuildContext context) async {
+    var pause = await pauseSendStatus(context);
+    if (pause) {
+      mute = false;
+      _alivcLivePusher.resume();
+      _alivcLivePusher.setMute(false);
+      notifyListeners();
+    }
   }
 
   int x = 0;
@@ -598,7 +607,7 @@ class StreamerNotifier with ChangeNotifier {
       WakelockPlus.enable();
 
       if (inactivityTimer != null) inactivityTimer?.cancel();
-      inactivityTimer = Timer(const Duration(seconds: 10), () {
+      inactivityTimer = Timer(const Duration(seconds: 3300), () {
         ShowGeneralDialog.generalDialog(
           Routing.navigatorKey.currentContext,
           titleText: tn?.liveBroadcastRemaining5Minutes ?? '',
@@ -615,6 +624,39 @@ class StreamerNotifier with ChangeNotifier {
         );
       });
     });
+  }
+
+  Future pauseSendStatus(BuildContext context) async {
+    print("hahahahah -------==== = = =");
+    bool returnNext = false;
+    bool connect = await System().checkConnections();
+
+    if (connect) {
+      try {
+        final notifier = LiveStreamBloc();
+        Map data = {"_id": dataStream.sId, "type": "PAUSE"};
+
+        await notifier.getLinkStream(context, data, UrlConstants.updateStream);
+
+        final fetch = notifier.liveStreamFetch;
+        if (fetch.postsState == LiveStreamState.getApiSuccess) {
+          returnNext = true;
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+
+      notifyListeners();
+    } else {
+      returnNext = false;
+      if (context.mounted) {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
+          pauseSendStatus(context);
+        });
+      }
+    }
+    return returnNext;
   }
 
   Future stopStream(BuildContext context, mounted) async {
