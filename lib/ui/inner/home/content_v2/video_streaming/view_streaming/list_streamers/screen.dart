@@ -29,16 +29,29 @@ class _ListStreamersScreenState extends State<ListStreamersScreen>
     with TickerProviderStateMixin, AfterFirstLayoutMixin {
   late AnimationController _controller;
 
+  final scrollController = ScrollController();
+
   @override
   void initState() {
-    Routing.navigatorKey.currentContext
-        ?.read<ViewStreamingNotifier>()
-        .initListStreamers();
+    final notifier = Routing.navigatorKey.currentContext
+        ?.read<ViewStreamingNotifier>();
+    notifier?.initListStreamers();
     super.initState();
     _controller = AnimationController(vsync: this);
     _controller.addListener(() {
       if (_controller.isCompleted) {
         _controller.reset();
+      }
+    });
+    scrollController.addListener(() {
+      if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange){
+        if(notifier != null){
+          if(notifier.listStreamers.length % 20 == 0){
+            notifier.getListStreamers(context, mounted, isReload: false);
+          }
+        }
+
+
       }
     });
   }
@@ -114,6 +127,7 @@ class _ListStreamersScreenState extends State<ListStreamersScreen>
                     await notifier.getListStreamers(context, mounted);
                   },
                   child: SingleChildScrollView(
+                    controller: scrollController,
                     physics: const AlwaysScrollableScrollPhysics(),
                     child: notifier.listStreamers.isEmpty && !notifier.loading
                         ? Container(
@@ -152,7 +166,7 @@ class _ListStreamersScreenState extends State<ListStreamersScreen>
                               ],
                             ))
                         : Wrap(
-                            children: List.generate(
+                            children: [...List.generate(
                                 notifier.loading
                                     ? 10
                                     : notifier.listStreamers.length, (index) {
@@ -517,7 +531,12 @@ class _ListStreamersScreenState extends State<ListStreamersScreen>
                                   );
                                 }
                               }
-                            }),
+                            }),...[if(notifier.loadMore && !notifier.stopLoad) Container(
+                              width: double.infinity,
+                              height: 50,
+                              alignment: Alignment.center,
+                              child: const CustomLoading(),
+                            )]],
                           ),
                   ),
                 ),
