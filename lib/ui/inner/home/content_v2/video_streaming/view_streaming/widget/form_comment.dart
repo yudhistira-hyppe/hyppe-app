@@ -63,8 +63,10 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                         : Positioned.fill(
                             top: 0,
                             child: Align(
-                                alignment: Alignment.topRight,
-                                child: Padding(
+                                alignment: Alignment.centerRight,
+                                child: Container(
+                                  height: 24,
+                                  width: 75,
                                   padding: const EdgeInsets.only(right: 8.0),
                                   child: CustomTextButton(
                                       onPressed: () {
@@ -72,7 +74,10 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                                           setState(() {
                                             comment = '';
                                           });
-                                          notifier.sendComment(context, notifier.streamerData!, notifier.commentController.text);
+                                          if(notifier.commentController.text.isNotEmpty){
+                                            notifier.sendComment(context, notifier.streamerData!, notifier.commentController.text);
+                                          }
+
                                         }
                                       },
                                       style: ButtonStyle(
@@ -102,7 +107,7 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                         alignment: Alignment.center,
                         child: CustomIconWidget(
                           iconData: "${AssetPath.vectorPath}${notifier.isClicked ? 'ic_like_red.svg' : 'ic_like_stroke.svg'}",
-                          // color: Colors.white,
+                          color: notifier.isClicked ? null : Colors.white,
                           defaultColor: false,
                           height: 24,
                         ),

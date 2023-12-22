@@ -15,6 +15,7 @@ class LinkStreamModel {
   int? totalLike;
   int? totalFollower;
   String? username;
+  String? fullName;
   String? title;
   String? email;
 
@@ -33,6 +34,7 @@ class LinkStreamModel {
     this.totalLike,
     this.totalFollower,
     this.username,
+    this.fullName,
     this.title,
     this.email,
   });
@@ -53,6 +55,7 @@ class LinkStreamModel {
     totalLike = json['totalLike'];
     totalFollower = json['totalFollower'];
     username = json['username'];
+    fullName = json['fullName'];
     title = json['title'];
     email = json['email'];
   }

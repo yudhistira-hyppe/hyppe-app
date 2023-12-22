@@ -446,6 +446,7 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
         isDiary: contentDiary >= 1,
         isPict: contentPict >= 1,
         isVid: contentVid >= 1,
+        isLive: false
       );
     } else {
       MakeContentNotifier mn = context.read<MakeContentNotifier>();

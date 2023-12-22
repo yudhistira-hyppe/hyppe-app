@@ -7,13 +7,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
 import 'package:hyppe/core/arguments/view_streaming_argument.dart';
-import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
-import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
-import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
-import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/love_lottie.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/love_lottie.dart';
@@ -27,13 +23,12 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../../../../app.dart';
 import '../../../../../../core/config/ali_config.dart';
+import '../../../../../../core/constants/asset_path.dart';
 import '../../../../../../core/constants/shared_preference_keys.dart';
-import '../../../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../../../core/services/shared_preference.dart';
 import '../../../../../../core/services/system.dart';
-import '../../../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import '../../../../../constant/widget/custom_icon_widget.dart';
 import '../../../../../constant/widget/custom_loading.dart';
-import '../../../../../constant/widget/custom_profile_image.dart';
 import '../../../../../constant/widget/custom_spacer.dart';
 import '../../../../../constant/widget/custom_text_widget.dart';
 
@@ -500,7 +495,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                             onTap: () {
                               Routing().moveBack();
                             },
-                            child: const Padding(
+                            child: Padding(
                               padding: EdgeInsets.only(right: 30.0),
                               child: CustomIconWidget(
                                 iconData: "${AssetPath.vectorPath}close.svg",
@@ -517,7 +512,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             CustomTextWidget(
-                              textToDisplay: 'Siaran LIVE telah berakhir',
+                              textToDisplay: notifier.language.liveStreamingIsOver ?? '',
                               textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                             ),
                             twelvePx,

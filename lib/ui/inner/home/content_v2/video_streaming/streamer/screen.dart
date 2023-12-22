@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_livepush_plugin/live_pusher_preview.dart';
+import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
+import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/beforelive.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/love_lottie.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/pauseLive.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/streamer.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
 
@@ -146,7 +149,27 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
                       ),
                     ),
                     notifier.isloadingPreview
-                        ? SizedBox(height: SizeConfig.screenHeight, child: const Center(child: CustomLoading()))
+                        ? SizedBox(
+                            height: SizeConfig.screenHeight,
+                            child: Stack(
+                              children: [
+                                const Center(child: CustomLoading()),
+                                Align(
+                                  alignment: Alignment.topRight,
+                                  child: SafeArea(
+                                    child: CustomIconButtonWidget(
+                                      padding: EdgeInsets.all(0),
+                                      alignment: Alignment.center,
+                                      iconData: "${AssetPath.vectorPath}close.svg",
+                                      defaultColor: false,
+                                      onPressed: () {
+                                        Routing().moveBack();
+                                      },
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ))
                         : notifier.statusLive == StatusStream.offline
                             ? BeforeLive(mounted: mounted)
                             : notifier.statusLive == StatusStream.prepare

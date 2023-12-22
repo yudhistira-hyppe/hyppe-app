@@ -81,7 +81,7 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
               textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w700, color: kHyppeBurem),
             ),
             sixteenPx,
-            ItemAccount(urlImage: System().showUserPicture(widget.notifier?.dataStream.avatar?.mediaEndpoint ?? '') ?? '', username: widget.notifier?.dataStream.userId ?? '', name: widget.notifier?.dataStream.username ?? ''),
+            ItemAccount(urlImage: System().showUserPicture(widget.notifier?.dataStream.avatar?.mediaEndpoint ?? '') ?? '', username: widget.notifier?.dataStream.fullName ?? '', name: widget.notifier?.dataStream.username ?? ''),
             eightPx,
             CustomTextWidget(
               textAlign: TextAlign.left,

@@ -36,7 +36,8 @@ class HomeAppBar extends StatelessWidget {
       nameTitle = nameTitle.substring(0, 15);
     }
     String helloName = nameTitle;
-    helloName = helloName == '' ? '' : System().capitalizeFirstLetter(helloName);
+    helloName =
+        helloName == '' ? '' : System().capitalizeFirstLetter(helloName);
     SizeConfig().init(context);
     return AppBar(
       centerTitle: false,
@@ -44,9 +45,18 @@ class HomeAppBar extends StatelessWidget {
       backgroundColor: Colors.white,
       actions: [
         // Doku(),
-        CustomIconButtonWidget(iconData: '${AssetPath.vectorPath}ic_live_streaming.svg', onPressed: (){
-          Routing().move(Routes.listStreamers);
-        }),
+        GestureDetector(
+            onTap: () {
+              Routing().move(Routes.listStreamers);
+            },
+            child: CustomIconWidget(
+              width: 30,
+                height: 30,
+                defaultColor: false,
+                iconData: '${AssetPath.vectorPath}ic_live_streaming.svg')),
+        // CustomIconButtonWidget(iconData: '${AssetPath.vectorPath}ic_live_streaming.svg', onPressed: (){
+        //   Routing().move(Routes.listStreamers);
+        // }),
         sixteenPx,
         Consumer<MainNotifier>(builder: (context, notifier, _) {
           final isReceived = notifier.receivedMsg;
@@ -56,8 +66,13 @@ class HomeAppBar extends StatelessWidget {
               notifier.receivedMsg = false;
             },
             child: isReceived
-                ? CustomIconWidget(defaultColor: false, iconData: '${AssetPath.vectorPath}message_with_dot.svg')
-                : CustomIconWidget(defaultColor: false, color: kHyppeTextLightPrimary, iconData: '${AssetPath.vectorPath}message.svg'),
+                ? CustomIconWidget(
+                    defaultColor: false,
+                    iconData: '${AssetPath.vectorPath}message_with_dot.svg')
+                : CustomIconWidget(
+                    defaultColor: false,
+                    color: kHyppeTextLightPrimary,
+                    iconData: '${AssetPath.vectorPath}message.svg'),
           );
         }),
         // Profile(),
@@ -68,7 +83,10 @@ class HomeAppBar extends StatelessWidget {
           ? Text(
               // "$offset",
               "Halo, $helloName! ",
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+              style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w700,
+                  color: kHyppeTextLightPrimary),
             )
           : const CustomIconWidget(
               iconData: "${AssetPath.vectorPath}hyppe.svg",

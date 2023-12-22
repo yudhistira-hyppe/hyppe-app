@@ -63,6 +63,13 @@ class ViewStreamingNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _loadMore = false;
+  bool get loadMore => _loadMore;
+  set loadMore(bool state){
+    _loadMore = state;
+    notifyListeners();
+  }
+
   bool _isCommentDisable = false;
   bool get isCommentDisable => _isCommentDisable;
   set isCommentDisable(bool state) {
@@ -89,6 +96,9 @@ class ViewStreamingNotifier with ChangeNotifier {
   initListStreamers() {
     _loading = true;
     _listStreamers = [];
+    _page = 0;
+    stopLoad = false;
+    _loadMore = false;
   }
 
   initViewStreaming(LinkStreamModel data) {
@@ -190,23 +200,50 @@ class ViewStreamingNotifier with ChangeNotifier {
     }
   }
 
+  int _page = 0;
+  int get page => _page;
+  set page(int state){
+    _page = state;
+    notifyListeners();
+  }
+
+  bool stopLoad = false;
+
   Future getListStreamers(BuildContext context, mounted, {bool isReload = true}) async {
-    loading = true;
+    if(isReload){
+      loading = true;
+    }else{
+      loadMore = true;
+    }
     bool connect = await System().checkConnections();
     if (isReload) {
       listStreamers = [];
+      page = 0;
+    }else{
+      page += 1;
     }
 
     if (connect) {
       try {
         final notifier = LiveStreamBloc();
-        Map data = {"page": 0, "limit": 20};
+        Map data = {"page": page, "limit": 20};
         if (mounted) {
           await notifier.getLinkStream(context, data, UrlConstants.listLiveStreaming);
         }
         final fetch = notifier.liveStreamFetch;
         if (fetch.postsState == LiveStreamState.getApiSuccess) {
-          fetch.data.forEach((v) => listStreamers.add(LinkStreamModel.fromJson(v)));
+          final List<LinkStreamModel> tempList = [];
+
+          fetch.data.forEach((v) => tempList.add(LinkStreamModel.fromJson(v)));
+          if(tempList.isNotEmpty){
+            listStreamers.addAll(tempList);
+          }else{
+            if(!isReload){
+              stopLoad = true;
+              notifyListeners();
+            }
+          }
+
           notifyListeners();
         }
       } catch (e) {
@@ -220,7 +257,11 @@ class ViewStreamingNotifier with ChangeNotifier {
         });
       }
     }
-    loading = false;
+    if(isReload){
+      loading = false;
+    }else{
+      loadMore = false;
+    }
   }
 
   Future exitStreaming(BuildContext context, LinkStreamModel model) async {
