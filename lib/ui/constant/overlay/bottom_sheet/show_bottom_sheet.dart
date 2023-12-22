@@ -263,6 +263,7 @@ class ShowBottomSheet {
     bool isPict = true,
     bool isDiary = true,
     bool isVid = true,
+        bool isLive = true,
   }) async {
     await showModalBottomSheet(
       context: context,
@@ -301,6 +302,7 @@ class ShowBottomSheet {
                       isPict: isPict,
                       isStory: isStory,
                       isVid: isVid,
+                      isLive: isLive,
                     ),
                   ],
                 );

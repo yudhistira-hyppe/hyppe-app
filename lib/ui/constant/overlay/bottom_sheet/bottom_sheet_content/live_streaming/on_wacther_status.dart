@@ -86,17 +86,23 @@ class _OnWatcherStatusState extends State<OnWatcherStatus> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            WatcherStatusItem(
-                              value: System().formatterNumber((notifier.audienceProfile.insight?.posts ?? 0).toInt()),
-                              title: language.post ?? '',
+                            Flexible(
+                              child: WatcherStatusItem(
+                                value: System().formatterNumber((notifier.audienceProfile.insight?.posts ?? 0).toInt()),
+                                title: language.posts ?? '',
+                              ),
                             ),
-                            WatcherStatusItem(
-                              value: System().formatterNumber((notifier.audienceProfile.insight?.followers ?? 0).toInt()),
-                              title: language.follower ?? '',
+                            Flexible(
+                              child: WatcherStatusItem(
+                                value: System().formatterNumber((notifier.audienceProfile.insight?.followers ?? 0).toInt()),
+                                title: language.follower ?? '',
+                              ),
                             ),
-                            WatcherStatusItem(
-                              value: System().formatterNumber((notifier.audienceProfile.insight?.followings ?? 0).toInt()),
-                              title: language.following ?? '',
+                            Flexible(
+                              child: WatcherStatusItem(
+                                value: System().formatterNumber((notifier.audienceProfile.insight?.followings ?? 0).toInt()),
+                                title: language.following ?? '',
+                              ),
                             ),
                           ],
                         ),

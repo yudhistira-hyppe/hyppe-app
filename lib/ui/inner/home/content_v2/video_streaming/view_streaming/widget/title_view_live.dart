@@ -67,7 +67,7 @@ class TitleViewLive extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                data.username ?? '',
+                (data.title?.isNotEmpty ?? false) ? (data.title ?? '') : (data.username ?? ''),
                 style: const TextStyle(
                   color: kHyppeTextPrimary,
                   fontWeight: FontWeight.w700,
@@ -88,6 +88,9 @@ class TitleViewLive extends StatelessWidget {
         GestureDetector(
           onTap: () {
             // ShowBottomSheet.onStreamWatchersStatus(context, notifier);
+            final ref = context.read<StreamerNotifier>();
+            ref.dataStream = data;
+            ShowBottomSheet.onStreamWatchersStatus(context, ref);
           },
           child: const Icon(
             Icons.keyboard_arrow_down,

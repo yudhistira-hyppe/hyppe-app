@@ -512,7 +512,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             CustomTextWidget(
-                              textToDisplay: 'Siaran LIVE telah berakhir',
+                              textToDisplay: notifier.language.liveStreamingIsOver ?? '',
                               textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                             ),
                             twelvePx,
