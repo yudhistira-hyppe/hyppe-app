@@ -1,0 +1,9 @@
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by ISS013602000846 on 2023/4/6.
+  
+*/
+"NSCameraUsageDescription" = "需要使用摄像头进行拍摄视频与直播";
+"NSMicrophoneUsageDescription" = "需要使用麦克风进行拍摄视频与直播";

@@ -185,25 +185,25 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
                     if (notifier.isPause) PauseLive(notifier: notifier),
                     if (notifier.statusLive == StatusStream.ready || notifier.statusLive == StatusStream.online) StreamerWidget(commentFocusNode: commentFocusNode),
                     // StreamerWidget(commentFocusNode: commentFocusNode),
-                    Align(
-                      alignment: Alignment.center,
-                      child: GestureDetector(
-                        onTap: () {
-                          notifier.zoom();
-                          // a++;
-                          // _debouncer.run(() {
-                          //   print(a);
-                          //   a = 0;
-                          // });
-                        }, //doesnt work
-                        onPanDown: (details) => print('tdgreen'),
-                        child: Container(
-                          height: 100,
-                          width: 100,
-                          color: Colors.red,
-                        ),
-                      ),
-                    ),
+                    // Align(
+                    //   alignment: Alignment.center,
+                    //   child: GestureDetector(
+                    //     onTap: () {
+                    //       notifier.zoom();
+                    //       // a++;
+                    //       // _debouncer.run(() {
+                    //       //   print(a);
+                    //       //   a = 0;
+                    //       // });
+                    //     }, //doesnt work
+                    //     onPanDown: (details) => print('tdgreen'),
+                    //     child: Container(
+                    //       height: 100,
+                    //       width: 100,
+                    //       color: Colors.red,
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
           onWillPop: () async {

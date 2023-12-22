@@ -126,6 +126,7 @@ class StreamerNotifier with ChangeNotifier {
   Future<void> init(BuildContext context, mounted) async {
     // final isGranted = await System().requestPermission(context, permissions: [Permission.camera, Permission.microphone]);
     isloading = true;
+    isloadingPreview = true;
     notifyListeners();
     // _setPageOrientation(action, ctx);
     _alivcBase = AlivcBase.init();
