@@ -1086,6 +1086,7 @@ class LocalizationModelV2 {
   String? emptyStreamers;
   String? messageEmptyStreamers;
   String? liveStreamingIsOver;
+  String? allowComments;
 
   LocalizationModelV2({
     this.login,
@@ -2175,6 +2176,7 @@ class LocalizationModelV2 {
     this.emptyStreamers,
     this.messageEmptyStreamers,
     this.liveStreamingIsOver,
+    this.allowComments,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -3283,5 +3285,6 @@ class LocalizationModelV2 {
     emptyStreamers = json['emptyStreamers'];
     messageEmptyStreamers = json['messageEmptyStreamers'];
     liveStreamingIsOver = json['liveStreamingIsOver'];
+    allowComments = json['allowComments'];
   }
 }

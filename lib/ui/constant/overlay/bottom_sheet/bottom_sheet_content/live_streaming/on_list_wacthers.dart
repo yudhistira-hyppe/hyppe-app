@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/live_stream/viewers_live_model.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/constant/widget/custom_gesture.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:provider/provider.dart';
@@ -100,7 +102,7 @@ class _OnListWatchersState extends State<OnListWatchers> {
             width: 36,
             height: 36,
             following: true,
-            imageUrl: watcher.avatar?.mediaEndpoint,
+            imageUrl: System().showUserPicture(watcher.avatar?.mediaEndpoint),
           ),
           twelvePx,
           Expanded(
@@ -124,25 +126,25 @@ class _OnListWatchersState extends State<OnListWatchers> {
               ],
             ),
           ),
-          // tenPx,
-          // CustomGesture(
-          //   margin: EdgeInsets.zero,
-          //   onTap: () {},
-          //   child: Container(
-          //     width: 86,
-          //     height: 24,
-          //     decoration: BoxDecoration(
-          //       borderRadius: BorderRadius.circular(8),
-          //       color: watcher.isFollowing ? context.getColorScheme().primary.withOpacity(0.85) : kHyppeBurem.withOpacity(0.25),
-          //     ),
-          //     alignment: Alignment.center,
-          //     child: CustomTextWidget(
-          //       textToDisplay: !watcher.isFollowing ? (language.following ?? '') : (language.follow ?? ''),
-          //       textAlign: TextAlign.center,
-          //       textStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: watcher.isFollowing ? Colors.white : Colors.black),
-          //     ),
-          //   ),
-          // )
+          tenPx,
+          CustomGesture(
+            margin: EdgeInsets.zero,
+            onTap: () {},
+            child: Container(
+              width: 86,
+              height: 24,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                // color: watcher.isFollowing ? context.getColorScheme().primary.withOpacity(0.85) : kHyppeBurem.withOpacity(0.25),
+              ),
+              alignment: Alignment.center,
+              // child: CustomTextWidget(
+              //   textToDisplay: !watcher.isFollowing ? (language.following ?? '') : (language.follow ?? ''),
+              //   textAlign: TextAlign.center,
+              //   textStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: watcher.isFollowing ? Colors.white : Colors.black),
+              // ),
+            ),
+          )
         ],
       ),
     );

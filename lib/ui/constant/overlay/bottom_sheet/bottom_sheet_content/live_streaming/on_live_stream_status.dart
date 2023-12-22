@@ -4,6 +4,7 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:provider/provider.dart';
@@ -71,7 +72,7 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
             const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
             sixteenPx,
             CustomTextWidget(
-              textToDisplay: "${isIndo ? language.liveVideo : ''}${widget.notifier?.dataStream.username}${!isIndo ? language.liveVideo : ''}",
+              textToDisplay: "${isIndo ? language.liveVideo : ''} ${notifier.userName} ${!isIndo ? language.liveVideo : ''}",
               textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700),
             ),
             sixteenPx,
@@ -81,7 +82,10 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
               textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w700, color: kHyppeBurem),
             ),
             sixteenPx,
-            ItemAccount(urlImage: System().showUserPicture(widget.notifier?.dataStream.avatar?.mediaEndpoint ?? '') ?? '', username: widget.notifier?.dataStream.fullName ?? '', name: widget.notifier?.dataStream.username ?? ''),
+            ItemAccount(
+                urlImage: (context.read<SelfProfileNotifier>().user.profile?.avatar?.mediaEndpoint) ?? '',
+                username: widget.notifier?.userName ?? '',
+                name: context.read<SelfProfileNotifier>().user.profile?.fullName ?? ''),
             eightPx,
             CustomTextWidget(
               textAlign: TextAlign.left,

@@ -9,9 +9,7 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/feedback/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:provider/provider.dart';
-
 import '../../../../../../core/constants/asset_path.dart';
 import '../../../../../../ux/routing.dart';
 import '../../../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
@@ -59,7 +57,7 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                 eightPx,
                 CustomTextWidget(
                   textToDisplay:
-                      '${System().dateFormatter(DateTime.now().toString(), 3)} • ${language.duration} ${widget.arguments?.duration.inHours} : ${widget.arguments?.duration.inMinutes} : ${widget.arguments?.duration.inSeconds}',
+                      '${System().dateFormatter(DateTime.now().toString(), 3)} • ${language.duration} ${widget.arguments?.duration.inMinutes} : ${(widget.arguments?.duration.inSeconds ?? 0) % 60}',
                   textStyle: const TextStyle(fontSize: 12, color: kHyppeBurem),
                 ),
                 twentyPx,

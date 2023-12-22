@@ -10,8 +10,22 @@ class StreamingModel {
   String? createAt;
   String? endLive;
   bool? pause;
+  bool? commentDisabled;
 
-  StreamingModel({this.sId, this.title, this.userId, this.expireTime, this.startLive, this.status, this.urlStream, this.urlIngest, this.createAt, this.endLive, this.pause});
+  StreamingModel({
+    this.sId,
+    this.title,
+    this.userId,
+    this.expireTime,
+    this.startLive,
+    this.status,
+    this.urlStream,
+    this.urlIngest,
+    this.createAt,
+    this.endLive,
+    this.pause,
+    this.commentDisabled,
+  });
 
   StreamingModel.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -25,5 +39,6 @@ class StreamingModel {
     createAt = json['createAt'];
     endLive = json['endLive'];
     pause = json['pause'];
+    commentDisabled = json['commentDisabled'];
   }
 }

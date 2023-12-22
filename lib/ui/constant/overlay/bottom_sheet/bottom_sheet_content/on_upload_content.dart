@@ -1,6 +1,5 @@
 import 'package:flutter_livepush_plugin/live_base.dart';
 import 'package:flutter_livepush_plugin/live_push_config.dart';
-import 'package:flutter_livepush_plugin/live_push_def.dart';
 import 'package:flutter_livepush_plugin/live_pusher.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -47,9 +46,9 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
   GlobalKey keybutton = GlobalKey();
   String newUser = '';
 
-  late AlivcBase _alivcBase;
-  late AlivcLivePusher _alivcLivePusher;
-  late AlivcLivePusherConfig _alivcLivePusherConfig;
+  // late AlivcBase _alivcBase;
+  // late AlivcLivePusher _alivcLivePusher;
+  // late AlivcLivePusherConfig _alivcLivePusherConfig;
   bool isCreator = false;
 
   @override
@@ -70,8 +69,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
   }
 
   Future<void> _initPush() async {
-    context.read<StreamerNotifier>().init(context);
-    print("init init init");
+    context.read<StreamerNotifier>().init(context, mounted);
     // _alivcBase = AlivcBase.init();
     // _alivcBase.registerSDK();
     // _alivcBase.setObserver();
@@ -117,10 +115,10 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
               targetPadding: const EdgeInsets.only(bottom: -40),
               tooltipPosition: TooltipPosition.top,
               title: tn.comeoncreatecontentnow,
-              titleTextStyle: TextStyle(fontSize: 12, color: kHyppeNotConnect),
-              titlePadding: EdgeInsets.all(6),
+              titleTextStyle: const TextStyle(fontSize: 12, color: kHyppeNotConnect),
+              titlePadding: const EdgeInsets.all(6),
               description: tn.tutorLanding6,
-              descTextStyle: TextStyle(fontSize: 10, color: kHyppeNotConnect),
+              descTextStyle: const TextStyle(fontSize: 10, color: kHyppeNotConnect),
               descriptionPadding: EdgeInsets.all(6),
               textColor: Colors.white,
               targetShapeBorder: const CircleBorder(),
@@ -164,7 +162,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                         },
                         child: Text(
                           tn.understand ?? '',
-                          style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                          style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
                         ))
                   ],
                 ),

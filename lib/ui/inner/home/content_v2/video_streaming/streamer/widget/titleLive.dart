@@ -36,7 +36,7 @@ class TitleLive extends StatelessWidget {
                 allwaysUseBadgePadding: false,
               ),
               sixPx,
-              Expanded(
+              Flexible(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

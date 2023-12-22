@@ -63,3 +63,15 @@ class StatusStreamLiveModel {
     status = json['status'];
   }
 }
+
+class StatusCommentLiveModel {
+  String? idStream;
+  bool? comment;
+
+  StatusCommentLiveModel({this.idStream, this.comment});
+
+  StatusCommentLiveModel.fromJson(Map<String, dynamic> json) {
+    idStream = json['idStream'];
+    comment = json['comment'];
+  }
+}

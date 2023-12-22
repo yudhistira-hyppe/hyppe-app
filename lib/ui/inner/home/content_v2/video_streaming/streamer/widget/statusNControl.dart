@@ -22,7 +22,7 @@ class StatusNControl extends StatelessWidget {
       builder: (_, notifier, __) => Expanded(
         flex: 2,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
@@ -33,31 +33,34 @@ class StatusNControl extends StatelessWidget {
                 style: TextStyle(color: kHyppeTextPrimary, wordSpacing: 10),
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                ShowBottomSheet.onStreamWatchersStatus(context, notifier);
-              },
-              child: Container(
-                width: 50 * SizeConfig.scaleDiagonal,
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                decoration: BoxDecoration(color: kHyppeTransparent, borderRadius: BorderRadius.circular(3)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.remove_red_eye_outlined,
-                      color: kHyppeTextPrimary,
-                      size: 12,
-                    ),
-                    sixPx,
-                    Text(
-                      '${notifier.totViews}',
-                      style: const TextStyle(color: kHyppeTextPrimary, fontSize: 10, fontWeight: FontWeight.w700),
-                    ),
-                  ],
+            sixPx,
+            if (notifier.totViews > 0)
+              GestureDetector(
+                onTap: () {
+                  ShowBottomSheet.onStreamWatchersStatus(context, notifier);
+                },
+                child: Container(
+                  width: 50 * SizeConfig.scaleDiagonal,
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                  decoration: BoxDecoration(color: kHyppeTransparent, borderRadius: BorderRadius.circular(3)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.remove_red_eye_outlined,
+                        color: kHyppeTextPrimary,
+                        size: 12,
+                      ),
+                      sixPx,
+                      Text(
+                        '${notifier.totViews}',
+                        style: const TextStyle(color: kHyppeTextPrimary, fontSize: 10, fontWeight: FontWeight.w700),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
+            sixPx,
             Column(
               children: [
                 IconButtonLive(
