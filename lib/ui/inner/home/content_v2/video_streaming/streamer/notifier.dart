@@ -115,7 +115,8 @@ class StreamerNotifier with ChangeNotifier {
   LocalizationModelV2? tn;
 
   Future<void> init(BuildContext context) async {
-    // final isGranted = await System().requestPermission(context, permissions: [Permission.camera, Permission.microphone]);
+    try{
+      // final isGranted = await System().requestPermission(context, permissions: [Permission.camera, Permission.microphone]);
     isloading = true;
     notifyListeners();
     // _setPageOrientation(action, ctx);
@@ -136,6 +137,9 @@ class StreamerNotifier with ChangeNotifier {
     isloading = false;
     notifyListeners();
     tn = context.read<TranslateNotifierV2>().translate;
+    }catch(_){
+      print('Error $_');
+    }
   }
 
   Future requestPermission(BuildContext context) async {
