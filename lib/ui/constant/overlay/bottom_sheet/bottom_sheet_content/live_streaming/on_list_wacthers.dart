@@ -15,6 +15,7 @@ import '../../../../../../ux/routing.dart';
 import '../../../../widget/custom_profile_image.dart';
 import '../../../../widget/custom_spacer.dart';
 import '../../../../widget/icon_button_widget.dart';
+import '../../show_bottom_sheet.dart';
 
 class OnListWatchers extends StatefulWidget {
   const OnListWatchers({super.key});
@@ -98,53 +99,44 @@ class _OnListWatchersState extends State<OnListWatchers> {
             textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
           ),
           sixteenPx,
-          CustomProfileImage(
-            width: 36,
-            height: 36,
-            following: true,
-            imageUrl: System().showUserPicture(watcher.avatar?.mediaEndpoint),
-          ),
-          twelvePx,
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomTextWidget(
-                  textAlign: TextAlign.left,
-                  textToDisplay: watcher.username ?? '',
-                  textStyle: context.getTextTheme().bodyText2?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
-                ),
-                fourPx,
-                CustomTextWidget(
-                  textAlign: TextAlign.left,
-                  textToDisplay: watcher.fullName ?? '',
-                  textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w400, color: kHyppeBurem),
-                ),
-              ],
-            ),
-          ),
-          tenPx,
-          CustomGesture(
-            margin: EdgeInsets.zero,
-            onTap: () {},
-            child: Container(
-              width: 86,
-              height: 24,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                // color: watcher.isFollowing ? context.getColorScheme().primary.withOpacity(0.85) : kHyppeBurem.withOpacity(0.25),
+          Flexible(
+            child: InkWell(
+              onTap: () => ShowBottomSheet.onWatcherStatus(context, watcher.email ?? '', watcher.sId ?? ''),
+              child: Row(
+                children: [
+                  CustomProfileImage(
+                    width: 36,
+                    height: 36,
+                    following: true,
+                    imageUrl: System().showUserPicture(watcher.avatar?.mediaEndpoint),
+                  ),
+                  twelvePx,
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomTextWidget(
+                          textAlign: TextAlign.left,
+                          textToDisplay: watcher.username ?? '',
+                          textStyle: context.getTextTheme().bodyText2?.copyWith(
+                                fontWeight: FontWeight.w700,
+                              ),
+                        ),
+                        fourPx,
+                        CustomTextWidget(
+                          textAlign: TextAlign.left,
+                          textToDisplay: watcher.fullName ?? '',
+                          textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w400, color: kHyppeBurem),
+                        ),
+                      ],
+                    ),
+                  ),
+                  tenPx
+                ],
               ),
-              alignment: Alignment.center,
-              // child: CustomTextWidget(
-              //   textToDisplay: !watcher.isFollowing ? (language.following ?? '') : (language.follow ?? ''),
-              //   textAlign: TextAlign.center,
-              //   textStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: watcher.isFollowing ? Colors.white : Colors.black),
-              // ),
             ),
-          )
+          ),
         ],
       ),
     );

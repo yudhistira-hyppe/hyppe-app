@@ -28,11 +28,15 @@ class FormCommentLive extends StatelessWidget {
                   child: TextFormField(
                     focusNode: commentFocusNode,
                     controller: notifier.commentCtrl,
+                    maxLength: 150,
                     keyboardType: TextInputType.text,
                     style: const TextStyle(color: Colors.white),
                     cursorColor: Colors.white,
                     enabled: !notifier.isCommentDisable,
+                    onChanged: (val) =>
+                      notifier.sendComment(),
                     decoration: InputDecoration(
+                        counterText: '',
                         hintText: notifier.isCommentDisable ? tn.commentsAreDisabled : tn.addComment,
                         isDense: true, // important line
                         contentPadding: EdgeInsets.fromLTRB(10, 10, commentFocusNode!.hasFocus ? 70 : 10, 10), // control your hints text size
@@ -46,7 +50,7 @@ class FormCommentLive extends StatelessWidget {
                 ),
                 !commentFocusNode!.hasFocus
                     ? Container()
-                    : Positioned.fill(
+                    : !notifier.isSendComment ? const SizedBox.shrink() : Positioned.fill(
                         top: 0,
                         child: Align(
                             alignment: Alignment.topRight,

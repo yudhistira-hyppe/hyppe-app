@@ -60,7 +60,7 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                     ? Container()
                     : comment == ''
                         ? Container()
-                        : Positioned.fill(
+                        : RegExp(r"\s\b|\b").hasMatch(comment) ? Positioned.fill(
                             top: 0,
                             child: Align(
                                 alignment: Alignment.centerRight,
@@ -93,7 +93,7 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                                         style: TextStyle(color: kHyppeTextPrimary),
                                       )),
                                 )),
-                          ),
+                          ): const SizedBox.shrink(),
               ],
             ),
           ),

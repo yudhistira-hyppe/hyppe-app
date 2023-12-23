@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -37,7 +38,11 @@ class ListCommentLive extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             GestureDetector(
-                              onTap: () => ShowBottomSheet.onWatcherStatus(context, notifier.comment[index].email ?? '', notifier.dataStream.sId ?? ''),
+                              onTap: () {
+                                if (notifier.userName != notifier.comment[index].username) {
+                                   ShowBottomSheet.onWatcherStatus(context, notifier.comment[index].email ?? '', notifier.dataStream.sId ?? '');
+                                }
+                              },
                               child: CustomProfileImage(
                                 cacheKey: '',
                                 following: true,

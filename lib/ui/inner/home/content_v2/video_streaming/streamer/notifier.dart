@@ -87,6 +87,7 @@ class StreamerNotifier with ChangeNotifier {
   bool isPause = false;
   bool isCommentDisable = false;
   bool isCancel = false;
+  bool isSendComment = false;
 
   FocusNode titleFocusNode = FocusNode();
   TextEditingController titleLiveCtrl = TextEditingController();
@@ -472,6 +473,11 @@ class StreamerNotifier with ChangeNotifier {
     inactivityTimer = null;
   }
 
+  //Comment Empty or Witespase 
+  void sendComment() {
+    isSendComment =  RegExp(r"\s\b|\b").hasMatch(commentCtrl.text) ? true : false;
+    notifyListeners();
+  }
   void flipCamera() {
     _alivcLivePusher.switchCamera();
   }

@@ -110,17 +110,19 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                     border: Border.all(color: kHyppeBorderTab),
                     borderRadius: BorderRadius.circular(3),
                   ),
-                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                  child: InkWell(
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                      onTap: () {
+                        ShowBottomSheet.onListOfWatcher(context);
+                      },
+                    child:  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                     CustomTextWidget(
                       textToDisplay: language.viewerList ?? 'List Penonton',
                       textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                    CustomGesture(
-                      margin: EdgeInsets.zero,
-                      onTap: () {
-                        ShowBottomSheet.onListOfWatcher(context);
-                      },
-                      child: CustomTextWidget(
+                    
+                    CustomTextWidget(
                         textToDisplay: widget.arguments?.data.totalViews.toString() ?? '0',
                         textStyle: TextStyle(
                           fontSize: 16,
@@ -128,8 +130,8 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                           color: context.getColorScheme().primary,
                         ),
                       ),
-                    ),
                   ]),
+                  ),
                 ),
                 twelvePx,
                 Container(

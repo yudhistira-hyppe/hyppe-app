@@ -114,11 +114,11 @@ class _OnWatcherStatusState extends State<OnWatcherStatus> {
                         buttonStyle: ButtonStyle(
                           backgroundColor: (notifier.statusFollowing == StatusFollowing.requested || notifier.statusFollowing == StatusFollowing.following)
                               ? null
-                              : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                              : (notifier.userName == notifier.audienceProfile.username) ? null : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                         ),
                         function: notifier.isCheckLoading
                             ? null
-                            : () {
+                            : (notifier.userName == notifier.audienceProfile.username) ? null :() {
                                 if (notifier.statusFollowing == StatusFollowing.none || notifier.statusFollowing == StatusFollowing.rejected) {
                                   notifier.followUser(context, widget.email, idMediaStreaming: widget.idMediaStreaming);
                                 } else if (notifier.statusFollowing == StatusFollowing.following) {
