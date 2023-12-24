@@ -94,24 +94,42 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
             ),
             eightPx,
             Expanded(
-              child: notifier.isloadingViewers
-                  ? const SizedBox(height: 10, child: Align(alignment: Alignment.topCenter, child: Padding(padding: EdgeInsets.only(top: 60), child: const CustomLoading())))
-                  : ListView.builder(
-                      controller: controller,
-                      itemCount: notifier.dataViewers.length,
-                      itemBuilder: (context, index) {
-                        final watcher = notifier.dataViewers[index];
-                        return ItemAccount(
-                          urlImage: watcher.avatar?.mediaEndpoint ?? '',
-                          name: watcher.fullName ?? '',
-                          username: watcher.username ?? '',
-                          isHost: false,
-                          index: index,
-                          length: notifier.dataViewers.length,
-                          isloading: notifier.isloadingViewersMore,
-                        );
-                      },
+              child: Column(
+                children: [
+                  Expanded(
+                    child: notifier.isloadingViewers
+                        ? const SizedBox(height: 10, child: Align(alignment: Alignment.topCenter, child: Padding(padding: EdgeInsets.only(top: 60), child: const CustomLoading())))
+                        : ListView.builder(
+                            controller: controller,
+                            itemCount: notifier.dataViewers.length,
+                            itemBuilder: (context, index) {
+                              final watcher = notifier.dataViewers[index];
+                              return ItemAccount(
+                                urlImage: watcher.avatar?.mediaEndpoint ?? '',
+                                name: watcher.fullName ?? '',
+                                username: watcher.username ?? '',
+                                isHost: false,
+                                index: index,
+                                length: notifier.dataViewers.length,
+                                isloading: notifier.isloadingViewersMore,
+                              );
+                            },
+                          ),
+                  ),
+                  Visibility(
+                    visible: notifier.dataViewers.length > 99,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
+                      child: CustomTextWidget(
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        textToDisplay: language.noteShowView99??'Menampilkan 99 penonton teratas yang peringkatnya diaktifkan',
+                        textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w400, color: kHyppeBurem),
+                      ),
                     ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

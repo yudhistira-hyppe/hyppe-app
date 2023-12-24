@@ -1087,5 +1087,6 @@
   "emptyStreamers": "Zero LIVE energy right now",
   "messageEmptyStreamers": "Let's inject some buzz. Go LIVE and light it up!",
   "liveStreamingIsOver": "LIVE has ended",
-  "allowComments": "Enable Comments"
+  "allowComments": "Enable Comments",
+  "noteShowView99": "Displays the top 99 viewers whose ratings are enabled"
 }
