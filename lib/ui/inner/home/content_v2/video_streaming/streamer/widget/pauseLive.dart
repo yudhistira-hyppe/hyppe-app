@@ -11,7 +11,8 @@ import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier
 import 'package:provider/provider.dart';
 
 class PauseLive extends StatelessWidget {
-  const PauseLive({super.key});
+  final StreamerNotifier notifier;
+  const PauseLive({super.key, required this.notifier});
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +75,9 @@ class PauseLive extends StatelessWidget {
                     sixteenPx,
                     CustomTextButton(
                       onPressed: () {
-                        context.read<StreamerNotifier>().resumeLive(context);
+                        if (!notifier.isloadingButton) {
+                          context.read<StreamerNotifier>().resumeLive(context);
+                        }
                       },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(kHyppePrimary),

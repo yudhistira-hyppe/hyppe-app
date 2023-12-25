@@ -70,21 +70,21 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
   }
 
   Future<void> _initPush() async {
-    context.read<StreamerNotifier>().init(context);
-    print("init init init");
-    // _alivcBase = AlivcBase.init();
-    // _alivcBase.registerSDK();
-    // _alivcBase.setObserver();
-    // _alivcBase.setOnLicenceCheck((result, reason) {
-    //   print("======== belum ada lisensi $reason ========");
-    //   if (result != AlivcLiveLicenseCheckResultCode.success) {
-    //     print("======== belum ada lisensi $reason ========");
-    //   }
-    // });
-    // _alivcLivePusher = AlivcLivePusher.init();
-    // _alivcLivePusher.createConfig();
-    // _alivcLivePusherConfig = AlivcLivePusherConfig.init();
-    // _alivcLivePusherConfig.setCameraType(AlivcLivePushCameraType.front);
+    // context.read<StreamerNotifier>().init(context, mounted);
+    _alivcBase = AlivcBase.init();
+    _alivcBase.registerSDK().then((value) => print(value));
+    _alivcBase.setObserver();
+    _alivcBase.setOnLicenceCheck((result, reason) {
+      print('sad');
+      print("======== belum ada lisensi $reason ========");
+      if (result != AlivcLiveLicenseCheckResultCode.success) {
+        print("======== belum ada lisensi $reason ========");
+      }
+    });
+    _alivcLivePusherConfig = AlivcLivePusherConfig.init();
+    _alivcLivePusherConfig.setCameraType(AlivcLivePushCameraType.front);
+    _alivcLivePusher = AlivcLivePusher.init();
+    _alivcLivePusher.createConfig();
   }
 
   @override
@@ -117,10 +117,10 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
               targetPadding: const EdgeInsets.only(bottom: -40),
               tooltipPosition: TooltipPosition.top,
               title: tn.comeoncreatecontentnow,
-              titleTextStyle: TextStyle(fontSize: 12, color: kHyppeNotConnect),
-              titlePadding: EdgeInsets.all(6),
+              titleTextStyle: const TextStyle(fontSize: 12, color: kHyppeNotConnect),
+              titlePadding: const EdgeInsets.all(6),
               description: tn.tutorLanding6,
-              descTextStyle: TextStyle(fontSize: 10, color: kHyppeNotConnect),
+              descTextStyle: const TextStyle(fontSize: 10, color: kHyppeNotConnect),
               descriptionPadding: EdgeInsets.all(6),
               textColor: Colors.white,
               targetShapeBorder: const CircleBorder(),
@@ -164,7 +164,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                         },
                         child: Text(
                           tn.understand ?? '',
-                          style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                          style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
                         ))
                   ],
                 ),

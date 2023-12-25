@@ -331,6 +331,28 @@ extension StringDefine on String {
       return (seconds - 2).toInt();
     }
   }
+
+  static String convertFormatterView(int currentView){
+    try{
+      RegExp regex = RegExp(r'([.]*0)(?!.*\d)');
+      if(currentView < 1000){ 
+        return currentView.toString();
+      }else if(currentView >= 1000 && currentView < (1000*100*10)){ 
+        double result = currentView/1000;
+        return "${double.parse(result.toString().replaceAll(regex, '')).toStringAsFixed(2)}k";
+      }else if(currentView >= 1000000 && currentView < (1000000*10*100)){ 
+        double result = currentView/1000000;
+        return "${double.parse(result.toString().replaceAll(regex, '')).toStringAsFixed(2)}M";
+      }else if(currentView >= (1000000*10*100) && currentView < (1000000*10*100*100)){ 
+        double result = currentView/(1000000*10*100);
+        return "${double.parse(result.toString().replaceAll(regex, '')).toStringAsFixed(2)}B";
+      }else if(currentView >= (1000000*10*100*100) && currentView < (1000000*10*100*100*100)){ 
+        double result = currentView/(1000000*10*100*100);
+        return "${double.parse(result.toString().replaceAll(regex, '')).toStringAsFixed(2)}T";
+      }
+    }catch(_){}
+    return currentView.toStringAsFixed(0);
+  }
 }
 
 extension IntegerExtension on int {

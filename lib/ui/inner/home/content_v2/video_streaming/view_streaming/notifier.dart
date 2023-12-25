@@ -65,7 +65,7 @@ class ViewStreamingNotifier with ChangeNotifier {
 
   bool _loadMore = false;
   bool get loadMore => _loadMore;
-  set loadMore(bool state){
+  set loadMore(bool state) {
     _loadMore = state;
     notifyListeners();
   }
@@ -202,7 +202,7 @@ class ViewStreamingNotifier with ChangeNotifier {
 
   int _page = 0;
   int get page => _page;
-  set page(int state){
+  set page(int state) {
     _page = state;
     notifyListeners();
   }
@@ -210,16 +210,16 @@ class ViewStreamingNotifier with ChangeNotifier {
   bool stopLoad = false;
 
   Future getListStreamers(BuildContext context, mounted, {bool isReload = true}) async {
-    if(isReload){
+    if (isReload) {
       loading = true;
-    }else{
+    } else {
       loadMore = true;
     }
     bool connect = await System().checkConnections();
     if (isReload) {
       listStreamers = [];
       page = 0;
-    }else{
+    } else {
       page += 1;
     }
 
@@ -235,10 +235,10 @@ class ViewStreamingNotifier with ChangeNotifier {
           final List<LinkStreamModel> tempList = [];
 
           fetch.data.forEach((v) => tempList.add(LinkStreamModel.fromJson(v)));
-          if(tempList.isNotEmpty){
+          if (tempList.isNotEmpty) {
             listStreamers.addAll(tempList);
-          }else{
-            if(!isReload){
+          } else {
+            if (!isReload) {
               stopLoad = true;
               notifyListeners();
             }
@@ -257,9 +257,9 @@ class ViewStreamingNotifier with ChangeNotifier {
         });
       }
     }
-    if(isReload){
+    if (isReload) {
       loading = false;
-    }else{
+    } else {
       loadMore = false;
     }
   }
@@ -308,6 +308,7 @@ class ViewStreamingNotifier with ChangeNotifier {
         final fetch = notifier.liveStreamFetch;
         if (fetch.postsState == LiveStreamState.getApiSuccess) {
           dataStreaming = StreamingModel.fromJson(fetch.data);
+          isCommentDisable = dataStreaming.commentDisabled ?? false;
           returnNext = true;
         }
       } catch (e) {
@@ -370,6 +371,7 @@ class ViewStreamingNotifier with ChangeNotifier {
       _connectAndListenToSocket(eventLikeStream, data);
       _connectAndListenToSocket(eventViewStream, data);
       _connectAndListenToSocket(eventStatusStream, data);
+      _connectAndListenToSocket(eventCommentDisable, data);
 
       // _alivcLivePusher.startPushWithURL(pushURL);
     } else {
@@ -453,6 +455,11 @@ class ViewStreamingNotifier with ChangeNotifier {
             gravity: ToastGravity.CENTER,
           );
         }
+      }
+    } else if (event == eventCommentDisable) {
+      var messages = StatusCommentLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
+      if (messages.idStream == dataStream.sId) {
+        isCommentDisable = messages.comment ?? false;
       }
     }
 

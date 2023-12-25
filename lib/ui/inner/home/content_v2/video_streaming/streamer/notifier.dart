@@ -82,9 +82,12 @@ class StreamerNotifier with ChangeNotifier {
   bool isloadingViewersMore = false;
   bool isloadingProfile = false;
   bool isCheckLoading = false;
+  bool isloadingButton = false;
   bool mute = false;
   bool isPause = false;
   bool isCommentDisable = false;
+  bool isCancel = false;
+  bool isSendComment = false;
 
   FocusNode titleFocusNode = FocusNode();
   TextEditingController titleLiveCtrl = TextEditingController();
@@ -113,33 +116,37 @@ class StreamerNotifier with ChangeNotifier {
   }
 
   LocalizationModelV2? tn;
+  double a = 0;
+  void zoom() {
+    a++;
+    _alivcLivePusher.setZoom(a);
+    _alivcLivePusher.setResolution(AlivcLivePushResolution.resolution_1080P);
+    print(a);
+  }
 
-  Future<void> init(BuildContext context) async {
-    try{
-      // final isGranted = await System().requestPermission(context, permissions: [Permission.camera, Permission.microphone]);
+  Future<void> init(BuildContext context, mounted) async {
+    // final isGranted = await System().requestPermission(context, permissions: [Permission.camera, Permission.microphone]);
     isloading = true;
+    isloadingPreview = true;
     notifyListeners();
     // _setPageOrientation(action, ctx);
     _alivcBase = AlivcBase.init();
-    await _alivcBase.registerSDK();
-    await _alivcBase.setObserver();
+    _alivcBase.registerSDK();
+    _alivcBase.setObserver();
     _alivcBase.setOnLicenceCheck((result, reason) {
       print("======== belum ada lisensi $reason ========");
       if (result != AlivcLiveLicenseCheckResultCode.success) {
         print("======== belum ada lisensi $reason ========");
       }
     });
-    await _setLivePusher();
-    await _onListen();
+    _setLivePusher();
+    _onListen(context, mounted);
     // double max = await _alivcLivePusher.getMaxZoom();
     // print("---=-=-=- maxzooom $max");
     // _alivcLivePusher.setZoom(2.0);
     isloading = false;
     notifyListeners();
     tn = context.read<TranslateNotifierV2>().translate;
-    }catch(_){
-      print('Error $_');
-    }
   }
 
   Future requestPermission(BuildContext context) async {
@@ -163,7 +170,7 @@ class StreamerNotifier with ChangeNotifier {
     print("=== skrng ${index} -- ${animationIndexes}");
   }
 
-  Future<void> _onListen() async {
+  Future<void> _onListen(BuildContext context, mounted) async {
     /// Listener for stream ingest errors
     /// Configure the callback for SDK errors.
     _alivcBase.setOnLicenceCheck((result, reason) {
@@ -207,7 +214,7 @@ class StreamerNotifier with ChangeNotifier {
     _alivcLivePusher.setOnPushStarted(() {
       statusLive = StatusStream.standBy;
       notifyListeners();
-      countDown();
+      countDown(context, mounted);
     });
 
     /// Configure the callback for pause of stream ingest from the camera.
@@ -341,7 +348,7 @@ class StreamerNotifier with ChangeNotifier {
     pusherConfig.setCameraType(AlivcLivePushCameraType.front);
 
     /// Set the resolution to 540p.
-    pusherConfig.setResolution(AlivcLivePushResolution.resolution_540P);
+    pusherConfig.setResolution(AlivcLivePushResolution.resolution_720P);
 
     /// Specify the frame rate. We recommend that you set the frame rate to 20 frames per second (FPS).
     pusherConfig.setFps(AlivcLivePushFPS.fps_20);
@@ -358,6 +365,8 @@ class StreamerNotifier with ChangeNotifier {
     /// Disable the mirroring mode for preview.
     pusherConfig.setPreviewMirror(false);
 
+    pusherConfig.setPushMirror(true);
+
     /// Set the stream ingest orientation to portrait.
     pusherConfig.setOrientation(AlivcLivePushOrientation.portrait);
 
@@ -372,6 +381,7 @@ class StreamerNotifier with ChangeNotifier {
     _alivcLivePusher.setCustomFilterDelegate();
     _alivcLivePusher.setCustomDetectorDelegate();
     _alivcLivePusher.setBGMDelegate();
+    _alivcLivePusher.setResolution(AlivcLivePushResolution.resolution_480P);
   }
 
   Future<void> _clickSnapShot() async {
@@ -403,6 +413,8 @@ class StreamerNotifier with ChangeNotifier {
 // rtmp://live.hyppe.cloud/Hyppe/hdstream_hd-v?auth_key=1700732018-0-0-8e221f09856a236e9f2454e8dfddfae1
 
   Future<void> clickPushAction(BuildContext context, mounted) async {
+    isCancel = false;
+    timeReady = 3;
     userName = context.read<SelfProfileNotifier>().user.profile?.username ?? '';
     dateTimeStart = DateTime.now();
     if (titleLive == '') {
@@ -461,24 +473,31 @@ class StreamerNotifier with ChangeNotifier {
     inactivityTimer = null;
   }
 
+  //Comment Empty or Witespase 
+  void sendComment() {
+    isSendComment =  RegExp(r"\s\b|\b").hasMatch(commentCtrl.text) ? true : false;
+    notifyListeners();
+  }
   void flipCamera() {
     _alivcLivePusher.switchCamera();
   }
 
-  void countDown() async {
+  void countDown(BuildContext context, mounted) async {
     await Future.delayed(const Duration(milliseconds: 1000), () {
       timeReady--;
       notifyListeners();
       if (timeReady > 0) {
-        countDown();
+        countDown(context, mounted);
       } else {
-        statusLive = StatusStream.ready;
-        notifyListeners();
-        Future.delayed(const Duration(seconds: 2), () {
-          statusLive = StatusStream.online;
-          initTimer();
+        if (!isCancel) {
+          statusLive = StatusStream.ready;
           notifyListeners();
-        });
+          Future.delayed(const Duration(seconds: 2), () {
+            statusLive = StatusStream.online;
+            initTimer(context, mounted);
+            notifyListeners();
+          });
+        }
       }
     });
   }
@@ -540,13 +559,24 @@ class StreamerNotifier with ChangeNotifier {
   }
 
   Future<void> resumeLive(BuildContext context) async {
+    isloadingButton = true;
+    notifyListeners();
     var pause = await pauseSendStatus(context);
+    isloadingButton = false;
     if (pause) {
       mute = false;
       _alivcLivePusher.resume();
       _alivcLivePusher.setMute(false);
       notifyListeners();
     }
+  }
+
+  Future<void> cancelLive(BuildContext context, mounted) async {
+    isCancel = true;
+    statusLive = StatusStream.offline;
+    _alivcLivePusher.stopPush();
+    inactivityTimer?.cancel();
+    stopStream(context, mounted);
   }
 
   int x = 0;
@@ -564,7 +594,7 @@ class StreamerNotifier with ChangeNotifier {
     Routing().moveReplacement(Routes.streamingFeedback, argument: SummaryLiveArgument(duration: duration, data: dataSummary));
   }
 
-  void initTimer() async {
+  void initTimer(BuildContext context, mounted) async {
     // adding delay to prevent if there's another that not disposed yet
     Future.delayed(const Duration(milliseconds: 1000), () {
       WakelockPlus.enable();
@@ -585,6 +615,9 @@ class StreamerNotifier with ChangeNotifier {
           isHorizontal: false,
           fillColor: false,
         );
+        inactivityTimer = Timer(const Duration(seconds: 300), () {
+          endLive(context, mounted, isBack: false);
+        });
       });
     });
   }

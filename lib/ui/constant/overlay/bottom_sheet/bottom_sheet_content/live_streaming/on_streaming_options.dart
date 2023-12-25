@@ -55,7 +55,7 @@ class _OnStreamingOptionsState extends State<OnStreamingOptions> {
                 padding: const EdgeInsets.only(top: 12, bottom: 16),
                 alignment: Alignment.centerLeft,
                 child: CustomTextWidget(
-                  textToDisplay: language.disableComments ?? 'Nonaktifkan Komentar',
+                  textToDisplay: widget.notifier.isCommentDisable ? language.allowComments ?? '' : language.disableComments ?? 'Nonaktifkan Komentar',
                   textStyle: const TextStyle(fontSize: 14),
                 ),
               )),

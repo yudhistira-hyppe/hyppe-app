@@ -5,6 +5,8 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
@@ -56,7 +58,7 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
     WidgetsBinding.instance.addPostFrameCallback((_) {
       var streampro = Provider.of<StreamerNotifier>(context, listen: false);
       streampro.requestPermission(context);
-      streampro.init(context);
+      streampro.init(context, mounted);
 
       commentFocusNode.addListener(() {
         // print("Has focus: ${commentFocusNode.hasFocus}");
@@ -119,6 +121,7 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
 
   @override
   Widget build(BuildContext context) {
+    final tn = context.read<TranslateNotifierV2>().translate;
     return Consumer<StreamerNotifier>(
       builder: (_, notifier, __) => Scaffold(
         resizeToAvoidBottomInset: false,
@@ -158,7 +161,7 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
                                   alignment: Alignment.topRight,
                                   child: SafeArea(
                                     child: CustomIconButtonWidget(
-                                      padding: EdgeInsets.all(0),
+                                      padding: const EdgeInsets.all(0),
                                       alignment: Alignment.center,
                                       iconData: "${AssetPath.vectorPath}close.svg",
                                       defaultColor: false,
@@ -175,22 +178,23 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
                             : notifier.statusLive == StatusStream.prepare
                                 ? prepare()
                                 : notifier.statusLive == StatusStream.standBy
-                                    ? startCounting(notifier.timeReady)
+                                    ? startCounting(notifier.timeReady, notifier)
                                     : notifier.statusLive == StatusStream.ready
                                         ? prepare(titile: "Siaran LIVE telah dimulai!")
                                         : Container(),
-                    if (notifier.isPause) const PauseLive(),
+                    if (notifier.isPause) PauseLive(notifier: notifier),
                     if (notifier.statusLive == StatusStream.ready || notifier.statusLive == StatusStream.online) StreamerWidget(commentFocusNode: commentFocusNode),
                     // StreamerWidget(commentFocusNode: commentFocusNode),
                     // Align(
                     //   alignment: Alignment.center,
                     //   child: GestureDetector(
                     //     onTap: () {
-                    //       a++;
-                    //       _debouncer.run(() {
-                    //         print(a);
-                    //         a = 0;
-                    //       });
+                    //       notifier.zoom();
+                    //       // a++;
+                    //       // _debouncer.run(() {
+                    //       //   print(a);
+                    //       //   a = 0;
+                    //       // });
                     //     }, //doesnt work
                     //     onPanDown: (details) => print('tdgreen'),
                     //     child: Container(
@@ -203,9 +207,26 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
                   ],
                 ),
           onWillPop: () async {
-            notifier.destoryPusher();
+            await ShowGeneralDialog.generalDialog(
+              context,
+              titleText: tn.endofLIVEBroadcast,
+              bodyText: tn.areYouSureYouWantToEndTheLIVEBroadcast,
+              maxLineTitle: 1,
+              maxLineBody: 4,
+              functionPrimary: () async {
+                notifier.endLive(context, context.mounted);
+              },
+              functionSecondary: () {
+                Routing().moveBack();
+              },
+              titleButtonPrimary: "${tn.endNow}",
+              titleButtonSecondary: "${tn.cancel}",
+              barrierDismissible: true,
+              isHorizontal: false,
+            );
+            // notifier.destoryPusher();
             // notifier.dispose();
-            return true;
+            return false;
           },
         ),
         // floatingActionButton: FloatingActionButton(
@@ -241,26 +262,49 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
     );
   }
 
-  Widget startCounting(int time) {
-    return Align(
-      alignment: Alignment.center,
-      child: Container(
-        width: 130,
-        height: 130,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100),
-          color: Colors.black.withOpacity(0.3),
-        ),
-        child: Align(
+  Widget startCounting(int time, StreamerNotifier notifier) {
+    return Stack(
+      children: [
+        Align(
           alignment: Alignment.center,
-          child: CustomTextWidget(
-              textToDisplay: time.toString(),
-              textStyle: const TextStyle(
-                color: kHyppeTextPrimary,
-                fontSize: 80,
-              )),
+          child: Container(
+            width: 130,
+            height: 130,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100),
+              color: Colors.black.withOpacity(0.3),
+            ),
+            child: Align(
+              alignment: Alignment.center,
+              child: CustomTextWidget(
+                  textToDisplay: time.toString(),
+                  textStyle: const TextStyle(
+                    color: kHyppeTextPrimary,
+                    fontSize: 80,
+                  )),
+            ),
+          ),
         ),
-      ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: GestureDetector(
+            onTap: () {
+              notifier.cancelLive(context, mounted);
+            },
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 100),
+              width: 50,
+              height: 50,
+              color: Colors.transparent,
+              child: const Center(
+                  child: Text(
+                "Batal",
+                style: TextStyle(color: Colors.white),
+              )),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
