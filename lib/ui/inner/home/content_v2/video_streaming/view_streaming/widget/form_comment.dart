@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/screen.dart';
@@ -45,6 +46,7 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                       comment = value;
                     });
                   },
+                  inputFormatters: [LengthLimitingTextInputFormatter(150)],
                   decoration: InputDecoration(
                       hintText: notifier.isCommentDisable ? tn.commentsAreDisabled : tn.addComment,
                       isDense: true, // important line

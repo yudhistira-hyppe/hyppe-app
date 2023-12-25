@@ -1045,6 +1045,7 @@ class LocalizationModelV2 {
   String? liveVideo;
   String? liveHost;
   String? whosWatching;
+  String? whosWatchingDetail;
   String? removeUser;
   String? messageRemoveUser1;
   String? messageRemoveUser2;
@@ -2136,6 +2137,7 @@ class LocalizationModelV2 {
     this.liveVideo,
     this.liveHost,
     this.whosWatching,
+    this.whosWatchingDetail,
     this.removeUser,
     this.messageRemoveUser1,
     this.messageRemoveUser2,
@@ -3246,6 +3248,7 @@ class LocalizationModelV2 {
     liveVideo = json['liveVideo'];
     liveHost = json['liveHost'];
     whosWatching = json['whosWatching'];
+    whosWatchingDetail = json['whosWatchingDetail'];
     removeUser = json['removeUser'];
     messageRemoveUser1 = json["messageRemoveUser1"];
     messageRemoveUser2 = json["messageRemoveUser2"];

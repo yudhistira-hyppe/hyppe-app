@@ -31,6 +31,7 @@ import '../../../../../constant/widget/custom_icon_widget.dart';
 import '../../../../../constant/widget/custom_loading.dart';
 import '../../../../../constant/widget/custom_spacer.dart';
 import '../../../../../constant/widget/custom_text_widget.dart';
+import '../streamer/screen.dart';
 
 class ViewStreamingScreen extends StatefulWidget {
   final ViewStreamingArgument args;
@@ -449,6 +450,8 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
     }
   }
 
+  final _debouncer = Debouncer(milliseconds: 2000);
+
   void onViewPlayerCreated(viewId) async {
     fAliplayer?.setPlayerView(viewId);
     fAliplayer?.setUrl(widget.args.data.urlStream ?? '');
@@ -495,7 +498,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                             onTap: () {
                               Routing().moveBack();
                             },
-                            child: Padding(
+                            child: const Padding(
                               padding: EdgeInsets.only(right: 30.0),
                               child: CustomIconWidget(
                                 iconData: "${AssetPath.vectorPath}close.svg",
@@ -541,16 +544,24 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                   )
                 : Stack(
                     children: [
-                      Container(
-                        color: Colors.black,
-                        width: SizeConfig.screenWidth,
-                        height: SizeConfig.screenHeight,
-                        child: AliPlayerView(
-                          onCreated: onViewPlayerCreated,
-                          x: 0,
-                          y: 0,
-                          height: SizeConfig.screenHeight,
+                      GestureDetector(
+                        onDoubleTap: (){
+                          notifier.likeAdd();
+                          _debouncer.run(() {
+                            notifier.sendLike(context, notifier.streamerData!);
+                          });
+                        },
+                        child: Container(
+                          color: Colors.black,
                           width: SizeConfig.screenWidth,
+                          height: SizeConfig.screenHeight,
+                          child: AliPlayerView(
+                            onCreated: onViewPlayerCreated,
+                            x: 0,
+                            y: 0,
+                            height: SizeConfig.screenHeight,
+                            width: SizeConfig.screenWidth,
+                          ),
                         ),
                       ),
                       if (notifier.dataStreaming.pause ?? false) const PauseLiveView(),

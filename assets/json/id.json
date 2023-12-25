@@ -1046,6 +1046,7 @@
   "liveVideo": "Siaran LIVE ",
   "liveHost": "Host siaran LIVE",
   "whosWatching": "Siapa yang menonton",
+  "whosWatchingDetail": "Siapa pun yang menonton juga dapat melihatmu sedang menonton.",
   "removeUser": "Keluarkan",
   "messageRemoveUser1": "Yakin ingin menghapus",
   "messageRemoveUser2": "dari siaran LIVE kamu?",
