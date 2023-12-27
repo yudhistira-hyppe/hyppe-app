@@ -253,12 +253,12 @@ class _ListStreamersScreenState extends State<ListStreamersScreen> with TickerPr
                                                       if (streamer.title != null)
                                                         CustomTextWidget(
                                                           textToDisplay: streamer.title ?? '',
-                                                          textStyle: const TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w700),
+                                                          textStyle: const TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.w700),
                                                         ),
                                                       twoPx,
                                                       CustomTextWidget(
                                                         textToDisplay: streamer.username ?? '',
-                                                        textStyle: const TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w700),
+                                                        textStyle: const TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.w700),
                                                       ),
                                                     ],
                                                   ),
@@ -317,12 +317,12 @@ class _ListStreamersScreenState extends State<ListStreamersScreen> with TickerPr
                                                     if (streamer.title != null)
                                                       CustomTextWidget(
                                                         textToDisplay: streamer.title ?? '',
-                                                        textStyle: const TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w700),
+                                                        textStyle: const TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.w700),
                                                       ),
                                                     twoPx,
                                                     CustomTextWidget(
                                                       textToDisplay: streamer.username ?? '',
-                                                      textStyle: const TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w700),
+                                                      textStyle: const TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.w700),
                                                     ),
                                                   ],
                                                 ),

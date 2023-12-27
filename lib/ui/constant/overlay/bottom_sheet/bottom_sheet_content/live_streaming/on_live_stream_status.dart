@@ -19,8 +19,9 @@ import '../../../../widget/custom_spacer.dart';
 
 class OnLiveStreamStatus extends StatefulWidget {
   final String? idStream;
+  final bool isViewer;
   final StreamerNotifier? notifier;
-  const OnLiveStreamStatus({super.key, this.idStream, this.notifier});
+  const OnLiveStreamStatus({super.key, this.idStream, this.notifier, required this.isViewer});
 
   @override
   State<OnLiveStreamStatus> createState() => _OnLiveStreamStatusState();
@@ -53,87 +54,119 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
     var profileImage = context.read<HomeNotifier>().profileImage;
     var profileImageKey = context.read<HomeNotifier>().profileImageKey;
     final isIndo = SharedPreference().readStorage(SpKeys.isoCode) == 'id';
+
+
     return Consumer<StreamerNotifier>(
-      builder: (_, notifier, __) => Container(
-        height: double.infinity,
-        width: double.infinity,
-        padding: const EdgeInsets.only(left: 16, right: 16, top: 12),
-        decoration: BoxDecoration(
-          color: context.getColorScheme().background,
-          borderRadius: const BorderRadius.only(
-            topRight: Radius.circular(12),
-            topLeft: Radius.circular(12),
+      builder: (_, notifier, __){
+        return Container(
+          height: double.infinity,
+          width: double.infinity,
+          padding: const EdgeInsets.only(top: 12),
+          decoration: BoxDecoration(
+            color: context.getColorScheme().background,
+            borderRadius: const BorderRadius.only(
+              topRight: Radius.circular(12),
+              topLeft: Radius.circular(12),
+            ),
           ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
-            sixteenPx,
-            CustomTextWidget(
-              textToDisplay: "${isIndo ? language.liveVideo : ''} ${notifier.userName} ${!isIndo ? language.liveVideo : ''}",
-              textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700),
-            ),
-            sixteenPx,
-            CustomTextWidget(
-              textAlign: TextAlign.left,
-              textToDisplay: language.liveHost ?? '',
-              textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w700, color: kHyppeBurem),
-            ),
-            sixteenPx,
-            ItemAccount(
-                urlImage: (context.read<SelfProfileNotifier>().user.profile?.avatar?.mediaEndpoint) ?? '',
-                username: widget.notifier?.userName ?? '',
-                name: context.read<SelfProfileNotifier>().user.profile?.fullName ?? ''),
-            eightPx,
-            CustomTextWidget(
-              textAlign: TextAlign.left,
-              textToDisplay: language.whosWatching ?? '',
-              textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w700, color: kHyppeBurem),
-            ),
-            eightPx,
-            Expanded(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: notifier.isloadingViewers
-                        ? const SizedBox(height: 10, child: Align(alignment: Alignment.topCenter, child: Padding(padding: EdgeInsets.only(top: 60), child: const CustomLoading())))
-                        : ListView.builder(
-                            controller: controller,
-                            itemCount: notifier.dataViewers.length,
-                            itemBuilder: (context, index) {
-                              final watcher = notifier.dataViewers[index];
-                              return ItemAccount(
-                                urlImage: watcher.avatar?.mediaEndpoint ?? '',
-                                name: watcher.fullName ?? '',
-                                username: watcher.username ?? '',
-                                isHost: false,
-                                index: index,
-                                length: notifier.dataViewers.length,
-                                isloading: notifier.isloadingViewersMore,
-                              );
-                            },
-                          ),
-                  ),
-                  Visibility(
-                    visible: notifier.dataViewers.length > 99,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
-                      child: CustomTextWidget(
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        textToDisplay: language.noteShowView99??'Menampilkan 99 penonton teratas yang peringkatnya diaktifkan',
-                        textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w400, color: kHyppeBurem),
-                      ),
-                    ),
-                  ),
-                ],
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+              sixteenPx,
+              Container(
+                margin: const EdgeInsets.only(left: 16, right: 16, ),
+                child: CustomTextWidget(
+                  textAlign: TextAlign.center,
+                  textToDisplay: (notifier.titleLive.isNotEmpty) ? (notifier.titleLive ?? '') : "${isIndo ? language.liveVideo : ''} ${notifier.userName} ${!isIndo ? language.liveVideo : ''}",
+                  textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700),
+                ),
               ),
-            ),
-          ],
-        ),
-      ),
+              tenPx,
+              const Divider(color: kHyppeSecondary,),
+              tenPx,
+              Container(
+                margin: const EdgeInsets.only(left: 16, right: 16, ),
+                child: CustomTextWidget(
+                  textAlign: TextAlign.left,
+                  textToDisplay: language.liveHost ?? '',
+                  textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w700, color: kHyppeBurem),
+                ),
+              ),
+              sixteenPx,
+              Container(
+                margin: const EdgeInsets.only(left: 16, right: 16, ),
+                child: ItemAccount(
+                    urlImage: widget.isViewer ? (notifier.dataStream.avatar?.mediaEndpoint ?? ''): (context.read<SelfProfileNotifier>().user.profile?.avatar?.mediaEndpoint) ?? '',
+                    username: widget.isViewer ? (notifier.dataStream.username ?? '') : (context.read<SelfProfileNotifier>().user.profile?.username ?? ''),
+                    name: widget.isViewer ? (notifier.dataStream.fullName ?? '') : context.read<SelfProfileNotifier>().user.profile?.fullName ?? ''),
+              ),
+              eightPx,
+              Container(
+                margin: const EdgeInsets.only(left: 16, right: 16, ),
+                child: CustomTextWidget(
+                  textAlign: TextAlign.left,
+                  textToDisplay: language.whosWatching ?? '',
+                  textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w700,),
+                ),
+              ),
+              if(widget.isViewer)
+                Container(
+                  margin: const EdgeInsets.only(left: 16, right: 16, ),
+                  child: CustomTextWidget(
+                    textAlign: TextAlign.left,
+                    maxLines: 2,
+                    textToDisplay: language.whosWatchingDetail ?? '',
+                    textStyle: context.getTextTheme().bodyText2?.copyWith(color: kHyppeBurem),
+                  ),
+                ),
+              eightPx,
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.only(left: 16, right: 16, ),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: notifier.isloadingViewers
+                            ? const SizedBox(height: 10, child: Align(alignment: Alignment.topCenter, child: Padding(padding: EdgeInsets.only(top: 60), child: const CustomLoading())))
+                            : ListView.builder(
+                          controller: controller,
+                          itemCount: notifier.dataViewers.length,
+                          itemBuilder: (context, index) {
+                            final watcher = notifier.dataViewers[index];
+                            return ItemAccount(
+                              urlImage: watcher.avatar?.mediaEndpoint ?? '',
+                              name: watcher.fullName ?? '',
+                              username: watcher.username ?? '',
+                              isHost: false,
+                              index: index,
+                              length: notifier.dataViewers.length,
+                              isloading: notifier.isloadingViewersMore,
+                            );
+                          },
+                        ),
+                      ),
+                      Visibility(
+                        visible: notifier.dataViewers.length > 99,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
+                          child: CustomTextWidget(
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            textToDisplay: language.noteShowView99??'Menampilkan 99 penonton teratas yang peringkatnya diaktifkan',
+                            textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w400, color: kHyppeBurem),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

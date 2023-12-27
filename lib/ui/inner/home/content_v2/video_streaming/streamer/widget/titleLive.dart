@@ -23,7 +23,7 @@ class TitleLive extends StatelessWidget {
           flex: 2,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               CustomProfileImage(
                 cacheKey: profileImageKey,
@@ -36,38 +36,44 @@ class TitleLive extends StatelessWidget {
                 allwaysUseBadgePadding: false,
               ),
               sixPx,
-              Flexible(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              GestureDetector(
+                onTap: () {
+                  ShowBottomSheet.onStreamWatchersStatus(context, false, notifier);
+                },
+                child: Row(
                   children: [
-                    Text(
-                      notifier.titleLive,
-                      style: const TextStyle(
-                        color: kHyppeTextPrimary,
-                        fontWeight: FontWeight.w700,
+                    SizedBox(
+                      width: 86,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            notifier.titleLive.isNotEmpty ? notifier.titleLive : notifier.userName,
+                            style: const TextStyle(
+                              color: kHyppeTextPrimary,
+                              fontWeight: FontWeight.w700,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            '${notifier.totLikes} ${tn.like}',
+                            style: const TextStyle(
+                              fontSize: 10,
+                              color: kHyppeTextPrimary,
+                            ),
+                          )
+                        ],
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
-                    Text(
-                      '${notifier.totLikes} ${tn.like}',
-                      style: const TextStyle(
-                        fontSize: 10,
-                        color: kHyppeTextPrimary,
-                      ),
+                    const Icon(
+                      Icons.keyboard_arrow_down,
+                      color: kHyppeTextPrimary,
                     )
                   ],
                 ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  ShowBottomSheet.onStreamWatchersStatus(context, notifier);
-                },
-                child: const Icon(
-                  Icons.keyboard_arrow_down,
-                  color: kHyppeTextPrimary,
-                ),
               )
+
             ],
           )),
     );

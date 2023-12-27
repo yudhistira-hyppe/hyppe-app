@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
@@ -33,6 +34,7 @@ class FormCommentLive extends StatelessWidget {
                     style: const TextStyle(color: Colors.white),
                     cursorColor: Colors.white,
                     enabled: !notifier.isCommentDisable,
+                    inputFormatters: [LengthLimitingTextInputFormatter(150)],
                     onChanged: (val) =>
                       notifier.sendComment(),
                     decoration: InputDecoration(

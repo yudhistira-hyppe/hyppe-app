@@ -1046,6 +1046,7 @@
   "liveVideo": "'s LIVE video",
   "liveHost": "LIVE host",
   "whosWatching": "Who's watching",
+  "whosWatchingDetail": "Anyone watching this LIVE can also see you watching.",
   "removeUser": "Remove",
   "messageRemoveUser1": "Are you sure you want to remove",
   "messageRemoveUser2": "from your LIVE studio?",
@@ -1088,5 +1089,6 @@
   "messageEmptyStreamers": "Let's inject some buzz. Go LIVE and light it up!",
   "liveStreamingIsOver": "LIVE has ended",
   "allowComments": "Enable Comments",
-  "noteShowView99": "Displays the top 99 viewers whose ratings are enabled"
+  "noteShowView99": "Displays the top 99 viewers whose ratings are enabled",
+  "viewers": "Viewers"
 }

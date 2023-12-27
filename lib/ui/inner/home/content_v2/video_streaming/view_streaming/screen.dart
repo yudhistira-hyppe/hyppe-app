@@ -32,6 +32,7 @@ import '../../../../../constant/widget/custom_loading.dart';
 import '../../../../../constant/widget/custom_spacer.dart';
 import '../../../../../constant/widget/custom_text_widget.dart';
 import '../streamer/screen.dart';
+import '../streamer/widget/love_lottielarge.dart';
 
 class ViewStreamingScreen extends StatefulWidget {
   final ViewStreamingArgument args;
@@ -453,6 +454,8 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
     }
   }
 
+  final _debouncer = Debouncer(milliseconds: 2000);
+
   void onViewPlayerCreated(viewId) async {
     fAliplayer?.setPlayerView(viewId);
     fAliplayer?.setUrl(widget.args.data.urlStream ?? '');
@@ -499,7 +502,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                             onTap: () {
                               Routing().moveBack();
                             },
-                            child: Padding(
+                            child: const Padding(
                               padding: EdgeInsets.only(right: 30.0),
                               child: CustomIconWidget(
                                 iconData: "${AssetPath.vectorPath}close.svg",
@@ -521,7 +524,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                             ),
                             twelvePx,
                             CustomTextWidget(
-                              textToDisplay: '${notifier.totViews} ${notifier.language.views}',
+                              textToDisplay: '${notifier.totViews} ${notifier.language.viewers}',
                               textStyle: const TextStyle(fontSize: 14, color: Color(0xffdadada)),
                             ),
                             twelvePx,
@@ -535,8 +538,8 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                             ),
                             twelvePx,
                             CustomTextWidget(
-                              textToDisplay: widget.args.data.username ?? '',
-                              textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xffdadada)),
+                              textToDisplay: '@${widget.args.data.username}',
+                              textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
                             ),
                           ],
                         ),
@@ -546,14 +549,14 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                 : Stack(
                     children: [
                       GestureDetector(
-                        onDoubleTap:() {
+                        onDoubleTap: (){
                           notifier.likeAdd();
-                          debouncer.run(() {
+                          _debouncer.run(() {
                             notifier.sendLike(context, notifier.streamerData!);
                           });
                         },
                         child: Container(
-                          color: Colors.transparent,
+                          color: Colors.black,
                           width: SizeConfig.screenWidth,
                           height: SizeConfig.screenHeight,
                           child: AliPlayerView(
@@ -577,6 +580,27 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                             child: Stack(
                               children: notifier.animationIndexes.map((e) {
                                 return LoveLootie(
+                                  onAnimationFinished: () {
+                                    // notifier.removeAnimation(e);
+                                  },
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned.fill(
+                        bottom: 0,
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: SizedBox(
+                            width: 180,
+                            child: Stack(
+                              children: notifier.likeList.map((e) {
+                                return LoveLootieLarge(
                                   onAnimationFinished: () {
                                     // notifier.removeAnimation(e);
                                   },
