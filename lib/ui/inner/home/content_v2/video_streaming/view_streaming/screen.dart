@@ -469,6 +469,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
   @override
   Widget build(BuildContext context) {
     fAliplayer?.setScalingMode(FlutterAvpdef.AVP_SCALINGMODE_SCALEASPECTFIT);
+
     return Consumer<ViewStreamingNotifier>(builder: (_, notifier, __) {
       return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -552,10 +553,16 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                 : Stack(
                     children: [
                       GestureDetector(
+                        onTap: () {
+                          commentFocusNode.unfocus();
+                        },
+                        onPanUpdate: (detail) {
+                          print('location tap ${detail.localPosition}');
+                        },
                         onDoubleTap: () {
-                          notifier.likeAdd();
+                          notifier.likeAddTapScreen();
                           _debouncer.run(() {
-                            notifier.sendLike(context, notifier.streamerData!);
+                            notifier.sendLikeTapScreen(context, notifier.streamerData!);
                           });
                         },
                         child: Container(
@@ -601,7 +608,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                           child: SizedBox(
                             width: 180,
                             child: Stack(
-                              children: notifier.likeList.map((e) {
+                              children: notifier.likeListTapScreen.map((e) {
                                 return LoveLootieLarge(
                                   onAnimationFinished: () {
                                     // notifier.removeAnimation(e);

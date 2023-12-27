@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -47,6 +49,19 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                       comment = value;
                     });
                   },
+                  onFieldSubmitted: (val) {
+                    // print(val);
+                    if (Platform.isIOS){
+                      if (notifier.streamerData != null) {
+                        setState(() {
+                          comment = '';
+                        });
+                        if(notifier.commentController.text.isNotEmpty){
+                          notifier.sendComment(context, notifier.streamerData!, notifier.commentController.text);
+                        }
+                      }
+                    }
+                  },
                   inputFormatters: [LengthLimitingTextInputFormatter(150)],
                   decoration: InputDecoration(
                       counterText: '',
@@ -81,7 +96,6 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                                           if(notifier.commentController.text.isNotEmpty){
                                             notifier.sendComment(context, notifier.streamerData!, notifier.commentController.text);
                                           }
-
                                         }
                                       },
                                       style: ButtonStyle(
