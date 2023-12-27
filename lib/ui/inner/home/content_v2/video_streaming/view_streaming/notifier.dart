@@ -103,10 +103,12 @@ class ViewStreamingNotifier with ChangeNotifier {
 
   initViewStreaming(LinkStreamModel data) {
     totLikes = data.totalLike ?? 0;
-    totViews = data.totalView ?? 0;
+    totViews = data.totalView ?? 0 + 1;
     streamerData = data;
     isOver = false;
     endLive = false;
+    comment = [];
+    notifyListeners();
   }
 
   sendComment(BuildContext context, LinkStreamModel model, String comment) async {

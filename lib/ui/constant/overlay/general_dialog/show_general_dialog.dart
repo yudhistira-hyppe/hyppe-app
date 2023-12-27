@@ -100,10 +100,11 @@ class ShowGeneralDialog {
           fillColor: fillColor ?? false,
         ),
       ),
-      transitionBuilder: (context, animation, secondaryAnimation, child) {
-        animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
-        return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
-      },
+      transitionBuilder: null,
+      // transitionBuilder: (context, animation, secondaryAnimation, child) {
+      //   animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
+      //   return ScaleTransition(scale: animation, alignment: Alignment.center, child: child);
+      // },
     );
   }
 

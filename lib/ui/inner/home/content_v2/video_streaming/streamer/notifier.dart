@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_livepush_plugin/beauty/live_beauty.dart';
 import 'package:flutter_livepush_plugin/live_base.dart';
 import 'package:flutter_livepush_plugin/live_push_def.dart';
 import 'package:flutter_livepush_plugin/live_pusher.dart';
@@ -473,11 +472,12 @@ class StreamerNotifier with ChangeNotifier {
     inactivityTimer = null;
   }
 
-  //Comment Empty or Witespase 
+  //Comment Empty or Witespase
   void sendComment() {
-    isSendComment =  RegExp(r"\s\b|\b").hasMatch(commentCtrl.text) ? true : false;
+    isSendComment = RegExp(r"\s\b|\b").hasMatch(commentCtrl.text) ? true : false;
     notifyListeners();
   }
+
   void flipCamera() {
     _alivcLivePusher.switchCamera();
   }
@@ -562,13 +562,15 @@ class StreamerNotifier with ChangeNotifier {
     isloadingButton = true;
     notifyListeners();
     var pause = await pauseSendStatus(context);
-    isloadingButton = false;
+
     if (pause) {
       mute = false;
       _alivcLivePusher.resume();
       _alivcLivePusher.setMute(false);
-      notifyListeners();
+      isPause = false;
     }
+    isloadingButton = false;
+    notifyListeners();
   }
 
   Future<void> cancelLive(BuildContext context, mounted) async {

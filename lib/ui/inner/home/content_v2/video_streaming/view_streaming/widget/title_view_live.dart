@@ -62,7 +62,7 @@ class TitleViewLive extends StatelessWidget {
           ),
         ),
         sixPx,
-        Expanded(
+        Flexible(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

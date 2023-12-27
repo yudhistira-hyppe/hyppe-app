@@ -207,23 +207,28 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
                   ],
                 ),
           onWillPop: () async {
-            await ShowGeneralDialog.generalDialog(
-              context,
-              titleText: tn.endofLIVEBroadcast,
-              bodyText: tn.areYouSureYouWantToEndTheLIVEBroadcast,
-              maxLineTitle: 1,
-              maxLineBody: 4,
-              functionPrimary: () async {
-                notifier.endLive(context, context.mounted);
-              },
-              functionSecondary: () {
-                Routing().moveBack();
-              },
-              titleButtonPrimary: "${tn.endNow}",
-              titleButtonSecondary: "${tn.cancel}",
-              barrierDismissible: true,
-              isHorizontal: false,
-            );
+            if (notifier.statusLive == StatusStream.offline) {
+              Routing().moveBack();
+            } else {
+              await ShowGeneralDialog.generalDialog(
+                context,
+                titleText: tn.endofLIVEBroadcast,
+                bodyText: tn.areYouSureYouWantToEndTheLIVEBroadcast,
+                maxLineTitle: 1,
+                maxLineBody: 4,
+                functionPrimary: () async {
+                  notifier.endLive(context, context.mounted);
+                },
+                functionSecondary: () {
+                  Routing().moveBack();
+                },
+                titleButtonPrimary: "${tn.endNow}",
+                titleButtonSecondary: "${tn.cancel}",
+                barrierDismissible: true,
+                isHorizontal: false,
+              );
+            }
+
             // notifier.destoryPusher();
             // notifier.dispose();
             return false;
