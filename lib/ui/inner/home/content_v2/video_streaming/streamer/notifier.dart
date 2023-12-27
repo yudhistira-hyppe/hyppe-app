@@ -451,11 +451,15 @@ class StreamerNotifier with ChangeNotifier {
   }
 
   Future<void> destoryPusher() async {
+    print("====1=====");
+    _alivcLivePusher.stopPush();
+    print("====2=====");
+    _alivcLivePusher.stopPreview();
+    print("====3=====");
+    _alivcLivePusher.destroy();
+    print("====4=====");
     WakelockPlus.disable();
     statusLive = StatusStream.offline;
-    _alivcLivePusher.stopPush();
-    _alivcLivePusher.stopPreview();
-    _alivcLivePusher.destroy();
     livePushMode = 0;
     timeReady = 3;
     totLikes = 0;
