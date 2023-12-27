@@ -38,7 +38,7 @@ class StatusNControl extends StatelessWidget {
             if (notifier.totViews > 0)
               GestureDetector(
                 onTap: () {
-                  ShowBottomSheet.onStreamWatchersStatus(context, notifier);
+                  ShowBottomSheet.onStreamWatchersStatus(context, false, notifier, );
                 },
                 child: Container(
                   width: 60 * SizeConfig.scaleDiagonal,

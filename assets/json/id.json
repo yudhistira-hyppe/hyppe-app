@@ -1090,5 +1090,6 @@
   "messageEmptyStreamers": "Yuk, saatnya LIVE-kan suasana!",
   "liveStreamingIsOver": "Siaran LIVE telah berakhir",
   "allowComments": "Aktifkan Komentar",
-  "noteShowView99": "Menampilkan 99 penonton teratas yang peringkatnya diaktifkan"
+  "noteShowView99": "Menampilkan 99 penonton teratas yang peringkatnya diaktifkan",
+  "viewers": "Penonton"
 }

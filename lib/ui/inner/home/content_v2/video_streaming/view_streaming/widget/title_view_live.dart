@@ -62,41 +62,50 @@ class TitleViewLive extends StatelessWidget {
           ),
         ),
         sixPx,
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                (data.title?.isNotEmpty ?? false) ? (data.title ?? '') : (data.username ?? ''),
-                style: const TextStyle(
-                  color: kHyppeTextPrimary,
-                  fontWeight: FontWeight.w700,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              Text(
-                "${totLikes.getCountShort()} ${tn.like}",
-                style: const TextStyle(
-                  fontSize: 10,
-                  color: kHyppeTextPrimary,
-                ),
-              )
-            ],
-          ),
-        ),
         GestureDetector(
           onTap: () {
             // ShowBottomSheet.onStreamWatchersStatus(context, notifier);
             final ref = context.read<StreamerNotifier>();
             ref.dataStream = data;
-            ShowBottomSheet.onStreamWatchersStatus(context, ref);
+            ref.titleLive = data.title ?? '';
+            ref.userName = data.username ?? '';
+            ShowBottomSheet.onStreamWatchersStatus(context, true, ref);
           },
-          child: const Icon(
-            Icons.keyboard_arrow_down,
-            color: kHyppeTextPrimary,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 86,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      (data.title?.isNotEmpty ?? false) ? (data.title ?? '') : (data.username ?? ''),
+                      style: const TextStyle(
+                        color: kHyppeTextPrimary,
+                        fontWeight: FontWeight.w700,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      "${totLikes.getCountShort()} ${tn.like}",
+                      style: const TextStyle(
+                        fontSize: 10,
+                        color: kHyppeTextPrimary,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              const Icon(
+                Icons.keyboard_arrow_down,
+                color: kHyppeTextPrimary,
+              )
+            ],
           ),
         )
+
       ],
     );
   }
@@ -121,7 +130,9 @@ class TitleViewLive extends StatelessWidget {
             final ref = context.read<StreamerNotifier>();
             ref.dataStream = data;
             print('testing see views ${ref.dataStream}');
-            ShowBottomSheet.onStreamWatchersStatus(context, ref);
+            ref.titleLive = data.title ?? '';
+            ref.userName = data.username ?? '';
+            ShowBottomSheet.onStreamWatchersStatus(context, true, ref);
           },
           child: Container(
             width: 50 * context.getScaleDiagonal(),
