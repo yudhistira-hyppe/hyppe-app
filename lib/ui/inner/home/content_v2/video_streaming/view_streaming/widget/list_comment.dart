@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/live_stream/link_stream_model.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../../../core/constants/size_config.dart';
 import '../../../../../../../core/constants/themes/hyppe_colors.dart';
@@ -44,10 +43,9 @@ class ListCommentViewer extends StatelessWidget {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                if(context.read<SelfProfileNotifier>().user.profile?.email != notifier.comment[index].email ){
+                                if (context.read<SelfProfileNotifier>().user.profile?.email != notifier.comment[index].email) {
                                   ShowBottomSheet.onWatcherStatus(context, notifier.comment[index].email ?? '', data?.sId ?? '');
                                 }
-
                               },
                               child: CustomProfileImage(
                                 cacheKey: '',

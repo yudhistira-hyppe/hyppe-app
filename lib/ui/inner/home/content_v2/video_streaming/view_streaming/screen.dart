@@ -32,6 +32,7 @@ import '../../../../../constant/widget/custom_loading.dart';
 import '../../../../../constant/widget/custom_spacer.dart';
 import '../../../../../constant/widget/custom_text_widget.dart';
 import '../streamer/screen.dart';
+import '../streamer/widget/love_lottielarge.dart';
 
 class ViewStreamingScreen extends StatefulWidget {
   final ViewStreamingArgument args;
@@ -45,6 +46,8 @@ class ViewStreamingScreen extends StatefulWidget {
 class _ViewStreamingScreenState extends State<ViewStreamingScreen>
     with WidgetsBindingObserver, TickerProviderStateMixin {
   FocusNode commentFocusNode = FocusNode();
+
+  final debouncer = Debouncer(milliseconds: 2000);
 
   FlutterAliplayer? fAliplayer;
   // final _sharedPrefs = SharedPreference();
@@ -481,7 +484,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
       return Scaffold(
         resizeToAvoidBottomInset: false,
         body: WillPopScope(
-          child: Container(
+          child: SizedBox(
             width: SizeConfig.screenWidth,
             height: SizeConfig.screenHeight,
             child: notifier.isOver
@@ -514,8 +517,9 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
                         child: Align(
                           alignment: Alignment.topRight,
                           child: GestureDetector(
-                            onTap: () {
-                              Routing().moveBack();
+                            onTap: () async {
+                              await notifier.exitStreaming(context, widget.args.data);
+                              await notifier.destoryPusher();
                             },
                             child: const Padding(
                               padding: EdgeInsets.only(right: 30.0),
@@ -543,10 +547,8 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
                             ),
                             twelvePx,
                             CustomTextWidget(
-                              textToDisplay:
-                                  '${notifier.totViews} ${notifier.language.viewers}',
-                              textStyle: const TextStyle(
-                                  fontSize: 14, color: Color(0xffdadada)),
+                              textToDisplay: '${notifier.totViewsEnd} ${notifier.language.viewers}',
+                              textStyle: const TextStyle(fontSize: 14, color: Color(0xffdadada)),
                             ),
                             twelvePx,
                             SizedBox(
@@ -609,6 +611,26 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
                             child: Stack(
                               children: notifier.animationIndexes.map((e) {
                                 return LoveLootie(
+                                  onAnimationFinished: () {
+                                    // notifier.removeAnimation(e);
+                                  },
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 0,
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Center(
+                          child: SizedBox(
+                            width: 180,
+                            child: Stack(
+                              children: notifier.likeList.map((e) {
+                                return LoveLootieLarge(
                                   onAnimationFinished: () {
                                     // notifier.removeAnimation(e);
                                   },

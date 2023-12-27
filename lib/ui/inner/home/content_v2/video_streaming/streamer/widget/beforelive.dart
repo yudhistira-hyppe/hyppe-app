@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -91,12 +92,16 @@ class BeforeLive extends StatelessWidget {
                             maxLength: 30,
                             maxLines: 2,
                             onChanged: (value) {
-                              notifier.titleLive = value;
+                              if (notifier.titleLiveCtrl.text.length > 30) {
+                                notifier.titleLiveCtrl.text = notifier.titleLiveCtrl.text.substring(0, 30);
+                              } else {
+                                notifier.titleLive = value;
+                              }
                             },
                           ),
                         ),
                         Text(
-                          "${notifier.titleLive.length}/30",
+                          "${notifier.titleLiveCtrl.text.length}/30",
                           style: const TextStyle(fontSize: 13, color: Color(0xffcecece)),
                         )
                       ],

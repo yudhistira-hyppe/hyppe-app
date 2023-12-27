@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/live_stream/viewers_live_model.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_gesture.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +15,7 @@ import '../../../../../../core/constants/asset_path.dart';
 import '../../../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../../../initial/hyppe/translate_v2.dart';
 import '../../../../../../ux/routing.dart';
+import '../../../../widget/custom_elevated_button.dart';
 import '../../../../widget/custom_profile_image.dart';
 import '../../../../widget/custom_spacer.dart';
 import '../../../../widget/icon_button_widget.dart';
@@ -77,7 +81,7 @@ class _OnListWatchersState extends State<OnListWatchers> {
                   itemCount: notifier.dataViewers.length,
                   itemBuilder: (context, index) {
                     final watcher = notifier.dataViewers[index];
-                    return watcherItem(watcher, index, language);
+                    return watcherItem(watcher, index, language, notifier);
                   }),
             ),
           ],
@@ -86,7 +90,7 @@ class _OnListWatchersState extends State<OnListWatchers> {
     );
   }
 
-  Widget watcherItem(ViewersLiveModel watcher, int index, LocalizationModelV2 language) {
+  Widget watcherItem(ViewersLiveModel watcher, int index, LocalizationModelV2 language, StreamerNotifier notifier) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -112,22 +116,58 @@ class _OnListWatchersState extends State<OnListWatchers> {
                   ),
                   twelvePx,
                   Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        CustomTextWidget(
-                          textAlign: TextAlign.left,
-                          textToDisplay: watcher.username ?? '',
-                          textStyle: context.getTextTheme().bodyText2?.copyWith(
-                                fontWeight: FontWeight.w700,
-                              ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomTextWidget(
+                              textAlign: TextAlign.left,
+                              textToDisplay: watcher.username ?? '',
+                              textStyle: context.getTextTheme().bodyText2?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                            ),
+                            fourPx,
+                            CustomTextWidget(
+                              textAlign: TextAlign.left,
+                              textToDisplay: watcher.fullName ?? '',
+                              textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w400, color: kHyppeBurem),
+                            ),
+                          ],
                         ),
-                        fourPx,
-                        CustomTextWidget(
-                          textAlign: TextAlign.left,
-                          textToDisplay: watcher.fullName ?? '',
-                          textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w400, color: kHyppeBurem),
+                        // Button Follow
+                          CustomElevatedButton(
+                          width: 95,
+                          height: 32 * SizeConfig.scaleDiagonal,
+                          buttonStyle: ButtonStyle(
+                            backgroundColor: (notifier.statusFollowing == StatusFollowing.requested || notifier.statusFollowing == StatusFollowing.following)
+                                ? null
+                                : (notifier.userName == notifier.audienceProfile.username) ? null : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                          ),
+                          function: notifier.isCheckLoading
+                              ? null
+                              : (notifier.userName == notifier.audienceProfile.username) ? null :() {
+                                  if (notifier.statusFollowing == StatusFollowing.none || notifier.statusFollowing == StatusFollowing.rejected) {
+                                    notifier.followUser(context, watcher.email, idMediaStreaming: watcher.sId);
+                                  } else if (notifier.statusFollowing == StatusFollowing.following) {
+                                    notifier.followUser(context, watcher.email, isUnFollow: true, idMediaStreaming: watcher.sId);
+                                  }
+                                },
+                          child: notifier.isCheckLoading
+                              ? const CustomLoading()
+                              : CustomTextWidget(
+                                  textToDisplay: notifier.statusFollowing == StatusFollowing.following
+                                      ? language.following ?? 'following '
+                                      : notifier.statusFollowing == StatusFollowing.requested
+                                          ? language.requested ?? 'requested'
+                                          : language.follow ?? 'follow',
+                                  textStyle: Theme.of(context).textTheme.labelMedium?.copyWith(
+                                        color: (notifier.statusFollowing == StatusFollowing.requested || notifier.statusFollowing == StatusFollowing.following) ? kHyppeGrey : kHyppeLightButtonText,
+                                      ),
+                                ),
                         ),
                       ],
                     ),

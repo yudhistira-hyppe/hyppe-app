@@ -5,8 +5,6 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
-import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:provider/provider.dart';
 
 class PauseLiveView extends StatelessWidget {
@@ -25,7 +23,7 @@ class PauseLiveView extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(50),
             decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
-            child: Center(
+            child: const Center(
               child: Padding(
                 padding: EdgeInsets.only(bottom: 120),
                 child: Column(
@@ -35,7 +33,7 @@ class PauseLiveView extends StatelessWidget {
                     Text(
                       'Siaran LIVE dijeda',
                       // tn.liveBroadcastIsPausedViewersCannotCurrentlySeeYou ?? 'Siaran LIVE dijeda, penonton saat ini tidak dapat melihatmu',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
                       ),
@@ -45,7 +43,7 @@ class PauseLiveView extends StatelessWidget {
                     Text(
                       'Host akan segera kembali',
                       // tn.theLiveBroadcastWillEndAfterTheCountdown ?? 'Siaran LIVE akan berakhir setelah hitung mundur',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: kHyppeBurem,
                         fontSize: 16,
                       ),

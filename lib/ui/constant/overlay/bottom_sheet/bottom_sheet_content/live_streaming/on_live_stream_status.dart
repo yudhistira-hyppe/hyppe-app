@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/widget/custom_gesture.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
@@ -57,9 +59,8 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
     var profileImageKey = context.read<HomeNotifier>().profileImageKey;
     final isIndo = SharedPreference().readStorage(SpKeys.isoCode) == 'id';
 
-
     return Consumer<StreamerNotifier>(
-      builder: (_, notifier, __){
+      builder: (_, notifier, __) {
         return Container(
           height: double.infinity,
           width: double.infinity,
@@ -78,7 +79,10 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
               const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
               sixteenPx,
               Container(
-                margin: const EdgeInsets.only(left: 16, right: 16, ),
+                margin: const EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                ),
                 child: CustomTextWidget(
                   textAlign: TextAlign.center,
                   textToDisplay: (notifier.titleLive.isNotEmpty) ? (notifier.titleLive ?? '') : "${isIndo ? language.liveVideo : ''} ${notifier.userName} ${!isIndo ? language.liveVideo : ''}",
@@ -86,10 +90,15 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                 ),
               ),
               tenPx,
-              const Divider(color: kHyppeSecondary,),
+              const Divider(
+                color: kHyppeSecondary,
+              ),
               tenPx,
               Container(
-                margin: const EdgeInsets.only(left: 16, right: 16, ),
+                margin: const EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                ),
                 child: CustomTextWidget(
                   textAlign: TextAlign.left,
                   textToDisplay: language.liveHost ?? '',
@@ -98,9 +107,12 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
               ),
               sixteenPx,
               Container(
-                margin: const EdgeInsets.only(left: 16, right: 16, ),
+                margin: const EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                ),
                 child: ItemAccount(
-                    urlImage: widget.isViewer ? (notifier.dataStream.avatar?.mediaEndpoint ?? ''): (context.read<SelfProfileNotifier>().user.profile?.avatar?.mediaEndpoint) ?? '',
+                    urlImage: widget.isViewer ? (notifier.dataStream.avatar?.mediaEndpoint ?? '') : (context.read<SelfProfileNotifier>().user.profile?.avatar?.mediaEndpoint) ?? '',
                     username: widget.isViewer ? (notifier.dataStream.username ?? '') : (context.read<SelfProfileNotifier>().user.profile?.username ?? ''),
                     name: widget.isViewer ? (notifier.dataStream.fullName ?? '') : (context.read<SelfProfileNotifier>().user.profile?.fullName ?? ''),
                   email: widget.isViewer ? (notifier.dataStream.email ?? '') : (context.read<SelfProfileNotifier>().user.profile?.fullName ?? ''),
@@ -109,16 +121,37 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
               ),
               eightPx,
               Container(
-                margin: const EdgeInsets.only(left: 16, right: 16, ),
+                margin: const EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                ),
                 child: CustomTextWidget(
                   textAlign: TextAlign.left,
                   textToDisplay: language.whosWatching ?? '',
-                  textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w700,),
+                  textStyle: context.getTextTheme().bodyText2?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
                 ),
               ),
-              if(widget.isViewer)
+              Container(
+                margin: const EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                ),
+                child: CustomTextWidget(
+                  textAlign: TextAlign.left,
+                  textToDisplay: language.whosWatching ?? '',
+                  textStyle: context.getTextTheme().bodyText2?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                ),
+              ),
+              if (widget.isViewer)
                 Container(
-                  margin: const EdgeInsets.only(left: 16, right: 16, ),
+                  margin: const EdgeInsets.only(
+                    left: 16,
+                    right: 16,
+                  ),
                   child: CustomTextWidget(
                     textAlign: TextAlign.left,
                     maxLines: 2,
@@ -129,7 +162,10 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
               eightPx,
               Expanded(
                 child: Container(
-                  margin: const EdgeInsets.only(left: 16, right: 16, ),
+                  margin: const EdgeInsets.only(
+                    left: 16,
+                    right: 16,
+                  ),
                   child: Column(
                     children: [
                       Expanded(
@@ -150,6 +186,7 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                               index: index,
                               length: notifier.dataViewers.length,
                               isloading: notifier.isloadingViewersMore,
+                              idStream: widget.idStream,
                             );
                           },
                         ),
@@ -161,7 +198,7 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                           child: CustomTextWidget(
                             textAlign: TextAlign.center,
                             maxLines: 2,
-                            textToDisplay: language.noteShowView99??'Menampilkan 99 penonton teratas yang peringkatnya diaktifkan',
+                            textToDisplay: language.noteShowView99 ?? 'Menampilkan 99 penonton teratas yang peringkatnya diaktifkan',
                             textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w400, color: kHyppeBurem),
                           ),
                         ),
@@ -196,6 +233,7 @@ class ItemAccount extends StatelessWidget {
   final int? length;
   final int? index;
   final bool? isloading;
+  final String? idStream;
   const ItemAccount({
     super.key,
     required this.urlImage,
@@ -207,6 +245,7 @@ class ItemAccount extends StatelessWidget {
     this.isloading,
     this.index,
     this.length,
+    this.idStream,
   });
 
   @override
@@ -259,6 +298,21 @@ class ItemAccount extends StatelessWidget {
                 ),
               ),
               if (!isHost) tenPx,
+              if (!isHost)
+                CustomGesture(
+                  margin: EdgeInsets.zero,
+                  onTap: () async {
+                    Routing().moveBack();
+                    ShowBottomSheet.onWatcherStatus(context, email ?? '', idStream ?? '');
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: const RotationTransition(
+                      turns: AlwaysStoppedAnimation(90 / 360),
+                      child: Align(alignment: Alignment.center, child: CustomIconWidget(width: 24, iconData: "${AssetPath.vectorPath}more.svg", color: Colors.black, defaultColor: false)),
+                    ),
+                  ),
+                ),
               // if (!isHost)
               //   CustomGesture(
               //     margin: EdgeInsets.zero,

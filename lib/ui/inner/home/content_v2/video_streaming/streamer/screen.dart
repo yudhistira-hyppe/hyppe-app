@@ -208,9 +208,11 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
                   ],
                 ),
           onWillPop: () async {
-            if(notifier.statusLive == StatusStream.standBy){
+            if (notifier.statusLive == StatusStream.offline) {
+              Routing().moveBack();
+            } else if (notifier.statusLive == StatusStream.standBy) {
               notifier.cancelLive(context, mounted);
-            }else{
+            } else {
               await ShowGeneralDialog.generalDialog(
                 context,
                 titleText: tn.endofLIVEBroadcast,

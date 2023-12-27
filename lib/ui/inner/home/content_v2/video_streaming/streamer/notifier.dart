@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_livepush_plugin/beauty/live_beauty.dart';
 import 'package:flutter_livepush_plugin/live_base.dart';
 import 'package:flutter_livepush_plugin/live_push_def.dart';
 import 'package:flutter_livepush_plugin/live_pusher.dart';
@@ -131,16 +130,17 @@ class StreamerNotifier with ChangeNotifier {
     notifyListeners();
     // _setPageOrientation(action, ctx);
     _alivcBase = AlivcBase.init();
-    _alivcBase.registerSDK();
-    _alivcBase.setObserver();
+    await _alivcBase.registerSDK();
+    await _alivcBase.setObserver();
     _alivcBase.setOnLicenceCheck((result, reason) {
       print("======== belum ada lisensi $reason ========");
       if (result != AlivcLiveLicenseCheckResultCode.success) {
         print("======== belum ada lisensi $reason ========");
       }
     });
-    _setLivePusher();
-    _onListen(context, mounted);
+    await setLiveConfig();
+    await _setLivePusher();
+    await _onListen(context, mounted);
     // double max = await _alivcLivePusher.getMaxZoom();
     // print("---=-=-=- maxzooom $max");
     // _alivcLivePusher.setZoom(2.0);
@@ -343,7 +343,7 @@ class StreamerNotifier with ChangeNotifier {
     });
   }
 
-  Future<void> _setLivePusher() async {
+  Future<void> setLiveConfig() async {
     AlivcLivePusherConfig pusherConfig = AlivcLivePusherConfig.init();
     pusherConfig.setCameraType(AlivcLivePushCameraType.front);
 
@@ -371,7 +371,9 @@ class StreamerNotifier with ChangeNotifier {
     pusherConfig.setOrientation(AlivcLivePushOrientation.portrait);
 
     pusherConfig.setPreviewDisplayMode(AlivcPusherPreviewDisplayMode.preview_aspect_fill);
+  }
 
+  Future<void> _setLivePusher() async {
     _alivcLivePusher = AlivcLivePusher.init();
     _alivcLivePusher.initLivePusher();
     _alivcLivePusher.createConfig();
@@ -381,7 +383,7 @@ class StreamerNotifier with ChangeNotifier {
     _alivcLivePusher.setCustomFilterDelegate();
     _alivcLivePusher.setCustomDetectorDelegate();
     _alivcLivePusher.setBGMDelegate();
-    _alivcLivePusher.setResolution(AlivcLivePushResolution.resolution_480P);
+    _alivcLivePusher.setResolution(AlivcLivePushResolution.resolution_720P);
   }
 
   Future<void> _clickSnapShot() async {
@@ -473,11 +475,12 @@ class StreamerNotifier with ChangeNotifier {
     inactivityTimer = null;
   }
 
-  //Comment Empty or Witespase 
+  //Comment Empty or Witespase
   void sendComment() {
-    isSendComment =  RegExp(r"\s\b|\b").hasMatch(commentCtrl.text) ? true : false;
+    isSendComment = commentCtrl.text.trim().isNotEmpty;
     notifyListeners();
   }
+
   void flipCamera() {
     _alivcLivePusher.switchCamera();
   }
@@ -562,13 +565,15 @@ class StreamerNotifier with ChangeNotifier {
     isloadingButton = true;
     notifyListeners();
     var pause = await pauseSendStatus(context);
-    isloadingButton = false;
+
     if (pause) {
       mute = false;
       _alivcLivePusher.resume();
       _alivcLivePusher.setMute(false);
-      notifyListeners();
+      isPause = false;
     }
+    isloadingButton = false;
+    notifyListeners();
   }
 
   Future<void> cancelLive(BuildContext context, mounted) async {

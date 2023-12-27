@@ -24,6 +24,7 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/home/screen.dart';
 import 'package:hyppe/ui/inner/notification/screen.dart';
@@ -150,6 +151,9 @@ class MainNotifier with ChangeNotifier {
       // context.read<HomeNotifier>().profileImageKey = context.read<SelfProfileNotifier>().user.profile?.avatar?.imageKey ?? '';
       context.read<HomeNotifier>().profileImageKey = keyImageCache;
       context.read<HomeNotifier>().onUpdate();
+      if (context.read<SelfProfileNotifier>().user.profile?.creator ?? false) {
+        context.read<StreamerNotifier>().init(context, context.mounted);
+      }
 
       print("profile?.badge ${context.read<HomeNotifier>().profileBadge?.badgeProfile}");
 

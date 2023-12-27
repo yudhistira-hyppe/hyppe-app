@@ -58,7 +58,6 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _initPush();
       setState(() {
         isCreator = context.read<SelfProfileNotifier>().user.profile?.creator ?? false;
       });
@@ -66,25 +65,26 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
       if (newUser == "TRUE") {
         WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(context).startShowCase([keybutton]));
       }
+      _initPush();
     });
   }
 
   Future<void> _initPush() async {
-    // context.read<StreamerNotifier>().init(context, mounted);
-    _alivcBase = AlivcBase.init();
-    _alivcBase.registerSDK().then((value) => print(value));
-    _alivcBase.setObserver();
-    _alivcBase.setOnLicenceCheck((result, reason) {
-      print('sad');
-      print("======== belum ada lisensi $reason ========");
-      if (result != AlivcLiveLicenseCheckResultCode.success) {
-        print("======== belum ada lisensi $reason ========");
-      }
-    });
-    _alivcLivePusherConfig = AlivcLivePusherConfig.init();
-    _alivcLivePusherConfig.setCameraType(AlivcLivePushCameraType.front);
-    _alivcLivePusher = AlivcLivePusher.init();
-    _alivcLivePusher.createConfig();
+    // if (isCreator) context.read<StreamerNotifier>().init(context, mounted);
+    // _alivcBase = AlivcBase.init();
+    // _alivcBase.registerSDK().then((value) => print(value));
+    // _alivcBase.setObserver();
+    // _alivcBase.setOnLicenceCheck((result, reason) {
+    //   print('sad');
+    //   print("======== belum ada lisensi $reason ========");
+    //   if (result != AlivcLiveLicenseCheckResultCode.success) {
+    //     print("======== belum ada lisensi $reason ========");
+    //   }
+    // });
+    // _alivcLivePusherConfig = AlivcLivePusherConfig.init();
+    // _alivcLivePusherConfig.setCameraType(AlivcLivePushCameraType.front);
+    // _alivcLivePusher = AlivcLivePusher.init();
+    // _alivcLivePusher.createConfig();
   }
 
   @override
