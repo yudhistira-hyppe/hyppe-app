@@ -30,6 +30,10 @@ class ListCommentViewer extends StatelessWidget {
               onTap: (){
                 commentFocusNode!.unfocus();
               },
+              onDoubleTapDown: (details) {
+                var position = details.globalPosition;
+                notifier.positionDxDy = position;
+              },
               onDoubleTap: (){
                 notifier.likeAddTapScreen();
                 debouncer.run(() {

@@ -57,10 +57,7 @@ class ViewStreamingNotifier with ChangeNotifier {
   int totLikes = 0;
   int totViews = 0;
 
-  double? positionLeft = 0.0;
-  double? positionRight = 0.0;
-  double? positionTop  = 0.0;
-  double? positionButtom = 0.0;
+  Offset positionDxDy = Offset(0, 0);
 
   bool endLive = false;
 
@@ -396,6 +393,7 @@ class ViewStreamingNotifier with ChangeNotifier {
         if (fetch.postsState == LiveStreamState.getApiSuccess) {
           likeListTapScreen = [];
         }
+        
       } catch (e) {
         debugPrint(e.toString());
       }

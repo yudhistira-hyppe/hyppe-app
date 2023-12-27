@@ -550,11 +550,13 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                 : Stack(
                     children: [
                       GestureDetector(
+                        behavior: HitTestBehavior.translucent,
                         onTap: (){
                           commentFocusNode.unfocus();
                         },
-                        onPanUpdate: (detail){
-                          print('location tap ${detail.localPosition}');
+                        onDoubleTapDown: (details) {
+                          var position = details.globalPosition;
+                          notifier.positionDxDy = position;
                         },
                         onDoubleTap: (){
                           notifier.likeAddTapScreen();
@@ -597,22 +599,18 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                         ),
                       ),
                       Positioned(
-                        top: 0,
-                        bottom: 0, 
-                        left: 0,
-                        right: 0,
-                        child: Center(
-                          child: SizedBox(
-                            width: 180,
-                            child: Stack(
-                              children: notifier.likeListTapScreen.map((e) {
-                                return LoveLootieLarge(
-                                  onAnimationFinished: () {
-                                    // notifier.removeAnimation(e);
-                                  },
-                                );
-                              }).toList(),
-                            ),
+                        top: notifier.positionDxDy.dy - 410,
+                        left: notifier.positionDxDy.dx - 90,
+                        child: SizedBox(
+                          width: 180,
+                          child: Stack(
+                            children: notifier.likeListTapScreen.map((e) {
+                              return LoveLootieLarge(
+                                onAnimationFinished: () {
+                                  // notifier.removeAnimation(e);
+                                },
+                              );
+                            }).toList(),
                           ),
                         ),
                       ),
