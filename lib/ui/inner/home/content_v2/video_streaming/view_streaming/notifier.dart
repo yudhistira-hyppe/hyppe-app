@@ -233,7 +233,9 @@ class ViewStreamingNotifier with ChangeNotifier {
         final fetch = notifier.liveStreamFetch;
         if (fetch.postsState == LiveStreamState.getApiSuccess) {
           final List<LinkStreamModel> tempList = [];
-          listStreamers = [];
+          if(isReload){
+            listStreamers = [];
+          }
           fetch.data.forEach((v) => tempList.add(LinkStreamModel.fromJson(v)));
           if (tempList.isNotEmpty) {
             listStreamers.addAll(tempList);
