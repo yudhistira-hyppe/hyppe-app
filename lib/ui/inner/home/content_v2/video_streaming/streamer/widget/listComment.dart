@@ -64,8 +64,8 @@ class ListCommentLive extends StatelessWidget {
                                   Text.rich(TextSpan(text: notifier.comment[index].username ?? '', style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700), children: [
                                     if (notifier.comment[index].messages == 'joined')
                                       const TextSpan(
-                                        text: 'joined',
-                                        style: TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700),
+                                        text: ' joined',
+                                        style: TextStyle(color: kHyppeTextPrimary, fontWeight: FontWeight.w700),
                                       )
                                   ])),
                                   // Text(

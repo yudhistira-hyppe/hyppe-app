@@ -4,6 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/live_stream/streaming_model.dart';
+import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
+import 'package:hyppe/ui/inner/home/notifier_v2.dart';
+import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import '../../../../../../core/bloc/live_stream/bloc.dart';
@@ -55,6 +59,7 @@ class ViewStreamingNotifier with ChangeNotifier {
   List<int> animationIndexes = [];
   int totLikes = 0;
   int totViews = 0;
+  int totViewsEnd = 0;
 
   bool endLive = false;
 
@@ -231,7 +236,7 @@ class ViewStreamingNotifier with ChangeNotifier {
     if (connect) {
       try {
         final notifier = LiveStreamBloc();
-        Map data = {"page": page, "limit": 20};
+        Map data = {"page": page, "limit": 10};
         if (mounted) {
           await notifier.getLinkStream(context, data, UrlConstants.listLiveStreaming);
         }
@@ -316,6 +321,15 @@ class ViewStreamingNotifier with ChangeNotifier {
           isCommentDisable = dataStreaming.commentDisabled ?? false;
           totViews = dataStreaming.viewCountActive ?? 0;
           returnNext = true;
+          comment.insert(
+            0,
+            CommentLiveModel(
+              email: SharedPreference().readStorage(SpKeys.email),
+              avatar: Avatar(mediaEndpoint: context.read<HomeNotifier>().profileImage),
+              messages: 'joined',
+              username: context.read<SelfProfileNotifier>().user.profile?.username,
+            ),
+          );
         }
       } catch (e) {
         debugPrint(e.toString());
@@ -460,6 +474,7 @@ class ViewStreamingNotifier with ChangeNotifier {
             msg: 'Live Streaming akan segera berakhir',
             gravity: ToastGravity.CENTER,
           );
+          totViewsEnd = messages.totalViews ?? 0;
         }
       }
     } else if (event == eventCommentDisable) {

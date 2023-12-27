@@ -35,8 +35,7 @@ class FormCommentLive extends StatelessWidget {
                     cursorColor: Colors.white,
                     enabled: !notifier.isCommentDisable,
                     inputFormatters: [LengthLimitingTextInputFormatter(150)],
-                    onChanged: (val) =>
-                      notifier.sendComment(),
+                    onChanged: (val) => notifier.sendComment(),
                     decoration: InputDecoration(
                         counterText: '',
                         hintText: notifier.isCommentDisable ? tn.commentsAreDisabled : tn.addComment,
@@ -52,33 +51,35 @@ class FormCommentLive extends StatelessWidget {
                 ),
                 !commentFocusNode!.hasFocus
                     ? Container()
-                    : !notifier.isSendComment ? const SizedBox.shrink() : Positioned.fill(
-                        top: 0,
-                        child: Align(
-                            alignment: Alignment.topRight,
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: CustomTextButton(
-                                  onPressed: () {
-                                    notifier.sendMessage(context, context.mounted).then((value) {
-                                      commentFocusNode!.unfocus();
-                                    });
-                                  },
-                                  style: ButtonStyle(
-                                      visualDensity: VisualDensity.comfortable,
-                                      padding: MaterialStateProperty.all(EdgeInsets.zero),
-                                      backgroundColor: MaterialStateProperty.all(kHyppePrimary),
-                                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(18.0),
-                                        ),
+                    : !notifier.isSendComment
+                        ? const SizedBox.shrink()
+                        : Positioned.fill(
+                            top: 0,
+                            child: Align(
+                                alignment: Alignment.topRight,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: CustomTextButton(
+                                      onPressed: () {
+                                        notifier.sendMessage(context, context.mounted).then((value) {
+                                          commentFocusNode!.unfocus();
+                                        });
+                                      },
+                                      style: ButtonStyle(
+                                          visualDensity: VisualDensity.comfortable,
+                                          padding: MaterialStateProperty.all(EdgeInsets.zero),
+                                          backgroundColor: MaterialStateProperty.all(kHyppePrimary),
+                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(18.0),
+                                            ),
+                                          )),
+                                      child: Text(
+                                        tn.send ?? '',
+                                        style: TextStyle(color: kHyppeTextPrimary, fontSize: 10),
                                       )),
-                                  child: Text(
-                                    tn.send ?? '',
-                                    style: TextStyle(color: kHyppeTextPrimary, fontSize: 10),
-                                  )),
-                            )),
-                      ),
+                                )),
+                          ),
               ],
             ),
           ),

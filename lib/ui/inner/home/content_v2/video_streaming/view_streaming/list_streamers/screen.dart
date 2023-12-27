@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/arguments/view_streaming_argument.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
@@ -37,6 +36,9 @@ class _ListStreamersScreenState extends State<ListStreamersScreen> with TickerPr
     final notifier = Routing.navigatorKey.currentContext?.read<ViewStreamingNotifier>();
     notifier?.initListStreamers();
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      (Routing.navigatorKey.currentContext ?? context).read<ViewStreamingNotifier>().getListStreamers(Routing.navigatorKey.currentContext ?? context, mounted);
+    });
     _controller = AnimationController(vsync: this);
     _controller.addListener(() {
       if (_controller.isCompleted) {
@@ -55,9 +57,7 @@ class _ListStreamersScreenState extends State<ListStreamersScreen> with TickerPr
   }
 
   @override
-  void afterFirstLayout(BuildContext context) {
-    (Routing.navigatorKey.currentContext ?? context).read<ViewStreamingNotifier>().getListStreamers(Routing.navigatorKey.currentContext ?? context, mounted);
-  }
+  void afterFirstLayout(BuildContext context) {}
 
   String? displayPhotoProfileOriginal(String url) {
     try {
@@ -78,7 +78,7 @@ class _ListStreamersScreenState extends State<ListStreamersScreen> with TickerPr
   @override
   void didPopNext() {
     Routing.navigatorKey.currentContext?.read<ViewStreamingNotifier>().initListStreamers();
-    // (Routing.navigatorKey.currentContext ?? context).read<ViewStreamingNotifier>().getListStreamers(Routing.navigatorKey.currentContext ?? context, mounted);
+    (Routing.navigatorKey.currentContext ?? context).read<ViewStreamingNotifier>().getListStreamers(Routing.navigatorKey.currentContext ?? context, mounted);
     super.didPopNext();
   }
 
