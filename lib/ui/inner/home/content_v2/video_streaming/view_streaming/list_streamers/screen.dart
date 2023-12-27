@@ -77,9 +77,16 @@ class _ListStreamersScreenState extends State<ListStreamersScreen> with TickerPr
 
   @override
   void didPopNext() {
+    print("ini didpooooop next ======");
     Routing.navigatorKey.currentContext?.read<ViewStreamingNotifier>().initListStreamers();
     (Routing.navigatorKey.currentContext ?? context).read<ViewStreamingNotifier>().getListStreamers(Routing.navigatorKey.currentContext ?? context, mounted);
     super.didPopNext();
+  }
+
+  @override
+  void didPop() {
+    print("ini didpooooop ======");
+    super.didPop();
   }
 
   @override
@@ -275,7 +282,7 @@ class _ListStreamersScreenState extends State<ListStreamersScreen> with TickerPr
                                         child: CustomGesture(
                                           onTap: () async {
                                             await Routing().move(Routes.viewStreaming, argument: ViewStreamingArgument(data: streamer));
-                                            notifier.getListStreamers(Routing.navigatorKey.currentContext ?? context, mounted);
+                                            // notifier.getListStreamers(Routing.navigatorKey.currentContext ?? context, mounted);
                                           },
                                           child: ClipRRect(
                                             borderRadius: BorderRadius.circular(8),

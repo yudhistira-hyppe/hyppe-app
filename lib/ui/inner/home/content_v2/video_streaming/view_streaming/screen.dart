@@ -473,7 +473,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
       return Scaffold(
         resizeToAvoidBottomInset: false,
         body: WillPopScope(
-          child: Container(
+          child: SizedBox(
             width: SizeConfig.screenWidth,
             height: SizeConfig.screenHeight,
             child: notifier.isOver
@@ -498,8 +498,9 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                         child: Align(
                           alignment: Alignment.topRight,
                           child: GestureDetector(
-                            onTap: () {
-                              Routing().moveBack();
+                            onTap: () async {
+                              await notifier.exitStreaming(context, widget.args.data);
+                              await notifier.destoryPusher();
                             },
                             child: const Padding(
                               padding: EdgeInsets.only(right: 30.0),
@@ -588,13 +589,12 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                           ),
                         ),
                       ),
-                      Positioned.fill(
-                        bottom: 0,
+                      Positioned(
                         top: 0,
+                        bottom: 0,
                         left: 0,
                         right: 0,
-                        child: Align(
-                          alignment: Alignment.center,
+                        child: Center(
                           child: SizedBox(
                             width: 180,
                             child: Stack(
