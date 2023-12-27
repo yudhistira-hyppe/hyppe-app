@@ -255,9 +255,13 @@ class _ListStreamersScreenState extends State<ListStreamersScreen> with TickerPr
                                                       crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
                                                         if (streamer.title != null)
-                                                          CustomTextWidget(
-                                                            textToDisplay: streamer.title ?? '',
-                                                            textStyle: const TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.w700),
+                                                          SizedBox(
+                                                            width: sizeTile - 20,
+                                                            child: CustomTextWidget(
+                                                              textToDisplay: streamer.title ?? '',
+                                                              textAlign: TextAlign.start,
+                                                              textStyle: const TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.w700),
+                                                            ),
                                                           ),
                                                         twoPx,
                                                         CustomTextWidget(
@@ -319,9 +323,13 @@ class _ListStreamersScreenState extends State<ListStreamersScreen> with TickerPr
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       if (streamer.title != null)
-                                                        CustomTextWidget(
-                                                          textToDisplay: streamer.title ?? '',
-                                                          textStyle: const TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.w700),
+                                                        SizedBox(
+                                                          width: sizeTile - 20,
+                                                          child: CustomTextWidget(
+                                                            textToDisplay: streamer.title ?? '',
+                                                            textAlign: TextAlign.start,
+                                                            textStyle: const TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.w700),
+                                                          ),
                                                         ),
                                                       twoPx,
                                                       CustomTextWidget(
@@ -380,9 +388,13 @@ class _ListStreamersScreenState extends State<ListStreamersScreen> with TickerPr
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       if (streamer.title != null)
-                                                        CustomTextWidget(
-                                                          textToDisplay: streamer.title ?? '',
-                                                          textStyle: const TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.w700),
+                                                        SizedBox(
+                                                          width: sizeTile - 20,
+                                                          child: CustomTextWidget(
+                                                            textToDisplay: streamer.title ?? '',
+                                                            textAlign: TextAlign.start,
+                                                            textStyle: const TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.w700),
+                                                          ),
                                                         ),
                                                       twoPx,
                                                       CustomTextWidget(
