@@ -518,8 +518,9 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
                           alignment: Alignment.topRight,
                           child: GestureDetector(
                             onTap: () async {
-                              await notifier.exitStreaming(context, widget.args.data);
+                              // await notifier.exitStreaming(context, widget.args.data);
                               await notifier.destoryPusher();
+                              Routing().moveBack();
                             },
                             child: const Padding(
                               padding: EdgeInsets.only(right: 30.0),

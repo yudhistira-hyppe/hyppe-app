@@ -41,7 +41,7 @@ class StatusNControl extends StatelessWidget {
                   ShowBottomSheet.onStreamWatchersStatus(context, false, notifier, );
                 },
                 child: Container(
-                  width: 60 * SizeConfig.scaleDiagonal,
+                  width: 50,
                   padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
                   decoration: BoxDecoration(color: kHyppeTransparent, borderRadius: BorderRadius.circular(3)),
                   child: Row(
