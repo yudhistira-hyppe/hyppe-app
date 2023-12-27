@@ -69,6 +69,8 @@ class StreamerNotifier with ChangeNotifier {
   LinkStreamModel dataStream = LinkStreamModel();
   UserProfileModel audienceProfile = UserProfileModel();
   StatusFollowing statusFollowing = StatusFollowing.none;
+
+  StatusFollowing statusFollowingViewer = StatusFollowing.none;
   LiveSummaryModel dataSummary = LiveSummaryModel();
 
   late AlivcBase _alivcBase;
@@ -910,6 +912,47 @@ class StreamerNotifier with ChangeNotifier {
     } catch (e) {
       'followUser error: $e'.logger();
       // statusFollowing = StatusFollowing.none;
+      ShowBottomSheet.onShowSomethingWhenWrong(context);
+    }
+  }
+
+  Future followUserViewer(BuildContext context, email, {isUnFollow = false, String? idMediaStreaming}) async {
+    try {
+      // _system.actionReqiredIdCard(
+      //   context,
+      //   action: () async {
+      // statusFollowing = StatusFollowing.requested;
+      isCheckLoading = true;
+      final notifier = FollowBloc();
+      await notifier.followUserBlocV2(
+        context,
+        data: FollowUserArgument(
+          receiverParty: email ?? '',
+          eventType: isUnFollow ? InteractiveEventType.unfollow : InteractiveEventType.following,
+          idMediaStreaming: idMediaStreaming,
+        ),
+      );
+      final fetch = notifier.followFetch;
+      if (fetch.followState == FollowState.followUserSuccess) {
+        if (isUnFollow) {
+          statusFollowingViewer = StatusFollowing.none;
+        } else {
+          statusFollowingViewer = StatusFollowing.following;
+        }
+      } else if (statusFollowingViewer != StatusFollowing.none && statusFollowingViewer != StatusFollowing.following) {
+        statusFollowingViewer = StatusFollowing.none;
+      }
+      // else {
+      //   statusFollowingViewer = StatusFollowing.none;
+      // }
+      //   },
+      //   uploadContentAction: false,
+      // );
+      isCheckLoading = false;
+      notifyListeners();
+    } catch (e) {
+      'followUser error: $e'.logger();
+      // statusFollowingViewer = StatusFollowing.none;
       ShowBottomSheet.onShowSomethingWhenWrong(context);
     }
   }

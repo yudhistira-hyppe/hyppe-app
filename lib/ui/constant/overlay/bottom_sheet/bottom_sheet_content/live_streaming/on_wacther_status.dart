@@ -80,6 +80,8 @@ class _OnWatcherStatusState extends State<OnWatcherStatus> {
                         email: notifier.audienceProfile.email ?? '',
                         sId: notifier.dataStream.sId ?? '',
                         isHost: false,
+                        isViewer: false,
+                        notifier: notifier,
                       ),
                       twentyPx,
                       Container(
