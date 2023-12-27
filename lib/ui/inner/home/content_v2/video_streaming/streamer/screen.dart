@@ -6,6 +6,7 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
@@ -43,7 +44,7 @@ class StreamerScreen extends StatefulWidget {
   State<StreamerScreen> createState() => _StreamerScreenState();
 }
 
-class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStateMixin {
+class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStateMixin, WidgetsBindingObserver, RouteAware {
   bool isloading = true;
   FocusNode commentFocusNode = FocusNode();
   AlivcPusherPreview? pusherPreviewView;
@@ -56,6 +57,7 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
     // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       var streampro = Provider.of<StreamerNotifier>(context, listen: false);
       streampro.requestPermission(context);
@@ -102,23 +104,32 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
   }
 
-  // Widget build(BuildContext context) {
-  //   SizeConfig().init(context);
-  //   return Scaffold(
-  //     body: Stack(
-  //       children: [
-  //         Container(
-  //           height: SizeConfig.screenHeight,
-  //           width: SizeConfig.screenWidth,
-  //           color: Colors.blue,
-  //         ),
-  //         // beforeLive(),
-  //         // startCounting(),
-  //         streamer(),
-  //       ],
-  //     ),
-  //   );
-  // }
+  @override
+  void didChangeDependencies() {
+    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    super.didChangeDependencies();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    // var streampro = Provider.of<StreamerNotifier>(context, listen: false);
+    if (state == AppLifecycleState.inactive) {
+      print("========= Streamer AppLifecycleState.inactive ==========");
+    }
+    if (state == AppLifecycleState.resumed) {
+      print("========= Streamer AppLifecycleState.resumed ==========");
+    }
+
+    if (state == AppLifecycleState.paused) {
+      // Minimize aplication
+      print("========= Streamer AppLifecycleState.paused ==========");
+      // streampro.pauseLive(context, mounted);
+    }
+
+    if (state == AppLifecycleState.detached) {
+      print("========= Streamer AppLifecycleState.detached ==========");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

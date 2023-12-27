@@ -5,7 +5,6 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/live_stream/viewers_live_model.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/services/system.dart';
-import 'package:hyppe/ui/constant/widget/custom_gesture.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
@@ -139,33 +138,37 @@ class _OnListWatchersState extends State<OnListWatchers> {
                           ],
                         ),
                         // Button Follow
-                          CustomElevatedButton(
+                        CustomElevatedButton(
                           width: 95,
                           height: 32 * SizeConfig.scaleDiagonal,
                           buttonStyle: ButtonStyle(
-                            backgroundColor: (notifier.statusFollowing == StatusFollowing.requested || notifier.statusFollowing == StatusFollowing.following)
+                            backgroundColor: (watcher.following ?? false)
                                 ? null
-                                : (notifier.userName == notifier.audienceProfile.username) ? null : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                : (notifier.userName == notifier.audienceProfile.username)
+                                    ? null
+                                    : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                           ),
                           function: notifier.isCheckLoading
                               ? null
-                              : (notifier.userName == notifier.audienceProfile.username) ? null :() {
-                                  if (notifier.statusFollowing == StatusFollowing.none || notifier.statusFollowing == StatusFollowing.rejected) {
-                                    notifier.followUser(context, watcher.email, idMediaStreaming: watcher.sId);
-                                  } else if (notifier.statusFollowing == StatusFollowing.following) {
-                                    notifier.followUser(context, watcher.email, isUnFollow: true, idMediaStreaming: watcher.sId);
-                                  }
-                                },
+                              : (notifier.userName == notifier.audienceProfile.username)
+                                  ? null
+                                  : () {
+                                      if (notifier.statusFollowing == StatusFollowing.none || notifier.statusFollowing == StatusFollowing.rejected) {
+                                        notifier.followUser(context, watcher.email, idMediaStreaming: watcher.sId).then((value) {
+                                          watcher.following = true;
+                                        });
+                                      } else if (notifier.statusFollowing == StatusFollowing.following) {
+                                        notifier.followUser(context, watcher.email, isUnFollow: true, idMediaStreaming: watcher.sId).then((value) {
+                                          watcher.following = false;
+                                        });
+                                      }
+                                    },
                           child: notifier.isCheckLoading
                               ? const CustomLoading()
                               : CustomTextWidget(
-                                  textToDisplay: notifier.statusFollowing == StatusFollowing.following
-                                      ? language.following ?? 'following '
-                                      : notifier.statusFollowing == StatusFollowing.requested
-                                          ? language.requested ?? 'requested'
-                                          : language.follow ?? 'follow',
+                                  textToDisplay: (watcher.following ?? false) ? language.following ?? 'following' : language.follow ?? 'follow',
                                   textStyle: Theme.of(context).textTheme.labelMedium?.copyWith(
-                                        color: (notifier.statusFollowing == StatusFollowing.requested || notifier.statusFollowing == StatusFollowing.following) ? kHyppeGrey : kHyppeLightButtonText,
+                                        color: (watcher.following ?? false) ? kHyppeGrey : kHyppeLightButtonText,
                                       ),
                                 ),
                         ),

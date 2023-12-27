@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -17,11 +18,12 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class TitleViewLive extends StatelessWidget {
+  final FlutterAliplayer? fAliplayer;
   final LinkStreamModel data;
   final int totLikes;
   final int totViews;
 
-  const TitleViewLive({super.key, required this.data, required this.totLikes, required this.totViews});
+  const TitleViewLive({super.key, required this.data, required this.totLikes, required this.totViews, this.fAliplayer});
 
   @override
   Widget build(BuildContext context) {
@@ -99,9 +101,7 @@ class TitleViewLive extends StatelessWidget {
             children: [
               ConstrainedBox(
                 // width: 86,
-                constraints: BoxConstraints(
-                  maxWidth: 86
-                ),
+                constraints: BoxConstraints(maxWidth: 86),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -185,8 +185,11 @@ class TitleViewLive extends StatelessWidget {
         GestureDetector(
           onTap: () {
             context.read<ViewStreamingNotifier>().exitStreaming(context, data).whenComplete(() async {
-              Routing().moveBack();
               await context.read<ViewStreamingNotifier>().destoryPusher();
+              fAliplayer?.stop();
+              fAliplayer?.destroy();
+              fAliplayer?.clearScreen();
+              Routing().moveBack();
             });
           },
           child: CustomIconWidget(

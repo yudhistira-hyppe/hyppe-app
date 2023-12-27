@@ -116,17 +116,25 @@ class _OnWatcherStatusState extends State<OnWatcherStatus> {
                         buttonStyle: ButtonStyle(
                           backgroundColor: (notifier.statusFollowing == StatusFollowing.requested || notifier.statusFollowing == StatusFollowing.following)
                               ? null
-                              : (notifier.userName == notifier.audienceProfile.username) ? null : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                              : (notifier.userName == notifier.audienceProfile.username)
+                                  ? null
+                                  : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                         ),
                         function: notifier.isCheckLoading
                             ? null
-                            : (notifier.userName == notifier.audienceProfile.username) ? null :() {
-                                if (notifier.statusFollowing == StatusFollowing.none || notifier.statusFollowing == StatusFollowing.rejected) {
-                                  notifier.followUser(context, widget.email, idMediaStreaming: widget.idMediaStreaming);
-                                } else if (notifier.statusFollowing == StatusFollowing.following) {
-                                  notifier.followUser(context, widget.email, isUnFollow: true, idMediaStreaming: widget.idMediaStreaming);
-                                }
-                              },
+                            : (notifier.userName == notifier.audienceProfile.username)
+                                ? null
+                                : () {
+                                    if (notifier.statusFollowing == StatusFollowing.none || notifier.statusFollowing == StatusFollowing.rejected) {
+                                      notifier.followUser(context, widget.email, idMediaStreaming: widget.idMediaStreaming).then((value) {
+                                        notifier.audienceProfile.insight?.followers = notifier.audienceProfile.insight!.followers! + 1;
+                                      });
+                                    } else if (notifier.statusFollowing == StatusFollowing.following) {
+                                      notifier.followUser(context, widget.email, isUnFollow: true, idMediaStreaming: widget.idMediaStreaming).then((value) {
+                                        notifier.audienceProfile.insight?.followers = notifier.audienceProfile.insight!.followers! - 1;
+                                      });
+                                    }
+                                  },
                         child: notifier.isCheckLoading
                             ? const CustomLoading()
                             : CustomTextWidget(

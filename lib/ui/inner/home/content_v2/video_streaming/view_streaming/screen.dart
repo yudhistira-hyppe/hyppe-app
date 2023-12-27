@@ -499,6 +499,9 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                           alignment: Alignment.topRight,
                           child: GestureDetector(
                             onTap: () async {
+                              fAliplayer?.stop();
+                              fAliplayer?.destroy();
+                              fAliplayer?.clearScreen();
                               await notifier.exitStreaming(context, widget.args.data);
                               await notifier.destoryPusher();
                             },
@@ -652,7 +655,12 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                             ),
                           ),
                         ),
-                      TitleViewLive(data: widget.args.data, totLikes: notifier.totLikes, totViews: notifier.totViews),
+                      TitleViewLive(
+                        data: widget.args.data,
+                        totLikes: notifier.totLikes,
+                        totViews: notifier.totViews,
+                        fAliplayer: fAliplayer,
+                      ),
                       // Positioned(
                       //   top: 12 + context.getHeightStatusBar(),
                       //   left: 16,
@@ -766,6 +774,9 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                   ),
           ),
           onWillPop: () async {
+            fAliplayer?.clearScreen();
+            fAliplayer?.stop();
+            fAliplayer?.destroy();
             await notifier.exitStreaming(context, widget.args.data);
             await notifier.destoryPusher();
             return true;

@@ -112,27 +112,14 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                   right: 16,
                 ),
                 child: ItemAccount(
-                    urlImage: widget.isViewer ? (notifier.dataStream.avatar?.mediaEndpoint ?? '') : (context.read<SelfProfileNotifier>().user.profile?.avatar?.mediaEndpoint) ?? '',
-                    username: widget.isViewer ? (notifier.dataStream.username ?? '') : (context.read<SelfProfileNotifier>().user.profile?.username ?? ''),
-                    name: widget.isViewer ? (notifier.dataStream.fullName ?? '') : (context.read<SelfProfileNotifier>().user.profile?.fullName ?? ''),
+                  urlImage: widget.isViewer ? (notifier.dataStream.avatar?.mediaEndpoint ?? '') : (context.read<SelfProfileNotifier>().user.profile?.avatar?.mediaEndpoint) ?? '',
+                  username: widget.isViewer ? (notifier.dataStream.username ?? '') : (context.read<SelfProfileNotifier>().user.profile?.username ?? ''),
+                  name: widget.isViewer ? (notifier.dataStream.fullName ?? '') : (context.read<SelfProfileNotifier>().user.profile?.fullName ?? ''),
                   email: widget.isViewer ? (notifier.dataStream.email ?? '') : (context.read<SelfProfileNotifier>().user.profile?.fullName ?? ''),
                   sId: notifier.dataStream.sId ?? '',
                 ),
               ),
               eightPx,
-              Container(
-                margin: const EdgeInsets.only(
-                  left: 16,
-                  right: 16,
-                ),
-                child: CustomTextWidget(
-                  textAlign: TextAlign.left,
-                  textToDisplay: language.whosWatching ?? '',
-                  textStyle: context.getTextTheme().bodyText2?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
-                ),
-              ),
               Container(
                 margin: const EdgeInsets.only(
                   left: 16,
@@ -172,7 +159,6 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                         child: notifier.isloadingViewers
                             ? const SizedBox(height: 10, child: Align(alignment: Alignment.topCenter, child: Padding(padding: EdgeInsets.only(top: 60), child: const CustomLoading())))
                             : ListView.builder(
-<<<<<<< HEAD
                                 controller: controller,
                                 itemCount: notifier.dataViewers.length,
                                 itemBuilder: (context, index) {
@@ -183,32 +169,15 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                                     username: watcher.username ?? '',
                                     isHost: false,
                                     index: index,
+                                    sId: widget.idStream ?? '',
                                     length: notifier.dataViewers.length,
                                     isloading: notifier.isloadingViewersMore,
-                                    email: watcher.email,
+                                    email: watcher.email ?? '',
                                     idStream: widget.idStream,
+                                    showThreeDot: true,
                                   );
                                 },
                               ),
-=======
-                          controller: controller,
-                          itemCount: notifier.dataViewers.length,
-                          itemBuilder: (context, index) {
-                            final watcher = notifier.dataViewers[index];
-                            return ItemAccount(
-                              urlImage: watcher.avatar?.mediaEndpoint ?? '',
-                              name: watcher.fullName ?? '',
-                              username: watcher.username ?? '',
-                              email: watcher.email ?? '',
-                              sId: notifier.dataStream.sId ?? '',
-                              isHost: false,
-                              index: index,
-                              length: notifier.dataViewers.length,
-                              isloading: notifier.isloadingViewersMore,
-                            );
-                          },
-                        ),
->>>>>>> a1f18ca3772e79f584bf2b6cce92d372177f5939
                       ),
                       Visibility(
                         visible: notifier.dataViewers.length > 99,
@@ -252,7 +221,8 @@ class ItemAccount extends StatelessWidget {
   final int? length;
   final int? index;
   final bool? isloading;
-  final String? email;
+  final bool showThreeDot;
+
   final String? idStream;
   const ItemAccount({
     super.key,
@@ -265,8 +235,8 @@ class ItemAccount extends StatelessWidget {
     this.isloading,
     this.index,
     this.length,
-    this.email,
     this.idStream,
+    this.showThreeDot = false,
   });
 
   @override
@@ -282,12 +252,11 @@ class ItemAccount extends StatelessWidget {
             children: [
               CustomProfileImage(
                 onTap: () async {
-                  if(context.read<SelfProfileNotifier>().user.profile?.username != username ){
+                  if (context.read<SelfProfileNotifier>().user.profile?.username != username) {
                     Routing().moveBack();
-                    Future.delayed(const Duration(milliseconds: 500), (){
+                    Future.delayed(const Duration(milliseconds: 500), () {
                       ShowBottomSheet.onWatcherStatus(Routing.navigatorKey.currentContext ?? context, email, sId);
                     });
-
                   }
                 },
                 width: 36,
@@ -319,7 +288,7 @@ class ItemAccount extends StatelessWidget {
                 ),
               ),
               if (!isHost) tenPx,
-              if (!isHost)
+              if (!isHost && showThreeDot && SharedPreference().readStorage(SpKeys.email) != email)
                 CustomGesture(
                   margin: EdgeInsets.zero,
                   onTap: () async {

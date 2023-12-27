@@ -426,8 +426,11 @@ class StreamerNotifier with ChangeNotifier {
     notifyListeners();
     var init = await initLiveStream(context, mounted);
     if (init) {
-      Future.delayed(Duration(seconds: 1));
+      Future.delayed(const Duration(seconds: 1));
       _alivcLivePusher.startPushWithURL(dataStream.urlIngest ?? '');
+      if (_socketService.isRunning) {
+        _socketService.closeSocket();
+      }
       _connectAndListenToSocket(eventComment);
       _connectAndListenToSocket(eventLikeStream);
       _connectAndListenToSocket(eventViewStream);
@@ -814,6 +817,7 @@ class StreamerNotifier with ChangeNotifier {
   Future getProfileNCheck(BuildContext context, String email) async {
     int totLoading = 0;
     isloadingProfile = true;
+    statusFollowing = StatusFollowing.none;
     notifyListeners();
     await checkFollowingToUser(context, email).then((value) => totLoading++);
     await getProfile(context, email).then((value) => totLoading++);
@@ -967,10 +971,6 @@ class StreamerNotifier with ChangeNotifier {
   void _connectAndListenToSocket(String events) async {
     String? token = SharedPreference().readStorage(SpKeys.userToken);
     String? email = SharedPreference().readStorage(SpKeys.email);
-
-    // if (_socketService.isRunning) {
-    //   _socketService.closeSocket();
-    // }
 
     _socketService.connectToSocket(
       () {
