@@ -475,7 +475,7 @@ class StreamerNotifier with ChangeNotifier {
 
   //Comment Empty or Witespase 
   void sendComment() {
-    isSendComment =  RegExp(r"\s\b|\b").hasMatch(commentCtrl.text) ? true : false;
+    isSendComment =  commentCtrl.text.trim().isNotEmpty;
     notifyListeners();
   }
   void flipCamera() {

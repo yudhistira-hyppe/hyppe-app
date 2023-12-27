@@ -31,6 +31,7 @@ import '../../../../../constant/widget/custom_icon_widget.dart';
 import '../../../../../constant/widget/custom_loading.dart';
 import '../../../../../constant/widget/custom_spacer.dart';
 import '../../../../../constant/widget/custom_text_widget.dart';
+import '../streamer/screen.dart';
 
 class ViewStreamingScreen extends StatefulWidget {
   final ViewStreamingArgument args;
@@ -44,6 +45,9 @@ class ViewStreamingScreen extends StatefulWidget {
 class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsBindingObserver, TickerProviderStateMixin {
   FocusNode commentFocusNode = FocusNode();
 
+  final debouncer = Debouncer(milliseconds: 2000);
+
+  
   FlutterAliplayer? fAliplayer;
   // final _sharedPrefs = SharedPreference();
   var secondsSkip = 0;
@@ -541,16 +545,24 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                   )
                 : Stack(
                     children: [
-                      Container(
-                        color: Colors.black,
-                        width: SizeConfig.screenWidth,
-                        height: SizeConfig.screenHeight,
-                        child: AliPlayerView(
-                          onCreated: onViewPlayerCreated,
-                          x: 0,
-                          y: 0,
-                          height: SizeConfig.screenHeight,
+                      GestureDetector(
+                        onDoubleTap:() {
+                          notifier.likeAdd();
+                          debouncer.run(() {
+                            notifier.sendLike(context, notifier.streamerData!);
+                          });
+                        },
+                        child: Container(
+                          color: Colors.transparent,
                           width: SizeConfig.screenWidth,
+                          height: SizeConfig.screenHeight,
+                          child: AliPlayerView(
+                            onCreated: onViewPlayerCreated,
+                            x: 0,
+                            y: 0,
+                            height: SizeConfig.screenHeight,
+                            width: SizeConfig.screenWidth,
+                          ),
                         ),
                       ),
                       if (notifier.dataStreaming.pause ?? false) const PauseLiveView(),

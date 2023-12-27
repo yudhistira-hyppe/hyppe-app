@@ -115,6 +115,7 @@ class TitleViewLive extends StatelessWidget {
           ),
         ),
         eightPx,
+        if (totViews > 0)
         GestureDetector(
           onTap: () {
             print('testing see views');
