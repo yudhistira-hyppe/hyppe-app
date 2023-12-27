@@ -27,10 +27,13 @@ class ListCommentViewer extends StatelessWidget {
         child: notifier.isCommentDisable
             ? Container()
             : GestureDetector(
+              onTap: (){
+                commentFocusNode!.unfocus();
+              },
               onDoubleTap: (){
-                notifier.likeAdd();
+                notifier.likeAddTapScreen();
                 debouncer.run(() {
-                  notifier.sendLike(context, notifier.streamerData!);
+                  notifier.sendLikeTapScreen(context, notifier.streamerData!);
                 });
               },
               child: ListView.builder(

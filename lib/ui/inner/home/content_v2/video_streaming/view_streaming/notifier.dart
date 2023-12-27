@@ -57,6 +57,11 @@ class ViewStreamingNotifier with ChangeNotifier {
   int totLikes = 0;
   int totViews = 0;
 
+  double? positionLeft = 0.0;
+  double? positionRight = 0.0;
+  double? positionTop  = 0.0;
+  double? positionButtom = 0.0;
+
   bool endLive = false;
 
   bool _loading = false;
@@ -156,6 +161,7 @@ class ViewStreamingNotifier with ChangeNotifier {
   }
 
   List<String> likeList = [];
+  List<String> likeListTapScreen = [];
 
   bool _isOver = false;
   bool get isOver => _isOver;
@@ -172,6 +178,12 @@ class ViewStreamingNotifier with ChangeNotifier {
 
   void likeAdd() {
     likeList.add(System().getCurrentDate());
+    totLikes++;
+    notifyListeners();
+  }
+
+  void likeAddTapScreen() {
+    likeListTapScreen.add(System().getCurrentDate());
     totLikes++;
     notifyListeners();
   }
@@ -349,6 +361,40 @@ class ViewStreamingNotifier with ChangeNotifier {
         final fetch = notifier.liveStreamFetch;
         if (fetch.postsState == LiveStreamState.getApiSuccess) {
           likeList = [];
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+
+      notifyListeners();
+    } else {
+      // returnNext = false;
+      if (context.mounted) {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
+          exitStreaming(context, model);
+        });
+      }
+    }
+  }
+
+  Future sendLikeTapScreen(BuildContext context, LinkStreamModel model) async {
+    bool connect = await System().checkConnections();
+
+    if (connect) {
+      try {
+        final notifier = LiveStreamBloc();
+        Map data = {
+          "_id": model.sId,
+          "like": likeListTapScreen,
+          // "like":["2023-12-14 12:01:49"],
+          "type": "LIKE"
+        };
+
+        await notifier.getLinkStream(context, data, UrlConstants.updateStream);
+        final fetch = notifier.liveStreamFetch;
+        if (fetch.postsState == LiveStreamState.getApiSuccess) {
+          likeListTapScreen = [];
         }
       } catch (e) {
         debugPrint(e.toString());
