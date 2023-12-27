@@ -152,7 +152,7 @@ class MainNotifier with ChangeNotifier {
       context.read<HomeNotifier>().profileImageKey = keyImageCache;
       context.read<HomeNotifier>().onUpdate();
       if (context.read<SelfProfileNotifier>().user.profile?.creator ?? false) {
-        context.read<StreamerNotifier>().init(context, context.mounted);
+        context.read<StreamerNotifier>().init(context, context.mounted, forConfig: true);
       }
 
       print("profile?.badge ${context.read<HomeNotifier>().profileBadge?.badgeProfile}");
