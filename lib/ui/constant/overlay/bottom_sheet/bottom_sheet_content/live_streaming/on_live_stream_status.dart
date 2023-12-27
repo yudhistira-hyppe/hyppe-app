@@ -7,6 +7,7 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../core/constants/asset_path.dart';
@@ -16,6 +17,7 @@ import '../../../../../../core/services/shared_preference.dart';
 import '../../../../widget/custom_icon_widget.dart';
 import '../../../../widget/custom_profile_image.dart';
 import '../../../../widget/custom_spacer.dart';
+import '../../show_bottom_sheet.dart';
 
 class OnLiveStreamStatus extends StatefulWidget {
   final String? idStream;
@@ -100,7 +102,10 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                 child: ItemAccount(
                     urlImage: widget.isViewer ? (notifier.dataStream.avatar?.mediaEndpoint ?? ''): (context.read<SelfProfileNotifier>().user.profile?.avatar?.mediaEndpoint) ?? '',
                     username: widget.isViewer ? (notifier.dataStream.username ?? '') : (context.read<SelfProfileNotifier>().user.profile?.username ?? ''),
-                    name: widget.isViewer ? (notifier.dataStream.fullName ?? '') : context.read<SelfProfileNotifier>().user.profile?.fullName ?? ''),
+                    name: widget.isViewer ? (notifier.dataStream.fullName ?? '') : (context.read<SelfProfileNotifier>().user.profile?.fullName ?? ''),
+                  email: widget.isViewer ? (notifier.dataStream.email ?? '') : (context.read<SelfProfileNotifier>().user.profile?.fullName ?? ''),
+                  sId: notifier.dataStream.sId ?? '',
+                ),
               ),
               eightPx,
               Container(
@@ -139,6 +144,8 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                               urlImage: watcher.avatar?.mediaEndpoint ?? '',
                               name: watcher.fullName ?? '',
                               username: watcher.username ?? '',
+                              email: watcher.email ?? '',
+                              sId: notifier.dataStream.sId ?? '',
                               isHost: false,
                               index: index,
                               length: notifier.dataViewers.length,
@@ -182,7 +189,9 @@ class Watcher {
 class ItemAccount extends StatelessWidget {
   final String urlImage;
   final String username;
+  final String email;
   final String name;
+  final String sId;
   final bool isHost;
   final int? length;
   final int? index;
@@ -192,6 +201,8 @@ class ItemAccount extends StatelessWidget {
     required this.urlImage,
     required this.name,
     required this.username,
+    required this.email,
+    required this.sId,
     this.isHost = true,
     this.isloading,
     this.index,
@@ -210,6 +221,15 @@ class ItemAccount extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               CustomProfileImage(
+                onTap: () async {
+                  if(context.read<SelfProfileNotifier>().user.profile?.username != username ){
+                    Routing().moveBack();
+                    Future.delayed(const Duration(milliseconds: 500), (){
+                      ShowBottomSheet.onWatcherStatus(Routing.navigatorKey.currentContext ?? context, email, sId);
+                    });
+
+                  }
+                },
                 width: 36,
                 height: 36,
                 following: true,

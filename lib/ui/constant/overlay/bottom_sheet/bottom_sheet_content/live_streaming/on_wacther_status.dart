@@ -77,6 +77,8 @@ class _OnWatcherStatusState extends State<OnWatcherStatus> {
                         urlImage: notifier.audienceProfile.avatar?.mediaEndpoint ?? '',
                         name: notifier.audienceProfile.fullName ?? '',
                         username: notifier.audienceProfile.username ?? '',
+                        email: notifier.audienceProfile.email ?? '',
+                        sId: notifier.dataStream.sId ?? '',
                         isHost: false,
                       ),
                       twentyPx,

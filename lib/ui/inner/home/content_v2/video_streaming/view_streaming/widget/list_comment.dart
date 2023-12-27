@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/live_stream/link_stream_model.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../../../core/constants/size_config.dart';
 import '../../../../../../../core/constants/themes/hyppe_colors.dart';
@@ -9,6 +10,7 @@ import '../../../../../../../core/services/system.dart';
 import '../../../../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import '../../../../../../constant/widget/custom_profile_image.dart';
 import '../../../../../../constant/widget/custom_spacer.dart';
+import '../../../profile/self_profile/notifier.dart';
 import '../notifier.dart';
 
 class ListCommentViewer extends StatelessWidget {
@@ -42,7 +44,10 @@ class ListCommentViewer extends StatelessWidget {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                ShowBottomSheet.onWatcherStatus(context, notifier.comment[index].email ?? '', data?.sId ?? '');
+                                if(context.read<SelfProfileNotifier>().user.profile?.email != notifier.comment[index].email ){
+                                  ShowBottomSheet.onWatcherStatus(context, notifier.comment[index].email ?? '', data?.sId ?? '');
+                                }
+
                               },
                               child: CustomProfileImage(
                                 cacheKey: '',

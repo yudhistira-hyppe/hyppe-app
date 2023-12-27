@@ -109,17 +109,17 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
                           // function: () => widget.function(),
                           theme: theme,
                         ),
+                        eightPx,
                         widget.functionSecondary == null
-                            ? Container()
-                            : _buildButton(
-                                caption: '${widget.titleButtonSecondary}',
-                                color: Colors.transparent,
-                                function: widget.functionSecondary ?? () {},
-                                textColor: theme.colorScheme.primary,
-                                matchParent: true,
-                                // function: () => _routing.moveBack(),
-                                theme: theme,
-                              ),
+                            ? Container() : GestureDetector(
+                          onTap: (){
+                            if(widget.functionSecondary != null){
+                              widget.functionSecondary!();
+                            }
+                          },
+                          child: CustomTextWidget(textToDisplay: '${widget.titleButtonSecondary}', textStyle: theme.textTheme.button?.copyWith(color: theme.colorScheme.primary, fontSize: 14),),
+                        ),
+                        eightPx
                       ],
                     )
         ],

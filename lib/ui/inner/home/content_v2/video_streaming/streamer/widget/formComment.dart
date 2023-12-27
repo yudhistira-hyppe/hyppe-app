@@ -60,9 +60,12 @@ class FormCommentLive extends StatelessWidget {
                               padding: const EdgeInsets.only(right: 8.0),
                               child: CustomTextButton(
                                   onPressed: () {
-                                    notifier.sendMessage(context, context.mounted).then((value) {
-                                      commentFocusNode!.unfocus();
-                                    });
+                                    if(notifier.commentCtrl.text.isNotEmpty){
+                                      notifier.sendMessage(context, context.mounted).then((value) {
+                                        commentFocusNode!.unfocus();
+                                        notifier.isSendComment = false;
+                                      });
+                                    }
                                   },
                                   style: ButtonStyle(
                                       visualDensity: VisualDensity.comfortable,
