@@ -100,9 +100,10 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
 
   @override
   void dispose() {
+    // print("====dispose stremer ===");
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
     context.read<StreamerNotifier>().inactivityTimer?.cancel();
     super.dispose();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
   }
 
   @override
@@ -222,8 +223,10 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
           onWillPop: () async {
             if (notifier.statusLive == StatusStream.offline) {
               Routing().moveBack();
+              notifier.destoryPusher();
             } else if (notifier.statusLive == StatusStream.standBy) {
               notifier.cancelLive(context, mounted);
+              notifier.destoryPusher();
             } else {
               await ShowGeneralDialog.generalDialog(
                 context,

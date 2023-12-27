@@ -123,7 +123,7 @@ class StreamerNotifier with ChangeNotifier {
     print(a);
   }
 
-  Future<void> init(BuildContext context, mounted) async {
+  Future<void> init(BuildContext context, mounted, {bool forConfig = false}) async {
     // final isGranted = await System().requestPermission(context, permissions: [Permission.camera, Permission.microphone]);
     isloading = true;
     isloadingPreview = true;
@@ -139,8 +139,12 @@ class StreamerNotifier with ChangeNotifier {
       }
     });
     await setLiveConfig();
-    await _setLivePusher();
-    await _onListen(context, mounted);
+    if (!forConfig) {
+      await Future.delayed(const Duration(milliseconds: 500));
+      await _setLivePusher();
+      await _onListen(context, mounted);
+    }
+
     // double max = await _alivcLivePusher.getMaxZoom();
     // print("---=-=-=- maxzooom $max");
     // _alivcLivePusher.setZoom(2.0);
@@ -627,11 +631,11 @@ class StreamerNotifier with ChangeNotifier {
         );
         secondsEnd = 300;
         inactivityTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-          if(secondsEnd <= 0){
+          if (secondsEnd <= 0) {
             inactivityTimer?.cancel();
             secondsEnd = 0;
             endLive(context, mounted, isBack: false);
-          }else{
+          } else {
             secondsEnd--;
             notifyListeners();
           }

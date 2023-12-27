@@ -70,7 +70,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
   }
 
   Future<void> _initPush() async {
-    // if (isCreator) context.read<StreamerNotifier>().init(context, mounted);
+    if (isCreator) context.read<StreamerNotifier>().init(context, mounted);
     // _alivcBase = AlivcBase.init();
     // _alivcBase.registerSDK().then((value) => print(value));
     // _alivcBase.setObserver();

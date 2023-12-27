@@ -31,7 +31,10 @@ class BeforeLive extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 GestureDetector(
-                  onTap: () => Routing().moveBack(),
+                  onTap: () {
+                    notifier.destoryPusher();
+                    Routing().moveBack();
+                  },
                   child: const Icon(
                     Icons.close,
                     color: Colors.white,
