@@ -32,6 +32,7 @@ import '../../../../../constant/widget/custom_loading.dart';
 import '../../../../../constant/widget/custom_spacer.dart';
 import '../../../../../constant/widget/custom_text_widget.dart';
 import '../streamer/screen.dart';
+import '../streamer/widget/love_lottielarge.dart';
 
 class ViewStreamingScreen extends StatefulWidget {
   final ViewStreamingArgument args;
@@ -549,12 +550,12 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                       GestureDetector(
                         onDoubleTap: () {
                           notifier.likeAdd();
-                          debouncer.run(() {
+                          _debouncer.run(() {
                             notifier.sendLike(context, notifier.streamerData!);
                           });
                         },
                         child: Container(
-                          color: Colors.transparent,
+                          color: Colors.black,
                           width: SizeConfig.screenWidth,
                           height: SizeConfig.screenHeight,
                           child: AliPlayerView(
@@ -578,6 +579,27 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                             child: Stack(
                               children: notifier.animationIndexes.map((e) {
                                 return LoveLootie(
+                                  onAnimationFinished: () {
+                                    // notifier.removeAnimation(e);
+                                  },
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned.fill(
+                        bottom: 0,
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: SizedBox(
+                            width: 180,
+                            child: Stack(
+                              children: notifier.likeList.map((e) {
+                                return LoveLootieLarge(
                                   onAnimationFinished: () {
                                     // notifier.removeAnimation(e);
                                   },

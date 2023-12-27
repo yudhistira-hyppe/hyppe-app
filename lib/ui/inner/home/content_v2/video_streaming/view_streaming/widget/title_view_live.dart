@@ -97,13 +97,17 @@ class TitleViewLive extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                width: 86,
+              ConstrainedBox(
+                // width: 86,
+                constraints: BoxConstraints(
+                  maxWidth: 86
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       (data.title?.isNotEmpty ?? false) ? (data.title ?? '') : (data.username ?? ''),
+                      // 'Text',
                       style: const TextStyle(
                         color: kHyppeTextPrimary,
                         fontWeight: FontWeight.w700,
