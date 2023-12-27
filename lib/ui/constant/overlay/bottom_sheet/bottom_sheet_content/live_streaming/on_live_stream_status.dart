@@ -99,7 +99,7 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                 margin: const EdgeInsets.only(left: 16, right: 16, ),
                 child: ItemAccount(
                     urlImage: widget.isViewer ? (notifier.dataStream.avatar?.mediaEndpoint ?? ''): (context.read<SelfProfileNotifier>().user.profile?.avatar?.mediaEndpoint) ?? '',
-                    username: notifier.dataStream.username ?? '',
+                    username: widget.isViewer ? (notifier.dataStream.username ?? '') : (context.read<SelfProfileNotifier>().user.profile?.username ?? ''),
                     name: widget.isViewer ? (notifier.dataStream.fullName ?? '') : context.read<SelfProfileNotifier>().user.profile?.fullName ?? ''),
               ),
               eightPx,

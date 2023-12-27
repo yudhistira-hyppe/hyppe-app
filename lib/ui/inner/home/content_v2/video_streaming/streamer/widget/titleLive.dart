@@ -42,26 +42,29 @@ class TitleLive extends StatelessWidget {
                 },
                 child: Row(
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          notifier.titleLive.isNotEmpty ? notifier.titleLive : notifier.userName,
-                          style: const TextStyle(
-                            color: kHyppeTextPrimary,
-                            fontWeight: FontWeight.w700,
+                    SizedBox(
+                      width: 86,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            notifier.titleLive.isNotEmpty ? notifier.titleLive : notifier.userName,
+                            style: const TextStyle(
+                              color: kHyppeTextPrimary,
+                              fontWeight: FontWeight.w700,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          '${notifier.totLikes} ${tn.like}',
-                          style: const TextStyle(
-                            fontSize: 10,
-                            color: kHyppeTextPrimary,
-                          ),
-                        )
-                      ],
+                          Text(
+                            '${notifier.totLikes} ${tn.like}',
+                            style: const TextStyle(
+                              fontSize: 10,
+                              color: kHyppeTextPrimary,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                     const Icon(
                       Icons.keyboard_arrow_down,
