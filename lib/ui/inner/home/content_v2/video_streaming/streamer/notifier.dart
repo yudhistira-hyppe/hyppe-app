@@ -130,14 +130,15 @@ class StreamerNotifier with ChangeNotifier {
     notifyListeners();
     // _setPageOrientation(action, ctx);
     _alivcBase = AlivcBase.init();
-    _alivcBase.registerSDK();
-    _alivcBase.setObserver();
+    await _alivcBase.registerSDK();
+    await _alivcBase.setObserver();
     _alivcBase.setOnLicenceCheck((result, reason) {
       print("======== belum ada lisensi $reason ========");
       if (result != AlivcLiveLicenseCheckResultCode.success) {
         print("======== belum ada lisensi $reason ========");
       }
     });
+    await setLiveConfig();
     await _setLivePusher();
     await _onListen(context, mounted);
     // double max = await _alivcLivePusher.getMaxZoom();
@@ -342,7 +343,7 @@ class StreamerNotifier with ChangeNotifier {
     });
   }
 
-  Future<void> _setLivePusher() async {
+  Future<void> setLiveConfig() async {
     AlivcLivePusherConfig pusherConfig = AlivcLivePusherConfig.init();
     pusherConfig.setCameraType(AlivcLivePushCameraType.front);
 
@@ -370,7 +371,9 @@ class StreamerNotifier with ChangeNotifier {
     pusherConfig.setOrientation(AlivcLivePushOrientation.portrait);
 
     pusherConfig.setPreviewDisplayMode(AlivcPusherPreviewDisplayMode.preview_aspect_fill);
+  }
 
+  Future<void> _setLivePusher() async {
     _alivcLivePusher = AlivcLivePusher.init();
     _alivcLivePusher.initLivePusher();
     _alivcLivePusher.createConfig();

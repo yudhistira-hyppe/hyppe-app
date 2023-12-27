@@ -43,8 +43,7 @@ class ViewStreamingNotifier with ChangeNotifier {
 
   String userName = '';
   String? _currentUserId = SharedPreference().readStorage(SpKeys.userID);
-  String get currentUserId => _currentUserId??''; 
-
+  String get currentUserId => _currentUserId ?? '';
 
   StreamingModel dataStreaming = StreamingModel();
 
@@ -107,7 +106,7 @@ class ViewStreamingNotifier with ChangeNotifier {
 
   initViewStreaming(LinkStreamModel data) {
     totLikes = data.totalLike ?? 0;
-    totViews = data.totalView ?? 0 + 1;
+    totViews = data.totalView ?? 0;
     streamerData = data;
     isOver = false;
     endLive = false;
