@@ -254,7 +254,7 @@ class _ItemAccountState extends State<ItemAccount> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final streampro = Provider.of<StreamerNotifier>(context, listen: false);
-      streampro.followUserViewer(context, widget.email ?? '');
+      streampro.getProfileNCheckViewer(context, widget.email ?? '');
     });
   }
 
@@ -327,7 +327,7 @@ class _ItemAccountState extends State<ItemAccount> {
                   width: 100,
                   height: 24,
                   buttonStyle: ButtonStyle(
-                    backgroundColor: (widget.notifier.statusFollowingViewer == StatusFollowing.requested || widget.notifier.statusFollowingViewer == StatusFollowing.following)
+                    backgroundColor: (widget.notifier.statusFollowing == StatusFollowing.requested || widget.notifier.statusFollowing == StatusFollowing.following)
                         ? null
                         : (widget.notifier.userName == widget.notifier.audienceProfile.username)
                         ? null
@@ -338,12 +338,12 @@ class _ItemAccountState extends State<ItemAccount> {
                       : (widget.notifier.userName == widget.notifier.audienceProfile.username)
                       ? null
                       : () {
-                    if (widget.notifier.statusFollowingViewer == StatusFollowing.none || widget.notifier.statusFollowingViewer == StatusFollowing.rejected) {
-                      widget.notifier.followUserViewer(context, widget.email, idMediaStreaming: widget.sId).then((value) {
+                    if (widget.notifier.statusFollowing == StatusFollowing.none || widget.notifier.statusFollowing == StatusFollowing.rejected) {
+                      widget.notifier.followUser(context, widget.email, idMediaStreaming: widget.sId).then((value) {
                         widget.notifier.audienceProfile.insight?.followers = widget.notifier.audienceProfile.insight!.followers! + 1;
                       });
-                    } else if (widget.notifier.statusFollowingViewer == StatusFollowing.following) {
-                      widget.notifier.followUserViewer(context, widget.email, isUnFollow: true, idMediaStreaming: widget.sId).then((value) {
+                    } else if (widget.notifier.statusFollowing == StatusFollowing.following) {
+                      widget.notifier.followUser(context, widget.email, isUnFollow: true, idMediaStreaming: widget.sId).then((value) {
                         widget.notifier.audienceProfile.insight?.followers = widget.notifier.audienceProfile.insight!.followers! - 1;
                       });
                     }
@@ -351,13 +351,13 @@ class _ItemAccountState extends State<ItemAccount> {
                   child: widget.notifier.isCheckLoading
                       ? const CustomLoading()
                       : CustomTextWidget(
-                    textToDisplay: widget.notifier.statusFollowingViewer == StatusFollowing.following
+                    textToDisplay: widget.notifier.statusFollowing == StatusFollowing.following
                         ? language.following ?? 'following '
-                        : widget.notifier.statusFollowingViewer == StatusFollowing.requested
+                        : widget.notifier.statusFollowing == StatusFollowing.requested
                         ? language.requested ?? 'requested'
                         : language.follow ?? 'follow',
                     textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      color: (widget.notifier.statusFollowingViewer == StatusFollowing.requested || widget.notifier.statusFollowingViewer == StatusFollowing.following) ? kHyppeGrey : kHyppeLightButtonText,
+                      color: (widget.notifier.statusFollowing == StatusFollowing.requested || widget.notifier.statusFollowing == StatusFollowing.following) ? kHyppeGrey : kHyppeLightButtonText,
                     ),
                   ),
                 ),

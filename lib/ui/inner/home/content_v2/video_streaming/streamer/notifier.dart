@@ -68,6 +68,7 @@ class StreamerNotifier with ChangeNotifier {
 
   LinkStreamModel dataStream = LinkStreamModel();
   UserProfileModel audienceProfile = UserProfileModel();
+  UserProfileModel audienceProfileViewer = UserProfileModel();
   StatusFollowing statusFollowing = StatusFollowing.none;
 
   StatusFollowing statusFollowingViewer = StatusFollowing.none;
@@ -82,6 +83,7 @@ class StreamerNotifier with ChangeNotifier {
   bool isloadingViewers = false;
   bool isloadingViewersMore = false;
   bool isloadingProfile = false;
+  bool isloadingProfileViewer = false;
   bool isCheckLoading = false;
   bool isloadingButton = false;
   bool mute = false;
@@ -466,6 +468,7 @@ class StreamerNotifier with ChangeNotifier {
     isloadingViewers = false;
     isloadingViewersMore = false;
     isloadingProfile = false;
+    isloadingProfileViewer = false;
     isCheckLoading = false;
     mute = false;
     isPause = false;
@@ -846,6 +849,19 @@ class StreamerNotifier with ChangeNotifier {
     }
   }
 
+  Future getProfileNCheckViewer(BuildContext context, String email) async {
+    int totLoading = 0;
+    isloadingProfileViewer = true;
+    statusFollowingViewer = StatusFollowing.none;
+    notifyListeners();
+    await checkFollowingToUserViewer(context, email).then((value) => totLoading++);
+    await getProfileViewer(context, email).then((value) => totLoading++);
+    if (totLoading >= 2) {
+      isloadingProfileViewer = false;
+      notifyListeners();
+    }
+  }
+
   Future getProfile(BuildContext context, String email) async {
     final usersNotifier = UserBloc();
     checkFollowingToUser(context, email);
@@ -855,6 +871,18 @@ class StreamerNotifier with ChangeNotifier {
 
     if (usersFetch.userState == UserState.getUserProfilesSuccess) {
       audienceProfile = usersFetch.data;
+    }
+  }
+
+  Future getProfileViewer(BuildContext context, String email) async {
+    final usersNotifier = UserBloc();
+    checkFollowingToUser(context, email);
+    await usersNotifier.getUserProfilesBloc(context, search: email, withAlertMessage: true);
+
+    final usersFetch = usersNotifier.userFetch;
+
+    if (usersFetch.userState == UserState.getUserProfilesSuccess) {
+      audienceProfileViewer = usersFetch.data;
     }
   }
 
@@ -871,6 +899,27 @@ class StreamerNotifier with ChangeNotifier {
           statusFollowing = StatusFollowing.following;
         } else if (resRequest.any((element) => element.event == InteractiveEvent.initial)) {
           statusFollowing = StatusFollowing.requested;
+        }
+      }
+    } catch (e) {
+      'load following request list: ERROR: $e'.logger();
+    }
+    notifyListeners();
+  }
+
+  Future<void> checkFollowingToUserViewer(BuildContext context, String email) async {
+    try {
+      _usersFollowingQuery.senderOrReceiver = email;
+      _usersFollowingQuery.limit = 200;
+      print('reload contentsQuery : 11');
+      final resFuture = _usersFollowingQuery.reload(context);
+      final resRequest = await resFuture;
+
+      if (resRequest.isNotEmpty) {
+        if (resRequest.any((element) => element.event == InteractiveEvent.accept)) {
+          statusFollowingViewer = StatusFollowing.following;
+        } else if (resRequest.any((element) => element.event == InteractiveEvent.initial)) {
+          statusFollowingViewer = StatusFollowing.requested;
         }
       }
     } catch (e) {
@@ -925,7 +974,7 @@ class StreamerNotifier with ChangeNotifier {
       // _system.actionReqiredIdCard(
       //   context,
       //   action: () async {
-      // statusFollowing = StatusFollowing.requested;
+      // statusFollowingViewer = StatusFollowing.requested;
       isCheckLoading = true;
       final notifier = FollowBloc();
       await notifier.followUserBlocV2(
