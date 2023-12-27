@@ -314,6 +314,7 @@ class ViewStreamingNotifier with ChangeNotifier {
         if (fetch.postsState == LiveStreamState.getApiSuccess) {
           dataStreaming = StreamingModel.fromJson(fetch.data);
           isCommentDisable = dataStreaming.commentDisabled ?? false;
+          totViews = dataStreaming.viewCountActive ?? 0;
           returnNext = true;
         }
       } catch (e) {

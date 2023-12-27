@@ -11,6 +11,7 @@ class StreamingModel {
   String? endLive;
   bool? pause;
   bool? commentDisabled;
+  int? viewCountActive;
 
   StreamingModel({
     this.sId,
@@ -25,6 +26,7 @@ class StreamingModel {
     this.endLive,
     this.pause,
     this.commentDisabled,
+    this.viewCountActive,
   });
 
   StreamingModel.fromJson(Map<String, dynamic> json) {
@@ -40,5 +42,6 @@ class StreamingModel {
     endLive = json['endLive'];
     pause = json['pause'];
     commentDisabled = json['commentDisabled'];
+    viewCountActive = json['viewCountActive'] ?? 0;
   }
 }

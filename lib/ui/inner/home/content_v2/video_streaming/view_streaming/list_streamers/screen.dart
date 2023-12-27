@@ -34,8 +34,7 @@ class _ListStreamersScreenState extends State<ListStreamersScreen> with TickerPr
 
   @override
   void initState() {
-    final notifier = Routing.navigatorKey.currentContext
-        ?.read<ViewStreamingNotifier>();
+    final notifier = Routing.navigatorKey.currentContext?.read<ViewStreamingNotifier>();
     notifier?.initListStreamers();
     super.initState();
     _controller = AnimationController(vsync: this);
@@ -45,14 +44,12 @@ class _ListStreamersScreenState extends State<ListStreamersScreen> with TickerPr
       }
     });
     scrollController.addListener(() {
-      if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange){
-        if(notifier != null){
-          if(notifier.listStreamers.length % 20 == 0){
+      if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
+        if (notifier != null) {
+          if (notifier.listStreamers.length % 20 == 0) {
             notifier.getListStreamers(context, mounted, isReload: false);
           }
         }
-
-
       }
     });
   }
@@ -81,7 +78,7 @@ class _ListStreamersScreenState extends State<ListStreamersScreen> with TickerPr
   @override
   void didPopNext() {
     Routing.navigatorKey.currentContext?.read<ViewStreamingNotifier>().initListStreamers();
-    (Routing.navigatorKey.currentContext ?? context).read<ViewStreamingNotifier>().getListStreamers(Routing.navigatorKey.currentContext ?? context, mounted);
+    // (Routing.navigatorKey.currentContext ?? context).read<ViewStreamingNotifier>().getListStreamers(Routing.navigatorKey.currentContext ?? context, mounted);
     super.didPopNext();
   }
 
@@ -161,57 +158,182 @@ class _ListStreamersScreenState extends State<ListStreamersScreen> with TickerPr
                                   textToDisplay: notifier.language.messageEmptyStreamers ?? '',
                                   textStyle: const TextStyle(fontSize: 12, color: kHyppeBurem),
                                 ),
-                                const SizedBox(height: 120,)
+                                const SizedBox(
+                                  height: 120,
+                                )
                               ],
                             ))
                         : SizedBox(
-                      height: (notifier.listStreamers.length <= 6 && !notifier.loading) ? (context.getHeight() * 0.85) : null,
-                          child: Wrap(
-                              children: [...List.generate(
-                                  notifier.loading
-                                      ? 10
-                                      : notifier.listStreamers.length, (index) {
-                                if (notifier.loading) {
-                                  if (index % 2 == 0) {
-                                    return Container(
-                                      width: sizeTile,
-                                      height: sizeTile,
-                                      margin: const EdgeInsets.only(left: 4, right: 2, bottom: 4, top: 4),
-                                      child: CustomShimmer(
-                                        width: sizeTile,
-                                        height: sizeTile,
-                                        radius: 8,
-                                      ),
-                                    );
-                                  } else {
-                                    return Container(
-                                      width: sizeTile,
-                                      height: sizeTile,
-                                      margin: const EdgeInsets.only(left: 2, right: 4, bottom: 4, top: 4),
-                                      child: CustomShimmer(
-                                        width: sizeTile,
-                                        height: sizeTile,
-                                        radius: 8,
-                                      ),
-                                    );
-                                  }
-                                } else {
-                                  final streamer = notifier.listStreamers[index];
-                                  // return Lottie.asset(
-                                  //   "${AssetPath.jsonPath}loveicon.json",
-                                  //   width: sizeTile,
-                                  //   height: sizeTile + 150,
-                                  //   repeat: false,
-                                  //   controller: _controller
-                                  // );
-                                  if (notifier.listStreamers.length == 1) {
-                                    return Container(
-                                      width: double.infinity,
-                                      alignment: Alignment.topLeft,
-                                      child: Container(
+                            height: (notifier.listStreamers.length <= 6 && !notifier.loading) ? (context.getHeight() * 0.85) : null,
+                            child: Wrap(
+                              children: [
+                                ...List.generate(notifier.loading ? 10 : notifier.listStreamers.length, (index) {
+                                  if (notifier.loading) {
+                                    if (index % 2 == 0) {
+                                      return Container(
                                         width: sizeTile,
                                         height: sizeTile,
                                         margin: const EdgeInsets.only(left: 4, right: 2, bottom: 4, top: 4),
+                                        child: CustomShimmer(
+                                          width: sizeTile,
+                                          height: sizeTile,
+                                          radius: 8,
+                                        ),
+                                      );
+                                    } else {
+                                      return Container(
+                                        width: sizeTile,
+                                        height: sizeTile,
+                                        margin: const EdgeInsets.only(left: 2, right: 4, bottom: 4, top: 4),
+                                        child: CustomShimmer(
+                                          width: sizeTile,
+                                          height: sizeTile,
+                                          radius: 8,
+                                        ),
+                                      );
+                                    }
+                                  } else {
+                                    final streamer = notifier.listStreamers[index];
+                                    // return Lottie.asset(
+                                    //   "${AssetPath.jsonPath}loveicon.json",
+                                    //   width: sizeTile,
+                                    //   height: sizeTile + 150,
+                                    //   repeat: false,
+                                    //   controller: _controller
+                                    // );
+                                    if (notifier.listStreamers.length == 1) {
+                                      return Container(
+                                        width: double.infinity,
+                                        alignment: Alignment.topLeft,
+                                        child: Container(
+                                          width: sizeTile,
+                                          height: sizeTile,
+                                          margin: const EdgeInsets.only(left: 4, right: 2, bottom: 4, top: 4),
+                                          child: CustomGesture(
+                                            onTap: () {
+                                              Routing().move(Routes.viewStreaming, argument: ViewStreamingArgument(data: streamer));
+                                            },
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.circular(8),
+                                              child: Stack(
+                                                children: [
+                                                  Positioned.fill(child: streamerImage(displayPhotoProfileOriginal(streamer.avatar?.mediaEndpoint ?? '') ?? '')),
+                                                  Positioned(
+                                                    top: 8,
+                                                    right: 14,
+                                                    child: Container(
+                                                      padding: const EdgeInsets.only(left: 4, right: 8, top: 2, bottom: 2),
+                                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: Colors.black.withOpacity(0.5)),
+                                                      child: Row(
+                                                        children: [
+                                                          const CustomIconWidget(
+                                                            iconData: '${AssetPath.vectorPath}eye.svg',
+                                                            width: 16,
+                                                            height: 16,
+                                                            defaultColor: false,
+                                                          ),
+                                                          fourPx,
+                                                          CustomTextWidget(
+                                                            textToDisplay: streamer.totalView?.getCountShort() ?? '0',
+                                                            textStyle: const TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w700),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Positioned(
+                                                    left: 10,
+                                                    bottom: 14,
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        if (streamer.title != null)
+                                                          CustomTextWidget(
+                                                            textToDisplay: streamer.title ?? '',
+                                                            textStyle: const TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.w700),
+                                                          ),
+                                                        twoPx,
+                                                        CustomTextWidget(
+                                                          textToDisplay: streamer.username ?? '',
+                                                          textStyle: const TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.w700),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                    if (index % 2 == 0) {
+                                      return Container(
+                                        width: sizeTile,
+                                        height: sizeTile,
+                                        margin: const EdgeInsets.only(left: 4, right: 2, bottom: 4, top: 4),
+                                        child: CustomGesture(
+                                          onTap: () async {
+                                            await Routing().move(Routes.viewStreaming, argument: ViewStreamingArgument(data: streamer));
+                                            notifier.getListStreamers(Routing.navigatorKey.currentContext ?? context, mounted);
+                                          },
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(8),
+                                            child: Stack(
+                                              children: [
+                                                Positioned.fill(child: streamerImage(displayPhotoProfileOriginal(streamer.avatar?.mediaEndpoint ?? '') ?? '')),
+                                                Positioned(
+                                                  top: 8,
+                                                  right: 14,
+                                                  child: Container(
+                                                    padding: const EdgeInsets.only(left: 4, right: 8, top: 2, bottom: 2),
+                                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: Colors.black.withOpacity(0.5)),
+                                                    child: Row(
+                                                      children: [
+                                                        const CustomIconWidget(
+                                                          iconData: '${AssetPath.vectorPath}eye.svg',
+                                                          width: 16,
+                                                          height: 16,
+                                                          defaultColor: false,
+                                                        ),
+                                                        fourPx,
+                                                        CustomTextWidget(
+                                                          textToDisplay: streamer.totalView?.getCountShort() ?? '0',
+                                                          textStyle: const TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w700),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                Positioned(
+                                                  left: 10,
+                                                  bottom: 14,
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      if (streamer.title != null)
+                                                        CustomTextWidget(
+                                                          textToDisplay: streamer.title ?? '',
+                                                          textStyle: const TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.w700),
+                                                        ),
+                                                      twoPx,
+                                                      CustomTextWidget(
+                                                        textToDisplay: streamer.username ?? '',
+                                                        textStyle: const TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.w700),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      return Container(
+                                        width: sizeTile,
+                                        height: sizeTile,
+                                        margin: const EdgeInsets.only(left: 2, right: 4, bottom: 4, top: 4),
                                         child: CustomGesture(
                                           onTap: () {
                                             Routing().move(Routes.viewStreaming, argument: ViewStreamingArgument(data: streamer));
@@ -267,142 +389,22 @@ class _ListStreamersScreenState extends State<ListStreamersScreen> with TickerPr
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    );
+                                      );
+                                    }
                                   }
-                                  if (index % 2 == 0) {
-                                    return Container(
-                                      width: sizeTile,
-                                      height: sizeTile,
-                                      margin: const EdgeInsets.only(left: 4, right: 2, bottom: 4, top: 4),
-                                      child: CustomGesture(
-                                        onTap: () async {
-                                          await Routing().move(Routes.viewStreaming, argument: ViewStreamingArgument(data: streamer));
-                                          notifier.getListStreamers(Routing.navigatorKey.currentContext ?? context, mounted);
-                                        },
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(8),
-                                          child: Stack(
-                                            children: [
-                                              Positioned.fill(child: streamerImage(displayPhotoProfileOriginal(streamer.avatar?.mediaEndpoint ?? '') ?? '')),
-                                              Positioned(
-                                                top: 8,
-                                                right: 14,
-                                                child: Container(
-                                                  padding: const EdgeInsets.only(left: 4, right: 8, top: 2, bottom: 2),
-                                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: Colors.black.withOpacity(0.5)),
-                                                  child: Row(
-                                                    children: [
-                                                      const CustomIconWidget(
-                                                        iconData: '${AssetPath.vectorPath}eye.svg',
-                                                        width: 16,
-                                                        height: 16,
-                                                        defaultColor: false,
-                                                      ),
-                                                      fourPx,
-                                                      CustomTextWidget(
-                                                        textToDisplay: streamer.totalView?.getCountShort() ?? '0',
-                                                        textStyle: const TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w700),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                              Positioned(
-                                                left: 10,
-                                                bottom: 14,
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    if (streamer.title != null)
-                                                      CustomTextWidget(
-                                                        textToDisplay: streamer.title ?? '',
-                                                        textStyle: const TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.w700),
-                                                      ),
-                                                    twoPx,
-                                                    CustomTextWidget(
-                                                      textToDisplay: streamer.username ?? '',
-                                                      textStyle: const TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.w700),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  } else {
-                                    return Container(
-                                      width: sizeTile,
-                                      height: sizeTile,
-                                      margin: const EdgeInsets.only(left: 2, right: 4, bottom: 4, top: 4),
-                                      child: CustomGesture(
-                                        onTap: () {
-                                          Routing().move(Routes.viewStreaming, argument: ViewStreamingArgument(data: streamer));
-                                        },
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(8),
-                                          child: Stack(
-                                            children: [
-                                              Positioned.fill(child: streamerImage(displayPhotoProfileOriginal(streamer.avatar?.mediaEndpoint ?? '') ?? '')),
-                                              Positioned(
-                                                top: 8,
-                                                right: 14,
-                                                child: Container(
-                                                  padding: const EdgeInsets.only(left: 4, right: 8, top: 2, bottom: 2),
-                                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: Colors.black.withOpacity(0.5)),
-                                                  child: Row(
-                                                    children: [
-                                                      const CustomIconWidget(
-                                                        iconData: '${AssetPath.vectorPath}eye.svg',
-                                                        width: 16,
-                                                        height: 16,
-                                                        defaultColor: false,
-                                                      ),
-                                                      fourPx,
-                                                      CustomTextWidget(
-                                                        textToDisplay: streamer.totalView?.getCountShort() ?? '0',
-                                                        textStyle: const TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w700),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                              Positioned(
-                                                left: 10,
-                                                bottom: 14,
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    if (streamer.title != null)
-                                                      CustomTextWidget(
-                                                        textToDisplay: streamer.title ?? '',
-                                                        textStyle: const TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.w700),
-                                                      ),
-                                                    twoPx,
-                                                    CustomTextWidget(
-                                                      textToDisplay: streamer.username ?? '',
-                                                      textStyle: const TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.w700),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  }
-                                }
-                              }),...[if(notifier.loadMore && !notifier.stopLoad) Container(
-                                width: double.infinity,
-                                height: 50,
-                                alignment: Alignment.center,
-                                child: const CustomLoading(),
-                              )]],
+                                }),
+                                ...[
+                                  if (notifier.loadMore && !notifier.stopLoad)
+                                    Container(
+                                      width: double.infinity,
+                                      height: 50,
+                                      alignment: Alignment.center,
+                                      child: const CustomLoading(),
+                                    )
+                                ]
+                              ],
                             ),
-                        ),
+                          ),
                   ),
                 ),
               ),

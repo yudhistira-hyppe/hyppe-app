@@ -95,7 +95,7 @@ class _OnWatcherStatusState extends State<OnWatcherStatus> {
                             Flexible(
                               child: WatcherStatusItem(
                                 value: System().formatterNumber((notifier.audienceProfile.insight?.followers ?? 0).toInt()),
-                                title: language.follower ?? '',
+                                title: notifier.audienceProfile.insight?.followers == 1 ? (language.follower ?? '') : (language.followers ?? ''),
                               ),
                             ),
                             Flexible(

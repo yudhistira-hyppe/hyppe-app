@@ -419,9 +419,9 @@ class StreamerNotifier with ChangeNotifier {
     timeReady = 3;
     userName = context.read<SelfProfileNotifier>().user.profile?.username ?? '';
     dateTimeStart = DateTime.now();
-    if (titleLive == '') {
-      titleLive = context.read<SelfProfileNotifier>().user.profile?.fullName ?? '';
-    }
+    // if (titleLive == '') {
+    //   titleLive = context.read<SelfProfileNotifier>().user.profile?.fullName ?? '';
+    // }
     statusLive = StatusStream.prepare;
     notifyListeners();
     var init = await initLiveStream(context, mounted);

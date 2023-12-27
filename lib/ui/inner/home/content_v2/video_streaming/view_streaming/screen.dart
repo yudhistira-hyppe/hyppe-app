@@ -522,7 +522,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                             ),
                             twelvePx,
                             CustomTextWidget(
-                              textToDisplay: '${notifier.totViews} ${notifier.language.views}',
+                              textToDisplay: '${notifier.totViews} ${notifier.language.viewers}',
                               textStyle: const TextStyle(fontSize: 14, color: Color(0xffdadada)),
                             ),
                             twelvePx,
@@ -536,8 +536,8 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                             ),
                             twelvePx,
                             CustomTextWidget(
-                              textToDisplay: widget.args.data.username ?? '',
-                              textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xffdadada)),
+                              textToDisplay: '@${widget.args.data.username}',
+                              textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
                             ),
                           ],
                         ),

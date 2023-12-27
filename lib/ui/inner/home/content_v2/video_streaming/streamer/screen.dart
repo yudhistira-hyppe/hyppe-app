@@ -5,6 +5,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
@@ -178,7 +179,7 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
                             : notifier.statusLive == StatusStream.prepare
                                 ? prepare()
                                 : notifier.statusLive == StatusStream.standBy
-                                    ? startCounting(notifier.timeReady, notifier)
+                                    ? startCounting(notifier.timeReady, notifier, tn)
                                     : notifier.statusLive == StatusStream.ready
                                         ? prepare(titile: "Siaran LIVE telah dimulai!")
                                         : Container(),
@@ -209,6 +210,8 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
           onWillPop: () async {
             if (notifier.statusLive == StatusStream.offline) {
               Routing().moveBack();
+            } else if (notifier.statusLive == StatusStream.standBy) {
+              notifier.cancelLive(context, mounted);
             } else {
               await ShowGeneralDialog.generalDialog(
                 context,
@@ -267,7 +270,7 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
     );
   }
 
-  Widget startCounting(int time, StreamerNotifier notifier) {
+  Widget startCounting(int time, StreamerNotifier notifier, LocalizationModelV2 tn) {
     return Stack(
       children: [
         Align(
@@ -301,10 +304,10 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
               width: 50,
               height: 50,
               color: Colors.transparent,
-              child: const Center(
+              child: Center(
                   child: Text(
-                "Batal",
-                style: TextStyle(color: Colors.white),
+                tn.cancel ?? "Batal",
+                style: const TextStyle(color: Colors.white),
               )),
             ),
           ),

@@ -40,7 +40,7 @@ class ListCommentLive extends StatelessWidget {
                             GestureDetector(
                               onTap: () {
                                 if (notifier.userName != notifier.comment[index].username) {
-                                   ShowBottomSheet.onWatcherStatus(context, notifier.comment[index].email ?? '', notifier.dataStream.sId ?? '');
+                                  ShowBottomSheet.onWatcherStatus(context, notifier.comment[index].email ?? '', notifier.dataStream.sId ?? '');
                                 }
                               },
                               child: CustomProfileImage(
@@ -61,14 +61,22 @@ class ListCommentLive extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    notifier.comment[index].username ?? '',
-                                    style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700),
-                                  ),
-                                  Text(
-                                    notifier.comment[index].messages ?? '',
-                                    style: const TextStyle(color: kHyppeTextPrimary),
-                                  ),
+                                  Text.rich(TextSpan(text: notifier.comment[index].username ?? '', style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700), children: [
+                                    if (notifier.comment[index].messages == 'joined')
+                                      const TextSpan(
+                                        text: 'joined',
+                                        style: TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700),
+                                      )
+                                  ])),
+                                  // Text(
+                                  //   notifier.comment[index].username ?? '',
+                                  //   style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700),
+                                  // ),
+                                  if (notifier.comment[index].messages != 'joined')
+                                    Text(
+                                      notifier.comment[index].messages ?? '',
+                                      style: const TextStyle(color: kHyppeTextPrimary),
+                                    ),
                                 ],
                               ),
                             )

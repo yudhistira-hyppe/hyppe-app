@@ -62,39 +62,70 @@ class TitleViewLive extends StatelessWidget {
           ),
         ),
         sixPx,
-        Flexible(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                (data.title?.isNotEmpty ?? false) ? (data.title ?? '') : (data.username ?? ''),
-                style: const TextStyle(
-                  color: kHyppeTextPrimary,
-                  fontWeight: FontWeight.w700,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              Text(
-                "${totLikes.getCountShort()} ${tn.like}",
-                style: const TextStyle(
-                  fontSize: 10,
-                  color: kHyppeTextPrimary,
-                ),
-              )
-            ],
-          ),
-        ),
+        // Flexible(
+        //   child: Column(
+        //     crossAxisAlignment: CrossAxisAlignment.start,
+        //     children: [
+        //       Text(
+        //         (data.title?.isNotEmpty ?? false) ? (data.title ?? '') : (data.username ?? ''),
+        //         style: const TextStyle(
+        //           color: kHyppeTextPrimary,
+        //           fontWeight: FontWeight.w700,
+        //         ),
+        //         maxLines: 1,
+        //         overflow: TextOverflow.ellipsis,
+        //       ),
+        //       Text(
+        //         "${totLikes.getCountShort()} ${tn.like}",
+        //         style: const TextStyle(
+        //           fontSize: 10,
+        //           color: kHyppeTextPrimary,
+        //         ),
+        //       )
+        //     ],
+        //   ),
+        // ),
         GestureDetector(
           onTap: () {
             // ShowBottomSheet.onStreamWatchersStatus(context, notifier);
             final ref = context.read<StreamerNotifier>();
             ref.dataStream = data;
-            ShowBottomSheet.onStreamWatchersStatus(context, ref);
+            ref.titleLive = data.title ?? '';
+            ref.userName = data.username ?? '';
+            ShowBottomSheet.onStreamWatchersStatus(context, true, ref);
           },
-          child: const Icon(
-            Icons.keyboard_arrow_down,
-            color: kHyppeTextPrimary,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 86,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      (data.title?.isNotEmpty ?? false) ? (data.title ?? '') : (data.username ?? ''),
+                      style: const TextStyle(
+                        color: kHyppeTextPrimary,
+                        fontWeight: FontWeight.w700,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      "${totLikes.getCountShort()} ${tn.like}",
+                      style: const TextStyle(
+                        fontSize: 10,
+                        color: kHyppeTextPrimary,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              const Icon(
+                Icons.keyboard_arrow_down,
+                color: kHyppeTextPrimary,
+              )
+            ],
           ),
         )
       ],
@@ -116,35 +147,37 @@ class TitleViewLive extends StatelessWidget {
         ),
         eightPx,
         if (totViews > 0)
-        GestureDetector(
-          onTap: () {
-            print('testing see views');
-            final ref = context.read<StreamerNotifier>();
-            ref.dataStream = data;
-            print('testing see views ${ref.dataStream}');
-            ShowBottomSheet.onStreamWatchersStatus(context, ref);
-          },
-          child: Container(
-            width: 50 * context.getScaleDiagonal(),
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-            decoration: BoxDecoration(color: kHyppeTransparent, borderRadius: BorderRadius.circular(3)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.remove_red_eye_outlined,
-                  color: kHyppeTextPrimary,
-                  size: 12,
-                ),
-                sixPx,
-                Text(
-                  totViews.getCountShort(),
-                  style: const TextStyle(color: kHyppeTextPrimary, fontSize: 10, fontWeight: FontWeight.w700),
-                ),
-              ],
+          GestureDetector(
+            onTap: () {
+              print('testing see views');
+              final ref = context.read<StreamerNotifier>();
+              ref.dataStream = data;
+              print('testing see views ${ref.dataStream}');
+              ref.titleLive = data.title ?? '';
+              ref.userName = data.username ?? '';
+              ShowBottomSheet.onStreamWatchersStatus(context, true, ref);
+            },
+            child: Container(
+              width: 50 * context.getScaleDiagonal(),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+              decoration: BoxDecoration(color: kHyppeTransparent, borderRadius: BorderRadius.circular(3)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.remove_red_eye_outlined,
+                    color: kHyppeTextPrimary,
+                    size: 12,
+                  ),
+                  sixPx,
+                  Text(
+                    totViews.getCountShort(),
+                    style: const TextStyle(color: kHyppeTextPrimary, fontSize: 10, fontWeight: FontWeight.w700),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
         eightPx,
         GestureDetector(
           onTap: () {

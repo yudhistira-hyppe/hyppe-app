@@ -104,6 +104,7 @@ class ShowBottomSheet {
 
   static onStreamWatchersStatus(
     context,
+    bool isViewer,
     StreamerNotifier notifier,
   ) async {
     await showModalBottomSheet(
@@ -120,6 +121,7 @@ class ShowBottomSheet {
               height: context.getHeight() * 0.6,
               child: OnLiveStreamStatus(
                 idStream: notifier.dataStream.sId,
+                isViewer: isViewer,
                 notifier: notifier,
               ),
             ),
