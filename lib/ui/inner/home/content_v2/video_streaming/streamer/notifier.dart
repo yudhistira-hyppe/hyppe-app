@@ -602,6 +602,8 @@ class StreamerNotifier with ChangeNotifier {
     Routing().moveReplacement(Routes.streamingFeedback, argument: SummaryLiveArgument(duration: duration, data: dataSummary));
   }
 
+  int secondsEnd = 0;
+
   void initTimer(BuildContext context, mounted) async {
     // adding delay to prevent if there's another that not disposed yet
     Future.delayed(const Duration(milliseconds: 1000), () {
@@ -623,9 +625,20 @@ class StreamerNotifier with ChangeNotifier {
           isHorizontal: false,
           fillColor: false,
         );
-        inactivityTimer = Timer(const Duration(seconds: 300), () {
-          endLive(context, mounted, isBack: false);
+        secondsEnd = 300;
+        inactivityTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+          if(secondsEnd <= 0){
+            inactivityTimer?.cancel();
+            secondsEnd = 0;
+            endLive(context, mounted, isBack: false);
+          }else{
+            secondsEnd--;
+            notifyListeners();
+          }
         });
+        // inactivityTimer = Timer(const Duration(seconds: 300), () {
+        //   endLive(context, mounted, isBack: false);
+        // });
       });
     });
   }

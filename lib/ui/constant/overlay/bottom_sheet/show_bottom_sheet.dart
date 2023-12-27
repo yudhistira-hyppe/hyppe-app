@@ -197,6 +197,10 @@ class ShowBottomSheet {
   }
 
   Future<ReactStream> onReactStreaming(context, ReactStream react, int nilai) async {
+    var height = context.getHeight() * 0.5;
+    if(height < 375){
+      height = 375;
+    }
     return await showModalBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -208,7 +212,7 @@ class ShowBottomSheet {
             padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Container(
               decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
-              height: context.getHeight() * 0.5,
+              height: height,
               child: OnReactStreaming(
                 react: react,
                 nilai: nilai,

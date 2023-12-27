@@ -161,7 +161,7 @@ class TitleViewLive extends StatelessWidget {
               ShowBottomSheet.onStreamWatchersStatus(context, true, ref);
             },
             child: Container(
-              width: 50 * context.getScaleDiagonal(),
+              width: 50,
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
               decoration: BoxDecoration(color: kHyppeTransparent, borderRadius: BorderRadius.circular(3)),
               child: Row(

@@ -100,6 +100,7 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
 
   @override
   void dispose() {
+    context.read<StreamerNotifier>().inactivityTimer?.cancel();
     super.dispose();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
   }
