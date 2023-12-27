@@ -503,7 +503,8 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                               fAliplayer?.stop();
                               fAliplayer?.destroy();
                               fAliplayer?.clearScreen();
-                              await notifier.exitStreaming(context, widget.args.data);
+                              Routing().moveBack();
+                              // await notifier.exitStreaming(context, widget.args.data);
                               await notifier.destoryPusher();
                             },
                             child: const Padding(
