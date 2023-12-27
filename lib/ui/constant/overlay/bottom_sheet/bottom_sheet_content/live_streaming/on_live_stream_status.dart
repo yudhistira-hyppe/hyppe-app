@@ -19,6 +19,7 @@ import '../../../../../../core/services/shared_preference.dart';
 import '../../../../widget/custom_icon_widget.dart';
 import '../../../../widget/custom_profile_image.dart';
 import '../../../../widget/custom_spacer.dart';
+import '../../show_bottom_sheet.dart';
 
 class OnLiveStreamStatus extends StatefulWidget {
   final String? idStream;
@@ -113,7 +114,10 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                 child: ItemAccount(
                     urlImage: widget.isViewer ? (notifier.dataStream.avatar?.mediaEndpoint ?? '') : (context.read<SelfProfileNotifier>().user.profile?.avatar?.mediaEndpoint) ?? '',
                     username: widget.isViewer ? (notifier.dataStream.username ?? '') : (context.read<SelfProfileNotifier>().user.profile?.username ?? ''),
-                    name: widget.isViewer ? (notifier.dataStream.fullName ?? '') : context.read<SelfProfileNotifier>().user.profile?.fullName ?? ''),
+                    name: widget.isViewer ? (notifier.dataStream.fullName ?? '') : (context.read<SelfProfileNotifier>().user.profile?.fullName ?? ''),
+                  email: widget.isViewer ? (notifier.dataStream.email ?? '') : (context.read<SelfProfileNotifier>().user.profile?.fullName ?? ''),
+                  sId: notifier.dataStream.sId ?? '',
+                ),
               ),
               eightPx,
               Container(
@@ -168,6 +172,7 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                         child: notifier.isloadingViewers
                             ? const SizedBox(height: 10, child: Align(alignment: Alignment.topCenter, child: Padding(padding: EdgeInsets.only(top: 60), child: const CustomLoading())))
                             : ListView.builder(
+<<<<<<< HEAD
                                 controller: controller,
                                 itemCount: notifier.dataViewers.length,
                                 itemBuilder: (context, index) {
@@ -185,6 +190,25 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                                   );
                                 },
                               ),
+=======
+                          controller: controller,
+                          itemCount: notifier.dataViewers.length,
+                          itemBuilder: (context, index) {
+                            final watcher = notifier.dataViewers[index];
+                            return ItemAccount(
+                              urlImage: watcher.avatar?.mediaEndpoint ?? '',
+                              name: watcher.fullName ?? '',
+                              username: watcher.username ?? '',
+                              email: watcher.email ?? '',
+                              sId: notifier.dataStream.sId ?? '',
+                              isHost: false,
+                              index: index,
+                              length: notifier.dataViewers.length,
+                              isloading: notifier.isloadingViewersMore,
+                            );
+                          },
+                        ),
+>>>>>>> a1f18ca3772e79f584bf2b6cce92d372177f5939
                       ),
                       Visibility(
                         visible: notifier.dataViewers.length > 99,
@@ -221,7 +245,9 @@ class Watcher {
 class ItemAccount extends StatelessWidget {
   final String urlImage;
   final String username;
+  final String email;
   final String name;
+  final String sId;
   final bool isHost;
   final int? length;
   final int? index;
@@ -233,6 +259,8 @@ class ItemAccount extends StatelessWidget {
     required this.urlImage,
     required this.name,
     required this.username,
+    required this.email,
+    required this.sId,
     this.isHost = true,
     this.isloading,
     this.index,
@@ -253,6 +281,15 @@ class ItemAccount extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               CustomProfileImage(
+                onTap: () async {
+                  if(context.read<SelfProfileNotifier>().user.profile?.username != username ){
+                    Routing().moveBack();
+                    Future.delayed(const Duration(milliseconds: 500), (){
+                      ShowBottomSheet.onWatcherStatus(Routing.navigatorKey.currentContext ?? context, email, sId);
+                    });
+
+                  }
+                },
                 width: 36,
                 height: 36,
                 following: true,

@@ -243,7 +243,7 @@ class ViewStreamingNotifier with ChangeNotifier {
         final fetch = notifier.liveStreamFetch;
         if (fetch.postsState == LiveStreamState.getApiSuccess) {
           final List<LinkStreamModel> tempList = [];
-
+          listStreamers = [];
           fetch.data.forEach((v) => tempList.add(LinkStreamModel.fromJson(v)));
           if (tempList.isNotEmpty) {
             listStreamers.addAll(tempList);
@@ -258,6 +258,11 @@ class ViewStreamingNotifier with ChangeNotifier {
         }
       } catch (e) {
         debugPrint(e.toString());
+      }
+      if (isReload) {
+        loading = false;
+      } else {
+        loadMore = false;
       }
     } else {
       if (context.mounted) {

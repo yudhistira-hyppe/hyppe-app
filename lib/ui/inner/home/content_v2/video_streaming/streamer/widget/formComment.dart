@@ -56,29 +56,33 @@ class FormCommentLive extends StatelessWidget {
                         : Positioned.fill(
                             top: 0,
                             child: Align(
-                                alignment: Alignment.topRight,
-                                child: Padding(
+                              alignment: Alignment.topRight,
+                              child: Padding(
                                   padding: const EdgeInsets.only(right: 8.0),
                                   child: CustomTextButton(
-                                      onPressed: () {
+                                    onPressed: () {
+                                      if (notifier.commentCtrl.text.isNotEmpty) {
                                         notifier.sendMessage(context, context.mounted).then((value) {
                                           commentFocusNode!.unfocus();
+                                          notifier.isSendComment = false;
                                         });
-                                      },
-                                      style: ButtonStyle(
-                                          visualDensity: VisualDensity.comfortable,
-                                          padding: MaterialStateProperty.all(EdgeInsets.zero),
-                                          backgroundColor: MaterialStateProperty.all(kHyppePrimary),
-                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(18.0),
-                                            ),
-                                          )),
-                                      child: Text(
-                                        tn.send ?? '',
-                                        style: TextStyle(color: kHyppeTextPrimary, fontSize: 10),
-                                      )),
-                                )),
+                                      }
+                                    },
+                                    child: Text(
+                                      tn.send ?? '',
+                                      style: TextStyle(color: kHyppeTextPrimary, fontSize: 10),
+                                    ),
+                                    style: ButtonStyle(
+                                        visualDensity: VisualDensity.comfortable,
+                                        padding: MaterialStateProperty.all(EdgeInsets.zero),
+                                        backgroundColor: MaterialStateProperty.all(kHyppePrimary),
+                                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(18.0),
+                                          ),
+                                        )),
+                                  )),
+                            ),
                           ),
               ],
             ),
