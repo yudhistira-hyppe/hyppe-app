@@ -84,7 +84,6 @@ class TitleViewLive extends StatelessWidget {
                   children: [
                     Text(
                       (data.title?.isNotEmpty ?? false) ? (data.title ?? '') : (data.username ?? ''),
-                      // 'Text',
                       style: const TextStyle(
                         color: kHyppeTextPrimary,
                         fontWeight: FontWeight.w700,

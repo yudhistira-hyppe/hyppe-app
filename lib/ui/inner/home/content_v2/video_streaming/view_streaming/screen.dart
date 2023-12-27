@@ -589,13 +589,12 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                           ),
                         ),
                       ),
-                      Positioned.fill(
-                        bottom: 0,
+                      Positioned(
                         top: 0,
+                        bottom: 0, 
                         left: 0,
                         right: 0,
-                        child: Align(
-                          alignment: Alignment.center,
+                        child: Center(
                           child: SizedBox(
                             width: 180,
                             child: Stack(

@@ -40,7 +40,7 @@ class _LoveLootieLargeState extends State<LoveLootieLarge> with TickerProviderSt
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Lottie.asset(
-      "${AssetPath.jsonPath}lovelarge.json",
+      "${AssetPath.jsonPath}loverage1.json",
       width: SizeConfig.screenWidth! * .5,
       height: SizeConfig.screenHeight! * .9,
       controller: _controller,
