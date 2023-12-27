@@ -172,25 +172,6 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                         child: notifier.isloadingViewers
                             ? const SizedBox(height: 10, child: Align(alignment: Alignment.topCenter, child: Padding(padding: EdgeInsets.only(top: 60), child: const CustomLoading())))
                             : ListView.builder(
-<<<<<<< HEAD
-                                controller: controller,
-                                itemCount: notifier.dataViewers.length,
-                                itemBuilder: (context, index) {
-                                  final watcher = notifier.dataViewers[index];
-                                  return ItemAccount(
-                                    urlImage: watcher.avatar?.mediaEndpoint ?? '',
-                                    name: watcher.fullName ?? '',
-                                    username: watcher.username ?? '',
-                                    isHost: false,
-                                    index: index,
-                                    length: notifier.dataViewers.length,
-                                    isloading: notifier.isloadingViewersMore,
-                                    email: watcher.email,
-                                    idStream: widget.idStream,
-                                  );
-                                },
-                              ),
-=======
                           controller: controller,
                           itemCount: notifier.dataViewers.length,
                           itemBuilder: (context, index) {
@@ -205,10 +186,10 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                               index: index,
                               length: notifier.dataViewers.length,
                               isloading: notifier.isloadingViewersMore,
+                              idStream: widget.idStream,
                             );
                           },
                         ),
->>>>>>> a1f18ca3772e79f584bf2b6cce92d372177f5939
                       ),
                       Visibility(
                         visible: notifier.dataViewers.length > 99,
@@ -252,7 +233,6 @@ class ItemAccount extends StatelessWidget {
   final int? length;
   final int? index;
   final bool? isloading;
-  final String? email;
   final String? idStream;
   const ItemAccount({
     super.key,
@@ -265,7 +245,6 @@ class ItemAccount extends StatelessWidget {
     this.isloading,
     this.index,
     this.length,
-    this.email,
     this.idStream,
   });
 
