@@ -41,6 +41,7 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                   style: const TextStyle(color: Colors.white),
                   cursorColor: Colors.white,
                   enabled: !notifier.isCommentDisable,
+                  maxLength: 150,
                   onChanged: (value) {
                     setState(() {
                       comment = value;
@@ -48,6 +49,7 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                   },
                   inputFormatters: [LengthLimitingTextInputFormatter(150)],
                   decoration: InputDecoration(
+                      counterText: '',
                       hintText: notifier.isCommentDisable ? tn.commentsAreDisabled : tn.addComment,
                       isDense: true, // important line
                       contentPadding: EdgeInsets.fromLTRB(10, 10, widget.commentFocusNode!.hasFocus ? 70 : 10, 10), // control your hints text size
@@ -62,7 +64,7 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                     ? Container()
                     : comment == ''
                         ? Container()
-                        : RegExp(r"\s\b|\b").hasMatch(comment) ? Positioned.fill(
+                        : comment.trim().isEmpty ? const SizedBox.shrink(): Positioned.fill(
                             top: 0,
                             child: Align(
                                 alignment: Alignment.centerRight,
@@ -95,7 +97,7 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                                         style: TextStyle(color: kHyppeTextPrimary),
                                       )),
                                 )),
-                          ): const SizedBox.shrink(),
+                          )
               ],
             ),
           ),

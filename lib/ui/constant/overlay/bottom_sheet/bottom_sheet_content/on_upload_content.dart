@@ -58,7 +58,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _initPush();
+      // _initPush();
       setState(() {
         isCreator = context.read<SelfProfileNotifier>().user.profile?.creator ?? false;
       });

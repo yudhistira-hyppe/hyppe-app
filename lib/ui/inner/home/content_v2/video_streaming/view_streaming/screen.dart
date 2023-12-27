@@ -45,6 +45,8 @@ class ViewStreamingScreen extends StatefulWidget {
 class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsBindingObserver, TickerProviderStateMixin {
   FocusNode commentFocusNode = FocusNode();
 
+  final debouncer = Debouncer(milliseconds: 2000);
+
   FlutterAliplayer? fAliplayer;
   // final _sharedPrefs = SharedPreference();
   var secondsSkip = 0;
@@ -545,14 +547,14 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                 : Stack(
                     children: [
                       GestureDetector(
-                        onDoubleTap: (){
+                        onDoubleTap: () {
                           notifier.likeAdd();
-                          _debouncer.run(() {
+                          debouncer.run(() {
                             notifier.sendLike(context, notifier.streamerData!);
                           });
                         },
                         child: Container(
-                          color: Colors.black,
+                          color: Colors.transparent,
                           width: SizeConfig.screenWidth,
                           height: SizeConfig.screenHeight,
                           child: AliPlayerView(

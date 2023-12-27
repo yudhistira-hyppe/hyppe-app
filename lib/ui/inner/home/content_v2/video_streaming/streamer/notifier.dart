@@ -138,8 +138,8 @@ class StreamerNotifier with ChangeNotifier {
         print("======== belum ada lisensi $reason ========");
       }
     });
-    _setLivePusher();
-    _onListen(context, mounted);
+    await _setLivePusher();
+    await _onListen(context, mounted);
     // double max = await _alivcLivePusher.getMaxZoom();
     // print("---=-=-=- maxzooom $max");
     // _alivcLivePusher.setZoom(2.0);
@@ -380,7 +380,7 @@ class StreamerNotifier with ChangeNotifier {
     _alivcLivePusher.setCustomFilterDelegate();
     _alivcLivePusher.setCustomDetectorDelegate();
     _alivcLivePusher.setBGMDelegate();
-    _alivcLivePusher.setResolution(AlivcLivePushResolution.resolution_480P);
+    _alivcLivePusher.setResolution(AlivcLivePushResolution.resolution_720P);
   }
 
   Future<void> _clickSnapShot() async {
@@ -474,7 +474,7 @@ class StreamerNotifier with ChangeNotifier {
 
   //Comment Empty or Witespase
   void sendComment() {
-    isSendComment = RegExp(r"\s\b|\b").hasMatch(commentCtrl.text) ? true : false;
+    isSendComment = commentCtrl.text.trim().isNotEmpty;
     notifyListeners();
   }
 

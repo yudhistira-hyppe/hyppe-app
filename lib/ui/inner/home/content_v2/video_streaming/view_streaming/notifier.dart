@@ -42,6 +42,9 @@ class ViewStreamingNotifier with ChangeNotifier {
   static const String eventStatusStream = 'STATUS_STREAM';
 
   String userName = '';
+  String? _currentUserId = SharedPreference().readStorage(SpKeys.userID);
+  String get currentUserId => _currentUserId??''; 
+
 
   StreamingModel dataStreaming = StreamingModel();
 
@@ -96,6 +99,7 @@ class ViewStreamingNotifier with ChangeNotifier {
   initListStreamers() {
     _loading = true;
     _listStreamers = [];
+    // comment.clear();
     _page = 0;
     stopLoad = false;
     _loadMore = false;
