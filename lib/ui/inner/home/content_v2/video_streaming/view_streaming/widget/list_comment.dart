@@ -9,6 +9,7 @@ import '../../../../../../../core/services/system.dart';
 import '../../../../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import '../../../../../../constant/widget/custom_profile_image.dart';
 import '../../../../../../constant/widget/custom_spacer.dart';
+import '../../../profile/self_profile/notifier.dart';
 import '../notifier.dart';
 
 class ListCommentViewer extends StatelessWidget {
@@ -57,7 +58,8 @@ class ListCommentViewer extends StatelessWidget {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  if (notifier.currentUserId != notifier.comment[index].sId) {
+                                  final email = (context.read<SelfProfileNotifier>().user.profile?.email);
+                                  if (email != notifier.comment[index].email) {
                                     ShowBottomSheet.onWatcherStatus(context, notifier.comment[index].email ?? '', data?.sId ?? '');
                                   }
                                 },
