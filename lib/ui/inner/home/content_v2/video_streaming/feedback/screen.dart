@@ -4,7 +4,6 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/system.dart';
-import 'package:hyppe/ui/constant/widget/custom_gesture.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -113,16 +112,15 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                   child: InkWell(
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
-                      onTap: () {
-                        ShowBottomSheet.onListOfWatcher(context);
-                      },
-                    child:  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                    CustomTextWidget(
-                      textToDisplay: language.viewerList ?? 'List Penonton',
-                      textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    
-                    CustomTextWidget(
+                    onTap: () {
+                      ShowBottomSheet.onListOfWatcher(context);
+                    },
+                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                      CustomTextWidget(
+                        textToDisplay: language.viewerList ?? 'List Penonton',
+                        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      CustomTextWidget(
                         textToDisplay: widget.arguments?.data.totalViews.toString() ?? '0',
                         textStyle: TextStyle(
                           fontSize: 16,
@@ -130,7 +128,7 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                           color: context.getColorScheme().primary,
                         ),
                       ),
-                  ]),
+                    ]),
                   ),
                 ),
                 twelvePx,

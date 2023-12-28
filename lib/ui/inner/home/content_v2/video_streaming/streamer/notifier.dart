@@ -68,7 +68,10 @@ class StreamerNotifier with ChangeNotifier {
 
   LinkStreamModel dataStream = LinkStreamModel();
   UserProfileModel audienceProfile = UserProfileModel();
+  UserProfileModel audienceProfileViewer = UserProfileModel();
   StatusFollowing statusFollowing = StatusFollowing.none;
+
+  StatusFollowing statusFollowingViewer = StatusFollowing.none;
   LiveSummaryModel dataSummary = LiveSummaryModel();
 
   late AlivcBase _alivcBase;
@@ -80,6 +83,7 @@ class StreamerNotifier with ChangeNotifier {
   bool isloadingViewers = false;
   bool isloadingViewersMore = false;
   bool isloadingProfile = false;
+  bool isloadingProfileViewer = false;
   bool isCheckLoading = false;
   bool isloadingButton = false;
   bool mute = false;
@@ -87,6 +91,7 @@ class StreamerNotifier with ChangeNotifier {
   bool isCommentDisable = false;
   bool isCancel = false;
   bool isSendComment = false;
+  bool isFirst = true;
 
   FocusNode titleFocusNode = FocusNode();
   TextEditingController titleLiveCtrl = TextEditingController();
@@ -124,7 +129,7 @@ class StreamerNotifier with ChangeNotifier {
   }
 
   Future<void> init(BuildContext context, mounted, {bool forConfig = false}) async {
-    // final isGranted = await System().requestPermission(context, permissions: [Permission.camera, Permission.microphone]);
+    print("-------- init stream $forConfig ---------");
     isloading = true;
     isloadingPreview = true;
     notifyListeners();
@@ -132,22 +137,24 @@ class StreamerNotifier with ChangeNotifier {
     _alivcBase = AlivcBase.init();
     await _alivcBase.registerSDK();
     await _alivcBase.setObserver();
-    _alivcBase.setOnLicenceCheck((result, reason) {
-      print("======== belum ada lisensi $reason ========");
-      if (result != AlivcLiveLicenseCheckResultCode.success) {
-        print("======== belum ada lisensi $reason ========");
-      }
-    });
-    await setLiveConfig();
+    // _alivcBase.setOnLicenceCheck((result, reason) {
+    //   print("======== belum ada lisensi $reason ========");
+    //   if (result != AlivcLiveLicenseCheckResultCode.success) {
+    //     print("======== belum ada lisensi $reason ========");
+    //   }
+    // });
+
     if (!forConfig) {
+      print("-------- init stream 2 ---------");
+      await setLiveConfig();
       await Future.delayed(const Duration(milliseconds: 500));
       await _setLivePusher();
+      if (isFirst && mounted) {
+        isFirst = false;
+        await init(context, mounted);
+      }
       await _onListen(context, mounted);
     }
-
-    // double max = await _alivcLivePusher.getMaxZoom();
-    // print("---=-=-=- maxzooom $max");
-    // _alivcLivePusher.setZoom(2.0);
     isloading = false;
     notifyListeners();
     tn = context.read<TranslateNotifierV2>().translate;
@@ -209,10 +216,16 @@ class StreamerNotifier with ChangeNotifier {
     });
 
     /// Configure the callback for preview stop.
-    _alivcLivePusher.setOnPreviewStoped(() {});
+    _alivcLivePusher.setOnPreviewStoped(() {
+      isloadingPreview = false;
+      notifyListeners();
+    });
 
     /// Configure the callback for first frame rendering.
-    _alivcLivePusher.setOnFirstFramePreviewed(() {});
+    _alivcLivePusher.setOnFirstFramePreviewed(() {
+      isloadingPreview = false;
+      notifyListeners();
+    });
 
     /// Configure the callback for start of stream ingest.
     _alivcLivePusher.setOnPushStarted(() {
@@ -241,7 +254,9 @@ class StreamerNotifier with ChangeNotifier {
 
     /// Listener for the network status during stream ingest
     /// Configure the callback for failed connection of stream ingest.
-    _alivcLivePusher.setOnConnectFail((errorCode, errorDescription) {});
+    _alivcLivePusher.setOnConnectFail((errorCode, errorDescription) {
+      "Error Init Live Streaming : $errorDescription".logger();
+    });
 
     /// Configure the callback for network recovery.
     _alivcLivePusher.setOnConnectRecovery(() {});
@@ -447,11 +462,15 @@ class StreamerNotifier with ChangeNotifier {
   }
 
   Future<void> destoryPusher() async {
+    print("====1=====");
+    _alivcLivePusher.stopPush();
+    print("====2=====");
+    _alivcLivePusher.stopPreview();
+    print("====3=====");
+    _alivcLivePusher.destroy();
+    print("====4=====");
     WakelockPlus.disable();
     statusLive = StatusStream.offline;
-    _alivcLivePusher.stopPush();
-    _alivcLivePusher.stopPreview();
-    _alivcLivePusher.destroy();
     livePushMode = 0;
     timeReady = 3;
     totLikes = 0;
@@ -464,6 +483,7 @@ class StreamerNotifier with ChangeNotifier {
     isloadingViewers = false;
     isloadingViewersMore = false;
     isloadingProfile = false;
+    isloadingProfileViewer = false;
     isCheckLoading = false;
     mute = false;
     isPause = false;
@@ -601,8 +621,8 @@ class StreamerNotifier with ChangeNotifier {
     if (isBack) Routing().moveBack();
     var dateTimeFinish = DateTime.now();
     Duration duration = dateTimeFinish.difference(dateTimeStart);
+    await destoryPusher();
     await stopStream(context, mounted);
-    destoryPusher();
     Routing().moveReplacement(Routes.streamingFeedback, argument: SummaryLiveArgument(duration: duration, data: dataSummary));
   }
 
@@ -844,6 +864,16 @@ class StreamerNotifier with ChangeNotifier {
     }
   }
 
+  Future getProfileNCheckViewer(BuildContext context, String email) async {
+    int totLoading = 0;
+    isloadingProfileViewer = true;
+    // statusFollowingViewer = StatusFollowing.none;
+    await checkFollowingToUserViewer(context, email).then((value) => totLoading++);
+    await getProfileViewer(context, email).then((value) => totLoading++);
+    isloadingProfileViewer = false;
+    notifyListeners();
+  }
+
   Future getProfile(BuildContext context, String email) async {
     final usersNotifier = UserBloc();
     checkFollowingToUser(context, email);
@@ -853,6 +883,18 @@ class StreamerNotifier with ChangeNotifier {
 
     if (usersFetch.userState == UserState.getUserProfilesSuccess) {
       audienceProfile = usersFetch.data;
+    }
+  }
+
+  Future getProfileViewer(BuildContext context, String email) async {
+    final usersNotifier = UserBloc();
+    checkFollowingToUser(context, email);
+    await usersNotifier.getUserProfilesBloc(context, search: email, withAlertMessage: true);
+
+    final usersFetch = usersNotifier.userFetch;
+
+    if (usersFetch.userState == UserState.getUserProfilesSuccess) {
+      audienceProfileViewer = usersFetch.data;
     }
   }
 
@@ -870,6 +912,30 @@ class StreamerNotifier with ChangeNotifier {
         } else if (resRequest.any((element) => element.event == InteractiveEvent.initial)) {
           statusFollowing = StatusFollowing.requested;
         }
+      }
+    } catch (e) {
+      'load following request list: ERROR: $e'.logger();
+    }
+    notifyListeners();
+  }
+
+  Future<void> checkFollowingToUserViewer(BuildContext context, String email) async {
+    try {
+      _usersFollowingQuery.senderOrReceiver = email;
+      _usersFollowingQuery.limit = 200;
+      print('reload contentsQuery : 11');
+      final resFuture = await _usersFollowingQuery.reload(context);
+      final resRequest = resFuture;
+      if (resRequest.isNotEmpty) {
+        if (resRequest.any((element) => element.event == InteractiveEvent.accept)) {
+          statusFollowingViewer = StatusFollowing.following;
+          notifyListeners();
+        } else if (resRequest.any((element) => element.event == InteractiveEvent.initial)) {
+          statusFollowingViewer = StatusFollowing.requested;
+          notifyListeners();
+        }
+      } else {
+        statusFollowingViewer = StatusFollowing.none;
       }
     } catch (e) {
       'load following request list: ERROR: $e'.logger();
@@ -914,6 +980,47 @@ class StreamerNotifier with ChangeNotifier {
     } catch (e) {
       'followUser error: $e'.logger();
       // statusFollowing = StatusFollowing.none;
+      ShowBottomSheet.onShowSomethingWhenWrong(context);
+    }
+  }
+
+  Future followUserViewer(BuildContext context, email, {isUnFollow = false, String? idMediaStreaming}) async {
+    try {
+      // _system.actionReqiredIdCard(
+      //   context,
+      //   action: () async {
+      // statusFollowingViewer = StatusFollowing.requested;
+      isCheckLoading = true;
+      final notifier = FollowBloc();
+      await notifier.followUserBlocV2(
+        context,
+        data: FollowUserArgument(
+          receiverParty: email ?? '',
+          eventType: isUnFollow ? InteractiveEventType.unfollow : InteractiveEventType.following,
+          idMediaStreaming: idMediaStreaming,
+        ),
+      );
+      final fetch = notifier.followFetch;
+      if (fetch.followState == FollowState.followUserSuccess) {
+        if (isUnFollow) {
+          statusFollowingViewer = StatusFollowing.none;
+        } else {
+          statusFollowingViewer = StatusFollowing.following;
+        }
+      } else if (statusFollowingViewer != StatusFollowing.none && statusFollowingViewer != StatusFollowing.following) {
+        statusFollowingViewer = StatusFollowing.none;
+      }
+      // else {
+      //   statusFollowingViewer = StatusFollowing.none;
+      // }
+      //   },
+      //   uploadContentAction: false,
+      // );
+      isCheckLoading = false;
+      notifyListeners();
+    } catch (e) {
+      'followUser error: $e'.logger();
+      // statusFollowingViewer = StatusFollowing.none;
       ShowBottomSheet.onShowSomethingWhenWrong(context);
     }
   }

@@ -118,7 +118,7 @@ class ViewStreamingNotifier with ChangeNotifier {
     isOver = false;
     endLive = false;
     comment = [];
-    notifyListeners();
+    // notifyListeners();
   }
 
   sendComment(BuildContext context, LinkStreamModel model, String comment) async {

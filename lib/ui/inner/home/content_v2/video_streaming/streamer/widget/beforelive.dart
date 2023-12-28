@@ -59,7 +59,7 @@ class BeforeLive extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        CustomProfileImage(
+                        (System().showUserPicture(profileImage)?.isNotEmpty ?? false ) ?CustomProfileImage(
                           cacheKey: profileImageKey,
                           following: true,
                           forStory: true,
@@ -68,6 +68,14 @@ class BeforeLive extends StatelessWidget {
                           imageUrl: System().showUserPicture(profileImage),
                           // badge: notifier.user.profile?.urluserBadge,
                           allwaysUseBadgePadding: false,
+                        ) : ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Image.asset(
+                            '${AssetPath.pngPath}profile-error.jpg',
+                            fit: BoxFit.fitWidth,
+                            height: 50 * SizeConfig.scaleDiagonal,
+                            width: 50 * SizeConfig.scaleDiagonal,
+                          ),
                         ),
                         sixPx,
                         Expanded(
@@ -80,17 +88,17 @@ class BeforeLive extends StatelessWidget {
                             textAlign: TextAlign.left,
                             style: const TextStyle(fontSize: 13, color: kHyppeTextPrimary),
                             cursorColor: kHyppeBurem,
-                            decoration: const InputDecoration(
+                            decoration:  InputDecoration(
                               isDense: false,
                               alignLabelWithHint: false,
                               isCollapsed: true,
-                              hintText: 'Tambah Judul ...',
+                              hintText: notifier.tn?.addATitle ,
                               counterText: '',
                               border: InputBorder.none,
                               focusedBorder: InputBorder.none,
                               enabledBorder: InputBorder.none,
-                              contentPadding: EdgeInsets.only(top: 0),
-                              hintStyle: TextStyle(fontSize: 13, color: kHyppeBurem),
+                              contentPadding: const EdgeInsets.only(top: 0),
+                              hintStyle: const TextStyle(fontSize: 13, color: kHyppeBurem),
                             ),
                             maxLength: 30,
                             maxLines: 2,

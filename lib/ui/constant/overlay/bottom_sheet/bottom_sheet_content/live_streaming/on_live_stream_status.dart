@@ -13,13 +13,14 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../core/constants/asset_path.dart';
+import '../../../../../../core/constants/enum.dart';
 import '../../../../../../core/constants/shared_preference_keys.dart';
 import '../../../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../../../core/services/shared_preference.dart';
+import '../../../../widget/custom_elevated_button.dart';
 import '../../../../widget/custom_icon_widget.dart';
 import '../../../../widget/custom_profile_image.dart';
 import '../../../../widget/custom_spacer.dart';
-import '../../show_bottom_sheet.dart';
 
 class OnLiveStreamStatus extends StatefulWidget {
   final String? idStream;
@@ -41,6 +42,7 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       streampro = Provider.of<StreamerNotifier>(context, listen: false);
       streampro?.getViewer(context, mounted, idStream: widget.idStream);
+
       controller?.addListener(() {
         streampro?.getMoreViewer(context, mounted, widget.idStream, controller!);
       });
@@ -106,19 +108,23 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                 ),
               ),
               sixteenPx,
-              Container(
-                margin: const EdgeInsets.only(
-                  left: 16,
-                  right: 16,
-                ),
-                child: ItemAccount(
-                  urlImage: widget.isViewer ? (notifier.dataStream.avatar?.mediaEndpoint ?? '') : (context.read<SelfProfileNotifier>().user.profile?.avatar?.mediaEndpoint) ?? '',
-                  username: widget.isViewer ? (notifier.dataStream.username ?? '') : (context.read<SelfProfileNotifier>().user.profile?.username ?? ''),
-                  name: widget.isViewer ? (notifier.dataStream.fullName ?? '') : (context.read<SelfProfileNotifier>().user.profile?.fullName ?? ''),
-                  email: widget.isViewer ? (notifier.dataStream.email ?? '') : (context.read<SelfProfileNotifier>().user.profile?.fullName ?? ''),
-                  sId: notifier.dataStream.sId ?? '',
-                ),
-              ),
+              Builder(builder: (context) {
+                return Container(
+                  margin: const EdgeInsets.only(
+                    left: 16,
+                    right: 16,
+                  ),
+                  child: ItemAccount(
+                    urlImage: widget.isViewer ? (notifier.dataStream.avatar?.mediaEndpoint ?? '') : (context.read<SelfProfileNotifier>().user.profile?.avatar?.mediaEndpoint) ?? '',
+                    username: widget.isViewer ? (notifier.dataStream.username ?? '') : (context.read<SelfProfileNotifier>().user.profile?.username ?? ''),
+                    name: widget.isViewer ? (notifier.dataStream.fullName ?? '') : (context.read<SelfProfileNotifier>().user.profile?.fullName ?? ''),
+                    email: widget.isViewer ? (notifier.dataStream.email ?? '') : (context.read<SelfProfileNotifier>().user.profile?.email ?? ''),
+                    sId: notifier.dataStream.sId ?? '',
+                    isViewer: widget.isViewer,
+                    notifier: notifier,
+                  ),
+                );
+              }),
               eightPx,
               Container(
                 margin: const EdgeInsets.only(
@@ -175,6 +181,8 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                                     email: watcher.email ?? '',
                                     idStream: widget.idStream,
                                     showThreeDot: true,
+                                    isViewer: widget.isViewer,
+                                    notifier: notifier,
                                   );
                                 },
                               ),
@@ -203,15 +211,7 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
   }
 }
 
-class Watcher {
-  final String? image;
-  final String? username;
-  final String? name;
-  final bool isFollowing;
-  const Watcher({this.image, this.username, this.name, this.isFollowing = true});
-}
-
-class ItemAccount extends StatelessWidget {
+class ItemAccount extends StatefulWidget {
   final String urlImage;
   final String username;
   final String email;
@@ -222,6 +222,8 @@ class ItemAccount extends StatelessWidget {
   final int? index;
   final bool? isloading;
   final bool showThreeDot;
+  final bool isViewer;
+  final StreamerNotifier notifier;
 
   final String? idStream;
   const ItemAccount({
@@ -231,6 +233,8 @@ class ItemAccount extends StatelessWidget {
     required this.username,
     required this.email,
     required this.sId,
+    required this.isViewer,
+    required this.notifier,
     this.isHost = true,
     this.isloading,
     this.index,
@@ -240,99 +244,157 @@ class ItemAccount extends StatelessWidget {
   });
 
   @override
+  State<ItemAccount> createState() => _ItemAccountState();
+}
+
+class _ItemAccountState extends State<ItemAccount> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final streampro = Provider.of<StreamerNotifier>(context, listen: false);
+      if(widget.isHost && widget.isViewer){
+        streampro.getProfileNCheckViewer(context, widget.email ?? '');
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final language = context.read<TranslateNotifierV2>().translate;
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              CustomProfileImage(
-                onTap: () async {
-                  if (context.read<SelfProfileNotifier>().user.profile?.username != username) {
-                    Routing().moveBack();
-                    Future.delayed(const Duration(milliseconds: 500), () {
-                      ShowBottomSheet.onWatcherStatus(Routing.navigatorKey.currentContext ?? context, email, sId);
-                    });
-                  }
-                },
-                width: 36,
-                height: 36,
-                following: true,
-                imageUrl: System().showUserPicture(urlImage),
-                forStory: false,
-              ),
-              twelvePx,
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomTextWidget(
-                      textAlign: TextAlign.left,
-                      textToDisplay: username,
-                      textStyle: context.getTextTheme().bodyText2?.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
-                    ),
-                    fourPx,
-                    CustomTextWidget(
-                      textAlign: TextAlign.left,
-                      textToDisplay: "$name${isHost ? " • Host" : ''}",
-                      textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w400, color: kHyppeBurem),
-                    ),
-                  ],
-                ),
-              ),
-              if (!isHost) tenPx,
-              if (!isHost && showThreeDot && SharedPreference().readStorage(SpKeys.email) != email)
-                CustomGesture(
-                  margin: EdgeInsets.zero,
+    return Consumer<StreamerNotifier>(
+      builder: (_, notifier, __) => Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                CustomProfileImage(
                   onTap: () async {
-                    Routing().moveBack();
-                    ShowBottomSheet.onWatcherStatus(context, email ?? '', idStream ?? '');
+                    if (context.read<SelfProfileNotifier>().user.profile?.username != widget.username) {
+                      Routing().moveBack();
+                      Future.delayed(const Duration(milliseconds: 500), () {
+                        ShowBottomSheet.onWatcherStatus(Routing.navigatorKey.currentContext ?? context, widget.email, widget.sId);
+                      });
+                    }
                   },
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: const RotationTransition(
-                      turns: AlwaysStoppedAnimation(90 / 360),
-                      child: Align(alignment: Alignment.center, child: CustomIconWidget(width: 24, iconData: "${AssetPath.vectorPath}more.svg", color: Colors.black, defaultColor: false)),
-                    ),
+                  width: 36,
+                  height: 36,
+                  following: true,
+                  imageUrl: System().showUserPicture(widget.urlImage),
+                  forStory: false,
+                ),
+                twelvePx,
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomTextWidget(
+                        textAlign: TextAlign.left,
+                        textToDisplay: widget.username,
+                        textStyle: context.getTextTheme().bodyText2?.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
+                      ),
+                      fourPx,
+                      CustomTextWidget(
+                        textAlign: TextAlign.left,
+                        textToDisplay: "${widget.name}${widget.isHost ? " • Host" : ''}",
+                        textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w400, color: kHyppeBurem),
+                      ),
+                    ],
                   ),
                 ),
-              // if (!isHost)
-              //   CustomGesture(
-              //     margin: EdgeInsets.zero,
-              //     onTap: () async {
-              //       await ShowGeneralDialog.generalDialog(context,
-              //           titleText: "${language.remove} $username?",
-              //           bodyText: "${language.messageRemoveUser1} $username ${language.messageRemoveUser2}",
-              //           maxLineTitle: 1,
-              //           maxLineBody: 4, functionPrimary: () async {
-              //         Routing().moveBack();
-              //       }, functionSecondary: () {
-              //         Routing().moveBack();
-              //       }, titleButtonPrimary: "${language.remove}", titleButtonSecondary: "${language.cancel}", barrierDismissible: true, isHorizontal: false);
-              //     },
-              //     child: Container(
-              //       width: 86,
-              //       height: 24,
-              //       decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.transparent, border: Border.all(color: kHyppeBurem, width: 1)),
-              //       alignment: Alignment.center,
-              //       child: CustomTextWidget(
-              //         textToDisplay: language.removeUser ?? '',
-              //         textAlign: TextAlign.center,
-              //         textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.black),
-              //       ),
-              //     ),
-              //   ),
-            ],
-          ),
-          if (length == ((index ?? 0) + 1) && (isloading ?? false)) const CustomLoading(size: 4),
-        ],
+                if (!widget.isHost) tenPx,
+                if (!widget.isHost && widget.showThreeDot && SharedPreference().readStorage(SpKeys.email) != widget.email)
+                  CustomGesture(
+                    margin: EdgeInsets.zero,
+                    onTap: () async {
+                      Routing().moveBack();
+                      ShowBottomSheet.onWatcherStatus(context, widget.email ?? '', widget.idStream ?? '');
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: const RotationTransition(
+                        turns: AlwaysStoppedAnimation(90 / 360),
+                        child: Align(alignment: Alignment.center, child: CustomIconWidget(width: 24, iconData: "${AssetPath.vectorPath}more.svg", color: Colors.black, defaultColor: false)),
+                      ),
+                    ),
+                  ),
+                // Text("${widget.notifier.statusFollowingViewer}"),
+                if (widget.isHost && widget.isViewer)
+                  CustomElevatedButton(
+                    width: 100,
+                    height: 24,
+                    buttonStyle: ButtonStyle(
+                      backgroundColor: (widget.notifier.statusFollowingViewer == StatusFollowing.requested || widget.notifier.statusFollowingViewer == StatusFollowing.following)
+                          ? null
+                          // : (widget.notifier.userName == widget.notifier.audienceProfile.username)
+                          //     ? null
+                          : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                    ),
+                    function: widget.notifier.isCheckLoading
+                        ? null
+                        : () {
+                            if (widget.notifier.statusFollowingViewer == StatusFollowing.none || widget.notifier.statusFollowingViewer == StatusFollowing.rejected) {
+                              widget.notifier.followUserViewer(context, widget.email, idMediaStreaming: widget.sId).then((value) {
+                                widget.notifier.audienceProfileViewer.insight?.followers = widget.notifier.audienceProfileViewer.insight!.followers! + 1;
+                              });
+                            } else if (widget.notifier.statusFollowingViewer == StatusFollowing.following) {
+                              widget.notifier.followUserViewer(context, widget.email, isUnFollow: true, idMediaStreaming: widget.sId).then((value) {
+                                widget.notifier.audienceProfileViewer.insight?.followers = widget.notifier.audienceProfileViewer.insight!.followers! - 1;
+                              });
+                            }
+                          },
+                    child: widget.notifier.isCheckLoading
+                        ? const CustomLoading()
+                        : CustomTextWidget(
+                            textToDisplay: widget.notifier.statusFollowingViewer == StatusFollowing.following
+                                ? language.following ?? 'following '
+                                : widget.notifier.statusFollowingViewer == StatusFollowing.requested
+                                    ? language.requested ?? 'requested'
+                                    : language.follow ?? 'follow',
+                            textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
+                                  color: (widget.notifier.statusFollowingViewer == StatusFollowing.requested || widget.notifier.statusFollowingViewer == StatusFollowing.following)
+                                      ? kHyppeGrey
+                                      : kHyppeLightButtonText,
+                                ),
+                          ),
+                  ),
+                // if (!isHost)
+                //   CustomGesture(
+                //     margin: EdgeInsets.zero,
+                //     onTap: () async {
+                //       await ShowGeneralDialog.generalDialog(context,
+                //           titleText: "${language.remove} $username?",
+                //           bodyText: "${language.messageRemoveUser1} $username ${language.messageRemoveUser2}",
+                //           maxLineTitle: 1,
+                //           maxLineBody: 4, functionPrimary: () async {
+                //         Routing().moveBack();
+                //       }, functionSecondary: () {
+                //         Routing().moveBack();
+                //       }, titleButtonPrimary: "${language.remove}", titleButtonSecondary: "${language.cancel}", barrierDismissible: true, isHorizontal: false);
+                //     },
+                //     child: Container(
+                //       width: 86,
+                //       height: 24,
+                //       decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.transparent, border: Border.all(color: kHyppeBurem, width: 1)),
+                //       alignment: Alignment.center,
+                //       child: CustomTextWidget(
+                //         textToDisplay: language.removeUser ?? '',
+                //         textAlign: TextAlign.center,
+                //         textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.black),
+                //       ),
+                //     ),
+                //   ),
+              ],
+            ),
+            if (widget.length == ((widget.index ?? 0) + 1) && (widget.isloading ?? false)) const CustomLoading(size: 4),
+          ],
+        ),
       ),
     );
   }

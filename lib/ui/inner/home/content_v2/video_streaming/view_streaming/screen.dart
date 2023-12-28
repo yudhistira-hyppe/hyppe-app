@@ -13,6 +13,7 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/love_lottie.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/love_lottie.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/over_live_streaming.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/pauseLive.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/title_view_live.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/viewer_comment.dart';
@@ -43,7 +44,8 @@ class ViewStreamingScreen extends StatefulWidget {
   State<ViewStreamingScreen> createState() => _ViewStreamingScreenState();
 }
 
-class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsBindingObserver, TickerProviderStateMixin {
+class _ViewStreamingScreenState extends State<ViewStreamingScreen>
+    with WidgetsBindingObserver, TickerProviderStateMixin {
   FocusNode commentFocusNode = FocusNode();
 
   final debouncer = Debouncer(milliseconds: 2000);
@@ -132,17 +134,22 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
 
     bool theme = SharedPreference().readStorage(SpKeys.themeData) ?? false;
     super.initState();
-    final notifier = (Routing.navigatorKey.currentContext ?? context).read<ViewStreamingNotifier>();
+    final notifier = (Routing.navigatorKey.currentContext ?? context)
+        .read<ViewStreamingNotifier>();
     notifier.initViewStreaming(widget.args.data);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       commentFocusNode.addListener(() {
         print("Has focus: ${commentFocusNode.hasFocus}");
       });
-      notifier.startViewStreaming(Routing.navigatorKey.currentContext ?? context, mounted, widget.args.data);
+      notifier.startViewStreaming(
+          Routing.navigatorKey.currentContext ?? context,
+          mounted,
+          widget.args.data);
       SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
       // _pageController.addListener(() => notifier.currentPage = _pageController.page);
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: widget.args.data.sId);
+      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(
+          playerId: widget.args.data.sId);
 
       WidgetsBinding.instance.addObserver(this);
       bottomIndex = 0;
@@ -169,7 +176,8 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
 
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
-      fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+      fAliplayer
+          ?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
 
       if (Platform.isAndroid) {
         getExternalStorageDirectories().then((value) {
@@ -193,7 +201,9 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
     });
     fAliplayer?.setOnPrepared((playerId) {
       // Fluttertoast.showToast(msg: "OnPrepared ");
-      fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
+      fAliplayer
+          ?.getPlayerName()
+          .then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
         _videoDuration = value['duration'];
         setState(() {
@@ -250,7 +260,8 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
       }
     });
     fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
-      if (!(context.read<ViewStreamingNotifier>().dataStreaming.pause ?? false)) {
+      if (!(context.read<ViewStreamingNotifier>().dataStreaming.pause ??
+          false)) {
         setState(() {
           _loadingPercent = 0;
           _showLoading = true;
@@ -438,7 +449,8 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
   void dispose() {
     fAliplayer?.stop();
     fAliplayer?.destroy();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: SystemUiOverlay.values);
     WakelockPlus.disable();
     SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
     if (Platform.isIOS) {
@@ -478,79 +490,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
             width: SizeConfig.screenWidth,
             height: SizeConfig.screenHeight,
             child: notifier.isOver
-                ? Stack(
-                    children: [
-                      Positioned.fill(
-                        child: Container(
-                          width: double.infinity,
-                          height: context.getHeight(),
-                          decoration: BoxDecoration(
-                            image: DecorationImage(image: NetworkImage(displayPhotoProfileOriginal(widget.args.data.avatar?.mediaEndpoint ?? '') ?? ''), fit: BoxFit.cover),
-                          ),
-                          child: BackdropFilter(
-                            filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                            child: Container(
-                              decoration: BoxDecoration(color: Colors.white.withOpacity(0.0)),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SafeArea(
-                        child: Align(
-                          alignment: Alignment.topRight,
-                          child: GestureDetector(
-                            onTap: () async {
-                              fAliplayer?.stop();
-                              fAliplayer?.destroy();
-                              fAliplayer?.clearScreen();
-                              Routing().moveBack();
-                              // await notifier.exitStreaming(context, widget.args.data);
-                              await notifier.destoryPusher();
-                            },
-                            child: const Padding(
-                              padding: EdgeInsets.only(right: 30.0),
-                              child: CustomIconWidget(
-                                iconData: "${AssetPath.vectorPath}close.svg",
-                                defaultColor: false,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CustomTextWidget(
-                              textToDisplay: notifier.language.liveStreamingIsOver ?? '',
-                              textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-                            ),
-                            twelvePx,
-                            CustomTextWidget(
-                              textToDisplay: '${notifier.totViewsEnd} ${notifier.language.viewers}',
-                              textStyle: const TextStyle(fontSize: 14, color: Color(0xffdadada)),
-                            ),
-                            twelvePx,
-                            SizedBox(
-                              width: 80,
-                              height: 80,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(40),
-                                child: streamerImage(displayPhotoProfileOriginal(widget.args.data.avatar?.mediaEndpoint ?? '') ?? ''),
-                              ),
-                            ),
-                            twelvePx,
-                            CustomTextWidget(
-                              textToDisplay: '@${widget.args.data.username}',
-                              textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  )
+                ? OverLiveStreaming(data: widget.args.data, notifier: notifier, fAliplayer: fAliplayer,)
                 : Stack(
                     children: [
                       GestureDetector(
@@ -565,7 +505,8 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                         onDoubleTap: () {
                           notifier.likeAddTapScreen();
                           _debouncer.run(() {
-                            notifier.sendLikeTapScreen(context, notifier.streamerData!);
+                            notifier.sendLikeTapScreen(
+                                context, notifier.streamerData!);
                           });
                         },
                         child: Container(
@@ -581,7 +522,8 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                           ),
                         ),
                       ),
-                      if (notifier.dataStreaming.pause ?? false) const PauseLiveView(),
+                      if (notifier.dataStreaming.pause ?? false)
+                        const PauseLiveView(),
                       // if (liveIsPause) const PauseLiveView(),
                       Positioned.fill(
                         bottom: -60,
@@ -637,7 +579,8 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                           ),
                         ),
                       ),
-                      if (_showLoading && !(notifier.dataStreaming.pause ?? false))
+                      if (_showLoading &&
+                          !(notifier.dataStreaming.pause ?? false))
                         Positioned.fill(
                           child: Align(
                             alignment: Alignment.center,
@@ -815,6 +758,10 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
           width: double.infinity,
           height: double.infinity,
           fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return Image.asset('${AssetPath.pngPath}profile-error.jpg',
+                fit: BoxFit.fitWidth);
+          },
         )),
       ],
     );

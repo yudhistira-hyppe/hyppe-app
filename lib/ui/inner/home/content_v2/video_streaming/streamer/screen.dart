@@ -139,10 +139,30 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
     return Consumer<StreamerNotifier>(
       builder: (_, notifier, __) => Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.black,
         body: WillPopScope(
           child: notifier.isloading
-              ? SizedBox(height: SizeConfig.screenHeight, child: const Center(child: CustomLoading()))
+              ? SizedBox(
+                  height: SizeConfig.screenHeight,
+                  child: Stack(
+                    children: [
+                      const Center(child: CustomLoading()),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: SafeArea(
+                          child: CustomIconButtonWidget(
+                            padding: const EdgeInsets.all(0),
+                            alignment: Alignment.center,
+                            iconData: "${AssetPath.vectorPath}close.svg",
+                            defaultColor: false,
+                            onPressed: () {
+                              Routing().moveBack();
+                            },
+                          ),
+                        ),
+                      )
+                    ],
+                  ))
               : Stack(
                   children: [
                     _buildPreviewWidget(context, notifier),
@@ -194,7 +214,7 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
                                 : notifier.statusLive == StatusStream.standBy
                                     ? startCounting(notifier.timeReady, notifier, tn)
                                     : notifier.statusLive == StatusStream.ready
-                                        ? prepare(titile: "Siaran LIVE telah dimulai!")
+                                        ? prepare(titile: notifier.tn?.liveVideoHasStarted ?? '')
                                         : Container(),
                     if (notifier.isPause) PauseLive(notifier: notifier),
                     if (notifier.statusLive == StatusStream.ready || notifier.statusLive == StatusStream.online) StreamerWidget(commentFocusNode: commentFocusNode),

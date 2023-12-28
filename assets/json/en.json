@@ -1090,5 +1090,7 @@
   "liveStreamingIsOver": "LIVE has ended",
   "allowComments": "Enable Comments",
   "noteShowView99": "Displays the top 99 viewers whose ratings are enabled",
-  "viewers": "Viewers"
+  "viewers": "Viewers",
+  "liveVideoHasStarted": "LIVE video has started!",
+  "addATitle": "Add a title..."
 }
