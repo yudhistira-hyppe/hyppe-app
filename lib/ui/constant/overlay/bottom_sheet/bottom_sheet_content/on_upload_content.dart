@@ -70,21 +70,21 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
   }
 
   Future<void> _initPush() async {
-    // if (isCreator) context.read<StreamerNotifier>().init(context, mounted);
-    _alivcBase = AlivcBase.init();
-    _alivcBase.registerSDK().then((value) => print(value));
-    _alivcBase.setObserver();
-    _alivcBase.setOnLicenceCheck((result, reason) {
-      print('sad');
-      print("======== belum ada lisensi $reason ========");
-      if (result != AlivcLiveLicenseCheckResultCode.success) {
-        print("======== belum ada lisensi $reason ========");
-      }
-    });
-    _alivcLivePusherConfig = AlivcLivePusherConfig.init();
-    _alivcLivePusherConfig.setCameraType(AlivcLivePushCameraType.front);
-    _alivcLivePusher = AlivcLivePusher.init();
-    _alivcLivePusher.createConfig();
+    if (isCreator) context.read<StreamerNotifier>().init(context, mounted, forConfig: true);
+    // _alivcBase = AlivcBase.init();
+    // _alivcBase.registerSDK().then((value) => print(value));
+    // _alivcBase.setObserver();
+    // _alivcBase.setOnLicenceCheck((result, reason) {
+    //   print('sad');
+    //   print("======== belum ada lisensi $reason ========");
+    //   if (result != AlivcLiveLicenseCheckResultCode.success) {
+    //     print("======== belum ada lisensi $reason ========");
+    //   }
+    // });
+    // _alivcLivePusherConfig = AlivcLivePusherConfig.init();
+    // _alivcLivePusherConfig.setCameraType(AlivcLivePushCameraType.front);
+    // _alivcLivePusher = AlivcLivePusher.init();
+    // _alivcLivePusher.createConfig();
   }
 
   @override

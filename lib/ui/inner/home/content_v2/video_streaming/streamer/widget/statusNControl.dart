@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
-import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -39,7 +38,11 @@ class StatusNControl extends StatelessWidget {
             if (notifier.totViews > 0)
               GestureDetector(
                 onTap: () {
-                  ShowBottomSheet.onStreamWatchersStatus(context, false, notifier, );
+                  ShowBottomSheet.onStreamWatchersStatus(
+                    context,
+                    false,
+                    notifier,
+                  );
                 },
                 child: Container(
                   width: 50,

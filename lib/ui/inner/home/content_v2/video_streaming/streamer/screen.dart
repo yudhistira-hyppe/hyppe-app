@@ -139,7 +139,7 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
     return Consumer<StreamerNotifier>(
       builder: (_, notifier, __) => Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.black,
         body: WillPopScope(
           child: notifier.isloading
               ? SizedBox(height: SizeConfig.screenHeight, child: const Center(child: CustomLoading()))

@@ -3,6 +3,10 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_livepush_plugin/live_base.dart';
+import 'package:flutter_livepush_plugin/live_push_config.dart';
+import 'package:flutter_livepush_plugin/live_push_def.dart';
+import 'package:flutter_livepush_plugin/live_pusher.dart';
 import 'package:hyppe/core/bloc/user_v2/bloc.dart' as userV2;
 import 'package:hyppe/core/bloc/user_v2/state.dart';
 import 'package:hyppe/core/bloc/utils_v2/bloc.dart';
@@ -143,8 +147,7 @@ class MainNotifier with ChangeNotifier {
       }
 
       selfProfile.onUpdate();
-      print(selfProfile.user.profile?.bio);
-      print("profile?.avatar ${selfProfile.user.profile?.avatar?.imageKey}");
+
       context.read<SelfProfileNotifier>().user.profile = usersFetch.data;
       context.read<HomeNotifier>().profileImage = context.read<SelfProfileNotifier>().user.profile?.avatar?.mediaEndpoint ?? '';
       context.read<HomeNotifier>().profileBadge = context.read<SelfProfileNotifier>().user.profile?.urluserBadge;
@@ -152,7 +155,7 @@ class MainNotifier with ChangeNotifier {
       context.read<HomeNotifier>().profileImageKey = keyImageCache;
       context.read<HomeNotifier>().onUpdate();
       if (context.read<SelfProfileNotifier>().user.profile?.creator ?? false) {
-        context.read<StreamerNotifier>().init(context, context.mounted, forConfig: true);
+        _initPush();
       }
 
       print("profile?.badge ${context.read<HomeNotifier>().profileBadge?.badgeProfile}");
@@ -171,6 +174,24 @@ class MainNotifier with ChangeNotifier {
         takeSelfie(context);
       }
     });
+  }
+
+  AlivcBase? _alivcBase;
+  AlivcLivePusherConfig? _alivcLivePusherConfig;
+
+  Future<void> _initPush() async {
+    _alivcBase = AlivcBase.init();
+    _alivcBase?.registerSDK().then((value) => print(value));
+    _alivcBase?.setObserver();
+    _alivcBase?.setOnLicenceCheck((result, reason) {
+      print('sad');
+      print("======== belum ada lisensi $reason ========");
+      if (result != AlivcLiveLicenseCheckResultCode.success) {
+        print("======== belum ada lisensi $reason ========");
+      }
+    });
+    _alivcLivePusherConfig = AlivcLivePusherConfig.init();
+    _alivcLivePusherConfig?.setCameraType(AlivcLivePushCameraType.front);
   }
 
   Future getProvinceName(BuildContext context, {required UserProfileModel? profile}) async {

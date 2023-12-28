@@ -91,6 +91,7 @@ class StreamerNotifier with ChangeNotifier {
   bool isCommentDisable = false;
   bool isCancel = false;
   bool isSendComment = false;
+  bool isFirst = true;
 
   FocusNode titleFocusNode = FocusNode();
   TextEditingController titleLiveCtrl = TextEditingController();
@@ -128,7 +129,7 @@ class StreamerNotifier with ChangeNotifier {
   }
 
   Future<void> init(BuildContext context, mounted, {bool forConfig = false}) async {
-    // final isGranted = await System().requestPermission(context, permissions: [Permission.camera, Permission.microphone]);
+    print("-------- init stream $forConfig ---------");
     isloading = true;
     isloadingPreview = true;
     notifyListeners();
@@ -136,16 +137,22 @@ class StreamerNotifier with ChangeNotifier {
     _alivcBase = AlivcBase.init();
     await _alivcBase.registerSDK();
     await _alivcBase.setObserver();
-    _alivcBase.setOnLicenceCheck((result, reason) {
-      print("======== belum ada lisensi $reason ========");
-      if (result != AlivcLiveLicenseCheckResultCode.success) {
-        print("======== belum ada lisensi $reason ========");
-      }
-    });
-    await setLiveConfig();
+    // _alivcBase.setOnLicenceCheck((result, reason) {
+    //   print("======== belum ada lisensi $reason ========");
+    //   if (result != AlivcLiveLicenseCheckResultCode.success) {
+    //     print("======== belum ada lisensi $reason ========");
+    //   }
+    // });
+
     if (!forConfig) {
+      print("-------- init stream 2 ---------");
+      await setLiveConfig();
       await Future.delayed(const Duration(milliseconds: 500));
       await _setLivePusher();
+      if (isFirst && mounted) {
+        isFirst = false;
+        await init(context, mounted);
+      }
       await _onListen(context, mounted);
     }
 
@@ -610,8 +617,8 @@ class StreamerNotifier with ChangeNotifier {
     if (isBack) Routing().moveBack();
     var dateTimeFinish = DateTime.now();
     Duration duration = dateTimeFinish.difference(dateTimeStart);
+    await destoryPusher();
     await stopStream(context, mounted);
-    destoryPusher();
     Routing().moveReplacement(Routes.streamingFeedback, argument: SummaryLiveArgument(duration: duration, data: dataSummary));
   }
 
