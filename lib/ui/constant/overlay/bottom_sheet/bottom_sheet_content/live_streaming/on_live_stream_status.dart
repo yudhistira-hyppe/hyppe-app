@@ -119,7 +119,7 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                       urlImage: widget.isViewer ? (notifier.dataStream.avatar?.mediaEndpoint ?? '') : (context.read<SelfProfileNotifier>().user.profile?.avatar?.mediaEndpoint) ?? '',
                       username: widget.isViewer ? (notifier.dataStream.username ?? '') : (context.read<SelfProfileNotifier>().user.profile?.username ?? ''),
                       name: widget.isViewer ? (notifier.dataStream.fullName ?? '') : (context.read<SelfProfileNotifier>().user.profile?.fullName ?? ''),
-                      email: widget.isViewer ? (notifier.dataStream.email ?? '') : (context.read<SelfProfileNotifier>().user.profile?.fullName ?? ''),
+                      email: widget.isViewer ? (notifier.dataStream.email ?? '') : (context.read<SelfProfileNotifier>().user.profile?.email ?? ''),
                       sId: notifier.dataStream.sId ?? '',
                       isViewer: widget.isViewer,
                       notifier: notifier,
@@ -300,7 +300,7 @@ class _ItemAccountState extends State<ItemAccount> {
                     fourPx,
                     CustomTextWidget(
                       textAlign: TextAlign.left,
-                      textToDisplay: "$widget.name${widget.isHost ? " • Host" : ''}",
+                      textToDisplay: "${widget.name}${widget.isHost ? " • Host" : ''}",
                       textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w400, color: kHyppeBurem),
                     ),
                   ],
