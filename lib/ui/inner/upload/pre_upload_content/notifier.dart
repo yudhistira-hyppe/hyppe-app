@@ -1377,7 +1377,6 @@ class PreUploadContentNotifier with ChangeNotifier {
         String withoutat = withat.substring(1);
         inputCaption = withoutat;
         _startSearch = 0;
-
         if (withoutat.length > 2) {
           _isShowAutoComplete = true;
           searchPeople(context, input: withoutat);
