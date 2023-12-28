@@ -254,7 +254,10 @@ class _ItemAccountState extends State<ItemAccount> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final streampro = Provider.of<StreamerNotifier>(context, listen: false);
-      streampro.getProfileNCheckViewer(context, widget.email ?? '');
+      if(widget.isHost && widget.isViewer){
+        streampro.getProfileNCheckViewer(context, widget.email ?? '');
+      }
+
     });
   }
 
@@ -329,11 +332,9 @@ class _ItemAccountState extends State<ItemAccount> {
                   buttonStyle: ButtonStyle(
                     backgroundColor: (widget.notifier.statusFollowingViewer == StatusFollowing.requested || widget.notifier.statusFollowingViewer == StatusFollowing.following)
                         ? null
-                        : (widget.notifier.userName == widget.notifier.audienceProfile.username)
-                        ? null
                         : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                   ),
-                  function: widget.notifier.isCheckLoading
+                  function: widget.notifier.isloadingProfileViewer
                       ? null
                       : () {
                     if (widget.notifier.statusFollowingViewer == StatusFollowing.none || widget.notifier.statusFollowingViewer == StatusFollowing.rejected) {
@@ -346,7 +347,7 @@ class _ItemAccountState extends State<ItemAccount> {
                       });
                     }
                   },
-                  child: widget.notifier.isCheckLoading
+                  child: widget.notifier.isloadingProfileViewer
                       ? const CustomLoading()
                       : CustomTextWidget(
                     textToDisplay: widget.notifier.statusFollowingViewer == StatusFollowing.following

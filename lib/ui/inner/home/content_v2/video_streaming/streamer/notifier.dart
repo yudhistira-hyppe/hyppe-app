@@ -129,32 +129,38 @@ class StreamerNotifier with ChangeNotifier {
 
   Future<void> init(BuildContext context, mounted, {bool forConfig = false}) async {
     // final isGranted = await System().requestPermission(context, permissions: [Permission.camera, Permission.microphone]);
-    isloading = true;
-    isloadingPreview = true;
-    notifyListeners();
-    // _setPageOrientation(action, ctx);
-    _alivcBase = AlivcBase.init();
-    await _alivcBase.registerSDK();
-    await _alivcBase.setObserver();
-    _alivcBase.setOnLicenceCheck((result, reason) {
-      print("======== belum ada lisensi $reason ========");
-      if (result != AlivcLiveLicenseCheckResultCode.success) {
+    try{
+      isloading = true;
+      isloadingPreview = true;
+      notifyListeners();
+      // _setPageOrientation(action, ctx);
+      _alivcBase = AlivcBase.init();
+      await _alivcBase.registerSDK();
+      await _alivcBase.setObserver();
+      _alivcBase.setOnLicenceCheck((result, reason) {
         print("======== belum ada lisensi $reason ========");
+        if (result != AlivcLiveLicenseCheckResultCode.success) {
+          print("======== belum ada lisensi $reason ========");
+        }
+      });
+      await setLiveConfig();
+      if (!forConfig) {
+        await Future.delayed(const Duration(milliseconds: 500));
+        await _setLivePusher();
+        await _onListen(context, mounted);
       }
-    });
-    await setLiveConfig();
-    if (!forConfig) {
-      await Future.delayed(const Duration(milliseconds: 500));
-      await _setLivePusher();
-      await _onListen(context, mounted);
+
+      // double max = await _alivcLivePusher.getMaxZoom();
+      // print("---=-=-=- maxzooom $max");
+      // _alivcLivePusher.setZoom(2.0);
+      isloading = false;
+      notifyListeners();
+      tn = context.read<TranslateNotifierV2>().translate;
+    }catch(e){
+      "Error Init Live Streaming : ${e.toString()}".logger();
+      isloading = false;
     }
 
-    // double max = await _alivcLivePusher.getMaxZoom();
-    // print("---=-=-=- maxzooom $max");
-    // _alivcLivePusher.setZoom(2.0);
-    isloading = false;
-    notifyListeners();
-    tn = context.read<TranslateNotifierV2>().translate;
   }
 
   Future requestPermission(BuildContext context) async {
@@ -213,10 +219,16 @@ class StreamerNotifier with ChangeNotifier {
     });
 
     /// Configure the callback for preview stop.
-    _alivcLivePusher.setOnPreviewStoped(() {});
+    _alivcLivePusher.setOnPreviewStoped(() {
+      isloadingPreview = false;
+      notifyListeners();
+    });
 
     /// Configure the callback for first frame rendering.
-    _alivcLivePusher.setOnFirstFramePreviewed(() {});
+    _alivcLivePusher.setOnFirstFramePreviewed(() {
+      isloadingPreview = false;
+      notifyListeners();
+    });
 
     /// Configure the callback for start of stream ingest.
     _alivcLivePusher.setOnPushStarted(() {
@@ -245,7 +257,9 @@ class StreamerNotifier with ChangeNotifier {
 
     /// Listener for the network status during stream ingest
     /// Configure the callback for failed connection of stream ingest.
-    _alivcLivePusher.setOnConnectFail((errorCode, errorDescription) {});
+    _alivcLivePusher.setOnConnectFail((errorCode, errorDescription) {
+      "Error Init Live Streaming : $errorDescription".logger();
+    });
 
     /// Configure the callback for network recovery.
     _alivcLivePusher.setOnConnectRecovery(() {});
@@ -856,10 +870,8 @@ class StreamerNotifier with ChangeNotifier {
     notifyListeners();
     await checkFollowingToUserViewer(context, email).then((value) => totLoading++);
     await getProfileViewer(context, email).then((value) => totLoading++);
-    if (totLoading >= 2) {
-      isloadingProfileViewer = false;
-      notifyListeners();
-    }
+    isloadingProfileViewer = false;
+    notifyListeners();
   }
 
   Future getProfile(BuildContext context, String email) async {
