@@ -92,6 +92,7 @@ class StreamerNotifier with ChangeNotifier {
   bool isCommentDisable = false;
   bool isCancel = false;
   bool isSendComment = false;
+  bool isFirst = true;
 
   FocusNode titleFocusNode = FocusNode();
   TextEditingController titleLiveCtrl = TextEditingController();
@@ -129,37 +130,31 @@ class StreamerNotifier with ChangeNotifier {
   }
 
   Future<void> init(BuildContext context, mounted, {bool forConfig = false}) async {
-    // final isGranted = await System().requestPermission(context, permissions: [Permission.camera, Permission.microphone]);
-    try{
-      isloading = true;
-      isloadingPreview = true;
-      notifyListeners();
-      // _setPageOrientation(action, ctx);
-      _alivcBase = AlivcBase.init();
-      await _alivcBase.registerSDK();
-      await _alivcBase.setObserver();
-      _alivcBase.setOnLicenceCheck((result, reason) {
-        print("======== belum ada lisensi $reason ========");
-        if (result != AlivcLiveLicenseCheckResultCode.success) {
-          print("======== belum ada lisensi $reason ========");
-        }
-      });
-      await setLiveConfig();
-      if (!forConfig) {
-        await Future.delayed(const Duration(milliseconds: 500));
-        await _setLivePusher();
-        await _onListen(context, mounted);
-      }
+    print("-------- init stream $forConfig ---------");
+    isloading = true;
+    isloadingPreview = true;
+    notifyListeners();
+    // _setPageOrientation(action, ctx);
+    _alivcBase = AlivcBase.init();
+    await _alivcBase.registerSDK();
+    await _alivcBase.setObserver();
+    // _alivcBase.setOnLicenceCheck((result, reason) {
+    //   print("======== belum ada lisensi $reason ========");
+    //   if (result != AlivcLiveLicenseCheckResultCode.success) {
+    //     print("======== belum ada lisensi $reason ========");
+    //   }
+    // });
 
-      // double max = await _alivcLivePusher.getMaxZoom();
-      // print("---=-=-=- maxzooom $max");
-      // _alivcLivePusher.setZoom(2.0);
-      isloading = false;
-      notifyListeners();
-      tn = context.read<TranslateNotifierV2>().translate;
-    }catch(e){
-      "Error Init Live Streaming : ${e.toString()}".logger();
-      isloading = false;
+    if (!forConfig) {
+      print("-------- init stream 2 ---------");
+      await setLiveConfig();
+      await Future.delayed(const Duration(milliseconds: 500));
+      await _setLivePusher();
+      if (isFirst && mounted) {
+        isFirst = false;
+        await init(context, mounted);
+      }
+      await _onListen(context, mounted);
     }
 
   }
@@ -466,11 +461,15 @@ class StreamerNotifier with ChangeNotifier {
   }
 
   Future<void> destoryPusher() async {
+    print("====1=====");
+    _alivcLivePusher.stopPush();
+    print("====2=====");
+    _alivcLivePusher.stopPreview();
+    print("====3=====");
+    _alivcLivePusher.destroy();
+    print("====4=====");
     WakelockPlus.disable();
     statusLive = StatusStream.offline;
-    _alivcLivePusher.stopPush();
-    _alivcLivePusher.stopPreview();
-    _alivcLivePusher.destroy();
     livePushMode = 0;
     timeReady = 3;
     totLikes = 0;
@@ -621,8 +620,8 @@ class StreamerNotifier with ChangeNotifier {
     if (isBack) Routing().moveBack();
     var dateTimeFinish = DateTime.now();
     Duration duration = dateTimeFinish.difference(dateTimeStart);
+    await destoryPusher();
     await stopStream(context, mounted);
-    destoryPusher();
     Routing().moveReplacement(Routes.streamingFeedback, argument: SummaryLiveArgument(duration: duration, data: dataSummary));
   }
 
@@ -867,8 +866,7 @@ class StreamerNotifier with ChangeNotifier {
   Future getProfileNCheckViewer(BuildContext context, String email) async {
     int totLoading = 0;
     isloadingProfileViewer = true;
-    statusFollowingViewer = StatusFollowing.none;
-    notifyListeners();
+    // statusFollowingViewer = StatusFollowing.none;
     await checkFollowingToUserViewer(context, email).then((value) => totLoading++);
     await getProfileViewer(context, email).then((value) => totLoading++);
     isloadingProfileViewer = false;
@@ -925,15 +923,18 @@ class StreamerNotifier with ChangeNotifier {
       _usersFollowingQuery.senderOrReceiver = email;
       _usersFollowingQuery.limit = 200;
       print('reload contentsQuery : 11');
-      final resFuture = _usersFollowingQuery.reload(context);
-      final resRequest = await resFuture;
-
+      final resFuture = await _usersFollowingQuery.reload(context);
+      final resRequest = resFuture;
       if (resRequest.isNotEmpty) {
         if (resRequest.any((element) => element.event == InteractiveEvent.accept)) {
           statusFollowingViewer = StatusFollowing.following;
+          notifyListeners();
         } else if (resRequest.any((element) => element.event == InteractiveEvent.initial)) {
           statusFollowingViewer = StatusFollowing.requested;
+          notifyListeners();
         }
+      } else {
+        statusFollowingViewer = StatusFollowing.none;
       }
     } catch (e) {
       'load following request list: ERROR: $e'.logger();
