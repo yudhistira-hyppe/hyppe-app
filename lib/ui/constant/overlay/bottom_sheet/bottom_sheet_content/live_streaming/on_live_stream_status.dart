@@ -108,7 +108,6 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                 ),
               ),
               sixteenPx,
-              Text("${notifier.statusFollowingViewer}"),
               Builder(builder: (context) {
                 return Container(
                   margin: const EdgeInsets.only(
@@ -324,7 +323,6 @@ class _ItemAccountState extends State<ItemAccount> {
                     ),
                   ),
                 // Text("${widget.notifier.statusFollowingViewer}"),
-                Text("${notifier.statusFollowingViewer}"),
                 if (widget.isHost && widget.isViewer)
                   CustomElevatedButton(
                     width: 100,
