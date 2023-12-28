@@ -863,8 +863,7 @@ class StreamerNotifier with ChangeNotifier {
   Future getProfileNCheckViewer(BuildContext context, String email) async {
     int totLoading = 0;
     isloadingProfileViewer = true;
-    statusFollowingViewer = StatusFollowing.none;
-    notifyListeners();
+    // statusFollowingViewer = StatusFollowing.none;
     await checkFollowingToUserViewer(context, email).then((value) => totLoading++);
     await getProfileViewer(context, email).then((value) => totLoading++);
     if (totLoading >= 2) {
@@ -923,15 +922,18 @@ class StreamerNotifier with ChangeNotifier {
       _usersFollowingQuery.senderOrReceiver = email;
       _usersFollowingQuery.limit = 200;
       print('reload contentsQuery : 11');
-      final resFuture = _usersFollowingQuery.reload(context);
-      final resRequest = await resFuture;
-
+      final resFuture = await _usersFollowingQuery.reload(context);
+      final resRequest = resFuture;
       if (resRequest.isNotEmpty) {
         if (resRequest.any((element) => element.event == InteractiveEvent.accept)) {
           statusFollowingViewer = StatusFollowing.following;
+          notifyListeners();
         } else if (resRequest.any((element) => element.event == InteractiveEvent.initial)) {
           statusFollowingViewer = StatusFollowing.requested;
+          notifyListeners();
         }
+      } else {
+        statusFollowingViewer = StatusFollowing.none;
       }
     } catch (e) {
       'load following request list: ERROR: $e'.logger();

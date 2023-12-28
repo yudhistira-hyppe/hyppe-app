@@ -118,9 +118,7 @@ class _OnWatcherStatusState extends State<OnWatcherStatus> {
                         buttonStyle: ButtonStyle(
                           backgroundColor: (notifier.statusFollowing == StatusFollowing.requested || notifier.statusFollowing == StatusFollowing.following)
                               ? null
-                              : (notifier.userName == notifier.audienceProfile.username)
-                                  ? null
-                                  : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                              : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                         ),
                         function: notifier.isCheckLoading
                             ? null
