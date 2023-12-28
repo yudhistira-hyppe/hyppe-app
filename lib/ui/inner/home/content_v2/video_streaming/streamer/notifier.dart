@@ -47,6 +47,7 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 import 'dart:math' as math;
 
 class StreamerNotifier with ChangeNotifier {
+
   final UsersDataQuery _usersFollowingQuery = UsersDataQuery()
     ..eventType = InteractiveEventType.following
     ..withEvents = [InteractiveEvent.initial, InteractiveEvent.accept, InteractiveEvent.request];

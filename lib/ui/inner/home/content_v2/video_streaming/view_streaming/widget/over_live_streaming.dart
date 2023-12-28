@@ -58,9 +58,12 @@ class _OverLiveStreamingState extends State<OverLiveStreaming> {
               height: double.infinity,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) {
-                setState(() {
-                  isErrorImage = true;
-                });
+                if(!isErrorImage){
+                  setState(() {
+                    isErrorImage = true;
+                  });
+                }
+
                 return Image.asset('${AssetPath.pngPath}profile-error.jpg',
                     fit: BoxFit.fitWidth);
               },
