@@ -194,7 +194,7 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
                                 : notifier.statusLive == StatusStream.standBy
                                     ? startCounting(notifier.timeReady, notifier, tn)
                                     : notifier.statusLive == StatusStream.ready
-                                        ? prepare(titile: "Siaran LIVE telah dimulai!")
+                                        ? prepare(titile: notifier.tn?.liveVideoHasStarted ?? '')
                                         : Container(),
                     if (notifier.isPause) PauseLive(notifier: notifier),
                     if (notifier.statusLive == StatusStream.ready || notifier.statusLive == StatusStream.online) StreamerWidget(commentFocusNode: commentFocusNode),

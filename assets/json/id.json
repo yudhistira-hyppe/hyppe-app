@@ -1091,5 +1091,7 @@
   "liveStreamingIsOver": "Siaran LIVE telah berakhir",
   "allowComments": "Aktifkan Komentar",
   "noteShowView99": "Menampilkan 99 penonton teratas yang peringkatnya diaktifkan",
-  "viewers": "Penonton"
+  "viewers": "Penonton",
+  "liveVideoHasStarted": "Siaran LIVE telah dimulai!",
+  "addATitle": "Tambah judul..."
 }

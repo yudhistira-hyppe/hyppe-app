@@ -253,7 +253,9 @@ class _ItemAccountState extends State<ItemAccount> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final streampro = Provider.of<StreamerNotifier>(context, listen: false);
-      streampro.getProfileNCheckViewer(context, widget.email);
+      if(widget.isHost && widget.isViewer){
+        streampro.getProfileNCheckViewer(context, widget.email ?? '');
+      }
     });
   }
 
