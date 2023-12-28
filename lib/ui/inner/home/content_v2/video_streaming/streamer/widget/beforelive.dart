@@ -59,7 +59,7 @@ class BeforeLive extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        CustomProfileImage(
+                        (System().showUserPicture(profileImage)?.isNotEmpty ?? false ) ?CustomProfileImage(
                           cacheKey: profileImageKey,
                           following: true,
                           forStory: true,
@@ -68,6 +68,14 @@ class BeforeLive extends StatelessWidget {
                           imageUrl: System().showUserPicture(profileImage),
                           // badge: notifier.user.profile?.urluserBadge,
                           allwaysUseBadgePadding: false,
+                        ) : ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Image.asset(
+                            '${AssetPath.pngPath}profile-error.jpg',
+                            fit: BoxFit.fitWidth,
+                            height: 50 * SizeConfig.scaleDiagonal,
+                            width: 50 * SizeConfig.scaleDiagonal,
+                          ),
                         ),
                         sixPx,
                         Expanded(
