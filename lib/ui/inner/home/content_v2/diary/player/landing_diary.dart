@@ -131,15 +131,15 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       initAlipayer();
 
       //scroll
-      if (mounted) {
-        Future.delayed(const Duration(milliseconds: 500), () {
-          print("=========== global key prirnt ${widget.scrollController} ");
-          widget.scrollController?.addListener(() {
-            double offset = widget.scrollController?.position.pixels ?? 0;
-            if (mounted) toPosition(offset);
-          });
-        });
-      }
+      // if (mounted) {
+      //   Future.delayed(const Duration(milliseconds: 500), () {
+      //     print("=========== global key prirnt ${widget.scrollController} ");
+      //     widget.scrollController?.addListener(() {
+      //       double offset = widget.scrollController?.position.pixels ?? 0;
+      //       if (mounted) toPosition(offset);
+      //     });
+      //   });
+      // }
     });
 
     _initializeTimer();
@@ -447,6 +447,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
 
     fAliplayer?.stop();
+    fAliplayer?.clearScreen();
+
     dataSelected = data;
 
     isPlay = false;
@@ -1134,6 +1136,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                               ? Positioned.fill(
                                                   child: GestureDetector(
                                                     onTap: () {
+                                                      context.read<PreviewDiaryNotifier>().navigateToShortVideoPlayer(context, index);
                                                       fAliplayer?.play();
                                                       if (mounted) {
                                                         setState(() {

@@ -308,20 +308,20 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
           isPause = true;
           setState(() {});
           WakelockPlus.disable();
-"================ disable wakelock 53".logger();
+          "================ disable wakelock 53".logger();
           _animationController?.stop();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusStopped:
           WakelockPlus.disable();
-"================ disable wakelock 85".logger();
+          "================ disable wakelock 85".logger();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusCompletion:
           WakelockPlus.disable();
-"================ disable wakelock 96".logger();
+          "================ disable wakelock 96".logger();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusError:
           WakelockPlus.disable();
-"================ disable wakelock 00".logger();
+          "================ disable wakelock 00".logger();
           break;
         default:
       }
@@ -474,7 +474,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
   void dispose() {
     globalAliPlayer = null;
     WakelockPlus.disable();
-"================ disable wakelock 63".logger();
+    "================ disable wakelock 63".logger();
     _animationController?.dispose();
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
@@ -509,7 +509,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
     return Scaffold(
       body: PageView.builder(
         controller: _pageController,
-        scrollDirection: Axis.horizontal,
+        scrollDirection: Axis.vertical,
         itemCount: _listData?.length ?? 0,
         onPageChanged: (index) async {
           _curIdx = index;
