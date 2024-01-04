@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_livepush_plugin/live_base.dart';
 import 'package:flutter_livepush_plugin/live_push_def.dart';
@@ -132,23 +133,25 @@ class StreamerNotifier with ChangeNotifier {
     print("-------- init stream $forConfig ---------");
     isloading = true;
     isloadingPreview = true;
-    notifyListeners();
-    // _setPageOrientation(action, ctx);
+
     _alivcBase = AlivcBase.init();
+    
     await _alivcBase.registerSDK();
     await _alivcBase.setObserver();
+
     // _alivcBase.setOnLicenceCheck((result, reason) {
     //   print("======== belum ada lisensi $reason ========");
     //   if (result != AlivcLiveLicenseCheckResultCode.success) {
     //     print("======== belum ada lisensi $reason ========");
     //   }
     // });
-
     if (!forConfig) {
       print("-------- init stream 2 ---------");
+      
       await setLiveConfig();
-      await Future.delayed(const Duration(milliseconds: 500));
       await _setLivePusher();
+      // await Future.delayed(const Duration(milliseconds: 500));
+      
       if (isFirst && mounted) {
         isFirst = false;
         await init(context, mounted);
@@ -160,12 +163,13 @@ class StreamerNotifier with ChangeNotifier {
     tn = context.read<TranslateNotifierV2>().translate;
   }
 
-  Future requestPermission(BuildContext context) async {
-    final isGranted = await System().requestPermission(context, permissions: [Permission.camera, Permission.microphone]);
+  Future<bool> requestPermission(BuildContext context) async {
+    final isGranted = await System().requestPermission(context, permissions: [Permission.camera, Permission.storage, Permission.microphone]);
     if (isGranted) {
-      return;
+      return isGranted;
     } else {
-      await System().requestPermission(context, permissions: [Permission.camera, Permission.microphone]);
+      await System().requestPermission(context, permissions: [Permission.camera, Permission.storage, Permission.microphone]);
+      return true;
     }
   }
 
@@ -363,11 +367,11 @@ class StreamerNotifier with ChangeNotifier {
   }
 
   Future<void> setLiveConfig() async {
-    AlivcLivePusherConfig pusherConfig = AlivcLivePusherConfig.init();
+    AlivcLivePusherConfig pusherConfig =  AlivcLivePusherConfig.init();
     pusherConfig.setCameraType(AlivcLivePushCameraType.front);
 
     /// Set the resolution to 540p.
-    pusherConfig.setResolution(AlivcLivePushResolution.resolution_720P);
+    pusherConfig.setResolution(AlivcLivePushResolution.resolution_480P);
 
     /// Specify the frame rate. We recommend that you set the frame rate to 20 frames per second (FPS).
     pusherConfig.setFps(AlivcLivePushFPS.fps_20);
@@ -390,6 +394,7 @@ class StreamerNotifier with ChangeNotifier {
     pusherConfig.setOrientation(AlivcLivePushOrientation.portrait);
 
     pusherConfig.setPreviewDisplayMode(AlivcPusherPreviewDisplayMode.preview_aspect_fill);
+    pusherConfig.setQualityMode(AlivcLivePushQualityMode.resolution_first);
   }
 
   Future<void> _setLivePusher() async {
@@ -402,7 +407,7 @@ class StreamerNotifier with ChangeNotifier {
     _alivcLivePusher.setCustomFilterDelegate();
     _alivcLivePusher.setCustomDetectorDelegate();
     _alivcLivePusher.setBGMDelegate();
-    _alivcLivePusher.setResolution(AlivcLivePushResolution.resolution_720P);
+    _alivcLivePusher.setResolution(AlivcLivePushResolution.resolution_540P);
   }
 
   Future<void> _clickSnapShot() async {
