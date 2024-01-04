@@ -4,6 +4,7 @@ import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/combination_v2/get_user_profile.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
@@ -198,7 +199,12 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
                   ),
                   IconButton(
                     icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}more.svg"),
-                    onPressed: () => ShowBottomSheet.onShowReportProfile(context, userID: notifier.userID),
+                    onPressed: (){
+                      context.handleActionIsGuest(() async  {
+                        ShowBottomSheet.onShowReportProfile(context,
+                            userID: notifier.userID);
+                      });
+                    },
                   ),
                 ],
               ),

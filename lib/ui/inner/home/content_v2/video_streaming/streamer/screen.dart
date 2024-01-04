@@ -59,7 +59,7 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      var streampro = Provider.of<StreamerNotifier>(context, listen: false);
+      final streampro = Provider.of<StreamerNotifier>(context, listen: false);
       streampro.requestPermission(context);
       streampro.init(context, mounted);
 

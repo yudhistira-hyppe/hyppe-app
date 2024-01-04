@@ -1904,4 +1904,13 @@ class System {
     final hexCode = hexColor.replaceAll('#', '');
     return Color(int.parse('FF$hexCode', radix: 16));
   }
+
+  Widget showWidgetForGuest(Widget forUser, Widget forGuest){
+    final String? userToken = SharedPreference().readStorage(SpKeys.userToken);
+    if(userToken?.isNotEmpty ?? false){
+      return forUser;
+    }else{
+      return forGuest;
+    }
+  }
 }

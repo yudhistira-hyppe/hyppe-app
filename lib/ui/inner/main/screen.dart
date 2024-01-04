@@ -330,20 +330,35 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
   }
 
   void tapMenu(int index, MainNotifier notifier, consumerContext) async {
+
     String newUser = SharedPreference().readStorage(SpKeys.newUser) ?? '';
     if (newUser == "TRUE" || globalTultipShow) {
       return;
     }
     if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
     if (index != 2) {
-      setState(() {
-        'pageIndex now: $index'.logger();
-        notifier.pageIndex = index;
-      });
+      if(index == 3){
+        consumerContext.handleActionIsGuest(() async  {
+          setState(() {
+            'pageIndex now: $index'.logger();
+            notifier.pageIndex = index;
+          });
+        });
+      }else{
+        setState(() {
+          'pageIndex now: $index'.logger();
+          notifier.pageIndex = index;
+        });
+      }
+
+
     } else {
-      PreUploadContentNotifier pn = context.read<PreUploadContentNotifier>();
-      pn.hastagChallange = '';
-      await notifier.onShowPostContent(consumerContext);
+      consumerContext.handleActionIsGuest(() async  {
+        PreUploadContentNotifier pn = context.read<PreUploadContentNotifier>();
+        pn.hastagChallange = '';
+        await notifier.onShowPostContent(consumerContext);
+      });
+
     }
   }
 }

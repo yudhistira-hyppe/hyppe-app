@@ -1,5 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/arguments/contents/user_interest_screen_argument.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
@@ -86,7 +87,11 @@ class _SettingScreenState extends State<SettingScreen> {
                 children: [
                   SettingTile(
                     icon: 'transaction-icon.svg',
-                    onTap: () => context.read<SettingNotifier>().validateUser(context, notifier),
+                    onTap: (){
+                      context.handleActionIsGuest((){
+                        context.read<SettingNotifier>().validateUser(context, notifier);
+                      });
+                    },
                     caption: '${notifier.translate.transaction}',
                     keyGLobal: keyTransaction,
                     descriptionCas: (mn?.tutorialData.isEmpty ?? [].isEmpty)
@@ -112,12 +117,20 @@ class _SettingScreenState extends State<SettingScreen> {
                     tiles: [
                       SettingTile(
                         icon: 'preferensi-account-icon.svg',
-                        onTap: () => Routing().move(Routes.accountPreferences),
+                        onTap: (){
+                          context.handleActionIsGuest((){
+                            Routing().move(Routes.accountPreferences);
+                          });
+                        },
                         caption: '${notifier.translate.accountPreference}',
                       ),
                       SettingTile(
                         icon: 'lock.svg',
-                        onTap: () => Routing().move(Routes.homePageSignInSecurity),
+                        onTap: () {
+                          context.handleActionIsGuest((){
+                            Routing().move(Routes.homePageSignInSecurity);
+                          });
+                        },
                         caption: '${notifier.translate.signInAndSecurity}',
                       ),
                       SettingTile(
@@ -140,7 +153,11 @@ class _SettingScreenState extends State<SettingScreen> {
                         caption: '${notifier.translate.language}',
                       ),
                       SettingTile(
-                        onTap: () => Routing().move(Routes.referralScreen),
+                        onTap: (){
+                          context.handleActionIsGuest((){
+                            Routing().move(Routes.referralScreen);
+                          });
+                        },
                         icon: 'person-plus.svg',
                         caption: '${notifier.translate.referralID}',
                         keyGLobal: keyReferral,
