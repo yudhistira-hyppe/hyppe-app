@@ -49,7 +49,7 @@ class UploadContent extends StatelessWidget {
               /// Camera / Video
               // Align(alignment: Alignment.bottomCenter, child: BuildSwitchButton()),
               /// Flash button
-              if (Platform.isAndroid && !notifier.conditionalCaptureVideoIcon())
+              if (!notifier.conditionalCaptureVideoIcon())
                 SafeArea(
                   child: Visibility(
                     visible: !notifier.isRecordingVideo,

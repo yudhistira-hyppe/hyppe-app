@@ -3,3 +3,5 @@ const JPEG = 'jpeg';
 const PNG = 'png';
 const MP4 = 'mp4';
 const MOV = 'mov';
+const HEIF = 'heif';
+const PVT = 'pvt';

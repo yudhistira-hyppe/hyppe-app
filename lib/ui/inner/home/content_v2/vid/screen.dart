@@ -715,9 +715,11 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                             padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                             child: GestureDetector(
                                               onTap: () {
-                                                if (vidData.insight?.isloadingFollow != true) {
-                                                  picNot.followUser(context, vidData, isUnFollow: vidData.following, isloading: vidData.insight!.isloadingFollow ?? false);
-                                                }
+                                                context.handleActionIsGuest((){
+                                                  if (vidData.insight?.isloadingFollow != true) {
+                                                    picNot.followUser(context, vidData, isUnFollow: vidData.following, isloading: vidData.insight!.isloadingFollow ?? false);
+                                                  }
+                                                });
                                               },
                                               child: vidData.insight?.isloadingFollow ?? false
                                                   ? Container(
@@ -737,31 +739,33 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                         ),
                                       GestureDetector(
                                         onTap: () {
-                                          if (vidData.email != email) {
-                                            // FlutterAliplayer? fAliplayer
-                                            context.read<PreviewPicNotifier>().reportContent(context, vidData, fAliplayer: vidData.fAliplayer, onCompleted: () async {
-                                              imageCache.clear();
-                                              imageCache.clearLiveImages();
-                                              await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
-                                            });
-                                          } else {
-                                            if (_curIdx != -1) {
-                                              "=============== pause 11".logger();
-                                              notifier.vidData?[_curIdx].fAliplayer?.pause();
-                                            }
+                                          context.handleActionIsGuest((){
+                                            if (vidData.email != email) {
+                                              // FlutterAliplayer? fAliplayer
+                                              context.read<PreviewPicNotifier>().reportContent(context, vidData, fAliplayer: vidData.fAliplayer, onCompleted: () async {
+                                                imageCache.clear();
+                                                imageCache.clearLiveImages();
+                                                await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
+                                              });
+                                            } else {
+                                              if (_curIdx != -1) {
+                                                "=============== pause 11".logger();
+                                                notifier.vidData?[_curIdx].fAliplayer?.pause();
+                                              }
 
-                                            ShowBottomSheet().onShowOptionContent(
-                                              context,
-                                              contentData: vidData,
-                                              captionTitle: hyppeVid,
-                                              onDetail: false,
-                                              isShare: vidData.isShared,
-                                              onUpdate: () {
-                                                (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
-                                              },
-                                              fAliplayer: vidData.fAliplayer,
-                                            );
-                                          }
+                                              ShowBottomSheet().onShowOptionContent(
+                                                context,
+                                                contentData: vidData,
+                                                captionTitle: hyppeVid,
+                                                onDetail: false,
+                                                isShare: vidData.isShared,
+                                                onUpdate: () {
+                                                  (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
+                                                },
+                                                fAliplayer: vidData.fAliplayer,
+                                              );
+                                            }
+                                          });
                                         },
                                         child: const Icon(
                                           Icons.more_vert,
@@ -1064,9 +1068,12 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                                 child: GestureDetector(
                                                   onTap: () async {
                                                     "=============== pause 4".logger();
-                                                    vidData.fAliplayer?.pause();
-                                                    await ShowBottomSheet.onBuyContent(context, data: vidData, fAliplayer: vidData.fAliplayer);
-                                                    // fAliplayer?.play();
+                                                    context.handleActionIsGuest(() async {
+                                                      vidData.fAliplayer?.pause();
+                                                      await ShowBottomSheet.onBuyContent(context, data: vidData, fAliplayer: vidData.fAliplayer);
+                                                      // fAliplayer?.play();
+                                                    });
+
                                                   },
                                                   child: const Align(
                                                     alignment: Alignment.centerRight,

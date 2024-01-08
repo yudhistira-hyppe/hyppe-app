@@ -4,7 +4,10 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
+import 'package:ffmpeg_kit_flutter/return_code.dart';
 import 'package:flutter/foundation.dart';
+import 'package:heif_converter/heif_converter.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/bloc/view/bloc.dart';
 import 'package:hyppe/core/bloc/view/state.dart';
@@ -744,7 +747,9 @@ class System {
       }
 
       if (featureType == FeatureType.story) {
-        final _pickerResult = await FilePicker.platform.pickFiles(allowMultiple: false, type: FileType.media, allowCompression: false);
+        final _pickerResult = await FilePicker.platform.pickFiles(
+            allowMultiple: false,
+            type: FileType.media, allowCompression: false);
         if (_pickerResult != null) {
           // untuk menampung file yang failed di validasi
           // String _failFile = '';
@@ -753,7 +758,87 @@ class System {
           if (_validateCountPost(_pickerResult.files.length) == false) {
             for (int element = 0; element < _pickerResult.files.length; element++) {
               // validasi content type
-              if (_pickerResult.files[element].extension?.toLowerCase() == MP4 || _pickerResult.files[element].extension?.toLowerCase() == MOV) {
+              print('path directory: ${_pickerResult.files[element].extension}');
+              if(_pickerResult.files[element].extension?.toLowerCase() == PVT){
+                final tmpDir = (await getTemporaryDirectory()).path;
+                final target = '$tmpDir/${DateTime.now().millisecondsSinceEpoch}.heic';
+                final result = await FlutterImageCompress.compressAndGetFile(
+                  _pickerResult.files[element].path ?? '',
+                  target,
+                  format: CompressFormat.heic,
+                  quality: 90,
+                );
+                if (result != null) {
+                  if(_filePickerResult == null){
+                    _filePickerResult = [];
+                  }
+                  if (_pickerResult.files.isNotEmpty) {
+                    _filePickerResult?.add((File(result.path)));
+                  }
+                }
+              }else if(_pickerResult.files[element].extension?.toLowerCase() == HEIF){
+                // // final tmpDir = (await getTemporaryDirectory()).path;
+                // // final target = '$tmpDir/${DateTime.now().millisecondsSinceEpoch}.HEIC';
+                // // final result = await FlutterImageCompress.compressAndGetFile(
+                // //   _pickerResult.files[element].path ?? '',
+                // //   target,
+                // //   format: CompressFormat.heic,
+                // //   quality: 90,
+                // // );
+                // ///
+                // String outputPath = await System().getSystemPath(params: 'postVideo');
+                // outputPath = '${outputPath + materialAppKey.currentContext!.getNameByDate()}.heif';
+                // String command = '-i "${_pickerResult.files[element].path}" -c copy $outputPath';
+                // print('encode video: $command');
+                // final session = await FFmpegKit.executeAsync(
+                //   command,
+                //       (session) async {
+                //
+                //   },
+                //       (log) {
+                //     print('FFmpegKit ${log.getMessage()}');
+                //   },
+                // );
+                // final codeSession = await session.getReturnCode();
+                // File? resultFirst;
+                // if (ReturnCode.isSuccess(codeSession)) {
+                //   print('ReturnCode = Success');
+                //   resultFirst = File(outputPath);
+                // } else if (ReturnCode.isCancel(codeSession)) {
+                //   print('ReturnCode = Cancel');
+                //
+                //   throw 'Merge video is canceled';
+                //   // Cancel
+                // } else {
+                //   print('ReturnCode = Error');
+                //   throw 'Merge video is Error';
+                //   // Error
+                // }
+                // ///
+                // // String dir = path.dirname(_pickerResult.files[element].path ?? '');
+                // // String newPath = path.join(dir, '${DateTime.now().millisecondsSinceEpoch}.heic');
+                // // print('NewPath: ${newPath}');
+                // // final result = await File(_pickerResult.files[element].path ?? '').rename(newPath);
+                //
+                // final tmpDir = (await getTemporaryDirectory()).path;
+                // final target = '$tmpDir/${DateTime.now().millisecondsSinceEpoch}.jpg';
+                // final result = await FlutterImageCompress.compressAndGetFile(
+                //   resultFirst ?? '',
+                //   target,
+                //   format: CompressFormat.jpg,
+                //   quality: 90,
+                // );
+                String? jpgPath = await HeifConverter.convert(_pickerResult.files[element].path ?? '', format: 'jpg');
+                final result = File(jpgPath ?? '');
+                if (result != null) {
+                  if(_filePickerResult == null){
+                    _filePickerResult = [];
+                  }
+                  if (_pickerResult.files.isNotEmpty) {
+                    _filePickerResult?.add(result);
+                  }
+                }
+              }else if (_pickerResult.files[element].extension?.toLowerCase() == MP4 || _pickerResult.files[element].extension?.toLowerCase() == MOV) {
                 await getVideoMetadata(_pickerResult.files[element].path ?? '').then((value) {
                   _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
 
@@ -775,6 +860,10 @@ class System {
                 if (_pickerResult.files.isNotEmpty) {
                   _filePickerResult = _pickerResult.files.map((file) => File(file.path ?? '')).toList();
                 }
+              }else{
+                if (_pickerResult.files.isNotEmpty) {
+                  _filePickerResult = _pickerResult.files.map((file) => File(file.path ?? '')).toList();
+                }
               }
 
               // show toast if there is fail file
@@ -782,9 +871,7 @@ class System {
               //   _errorMsg = '${notifier.theFileDurationExceedsTheMaximumLimitForThisFeature} :\n$_failFile';
               // }
 
-              if (_pickerResult.files.isNotEmpty) {
-                _filePickerResult = _pickerResult.files.map((file) => File(file.path ?? '')).toList();
-              }
+
             }
           }
           // validasi durasi
@@ -794,12 +881,12 @@ class System {
     return {_errorMsg: _filePickerResult};
   }
 
-  Future<Uint8List?> createThumbnail(String path) async {
+  Future<Uint8List?> createThumbnail(String path, {int quality = 25}) async {
     return await VideoThumbnail.thumbnailData(
       video: path,
       imageFormat: ImageFormat.JPEG,
       maxWidth: 128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
-      quality: 25,
+      quality: quality,
     );
   }
 
@@ -1903,5 +1990,14 @@ class System {
   Color colorFromHex(String hexColor) {
     final hexCode = hexColor.replaceAll('#', '');
     return Color(int.parse('FF$hexCode', radix: 16));
+  }
+
+  Widget showWidgetForGuest(Widget forUser, Widget forGuest){
+    final String? userToken = SharedPreference().readStorage(SpKeys.userToken);
+    if(userToken?.isNotEmpty ?? false){
+      return forUser;
+    }else{
+      return forGuest;
+    }
   }
 }
