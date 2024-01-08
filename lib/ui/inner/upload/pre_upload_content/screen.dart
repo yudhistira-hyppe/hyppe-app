@@ -69,6 +69,8 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
       notifier.captionController.selection = TextSelection.collapsed(offset: 0);
     }
     // notifier.initThumbnail();
+    
+    notifier.getInitialInterest(context);
 
     // Future.microtask(() => context.read<PreUploadContentNotifier>().checkLandingpage(context));
     if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
@@ -416,11 +418,8 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                     child: CustomBaseCacheImage(
                       widthPlaceHolder: 80,
                       heightPlaceHolder: 80,
-                      imageUrl: (notifier.editData?.isApsara ?? false) ? (notifier.editData?.mediaThumbEndPoint ?? '') : '${notifier.editData?.fullThumbPath ?? ''}',
+                      imageUrl: (notifier.editData?.isApsara ?? false) ? (notifier.editData?.mediaThumbEndPoint ?? '') : notifier.editData?.fullThumbPath ?? '',
                       imageBuilder: (context, imageProvider) => Container(
-                        // margin: margin,
-                        // // const EdgeInsets.symmetric(horizontal: 4.5),
-                        // width: _scaling,
                         height: 168,
                         decoration: BoxDecoration(
                           image: DecorationImage(
