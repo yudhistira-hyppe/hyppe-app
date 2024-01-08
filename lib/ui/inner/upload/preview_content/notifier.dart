@@ -808,7 +808,7 @@ class PreviewContentNotifier with ChangeNotifier {
             final codeSession = await session.getReturnCode();
             if (ReturnCode.isSuccess(codeSession)) {
               print('ReturnCode = Success');
-              // await restartVideoPlayer(outputPath, context, isInit: isInit);
+              await restartVideoPlayer(outputPath, context, isInit: isInit);
             } else if (ReturnCode.isCancel(codeSession)) {
               print('ReturnCode = Cancel');
               _isLoadVideo = false;
