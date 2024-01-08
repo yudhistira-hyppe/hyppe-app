@@ -112,7 +112,7 @@ class MainNotifier with ChangeNotifier {
     // Connect to socket
     if (isInitSocket) {
       _connectAndListenToSocket();
-      _connectAndListenToSocketAds();
+      // _connectAndListenToSocketAds();
     }
     // _pageIndex = 0;
 
@@ -365,7 +365,7 @@ class MainNotifier with ChangeNotifier {
           },
         );
       },
-      host: Env.data.baseUrl,
+      host: Env.data.baseUrlSocket,
       options: OptionBuilder()
           .setAuth({
             "x-auth-user": "$email",
@@ -418,7 +418,7 @@ class MainNotifier with ChangeNotifier {
           },
         );
       },
-      host: Env.data.baseUrl,
+      host: Env.data.baseUrlSocket,
       options: OptionBuilder()
           .setAuth({
             "x-auth-user": "$email",

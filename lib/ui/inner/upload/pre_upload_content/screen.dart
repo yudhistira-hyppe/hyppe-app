@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/update_contents_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -52,6 +54,8 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
   int indexKeyOwn = 0;
   int indexKeyBoost = 0;
 
+  Timer? timeHandle;
+
   @override
   void dispose() {
     super.dispose();
@@ -69,6 +73,8 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
       notifier.captionController.selection = TextSelection.collapsed(offset: 0);
     }
     // notifier.initThumbnail();
+    
+    notifier.getInitialInterest(context);
 
     // Future.microtask(() => context.read<PreUploadContentNotifier>().checkLandingpage(context));
     if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
@@ -398,8 +404,13 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                     contentPadding: const EdgeInsets.only(bottom: 5),
                     counterText: ""),
                 onChanged: (value) {
-                  notifier.showAutoComplete(value, context);
-                  _handleTextChange(value);
+                  if (timeHandle != null) {
+                    timeHandle!.cancel();
+                  }
+                  timeHandle = Timer(Duration(milliseconds: 500), () {
+                    notifier.showAutoComplete(value, context);
+                    _handleTextChange(value);
+                  });
                 },
                 onTap: () {
                   tapCursor(notifier);
@@ -416,11 +427,8 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                     child: CustomBaseCacheImage(
                       widthPlaceHolder: 80,
                       heightPlaceHolder: 80,
-                      imageUrl: (notifier.editData?.isApsara ?? false) ? (notifier.editData?.mediaThumbEndPoint ?? '') : '${notifier.editData?.fullThumbPath ?? ''}',
+                      imageUrl: (notifier.editData?.isApsara ?? false) ? (notifier.editData?.mediaThumbEndPoint ?? '') : notifier.editData?.fullThumbPath ?? '',
                       imageBuilder: (context, imageProvider) => Container(
-                        // margin: margin,
-                        // // const EdgeInsets.symmetric(horizontal: 4.5),
-                        // width: _scaling,
                         height: 168,
                         decoration: BoxDecoration(
                           image: DecorationImage(
@@ -548,19 +556,29 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
       positionYplus: 50,
       onTargetClick: () {},
       disposeOnTap: false,
-      onToolTipClick: () {
+      onToolTipClick: () async {
         context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKey].key ?? '');
-        controller.animateTo(10000, duration: Duration(milliseconds: 500), curve: Curves.ease).then((value) {
-          ShowCaseWidget.of(myContext).next();
-        });
+        controller
+            .animateTo(
+              controller.position.maxScrollExtent + kToolbarHeight,
+              curve: Curves.easeOut,
+              duration: const Duration(milliseconds: 200),
+            )
+            .then((value) => ShowCaseWidget.of(myContext).next());
+
         mn?.tutorialData[indexKey].status = true;
       },
       closeWidget: GestureDetector(
         onTap: () async {
           context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKey].key ?? '');
-          await controller.animateTo(10000, duration: Duration(milliseconds: 500), curve: Curves.ease).then((value) {
-            ShowCaseWidget.of(myContext).next();
-          });
+          controller
+              .animateTo(
+                controller.position.maxScrollExtent + kToolbarHeight,
+                curve: Curves.easeOut,
+                duration: const Duration(milliseconds: 200),
+              )
+              .then((value) => ShowCaseWidget.of(myContext).next());
+
           mn?.tutorialData[indexKey].status = true;
         },
         child: const Padding(

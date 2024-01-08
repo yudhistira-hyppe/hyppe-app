@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_livepush_plugin/live_base.dart';
 import 'package:flutter_livepush_plugin/live_push_config.dart';
 import 'package:flutter_livepush_plugin/live_push_def.dart';
@@ -59,7 +61,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       setState(() {
-        isCreator = context.read<SelfProfileNotifier>().user.profile?.creator ?? false;
+        isCreator = (context.read<SelfProfileNotifier>().user.profile?.creator ?? false) && Platform.isAndroid;
       });
       newUser = SharedPreference().readStorage(SpKeys.newUser) ?? 'FALSE';
       if (newUser == "TRUE") {

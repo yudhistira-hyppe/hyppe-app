@@ -40,10 +40,13 @@ class Env {
     appStoreID: appStoreID,
     debugShowMaterialGrid: false,
     debugShowCheckedModeBanner: false,
-    baseUrl: "https://s1.hyppe.cloud",
-    baseUrl2: "https://s1.hyppe.cloud",
+    baseUrl: "https://p1-5003.hyppe.cloud",
+    baseUrl2: "https://p1-5003.hyppe.cloud",
+    baseUrlSocket: "https://p3-5003.hyppe.cloud",
+    // baseUrl: "https://p1-5003.hyppe.cloud/",
+    // baseUrl2: "https://p1-5003.hyppe.cloud/",
     deeplinkBaseUrl: "https://share.hyppe.app",
-    apiBaseUrl: "https://s1.hyppe.cloud",
+    apiBaseUrl: "https://p1-5003.hyppe.cloud",
     versionApi: UrlConstants.apiV0,
   );
 
@@ -56,6 +59,7 @@ class Env {
     debugShowCheckedModeBanner: false,
     baseUrl: "https://p1.hyppe.cloud",
     baseUrl2: "https://p2.hyppe.cloud",
+    baseUrlSocket: "https://p1.hyppe.cloud",
     deeplinkBaseUrl: "https://share.hyppe.app",
     apiBaseUrl: "https://p1.hyppe.cloud",
     versionApi: UrlConstants.apiV0,
@@ -73,6 +77,7 @@ class EnvData {
   final String appStoreID;
   final String baseUrl;
   final String baseUrl2;
+  final String baseUrlSocket;
   final String versionApi;
 
   EnvData({
@@ -86,6 +91,7 @@ class EnvData {
     required this.appStoreID,
     required this.baseUrl,
     required this.baseUrl2,
+    required this.baseUrlSocket,
     required this.versionApi,
   });
 }

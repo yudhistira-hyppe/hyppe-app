@@ -135,6 +135,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<String> _interestData = [];
   List<Interest> _interest = [];
   List<Interest> _interestList = [];
+  List<String> _tempinterestData = [];
   List<UserData> _userList = [];
   List<String> _userTagData = [];
   List<TagPeople> _userTagDataReal = [];
@@ -378,16 +379,15 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-
-  initThumbnail() async{
+  initThumbnail() async {
     final isImage = ((fileContent?[0] ?? '').isImageFormat());
     print('My Thumbnail: $isImage');
-    if(!isImage){
+    if (!isImage) {
       thumbNail = await System().createThumbnail(fileContent?[0] ?? '');
       print('My Thumbnail: $thumbNail');
     }
-
   }
+
   void setDefaultFileContent(BuildContext context) {
     final notifierPre = context.read<PreviewContentNotifier>();
     final isPic = _fileContent?[0]?.isImageFormat();
@@ -1183,6 +1183,44 @@ class PreUploadContentNotifier with ChangeNotifier {
     }
   }
 
+  Future getInitialInterest(BuildContext context) async {
+    _interestList.clear();
+    if (_interestList.isEmpty) {
+      final notifier = UtilsBlocV2();
+      await notifier.getInterestBloc(context);
+      final fetch = notifier.utilsFetch;
+
+      final Interest seeMore = Interest(
+        id: '11111',
+        interestName: 'See More',
+      );
+      // {
+      //   "id": "11111",
+      //   "langIso": "alice",
+      //   "cts": '2021-12-16 12:45:36',
+      //   "icon": 'https://prod.hyppe.app/images/icon_interest/music.svg',
+      //   'interestName': 'See More'
+      // };
+      if (fetch.utilsState == UtilsState.getInterestsSuccess) {
+        _interest = [];
+        fetch.data.forEach((v) {
+          if (_interest.length <= 5) {
+            _interest.add(Interest.fromJson(v));
+          }
+          if (_interest.length == 6) {
+            _interest.add(seeMore);
+          }
+          _interestList.add(Interest.fromJson(v));
+        });
+        _interestList.sort((a, b) {
+          return a.interestName?.compareTo(b.interestName ?? '') ?? 0;
+        });
+
+        notifyListeners();
+      }
+    }
+  }
+
   Future onGetInterest(BuildContext context) async {
     if (_interestList.isEmpty) {
       final notifier = UtilsBlocV2();
@@ -1232,10 +1270,10 @@ class PreUploadContentNotifier with ChangeNotifier {
         } else {
           _interestData.add(tile);
         }
-        // notifyListeners();
+        notifyListeners();
       }
     }
-    notifyListeners();
+    // notifyListeners();
   }
 
   void insertInterestList(BuildContext context, int index) {
@@ -1253,11 +1291,34 @@ class PreUploadContentNotifier with ChangeNotifier {
         } else {
           _interestData.add(tile);
         }
+
+        if (_tempinterestData.contains(tile)) {
+          _tempinterestData.removeWhere((v) => v == tile);
+        } else {
+          _tempinterestData.add(tile);
+        }
+        
         notifyListeners();
       }
     } else {
       return null;
     }
+  }
+  
+  void removeTempInterestList({bool isSaved=false}) {
+    if (!isSaved){
+      if (_tempinterestData.isNotEmpty) {
+      for (var e in _tempinterestData) {
+          if (_interestData.contains(e)) {
+              _interestData.removeWhere((v) => v == e);
+          }
+        }
+        notifyListeners();
+      }
+    }else{
+      _tempinterestData.clear();
+    }
+    
   }
 
   Future inserTagPeople(int index) async {
@@ -1377,7 +1438,6 @@ class PreUploadContentNotifier with ChangeNotifier {
         String withoutat = withat.substring(1);
         inputCaption = withoutat;
         _startSearch = 0;
-
         if (withoutat.length > 2) {
           _isShowAutoComplete = true;
           searchPeople(context, input: withoutat);
@@ -1742,7 +1802,7 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   bool _checkChallenge = true;
   bool get checkChallenge => _checkChallenge;
-  set checkChallenge(bool state){
+  set checkChallenge(bool state) {
     _checkChallenge = state;
     notifyListeners();
   }
@@ -1754,8 +1814,8 @@ class PreUploadContentNotifier with ChangeNotifier {
       final fetch = bannerNotifier.userFetch;
 
       if (fetch.challengeState == ChallengeState.getPostSuccess) {
-        checkChallenge =  fetch.data['join_status'];
-      }else{
+        checkChallenge = fetch.data['join_status'];
+      } else {
         checkChallenge = false;
       }
     } catch (e) {
