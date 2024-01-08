@@ -667,11 +667,15 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     ).whenComplete(() => _isShareAction = false);
   }
 
+  bool loadSend = false;
+
   void sendMessage(BuildContext context, ContentData? data) async {
     // _system.actionReqiredIdCard(
     //   context,
     //   action: () async {
-    if (_textEditingController.text.isNotEmpty) {
+    if (_textEditingController.text.isNotEmpty && !loadSend) {
+      loadSend = true;
+      notifyListeners();
       try {
         textEditingController.text.logger();
 
@@ -687,6 +691,8 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
           'Your message was sent'.logger();
         });
       } finally {
+        loadSend = false;
+        notifyListeners();
         _textEditingController.clear();
         // Future.delayed(const Duration(milliseconds: 500), (){
         //   // FocusScopeNode currentFocus = FocusScope.of(context);

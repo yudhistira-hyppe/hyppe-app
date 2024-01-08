@@ -12,7 +12,7 @@ class SpKeys {
   static const String avatar = "avatar";
   static const String fcmToken = 'fcmToken';
   static const String userToken = "userToken";
-  static const String guestToken = "guestToken";
+  static const String isGuest = "isGuest";
   static const String isLoginSosmed = 'false';
   static const String lastHitPost = "lastHitPost";
   static const String isShowPopAds = "isShowPopAds";

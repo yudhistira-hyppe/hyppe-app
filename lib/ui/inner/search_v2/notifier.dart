@@ -71,6 +71,13 @@ class SearchNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _loadNavigate = false;
+  bool get loadNavigate => _loadNavigate;
+  set loadNavigate(bool state) {
+    _loadNavigate = state;
+    notifyListeners();
+  }
+
   bool _isZoom = false;
   bool get isZoom => _isZoom;
   set isZoom(bool state) {
@@ -1765,6 +1772,7 @@ class SearchNotifier with ChangeNotifier {
     final connect = await System().checkConnections();
     if (connect) {
       var result;
+      loadNavigate = true;
 
       switch (type) {
         case HyppeType.HyppePic:
@@ -1810,7 +1818,7 @@ class SearchNotifier with ChangeNotifier {
           if (result != null) {
             scrollAuto(result);
           }
-
+          loadNavigate = false;
           break;
         case HyppeType.HyppeDiary:
           final diaries = await getDetailContents(context, keys, type, api, data.length);
@@ -1855,6 +1863,7 @@ class SearchNotifier with ChangeNotifier {
           if (result != null) {
             scrollAuto(result);
           }
+          loadNavigate = false;
           break;
         case HyppeType.HyppeVid:
           final vids = await getDetailContents(context, keys, type, api, data.length);
@@ -1898,6 +1907,7 @@ class SearchNotifier with ChangeNotifier {
           if (result != null) {
             scrollAuto(result);
           }
+          loadNavigate = false;
           break;
       }
     } else {

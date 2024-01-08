@@ -33,6 +33,8 @@ import 'package:measured_size/measured_size.dart';
 import '../../../../../../app.dart';
 import '../../../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../../constant/widget/custom_elevated_button.dart';
+import '../../../notifier_v2.dart';
+import '../../stories/preview/notifier.dart';
 
 class SelfProfileScreen extends StatefulWidget {
   final GeneralArgument? arguments;
@@ -233,6 +235,7 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
                 color: Colors.purple,
                 onRefresh: () async {
                   await notifier.getDataPerPgage(context, isReload: true);
+                  await context.read<HomeNotifier>().initNewHome(context, mounted);
                 },
                 child: isloading
                     ? CustomScrollView(
