@@ -378,16 +378,15 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-
-  initThumbnail() async{
+  initThumbnail() async {
     final isImage = ((fileContent?[0] ?? '').isImageFormat());
     print('My Thumbnail: $isImage');
-    if(!isImage){
+    if (!isImage) {
       thumbNail = await System().createThumbnail(fileContent?[0] ?? '');
       print('My Thumbnail: $thumbNail');
     }
-
   }
+
   void setDefaultFileContent(BuildContext context) {
     final notifierPre = context.read<PreviewContentNotifier>();
     final isPic = _fileContent?[0]?.isImageFormat();
@@ -1741,7 +1740,7 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   bool _checkChallenge = true;
   bool get checkChallenge => _checkChallenge;
-  set checkChallenge(bool state){
+  set checkChallenge(bool state) {
     _checkChallenge = state;
     notifyListeners();
   }
@@ -1753,8 +1752,8 @@ class PreUploadContentNotifier with ChangeNotifier {
       final fetch = bannerNotifier.userFetch;
 
       if (fetch.challengeState == ChallengeState.getPostSuccess) {
-        checkChallenge =  fetch.data['join_status'];
-      }else{
+        checkChallenge = fetch.data['join_status'];
+      } else {
         checkChallenge = false;
       }
     } catch (e) {

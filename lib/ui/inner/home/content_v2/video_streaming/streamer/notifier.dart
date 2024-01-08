@@ -133,9 +133,10 @@ class StreamerNotifier with ChangeNotifier {
     print("-------- init stream $forConfig ---------");
     isloading = true;
     isloadingPreview = true;
+    notifyListeners();
 
     _alivcBase = AlivcBase.init();
-    
+
     await _alivcBase.registerSDK();
     await _alivcBase.setObserver();
 
@@ -147,11 +148,11 @@ class StreamerNotifier with ChangeNotifier {
     // });
     if (!forConfig) {
       print("-------- init stream 2 ---------");
-      
+
       await setLiveConfig();
       await _setLivePusher();
       // await Future.delayed(const Duration(milliseconds: 500));
-      
+
       if (isFirst && mounted) {
         isFirst = false;
         await init(context, mounted);
@@ -367,7 +368,7 @@ class StreamerNotifier with ChangeNotifier {
   }
 
   Future<void> setLiveConfig() async {
-    AlivcLivePusherConfig pusherConfig =  AlivcLivePusherConfig.init();
+    AlivcLivePusherConfig pusherConfig = AlivcLivePusherConfig.init();
     pusherConfig.setCameraType(AlivcLivePushCameraType.front);
 
     /// Set the resolution to 540p.
@@ -1115,7 +1116,7 @@ class StreamerNotifier with ChangeNotifier {
           },
         );
       },
-      host: Env.data.baseUrl,
+      host: Env.data.socketUrl,
       options: OptionBuilder()
           .setAuth({
             "x-auth-user": "$email",

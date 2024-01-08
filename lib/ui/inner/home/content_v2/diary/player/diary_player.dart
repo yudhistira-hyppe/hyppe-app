@@ -5,6 +5,7 @@ import 'dart:io';
 import 'dart:math';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
@@ -13,7 +14,6 @@ import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
-import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -133,6 +133,10 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
   void initState() {
     print("init init init init");
     // stopwatch = new Stopwatch()..start();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarIconBrightness: Brightness.dark,
+      statusBarColor: Colors.transparent,
+    ));
     FirebaseCrashlytics.instance.setCustomKey('layout', 'DiaryPlayerPage');
     super.initState();
     _pageController = PageController(initialPage: widget.argument.index.toInt());
@@ -557,13 +561,13 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
                     ? AliPlayerView(
                         onCreated: onViewPlayerCreated,
                         x: 0,
-                        y: _playerY,
+                        y: 0,
                         width: MediaQuery.of(context).size.width,
                         height: MediaQuery.of(context).size.height,
                       )
                     : Container(),
                 _showLoading
-                    ? Positioned.fill(
+                    ? const Positioned.fill(
                         child: Align(
                         alignment: Alignment.center,
                         child: CircularProgressIndicator(),
@@ -608,18 +612,18 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
     return SafeArea(
       child: Stack(
         children: [
-          Container(
-            padding: const EdgeInsets.only(left: 10.0, right: 10, top: 5),
-            height: 9,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(40.0),
-              child: LinearProgressIndicator(
-                value: _animationController?.value,
-                backgroundColor: kHyppeLightButtonText.withOpacity(0.4),
-                valueColor: const AlwaysStoppedAnimation<Color>(kHyppeLightButtonText),
-              ),
-            ),
-          ),
+          // Container(
+          //   padding: const EdgeInsets.only(left: 10.0, right: 10, top: 5),
+          //   height: 9,
+          //   child: ClipRRect(
+          //     borderRadius: BorderRadius.circular(40.0),
+          //     child: LinearProgressIndicator(
+          //       value: _animationController?.value,
+          //       backgroundColor: kHyppeLightButtonText.withOpacity(0.4),
+          //       valueColor: const AlwaysStoppedAnimation<Color>(kHyppeLightButtonText),
+          //     ),
+          //   ),
+          // ),
           Row(
             children: [
               Expanded(

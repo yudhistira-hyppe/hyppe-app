@@ -252,7 +252,7 @@ class ViewStreamingNotifier with ChangeNotifier {
         final fetch = notifier.liveStreamFetch;
         if (fetch.postsState == LiveStreamState.getApiSuccess) {
           final List<LinkStreamModel> tempList = [];
-          if(isReload){
+          if (isReload) {
             listStreamers = [];
           }
           fetch.data.forEach((v) => tempList.add(LinkStreamModel.fromJson(v)));
@@ -416,7 +416,6 @@ class ViewStreamingNotifier with ChangeNotifier {
         if (fetch.postsState == LiveStreamState.getApiSuccess) {
           likeListTapScreen = [];
         }
-        
       } catch (e) {
         debugPrint(e.toString());
       }
@@ -473,7 +472,7 @@ class ViewStreamingNotifier with ChangeNotifier {
           },
         );
       },
-      host: Env.data.baseUrl,
+      host: Env.data.socketUrl,
       options: OptionBuilder()
           .setAuth({
             "x-auth-user": "$email",

@@ -365,7 +365,7 @@ class MainNotifier with ChangeNotifier {
           },
         );
       },
-      host: Env.data.baseUrl,
+      host: Env.data.socketUrl,
       options: OptionBuilder()
           .setAuth({
             "x-auth-user": "$email",
@@ -418,7 +418,7 @@ class MainNotifier with ChangeNotifier {
           },
         );
       },
-      host: Env.data.baseUrl,
+      host: Env.data.socketUrl,
       options: OptionBuilder()
           .setAuth({
             "x-auth-user": "$email",
