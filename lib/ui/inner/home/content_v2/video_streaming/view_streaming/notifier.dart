@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/live_stream/streaming_model.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
+import 'package:hyppe/core/services/socket_live_service.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +23,6 @@ import '../../../../../../core/models/collection/live_stream/viewers_live_model.
 import '../../../../../../core/models/collection/localization_v2/localization_model.dart';
 import '../../../../../../core/response/generic_response.dart';
 import '../../../../../../core/services/shared_preference.dart';
-import '../../../../../../core/services/socket_service.dart';
 import '../../../../../../core/services/system.dart';
 import '../../../../../../ux/routing.dart';
 import '../../../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
@@ -35,7 +35,7 @@ class ViewStreamingNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  final _socketService = SocketService();
+  final _socketService = SocketLiveService();
 
   final commentController = TextEditingController();
 
@@ -149,7 +149,11 @@ class ViewStreamingNotifier with ChangeNotifier {
   }
 
   Future<void> destoryPusher() async {
-    WakelockPlus.disable();
+    _socketService.closeSocket(eventComment);
+    _socketService.closeSocket(eventViewStream);
+    _socketService.closeSocket(eventLikeStream);
+    _socketService.closeSocket(eventCommentDisable);
+    _socketService.closeSocket(eventStatusStream);
     statusLive = StatusStream.offline;
     totLikes = 0;
     totViews = 0;
@@ -160,7 +164,7 @@ class ViewStreamingNotifier with ChangeNotifier {
     dataViewers = [];
     comment = [];
     animationIndexes = [];
-    _socketService.closeSocket();
+    WakelockPlus.disable();
   }
 
   List<String> likeList = [];
@@ -433,15 +437,19 @@ class ViewStreamingNotifier with ChangeNotifier {
   }
 
   Future<void> startViewStreaming(BuildContext context, mounted, LinkStreamModel data) async {
-    notifyListeners();
+    // notifyListeners();
     var init = await initLiveStream(context, mounted, data);
     if (init) {
-      Future.delayed(Duration(seconds: 1));
+      // _socketService.closeSocket();
+      await Future.delayed(const Duration(seconds: 1));
+      print("======== ini socket status ${_socketService.isRunning} =========");
+      // if (!_socketService.isRunning) {
       _connectAndListenToSocket(eventComment, data);
       _connectAndListenToSocket(eventLikeStream, data);
       _connectAndListenToSocket(eventViewStream, data);
       _connectAndListenToSocket(eventStatusStream, data);
       _connectAndListenToSocket(eventCommentDisable, data);
+      // }
 
       // _alivcLivePusher.startPushWithURL(pushURL);
     } else {
@@ -472,7 +480,7 @@ class ViewStreamingNotifier with ChangeNotifier {
           },
         );
       },
-      host: Env.data.socketUrl,
+      host: Env.data.baseUrlSocket,
       options: OptionBuilder()
           .setAuth({
             "x-auth-user": "$email",
@@ -488,10 +496,14 @@ class ViewStreamingNotifier with ChangeNotifier {
   }
 
   void handleSocket(message, event, LinkStreamModel dataStream) async {
+    print("handlesocket ====================");
+    print("handlesocket ==================== $message $event $dataStream");
     if (event == eventComment) {
+      print("handlesocket 222 ==================== $message $event $dataStream");
       var messages = CommentLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
       if (messages.idStream == dataStream.sId) {
         comment.insert(0, messages);
+        notifyListeners();
       }
     } else if (event == eventLikeStream) {
       var messages = CountLikeLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
