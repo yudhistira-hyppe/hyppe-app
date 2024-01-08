@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:provider/provider.dart';
@@ -29,10 +31,11 @@ class _OnInterestListBottomSheetState extends State<OnInterestListBottomSheet> {
   var privacy = [];
   TextEditingController controller = TextEditingController();
   BuildContext? scaffoldContext;
-
+  LocalizationModelV2? lang;
   @override
   void initState() {
     // TODO: implement initState
+    lang = context.read<TranslateNotifierV2>().translate;
     super.initState();
     print('dsd');
     // Provider.of<PreUploadContentNotifier>(context, listen: false).onGetInterest(context);
@@ -49,13 +52,16 @@ class _OnInterestListBottomSheetState extends State<OnInterestListBottomSheet> {
           elevation: 0,
           centerTitle: false,
           leading: GestureDetector(
-              onTap: widget.onSave,
+              onTap: (){
+                widget.onSave();
+                notifier.removeTempInterestList();
+              },
               child: Icon(
                 Icons.clear_rounded,
                 color: Theme.of(context).colorScheme.onSurface,
               )),
           title: CustomTextWidget(
-            textToDisplay: 'Categories  ',
+            textToDisplay: '${lang?.categories} ',
             textStyle: textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
           ),
           backgroundColor: Colors.transparent,
@@ -69,7 +75,7 @@ class _OnInterestListBottomSheetState extends State<OnInterestListBottomSheet> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: notifier.interestList.length,
                     itemBuilder: (context, index) {
@@ -95,7 +101,10 @@ class _OnInterestListBottomSheetState extends State<OnInterestListBottomSheet> {
                   CustomElevatedButton(
                     width: 375.0 * SizeConfig.scaleDiagonal,
                     height: 44.0 * SizeConfig.scaleDiagonal,
-                    function: widget.onSave,
+                    function: (){
+                      widget.onSave();
+                      notifier.removeTempInterestList(isSaved: true);
+                    },
                     buttonStyle: ButtonStyle(
                       foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                       shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
