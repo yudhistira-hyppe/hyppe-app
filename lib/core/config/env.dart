@@ -45,6 +45,7 @@ class Env {
     deeplinkBaseUrl: "https://share.hyppe.app",
     apiBaseUrl: "https://s1.hyppe.cloud",
     versionApi: UrlConstants.apiV0,
+    socketUrl: "https://p3.hyppe.cloud",
   );
 
   static final EnvData prod = EnvData(
@@ -59,6 +60,7 @@ class Env {
     deeplinkBaseUrl: "https://share.hyppe.app",
     apiBaseUrl: "https://p1.hyppe.cloud",
     versionApi: UrlConstants.apiV0,
+    socketUrl: "https://p3.hyppe.cloud",
   );
 }
 
@@ -74,6 +76,7 @@ class EnvData {
   final String baseUrl;
   final String baseUrl2;
   final String versionApi;
+  final String socketUrl;
 
   EnvData({
     required this.debug,
@@ -87,5 +90,6 @@ class EnvData {
     required this.baseUrl,
     required this.baseUrl2,
     required this.versionApi,
+    required this.socketUrl,
   });
 }

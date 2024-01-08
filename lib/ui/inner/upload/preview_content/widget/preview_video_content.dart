@@ -149,13 +149,15 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
                             child: Material(
                               child: !notifier.isLoadVideo
                                   ? Center(
-                                      child: Platform.isAndroid
-                                          ? AspectRatio(
-                                              aspectRatio: notifier.betterPlayerController?.value.aspectRatio ?? 1,
-                                              child: VideoPlayer(notifier.betterPlayerController!),
-                                            )
-                                          : VideoPlayer(notifier.betterPlayerController!),
+                                      child:
+                                          // Platform.isAndroid
+                                          //     ?
+                                          AspectRatio(
+                                      aspectRatio: notifier.betterPlayerController?.value.aspectRatio ?? 1,
+                                      child: VideoPlayer(notifier.betterPlayerController!),
                                     )
+                                      // : VideoPlayer(notifier.betterPlayerController!),
+                                      )
                                   : const Center(
                                       child: CustomLoading(),
                                     ),

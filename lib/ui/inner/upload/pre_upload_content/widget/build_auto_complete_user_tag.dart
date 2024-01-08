@@ -24,9 +24,9 @@ class _AutoCompleteUserTagState extends State<AutoCompleteUserTag> {
       builder: (context, notifier, child) => Visibility(
         visible: notifier.isShowAutoComplete,
         child: Padding(
-          padding: EdgeInsets.only(top: 100),
+          padding: EdgeInsets.only(top: notifier.captionController.text.length > 1000 ? 195 : 100),
           child: Container(
-            height: 200,
+            height: (MediaQuery.of(context).size.height/2.7) - MediaQuery.of(context).viewInsets.bottom,
             color: Theme.of(context).colorScheme.background,
             child: notifier.isLoading
                     ? Row(
@@ -57,6 +57,7 @@ class _AutoCompleteUserTagState extends State<AutoCompleteUserTag> {
                             },
                             child: Column(
                               children: [
+                                Divider(height: 2, color: Colors.grey.withOpacity(.5),),
                                 Expanded(
                                   child: ListView.builder(
                                     controller: _scrollController,
