@@ -80,7 +80,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
       indexKeyOwn = mn?.tutorialData.indexWhere((element) => element.key == 'ownership') ?? 0;
       indexKeyBoost = mn?.tutorialData.indexWhere((element) => element.key == 'boost') ?? 0;
 
-      if (mn?.tutorialData[indexKey].status != false) {
+      if (mn?.tutorialData[indexKey].status == false) {
         WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(myContext).startShowCase([keyKategori, keyOwnerShip]));
       }
       if (widget.arguments.onEdit && widget.arguments.contentData?.reportedStatus != "OWNED" && widget.arguments.contentData?.reportedStatus2 != "BLURRED" && statusKyc == VERIFIED) {
