@@ -1192,7 +1192,7 @@ class PreUploadContentNotifier with ChangeNotifier {
 
       final Interest seeMore = Interest(
         id: '11111',
-        interestName: 'See More',
+        interestName: language.seeMore,
       );
       // {
       //   "id": "11111",

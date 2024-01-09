@@ -862,21 +862,12 @@ class StreamerNotifier with ChangeNotifier {
   }
 
   Future getProfileNCheck(BuildContext context, String email) async {
-    int totLoading = 0;
     isloadingProfile = true;
     notifyListeners();
     statusFollowing = StatusFollowing.none;
-    getProfile(context, email, withCheckFollow: false).then((value) => totLoading++);
-    await checkFollowingToUser(context, email).then((value) {
-      if (value) {
-        totLoading++;
-      } else {}
-    });
-
-    if (totLoading >= 2) {
-      isloadingProfile = false;
-      notifyListeners();
-    }
+    await getProfile(context, email, withCheckFollow: false);
+    isloadingProfile = false;
+    notifyListeners();
   }
 
   Future getProfileNCheckViewer(BuildContext context, String email) async {
@@ -891,6 +882,7 @@ class StreamerNotifier with ChangeNotifier {
 
   Future getProfile(BuildContext context, String email, {bool withCheckFollow = true}) async {
     final usersNotifier = UserBloc();
+    print("========== withCheckFollow $withCheckFollow");
     if (withCheckFollow) {
       checkFollowingToUser(context, email);
     }
@@ -901,6 +893,11 @@ class StreamerNotifier with ChangeNotifier {
 
     if (usersFetch.userState == UserState.getUserProfilesSuccess) {
       audienceProfile = usersFetch.data;
+      if (audienceProfile.following ?? false) {
+        statusFollowing = StatusFollowing.following;
+      } else {
+        statusFollowing = StatusFollowing.none;
+      }
     }
   }
 
@@ -1155,7 +1152,8 @@ class StreamerNotifier with ChangeNotifier {
     } else if (event == eventLikeStream) {
       var messages = CountLikeLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
       if (messages.idStream == dataStream.sId) {
-        totLikes += messages.likeCount ?? 0;
+        // totLikes += messages.likeCount ?? 0;
+        totLikes = messages.likeCountTotal ?? 0;
         print("totalnya ${animationIndexes}");
         // for (var i = 0; i < (messages.likeCount ?? 0); i++) {
         var run = getRandomDouble(1, 999999999999999);

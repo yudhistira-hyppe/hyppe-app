@@ -509,7 +509,8 @@ class ViewStreamingNotifier with ChangeNotifier {
       var messages = CountLikeLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
       String userId = SharedPreference().readStorage(SpKeys.userID);
       if (messages.idStream == dataStream.sId && userId != messages.userId) {
-        totLikes += messages.likeCount ?? 0;
+        // totLikes += messages.likeCount ?? 0;
+        totLikes = messages.likeCountTotal ?? 0;
         print("totalnya ${animationIndexes}");
         // for (var i = 0; i < (messages.likeCount ?? 0); i++) {
         var run = getRandomDouble(1, 999999999999999);

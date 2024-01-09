@@ -104,8 +104,6 @@ dependencies:
 
   flutter_livepush_plugin: ^2.1.0+1
 
-
-
   dynamic_widget: # Dynamic widget builder
     git:
       url: https://github.com/dengyin2000/dynamic_widget.git

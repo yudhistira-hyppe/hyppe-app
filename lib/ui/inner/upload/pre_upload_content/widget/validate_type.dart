@@ -18,23 +18,27 @@ class ValidateType extends StatefulWidget {
   State<ValidateType> createState() => _ValidateTypeState();
 }
 
-class _ValidateTypeState extends State<ValidateType>
-    with AfterFirstLayoutMixin {
+class _ValidateTypeState extends State<ValidateType> {
   bool isEditingOverlay = false;
   bool? _isImage;
   bool isLoading = true;
   // ignore: prefer_typing_uninitialized_variables
   var isEditingContent;
 
-  @override
-  void afterFirstLayout(BuildContext context) {
-    context.read<PreUploadContentNotifier>().initThumbnail();
-  }
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final notifier =
+    afterFirstLayout();
+    isLoading = false;
+    super.initState();
+  }
+
+  void afterFirstLayout() {
+    context.read<PreUploadContentNotifier>().initThumbnail().then((value) => getThumbnail());
+  }
+  Future getThumbnail() async {
+    // await Future.delayed(Duration(milliseconds: 200),(){});
+    final notifier =
           Provider.of<PreUploadContentNotifier>(context, listen: false);
 
       _isImage = System()
@@ -45,8 +49,9 @@ class _ValidateTypeState extends State<ValidateType>
       isEditingOverlay = widget.editContent
           ? notifier.featureType == FeatureType.pic
           : (_isImage ?? false) || _isImage == null;
-
+      print('Thumbnail ${notifier.thumbNail}');
       // notifier.initThumbnail();
+      
       isEditingContent = widget.editContent
           ? CachedNetworkImage(
               imageUrl: notifier.thumbNail ?? '',
@@ -59,11 +64,10 @@ class _ValidateTypeState extends State<ValidateType>
               : notifier.thumbNail != null
                   ? MemoryImage(notifier.thumbNail!)
                   : const AssetImage('${AssetPath.pngPath}content-error.png');
-    });
-    isLoading = false;
-    super.initState();
+      setState(() {
+        
+      });
   }
-
   @override
   Widget build(BuildContext context) {
     return Container(
