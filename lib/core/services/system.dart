@@ -691,6 +691,7 @@ class System {
       }
 
       if (featureType == FeatureType.pic) {
+        
         // await FilePicker.platform.pickFiles(type: FileType.image, allowCompression: false).then((result) {
         //   if (result != null) {
         //     _filePickerResult = [File(result.files.single.path ?? '')];

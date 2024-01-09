@@ -103,7 +103,7 @@ dependencies:
 
   flutter_livepush_plugin: ^2.1.0+1
 
-
+  heif_converter: ^1.0.0
 
   dynamic_widget: # Dynamic widget builder
     git:

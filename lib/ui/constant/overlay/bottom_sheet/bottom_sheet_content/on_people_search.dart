@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_search_bar.dart';
+import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/constant/widget/story_color_validator.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +15,7 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 
 class OnSearchPeopleBottomSheet extends StatefulWidget {
   final String value;
+  final LocalizationModelV2? language;
   final Function() onSave;
   final Function() onCancel;
 
@@ -20,6 +24,7 @@ class OnSearchPeopleBottomSheet extends StatefulWidget {
   const OnSearchPeopleBottomSheet({
     Key? key,
     required this.value,
+    this.language,
     required this.onSave,
     required this.onChange,
     required this.onCancel,
@@ -33,7 +38,7 @@ class _OnSearchPeopleBottomSheetState extends State<OnSearchPeopleBottomSheet> {
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   String? lastInputValue;
-
+  
   @override
   void initState() {
     // _scrollController.addListener(() => _notifier.scrollListPeopleListener(
@@ -68,7 +73,7 @@ class _OnSearchPeopleBottomSheetState extends State<OnSearchPeopleBottomSheet> {
               color: Theme.of(context).colorScheme.onSurface,
             )),
         title: CustomTextWidget(
-          textToDisplay: 'Tag People',
+          textToDisplay: widget.language?.tagPeople??'Tag People',
           textStyle: textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.transparent,
@@ -83,6 +88,8 @@ class _OnSearchPeopleBottomSheetState extends State<OnSearchPeopleBottomSheet> {
                   hintText: notifier.language.search,
                   contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
                   controller: _controller,
+                  withShadow: true,
+
                   onChanged: (val) {
                     if (lastInputValue != val) {
                       lastInputValue = val;
