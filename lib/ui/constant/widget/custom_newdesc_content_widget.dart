@@ -257,7 +257,7 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
             recognizer: item.type == CaptionType.normal
                 ? null
                 : (TapGestureRecognizer()
-                  ..onTap = () {
+                  ..onTap = () async {
                   if(!isClicked){
                     setState(() {
                       isClicked = true;
@@ -265,10 +265,10 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
                     if (item.type == CaptionType.hashtag) {
                       var fixKeyword = item.desc[0] == '#' ? item.desc.substring(1, item.desc.length) : item.desc;
                       fixKeyword = fixKeyword.replaceAll(',', '');
-                      Routing().move(Routes.hashtagDetail, argument: HashtagArgument(isTitle: false, hashtag: Tags(tag: fixKeyword, id: fixKeyword), fromRoute: true));
+                      await Routing().move(Routes.hashtagDetail, argument: HashtagArgument(isTitle: false, hashtag: Tags(tag: fixKeyword, id: fixKeyword), fromRoute: true));
                     } else {
                       final fixUsername = item.desc[0] == '@' ? item.desc.substring(1, item.desc.length) : item.desc;
-                      materialAppKey.currentContext!.read<NotificationNotifier>().checkAndNavigateToProfile(context, fixUsername);
+                      await materialAppKey.currentContext!.read<NotificationNotifier>().checkAndNavigateToProfile(context, fixUsername);
                     }
                     setState(() {
                       isClicked = false;

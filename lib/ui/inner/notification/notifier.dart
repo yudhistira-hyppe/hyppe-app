@@ -248,7 +248,7 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
     }
   }
 
-  void checkAndNavigateToProfile(BuildContext context, String? username, {bool isReplace = false, bool isPlay = true}) async {
+  Future checkAndNavigateToProfile(BuildContext context, String? username, {bool isReplace = false, bool isPlay = true}) async {
     UserProfileModel? result = null;
     try {
       if (username != null) {
