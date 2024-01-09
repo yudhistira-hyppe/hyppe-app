@@ -735,7 +735,10 @@ class PreUploadContentNotifier with ChangeNotifier {
         _uploadSuccess = value;
         'Create post content with value $value'.logger();
         // _eventService.notifyUploadFinishingUp(_uploadSuccess);
-        eventService.notifyUploadSuccess(_uploadSuccess);
+        if(_uploadSuccess != null){
+          eventService.notifyUploadSuccess(_uploadSuccess);
+        }
+
         // final decode = json.decode(_uploadSuccess.toString());
         // _postIdPanding = decode['data']['postID'];
 
@@ -1461,13 +1464,16 @@ class PreUploadContentNotifier with ChangeNotifier {
     int searchLength = _temporarySearch.length;
     _isShowAutoComplete = false;
 
-    final newText = text.replaceRange(selection.start - searchLength, selection.end, '${_searchPeolpleData[index].username} ');
-    int length = _searchPeolpleData[index].username?.length ?? 0;
-    _captionController.value = TextEditingValue(
-      text: "${newText}",
-      selection: TextSelection.collapsed(offset: selection.baseOffset + length - searchLength + 1),
-    );
-    notifyListeners();
+    if(_searchPeolpleData.isNotEmpty){
+      final newText = text.replaceRange(selection.start - searchLength, selection.end, '${_searchPeolpleData[index].username} ');
+      int length = _searchPeolpleData[index].username?.length ?? 0;
+      _captionController.value = TextEditingValue(
+        text: newText,
+        selection: TextSelection.collapsed(offset: selection.baseOffset + length - searchLength + 1),
+      );
+      notifyListeners();
+    }
+
   }
 
   Future submitOwnership(BuildContext context, {bool withAlert = false}) async {
