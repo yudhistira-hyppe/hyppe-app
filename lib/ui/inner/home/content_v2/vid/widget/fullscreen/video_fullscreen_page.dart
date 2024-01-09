@@ -476,7 +476,27 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage>
             appBar: AppBar(
               elevation: 0,
               leading: IconButton(
-                  onPressed: () {},
+                  onPressed: (){
+                    int changevalue;
+                    changevalue =
+                        _currentPosition + 1000;
+                    if (changevalue > _videoDuration) {
+                      changevalue = _videoDuration;
+                    }
+                    widget.data.isLoading = true;
+                    setState(() {});
+                    Navigator.pop(
+                        context,
+                        VideoIndicator(
+                            videoDuration:
+                                _videoDuration,
+                            seekValue: changevalue,
+                            positionText:
+                                _currentPositionText,
+                            showTipsWidget:
+                                _showTipsWidget,
+                            isMute: isMute));
+                  },
                   icon: const Icon(
                     Icons.arrow_back_ios,
                     color: Colors.white,
