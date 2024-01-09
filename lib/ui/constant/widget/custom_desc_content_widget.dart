@@ -301,7 +301,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
                           callback(true);
                         }
                         final fixUsername = item.desc[0] == '@' ? item.desc.substring(1, item.desc.length) : item.desc;
-                        materialAppKey.currentContext!.read<NotificationNotifier>().checkAndNavigateToProfile(context, fixUsername, isReplace: widget.isReplace, isPlay: widget.isPlay ?? true);
+                        await materialAppKey.currentContext!.read<NotificationNotifier>().checkAndNavigateToProfile(context, fixUsername, isReplace: widget.isReplace, isPlay: widget.isPlay ?? true);
                       }
                       setState(() {
                         isClicked = false;
