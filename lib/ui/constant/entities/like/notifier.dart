@@ -95,6 +95,7 @@ class LikeNotifier with ChangeNotifier {
 
   bool? change;
   Future<void> likePost(BuildContext context, ContentData postData) async {
+    print('liked ${postData.insight?.isloading}');
     if (postData.insight?.isloading == false) {
       print('ini like00');
       _isLoading = true;

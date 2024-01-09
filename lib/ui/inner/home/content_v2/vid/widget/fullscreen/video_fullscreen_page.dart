@@ -83,8 +83,9 @@ class VideoFullscreenPage extends StatefulWidget {
 class _VideoFullscreenPageState extends State<VideoFullscreenPage>
     with AfterFirstLayoutMixin, SingleTickerProviderStateMixin {
   PageController controller = PageController();
-  late final AnimationController animatedController = AnimationController(vsync: this, duration: const Duration(seconds: 2))..repeat();
-
+  late final AnimationController animatedController =
+      AnimationController(vsync: this, duration: const Duration(seconds: 2))
+        ..repeat();
 
   int seekValue = 0;
   bool isMute = false;
@@ -139,11 +140,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage>
 
   @override
   void initState() {
-    // animatedController = AnimationController(
-    //   duration: const Duration(milliseconds: 5000),
-    //   vsync: this,
-    // )..repeat();
-    // animatedController.forward();
+    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     if (widget.data.certified ?? false) {
       System().block(context);
     } else {
@@ -475,6 +472,18 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage>
             _initializeTimer();
           },
           child: Scaffold(
+            extendBodyBehindAppBar: true,
+            appBar: AppBar(
+              elevation: 0,
+              leading: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
+                  )),
+              title: Text("Title"),
+              backgroundColor: Colors.transparent,
+            ),
             body: notifier.loadVideo
                 ? Container(
                     color: Colors.black,
@@ -592,7 +601,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage>
                                       child: Offstage(
                                           offstage: false,
                                           child: _buildContentWidget(
-                                              context, Orientation.portrait)),
+                                              context, orientation)),
                                     ),
                                   Align(
                                     alignment: Alignment.topCenter,
@@ -717,7 +726,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage>
                                 child: Offstage(
                                     offstage: false,
                                     child: _buildContentWidget(
-                                        context, Orientation.portrait)),
+                                        context, orientation)),
                               ),
                             Align(
                               alignment: Alignment.topCenter,
@@ -1371,21 +1380,20 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage>
     // print('ORIENTATION: CHANGING ORIENTATION');
     return SafeArea(
       child: Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            gradient: LinearGradient(
-                begin: Alignment.bottomCenter,
-                stops: const [
-                  0.1,
-                  0.9
-                ],
-                colors: [
-                  Colors.black.withOpacity(.8),
-                  Colors.black.withOpacity(.1)
-                ])),
+        decoration: orientation == Orientation.portrait
+            ? BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                gradient: LinearGradient(
+                  end: const Alignment(0.0, -1),
+                  begin: const Alignment(0.0, 1),
+                  colors: [
+                    const Color(0x8A000000),
+                    Colors.black12.withOpacity(0.0)
+                  ],
+                ),
+              )
+            : null,
         child: Stack(
-          // mainAxisAlignment: MainAxisAlignment.end,
-          // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Positioned(
               right: 18,
@@ -1435,7 +1443,9 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage>
             Positioned(
               bottom: 0,
               left: 0,
-              right: SizeConfig.screenWidth! * .18,
+              right: orientation == Orientation.landscape
+                  ? SizeConfig.screenHeight! * .2
+                  : SizeConfig.screenHeight! * .08,
               child: Column(
                 children: [
                   Container(
@@ -1577,7 +1587,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage>
                       ),
                     ],
                   ),
-                  if (widget.data.music!.musicTitle != '')
+                  if (widget.data.music?.musicTitle != '' &&
+                      widget.data.music?.musicTitle != null)
                     Padding(
                       padding: const EdgeInsets.only(
                           top: 0.0, bottom: 12.0, left: 8.0, right: 12.0),
@@ -1594,7 +1605,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage>
                           Expanded(
                             child: CustomTextWidget(
                               textToDisplay:
-                                  " ${widget.data.music!.musicTitle}",
+                                  " ${widget.data.music?.musicTitle ?? ''}",
                               maxLines: 1,
                               textStyle: const TextStyle(
                                   color: kHyppeTextLightPrimary,
@@ -1605,7 +1616,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage>
                           ),
                           CircleAvatar(
                             radius: 18,
-                            backgroundColor: kHyppeSurface.withOpacity(.2),
+                            backgroundColor: kHyppeSurface.withOpacity(.9),
                             child: CustomBaseCacheImage(
                               imageUrl:
                                   widget.data.music?.apsaraThumnailUrl ?? '',
@@ -1682,36 +1693,39 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage>
       opacity: onTapCtrl || isPause ? 1.0 : 0.0,
       duration: const Duration(milliseconds: 500),
       onEnd: _onPlayerHide,
-      child: Container(
-        height: height * 0.8,
-        decoration: BoxDecoration(
-          color: backgroundColor,
-        ),
-        child: _showTipsWidget
-            ? Center(
-                child: GestureDetector(
-                  onTap: () {
-                    widget.fAliplayer?.prepare();
-                    widget.fAliplayer?.play();
-                    setState(() {
-                      isPause = false;
-                      _showTipsWidget = false;
-                    });
-                  },
-                  child: const CustomIconWidget(
-                    iconData: "${AssetPath.vectorPath}pause.svg",
-                    defaultColor: false,
+      child: Center(
+        child: Container(
+          width: SizeConfig.screenWidth! * .8,
+          // height: height * 0.8,
+          decoration: BoxDecoration(
+            color: backgroundColor,
+          ),
+          child: _showTipsWidget
+              ? Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      widget.fAliplayer?.prepare();
+                      widget.fAliplayer?.play();
+                      setState(() {
+                        isPause = false;
+                        _showTipsWidget = false;
+                      });
+                    },
+                    child: const CustomIconWidget(
+                      iconData: "${AssetPath.vectorPath}pause.svg",
+                      defaultColor: false,
+                    ),
                   ),
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _buildSkipBack(iconColor, barHeight),
+                    _buildPlayPause(iconColor, barHeight),
+                    _buildSkipForward(iconColor, barHeight),
+                  ],
                 ),
-              )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _buildSkipBack(iconColor, barHeight),
-                  _buildPlayPause(iconColor, barHeight),
-                  _buildSkipForward(iconColor, barHeight),
-                ],
-              ),
+        ),
       ),
     );
   }
