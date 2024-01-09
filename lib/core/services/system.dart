@@ -591,6 +591,7 @@ class System {
       if (featureType == FeatureType.other) {
         debugPrint("Masuk KYC");
         List<File>? imageFileList = [];
+        List<File>? convertImageFile = [];
         if (pdf) {
           final _pickerResult = await FilePicker.platform.pickFiles(allowMultiple: true, type: FileType.custom, allowedExtensions: ['pdf', 'doc']);
           // validasi durasi
@@ -626,16 +627,51 @@ class System {
             }
           }
         } else {
-          final List<XFile>? selectedImages = await _imagePicker.pickMultiImage(imageQuality: 90);
-          if ((selectedImages?.isNotEmpty ?? false) && (selectedImages?.length ?? 0) <= maxFile) {
-            for (XFile file in selectedImages ?? []) {
-              debugPrint(file.path);
-              imageFileList.add(File(file.path));
+          var permsiion = await System().checkPermission(permission: Permission.storage);
+            if (permsiion == PermissionStatus.denied) {
+              try {
+                await Permission.storage.request();
+                await Permission.storage.status.isGranted;
+                await Permission.photos.status.isGranted;
+              } catch (e) {
+                print(e);
+              }
             }
-            _filePickerResult = imageFileList;
-          } else {
-            _errorMsg = "${notifier.pleaseSelectOneortheMaxFileis} $maxFile";
+            try {
+              final List<XFile>? selectedImages = await _imagePicker.pickMultiImage(imageQuality: 90);
+              if ((selectedImages?.isNotEmpty ?? false) && (selectedImages?.length ?? 0) <= maxFile) {
+              for (XFile file in selectedImages ?? []) {
+                debugPrint(file.path);
+                imageFileList.add(File(file.path));
+              }
+              if (imageFileList.contains('heic') || imageFileList.contains('heif')) {
+                final tmpDir = (await getTemporaryDirectory()).path;
+                final target = '$tmpDir/${DateTime.now().millisecondsSinceEpoch}.jpg';
+                final result = await FlutterImageCompress.compressAndGetFile(
+                  imageFileList.first.path,
+                  target,
+                  format: CompressFormat.png,
+                );
+
+                if (result == null) {
+                // error handling here
+                  print('error result');
+                }else{
+                  convertImageFile.add(File(result.path));
+                }
+                print('Path ${convertImageFile.first.path}');
+                _filePickerResult = convertImageFile;
+              }else{
+                _filePickerResult = imageFileList;
+              }
+              
+            } else {
+              _errorMsg = "${notifier.pleaseSelectOneortheMaxFileis} $maxFile";
+            }
+          } catch (e) {
+            print(e);
           }
+         
         }
       }
 
@@ -691,7 +727,6 @@ class System {
       }
 
       if (featureType == FeatureType.pic) {
-        
         // await FilePicker.platform.pickFiles(type: FileType.image, allowCompression: false).then((result) {
         //   if (result != null) {
         //     _filePickerResult = [File(result.files.single.path ?? '')];
