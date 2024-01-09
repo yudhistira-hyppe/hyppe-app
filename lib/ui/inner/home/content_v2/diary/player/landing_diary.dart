@@ -153,6 +153,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     fAliplayer?.setAutoPlay(true);
     vidConfig();
     // fAliplayer?.setLoop(true);
+    fAliplayer?.setMuted(isMute);
 
     //Turn on mix mode
     if (Platform.isIOS) {

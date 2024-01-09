@@ -49,6 +49,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'dart:async';
+
+import '../../../../../../core/arguments/main_argument.dart';
 // import 'package:story_view/story_view.dart';
 
 class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
@@ -818,16 +820,17 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   }
 
   bool _ableClose = true;
-  void onCloseStory(bool mounted) {
+  void onCloseStory(BuildContext context, bool mounted) {
     if (mounted) {
       if (_ableClose) {
         _textEditingController.clear();
         if (_routeArgument?.postID != null) {
           print('onCloseStory moveAndPop ');
-          _routing.moveAndPop(Routes.lobby);
+
+          _routing.moveAndPop(Routes.lobby, argument: MainArgument(canShowAds: false, page: 4));
         } else {
           print('onCloseStory moveBack');
-          Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
+          Routing().moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false, page: 4));
         }
         _ableClose = false;
       }

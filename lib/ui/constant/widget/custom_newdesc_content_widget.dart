@@ -53,6 +53,7 @@ class CustomNewDescContent extends StatefulWidget {
 
 class _CustomNewDescContentState extends State<CustomNewDescContent> {
   bool _readMore = true;
+  bool isClicked = false;
 
   final String _kLineSeparator = '\u2028';
   var desc = '';
@@ -257,6 +258,10 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
                 ? null
                 : (TapGestureRecognizer()
                   ..onTap = () {
+                  if(!isClicked){
+                    setState(() {
+                      isClicked = true;
+                    });
                     if (item.type == CaptionType.hashtag) {
                       var fixKeyword = item.desc[0] == '#' ? item.desc.substring(1, item.desc.length) : item.desc;
                       fixKeyword = fixKeyword.replaceAll(',', '');
@@ -265,6 +270,11 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
                       final fixUsername = item.desc[0] == '@' ? item.desc.substring(1, item.desc.length) : item.desc;
                       materialAppKey.currentContext!.read<NotificationNotifier>().checkAndNavigateToProfile(context, fixUsername);
                     }
+                    setState(() {
+                      isClicked = false;
+                    });
+                  }
+
                   })));
       }
     }

@@ -40,13 +40,15 @@ class Env {
     appStoreID: appStoreID,
     debugShowMaterialGrid: false,
     debugShowCheckedModeBanner: false,
-    baseUrl: "https://p1-5003.hyppe.cloud",
-    baseUrl2: "https://p1-5003.hyppe.cloud",
-    baseUrlSocket: "https://p3-5003.hyppe.cloud",
-    // baseUrl: "https://p1-5003.hyppe.cloud/",
-    // baseUrl2: "https://p1-5003.hyppe.cloud/",
+    // baseUrl: "https://p1-5003.hyppe.cloud",
+    // baseUrl2: "https://p1-5003.hyppe.cloud",
+    // baseUrlSocket: "https://p3-5003.hyppe.cloud",
+    baseUrl: "https://s1.hyppe.cloud/",
+    baseUrl2: "https://s1.hyppe.cloud/",
+    baseUrlSocket: "https://s1.hyppe.cloud",
+
     deeplinkBaseUrl: "https://share.hyppe.app",
-    apiBaseUrl: "https://p1-5003.hyppe.cloud",
+    apiBaseUrl: "https://s1.hyppe.cloud",
     versionApi: UrlConstants.apiV0,
   );
 
