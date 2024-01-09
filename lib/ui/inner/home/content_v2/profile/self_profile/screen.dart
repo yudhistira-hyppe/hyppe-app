@@ -235,7 +235,7 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
                 color: Colors.purple,
                 onRefresh: () async {
                   await notifier.getDataPerPgage(context, isReload: true);
-                  await context.read<HomeNotifier>().initNewHome(context, mounted);
+                  context.read<HomeNotifier>().initNewHome(context, mounted);
                 },
                 child: isloading
                     ? CustomScrollView(
