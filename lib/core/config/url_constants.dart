@@ -29,6 +29,7 @@ class UrlConstants {
   /// APIs end point
   /* User route */
   static const String userRoute = "/api/user";
+  static const String userRouteV2 = "/migration/api/user";
 
   /* Utils route */
   static const String utilsRoute = "/api/utils";
@@ -113,6 +114,9 @@ class UrlConstants {
 
   /// post sign_in
   static const String login = "$userRoute/login";
+
+  /// guest mode
+  static const String guest = "$userRouteV2/guest";
 
   /// post login with google
   static const String loginGoogle = "$userRoute/signup/socmed";

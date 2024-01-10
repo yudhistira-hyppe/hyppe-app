@@ -254,6 +254,50 @@ class UserBloc {
     );
   }
 
+  Future guestMode(BuildContext context, { required String email, String? latitude, String? longtitude}) async {
+    setUserFetch(UserFetch(UserState.loading));
+    final lang = SharedPreference().readStorage(SpKeys.isoCode);
+    deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
+    realDeviceId = await System().getDeviceIdentifier();
+    platForm = Platform.isAndroid ? "android" : "ios";
+    // print('ini plat $platForm');
+    dynamic payload = {
+      'email': email.toLowerCase(),
+      "deviceId": deviceID,
+      "imei": realDeviceId != "" ? realDeviceId : deviceID,
+      "regSrc": platForm,
+      "location": {
+        "longitude": latitude ?? "${double.parse("0.0")}",
+        "latitude": longtitude ?? "${double.parse("0.0")}",
+      },
+      "langIso": lang ?? 'id',
+    };
+    'Login payload => $payload'.logger();
+
+    await Repos().reposPost(
+      context,
+          (onResult) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+          setUserFetch(UserFetch(UserState.LoginError, data: GenericResponse.fromJson(onResult.data).responseData));
+        } else {
+          setUserFetch(UserFetch(UserState.LoginSuccess, version: onResult.data['version'], versionIos: onResult.data['version_ios'], data: GenericResponse.fromJson(onResult.data).responseData));
+          SharedPreference().removeValue(SpKeys.referralFrom);
+        }
+      },
+          (errorData) {
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
+        setUserFetch(UserFetch(UserState.LoginError));
+      },
+      errorServiceType: ErrorType.login,
+      methodType: MethodType.post,
+      withCheckConnection: false,
+      withAlertMessage: true,
+      host: UrlConstants.guest,
+      // host: 'item/test/',
+      data: payload,
+    );
+  }
+
   Future signUpBlocV2(BuildContext context, {required SignUpDataArgument data}) async {
     setUserFetch(UserFetch(UserState.loading));
     await Repos().reposPost(context, (onResult) {

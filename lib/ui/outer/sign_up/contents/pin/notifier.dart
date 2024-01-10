@@ -356,6 +356,8 @@ class SignUpPinNotifier extends ChangeNotifier with WidgetsBindingObserver, Load
             _accountResponse = SignIn.fromJson(fetch.data);
 
             SharedPreference().writeStorage(SpKeys.email, _accountResponse.data?.email);
+
+            SharedPreference().writeStorage(SpKeys.isGuest, false);
             SharedPreference().writeStorage(SpKeys.userID, _accountResponse.data?.userId);
             SharedPreference().writeStorage(SpKeys.userToken, _accountResponse.data?.token);
             SharedPreference().writeStorage(SpKeys.lastHitPost, '');
