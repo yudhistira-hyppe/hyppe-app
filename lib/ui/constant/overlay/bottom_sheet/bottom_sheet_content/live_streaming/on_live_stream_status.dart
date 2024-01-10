@@ -253,7 +253,7 @@ class _ItemAccountState extends State<ItemAccount> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final streampro = Provider.of<StreamerNotifier>(context, listen: false);
-      if(widget.isHost && widget.isViewer){
+      if (widget.isHost && widget.isViewer) {
         streampro.getProfileNCheckViewer(context, widget.email ?? '');
       }
     });
@@ -314,7 +314,7 @@ class _ItemAccountState extends State<ItemAccount> {
                     margin: EdgeInsets.zero,
                     onTap: () async {
                       Routing().moveBack();
-                      ShowBottomSheet.onWatcherStatus(context, widget.email ?? '', widget.idStream ?? '');
+                      ShowBottomSheet.onWatcherStatus(context, widget.email, widget.idStream ?? '');
                     },
                     child: Container(
                       alignment: Alignment.center,

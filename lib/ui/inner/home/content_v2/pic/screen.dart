@@ -965,9 +965,11 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                           child: GestureDetector(
                                             onTap: () {
-                                              if (picData?.insight?.isloadingFollow != true) {
-                                                picNot.followUser(context, picData ?? ContentData(), isUnFollow: picData?.following, isloading: picData?.insight!.isloadingFollow ?? false);
-                                              }
+                                              context.handleActionIsGuest((){
+                                                if (picData?.insight?.isloadingFollow != true) {
+                                                  picNot.followUser(context, picData ?? ContentData(), isUnFollow: picData?.following, isloading: picData?.insight!.isloadingFollow ?? false);
+                                                }
+                                              });
                                             },
                                             child: picData?.insight?.isloadingFollow ?? false
                                                 ? Container(
@@ -988,27 +990,30 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                     GestureDetector(
                                       onTap: () {
                                         // fAliplayer?.pause();
-                                        if (picData?.email != email) {
-                                          context.read<PreviewPicNotifier>().reportContent(context, picData ?? ContentData(), fAliplayer: fAliplayer, onCompleted: () async {
-                                            imageCache.clear();
-                                            imageCache.clearLiveImages();
-                                            await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 0);
-                                          });
-                                        } else {
-                                          fAliplayer?.setMuted(true);
-                                          fAliplayer?.pause();
-                                          ShowBottomSheet().onShowOptionContent(
-                                            context,
-                                            contentData: picData ?? ContentData(),
-                                            captionTitle: hyppePic,
-                                            onDetail: false,
-                                            isShare: picData?.isShared,
-                                            onUpdate: () {
-                                              (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 0);
-                                            },
-                                            fAliplayer: fAliplayer,
-                                          );
-                                        }
+                                        context.handleActionIsGuest((){
+                                          if (picData?.email != email) {
+                                            context.read<PreviewPicNotifier>().reportContent(context, picData ?? ContentData(), fAliplayer: fAliplayer, onCompleted: () async {
+                                              imageCache.clear();
+                                              imageCache.clearLiveImages();
+                                              await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 0);
+                                            });
+                                          } else {
+                                            fAliplayer?.setMuted(true);
+                                            fAliplayer?.pause();
+                                            ShowBottomSheet().onShowOptionContent(
+                                              context,
+                                              contentData: picData ?? ContentData(),
+                                              captionTitle: hyppePic,
+                                              onDetail: false,
+                                              isShare: picData?.isShared,
+                                              onUpdate: () {
+                                                (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 0);
+                                              },
+                                              fAliplayer: fAliplayer,
+                                            );
+                                          }
+                                        });
+
                                       },
                                       child: const Icon(
                                         Icons.more_vert,
@@ -1434,8 +1439,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                             Expanded(
                                               child: GestureDetector(
                                                 onTap: () async {
-                                                  fAliplayer?.pause();
-                                                  await ShowBottomSheet.onBuyContent(context, data: picData, fAliplayer: fAliplayer);
+                                                  context.handleActionIsGuest(() async  {
+                                                    fAliplayer?.pause();
+                                                    await ShowBottomSheet.onBuyContent(context, data: picData, fAliplayer: fAliplayer);
+                                                  });
                                                 },
                                                 child: const Align(
                                                   alignment: Alignment.centerRight,

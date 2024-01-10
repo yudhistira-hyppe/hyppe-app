@@ -28,13 +28,15 @@ class CountLikeLiveModel {
   String? idStream;
   int? likeCount;
   String? userId;
+  int? likeCountTotal;
 
-  CountLikeLiveModel({this.idStream, this.likeCount, this.userId});
+  CountLikeLiveModel({this.idStream, this.likeCount, this.userId, this.likeCountTotal});
 
   CountLikeLiveModel.fromJson(Map<String, dynamic> json) {
     idStream = json['idStream'];
     likeCount = json['likeCount'];
     userId = json['userId'];
+    likeCountTotal = json['likeCountTotal'];
   }
 }
 

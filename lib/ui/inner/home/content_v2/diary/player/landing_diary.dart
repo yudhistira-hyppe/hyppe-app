@@ -153,6 +153,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     fAliplayer?.setAutoPlay(true);
     vidConfig();
     // fAliplayer?.setLoop(true);
+    fAliplayer?.setMuted(isMute);
 
     //Turn on mix mode
     if (Platform.isIOS) {
@@ -963,9 +964,11 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                           child: GestureDetector(
                                             onTap: () {
-                                              if (data?.insight?.isloadingFollow != true) {
-                                                picNot.followUser(context, data ?? ContentData(), isUnFollow: data?.following, isloading: data?.insight?.isloadingFollow ?? false);
-                                              }
+                                              context.handleActionIsGuest((){
+                                                if (data?.insight?.isloadingFollow != true) {
+                                                  picNot.followUser(context, data ?? ContentData(), isUnFollow: data?.following, isloading: data?.insight?.isloadingFollow ?? false);
+                                                }
+                                              });
                                             },
                                             child: data?.insight?.isloadingFollow ?? false
                                                 ? const SizedBox(
@@ -985,28 +988,30 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                       ),
                                     GestureDetector(
                                       onTap: () {
-                                        if (data?.email != email) {
-                                          // FlutterAliplayer? fAliplayer
-                                          context.read<PreviewPicNotifier>().reportContent(context, data ?? ContentData(), fAliplayer: fAliplayer, onCompleted: () async {
-                                            imageCache.clear();
-                                            imageCache.clearLiveImages();
-                                            await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 1);
-                                          });
-                                        } else {
-                                          fAliplayer?.setMuted(true);
-                                          fAliplayer?.pause();
-                                          ShowBottomSheet().onShowOptionContent(
-                                            context,
-                                            contentData: data ?? ContentData(),
-                                            captionTitle: hyppeDiary,
-                                            onDetail: false,
-                                            isShare: data?.isShared,
-                                            onUpdate: () {
-                                              (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 1);
-                                            },
-                                            fAliplayer: fAliplayer,
-                                          );
-                                        }
+                                        context.handleActionIsGuest((){
+                                          if (data?.email != email) {
+                                            // FlutterAliplayer? fAliplayer
+                                            context.read<PreviewPicNotifier>().reportContent(context, data ?? ContentData(), fAliplayer: fAliplayer, onCompleted: () async {
+                                              imageCache.clear();
+                                              imageCache.clearLiveImages();
+                                              await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 1);
+                                            });
+                                          } else {
+                                            fAliplayer?.setMuted(true);
+                                            fAliplayer?.pause();
+                                            ShowBottomSheet().onShowOptionContent(
+                                              context,
+                                              contentData: data ?? ContentData(),
+                                              captionTitle: hyppeDiary,
+                                              onDetail: false,
+                                              isShare: data?.isShared,
+                                              onUpdate: () {
+                                                (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 1);
+                                              },
+                                              fAliplayer: fAliplayer,
+                                            );
+                                          }
+                                        });
                                       },
                                       child: const Icon(
                                         Icons.more_vert,
@@ -1383,8 +1388,11 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                             Expanded(
                                               child: GestureDetector(
                                                 onTap: () async {
-                                                  fAliplayer?.pause();
-                                                  await ShowBottomSheet.onBuyContent(context, data: data, fAliplayer: fAliplayer);
+                                                  context.handleActionIsGuest(() async{
+                                                    fAliplayer?.pause();
+                                                    await ShowBottomSheet.onBuyContent(context, data: data, fAliplayer: fAliplayer);
+                                                  });
+
                                                   // fAliplayer?.play();
                                                 },
                                                 child: const Align(

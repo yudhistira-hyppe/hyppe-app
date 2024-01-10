@@ -61,6 +61,7 @@ class CustomDescContent extends StatefulWidget {
 class _CustomDescContentState extends State<CustomDescContent> {
   bool _readMore = true;
   bool isloading = false;
+  bool isClicked = false;
 
   final String _kLineSeparator = '\u2028';
 
@@ -76,14 +77,15 @@ class _CustomDescContentState extends State<CustomDescContent> {
   @override
   void initState() {
     super.initState();
+    isloading = widget.isloading ?? false;
   }
 
   @override
   Widget build(BuildContext context) {
     desc = widget.desc;
-    setState(() {
-      isloading = widget.isloading ?? false;
-    });
+    // setState(() {
+    //   isloading = widget.isloading ?? false;
+    // });
 
     final values = desc.split('\n');
     for (var i = 0; i < values.length; i++) {
@@ -269,34 +271,43 @@ class _CustomDescContentState extends State<CustomDescContent> {
                 ? null
                 : (TapGestureRecognizer()
                   ..onTap = () async {
-                    if (item.type == CaptionType.hashtag) {
-                      if (callback != null) {
-                        callback(true);
-                      }
-                      var fixKeyword = item.desc[0] == '#' ? item.desc.substring(1, item.desc.length) : item.desc;
-                      fixKeyword = fixKeyword.replaceAll(',', '');
-                      globalAliPlayer?.pause();
-                      if (widget.isReplace) {
-                        await Routing().moveReplacement(Routes.hashtagDetail, argument: HashtagArgument(isTitle: false, hashtag: Tags(tag: fixKeyword, id: fixKeyword), fromRoute: true));
+                    if(!isClicked){
+                      setState(() {
+                        isClicked = true;
+                      });
+                      if (item.type == CaptionType.hashtag) {
+                        if (callback != null) {
+                          callback(true);
+                        }
+                        var fixKeyword = item.desc[0] == '#' ? item.desc.substring(1, item.desc.length) : item.desc;
+                        fixKeyword = fixKeyword.replaceAll(',', '');
+                        globalAliPlayer?.pause();
+                        if (widget.isReplace) {
+                          await Routing().moveReplacement(Routes.hashtagDetail, argument: HashtagArgument(isTitle: false, hashtag: Tags(tag: fixKeyword, id: fixKeyword), fromRoute: true));
+                        } else {
+                          if (widget.afterGone != null) {
+                            widget.beforeGone!();
+                          }
+                          await Routing().move(Routes.hashtagDetail, argument: HashtagArgument(isTitle: false, hashtag: Tags(tag: fixKeyword, id: fixKeyword), fromRoute: true));
+                          if (widget.afterGone != null) {
+                            widget.afterGone!();
+                          }
+                        }
+                        if (widget.isPlay ?? true) {
+                          globalAliPlayer?.play();
+                        }
                       } else {
-                        if (widget.afterGone != null) {
-                          widget.beforeGone!();
+                        if (callback != null) {
+                          callback(true);
                         }
-                        await Routing().move(Routes.hashtagDetail, argument: HashtagArgument(isTitle: false, hashtag: Tags(tag: fixKeyword, id: fixKeyword), fromRoute: true));
-                        if (widget.afterGone != null) {
-                          widget.afterGone!();
-                        }
+                        final fixUsername = item.desc[0] == '@' ? item.desc.substring(1, item.desc.length) : item.desc;
+                        await materialAppKey.currentContext!.read<NotificationNotifier>().checkAndNavigateToProfile(context, fixUsername, isReplace: widget.isReplace, isPlay: widget.isPlay ?? true);
                       }
-                      if (widget.isPlay ?? true) {
-                        globalAliPlayer?.play();
-                      }
-                    } else {
-                      if (callback != null) {
-                        callback(true);
-                      }
-                      final fixUsername = item.desc[0] == '@' ? item.desc.substring(1, item.desc.length) : item.desc;
-                      materialAppKey.currentContext!.read<NotificationNotifier>().checkAndNavigateToProfile(context, fixUsername, isReplace: widget.isReplace, isPlay: widget.isPlay ?? true);
+                      setState(() {
+                        isClicked = false;
+                      });
                     }
+
                   })));
       }
     }

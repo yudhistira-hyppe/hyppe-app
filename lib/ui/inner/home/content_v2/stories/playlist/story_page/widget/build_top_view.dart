@@ -140,7 +140,7 @@ class _BuildTopViewState extends State<BuildTopView> {
                       ),
                     ),
                     // onPressed: () => notifier.onCloseStory(context, arguments),
-                    onPressed: () => notifier.onCloseStory(mounted),
+                    onPressed: () => notifier.onCloseStory(context, mounted),
                     child: const CustomIconWidget(
                       defaultColor: false,
                       color: kHyppeLightButtonText,

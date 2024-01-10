@@ -792,23 +792,26 @@ class PreviewContentNotifier with ChangeNotifier {
   }
 
   Future<void> videoMerger(BuildContext context, String urlAudio, {isInit = false}) async {
+    final videoCtrl = VideoPlayerController.file(File(_fileContent?[_indexView] ?? ''));
     try {
+      await videoCtrl.initialize();
+      final durationVideo = _printDuration(videoCtrl.value.duration);
       if (urlAudio.isNotEmpty) {
-        print("masuk mergeerr");
+        print("masuk mergeerr $durationVideo");
         _isLoadVideo = true;
         notifyListeners();
         print(isLoadVideo);
         String outputPath = await System().getSystemPath(params: 'postVideo');
         outputPath = '${outputPath + materialAppKey.currentContext!.getNameByDate()}.mp4';
 
-        String command = '-stream_loop -1 -i $urlAudio -i ${_fileContent?[_indexView]} -shortest -c copy $outputPath';
+        String command = '-stream_loop -1 -i $urlAudio -i ${_fileContent?[_indexView]} ${durationVideo.isNotEmpty ? "-t $durationVideo" :"-shortest"} -c copy $outputPath';
         await FFmpegKit.executeAsync(
           command,
           (session) async {
             final codeSession = await session.getReturnCode();
             if (ReturnCode.isSuccess(codeSession)) {
               print('ReturnCode = Success');
-              // await restartVideoPlayer(outputPath, context, isInit: isInit);
+              await restartVideoPlayer(outputPath, context, isInit: isInit);
             } else if (ReturnCode.isCancel(codeSession)) {
               print('ReturnCode = Cancel');
               _isLoadVideo = false;
@@ -840,7 +843,16 @@ class PreviewContentNotifier with ChangeNotifier {
     } finally {
       _isLoadVideo = false;
       notifyListeners();
+      videoCtrl.dispose();
     }
+  }
+
+  String _printDuration(Duration duration) {
+    String negativeSign = duration.isNegative ? '-' : '';
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60).abs());
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60).abs());
+    return "$negativeSign${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
   }
 
   /// split story videos ==Hariyanto Lukman==
@@ -1242,7 +1254,7 @@ class PreviewContentNotifier with ChangeNotifier {
                 : featureType == FeatureType.vid
                     ? const Duration(minutes: 30, milliseconds: 900)
                     : const Duration(seconds: 0);
-            print('State Preview Limit: ${videoDuration.inMinutes} ${limitDuration.inMinutes} $featureType');
+            print('State Preview Limit: ${videoDuration.inSeconds} ${limitDuration.inSeconds} $featureType');
 
             if (videoDuration >= limitDuration) {
               messageLimit = featureType == FeatureType.vid
@@ -1366,6 +1378,9 @@ class PreviewContentNotifier with ChangeNotifier {
                   : const Duration(seconds: 0);
       print('State Preview Limit Checking: ${videoDuration.inMinutes} ${limitDuration.inMinutes} $featureType');
       if (videoDuration.inSeconds == 0) {
+        return false;
+      }
+      if (videoDuration >= limitDuration){
         return false;
       }
       if (featureType == FeatureType.diary || featureType == FeatureType.vid) {

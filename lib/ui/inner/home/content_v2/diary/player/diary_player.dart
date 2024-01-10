@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'dart:ui';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,12 +15,17 @@ import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
+import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
+import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/decorated_icon_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
@@ -27,6 +33,7 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/diary_sensi
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/left_items.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/right_items.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/title_playlist_diaries.dart';
+import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 // import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -59,6 +66,8 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
   ModeTypeAliPLayer? _playMode;
   Map<String, dynamic>? _dataSourceMap;
   String auth = '';
+
+  ContentData? dataSelected;
 
   bool isPlay = false;
   bool onTapCtrl = false;
@@ -133,14 +142,15 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
   void initState() {
     print("init init init init");
     // stopwatch = new Stopwatch()..start();
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarIconBrightness: Brightness.dark,
-      statusBarColor: Colors.transparent,
-    ));
+
     FirebaseCrashlytics.instance.setCustomKey('layout', 'DiaryPlayerPage');
     super.initState();
     _pageController = PageController(initialPage: widget.argument.index.toInt());
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        statusBarIconBrightness: Brightness.light,
+        statusBarColor: Colors.transparent,
+      ));
       _curIdx = widget.argument.index.toInt();
       _lastCurIndex = widget.argument.index.toInt();
       // _pageController.addListener(() => notifier.currentPage = _pageController.page);
@@ -509,81 +519,163 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
   bool loadTitle = false;
   @override
   Widget build(BuildContext context) {
+    var lang = context.read<TranslateNotifierV2>().translate;
     // print("[DIARY_PLAYER] build() started. "+stopwatch.elapsed.toString());
-    return Scaffold(
-      body: PageView.builder(
-        controller: _pageController,
-        scrollDirection: Axis.vertical,
-        itemCount: _listData?.length ?? 0,
-        onPageChanged: (index) async {
-          _curIdx = index;
-          loadTitle = true;
-          setState(() {});
-          if (_lastCurIndex != _curIdx) {
-            if (_listData?[_curIdx].isApsara ?? false) {
-              _playMode = ModeTypeAliPLayer.auth;
-            } else {
-              _playMode = ModeTypeAliPLayer.url;
-            }
-            // initDiary();
-            start();
-            if (widget.argument.diaryData?[_curIdx].certified ?? false) {
-              System().block(context);
-            } else {
-              System().disposeBlock();
-            }
-          }
-          _lastCurIndex = _curIdx;
-        },
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {},
-            onDoubleTap: () {
-              final _likeNotifier = context.read<LikeNotifier>();
-              final data = _listData?[_curIdx];
-              if (data != null) {
-                _likeNotifier.likePost(context, data);
-              }
-            },
-            onLongPress: () {
-              setState(() {
-                _isPause = !_isPause;
-              });
-              if (_isPause) {
-                fAliplayer?.pause();
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: PageView.builder(
+          controller: _pageController,
+          scrollDirection: Axis.vertical,
+          itemCount: _listData?.length ?? 0,
+          onPageChanged: (index) async {
+            _curIdx = index;
+            loadTitle = true;
+            setState(() {});
+            if (_lastCurIndex != _curIdx) {
+              if (_listData?[_curIdx].isApsara ?? false) {
+                _playMode = ModeTypeAliPLayer.auth;
               } else {
-                fAliplayer?.play();
+                _playMode = ModeTypeAliPLayer.url;
               }
-            },
-            child: Stack(
-              children: [
-                _curIdx == index
-                    ? AliPlayerView(
-                        onCreated: onViewPlayerCreated,
-                        x: 0,
-                        y: 0,
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height,
-                      )
-                    : Container(),
-                _showLoading
-                    ? const Positioned.fill(
-                        child: Align(
-                        alignment: Alignment.center,
-                        child: CircularProgressIndicator(),
-                      ))
-                    : Container(),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  // padding: EdgeInsets.only(bottom: 25.0),
-                  child: _buildFillDiary(),
-                ),
-                // _buildSingleScreen(index),
-              ],
-            ),
-          );
-        },
+              // initDiary();
+              start();
+              if (widget.argument.diaryData?[_curIdx].certified ?? false) {
+                System().block(context);
+              } else {
+                System().disposeBlock();
+              }
+            }
+            _lastCurIndex = _curIdx;
+          },
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () {},
+              onDoubleTap: () {
+                final _likeNotifier = context.read<LikeNotifier>();
+                final data = _listData?[_curIdx];
+                if (data != null) {
+                  _likeNotifier.likePost(context, data);
+                }
+              },
+              onLongPress: () {
+                setState(() {
+                  _isPause = !_isPause;
+                });
+                if (_isPause) {
+                  fAliplayer?.pause();
+                } else {
+                  fAliplayer?.play();
+                }
+              },
+              child: Stack(
+                children: [
+                  _curIdx == index
+                      ? AliPlayerView(
+                          onCreated: onViewPlayerCreated,
+                          x: 0,
+                          y: 0,
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height,
+                        )
+                      : Container(),
+                  _showLoading
+                      ? const Positioned.fill(
+                          child: Align(
+                          alignment: Alignment.center,
+                          child: CircularProgressIndicator(),
+                        ))
+                      : Container(),
+                  // Text('${dataSelected?.postID}'),
+
+                  dataSelected?.postID == _listData?[index].postID
+                      ? Container()
+                      : CustomBaseCacheImage(
+                          memCacheWidth: 100,
+                          memCacheHeight: 100,
+                          widthPlaceHolder: 80,
+                          heightPlaceHolder: 80,
+                          placeHolderWidget: Container(),
+                          imageUrl: (_listData?[index].isApsara ?? false) ? (_listData?[index].mediaThumbEndPoint ?? "") : _listData?[index].fullThumbPath ?? '',
+                          imageBuilder: (context, imageProvider) => _listData?[_curIdx].reportedStatus == 'BLURRED'
+                              ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(20), // Image border
+                                  child: ImageFiltered(
+                                    imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                    child: AspectRatio(
+                                      aspectRatio: 9 / 16,
+                                      child: Image(
+                                        // width: SizeConfig.screenWidth,
+                                        // height: MediaQuery.of(context).size.width * 16.0 / 11.0,
+                                        image: imageProvider,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : AspectRatio(
+                                  aspectRatio: 9 / 16,
+                                  child: Container(
+                                    // const EdgeInsets.symmetric(horizontal: 4.5),
+                                    // width: SizeConfig.screenWidth,
+                                    // height: MediaQuery.of(context).size.width * 16.0 / 11.0,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.cover,
+                                      ),
+                                      borderRadius: BorderRadius.circular(16.0),
+                                    ),
+                                  ),
+                                ),
+                          errorWidget: (context, url, error) {
+                            return GestureDetector(
+                              onTap: () {
+                                context.read<HomeNotifier>().checkConnection();
+                              },
+                              child: Container(
+                                  decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                  width: SizeConfig.screenWidth,
+                                  height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.all(20),
+                                  child: CustomTextWidget(
+                                    textToDisplay: lang?.couldntLoadVideo ?? 'Error',
+                                    maxLines: 3,
+                                  )),
+                            );
+                          },
+                          emptyWidget: GestureDetector(
+                            onTap: () {
+                              context.read<HomeNotifier>().checkConnection();
+                            },
+                            child: Container(
+                                decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                width: SizeConfig.screenWidth,
+                                height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                                alignment: Alignment.center,
+                                padding: EdgeInsets.all(20),
+                                child: CustomTextWidget(
+                                  textToDisplay: lang?.couldntLoadVideo ?? 'Error',
+                                  maxLines: 3,
+                                )),
+                          ),
+                        ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    // padding: EdgeInsets.only(bottom: 25.0),
+                    child: _buildFillDiary(),
+                  ),
+                  // _buildSingleScreen(index),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -829,6 +921,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
     _animationController?.reset();
     fAliplayer?.stop();
     isPlay = false;
+    dataSelected = _listData?[_curIdx];
     if (_playMode == ModeTypeAliPLayer.auth) {
       await getAuth(_listData?[_curIdx].apsaraId ?? '');
     } else {

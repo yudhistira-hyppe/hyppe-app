@@ -212,6 +212,14 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                           ),
                           tenPx,
                           TextField(
+                            onTap: (){
+                              context.handleActionIsGuest(() async  {
+
+                              }, addAction: (){
+                                notifier.inputNode.unfocus();
+                              });
+
+                            },
                             controller: notifier.commentController,
                             focusNode: notifier.inputNode,
                             style: Theme.of(context).textTheme.bodyText2,

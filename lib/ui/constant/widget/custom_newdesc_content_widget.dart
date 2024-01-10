@@ -53,6 +53,7 @@ class CustomNewDescContent extends StatefulWidget {
 
 class _CustomNewDescContentState extends State<CustomNewDescContent> {
   bool _readMore = true;
+  bool isClicked = false;
 
   final String _kLineSeparator = '\u2028';
   var desc = '';
@@ -256,15 +257,24 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
             recognizer: item.type == CaptionType.normal
                 ? null
                 : (TapGestureRecognizer()
-                  ..onTap = () {
+                  ..onTap = () async {
+                  if(!isClicked){
+                    setState(() {
+                      isClicked = true;
+                    });
                     if (item.type == CaptionType.hashtag) {
                       var fixKeyword = item.desc[0] == '#' ? item.desc.substring(1, item.desc.length) : item.desc;
                       fixKeyword = fixKeyword.replaceAll(',', '');
-                      Routing().move(Routes.hashtagDetail, argument: HashtagArgument(isTitle: false, hashtag: Tags(tag: fixKeyword, id: fixKeyword), fromRoute: true));
+                      await Routing().move(Routes.hashtagDetail, argument: HashtagArgument(isTitle: false, hashtag: Tags(tag: fixKeyword, id: fixKeyword), fromRoute: true));
                     } else {
                       final fixUsername = item.desc[0] == '@' ? item.desc.substring(1, item.desc.length) : item.desc;
-                      materialAppKey.currentContext!.read<NotificationNotifier>().checkAndNavigateToProfile(context, fixUsername);
+                      await materialAppKey.currentContext!.read<NotificationNotifier>().checkAndNavigateToProfile(context, fixUsername);
                     }
+                    setState(() {
+                      isClicked = false;
+                    });
+                  }
+
                   })));
       }
     }

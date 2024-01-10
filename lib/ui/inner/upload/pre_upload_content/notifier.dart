@@ -135,6 +135,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<String> _interestData = [];
   List<Interest> _interest = [];
   List<Interest> _interestList = [];
+  List<String> _tempinterestData = [];
   List<UserData> _userList = [];
   List<String> _userTagData = [];
   List<TagPeople> _userTagDataReal = [];
@@ -734,7 +735,10 @@ class PreUploadContentNotifier with ChangeNotifier {
         _uploadSuccess = value;
         'Create post content with value $value'.logger();
         // _eventService.notifyUploadFinishingUp(_uploadSuccess);
-        eventService.notifyUploadSuccess(_uploadSuccess);
+        if(_uploadSuccess != null){
+          eventService.notifyUploadSuccess(_uploadSuccess);
+        }
+
         // final decode = json.decode(_uploadSuccess.toString());
         // _postIdPanding = decode['data']['postID'];
 
@@ -1182,6 +1186,44 @@ class PreUploadContentNotifier with ChangeNotifier {
     }
   }
 
+  Future getInitialInterest(BuildContext context) async {
+    _interestList.clear();
+    if (_interestList.isEmpty) {
+      final notifier = UtilsBlocV2();
+      await notifier.getInterestBloc(context);
+      final fetch = notifier.utilsFetch;
+
+      final Interest seeMore = Interest(
+        id: '11111',
+        interestName: language.seeMore,
+      );
+      // {
+      //   "id": "11111",
+      //   "langIso": "alice",
+      //   "cts": '2021-12-16 12:45:36',
+      //   "icon": 'https://prod.hyppe.app/images/icon_interest/music.svg',
+      //   'interestName': 'See More'
+      // };
+      if (fetch.utilsState == UtilsState.getInterestsSuccess) {
+        _interest = [];
+        fetch.data.forEach((v) {
+          if (_interest.length <= 5) {
+            _interest.add(Interest.fromJson(v));
+          }
+          if (_interest.length == 6) {
+            _interest.add(seeMore);
+          }
+          _interestList.add(Interest.fromJson(v));
+        });
+        _interestList.sort((a, b) {
+          return a.interestName?.compareTo(b.interestName ?? '') ?? 0;
+        });
+
+        notifyListeners();
+      }
+    }
+  }
+
   Future onGetInterest(BuildContext context) async {
     if (_interestList.isEmpty) {
       final notifier = UtilsBlocV2();
@@ -1231,10 +1273,10 @@ class PreUploadContentNotifier with ChangeNotifier {
         } else {
           _interestData.add(tile);
         }
-        // notifyListeners();
+        notifyListeners();
       }
     }
-    notifyListeners();
+    // notifyListeners();
   }
 
   void insertInterestList(BuildContext context, int index) {
@@ -1252,11 +1294,34 @@ class PreUploadContentNotifier with ChangeNotifier {
         } else {
           _interestData.add(tile);
         }
+
+        if (_tempinterestData.contains(tile)) {
+          _tempinterestData.removeWhere((v) => v == tile);
+        } else {
+          _tempinterestData.add(tile);
+        }
+        
         notifyListeners();
       }
     } else {
       return null;
     }
+  }
+  
+  void removeTempInterestList({bool isSaved=false}) {
+    if (!isSaved){
+      if (_tempinterestData.isNotEmpty) {
+      for (var e in _tempinterestData) {
+          if (_interestData.contains(e)) {
+              _interestData.removeWhere((v) => v == e);
+          }
+        }
+        notifyListeners();
+      }
+    }else{
+      _tempinterestData.clear();
+    }
+    
   }
 
   Future inserTagPeople(int index) async {
@@ -1399,13 +1464,16 @@ class PreUploadContentNotifier with ChangeNotifier {
     int searchLength = _temporarySearch.length;
     _isShowAutoComplete = false;
 
-    final newText = text.replaceRange(selection.start - searchLength, selection.end, '${_searchPeolpleData[index].username} ');
-    int length = _searchPeolpleData[index].username?.length ?? 0;
-    _captionController.value = TextEditingValue(
-      text: "${newText}",
-      selection: TextSelection.collapsed(offset: selection.baseOffset + length - searchLength + 1),
-    );
-    notifyListeners();
+    if(_searchPeolpleData.isNotEmpty){
+      final newText = text.replaceRange(selection.start - searchLength, selection.end, '${_searchPeolpleData[index].username} ');
+      int length = _searchPeolpleData[index].username?.length ?? 0;
+      _captionController.value = TextEditingValue(
+        text: newText,
+        selection: TextSelection.collapsed(offset: selection.baseOffset + length - searchLength + 1),
+      );
+      notifyListeners();
+    }
+
   }
 
   Future submitOwnership(BuildContext context, {bool withAlert = false}) async {

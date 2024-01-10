@@ -44,8 +44,7 @@ class ViewStreamingScreen extends StatefulWidget {
   State<ViewStreamingScreen> createState() => _ViewStreamingScreenState();
 }
 
-class _ViewStreamingScreenState extends State<ViewStreamingScreen>
-    with WidgetsBindingObserver, TickerProviderStateMixin {
+class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsBindingObserver, TickerProviderStateMixin {
   FocusNode commentFocusNode = FocusNode();
 
   final debouncer = Debouncer(milliseconds: 2000);
@@ -134,22 +133,17 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
 
     bool theme = SharedPreference().readStorage(SpKeys.themeData) ?? false;
     super.initState();
-    final notifier = (Routing.navigatorKey.currentContext ?? context)
-        .read<ViewStreamingNotifier>();
+    final notifier = (Routing.navigatorKey.currentContext ?? context).read<ViewStreamingNotifier>();
     notifier.initViewStreaming(widget.args.data);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       commentFocusNode.addListener(() {
         print("Has focus: ${commentFocusNode.hasFocus}");
       });
-      notifier.startViewStreaming(
-          Routing.navigatorKey.currentContext ?? context,
-          mounted,
-          widget.args.data);
+      notifier.startViewStreaming(Routing.navigatorKey.currentContext ?? context, mounted, widget.args.data);
       SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
       // _pageController.addListener(() => notifier.currentPage = _pageController.page);
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(
-          playerId: widget.args.data.sId);
+      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: widget.args.data.sId);
 
       WidgetsBinding.instance.addObserver(this);
       bottomIndex = 0;
@@ -176,8 +170,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
 
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
-      fAliplayer
-          ?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+      fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
 
       if (Platform.isAndroid) {
         getExternalStorageDirectories().then((value) {
@@ -201,9 +194,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
     });
     fAliplayer?.setOnPrepared((playerId) {
       // Fluttertoast.showToast(msg: "OnPrepared ");
-      fAliplayer
-          ?.getPlayerName()
-          .then((value) => print("getPlayerName==${value}"));
+      fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
         _videoDuration = value['duration'];
         setState(() {
@@ -260,8 +251,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
       }
     });
     fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
-      if (!(context.read<ViewStreamingNotifier>().dataStreaming.pause ??
-          false)) {
+      if (!(context.read<ViewStreamingNotifier>().dataStreaming.pause ?? false)) {
         setState(() {
           _loadingPercent = 0;
           _showLoading = true;
@@ -449,8 +439,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
   void dispose() {
     fAliplayer?.stop();
     fAliplayer?.destroy();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-        overlays: SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
     WakelockPlus.disable();
     SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
     if (Platform.isIOS) {
@@ -490,7 +479,11 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
             width: SizeConfig.screenWidth,
             height: SizeConfig.screenHeight,
             child: notifier.isOver
-                ? OverLiveStreaming(data: widget.args.data, notifier: notifier, fAliplayer: fAliplayer,)
+                ? OverLiveStreaming(
+                    data: widget.args.data,
+                    notifier: notifier,
+                    fAliplayer: fAliplayer,
+                  )
                 : Stack(
                     children: [
                       GestureDetector(
@@ -505,8 +498,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
                         onDoubleTap: () {
                           notifier.likeAddTapScreen();
                           _debouncer.run(() {
-                            notifier.sendLikeTapScreen(
-                                context, notifier.streamerData!);
+                            notifier.sendLikeTapScreen(context, notifier.streamerData!);
                           });
                         },
                         child: Container(
@@ -522,8 +514,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
                           ),
                         ),
                       ),
-                      if (notifier.dataStreaming.pause ?? false)
-                        const PauseLiveView(),
+                      if (notifier.dataStreaming.pause ?? false) const PauseLiveView(),
                       // if (liveIsPause) const PauseLiveView(),
                       Positioned.fill(
                         bottom: -60,
@@ -579,8 +570,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
                           ),
                         ),
                       ),
-                      if (_showLoading &&
-                          !(notifier.dataStreaming.pause ?? false))
+                      if (_showLoading && !(notifier.dataStreaming.pause ?? false))
                         Positioned.fill(
                           child: Align(
                             alignment: Alignment.center,
@@ -759,8 +749,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
           height: double.infinity,
           fit: BoxFit.cover,
           errorBuilder: (context, error, stackTrace) {
-            return Image.asset('${AssetPath.pngPath}profile-error.jpg',
-                fit: BoxFit.fitWidth);
+            return Image.asset('${AssetPath.pngPath}profile-error.jpg', fit: BoxFit.fitWidth);
           },
         )),
       ],
