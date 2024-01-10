@@ -1380,6 +1380,9 @@ class PreviewContentNotifier with ChangeNotifier {
       if (videoDuration.inSeconds == 0) {
         return false;
       }
+      if (videoDuration >= limitDuration){
+        return false;
+      }
       if (featureType == FeatureType.diary || featureType == FeatureType.vid) {
         return videoDuration.inMinutes <= limitDuration.inMinutes;
       } else {
