@@ -1200,7 +1200,7 @@ class PreviewContentNotifier with ChangeNotifier {
     await _betterPlayerController?.dispose();
     _betterPlayerController = null;
 
-    await Future.delayed(const Duration(milliseconds: 500));
+    // await Future.delayed(const Duration(milliseconds: 500));
 
     _betterPlayerController = VideoPlayerController.file(
       File(
