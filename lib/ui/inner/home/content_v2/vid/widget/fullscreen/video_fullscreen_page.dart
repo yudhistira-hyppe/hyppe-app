@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
@@ -8,6 +6,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
@@ -16,10 +15,13 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
+import 'package:hyppe/ui/constant/widget/custom_appbar.dart';
 import 'package:hyppe/ui/constant/widget/custom_desc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'dart:math' as math;
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/constant/widget/profile_component.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
@@ -472,42 +474,11 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage>
             _initializeTimer();
           },
           child: Scaffold(
-            extendBodyBehindAppBar: true,
-            appBar: AppBar(
-              elevation: 0,
-              leading: IconButton(
-                  onPressed: (){
-                    int changevalue;
-                    changevalue =
-                        _currentPosition + 1000;
-                    if (changevalue > _videoDuration) {
-                      changevalue = _videoDuration;
-                    }
-                    widget.data.isLoading = true;
-                    setState(() {});
-                    Navigator.pop(
-                        context,
-                        VideoIndicator(
-                            videoDuration:
-                                _videoDuration,
-                            seekValue: changevalue,
-                            positionText:
-                                _currentPositionText,
-                            showTipsWidget:
-                                _showTipsWidget,
-                            isMute: isMute));
-                  },
-                  icon: const Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.white,
-                  )),
-              title: Text("Title"),
-              backgroundColor: Colors.transparent,
-            ),
+            
             body: notifier.loadVideo
                 ? Container(
                     color: Colors.black,
-                    child: Center(
+                    child: const Center(
                       child: CircularProgressIndicator(),
                     ),
                   )
@@ -546,7 +517,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage>
                                     color: Colors.black,
                                     height: MediaQuery.of(context).size.height,
                                     width: MediaQuery.of(context).size.width,
-                                    child: Center(
+                                    child: const Center(
                                       child: CircularProgressIndicator(),
                                     ),
                                   )
@@ -633,48 +604,58 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage>
                                       SizeConfig.screenHeight ?? 0,
                                     ),
                                   ),
-                                  if (Platform.isIOS)
-                                    Align(
-                                      alignment: Alignment.topRight,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: IconButton(
-                                          onPressed: () {
-                                            int changevalue;
-                                            changevalue =
-                                                _currentPosition + 1000;
-                                            if (changevalue > _videoDuration) {
-                                              changevalue = _videoDuration;
-                                            }
-                                            widget.data.isLoading = true;
-                                            setState(() {});
-                                            Navigator.pop(
-                                                context,
-                                                VideoIndicator(
-                                                    videoDuration:
-                                                        _videoDuration,
-                                                    seekValue: changevalue,
-                                                    positionText:
-                                                        _currentPositionText,
-                                                    showTipsWidget:
-                                                        _showTipsWidget,
-                                                    isMute: isMute));
-                                          },
-                                          padding: orientation ==
-                                                  Orientation.portrait
-                                              ? const EdgeInsets.symmetric(
-                                                  horizontal: 8.0,
-                                                  vertical: 42.0)
-                                              : const EdgeInsets.symmetric(
-                                                  horizontal: 46.0,
-                                                  vertical: 8.0),
-                                          icon: const CustomIconWidget(
-                                              iconData:
-                                                  "${AssetPath.vectorPath}close.svg",
-                                              defaultColor: false),
-                                        ),
-                                      ),
+                                  // if (Platform.isIOS)
+                                  AnimatedOpacity(
+                                    opacity: onTapCtrl || isPause ? 1.0 : 0.0,
+                                    duration: const Duration(milliseconds: 500),
+                                    onEnd: _onPlayerHide,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 18.0),
+                                      child: CustomAppBar(orientation: orientation, data: widget.data, 
+                                        currentPosition: _currentPosition,
+                                        currentPositionText: _currentPositionText,
+                                        videoDuration: _videoDuration,
+                                        showTipsWidget: _showTipsWidget,
+                                        isMute: isMute,
+                                        onTap: (){
+                                          if (widget.data.email != email) {
+                                            // FlutterAliplayer? fAliplayer
+                                            context.read<PreviewPicNotifier>().reportContent(
+                                                context, widget.data,
+                                                fAliplayer: widget.data.fAliplayer,
+                                                onCompleted: () async {
+                                              imageCache.clear();
+                                              imageCache.clearLiveImages();
+                                              await (Routing.navigatorKey.currentContext ??
+                                                      context)
+                                                  .read<HomeNotifier>()
+                                                  .initNewHome(context, mounted,
+                                                      isreload: true, forceIndex: 2);
+                                            });
+                                          } else {
+                                            // if (_curIdx != -1) {
+                                            //   "=============== pause 11".logger();
+                                            //   notifier.vidData?[_curIdx].fAliplayer?.pause();
+                                            // }
+
+                                            ShowBottomSheet().onShowOptionContent(
+                                              context,
+                                              contentData: widget.data,
+                                              captionTitle: hyppeVid,
+                                              onDetail: false,
+                                              isShare: widget.data.isShared,
+                                              onUpdate: () {
+                                                (Routing.navigatorKey.currentContext ?? context)
+                                                    .read<HomeNotifier>()
+                                                    .initNewHome(context, mounted,
+                                                        isreload: true, forceIndex: 2);
+                                              },
+                                              fAliplayer: widget.data.fAliplayer,
+                                            );
+                                          }
+                                      }),
                                     ),
+                                  ),
                                   if (isLoadingVid)
                                     Container(
                                       width: context.getWidth(),
@@ -758,7 +739,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage>
                                 SizeConfig.screenHeight ?? 0,
                               ),
                             ),
-                            if (Platform.isIOS)
+                            // if (Platform.isIOS)
                               Align(
                                 alignment: Alignment.topRight,
                                 child: Padding(
@@ -1398,298 +1379,312 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage>
 
   _buildContentWidget(BuildContext context, Orientation orientation) {
     // print('ORIENTATION: CHANGING ORIENTATION');
-    return SafeArea(
-      child: Container(
-        decoration: orientation == Orientation.portrait
-            ? BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                gradient: LinearGradient(
-                  end: const Alignment(0.0, -1),
-                  begin: const Alignment(0.0, 1),
-                  colors: [
-                    const Color(0x8A000000),
-                    Colors.black12.withOpacity(0.0)
-                  ],
-                ),
-              )
-            : null,
-        child: Stack(
-          children: [
-            Positioned(
-              right: 18,
-              bottom: 0,
-              child: Column(
-                children: [
-                  Consumer<LikeNotifier>(
-                      builder: (context, likeNotifier, child) =>
-                          buttonVideoRight(
-                              onFunctionTap: () {
-                                likeNotifier.likePost(context, widget.data);
-                              },
-                              iconData:
-                                  '${AssetPath.vectorPath}${(widget.data.insight?.isPostLiked ?? false) ? 'liked.svg' : 'love-shadow.svg'}',
-                              value:
-                                  '${widget.data.insight?.likes}  ${lang?.like}',
-                              liked:
-                                  widget.data.insight?.isPostLiked ?? false)),
-                  buttonVideoRight(
-                      onFunctionTap: () {
-                        Routing().move(Routes.commentsDetail,
-                            argument: CommentsArgument(
-                                postID: widget.data.postID ?? '',
-                                fromFront: true,
-                                data: widget.data));
-                      },
-                      iconData: '${AssetPath.vectorPath}comment-shadow.svg',
-                      value: widget.data.comment!.length.toString()),
-                  if (widget.data.isShared ?? false)
+    return AnimatedOpacity(
+      opacity: onTapCtrl || isPause ? 1.0 : 0.0,
+      duration: const Duration(milliseconds: 500),
+      onEnd: _onPlayerHide,
+      child: SafeArea(
+        child: Container(
+          decoration: orientation == Orientation.portrait
+              ? BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  gradient: LinearGradient(
+                    end: const Alignment(0.0, -1),
+                    begin: const Alignment(0.0, 1),
+                    colors: [
+                      const Color(0x8A000000),
+                      Colors.black12.withOpacity(0.0)
+                    ],
+                  ),
+                )
+              : null,
+          child: Stack(
+            children: [
+              Positioned(
+                right: 18,
+                bottom: 0,
+                child: Column(
+                  children: [
+                    Consumer<LikeNotifier>(
+                        builder: (context, likeNotifier, child) =>
+                            buttonVideoRight(
+                                onFunctionTap: () {
+                                  likeNotifier.likePost(context, widget.data);
+                                },
+                                iconData:
+                                    '${AssetPath.vectorPath}${(widget.data.insight?.isPostLiked ?? false) ? 'liked.svg' : 'love-shadow.svg'}',
+                                value:
+                                    '${widget.data.insight?.likes}  ${lang?.like}',
+                                liked:
+                                    widget.data.insight?.isPostLiked ?? false)),
                     buttonVideoRight(
                         onFunctionTap: () {
-                          context
-                              .read<VidDetailNotifier>()
-                              .createdDynamicLink(context, data: widget.data);
+                          Routing().move(Routes.commentsDetail,
+                              argument: CommentsArgument(
+                                  postID: widget.data.postID ?? '',
+                                  fromFront: true,
+                                  data: widget.data));
                         },
-                        iconData: '${AssetPath.vectorPath}share-shadow.svg',
-                        value: lang!.share ?? 'Share'),
-                  if ((widget.data.saleAmount ?? 0) > 0 &&
-                      email != widget.data.email)
-                    buttonVideoRight(
-                        onFunctionTap: () {},
-                        iconData: '${AssetPath.vectorPath}cart-shadow.svg',
-                        value: lang!.buy ?? 'Buy'),
-                ],
+                        iconData: '${AssetPath.vectorPath}comment-shadow.svg',
+                        value: widget.data.comment!.length.toString()),
+                    if (widget.data.isShared ?? false)
+                      buttonVideoRight(
+                          onFunctionTap: () {
+                            context
+                                .read<VidDetailNotifier>()
+                                .createdDynamicLink(context, data: widget.data);
+                          },
+                          iconData: '${AssetPath.vectorPath}share-shadow.svg',
+                          value: lang!.share ?? 'Share'),
+                    if ((widget.data.saleAmount ?? 0) > 0 &&
+                        email != widget.data.email)
+                      buttonVideoRight(
+                          onFunctionTap: () async {
+                            widget.data.fAliplayer?.pause();
+                            await ShowBottomSheet.onBuyContent(context,
+                                data: widget.data,
+                                fAliplayer: widget.data.fAliplayer);
+                          },
+                          iconData: '${AssetPath.vectorPath}cart-shadow.svg',
+                          value: lang!.buy ?? 'Buy'),
+                  ],
+                ),
               ),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: orientation == Orientation.landscape
-                  ? SizeConfig.screenHeight! * .2
-                  : SizeConfig.screenHeight! * .08,
-              child: Column(
-                children: [
-                  Container(
-                    width: SizeConfig.screenWidth!,
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: CustomDescContent(
-                      desc: "${widget.data.description}",
-                      trimLines: 2,
-                      textAlign: TextAlign.start,
-                      seeLess:
-                          ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
-                      seeMore:
-                          '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
-                      normStyle: const TextStyle(
-                          fontSize: 12, color: kHyppePrimaryTransparent),
-                      hrefStyle: Theme.of(context)
-                          .textTheme
-                          .subtitle2
-                          ?.copyWith(color: kHyppePrimary),
-                      expandStyle: Theme.of(context)
-                          .textTheme
-                          .subtitle2
-                          ?.copyWith(
-                              color: Theme.of(context).colorScheme.primary),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: orientation == Orientation.landscape
+                    ? SizeConfig.screenHeight! * .2
+                    : SizeConfig.screenHeight! * .08,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: orientation == Orientation.landscape
+                          ? SizeConfig.screenWidth! * .35
+                          : SizeConfig.screenWidth!,
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: CustomDescContent(
+                        desc: "${widget.data.description}",
+                        trimLines: 2,
+                        textAlign: TextAlign.start,
+                        seeLess:
+                            ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
+                        seeMore:
+                            '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                        normStyle: const TextStyle(
+                            fontSize: 12, color: kHyppePrimaryTransparent),
+                        hrefStyle: Theme.of(context)
+                            .textTheme
+                            .subtitle2
+                            ?.copyWith(color: kHyppePrimary),
+                        expandStyle: Theme.of(context)
+                            .textTheme
+                            .subtitle2
+                            ?.copyWith(
+                                color: Theme.of(context).colorScheme.primary),
+                      ),
                     ),
-                  ),
-                  Column(
-                    children: [
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Text(
-                            "${System.getTimeformatByMs(_currentPositionText)}/${System.getTimeformatByMs(_videoDuration)}",
-                            textAlign: TextAlign.end,
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 11),
+                    Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Text(
+                              "${System.getTimeformatByMs(_currentPositionText)}/${System.getTimeformatByMs(_videoDuration)}",
+                              textAlign: TextAlign.end,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 11),
+                            ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: SliderTheme(
-                                data: SliderTheme.of(context).copyWith(
-                                  overlayShape: SliderComponentShape.noThumb,
-                                  activeTrackColor: const Color(0xAA7d7d7d),
-                                  inactiveTrackColor:
-                                      const Color.fromARGB(170, 156, 155, 155),
-                                  // trackShape: RectangularSliderTrackShape(),
-                                  trackHeight: 3.0,
-                                  thumbColor: Colors.purple,
-                                  thumbShape: const RoundSliderThumbShape(
-                                      enabledThumbRadius: 8.0),
-                                ),
-                                child: Slider(
-                                    min: 0,
-                                    max: _videoDuration == 0
-                                        ? 1
-                                        : _videoDuration.toDouble(),
-                                    value: _currentPosition.toDouble(),
-                                    activeColor: Colors.purple,
-                                    // trackColor: Color(0xAA7d7d7d),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: SliderTheme(
+                                  data: SliderTheme.of(context).copyWith(
+                                    overlayShape: SliderComponentShape.noThumb,
+                                    activeTrackColor: const Color(0xAA7d7d7d),
+                                    inactiveTrackColor: const Color.fromARGB(
+                                        170, 156, 155, 155),
+                                    // trackShape: RectangularSliderTrackShape(),
+                                    trackHeight: 3.0,
                                     thumbColor: Colors.purple,
-                                    onChangeStart: (value) {
-                                      _inSeek = true;
-                                      // _showLoading = false;
-                                      setState(() {});
-                                    },
-                                    onChangeEnd: (value) {
-                                      _inSeek = false;
-                                      setState(() {
-                                        if (_currentPlayerState ==
-                                                FlutterAvpdef.completion &&
-                                            _showTipsWidget) {
-                                          setState(() {
-                                            _showTipsWidget = false;
-                                          });
-                                        }
-                                      });
-                                      // isActiveAds
-                                      //     ? fAliplayerAds?.seekTo(value.ceil(), GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE)
-                                      //     : fAliplayer?.seekTo(value.ceil(), GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
-                                      widget.fAliplayer?.seekTo(
-                                          value.ceil(), FlutterAvpdef.ACCURATE);
-                                    },
-                                    onChanged: (value) {
-                                      print('on change');
+                                    thumbShape: const RoundSliderThumbShape(
+                                        enabledThumbRadius: 8.0),
+                                  ),
+                                  child: Slider(
+                                      min: 0,
+                                      max: _videoDuration == 0
+                                          ? 1
+                                          : _videoDuration.toDouble(),
+                                      value: _currentPosition.toDouble(),
+                                      activeColor: Colors.purple,
+                                      // trackColor: Color(0xAA7d7d7d),
+                                      thumbColor: Colors.purple,
+                                      onChangeStart: (value) {
+                                        _inSeek = true;
+                                        // _showLoading = false;
+                                        setState(() {});
+                                      },
+                                      onChangeEnd: (value) {
+                                        _inSeek = false;
+                                        setState(() {
+                                          if (_currentPlayerState ==
+                                                  FlutterAvpdef.completion &&
+                                              _showTipsWidget) {
+                                            setState(() {
+                                              _showTipsWidget = false;
+                                            });
+                                          }
+                                        });
+                                        // isActiveAds
+                                        //     ? fAliplayerAds?.seekTo(value.ceil(), GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE)
+                                        //     : fAliplayer?.seekTo(value.ceil(), GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
+                                        widget.fAliplayer?.seekTo(value.ceil(),
+                                            FlutterAvpdef.ACCURATE);
+                                      },
+                                      onChanged: (value) {
+                                        print('on change');
 
-                                      widget.fAliplayer
-                                          ?.requestBitmapAtPosition(
-                                              value.ceil());
+                                        widget.fAliplayer
+                                            ?.requestBitmapAtPosition(
+                                                value.ceil());
 
-                                      setState(() {
-                                        _currentPosition = value.ceil();
-                                      });
-                                    }),
+                                        setState(() {
+                                          _currentPosition = value.ceil();
+                                        });
+                                      }),
+                                ),
+                              ),
+                              // GestureDetector(
+                              //   onTap: () {
+                              //     setState(() {
+                              //       isMute = !isMute;
+                              //     });
+                              //     widget.fAliplayer?.setMuted(isMute);
+                              //   },
+                              //   child: Padding(
+                              //     padding: const EdgeInsets.only(right: 2.0),
+                              //     child: CustomIconWidget(
+                              //       iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
+                              //       defaultColor: false,
+                              //       height: 24,
+                              //     ),
+                              //   ),
+                              // ),
+                              // GestureDetector(
+                              //   onTap: () async {
+                              //     int changevalue;
+                              //     changevalue = _currentPosition + 1000;
+                              //     if (changevalue > _videoDuration) {
+                              //       changevalue = _videoDuration;
+                              //     }
+                              //     widget.data.isLoading = true;
+                              //     setState(() {});
+                              //     Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
+                              //   },
+                              //   child: const Padding(
+                              //     padding: EdgeInsets.only(right: 12.0),
+                              //     child: Icon(
+                              //       Icons.fullscreen_exit,
+                              //       color: Colors.white,
+                              //     ),
+                              //   ),
+                              // ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (widget.data.music?.musicTitle != '' &&
+                        widget.data.music?.musicTitle != null)
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 0.0, bottom: 12.0, left: 8.0, right: 12.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const CustomIconWidget(
+                              iconData:
+                                  "${AssetPath.vectorPath}music_stroke_black.svg",
+                              defaultColor: false,
+                              color: kHyppeTextLightPrimary,
+                              height: 10,
+                            ),
+                            Expanded(
+                              child: CustomTextWidget(
+                                textToDisplay:
+                                    " ${widget.data.music?.musicTitle ?? ''}",
+                                maxLines: 1,
+                                textStyle: const TextStyle(
+                                    color: kHyppeTextLightPrimary,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700),
+                                textAlign: TextAlign.left,
                               ),
                             ),
-                            // GestureDetector(
-                            //   onTap: () {
-                            //     setState(() {
-                            //       isMute = !isMute;
-                            //     });
-                            //     widget.fAliplayer?.setMuted(isMute);
-                            //   },
-                            //   child: Padding(
-                            //     padding: const EdgeInsets.only(right: 2.0),
-                            //     child: CustomIconWidget(
-                            //       iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
-                            //       defaultColor: false,
-                            //       height: 24,
-                            //     ),
-                            //   ),
-                            // ),
-                            // GestureDetector(
-                            //   onTap: () async {
-                            //     int changevalue;
-                            //     changevalue = _currentPosition + 1000;
-                            //     if (changevalue > _videoDuration) {
-                            //       changevalue = _videoDuration;
-                            //     }
-                            //     widget.data.isLoading = true;
-                            //     setState(() {});
-                            //     Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
-                            //   },
-                            //   child: const Padding(
-                            //     padding: EdgeInsets.only(right: 12.0),
-                            //     child: Icon(
-                            //       Icons.fullscreen_exit,
-                            //       color: Colors.white,
-                            //     ),
-                            //   ),
-                            // ),
+                            CircleAvatar(
+                              radius: 18,
+                              backgroundColor: kHyppeSurface.withOpacity(.9),
+                              child: CustomBaseCacheImage(
+                                imageUrl:
+                                    widget.data.music?.apsaraThumnailUrl ?? '',
+                                imageBuilder: (_, imageProvider) {
+                                  return Container(
+                                    width: 48,
+                                    height: 48,
+                                    color: kDefaultIconDarkColor,
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(24)),
+                                      image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: imageProvider,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                errorWidget: (_, __, ___) {
+                                  return const CustomIconWidget(
+                                    iconData:
+                                        "${AssetPath.vectorPath}music_stroke_black.svg",
+                                    defaultColor: false,
+                                    color: kHyppeLightIcon,
+                                    height: 18,
+                                  );
+                                },
+                                emptyWidget: AnimatedBuilder(
+                                  animation: animatedController,
+                                  builder: (_, child) {
+                                    return Transform.rotate(
+                                      angle: animatedController.value *
+                                          2 *
+                                          math.pi,
+                                      child: child,
+                                    );
+                                  },
+                                  child: const CustomIconWidget(
+                                    iconData:
+                                        "${AssetPath.vectorPath}music_stroke_black.svg",
+                                    defaultColor: false,
+                                    color: kHyppeLightIcon,
+                                    height: 18,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                  if (widget.data.music?.musicTitle != '' &&
-                      widget.data.music?.musicTitle != null)
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: 0.0, bottom: 12.0, left: 8.0, right: 12.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const CustomIconWidget(
-                            iconData:
-                                "${AssetPath.vectorPath}music_stroke_black.svg",
-                            defaultColor: false,
-                            color: kHyppeTextLightPrimary,
-                            height: 10,
-                          ),
-                          Expanded(
-                            child: CustomTextWidget(
-                              textToDisplay:
-                                  " ${widget.data.music?.musicTitle ?? ''}",
-                              maxLines: 1,
-                              textStyle: const TextStyle(
-                                  color: kHyppeTextLightPrimary,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w700),
-                              textAlign: TextAlign.left,
-                            ),
-                          ),
-                          CircleAvatar(
-                            radius: 18,
-                            backgroundColor: kHyppeSurface.withOpacity(.9),
-                            child: CustomBaseCacheImage(
-                              imageUrl:
-                                  widget.data.music?.apsaraThumnailUrl ?? '',
-                              imageBuilder: (_, imageProvider) {
-                                return Container(
-                                  width: 48,
-                                  height: 48,
-                                  color: kDefaultIconDarkColor,
-                                  decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(24)),
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: imageProvider,
-                                    ),
-                                  ),
-                                );
-                              },
-                              errorWidget: (_, __, ___) {
-                                return const CustomIconWidget(
-                                  iconData:
-                                      "${AssetPath.vectorPath}music_stroke_black.svg",
-                                  defaultColor: false,
-                                  color: kHyppeLightIcon,
-                                  height: 18,
-                                );
-                              },
-                              emptyWidget: AnimatedBuilder(
-                                animation: animatedController,
-                                builder: (_, child) {
-                                  return Transform.rotate(
-                                    angle:
-                                        animatedController.value * 2 * math.pi,
-                                    child: child,
-                                  );
-                                },
-                                child: const CustomIconWidget(
-                                  iconData:
-                                      "${AssetPath.vectorPath}music_stroke_black.svg",
-                                  defaultColor: false,
-                                  color: kHyppeLightIcon,
-                                  height: 18,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                ],
-              ),
-            )
-          ],
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
