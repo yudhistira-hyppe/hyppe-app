@@ -1265,6 +1265,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     if (interest.isNotEmpty) {
       String tile = interest[index].id ?? '';
       if (tile == '11111') {
+        _tempinterestData.clear();
         showInterest(context);
         _tempinterestData.addAll(_interestData);
       } else {
