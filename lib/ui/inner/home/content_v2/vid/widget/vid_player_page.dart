@@ -1346,6 +1346,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                               showTipsWidget: _showTipsWidget,
                               videoDuration: _videoDuration,
                               isMute: isMute,
+                              fAliplayer: fAliplayer!,
                               onTap: (){
                               if (widget.data!.email != email) {
                                 // FlutterAliplayer? fAliplayer

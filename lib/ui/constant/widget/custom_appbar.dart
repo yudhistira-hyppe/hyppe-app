@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -19,6 +20,7 @@ class CustomAppBar extends StatelessWidget {
   final int currentPositionText;
   final bool showTipsWidget;
   final bool isMute;
+  final FlutterAliplayer fAliplayer;
   final Function()? onTap;
   const CustomAppBar(
       {super.key,
@@ -29,6 +31,7 @@ class CustomAppBar extends StatelessWidget {
       this.videoDuration = 1,
       this.currentPositionText = 0,
       this.showTipsWidget = false,
+      required this.fAliplayer,
       this.isMute = false});
 
   @override
@@ -78,8 +81,10 @@ class CustomAppBar extends StatelessWidget {
                 haveStory: false,
                 isCelebrity: false,
                 isUserVerified: data.privacy!.isIdVerified ?? false,
-                onTapOnProfileImage: () =>
-                    System().navigateToProfile(context, data.email ?? ''),
+                onTapOnProfileImage: () {
+                  fAliplayer.pause();
+                  System().navigateToProfile(context, data.email ?? '');
+                },
                 featureType: FeatureType.pic,
                 imageUrl:
                     '${System().showUserPicture(data.avatar?.mediaEndpoint)}',

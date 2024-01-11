@@ -617,6 +617,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage>
                                         videoDuration: _videoDuration,
                                         showTipsWidget: _showTipsWidget,
                                         isMute: isMute,
+                                        fAliplayer: widget.fAliplayer!,
                                         onTap: (){
                                           if (widget.data.email != email) {
                                             // FlutterAliplayer? fAliplayer
