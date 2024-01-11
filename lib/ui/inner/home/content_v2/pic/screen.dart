@@ -10,6 +10,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
 import 'package:hyppe/app.dart';
+import 'package:hyppe/core/arguments/pic_fullscreen_argument.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/ali_config.dart';
@@ -1233,32 +1234,38 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                               ? ("${picData?.mediaEndpoint}?key=${picData?.valueCache}")
                                                               : ("${picData?.fullThumbPath}&key=${picData?.valueCache}"),
                                                           imageBuilder: (context, imageProvider) {
-                                                            return ClipRRect(
-                                                              borderRadius: BorderRadius.circular(20), // Image border
-                                                              child: ImageSize(
-                                                                onChange: (Size size) {
-                                                                  if ((picData?.imageHeightTemp ?? 0) == 0) {
-                                                                    setState(() {
-                                                                      picData?.imageHeightTemp = size.height;
-                                                                    });
-                                                                  }
-                                                                },
-                                                                child: picData?.reportedStatus == 'BLURRED'
-                                                                    ? ImageFiltered(
-                                                                        imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                                                        child: Image(
+                                                            return InkWell(
+                                                              onTap: (){
+                                                                // Navigator.pushNamed(context, Routes.picFullScreenDetail, arguments: picData);
+                                                                Routing().move(Routes.picFullScreenDetail, argument: PicFullscreenArgument(imageProvider: imageProvider, picData: picData!));
+                                                              },
+                                                              child: ClipRRect(
+                                                                borderRadius: BorderRadius.circular(20), // Image border
+                                                                child: ImageSize(
+                                                                  onChange: (Size size) {
+                                                                    if ((picData?.imageHeightTemp ?? 0) == 0) {
+                                                                      setState(() {
+                                                                        picData?.imageHeightTemp = size.height;
+                                                                      });
+                                                                    }
+                                                                  },
+                                                                  child: picData?.reportedStatus == 'BLURRED'
+                                                                      ? ImageFiltered(
+                                                                          imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                                                          child: Image(
+                                                                            image: imageProvider,
+                                                                            fit: BoxFit.fitHeight,
+                                                                            width: SizeConfig.screenWidth,
+                                                                            // height: picData?.imageHeightTemp == 0 ? null : picData?.imageHeightTemp,
+                                                                          ),
+                                                                        )
+                                                                      : Image(
                                                                           image: imageProvider,
                                                                           fit: BoxFit.fitHeight,
                                                                           width: SizeConfig.screenWidth,
-                                                                          // height: picData?.imageHeightTemp == 0 ? null : picData?.imageHeightTemp,
+                                                                          // height: picData?.imageHeightTemp == 0 || (picData?.imageHeightTemp ?? 0) <= 100 ? null : picData?.imageHeightTemp,
                                                                         ),
-                                                                      )
-                                                                    : Image(
-                                                                        image: imageProvider,
-                                                                        fit: BoxFit.fitHeight,
-                                                                        width: SizeConfig.screenWidth,
-                                                                        // height: picData?.imageHeightTemp == 0 || (picData?.imageHeightTemp ?? 0) <= 100 ? null : picData?.imageHeightTemp,
-                                                                      ),
+                                                                ),
                                                               ),
                                                             );
                                                           },
@@ -1267,7 +1274,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                               _networklHasErrorNotifier.value++;
                                                               Random random = new Random();
                                                               int randomNumber = random.nextInt(100); // from 0 upto 99 included
-
+                                                        
                                                               picData?.valueCache = randomNumber.toString();
                                                               setState(() {});
                                                               // reloadImage(index);
