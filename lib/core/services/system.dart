@@ -594,6 +594,7 @@ class System {
       if (featureType == FeatureType.other) {
         debugPrint("Masuk KYC");
         List<File>? imageFileList = [];
+        List<File>? convertImageFile = [];
         if (pdf) {
           final _pickerResult = await FilePicker.platform.pickFiles(allowMultiple: true, type: FileType.custom, allowedExtensions: ['pdf', 'doc']);
           // validasi durasi
@@ -629,15 +630,48 @@ class System {
             }
           }
         } else {
-          final List<XFile>? selectedImages = await _imagePicker.pickMultiImage(imageQuality: 90);
-          if ((selectedImages?.isNotEmpty ?? false) && (selectedImages?.length ?? 0) <= maxFile) {
-            for (XFile file in selectedImages ?? []) {
-              debugPrint(file.path);
-              imageFileList.add(File(file.path));
+          var permsiion = await System().checkPermission(permission: Permission.storage);
+          if (permsiion == PermissionStatus.denied) {
+            try {
+              await Permission.storage.request();
+              await Permission.storage.status.isGranted;
+              await Permission.photos.status.isGranted;
+            } catch (e) {
+              print(e);
             }
-            _filePickerResult = imageFileList;
-          } else {
-            _errorMsg = "${notifier.pleaseSelectOneortheMaxFileis} $maxFile";
+          }
+          try {
+            final List<XFile>? selectedImages = await _imagePicker.pickMultiImage(imageQuality: 90);
+            if ((selectedImages?.isNotEmpty ?? false) && (selectedImages?.length ?? 0) <= maxFile) {
+              for (XFile file in selectedImages ?? []) {
+                debugPrint(file.path);
+                imageFileList.add(File(file.path));
+              }
+              if (imageFileList.contains('heic') || imageFileList.contains('heif')) {
+                final tmpDir = (await getTemporaryDirectory()).path;
+                final target = '$tmpDir/${DateTime.now().millisecondsSinceEpoch}.jpg';
+                final result = await FlutterImageCompress.compressAndGetFile(
+                  imageFileList.first.path,
+                  target,
+                  format: CompressFormat.png,
+                );
+
+                if (result == null) {
+                  // error handling here
+                  print('error result');
+                } else {
+                  convertImageFile.add(File(result.path));
+                }
+                print('Path ${convertImageFile.first.path}');
+                _filePickerResult = convertImageFile;
+              } else {
+                _filePickerResult = imageFileList;
+              }
+            } else {
+              _errorMsg = "${notifier.pleaseSelectOneortheMaxFileis} $maxFile";
+            }
+          } catch (e) {
+            print(e);
           }
         }
       }
@@ -694,7 +728,6 @@ class System {
       }
 
       if (featureType == FeatureType.pic) {
-        
         // await FilePicker.platform.pickFiles(type: FileType.image, allowCompression: false).then((result) {
         //   if (result != null) {
         //     _filePickerResult = [File(result.files.single.path ?? '')];
@@ -748,9 +781,7 @@ class System {
       }
 
       if (featureType == FeatureType.story) {
-        final _pickerResult = await FilePicker.platform.pickFiles(
-            allowMultiple: false,
-            type: FileType.media, allowCompression: false);
+        final _pickerResult = await FilePicker.platform.pickFiles(allowMultiple: false, type: FileType.media, allowCompression: false);
         if (_pickerResult != null) {
           // untuk menampung file yang failed di validasi
           // String _failFile = '';
@@ -760,7 +791,7 @@ class System {
             for (int element = 0; element < _pickerResult.files.length; element++) {
               // validasi content type
               print('path directory: ${_pickerResult.files[element].extension}');
-              if(_pickerResult.files[element].extension?.toLowerCase() == PVT){
+              if (_pickerResult.files[element].extension?.toLowerCase() == PVT) {
                 final tmpDir = (await getTemporaryDirectory()).path;
                 final target = '$tmpDir/${DateTime.now().millisecondsSinceEpoch}.heic';
                 final result = await FlutterImageCompress.compressAndGetFile(
@@ -770,14 +801,14 @@ class System {
                   quality: 90,
                 );
                 if (result != null) {
-                  if(_filePickerResult == null){
+                  if (_filePickerResult == null) {
                     _filePickerResult = [];
                   }
                   if (_pickerResult.files.isNotEmpty) {
                     _filePickerResult?.add((File(result.path)));
                   }
                 }
-              }else if(_pickerResult.files[element].extension?.toLowerCase() == HEIF){
+              } else if (_pickerResult.files[element].extension?.toLowerCase() == HEIF) {
                 // // final tmpDir = (await getTemporaryDirectory()).path;
                 // // final target = '$tmpDir/${DateTime.now().millisecondsSinceEpoch}.HEIC';
                 // // final result = await FlutterImageCompress.compressAndGetFile(
@@ -832,14 +863,14 @@ class System {
                 String? jpgPath = await HeifConverter.convert(_pickerResult.files[element].path ?? '', format: 'jpg');
                 final result = File(jpgPath ?? '');
                 if (result != null) {
-                  if(_filePickerResult == null){
+                  if (_filePickerResult == null) {
                     _filePickerResult = [];
                   }
                   if (_pickerResult.files.isNotEmpty) {
                     _filePickerResult?.add(result);
                   }
                 }
-              }else if (_pickerResult.files[element].extension?.toLowerCase() == MP4 || _pickerResult.files[element].extension?.toLowerCase() == MOV) {
+              } else if (_pickerResult.files[element].extension?.toLowerCase() == MP4 || _pickerResult.files[element].extension?.toLowerCase() == MOV) {
                 await getVideoMetadata(_pickerResult.files[element].path ?? '').then((value) {
                   _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
 
@@ -861,7 +892,7 @@ class System {
                 if (_pickerResult.files.isNotEmpty) {
                   _filePickerResult = _pickerResult.files.map((file) => File(file.path ?? '')).toList();
                 }
-              }else{
+              } else {
                 if (_pickerResult.files.isNotEmpty) {
                   _filePickerResult = _pickerResult.files.map((file) => File(file.path ?? '')).toList();
                 }
@@ -872,7 +903,35 @@ class System {
               //   _errorMsg = '${notifier.theFileDurationExceedsTheMaximumLimitForThisFeature} :\n$_failFile';
               // }
 
+              if (_pickerResult.files.isNotEmpty) {
+                switch (_pickerResult.files[element].extension?.toLowerCase().toLowerCase()) {
+                  case 'jpg':
+                  case 'jpeg':
+                    File? pathPicker = File(_pickerResult.files.first.path ?? '');
+                    int fs = pathPicker.lengthSync();
+                    var resfs = (log(fs) / log(1024)).floor();
+                    var mb = (fs / pow(1024, resfs)).toStringAsFixed(0);
+                    if (int.parse(mb) >= 3) {
+                      List<String> naming = pathPicker.path.split('.');
+                      final tmpDir = (await getTemporaryDirectory()).path;
+                      final target = '$tmpDir/${DateTime.now().millisecondsSinceEpoch}.${naming.last}';
+                      final result = await FlutterImageCompress.compressAndGetFile(pathPicker.path, target, quality: 75);
 
+                      if (result == null) {
+                        // error handling here
+                        print('error result');
+                      } else {
+                        _filePickerResult = [File(result.path)];
+                      }
+                    } else {
+                      _filePickerResult = _pickerResult.files.map((file) => File(file.path ?? '')).toList();
+                    }
+                    break;
+                  default:
+                    _filePickerResult = _pickerResult.files.map((file) => File(file.path ?? '')).toList();
+                    break;
+                }
+              }
             }
           }
           // validasi durasi
@@ -1993,11 +2052,11 @@ class System {
     return Color(int.parse('FF$hexCode', radix: 16));
   }
 
-  Widget showWidgetForGuest(Widget forUser, Widget forGuest){
+  Widget showWidgetForGuest(Widget forUser, Widget forGuest) {
     final String? userToken = SharedPreference().readStorage(SpKeys.userToken);
-    if(userToken?.isNotEmpty ?? false){
+    if (userToken?.isNotEmpty ?? false) {
       return forUser;
-    }else{
+    } else {
       return forGuest;
     }
   }

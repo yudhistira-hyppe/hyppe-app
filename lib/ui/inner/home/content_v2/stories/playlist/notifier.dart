@@ -860,7 +860,6 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
         }
         _ableClose = false;
       }
-
       Future.delayed(const Duration(milliseconds: 700), () {
         _ableClose = true;
       });

@@ -1262,11 +1262,13 @@ class PreUploadContentNotifier with ChangeNotifier {
   }
 
   bool pickedInterest(String? tile) => _interestData.contains(tile) ? true : false;
+  bool pickedInterestList(String? tile) => _tempinterestData.contains(tile) ? true : false;
   void insertInterest(BuildContext context, int index) {
     if (interest.isNotEmpty) {
       String tile = interest[index].id ?? '';
       if (tile == '11111') {
         showInterest(context);
+        _tempinterestData.addAll(_interestData);
       } else {
         if (_interestData.contains(tile)) {
           _interestData.removeWhere((v) => v == tile);
@@ -1289,11 +1291,11 @@ class PreUploadContentNotifier with ChangeNotifier {
       if (tile == '11111') {
         showLocation(context);
       } else {
-        if (_interestData.contains(tile)) {
-          _interestData.removeWhere((v) => v == tile);
-        } else {
-          _interestData.add(tile);
-        }
+        // if (_interestData.contains(tile)) {
+        //   _interestData.removeWhere((v) => v == tile);
+        // } else {
+        //   _interestData.add(tile);
+        // }
 
         if (_tempinterestData.contains(tile)) {
           _tempinterestData.removeWhere((v) => v == tile);
@@ -1309,15 +1311,13 @@ class PreUploadContentNotifier with ChangeNotifier {
   }
   
   void removeTempInterestList({bool isSaved=false}) {
-    if (!isSaved){
+    if (isSaved){
+      _interestData.clear();
       if (_tempinterestData.isNotEmpty) {
-      for (var e in _tempinterestData) {
-          if (_interestData.contains(e)) {
-              _interestData.removeWhere((v) => v == e);
-          }
-        }
+        _interestData.addAll(_tempinterestData);
         notifyListeners();
       }
+      _tempinterestData.clear();
     }else{
       _tempinterestData.clear();
     }
