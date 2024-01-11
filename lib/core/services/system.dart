@@ -904,14 +904,14 @@ class System {
               // }
 
               if (_pickerResult.files.isNotEmpty) {
-                switch (_pickerResult.files[element].extension?.toLowerCase().toLowerCase()) {
+                switch (_pickerResult.files[element].extension?.toLowerCase()) {
                   case 'jpg':
                   case 'jpeg':
                     File? pathPicker = File(_pickerResult.files.first.path ?? '');
                     int fs = pathPicker.lengthSync();
                     var resfs = (log(fs) / log(1024)).floor();
                     var mb = (fs / pow(1024, resfs)).toStringAsFixed(0);
-                    if (int.parse(mb) >= 3) {
+                    if (int.parse(mb) >= 2) {
                       List<String> naming = pathPicker.path.split('.');
                       final tmpDir = (await getTemporaryDirectory()).path;
                       final target = '$tmpDir/${DateTime.now().millisecondsSinceEpoch}.${naming.last}';
