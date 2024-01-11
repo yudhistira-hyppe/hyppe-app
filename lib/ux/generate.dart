@@ -436,7 +436,10 @@ class Generate {
       case Routes.listStreamers:
         return MaterialPageRoute(builder: (_) => const ListStreamersScreen());
       case Routes.viewStreaming:
-        return MaterialPageRoute(builder: (_) => ViewStreamingScreen(args: settings.arguments as ViewStreamingArgument,));
+        return MaterialPageRoute(
+            builder: (_) => ViewStreamingScreen(
+                  args: settings.arguments as ViewStreamingArgument,
+                ));
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

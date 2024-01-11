@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/contents/slided_pic_detail_screen_argument.dart';
+import 'package:hyppe/core/arguments/contents/story_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/arguments/main_argument.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
@@ -133,15 +134,15 @@ class DynamicLinkService {
           isHomeScreen = false;
           'deepLink isOnHomeScreen $isHomeScreen'.logger();
           switch (path) {
-            // case Routes.storyDetail:
-            //   '_handleDeepLink storyDetail'.logger();
-            //   _routing.move(
-            //     path,
-            //     argument: StoryDetailScreenArgument()
-            //       ..postID = deepLink.queryParameters['postID']
-            //       ..backPage = false,
-            //   );
-            //   break;
+            case Routes.showStories:
+              '_handleDeepLink storyDetail'.logger();
+              _routing.move(
+                path,
+                argument: StoryDetailScreenArgument(peopleIndex: 0)
+                  ..postID = deepLink.queryParameters['postID']
+                  ..backPage = false,
+              );
+              break;
             case Routes.vidDetail:
               '_handleDeepLink vidDetail'.logger();
               if (isFromSplash) {
