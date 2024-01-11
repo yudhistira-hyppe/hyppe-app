@@ -847,16 +847,18 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   }
 
   bool _ableClose = true;
-  void onCloseStory(BuildContext context, bool mounted, bool isFromProfile) {
+  void onCloseStory(BuildContext context, bool mounted, bool isFromProfile, bool isOther) async {
     if (mounted) {
       if (_ableClose) {
         _textEditingController.clear();
-        if (_routeArgument?.postID != null) {
+        if(isOther){
+          _routing.moveBack();
+        }else if (_routeArgument?.postID != null) {
           print('onCloseStory moveAndPop ');
-          _routing.moveAndPop(Routes.lobby, argument: MainArgument(canShowAds: false, page: isFromProfile ? 4 : 0));
+          await _routing.moveAndPop(Routes.lobby, argument: MainArgument(canShowAds: false, page: isFromProfile ? 4 : 0));
         } else {
           print('onCloseStory moveBack');
-          Routing().moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false, page: isFromProfile ? 4 : 0));
+          await Routing().moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false, page: isFromProfile ? 4 : 0));
         }
         _ableClose = false;
       }

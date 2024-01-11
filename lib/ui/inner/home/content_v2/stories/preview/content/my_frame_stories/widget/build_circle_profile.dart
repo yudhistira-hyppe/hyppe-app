@@ -38,7 +38,7 @@ class BuildCircleProfile extends StatelessWidget {
         context.handleActionIsGuest((){
           context
               .read<PreviewStoriesNotifier>()
-              .navigateToMyStoryGroup(context, listStory ?? []);
+              .navigateToMyStoryGroup(context, listStory ?? [], false);
         });
 
       },
