@@ -69,6 +69,27 @@ class AdsDataBloc {
             'x-auth-user': email,
             'x-auth-token': token,
           });
+    }else if(adsType == AdsType.between){
+      setCommentFetch(AdsDataFetch(AdsDataState.loading));
+      final email = SharedPreference().readStorage(SpKeys.email);
+      final token = SharedPreference().readStorage(SpKeys.userToken);
+      await Repos().reposPost(context, (onResult) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+          setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError));
+        } else {
+          print('data: ${onResult.data}');
+          final response = AdsVideo.fromJson(onResult.data);
+          setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocSuccess, data: response));
+        }
+      }, (errorData) => setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError)),
+          host: UrlConstants.getAdsInBetween,
+          withAlertMessage: false,
+          withCheckConnection: false,
+          methodType: MethodType.get,
+          headers: {
+            'x-auth-user': email,
+            'x-auth-token': token,
+          });
     }
   }
 
