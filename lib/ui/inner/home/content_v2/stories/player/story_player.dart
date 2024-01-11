@@ -899,6 +899,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                   '',
               data: _groupUserStories?[index].story?[_curChildIdx],
               fromProfile: widget.argument.fromProfile,
+              isOther: widget.argument.isOther,
               // storyController: _storyController,
             ),
           (_groupUserStories?[index].story?[_curChildIdx].isReport ?? false)
