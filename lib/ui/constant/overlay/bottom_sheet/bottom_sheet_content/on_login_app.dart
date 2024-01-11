@@ -109,14 +109,14 @@ class _OnLoginAppState extends State<OnLoginApp> {
                         Container(
                           height: 60,
                           padding: const EdgeInsets.only(right: 15.0),
-                          decoration: const BoxDecoration(
-                            border: Border(
-                              right: BorderSide(
-                                color: Color(0xFFEDEDED),
-                                width: 1.0,
-                              ),
-                            ),
-                          ),
+                          // decoration: const BoxDecoration(
+                          //   border: Border(
+                          //     right: BorderSide(
+                          //       color: Color(0xFFEDEDED),
+                          //       width: 1.0,
+                          //     ),
+                          //   ),
+                          // ),
                           child: const CustomIconWidget(
                             defaultColor: false,
                             iconData: '${AssetPath.vectorPath}google.svg',
@@ -126,7 +126,7 @@ class _OnLoginAppState extends State<OnLoginApp> {
                         CustomTextWidget(
                           textToDisplay:
                               notifier.language.signInWithGoogleAccount ?? '',
-                          textStyle: Theme.of(context).textTheme.subtitle2 ??
+                          textStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w700) ??
                               const TextStyle(),
                         ),
                         const Spacer(),
@@ -146,14 +146,14 @@ class _OnLoginAppState extends State<OnLoginApp> {
                               Container(
                                 height: 60,
                                 padding: const EdgeInsets.only(right: 15.0),
-                                decoration: const BoxDecoration(
-                                  border: Border(
-                                    right: BorderSide(
-                                      color: Color(0xFFEDEDED),
-                                      width: 1.0,
-                                    ),
-                                  ),
-                                ),
+                                // decoration: const BoxDecoration(
+                                //   border: Border(
+                                //     right: BorderSide(
+                                //       color: Color(0xFFEDEDED),
+                                //       width: 1.0,
+                                //     ),
+                                //   ),
+                                // ),
                                 child: CustomIconWidget(
                                   defaultColor: false,
                                   color: Theme.of(context)
@@ -168,7 +168,7 @@ class _OnLoginAppState extends State<OnLoginApp> {
                                 textToDisplay:
                                     notifier.language.signInWithApple ?? '',
                                 textStyle:
-                                    Theme.of(context).textTheme.subtitle2,
+                                    Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w700),
                               ),
                               const Spacer(),
                             ],
@@ -180,6 +180,7 @@ class _OnLoginAppState extends State<OnLoginApp> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              sixteenPx,
               Expanded(
                 child: Container(
                   height: 1,
@@ -191,7 +192,7 @@ class _OnLoginAppState extends State<OnLoginApp> {
               ),
               twelvePx,
               CustomTextWidget(
-                  textToDisplay: notifier.language.or ?? 'or',
+                  textToDisplay: notifier.language.or?.toLowerCase() ?? 'or',
                   textStyle: Theme.of(context).textTheme.bodyText2),
               twelvePx,
               Expanded(
@@ -203,6 +204,7 @@ class _OnLoginAppState extends State<OnLoginApp> {
                   ),
                 ),
               ),
+              sixteenPx
             ],
           ),
           twelvePx,
@@ -217,24 +219,24 @@ class _OnLoginAppState extends State<OnLoginApp> {
                   Container(
                     height: 60,
                     padding: const EdgeInsets.only(right: 15.0),
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        right: BorderSide(
-                          color: Color(0xFFEDEDED),
-                          width: 1.0,
-                        ),
-                      ),
-                    ),
+                    // decoration: const BoxDecoration(
+                    //   border: Border(
+                    //     right: BorderSide(
+                    //       color: Color(0xFFEDEDED),
+                    //       width: 1.0,
+                    //     ),
+                    //   ),
+                    // ),
                     child: const CustomIconWidget(
                       defaultColor: false,
-                      iconData: '${AssetPath.vectorPath}person.svg',
+                      iconData: '${AssetPath.vectorPath}person_login.svg',
                     ),
                   ),
                   const Spacer(),
                   CustomTextWidget(
                     textToDisplay:
                         notifier.language.useAnotherEmailAddress ?? '',
-                    textStyle: Theme.of(context).textTheme.subtitle2 ??
+                    textStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w700) ??
                         const TextStyle(),
                   ),
                   const Spacer(),

@@ -112,14 +112,31 @@ class _WelcomeLoginScreenState extends State<WelcomeLoginScreen> {
                                               bottom: 10,
                                               left: 30,
                                               right: 30,
-                                              child: CustomTextWidget(
-                                                textAlign: TextAlign.center,
-                                                maxLines: 4,
-                                                textToDisplay: data.desc,
-                                                textStyle: const TextStyle(
-                                                  fontSize: 14,
+                                              child: RichText(
+                                                  maxLines: 4,
+                                                  textAlign: TextAlign.center,
+                                                  text: TextSpan(
+                                                children: [
+                                                  TextSpan(
+                                                  text: data.desc,
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                      fontFamily: 'Lato',
+                                                    color: Colors.black
+                                                  ),
                                                 ),
-                                              ))
+                                                  if(index == 3)
+                                                    TextSpan(
+                                                      text: '\n#ShareWhatInspireYou',
+                                                      style: const TextStyle(
+                                                        fontSize: 14,
+                                                          fontFamily: 'Lato',
+                                                          color: Colors.black,
+                                                        fontWeight: FontWeight.bold
+                                                      ),
+                                                    ),
+                                                ]
+                                              )))
                                         ],
                                       ),
                                     ),

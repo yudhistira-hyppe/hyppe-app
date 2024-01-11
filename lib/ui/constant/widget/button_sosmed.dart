@@ -18,13 +18,13 @@ class ButtomSosmed extends StatelessWidget {
       child: ElevatedButton(
         onPressed: function as void Function()?,
         style: ButtonStyle(
-          fixedSize: MaterialStateProperty.all(const Size(412, 40)),
+          fixedSize: MaterialStateProperty.all(const Size(412, 50)),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
               side: BorderSide(
                 color: Color(0xFFEDEDED),
               ))),
-          backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.background),
+          backgroundColor: MaterialStateProperty.all(Color(0xFFFDFDFD)),
         ),
         child: child,
         //
