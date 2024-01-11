@@ -193,46 +193,56 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
     });
   }
 
+  bool _goToGuest = false;
+  bool get goToGuest => _goToGuest;
+  set goToGuest(bool state){
+    _goToGuest = state;
+    notifyListeners();
+  }
+
   Future onClickGuest(BuildContext context) async {
     bool connection = await System().checkConnections();
-    setLoading(true);
-    await System().getLocation(context).then((value) async {
-      if (value) {
-        if (connection) {
-          unFocusController();
-          incorrect = false;
-          // ignore: avoid_print
-          // print(a.latitude);
-          var email = await UniqueIdentifier.serial;
-          email = "$email@hyppeguest.com";
-          await FcmService().initializeFcmIfNot();
-          final notifier = UserBloc();
-          await notifier.guestMode(
-            context,
-            email: email,
-            latitude: latitude.toString(),
-            longtitude: longitude.toString(),
-          );
+    if(!goToGuest){
+      goToGuest = true;
+      await System().getLocation(context).then((value) async {
+        if (value) {
+          if (connection) {
+            unFocusController();
+            incorrect = false;
+            // ignore: avoid_print
+            // print(a.latitude);
+            var email = await UniqueIdentifier.serial;
+            email = "$email@hyppeguest.com";
+            await FcmService().initializeFcmIfNot();
+            final notifier = UserBloc();
+            await notifier.guestMode(
+              context,
+              email: email,
+              latitude: latitude.toString(),
+              longtitude: longitude.toString(),
+            );
 
-          final fetch = notifier.userFetch;
-          if (fetch.userState == UserState.LoginSuccess) {
-            hide = true;
-            final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
-            _validateUserData(context, _result, false, onlineVersion: fetch.version, onlineIosVersion: fetch.versionIos, isGuest: true);
-          }
-          if (fetch.userState == UserState.LoginError) {
-            if (fetch.data != null) {
-              clearTextController();
-              incorrect = true;
+            final fetch = notifier.userFetch;
+            if (fetch.userState == UserState.LoginSuccess) {
+              hide = true;
+              final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
+              _validateUserData(context, _result, false, onlineVersion: fetch.version, onlineIosVersion: fetch.versionIos, isGuest: true);
             }
+            if (fetch.userState == UserState.LoginError) {
+              if (fetch.data != null) {
+                clearTextController();
+                incorrect = true;
+              }
+            }
+          } else {
+            ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
           }
-        } else {
-          ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
+          goToGuest = false;
         }
-        setLoading(false);
-      }
-      setLoading(false);
-    });
+        goToGuest = false;
+      });
+    }
+
   }
 
   void onClickSignUpHere() {

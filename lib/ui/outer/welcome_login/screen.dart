@@ -10,6 +10,7 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_gesture.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_form_field.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -189,7 +190,7 @@ class _WelcomeLoginScreenState extends State<WelcomeLoginScreen> {
                               color: context.getColorScheme().primary,
                               width: 1)),
                       alignment: Alignment.center,
-                      child: CustomTextWidget(
+                      child: notifier.goToGuest ? const CustomLoading() : CustomTextWidget(
                         textToDisplay: notifier.language.exploreAsGuest ?? '',
                         textAlign: TextAlign.center,
                         textStyle: TextStyle(

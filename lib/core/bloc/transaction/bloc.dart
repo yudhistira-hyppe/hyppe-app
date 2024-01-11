@@ -150,29 +150,34 @@ class TransactionBloc {
   }
 
   Future getAccountBalance(BuildContext context, {required Map? params}) async {
-    var type = FeatureType.other;
-    setTransactionFetch(TransactionFetch(TransactionState.loading));
+    bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
 
-    await _repos.reposPost(
-      context,
-      (onResult) {
-        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
-          setTransactionFetch(TransactionFetch(TransactionState.getAccountBalanceError, message: onResult.data['message'], data: onResult.data));
-        } else {
-          setTransactionFetch(TransactionFetch(TransactionState.getAccountBalanceSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
-        }
-      },
-      (errorData) {
-        setTransactionFetch(TransactionFetch(TransactionState.getAccountBalanceError, data: errorData.error));
-      },
-      data: params,
-      withAlertMessage: true,
-      headers: {"x-auth-token": SharedPreference().readStorage(SpKeys.userToken)},
-      withCheckConnection: false,
-      host: UrlConstants.accountBalances,
-      methodType: MethodType.post,
-      errorServiceType: System().getErrorTypeV2(type),
-    );
+    if(!(isGuest ?? true)){
+      var type = FeatureType.other;
+      setTransactionFetch(TransactionFetch(TransactionState.loading));
+
+      await _repos.reposPost(
+        context,
+            (onResult) {
+          if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+            setTransactionFetch(TransactionFetch(TransactionState.getAccountBalanceError, message: onResult.data['message'], data: onResult.data));
+          } else {
+            setTransactionFetch(TransactionFetch(TransactionState.getAccountBalanceSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
+          }
+        },
+            (errorData) {
+          setTransactionFetch(TransactionFetch(TransactionState.getAccountBalanceError, data: errorData.error));
+        },
+        data: params,
+        withAlertMessage: true,
+        headers: {"x-auth-token": SharedPreference().readStorage(SpKeys.userToken)},
+        withCheckConnection: false,
+        host: UrlConstants.accountBalances,
+        methodType: MethodType.post,
+        errorServiceType: System().getErrorTypeV2(type),
+      );
+    }
+
   }
 
   Future sendVerificationPin(BuildContext context, {required Map? params}) async {

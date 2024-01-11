@@ -28,68 +28,67 @@ class UrlConstants {
 
   /// APIs end point
   /* User route */
-  static const String userRoute = "/api/user";
-  static const String userRouteV2 = "/migration/api/user";
+  static const String userRoute = "/migration/api/user";
 
   /* Utils route */
-  static const String utilsRoute = "/api/utils";
+  static const String utilsRoute = "/migration/api/utils";
 
   /* Post route */
-  static const String postRoute = "/api/post";
+  static const String postRoute = "/migration/api/post";
 
   /* Posts route */
-  static const String postsRoute = "/api/posts";
+  static const String postsRoute = "/migration/api/posts";
 
   /* Follow route */
-  static const String followRoute = "/api/follow";
+  static const String followRoute = "/migration/api/follow";
 
   /* Stories route */
-  static const String storiesRoute = "/api/story";
+  static const String storiesRoute = "/migration/api/story";
 
   /* Search route */
-  static const String searchRoute = "/api/search";
+  static const String searchRoute = "/migration/api/search";
 
   /* Chat route */
-  static const String chatRoute = "/api/chat";
+  static const String chatRoute = "/migration/api/chat";
 
   /* Notification route */
-  static const String notificationRoute = "/api/inapp";
+  static const String notificationRoute = "/migration/api/inapp";
 
   /* Wallet route */
   static const String walletRoute = "/bagea-core";
 
   /* Wallet route */
-  static const String bizRoute = "/api/biz";
+  static const String bizRoute = "/migration/api/biz";
 
   /* v3 user profile */
-  static const String profileRoute = "/api/getuserprofiles";
+  static const String profileRoute = "/migration/api/getuserprofiles";
 
   /* User Content route */
-  static const String userContentRoute = "/api/getusercontents";
+  static const String userContentRoute = "/migration/api/getusercontents";
 
   /* User Content route */
-  static const String bankRoute = "/api/banks";
+  static const String bankRoute = "/migration/api/banks";
 
   /* User Content route */
-  static const String liveStramRoute = "/api/live";
+  static const String liveStramRoute = "/migration/api/live";
 
   /* v3 user ads */
-  static const String adsRoute = "/api/ads";
+  static const String adsRoute = "/migration/api/ads";
 
-  static const String adsRouteV2 = "/api/adsv2/ads";
+  static const String adsRouteV2 = "/migration/api/adsv2/ads";
 
-  static const String transactionRoute = "/api/transactions";
+  static const String transactionRoute = "/migration/api/transactions";
 
-  static const String userbankaccountsRoute = "/api/userbankaccounts";
+  static const String userbankaccountsRoute = "/migration/api/userbankaccounts";
 
-  static const String accountBalancesRoutes = "/api/accountbalances";
+  static const String accountBalancesRoutes = "/migration/api/accountbalances";
 
   /* Post route */
-  static const String contentRouteV3 = "/api/getusercontents";
+  static const String contentRouteV3 = "/migration/api/getusercontents";
 
-  static const String interestCount = "/api/interest-count";
+  static const String interestCount = "/migration/api/interest-count";
 
-  static const String challange = "/api/challenge";
+  static const String challange = "/migration/api/challenge";
 
   ///---------------------------------------------------------------------------------------------------------///
   /* APIs Bookmark */
@@ -116,7 +115,7 @@ class UrlConstants {
   static const String login = "$userRoute/login";
 
   /// guest mode
-  static const String guest = "$userRouteV2/guest";
+  static const String guest = "$userRoute/guest";
 
   /// post login with google
   static const String loginGoogle = "$userRoute/signup/socmed";
@@ -231,7 +230,7 @@ class UrlConstants {
 
   /// APIs end point
   /* Post route */
-  static const String postRouteV2 = "/api/posts";
+  static const String postRouteV2 = "/migration/api/posts";
 
   ///---------------------------------------------------------------------------------------------------------///
   /// post => Get Contents

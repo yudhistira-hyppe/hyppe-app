@@ -1993,11 +1993,11 @@ class System {
   }
 
   Widget showWidgetForGuest(Widget forUser, Widget forGuest){
-    final String? userToken = SharedPreference().readStorage(SpKeys.userToken);
-    if(userToken?.isNotEmpty ?? false){
-      return forUser;
-    }else{
+    final bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
+    if(isGuest ?? false){
       return forGuest;
+    }else{
+      return forUser;
     }
   }
 }

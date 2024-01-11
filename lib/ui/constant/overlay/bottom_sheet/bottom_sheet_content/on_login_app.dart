@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_gesture.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -30,9 +31,38 @@ class _OnLoginAppState extends State<OnLoginApp> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           twentyPx,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+          System().showWidgetForGuest(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                CustomGesture(
+                  margin: EdgeInsets.zero,
+                  onTap: () {
+                    Routing().moveBack();
+                  },
+                  child: const CustomIconWidget(
+                      height: 28,
+                      width: 28,
+                      iconData: "${AssetPath.vectorPath}close.svg"),
+                ),
+                sixteenPx
+              ],
+            ),
+            Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              sixteenPx,
+              CustomGesture(
+                margin: EdgeInsets.zero,
+                onTap: () {
+                  Routing().moveBack();
+                },
+                child: const CustomIconWidget(
+                    height: 28,
+                    width: 28,
+                    iconData: "${AssetPath.vectorPath}help_circle.svg"),
+              ),
+              const Expanded(child: SizedBox.shrink()),
               CustomGesture(
                 margin: EdgeInsets.zero,
                 onTap: () {
@@ -45,7 +75,7 @@ class _OnLoginAppState extends State<OnLoginApp> {
               ),
               sixteenPx
             ],
-          ),
+          ), ),
           thirtyTwoPx,
           const CustomIconWidget(
             iconData: "${AssetPath.vectorPath}ic_welcome_login.svg",
