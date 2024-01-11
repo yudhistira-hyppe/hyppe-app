@@ -1620,7 +1620,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
       onEnd: _onPlayerHide,
       child: Container(
         height: height * 0.8,
-        // width: SizeConfig.screenWidth! * .8,
+        width: SizeConfig.screenWidth! * .8,
         decoration: BoxDecoration(
           color: backgroundColor,
         ),
