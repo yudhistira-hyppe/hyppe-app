@@ -23,6 +23,7 @@ class BuildTopView extends StatefulWidget {
   final String when;
   final bool onDetail;
   final ContentData? data;
+  final bool fromProfile;
   // final StoryController? storyController;
 
   const BuildTopView({
@@ -30,6 +31,7 @@ class BuildTopView extends StatefulWidget {
     this.data,
     required this.when,
     this.onDetail = true,
+    this.fromProfile = false
     // this.storyController,
   }) : super(key: key);
 
@@ -140,7 +142,7 @@ class _BuildTopViewState extends State<BuildTopView> {
                       ),
                     ),
                     // onPressed: () => notifier.onCloseStory(context, arguments),
-                    onPressed: () => notifier.onCloseStory(context, mounted),
+                    onPressed: () => notifier.onCloseStory(context, mounted, widget.fromProfile),
                     child: const CustomIconWidget(
                       defaultColor: false,
                       color: kHyppeLightButtonText,

@@ -354,6 +354,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
         Routes.showStories,
         argument: StoryDetailScreenArgument(
           myStories: myStoryGroup,
+          fromProfile: true
         ),
       );
     } else {
