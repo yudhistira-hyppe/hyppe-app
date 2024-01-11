@@ -819,7 +819,37 @@ class System {
               // }
 
               if (_pickerResult.files.isNotEmpty) {
-                _filePickerResult = _pickerResult.files.map((file) => File(file.path ?? '')).toList();
+                switch (_pickerResult.files[element].extension?.toLowerCase().toLowerCase()) {
+                  case 'jpg':
+                  case 'jpeg':
+                    File? pathPicker = File(_pickerResult.files.first.path??'');
+                    int fs = pathPicker.lengthSync();
+                    var resfs = (log(fs) / log(1024)).floor();
+                    var mb = (fs / pow(1024, resfs)).toStringAsFixed(0);
+                    if (int.parse(mb) >= 3){
+                      List<String> naming = pathPicker.path.split('.');
+                      final tmpDir = (await getTemporaryDirectory()).path;
+                      final target = '$tmpDir/${DateTime.now().millisecondsSinceEpoch}.${naming.last}';
+                      final result = await FlutterImageCompress.compressAndGetFile(
+                        pathPicker.path,
+                        target,
+                        quality: 75
+                      );
+                      
+                      if (result == null) {
+                      // error handling here
+                        print('error result');
+                      }else{
+                        _filePickerResult = [File(result.path)];
+                      }
+                    }else{
+                      _filePickerResult = _pickerResult.files.map((file) => File(file.path ?? '')).toList();
+                    }
+                    break;
+                  default:
+                    _filePickerResult = _pickerResult.files.map((file) => File(file.path ?? '')).toList();
+                    break;
+                }
               }
             }
           }
