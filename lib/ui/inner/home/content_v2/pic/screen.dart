@@ -1237,7 +1237,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                             return InkWell(
                                                               onTap: (){
                                                                 // Navigator.pushNamed(context, Routes.picFullScreenDetail, arguments: picData);
-                                                                Routing().move(Routes.picFullScreenDetail, argument: PicFullscreenArgument(imageProvider: imageProvider, picData: picData!));
+                                                                Routing().move(Routes.picFullScreenDetail, argument: PicFullscreenArgument(imageProvider: imageProvider, picData: notifier.pic!, index: index));
                                                               },
                                                               child: ClipRRect(
                                                                 borderRadius: BorderRadius.circular(20), // Image border

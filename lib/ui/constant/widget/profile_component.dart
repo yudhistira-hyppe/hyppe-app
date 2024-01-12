@@ -106,7 +106,19 @@ class ProfileComponent extends StatelessWidget {
                                 : CustomTextWidget(
                                     textToDisplay: username ?? '',
                                     maxLines: 1,
-                                    textStyle: Theme.of(context).textTheme.button?.copyWith(color: textColor),
+                                    textStyle: TextStyle(
+                                      color: textColor,
+                                      shadows: const [
+                                        Shadow(
+                                            offset: Offset(0.0, 1.0),
+                                            blurRadius: 2.0,
+                                            color: Colors.black12),
+                                        Shadow(
+                                            offset: Offset(0.0, 1.0),
+                                            blurRadius: 4.0,
+                                            color: Colors.black12),
+                                      ],
+                                    ),
                                     textAlign: TextAlign.left,
                                   ),
                           ),
@@ -136,7 +148,19 @@ class ProfileComponent extends StatelessWidget {
                               maxLines: 1,
                               textToDisplay: createdAt,
                               textAlign: TextAlign.left,
-                              textStyle: Theme.of(context).textTheme.caption?.copyWith(color: textColor),
+                              textStyle: TextStyle(
+                                color: textColor,
+                                shadows: const [
+                                  Shadow(
+                                      offset: Offset(0.0, 1.0),
+                                      blurRadius: 2.0,
+                                      color: Colors.black12),
+                                  Shadow(
+                                      offset: Offset(0.0, 1.0),
+                                      blurRadius: 4.0,
+                                      color: Colors.black12),
+                                ],
+                              ),
                             ),
                     ),
                   ],

@@ -20,7 +20,6 @@ import 'package:hyppe/ui/constant/widget/custom_desc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'dart:math' as math;
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/constant/widget/profile_component.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
@@ -1415,9 +1414,10 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage>
                                 iconData:
                                     '${AssetPath.vectorPath}${(widget.data.insight?.isPostLiked ?? false) ? 'liked.svg' : 'love-shadow.svg'}',
                                 value:
-                                    '${widget.data.insight?.likes}  ${lang?.like}',
+                                    '${widget.data.insight?.likes}',
                                 liked:
                                     widget.data.insight?.isPostLiked ?? false)),
+                    if (widget.data.allowComments ?? false)
                     buttonVideoRight(
                         onFunctionTap: () {
                           Routing().move(Routes.commentsDetail,
