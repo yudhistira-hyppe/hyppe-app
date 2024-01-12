@@ -360,7 +360,7 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
     } else {
 
       if(isGuest ?? false){
-        ShowBottomSheet.onLoginApp(this);
+        ShowBottomSheet.onLoginApp(Routing.navigatorKey.currentContext ?? context);
       }else{
         PreUploadContentNotifier pn = (Routing.navigatorKey.currentContext ?? context).read<PreUploadContentNotifier>();
         pn.hastagChallange = '';

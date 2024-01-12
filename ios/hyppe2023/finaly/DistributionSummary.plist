@@ -10,7 +10,7 @@
 				<string>arm64</string>
 			</array>
 			<key>buildNumber</key>
-			<string>117</string>
+			<string>118</string>
 			<key>certificate</key>
 			<dict>
 				<key>SHA1</key>
@@ -2386,7 +2386,7 @@
 				<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 			</dict>
 			<key>versionNumber</key>
-			<string>1.6.0</string>
+			<string>1.6.1</string>
 		</dict>
 	</array>
 </dict>

@@ -54,12 +54,13 @@ class _OnInterestListBottomSheetState extends State<OnInterestListBottomSheet> {
           leading: GestureDetector(
               onTap: (){
                 widget.onSave();
-                notifier.removeTempInterestList();
+                notifier.removeTempInterestList(isSaved: false);
               },
               child: Icon(
                 Icons.clear_rounded,
                 color: Theme.of(context).colorScheme.onSurface,
-              )),
+              ),
+          ),
           title: CustomTextWidget(
             textToDisplay: '${lang?.categories} ',
             textStyle: textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
@@ -86,7 +87,7 @@ class _OnInterestListBottomSheetState extends State<OnInterestListBottomSheet> {
                           textToDisplay: notifier.interestList[index].interestName ?? '',
                           // textStyle: Theme.of(context).primaryTextTheme.titleMedium,
                         ),
-                        trailing: notifier.pickedInterest(notifier.interestList[index].id)
+                        trailing: notifier.pickedInterestList(notifier.interestList[index].id)
                             ? const Icon(
                                 Icons.check_box,
                                 color: kHyppePrimary,

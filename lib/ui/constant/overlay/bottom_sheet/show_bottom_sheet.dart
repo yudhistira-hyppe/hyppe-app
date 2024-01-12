@@ -1154,7 +1154,7 @@ class ShowBottomSheet {
       isScrollControlled: true,
       builder: (builder) {
         return Container(
-          padding: const EdgeInsets.symmetric(vertical: 15),
+          padding: const EdgeInsets.symmetric(vertical: 24),
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(8),

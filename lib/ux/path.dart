@@ -55,8 +55,9 @@ class Routes {
   static const String diaryDetail = '/diary-detail';
   static const String diaryView = '/diary-view';
   static const String diarySeeAllScreen = '/diary-see-all-screen';
+  static const String diaryFull = '/diary-full';
 
-  // static const String storyDetail = '/story-detail';
+  static const String storyDetail = '/story-detail';
   static const String showStories = '/show-stories';
 
   static const String appSettings = '/app-settings';

@@ -37,6 +37,7 @@ import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/screen.dart'
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/shimmer_slider.dart';
 import 'package:hyppe/ui/inner/home/content_v2/content_preferences/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/player/diary_player.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/player/landing_diary_full.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/screen.dart';
 // import 'package:hyppe/ui/inner/home/content/wallet/screen_lama.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/see_all/diary_see_all_screen.dart';
@@ -229,6 +230,9 @@ class Generate {
 
       case Routes.diaryDetail:
         return MaterialPageRoute(builder: (_) => DiaryPlayerPage(argument: settings.arguments as DiaryDetailScreenArgument));
+
+      case Routes.diaryFull:
+        return MaterialPageRoute(builder: (_) => LandingDiaryFullPage(argument: settings.arguments as DiaryDetailScreenArgument));
 
       // case Routes.storyDetail:
       //   return MaterialPageRoute(builder: (_) => HyppePlaylistStories(argument: settings.arguments as StoryDetailScreenArgument));
@@ -436,7 +440,10 @@ class Generate {
       case Routes.listStreamers:
         return MaterialPageRoute(builder: (_) => const ListStreamersScreen());
       case Routes.viewStreaming:
-        return MaterialPageRoute(builder: (_) => ViewStreamingScreen(args: settings.arguments as ViewStreamingArgument,));
+        return MaterialPageRoute(
+            builder: (_) => ViewStreamingScreen(
+                  args: settings.arguments as ViewStreamingArgument,
+                ));
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

@@ -34,7 +34,7 @@ class OtherProfileTop extends StatelessWidget {
 
   void showTap(BuildContext context, List<ContentData> dataStory, OtherProfileNotifier notifier) {
     if (dataStory.isNotEmpty) {
-      context.read<PreviewStoriesNotifier>().navigateToOtherStoryGroup(context, dataStory, email ?? '');
+      context.read<PreviewStoriesNotifier>().navigateToOtherStoryGroup(context, dataStory, email ?? '', isOther: true);
     } else {
       showPict(context, notifier);
     }

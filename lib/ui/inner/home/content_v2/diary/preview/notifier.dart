@@ -225,7 +225,7 @@ class PreviewDiaryNotifier with ChangeNotifier {
     final connect = await _system.checkConnections();
     if (connect) {
       _routing.move(
-        Routes.diaryDetail,
+        Routes.diaryFull,
         argument: DiaryDetailScreenArgument(
           diaryData: diaryData,
           index: index.toDouble(),

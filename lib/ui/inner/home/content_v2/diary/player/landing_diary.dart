@@ -964,7 +964,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                           child: GestureDetector(
                                             onTap: () {
-                                              context.handleActionIsGuest((){
+                                              context.handleActionIsGuest(() {
                                                 if (data?.insight?.isloadingFollow != true) {
                                                   picNot.followUser(context, data ?? ContentData(), isUnFollow: data?.following, isloading: data?.insight?.isloadingFollow ?? false);
                                                 }
@@ -988,7 +988,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                       ),
                                     GestureDetector(
                                       onTap: () {
-                                        context.handleActionIsGuest((){
+                                        context.handleActionIsGuest(() {
                                           if (data?.email != email) {
                                             // FlutterAliplayer? fAliplayer
                                             context.read<PreviewPicNotifier>().reportContent(context, data ?? ContentData(), fAliplayer: fAliplayer, onCompleted: () async {
@@ -1388,7 +1388,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                             Expanded(
                                               child: GestureDetector(
                                                 onTap: () async {
-                                                  context.handleActionIsGuest(() async{
+                                                  context.handleActionIsGuest(() async {
                                                     fAliplayer?.pause();
                                                     await ShowBottomSheet.onBuyContent(context, data: data, fAliplayer: fAliplayer);
                                                   });
