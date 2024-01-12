@@ -735,7 +735,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         _uploadSuccess = value;
         'Create post content with value $value'.logger();
         // _eventService.notifyUploadFinishingUp(_uploadSuccess);
-        if(_uploadSuccess != null){
+        if (_uploadSuccess != null) {
           eventService.notifyUploadSuccess(_uploadSuccess);
         }
 
@@ -921,6 +921,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         destinationPath: _desFile ?? '',
         videoQuality: VideoQuality.high,
         isMinBitrateCheckEnabled: false,
+        iosSaveInGallery: false,
         // frameRate: 24, /* or ignore it */
       );
 
@@ -1267,6 +1268,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     if (interest.isNotEmpty) {
       String tile = interest[index].id ?? '';
       if (tile == '11111') {
+        _tempinterestData.clear();
         showInterest(context);
         _tempinterestData.addAll(_interestData);
       } else {
@@ -1302,26 +1304,25 @@ class PreUploadContentNotifier with ChangeNotifier {
         } else {
           _tempinterestData.add(tile);
         }
-        
+
         notifyListeners();
       }
     } else {
       return null;
     }
   }
-  
-  void removeTempInterestList({bool isSaved=false}) {
-    if (isSaved){
+
+  void removeTempInterestList({bool isSaved = false}) {
+    if (isSaved) {
       _interestData.clear();
       if (_tempinterestData.isNotEmpty) {
         _interestData.addAll(_tempinterestData);
         notifyListeners();
       }
       _tempinterestData.clear();
-    }else{
+    } else {
       _tempinterestData.clear();
     }
-    
   }
 
   Future inserTagPeople(int index) async {
@@ -1464,7 +1465,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     int searchLength = _temporarySearch.length;
     _isShowAutoComplete = false;
 
-    if(_searchPeolpleData.isNotEmpty){
+    if (_searchPeolpleData.isNotEmpty) {
       final newText = text.replaceRange(selection.start - searchLength, selection.end, '${_searchPeolpleData[index].username} ');
       int length = _searchPeolpleData[index].username?.length ?? 0;
       _captionController.value = TextEditingValue(
@@ -1473,7 +1474,6 @@ class PreUploadContentNotifier with ChangeNotifier {
       );
       notifyListeners();
     }
-
   }
 
   Future submitOwnership(BuildContext context, {bool withAlert = false}) async {
