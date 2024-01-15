@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:hyppe/core/arguments/account_preference_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
@@ -425,7 +426,7 @@ class Generate {
         return MaterialPageRoute(builder: (_) => ScrollVid(arguments: settings.arguments as SlidedVidDetailScreenArgument));
 
       case Routes.scrollFullDiary:
-        return MaterialPageRoute(builder: (_) => ScrollFullDiary(arguments: settings.arguments as SlidedDiaryDetailScreenArgument));
+        return CupertinoPageRoute(builder: (_) => ScrollFullDiary(arguments: settings.arguments as SlidedDiaryDetailScreenArgument));
 
       case Routes.chalenge:
         return MaterialPageRoute(builder: (_) => const ChalangeScreen());
