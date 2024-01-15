@@ -30,7 +30,7 @@ class SelfProfileTop extends StatelessWidget {
 
   void showTap(BuildContext context, List<ContentData> dataStory, SelfProfileNotifier notifier) {
     if (dataStory.isNotEmpty) {
-      context.read<PreviewStoriesNotifier>().navigateToMyStoryGroup(context, dataStory);
+      context.read<PreviewStoriesNotifier>().navigateToMyStoryGroup(context, dataStory, true);
     } else {
       showPict(context, notifier);
     }

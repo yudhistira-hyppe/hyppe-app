@@ -4,7 +4,7 @@ homepage: https://www.hyppe.id
 
 publish_to: "none"
 
-version: 1.6.0+152 #26-06-2023
+version: 1.6.1+153 #26-06-2023
 
 environment:
   sdk: ">=2.18.0 <3.0.0"
@@ -103,8 +103,6 @@ dependencies:
   heif_converter: ^1.0.0
   unique_identifier: ^0.3.0
   flutter_livepush_plugin: ^2.1.0+1
-
-
 
   dynamic_widget: # Dynamic widget builder
     git:

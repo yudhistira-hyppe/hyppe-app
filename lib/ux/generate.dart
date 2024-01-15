@@ -14,6 +14,7 @@ import 'package:hyppe/core/arguments/hashtag_argument.dart';
 import 'package:hyppe/core/arguments/image_preview_argument.dart';
 import 'package:hyppe/core/arguments/message_detail_argument.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
+import 'package:hyppe/core/arguments/pic_fullscreen_argument.dart';
 import 'package:hyppe/core/arguments/referral_list_user.dart';
 import 'package:hyppe/core/arguments/summary_live_argument.dart';
 import 'package:hyppe/core/arguments/ticket_argument.dart';
@@ -37,7 +38,9 @@ import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/screen.dart'
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/shimmer_slider.dart';
 import 'package:hyppe/ui/inner/home/content_v2/content_preferences/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/player/diary_player.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/player/landing_diary_full.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/screen_full.dart';
 // import 'package:hyppe/ui/inner/home/content/wallet/screen_lama.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/see_all/diary_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/FAQ/screen.dart';
@@ -45,6 +48,7 @@ import 'package:hyppe/ui/inner/home/content_v2/help/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/support_ticket/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/fullscreen/pic_fullscreen_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/see_all/pic_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/test.dart';
@@ -229,6 +233,9 @@ class Generate {
 
       case Routes.diaryDetail:
         return MaterialPageRoute(builder: (_) => DiaryPlayerPage(argument: settings.arguments as DiaryDetailScreenArgument));
+
+      case Routes.diaryFull:
+        return MaterialPageRoute(builder: (_) => LandingDiaryFullPage(argument: settings.arguments as DiaryDetailScreenArgument));
 
       // case Routes.storyDetail:
       //   return MaterialPageRoute(builder: (_) => HyppePlaylistStories(argument: settings.arguments as StoryDetailScreenArgument));
@@ -417,6 +424,9 @@ class Generate {
       case Routes.scrollVid:
         return MaterialPageRoute(builder: (_) => ScrollVid(arguments: settings.arguments as SlidedVidDetailScreenArgument));
 
+      case Routes.scrollFullDiary:
+        return MaterialPageRoute(builder: (_) => ScrollFullDiary(arguments: settings.arguments as SlidedDiaryDetailScreenArgument));
+
       case Routes.chalenge:
         return MaterialPageRoute(builder: (_) => const ChalangeScreen());
       case Routes.chalengeDetail:
@@ -436,7 +446,12 @@ class Generate {
       case Routes.listStreamers:
         return MaterialPageRoute(builder: (_) => const ListStreamersScreen());
       case Routes.viewStreaming:
-        return MaterialPageRoute(builder: (_) => ViewStreamingScreen(args: settings.arguments as ViewStreamingArgument,));
+        return MaterialPageRoute(
+            builder: (_) => ViewStreamingScreen(
+                  args: settings.arguments as ViewStreamingArgument,
+                ));
+      case Routes.picFullScreenDetail:
+        return MaterialPageRoute(builder: (_) => PicFullscreenPage(argument: settings.arguments as PicFullscreenArgument));
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

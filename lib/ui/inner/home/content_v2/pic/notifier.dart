@@ -38,6 +38,7 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
     ..featureType = FeatureType.pic;
 
   List<ContentData>? _pic;
+  Offset positionDxDy = const Offset(0, 0);
 
   List<ContentData>? get pic => _pic;
 

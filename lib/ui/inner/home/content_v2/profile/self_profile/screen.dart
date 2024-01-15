@@ -57,7 +57,7 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
     FirebaseCrashlytics.instance.setCustomKey('layout', 'SelfProfileScreen');
     final notifier = context.read<SelfProfileNotifier>();
     notifier.setPageIndex(0);
-    _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
+    _scrollController.addListener(() => notifier.onScrollListener(context, scrollController: _scrollController));
 
     // ShowGeneralDialog.adsRewardPop(context);
 
@@ -249,118 +249,116 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
                 },
                 child: isloading
                     ? CustomScrollView(
-                  slivers: [SliverToBoxAdapter(child: BothProfileTopShimmer()), BothProfileContentShimmer()],
-                )
+                        slivers: [SliverToBoxAdapter(child: BothProfileTopShimmer()), BothProfileContentShimmer()],
+                      )
                     : !notifier.isConnect
-                    ? OfflineMode(
-                  function: () async {
-                    var connect = await System().checkConnections();
-                    if (connect) {
-                      setState(() {
-                        isloading = true;
-                      });
-                      await notifier.initialSelfProfile(context).then((value) => isloading = false);
-                    }
-                  },
-                )
-                    : CustomScrollView(
-                  controller: _scrollController,
-                  scrollDirection: Axis.vertical,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  slivers: [
-                    // SliverAppBar(
-                    //   pinned: false,
-                    //   stretch: false,
-                    //   elevation: 0.0,
-                    //   floating: false,
-                    //   automaticallyImplyLeading: false,
-                    //   expandedHeight: (400 * SizeConfig.scaleDiagonal) + 46,
-                    //   backgroundColor: Theme.of(context).colorScheme.background,
-                    //   flexibleSpace: FlexibleSpaceBar(
-                    //       titlePadding: EdgeInsets.zero,
-                    //       background: notifier.user.profile != null
-                    //           ? SelfProfileTop()
-                    //           : BothProfileTopShimmer()),
-                    // ),
-                    SliverToBoxAdapter(
-                      child: MeasuredSize(
-                          onChange: (e) async {
-                            if (mounted) {
-                              heightProfileCard = e.height;
-                              await Future.delayed(Duration(milliseconds: 300), () {
-                                isloading = true;
-                              });
-                              // await Future.delayed(Duration(milliseconds: 1000), () {
-                              isloading = false;
-                              // });
-                              print("=============================== height");
-                              print(heightProfileCard);
-                            }
-                          },
-                          child: Container(child: notifier.user.profile != null ? const SelfProfileTop() : BothProfileTopShimmer())),
-                    ),
+                        ? OfflineMode(
+                            function: () async {
+                              var connect = await System().checkConnections();
+                              if (connect) {
+                                setState(() {
+                                  isloading = true;
+                                });
+                                await notifier.initialSelfProfile(context).then((value) => isloading = false);
+                              }
+                            },
+                          )
+                        : CustomScrollView(
+                            controller: _scrollController,
+                            scrollDirection: Axis.vertical,
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            slivers: [
+                              // SliverAppBar(
+                              //   pinned: false,
+                              //   stretch: false,
+                              //   elevation: 0.0,
+                              //   floating: false,
+                              //   automaticallyImplyLeading: false,
+                              //   expandedHeight: (400 * SizeConfig.scaleDiagonal) + 46,
+                              //   backgroundColor: Theme.of(context).colorScheme.background,
+                              //   flexibleSpace: FlexibleSpaceBar(
+                              //       titlePadding: EdgeInsets.zero,
+                              //       background: notifier.user.profile != null
+                              //           ? SelfProfileTop()
+                              //           : BothProfileTopShimmer()),
+                              // ),
+                              SliverToBoxAdapter(
+                                child: MeasuredSize(
+                                    onChange: (e) async {
+                                      if (mounted) {
+                                        heightProfileCard = e.height;
+                                        await Future.delayed(Duration(milliseconds: 300), () {
+                                          isloading = true;
+                                        });
+                                        // await Future.delayed(Duration(milliseconds: 1000), () {
+                                        isloading = false;
+                                        // });
+                                        print("=============================== height");
+                                        print(heightProfileCard);
+                                      }
+                                    },
+                                    child: Container(child: notifier.user.profile != null ? const SelfProfileTop() : BothProfileTopShimmer())),
+                              ),
 
-                    SliverAppBar(
-                      pinned: true,
-                      flexibleSpace: const SelfProfileBottom(),
-                      automaticallyImplyLeading: false,
-                      backgroundColor: Theme.of(context).colorScheme.background,
-                    ),
-                    notifier.optionButton(_scrollController, heightProfileCard),
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                            (BuildContext context, int index) {
-                          return notifier.scollLoading ? const CustomLoading(size: 4) : Container();
-                        },
-                        childCount: 1,
-                      ),
-                    )
-                  ],
-                ),
+                              SliverAppBar(
+                                pinned: true,
+                                flexibleSpace: const SelfProfileBottom(),
+                                automaticallyImplyLeading: false,
+                                backgroundColor: Theme.of(context).colorScheme.background,
+                              ),
+                              notifier.optionButton(_scrollController, heightProfileCard),
+                              SliverList(
+                                delegate: SliverChildBuilderDelegate(
+                                  (BuildContext context, int index) {
+                                    return notifier.scollLoading ? const CustomLoading(size: 4) : Container();
+                                  },
+                                  childCount: 1,
+                                ),
+                              )
+                            ],
+                          ),
               ),
-            SafeArea(
-              child: Container(
-                width: double.infinity,
-                height: context.getHeight(),
-                alignment: Alignment.center,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 51),
-                      child: const CustomIconWidget(
-                          defaultColor: false,
-                          iconData: '${AssetPath.vectorPath}avatar.svg'),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 54),
-                        child: const CustomTextWidget(
-                          maxLines: 2,
-                          textToDisplay: 'Masuk untuk nikmati fitur seru Hyppe secara lengkap',
-                          textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),)),
-                    twentyFourPx,
-                    CustomElevatedButton(
-                      width: 259,
-                      height: 36 * SizeConfig.scaleDiagonal,
-                      buttonStyle: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+              SafeArea(
+                child: Container(
+                  width: double.infinity,
+                  height: context.getHeight(),
+                  alignment: Alignment.center,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 51),
+                        child: const CustomIconWidget(defaultColor: false, iconData: '${AssetPath.vectorPath}avatar.svg'),
                       ),
-                      function: () {
-                        ShowBottomSheet.onLoginApp(context);
-                      },
-                      child: CustomTextWidget(
-                        textToDisplay: notifier.language.login ?? 'Login',
-                        textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          color: kHyppeLightButtonText,
+                      Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 54),
+                          child: const CustomTextWidget(
+                            maxLines: 2,
+                            textToDisplay: 'Masuk untuk nikmati fitur seru Hyppe secara lengkap',
+                            textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          )),
+                      twentyFourPx,
+                      CustomElevatedButton(
+                        width: 259,
+                        height: 36 * SizeConfig.scaleDiagonal,
+                        buttonStyle: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                         ),
-                      ),
-                    )
-                  ],
+                        function: () {
+                          ShowBottomSheet.onLoginApp(context);
+                        },
+                        child: CustomTextWidget(
+                          textToDisplay: notifier.language.login ?? 'Login',
+                          textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
+                                color: kHyppeLightButtonText,
+                              ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            )
-          ),
+              )),
         ),
       ),
     );

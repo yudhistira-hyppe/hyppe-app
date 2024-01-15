@@ -284,8 +284,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                   }
                 },
                 child: AbsorbPointer(
-                  // absorbing: true,
-                  absorbing: isZoom,
+                  absorbing: false,
+                  // absorbing: isZoom,
                   child: NestedScrollView(
                     // key: context.read<MainNotifier>().globalKey,
                     key: globalKey,
@@ -360,7 +360,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                     },
                     body: TabBarView(
                       controller: _tabController,
-                      physics: isZoom ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
+                      // physics: isZoom ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
                       children: [
                         // Pict
                         Container(
@@ -382,6 +382,20 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                             // offset: offset,
                           ),
                         ),
+                        // Container(
+                        //     padding: const EdgeInsets.only(left: 6.0, right: 6),
+                        //     color: kHyppeLightSurface,
+                        //     child: ListView.builder(
+                        //       itemCount: 100,
+                        //       itemBuilder: (context, index) {
+                        //         return Container(
+                        //           margin: EdgeInsets.only(bottom: 30),
+                        //           height: 50,
+                        //           width: 50,
+                        //           color: Colors.red,
+                        //         );
+                        //       },
+                        //     )),
                         Container(
                           padding: const EdgeInsets.only(left: 6.0, right: 6),
                           color: kHyppeLightSurface,

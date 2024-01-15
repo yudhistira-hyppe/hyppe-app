@@ -50,7 +50,7 @@ class ScrollPicNotifier with ChangeNotifier {
       if (pageSrc == PageSrc.selfProfile) {
         final sp = context.read<SelfProfileNotifier>();
         sp.pageIndex = 0;
-        await sp.onScrollListener(context, scrollController, isLoad: true);
+        await sp.onScrollListener(context, scrollController: scrollController, isLoad: true);
         if (sp.user.pics == null || (sp.user.pics?.isEmpty ?? [].isEmpty)) {
         } else {
           pics = sp.user.pics;
@@ -61,7 +61,7 @@ class ScrollPicNotifier with ChangeNotifier {
       if (pageSrc == PageSrc.otherProfile) {
         final op = context.read<OtherProfileNotifier>();
         op.pageIndex = 0;
-        await op.onScrollListener(context, scrollController, isLoad: true);
+        await op.onScrollListener(context, scrollController: scrollController, isLoad: true);
         if (op.manyUser.last.pics == null || (op.manyUser.last.pics?.isEmpty ?? [].isEmpty)) {
         } else {
           pics = op.manyUser.last.pics;
