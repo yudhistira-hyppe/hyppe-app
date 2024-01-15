@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:hyppe/core/arguments/account_preference_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
@@ -22,6 +23,7 @@ import 'package:hyppe/core/arguments/transaction_argument.dart';
 import 'package:hyppe/core/arguments/update_contents_argument.dart';
 import 'package:hyppe/core/arguments/user_otp_screen_argument.dart';
 import 'package:hyppe/core/arguments/verify_page_argument.dart';
+import 'package:hyppe/core/arguments/vid_fullscreen_argument.dart';
 import 'package:hyppe/core/arguments/view_streaming_argument.dart';
 import 'package:hyppe/ui/constant/entities/appeal/screen.dart';
 import 'package:hyppe/ui/constant/entities/appeal/success_appeal.dart';
@@ -48,6 +50,7 @@ import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/screen.da
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/fullscreen/pic_fullscreen_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/widget/picscroll_fullscreen_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/see_all/pic_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/test.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/confirm_pin/screen.dart';
@@ -88,10 +91,10 @@ import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_docume
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/widget/vidscroll_fullscreen_page.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/feedback/screen.dart';
-import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/screen.dart';
 import 'package:hyppe/ui/inner/home/widget/aliplayer.dart';
 import 'package:hyppe/ui/inner/main/screen.dart';
@@ -137,7 +140,6 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_detail.da
 import 'package:hyppe/ui/inner/home/content_v2/profile/setting/setting_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/sign_in_security/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/change_password/screen.dart';
-import 'package:provider/provider.dart';
 // import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/screen.dart';
 
 import '../core/arguments/detail_ticket_argument.dart';
@@ -440,7 +442,11 @@ class Generate {
       case Routes.viewStreaming:
         return MaterialPageRoute(builder: (_) => ViewStreamingScreen(args: settings.arguments as ViewStreamingArgument,));
       case Routes.picFullScreenDetail:
-        return MaterialPageRoute(builder: (_) => PicFullscreenPage(argument: settings.arguments as PicFullscreenArgument));
+        return CupertinoPageRoute(builder: (_) => PicFullscreenPage(argument: settings.arguments as PicFullscreenArgument));
+      case Routes.picScrollFullScreenDetail:
+        return CupertinoPageRoute(builder: (_) => PicScrollFullscreenPage(argument: settings.arguments as SlidedPicDetailScreenArgument));
+      case Routes.vidScrollFullScreenDetail:
+        return CupertinoPageRoute(builder: (_) => VidScrollFullScreenPage(argument: settings.arguments as VidFullscreenArgument));
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

@@ -69,7 +69,8 @@ class ScrollPic extends StatefulWidget {
   _ScrollPicState createState() => _ScrollPicState();
 }
 
-class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
+class _ScrollPicState extends State<ScrollPic>
+    with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
   FlutterAliplayer? fAliplayer;
   List<ContentData>? pics = [];
   final scrollGlobal = GlobalKey<SelfProfileScreenState>();
@@ -107,11 +108,14 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
   bool toComment = false;
 
   final ItemScrollController itemScrollController = ItemScrollController();
-  final ScrollOffsetController scrollOffsetController = ScrollOffsetController();
-  final ScrollOffsetListener scrollOffsetListener = ScrollOffsetListener.create();
+  final ScrollOffsetController scrollOffsetController =
+      ScrollOffsetController();
+  final ScrollOffsetListener scrollOffsetListener =
+      ScrollOffsetListener.create();
 
   /// Listener that reports the position of items when the list is scrolled.
-  final ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
+  final ItemPositionsListener itemPositionsListener =
+      ItemPositionsListener.create();
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -131,7 +135,8 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     print("${pics}");
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPic-${pics?.first.postID}');
+      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(
+          playerId: 'aliPic-${pics?.first.postID}');
       WidgetsBinding.instance.addObserver(this);
 
       fAliplayer?.setAutoPlay(true);
@@ -147,7 +152,8 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
 
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
-      fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+      fAliplayer
+          ?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
       itemScrollController.jumpTo(index: widget.arguments?.page ?? 0);
       // scrollIndex = widget.arguments?.page ?? 0;
       print("00000000000000 ${widget.arguments?.page}");
@@ -156,7 +162,6 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     var index = 0;
     var lastIndex = 0;
     final pageSrc = widget.arguments?.pageSrc ?? PageSrc.otherProfile;
-
 
     itemPositionsListener.itemPositions.addListener(() async {
       print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
@@ -172,7 +177,8 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
         if (index == pics!.length - 2) {
           if (connect) {
             if (!notifier.isLoadingLoadmore) {
-              await notifier.loadMore(context, _scrollController, pageSrc, widget.arguments?.key ?? '');
+              await notifier.loadMore(context, _scrollController, pageSrc,
+                  widget.arguments?.key ?? '');
               if (mounted) {
                 setState(() {
                   pics = notifier.pics;
@@ -229,7 +235,9 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
         fAliplayer?.pause();
       }
 
-      fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
+      fAliplayer
+          ?.getPlayerName()
+          .then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
         setState(() {
           isPrepare = true;
@@ -330,7 +338,8 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
         // Fluttertoast.showToast(msg: "${info.trackDefinition}切换成功");
       }
     });
-    fAliplayer?.setOnThumbnailPreparedListener(preparedSuccess: (playerId) {}, preparedFail: (playerId) {});
+    fAliplayer?.setOnThumbnailPreparedListener(
+        preparedSuccess: (playerId) {}, preparedFail: (playerId) {});
 
     fAliplayer?.setOnThumbnailGetListener(
         onThumbnailGetSuccess: (bitmap, range, playerId) {
@@ -476,7 +485,8 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
 
   @override
   void didChangeDependencies() {
-    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    CustomRouteObserver.routeObserver
+        .subscribe(this, ModalRoute.of(context) as PageRoute);
     super.didChangeDependencies();
   }
 
@@ -551,7 +561,10 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
         break;
       case AppLifecycleState.resumed:
         print("========= resumed");
-        if ((Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds)) {
+        if ((Routing.navigatorKey.currentContext ?? context)
+                .read<PreviewVidNotifier>()
+                .canPlayOpenApps &&
+            !SharedPreference().readStorage(SpKeys.isShowPopAds)) {
           fAliplayer?.play();
         }
         break;
@@ -621,7 +634,10 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                     ListTile(
                       title: Align(
                         alignment: const Alignment(-1.2, 0),
-                        child: Container(margin: const EdgeInsets.symmetric(horizontal: 10), child: widget.arguments?.titleAppbar ?? Container()),
+                        child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            child:
+                                widget.arguments?.titleAppbar ?? Container()),
                       ),
                       leading: IconButton(
                           icon: const Icon(
@@ -640,12 +656,15 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                           ? const NoResultFound()
                           : RefreshIndicator(
                               onRefresh: () async {
-                                bool connect = await System().checkConnections();
+                                bool connect =
+                                    await System().checkConnections();
                                 if (connect) {
                                   setState(() {
                                     isloading = true;
                                   });
-                                  await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                                  await notifier.reload(
+                                      context, widget.arguments!.pageSrc!,
+                                      key: widget.arguments?.key ?? '');
                                   setState(() {
                                     pics = notifier.pics;
                                   });
@@ -661,14 +680,18 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                               },
                               child: NotificationListener<ScrollNotification>(
                                 onNotification: (scrollNotification) {
-                                  print("scrollNotification ===== $scrollNotification");
+                                  print(
+                                      "scrollNotification ===== $scrollNotification");
                                   // scrollNotification.disallowIndicator();
-                                  if (scrollNotification is ScrollStartNotification) {
+                                  if (scrollNotification
+                                      is ScrollStartNotification) {
                                     print("=======start=======");
                                     // _onStartScroll(scrollNotification.metrics);
-                                  } else if (scrollNotification is ScrollUpdateNotification) {
+                                  } else if (scrollNotification
+                                      is ScrollUpdateNotification) {
                                     // _onUpdateScroll(scrollNotification.metrics);
-                                  } else if (scrollNotification is ScrollEndNotification) {
+                                  } else if (scrollNotification
+                                      is ScrollEndNotification) {
                                     print("=======end=======");
                                     // _onEndScroll(scrollNotification.metrics);
                                   }
@@ -679,24 +702,35 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                   scrollDirection: Axis.vertical,
                                   itemScrollController: itemScrollController,
                                   itemPositionsListener: itemPositionsListener,
-                                  scrollOffsetController: scrollOffsetController,
+                                  scrollOffsetController:
+                                      scrollOffsetController,
                                   scrollOffsetListener: scrollOffsetListener,
                                   // scrollDirection: Axis.horizontal,
-                                  physics: isZoom ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
+                                  physics: isZoom
+                                      ? const NeverScrollableScrollPhysics()
+                                      : const AlwaysScrollableScrollPhysics(),
                                   shrinkWrap: false,
                                   itemCount: pics?.length ?? 0,
-                                  padding: const EdgeInsets.symmetric(horizontal: 11.5),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 11.5),
 
                                   itemBuilder: (context, index) {
                                     if (pics == null || home.isLoadingPict) {
                                       fAliplayer?.pause();
                                       _lastCurIndex = -1;
                                       return CustomShimmer(
-                                        width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                                        width:
+                                            (MediaQuery.of(context).size.width -
+                                                    11.5 -
+                                                    11.5 -
+                                                    9) /
+                                                2,
                                         height: 168,
                                         radius: 8,
-                                        margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                                        padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 4.5, vertical: 10),
+                                        padding: const EdgeInsets.only(
+                                            left: 8.0, right: 8.0, top: 8.0),
                                       );
                                     } else if (index == pics?.length) {
                                       return UnconstrainedBox(
@@ -736,7 +770,8 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
             borderRadius: BorderRadius.circular(16),
             color: Colors.white,
           ),
-          padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
+          padding:
+              const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
           margin: const EdgeInsets.only(
             top: 18,
             left: 6,
@@ -776,8 +811,10 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                       featureType: FeatureType.other,
                       // isCelebrity: vidpics?[index].privacy?.isCelebrity,
                       isCelebrity: false,
-                      imageUrl: '${System().showUserPicture(pics?[index].avatar?.mediaEndpoint)}',
-                      onTapOnProfileImage: () => System().navigateToProfile(context, pics?[index].email ?? ''),
+                      imageUrl:
+                          '${System().showUserPicture(pics?[index].avatar?.mediaEndpoint)}',
+                      onTapOnProfileImage: () => System()
+                          .navigateToProfile(context, pics?[index].email ?? ''),
                       createdAt: '2022-02-02',
                       musicName: pics?[index].music?.musicTitle ?? '',
                       location: pics?[index].location ?? '',
@@ -785,14 +822,20 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                       badge: pics?[index].urluserBadge,
                     ),
                   ),
-                  if (pics?[index].email != email && (pics?[index].isNewFollowing ?? false))
+                  if (pics?[index].email != email &&
+                      (pics?[index].isNewFollowing ?? false))
                     Consumer<PreviewPicNotifier>(
                       builder: (context, picNot, child) => Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: GestureDetector(
                           onTap: () {
                             if (pics?[index].insight?.isloadingFollow != true) {
-                              picNot.followUser(context, pics?[index] ?? ContentData(), isUnFollow: pics?[index].following, isloading: pics?[index].insight!.isloadingFollow ?? false);
+                              picNot.followUser(
+                                  context, pics?[index] ?? ContentData(),
+                                  isUnFollow: pics?[index].following,
+                                  isloading:
+                                      pics?[index].insight!.isloadingFollow ??
+                                          false);
                             }
                           },
                           child: pics?[index].insight?.isloadingFollow ?? false
@@ -805,8 +848,14 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                   ),
                                 )
                               : Text(
-                                  (pics?[index].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
-                                  style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                                  (pics?[index].following ?? false)
+                                      ? (lang?.following ?? '')
+                                      : (lang?.follow ?? ''),
+                                  style: TextStyle(
+                                      color: kHyppePrimary,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w700,
+                                      fontFamily: "Lato"),
                                 ),
                         ),
                       ),
@@ -815,13 +864,18 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                     onTap: () {
                       // fAliplayer?.pause();
                       if (pics?[index].email != email) {
-                        context.read<PreviewPicNotifier>().reportContent(context, pics?[index] ?? ContentData(), fAliplayer: fAliplayer, onCompleted: () async {
+                        context.read<PreviewPicNotifier>().reportContent(
+                            context, pics?[index] ?? ContentData(),
+                            fAliplayer: fAliplayer, onCompleted: () async {
                           bool connect = await System().checkConnections();
                           if (connect) {
                             setState(() {
                               isloading = true;
                             });
-                            await notifier.reload(Routing.navigatorKey.currentContext ?? context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                            await notifier.reload(
+                                Routing.navigatorKey.currentContext ?? context,
+                                widget.arguments!.pageSrc!,
+                                key: widget.arguments?.key ?? '');
                             setState(() {
                               pics = notifier.pics;
                             });
@@ -844,7 +898,8 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                           captionTitle: hyppePic,
                           onDetail: false,
                           isShare: pics?[index].isShared,
-                          onUpdate: () => context.read<HomeNotifier>().onUpdate(),
+                          onUpdate: () =>
+                              context.read<HomeNotifier>().onUpdate(),
                           fAliplayer: fAliplayer,
                         );
                       }
@@ -875,7 +930,11 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                     //=============
                     if (_lastCurIndex != _curIdx) {
                       try {
-                        widget.arguments?.scrollController?.jumpTo(System().scrollAuto(_curIdx, widget.arguments?.heightTopProfile ?? 0, widget.arguments?.heightBox?.toInt() ?? 110));
+                        widget.arguments?.scrollController?.jumpTo(System()
+                            .scrollAuto(
+                                _curIdx,
+                                widget.arguments?.heightTopProfile ?? 0,
+                                widget.arguments?.heightBox?.toInt() ?? 110));
                       } catch (e) {
                         print("ini error $e");
                       }
@@ -889,7 +948,9 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                         fAliplayer?.stop();
                       }
                       Future.delayed(const Duration(milliseconds: 100), () {
-                        System().increaseViewCount2(context, pics?[index] ?? ContentData(), check: false);
+                        System().increaseViewCount2(
+                            context, pics?[index] ?? ContentData(),
+                            check: false);
                       });
                       if (pics?[index].certified ?? false) {
                         System().block(context);
@@ -965,18 +1026,33 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                         !notifier.connectionError
                             ? GestureDetector(
                                 onTap: () {
-                                  if (pics?[index].reportedStatus != 'BLURRED') {
+                                  if (pics?[index].reportedStatus !=
+                                      'BLURRED') {
                                     fAliplayer?.play();
                                     setState(() {
                                       isMute = !isMute;
                                     });
                                     fAliplayer?.setMuted(isMute);
                                   }
+                                  print('index pic $index');
+                                  Routing().move(
+                                      Routes.picScrollFullScreenDetail,
+                                      argument: SlidedPicDetailScreenArgument(
+                                        page: index,
+                                        type: TypePlaylist.mine,
+                                        titleAppbar: widget.arguments!.titleAppbar,
+                                        pageSrc: PageSrc.selfProfile,
+                                        picData: widget.arguments!.picData,
+                                        scrollController: widget.arguments!.scrollController,
+                                        heightTopProfile: widget.arguments!.heightTopProfile,
+                                      ));
                                 },
                                 onDoubleTap: () {
-                                  final _likeNotifier = context.read<LikeNotifier>();
+                                  final _likeNotifier =
+                                      context.read<LikeNotifier>();
                                   if (pics?[index] != null) {
-                                    _likeNotifier.likePost(context, pics![index]);
+                                    _likeNotifier.likePost(
+                                        context, pics![index]);
                                   }
                                 },
                                 child: Center(
@@ -994,115 +1070,227 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                       child: pics?[index].isLoading ?? false
                                           ? Container()
                                           : ValueListenableBuilder(
-                                              valueListenable: _networklHasErrorNotifier,
-                                              builder: (BuildContext context, int count, _) {
+                                              valueListenable:
+                                                  _networklHasErrorNotifier,
+                                              builder: (BuildContext context,
+                                                  int count, _) {
                                                 return CustomBaseCacheImage(
-                                                  cacheKey: "${pics?[index].postID}-${_networklHasErrorNotifier.value.toString()}",
+                                                  cacheKey:
+                                                      "${pics?[index].postID}-${_networklHasErrorNotifier.value.toString()}",
                                                   memCacheWidth: 100,
                                                   memCacheHeight: 100,
                                                   widthPlaceHolder: 80,
                                                   heightPlaceHolder: 80,
-                                                  imageUrl: (pics?[index].isApsara ?? false) ? (pics?[index].mediaEndpoint ?? "") : "${pics?[index].fullContent ?? ''}" + '&2',
+                                                  imageUrl: (pics?[index]
+                                                              .isApsara ??
+                                                          false)
+                                                      ? (pics?[index]
+                                                              .mediaEndpoint ??
+                                                          "")
+                                                      : "${pics?[index].fullContent ?? ''}" +
+                                                          '&2',
                                                   // imageUrl: "https://mir-s3-cdn-cf.behance.net/project_modules/max_3840/8f37ff162632759.63d906f614037.jpg",
-                                                  imageBuilder: (context, imageProvider) => ClipRRect(
-                                                    borderRadius: BorderRadius.circular(20), // Image borderr
-                                                    child: pics?[index].reportedStatus == 'BLURRED'
+                                                  imageBuilder: (context,
+                                                          imageProvider) =>
+                                                      ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20), // Image borderr
+                                                    child: pics?[index]
+                                                                .reportedStatus ==
+                                                            'BLURRED'
                                                         ? ImageFiltered(
-                                                            imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                                            imageFilter:
+                                                                ImageFilter
+                                                                    .blur(
+                                                                        sigmaX:
+                                                                            30,
+                                                                        sigmaY:
+                                                                            30),
                                                             child: Image(
-                                                              image: imageProvider,
-                                                              fit: BoxFit.fitHeight,
-                                                              width: SizeConfig.screenWidth,
+                                                              image:
+                                                                  imageProvider,
+                                                              fit: BoxFit
+                                                                  .fitHeight,
+                                                              width: SizeConfig
+                                                                  .screenWidth,
                                                             ),
                                                           )
                                                         : Image(
-                                                            image: imageProvider,
-                                                            fit: BoxFit.fitHeight,
-                                                            width: SizeConfig.screenWidth,
+                                                            image:
+                                                                imageProvider,
+                                                            fit: BoxFit
+                                                                .fitHeight,
+                                                            width: SizeConfig
+                                                                .screenWidth,
                                                           ),
                                                   ),
-                                                  emptyWidget: notifier.connectionError
-                                                      ? GestureDetector(
-                                                          onTap: () async {
-                                                            _networklHasErrorNotifier.value++;
-                                                            bool connect = await System().checkConnections();
-                                                            if (connect) {
-                                                              setState(() {
-                                                                isloading = true;
-                                                              });
-                                                              await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
-                                                              setState(() {
-                                                                pics = notifier.pics;
-                                                              });
-                                                            } else {
-                                                              if (mounted) {
-                                                                ShowGeneralDialog.showToastAlert(
-                                                                  context,
-                                                                  lang?.internetConnectionLost ?? ' Error',
-                                                                  () async {},
-                                                                );
-                                                              }
-                                                            }
-                                                          },
-                                                          child: Container(
-                                                              decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                                                              width: SizeConfig.screenWidth,
-                                                              height: 250,
-                                                              alignment: Alignment.center,
-                                                              padding: const EdgeInsets.all(20),
-                                                              child: pics?[index].reportedStatus == 'BLURRED'
-                                                                  ? Container()
-                                                                  : CustomTextWidget(
-                                                                      textToDisplay: lang?.couldntLoadImage ?? 'Error',
-                                                                      maxLines: 3,
-                                                                    )),
-                                                        )
-                                                      : Image.network(
-                                                          (pics?[index].isApsara ?? false) ? (pics?[index].mediaEndpoint ?? "") : "${pics?[index].fullContent}" + '&2',
-                                                          fit: BoxFit.fitHeight,
-                                                          width: SizeConfig.screenWidth,
-                                                        ),
-                                                  errorWidget: (context, url, error) {
-                                                    return notifier.connectionError
+                                                  emptyWidget:
+                                                      notifier.connectionError
+                                                          ? GestureDetector(
+                                                              onTap: () async {
+                                                                _networklHasErrorNotifier
+                                                                    .value++;
+                                                                bool connect =
+                                                                    await System()
+                                                                        .checkConnections();
+                                                                if (connect) {
+                                                                  setState(() {
+                                                                    isloading =
+                                                                        true;
+                                                                  });
+                                                                  await notifier.reload(
+                                                                      context,
+                                                                      widget
+                                                                          .arguments!
+                                                                          .pageSrc!,
+                                                                      key: widget
+                                                                              .arguments
+                                                                              ?.key ??
+                                                                          '');
+                                                                  setState(() {
+                                                                    pics =
+                                                                        notifier
+                                                                            .pics;
+                                                                  });
+                                                                } else {
+                                                                  if (mounted) {
+                                                                    ShowGeneralDialog
+                                                                        .showToastAlert(
+                                                                      context,
+                                                                      lang?.internetConnectionLost ??
+                                                                          ' Error',
+                                                                      () async {},
+                                                                    );
+                                                                  }
+                                                                }
+                                                              },
+                                                              child: Container(
+                                                                  decoration: BoxDecoration(
+                                                                      color:
+                                                                          kHyppeNotConnect,
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              16)),
+                                                                  width: SizeConfig
+                                                                      .screenWidth,
+                                                                  height: 250,
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(
+                                                                          20),
+                                                                  child: pics?[index]
+                                                                              .reportedStatus ==
+                                                                          'BLURRED'
+                                                                      ? Container()
+                                                                      : CustomTextWidget(
+                                                                          textToDisplay:
+                                                                              lang?.couldntLoadImage ?? 'Error',
+                                                                          maxLines:
+                                                                              3,
+                                                                        )),
+                                                            )
+                                                          : Image.network(
+                                                              (pics?[index]
+                                                                          .isApsara ??
+                                                                      false)
+                                                                  ? (pics?[index]
+                                                                          .mediaEndpoint ??
+                                                                      "")
+                                                                  : "${pics?[index].fullContent}" +
+                                                                      '&2',
+                                                              fit: BoxFit
+                                                                  .fitHeight,
+                                                              width: SizeConfig
+                                                                  .screenWidth,
+                                                            ),
+                                                  errorWidget:
+                                                      (context, url, error) {
+                                                    return notifier
+                                                            .connectionError
                                                         ? GestureDetector(
                                                             onTap: () async {
-                                                              _networklHasErrorNotifier.value++;
-                                                              bool connect = await System().checkConnections();
+                                                              _networklHasErrorNotifier
+                                                                  .value++;
+                                                              bool connect =
+                                                                  await System()
+                                                                      .checkConnections();
                                                               if (connect) {
                                                                 setState(() {
-                                                                  isloading = true;
+                                                                  isloading =
+                                                                      true;
                                                                 });
-                                                                await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                                                                await notifier.reload(
+                                                                    context,
+                                                                    widget
+                                                                        .arguments!
+                                                                        .pageSrc!,
+                                                                    key: widget
+                                                                            .arguments
+                                                                            ?.key ??
+                                                                        '');
                                                                 setState(() {
-                                                                  pics = notifier.pics;
+                                                                  pics =
+                                                                      notifier
+                                                                          .pics;
                                                                 });
                                                               } else {
                                                                 if (mounted) {
-                                                                  ShowGeneralDialog.showToastAlert(
+                                                                  ShowGeneralDialog
+                                                                      .showToastAlert(
                                                                     context,
-                                                                    lang?.internetConnectionLost ?? ' Error',
+                                                                    lang?.internetConnectionLost ??
+                                                                        ' Error',
                                                                     () async {},
                                                                   );
                                                                 }
                                                               }
                                                             },
                                                             child: Container(
-                                                                decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                                                                width: SizeConfig.screenWidth,
+                                                                decoration: BoxDecoration(
+                                                                    color:
+                                                                        kHyppeNotConnect,
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            16)),
+                                                                width: SizeConfig
+                                                                    .screenWidth,
                                                                 height: 250,
-                                                                alignment: Alignment.center,
-                                                                padding: const EdgeInsets.all(20),
-                                                                child: pics?[index].reportedStatus == 'BLURRED'
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        20),
+                                                                child: pics?[index]
+                                                                            .reportedStatus ==
+                                                                        'BLURRED'
                                                                     ? Container()
                                                                     : CustomTextWidget(
-                                                                        textToDisplay: lang?.couldntLoadImage ?? 'Error',
-                                                                        maxLines: 3,
+                                                                        textToDisplay:
+                                                                            lang?.couldntLoadImage ??
+                                                                                'Error',
+                                                                        maxLines:
+                                                                            3,
                                                                       )),
                                                           )
                                                         : Image.network(
-                                                            (pics?[index].isApsara ?? false) ? (pics?[index].mediaEndpoint ?? "") : "${pics?[index].fullContent}" + '&2',
-                                                            fit: BoxFit.fitHeight,
-                                                            width: SizeConfig.screenWidth,
+                                                            (pics?[index]
+                                                                        .isApsara ??
+                                                                    false)
+                                                                ? (pics?[index]
+                                                                        .mediaEndpoint ??
+                                                                    "")
+                                                                : "${pics?[index].fullContent}" +
+                                                                    '&2',
+                                                            fit: BoxFit
+                                                                .fitHeight,
+                                                            width: SizeConfig
+                                                                .screenWidth,
                                                           );
                                                   },
                                                 );
@@ -1116,28 +1304,39 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                   notifier.checkConnection();
                                 },
                                 child: Container(
-                                    decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                    decoration: BoxDecoration(
+                                        color: kHyppeNotConnect,
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
                                     width: SizeConfig.screenWidth,
                                     height: 250,
                                     padding: const EdgeInsets.all(20),
                                     alignment: Alignment.center,
-                                    child: pics?[index].reportedStatus == 'BLURRED'
-                                        ? Container()
-                                        : CustomTextWidget(
-                                            textToDisplay: lang?.couldntLoadImage ?? 'Error',
-                                            maxLines: 3,
-                                          )),
+                                    child:
+                                        pics?[index].reportedStatus == 'BLURRED'
+                                            ? Container()
+                                            : CustomTextWidget(
+                                                textToDisplay:
+                                                    lang?.couldntLoadImage ??
+                                                        'Error',
+                                                maxLines: 3,
+                                              )),
                               ),
-                        _buildBody(context, SizeConfig.screenWidth, pics?[index] ?? ContentData()),
-                        blurContentWidget(context, pics?[index] ?? ContentData()),
+                        _buildBody(context, SizeConfig.screenWidth,
+                            pics?[index] ?? ContentData()),
+                        blurContentWidget(
+                            context, pics?[index] ?? ContentData()),
                       ],
                     ),
                   ),
                 ),
               ),
-              SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
+              SharedPreference().readStorage(SpKeys.statusVerificationId) ==
+                          VERIFIED &&
                       (pics?[index].boosted.isEmpty ?? [].isEmpty) &&
-                      (pics?[index].reportedStatus != 'OWNED' && pics?[index].reportedStatus != 'BLURRED' && pics?[index].reportedStatus2 != 'BLURRED') &&
+                      (pics?[index].reportedStatus != 'OWNED' &&
+                          pics?[index].reportedStatus != 'BLURRED' &&
+                          pics?[index].reportedStatus2 != 'BLURRED') &&
                       pics?[index].email == email
                   ? Container(
                       width: MediaQuery.of(context).size.width,
@@ -1147,15 +1346,19 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                         marginBool: true,
                         contentData: pics?[index],
                         startState: () {
-                          SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                          SharedPreference()
+                              .writeStorage(SpKeys.isShowPopAds, true);
                         },
                         afterState: () {
-                          SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                          SharedPreference()
+                              .writeStorage(SpKeys.isShowPopAds, false);
                         },
                       ),
                     )
                   : Container(),
-              pics?[index].email == SharedPreference().readStorage(SpKeys.email) && (pics?[index].reportedStatus == 'OWNED')
+              pics?[index].email ==
+                          SharedPreference().readStorage(SpKeys.email) &&
+                      (pics?[index].reportedStatus == 'OWNED')
                   ? Padding(
                       padding: const EdgeInsets.only(bottom: 11.0),
                       child: ContentViolationWidget(
@@ -1164,7 +1367,9 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                       ),
                     )
                   : Container(),
-              if (pics?[index].email == email && (pics?[index].boostCount ?? 0) >= 0 && (pics?[index].boosted.isNotEmpty ?? [].isEmpty))
+              if (pics?[index].email == email &&
+                  (pics?[index].boostCount ?? 0) >= 0 &&
+                  (pics?[index].boosted.isNotEmpty ?? [].isEmpty))
                 Container(
                   padding: const EdgeInsets.all(10),
                   margin: EdgeInsets.only(bottom: 10),
@@ -1184,8 +1389,12 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                       Padding(
                         padding: const EdgeInsets.only(left: 13),
                         child: CustomTextWidget(
-                          textToDisplay: "${pics?[index].boostJangkauan ?? '0'} ${lang?.reach}",
-                          textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                          textToDisplay:
+                              "${pics?[index].boostJangkauan ?? '0'} ${lang?.reach}",
+                          textStyle: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: kHyppeTextLightPrimary),
                         ),
                       )
                     ],
@@ -1213,13 +1422,19 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                 : InkWell(
                                     child: CustomIconWidget(
                                       defaultColor: false,
-                                      color: (pics?[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
-                                      iconData: '${AssetPath.vectorPath}${(pics?[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                      color:
+                                          (pics?[index].insight?.isPostLiked ??
+                                                  false)
+                                              ? kHyppeRed
+                                              : kHyppeTextLightPrimary,
+                                      iconData:
+                                          '${AssetPath.vectorPath}${(pics?[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
                                       height: 28,
                                     ),
                                     onTap: () {
                                       if (pics?[index] != null) {
-                                        likeNotifier.likePost(context, pics![index]);
+                                        likeNotifier.likePost(
+                                            context, pics![index]);
                                       }
                                     },
                                   ),
@@ -1251,7 +1466,10 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                         if ((pics?[index].isShared ?? false))
                           GestureDetector(
                             onTap: () {
-                              context.read<PicDetailNotifier>().createdDynamicLink(context, data: pics?[index]);
+                              context
+                                  .read<PicDetailNotifier>()
+                                  .createdDynamicLink(context,
+                                      data: pics?[index]);
                             },
                             child: const Padding(
                               padding: EdgeInsets.only(left: 21.0),
@@ -1263,12 +1481,14 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                               ),
                             ),
                           ),
-                        if ((pics?[index].saleAmount ?? 0) > 0 && email != pics?[index].email)
+                        if ((pics?[index].saleAmount ?? 0) > 0 &&
+                            email != pics?[index].email)
                           Expanded(
                             child: GestureDetector(
                               onTap: () async {
                                 fAliplayer?.pause();
-                                await ShowBottomSheet.onBuyContent(context, data: pics?[index], fAliplayer: fAliplayer);
+                                await ShowBottomSheet.onBuyContent(context,
+                                    data: pics?[index], fAliplayer: fAliplayer);
                               },
                               child: const Align(
                                 alignment: Alignment.centerRight,
@@ -1286,7 +1506,10 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                     twelvePx,
                     Text(
                       "${pics?[index].insight?.likes}  ${tn.translate.like}",
-                      style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                      style: const TextStyle(
+                          color: kHyppeTextLightPrimary,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14),
                     ),
                   ],
                 ),
@@ -1298,11 +1521,20 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                 desc: "${pics?[index].description}",
                 trimLines: 2,
                 textAlign: TextAlign.start,
-                seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
-                seeMore: '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
-                normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary, fontSize: 12),
-                expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                seeLess:
+                    ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
+                seeMore:
+                    '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                normStyle: const TextStyle(
+                    fontSize: 12, color: kHyppeTextLightPrimary),
+                hrefStyle: Theme.of(context)
+                    .textTheme
+                    .subtitle2
+                    ?.copyWith(color: kHyppePrimary, fontSize: 12),
+                expandStyle: Theme.of(context)
+                    .textTheme
+                    .subtitle2
+                    ?.copyWith(color: Theme.of(context).colorScheme.primary),
               ),
               if (pics?[index].allowComments ?? true)
                 GestureDetector(
@@ -1330,21 +1562,41 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                       child: ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: (pics?[index].comment?.length ?? 0) >= 2 ? 2 : 1,
+                        itemCount:
+                            (pics?[index].comment?.length ?? 0) >= 2 ? 2 : 1,
                         itemBuilder: (context, indexComment) {
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 6.0),
                             child: CustomNewDescContent(
                               // desc: "${pics?[index]?.description}",
-                              username: pics?[index].comment?[indexComment].userComment?.username ?? '',
-                              desc: pics?[index].comment?[indexComment].txtMessages ?? '',
+                              username: pics?[index]
+                                      .comment?[indexComment]
+                                      .userComment
+                                      ?.username ??
+                                  '',
+                              desc: pics?[index]
+                                      .comment?[indexComment]
+                                      .txtMessages ??
+                                  '',
                               trimLines: 2,
                               textAlign: TextAlign.start,
-                              seeLess: ' seeLess', // ${notifier2.translate.seeLess}',
-                              seeMore: '  Selengkapnya ', //${notifier2.translate.seeMoreContent}',
-                              normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                              hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                              expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                              seeLess:
+                                  ' seeLess', // ${notifier2.translate.seeLess}',
+                              seeMore:
+                                  '  Selengkapnya ', //${notifier2.translate.seeMoreContent}',
+                              normStyle: const TextStyle(
+                                  fontSize: 12, color: kHyppeTextLightPrimary),
+                              hrefStyle: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  ?.copyWith(color: kHyppePrimary),
+                              expandStyle: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
                             ),
                           );
                         },
@@ -1355,7 +1607,10 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                 padding: EdgeInsets.symmetric(vertical: 4.0),
                 child: Text(
                   "${System().readTimestamp(
-                    DateTime.parse(System().dateTimeRemoveT(pics?[index].createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+                    DateTime.parse(System().dateTimeRemoveT(
+                            pics?[index].createdAt ??
+                                DateTime.now().toString()))
+                        .millisecondsSinceEpoch,
                     context,
                     fullCaption: true,
                   )}",
@@ -1390,7 +1645,9 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
               child: GestureDetector(
                 onTap: () {
                   fAliplayer?.pause();
-                  context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID, fAliplayer: fAliplayer);
+                  context.read<PicDetailNotifier>().showUserTag(
+                      context, data.tagPeople, data.postID,
+                      fAliplayer: fAliplayer);
                 },
                 child: const CustomIconWidget(
                   iconData: '${AssetPath.vectorPath}tag_people.svg',
@@ -1412,7 +1669,9 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: CustomIconWidget(
-                    iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
+                    iconData: isMute
+                        ? '${AssetPath.vectorPath}sound-off.svg'
+                        : '${AssetPath.vectorPath}sound-on.svg',
                     defaultColor: false,
                     height: 24,
                   ),
@@ -1442,8 +1701,15 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                         height: 30,
                         color: Colors.white,
                       ),
-                      Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                      Text("HyppePic ${transnot.translate.contentContainsSensitiveMaterial}",
+                      Text(
+                          transnot.translate.sensitiveContent ??
+                              'Sensitive Content',
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600)),
+                      Text(
+                          "HyppePic ${transnot.translate.contentContainsSensitiveMaterial}",
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Colors.white,
@@ -1454,15 +1720,24 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                               onTap: () async {
                                 System().checkConnections().then((value) {
                                   if (value) {
-                                    Routing().move(Routes.appeal, argument: data);
+                                    Routing()
+                                        .move(Routes.appeal, argument: data);
                                   }
                                 });
                               },
                               child: Container(
                                   padding: const EdgeInsets.all(8),
                                   margin: const EdgeInsets.all(18),
-                                  decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
-                                  child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.white),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Text(
+                                      transnot.translate.appealThisWarning ??
+                                          'Appeal This Warning',
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600))),
                             )
                           : const SizedBox(),
                       const Spacer(),
@@ -1476,11 +1751,14 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                           setState(() {
                             data.reportedStatus = '';
                           });
-                          context.read<ReportNotifier>().seeContent(context, data, hyppePic);
+                          context
+                              .read<ReportNotifier>()
+                              .seeContent(context, data, hyppePic);
                         },
                         child: Container(
                           padding: const EdgeInsets.only(top: 8),
-                          margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
+                          margin: const EdgeInsets.only(
+                              bottom: 20, right: 8, left: 8),
                           width: SizeConfig.screenWidth,
                           decoration: const BoxDecoration(
                             border: Border(
@@ -1492,7 +1770,10 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                           ),
                           child: Text(
                             "${transnot.translate.see} HyppePic",
-                            style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600),
                             textAlign: TextAlign.center,
                           ),
                         ),

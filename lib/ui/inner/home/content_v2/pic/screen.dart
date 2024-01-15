@@ -56,6 +56,7 @@ import 'package:showcaseview/showcaseview.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import '../../../../../ux/path.dart';
 import '../../../../constant/entities/report/notifier.dart';
+import 'fullscreen/pic_fullscreen_page.dart';
 
 class HyppePreviewPic extends StatefulWidget {
   final ScrollController? scrollController;
@@ -1198,6 +1199,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                 });
                                                 fAliplayer?.setMuted(isMute);
                                               }
+                                              fAliplayer?.pause();
+                                              Routing().move(Routes.picFullScreenDetail, argument: PicFullscreenArgument(picData: notifier.pic!, index: index, scrollPic: false));
+                                              // Navigator.push(context, PageRouteBuilder(opaque: false, pageBuilder: (_, __, ___) => PicFullscreenPage(argument: PicFullscreenArgument(picData: notifier.pic!, index: index, scrollPic: false),)));
+
                                             },
                                             onDoubleTap: () {
                                               final _likeNotifier = context.read<LikeNotifier>();
@@ -1234,38 +1239,32 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                               ? ("${picData?.mediaEndpoint}?key=${picData?.valueCache}")
                                                               : ("${picData?.fullThumbPath}&key=${picData?.valueCache}"),
                                                           imageBuilder: (context, imageProvider) {
-                                                            return InkWell(
-                                                              onTap: (){
-                                                                // Navigator.pushNamed(context, Routes.picFullScreenDetail, arguments: picData);
-                                                                Routing().move(Routes.picFullScreenDetail, argument: PicFullscreenArgument(imageProvider: imageProvider, picData: notifier.pic!, index: index));
-                                                              },
-                                                              child: ClipRRect(
-                                                                borderRadius: BorderRadius.circular(20), // Image border
-                                                                child: ImageSize(
-                                                                  onChange: (Size size) {
-                                                                    if ((picData?.imageHeightTemp ?? 0) == 0) {
-                                                                      setState(() {
-                                                                        picData?.imageHeightTemp = size.height;
-                                                                      });
-                                                                    }
-                                                                  },
-                                                                  child: picData?.reportedStatus == 'BLURRED'
-                                                                      ? ImageFiltered(
-                                                                          imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                                                          child: Image(
-                                                                            image: imageProvider,
-                                                                            fit: BoxFit.fitHeight,
-                                                                            width: SizeConfig.screenWidth,
-                                                                            // height: picData?.imageHeightTemp == 0 ? null : picData?.imageHeightTemp,
-                                                                          ),
-                                                                        )
-                                                                      : Image(
+                                                            return ClipRRect(
+                                                              borderRadius: BorderRadius.circular(20), // Image border
+                                                              child: ImageSize(
+                                                                onChange: (Size size) {
+                                                                  if ((picData?.imageHeightTemp ?? 0) == 0) {
+                                                                    setState(() {
+                                                                      picData?.imageHeightTemp = size.height;
+                                                                    });
+                                                                  }
+                                                                },
+                                                                child: picData?.reportedStatus == 'BLURRED'
+                                                                    ? ImageFiltered(
+                                                                        imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                                                        child: Image(
                                                                           image: imageProvider,
                                                                           fit: BoxFit.fitHeight,
                                                                           width: SizeConfig.screenWidth,
-                                                                          // height: picData?.imageHeightTemp == 0 || (picData?.imageHeightTemp ?? 0) <= 100 ? null : picData?.imageHeightTemp,
+                                                                          // height: picData?.imageHeightTemp == 0 ? null : picData?.imageHeightTemp,
                                                                         ),
-                                                                ),
+                                                                      )
+                                                                    : Image(
+                                                                        image: imageProvider,
+                                                                        fit: BoxFit.fitHeight,
+                                                                        width: SizeConfig.screenWidth,
+                                                                        // height: picData?.imageHeightTemp == 0 || (picData?.imageHeightTemp ?? 0) <= 100 ? null : picData?.imageHeightTemp,
+                                                                      ),
                                                               ),
                                                             );
                                                           },
