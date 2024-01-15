@@ -14,6 +14,7 @@ import 'package:hyppe/core/arguments/hashtag_argument.dart';
 import 'package:hyppe/core/arguments/image_preview_argument.dart';
 import 'package:hyppe/core/arguments/message_detail_argument.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
+import 'package:hyppe/core/arguments/pic_fullscreen_argument.dart';
 import 'package:hyppe/core/arguments/referral_list_user.dart';
 import 'package:hyppe/core/arguments/summary_live_argument.dart';
 import 'package:hyppe/core/arguments/ticket_argument.dart';
@@ -46,6 +47,7 @@ import 'package:hyppe/ui/inner/home/content_v2/help/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/support_ticket/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/fullscreen/pic_fullscreen_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/see_all/pic_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/test.dart';
@@ -444,6 +446,8 @@ class Generate {
             builder: (_) => ViewStreamingScreen(
                   args: settings.arguments as ViewStreamingArgument,
                 ));
+      case Routes.picFullScreenDetail:
+        return MaterialPageRoute(builder: (_) => PicFullscreenPage(argument: settings.arguments as PicFullscreenArgument));
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

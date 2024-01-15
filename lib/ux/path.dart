@@ -52,6 +52,9 @@ class Routes {
   static const String picDetailPreview = '/pic-detail-preview';
   static const String picSlideDetailPreview = '/pic-slide-detail-preview';
 
+  //Fullscreen Pic
+  static const String picFullScreenDetail = '/pic-fullscreen';
+
   static const String diaryDetail = '/diary-detail';
   static const String diaryView = '/diary-view';
   static const String diarySeeAllScreen = '/diary-see-all-screen';

@@ -5,6 +5,9 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
+import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 // import 'package:hyppe/core/constants/enum.dart';
@@ -45,7 +48,7 @@ class RightItems extends StatelessWidget {
             alignment: Alignment.bottomRight,
 
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 80.0),
+              padding: const EdgeInsets.only(bottom: 50.0),
               child: SizedBox(
                 height: 400 * SizeConfig.scaleDiagonal,
                 child: Column(
@@ -88,7 +91,7 @@ class RightItems extends StatelessWidget {
                     (data.allowComments ?? false)
                         ? _customIcon2(
                             context,
-                            "${AssetPath.vectorPath}comment.svg",
+                            "${AssetPath.vectorPath}comment-shadow.svg",
                             value2.translate.comment ?? 'comment',
                             onTap: () async {
                               // if (context.read<ProfileNotifier>().myProfile != null) {
@@ -103,14 +106,15 @@ class RightItems extends StatelessWidget {
                               //   ShowBottomSheet.onShowSomethingWhenWrong(context);
                               // }
                               context.read<DiariesPlaylistNotifier>().forcePause = true;
-                              ShowBottomSheet.onShowCommentV2(context, postID: data.postID);
+                              // ShowBottomSheet.onShowCommentV2(context, postID: data.postID);
+                              Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data));
                             },
                           )
                         : const SizedBox.shrink(),
                     if ((data.isShared ?? true) && data.visibility == 'PUBLIC')
                       _customIcon2(
                         context,
-                        "${AssetPath.vectorPath}share.svg",
+                        "${AssetPath.vectorPath}share-shadow.svg",
                         value2.translate.share ?? 'share',
                         colorIcon: kHyppeLightButtonText,
                         onTap: () => value.createdDynamicLink(context, data: data),

@@ -42,8 +42,6 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/left_items.
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/right_items.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/title_playlist_diaries.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/preview/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/fullscreen/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
@@ -55,7 +53,6 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
-import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class LandingDiaryFullPage extends StatefulWidget {
@@ -70,6 +67,7 @@ class LandingDiaryFullPage extends StatefulWidget {
 }
 
 class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with WidgetsBindingObserver, TickerProviderStateMixin, WidgetsBindingObserver, RouteAware {
+  late final AnimationController animatedController = AnimationController(vsync: this, duration: const Duration(seconds: 2))..repeat();
   FlutterAliplayer? fAliplayer;
   bool isPrepare = false;
   bool isPlay = false;
@@ -106,11 +104,12 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
   int itemIndex = 0;
   bool scroolUp = false;
   late PageController _pageController;
+  double opacityLevel = 0.0;
 
   @override
   void initState() {
     "++++++++++++++ initState".logger();
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'LandingDiaryPage');
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'LandingDiaryFullPage');
     final notifier = Provider.of<PreviewDiaryNotifier>(context, listen: false);
 
     notifier.initAdsCounter();
@@ -665,6 +664,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
     // if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
     //   fAliplayer?.destroy();
     // }
+    animatedController.dispose();
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
   }
@@ -729,13 +729,19 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
   }
 
   void play() {
-    isPause = false;
+    setState(() {
+      isPause = false;
+    });
+
     fAliplayer?.play();
   }
 
   void pause() {
     print('pause pause');
-    isPause = true;
+    setState(() {
+      isPause = true;
+    });
+
     fAliplayer?.pause();
   }
 
@@ -769,6 +775,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
               }
               context.read<VideoNotifier>().currentPostID = notifier.diaryData?[index].postID ?? '';
               _curIdx = index;
+              _lastCurPostId = _curPostId;
 
               _curPostId = notifier.diaryData?[index].postID ?? index.toString();
               // if (_lastCurIndex != _curIdx) {
@@ -826,8 +833,9 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                 }
               }
               // _lastCurIndex = _curIdx;
-              _lastCurPostId = _curPostId;
             }
+
+            _lastCurIndex = _curIdx;
           },
           itemBuilder: (context, index) {
             if (notifier.diaryData == null || home.isLoadingDiary) {
@@ -957,17 +965,19 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                                       aliPlayerViewType: AliPlayerViewTypeForAndroid.surfaceview,
                                     )
                                   : Container(),
-                              Visibility(
-                                visible: isPlay,
-                                child: StickerOverlay(
-                                  fullscreen: true,
-                                  stickers: data?.stickers,
-                                  width: MediaQuery.of(context).size.width,
-                                  height: (MediaQuery.of(context).size.width),
-                                  isPause: isPause || _showLoading,
-                                  canPause: true,
-                                ),
-                              ),
+                              _curPostId == (data?.postID ?? index.toString())
+                                  ? Visibility(
+                                      visible: isPlay,
+                                      child: StickerOverlay(
+                                        fullscreen: true,
+                                        stickers: data?.stickers,
+                                        width: MediaQuery.of(context).size.width,
+                                        height: (MediaQuery.of(context).size.width) * (16 / 9),
+                                        isPause: isPause || _showLoading,
+                                        canPause: true,
+                                      ),
+                                    )
+                                  : Container(),
                               // _buildProgressBar(SizeConfig.screenWidth!, 500),
                               !notifier.connectionError
                                   ? Positioned.fill(
@@ -1112,18 +1122,6 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
     return SafeArea(
       child: Stack(
         children: [
-          // Container(
-          //   padding: const EdgeInsets.only(left: 10.0, right: 10, top: 5),
-          //   height: 9,
-          //   child: ClipRRect(
-          //     borderRadius: BorderRadius.circular(40.0),
-          //     child: LinearProgressIndicator(
-          //       value: _animationController?.value,
-          //       backgroundColor: kHyppeLightButtonText.withOpacity(0.4),
-          //       valueColor: const AlwaysStoppedAnimation<Color>(kHyppeLightButtonText),
-          //     ),
-          //   ),
-          // ),
           Row(
             children: [
               Expanded(
@@ -1136,6 +1134,19 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                     } else {
                       pause();
                       print('DiaryPlayer play');
+                    }
+                    setState(() {
+                      opacityLevel = 1.0;
+                    });
+                    Future.delayed(const Duration(seconds: 1), () {
+                      opacityLevel = 0.0;
+                      setState(() {});
+                    });
+                  },
+                  onDoubleTap: () {
+                    final _likeNotifier = context.read<LikeNotifier>();
+                    if (data != null) {
+                      _likeNotifier.likePost(context, data);
                     }
                   },
                   onLongPressEnd: (value) => play(),
@@ -1210,7 +1221,28 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                   postID: data?.postID,
                   // storyController: _storyController,
                   tagPeople: data?.tagPeople,
-                  data: data),
+                  data: data,
+                  animatedController: animatedController,
+                ),
+
+          Align(
+            alignment: Alignment.center,
+            child: AnimatedOpacity(
+              opacity: opacityLevel,
+              duration: const Duration(milliseconds: 500),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Opacity(
+                  opacity: 0.4,
+                  child: Icon(
+                    isPause ? Icons.play_arrow_rounded : Icons.pause_rounded,
+                    size: 100,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
           Align(
             alignment: Alignment.bottomCenter,
             child: data?.email == SharedPreference().readStorage(SpKeys.email) && (data?.reportedStatus == 'OWNED')
