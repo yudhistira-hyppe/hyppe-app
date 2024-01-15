@@ -966,7 +966,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                           child: GestureDetector(
                                             onTap: () {
-                                              context.handleActionIsGuest((){
+                                              context.handleActionIsGuest(() {
                                                 if (picData?.insight?.isloadingFollow != true) {
                                                   picNot.followUser(context, picData ?? ContentData(), isUnFollow: picData?.following, isloading: picData?.insight!.isloadingFollow ?? false);
                                                 }
@@ -991,7 +991,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                     GestureDetector(
                                       onTap: () {
                                         // fAliplayer?.pause();
-                                        context.handleActionIsGuest((){
+                                        context.handleActionIsGuest(() {
                                           if (picData?.email != email) {
                                             context.read<PreviewPicNotifier>().reportContent(context, picData ?? ContentData(), fAliplayer: fAliplayer, onCompleted: () async {
                                               imageCache.clear();
@@ -1014,7 +1014,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                             );
                                           }
                                         });
-
                                       },
                                       child: const Icon(
                                         Icons.more_vert,
@@ -1240,9 +1239,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                               : ("${picData?.fullThumbPath}&key=${picData?.valueCache}"),
                                                           imageBuilder: (context, imageProvider) {
                                                             return InkWell(
-                                                              onTap: (){
+                                                              onTap: () {
                                                                 // Navigator.pushNamed(context, Routes.picFullScreenDetail, arguments: picData);
-                                                                Routing().move(Routes.picFullScreenDetail, argument: PicFullscreenArgument(imageProvider: imageProvider, picData: notifier.pic!, index: index));
+                                                                Routing().move(Routes.picFullScreenDetail,
+                                                                    argument: PicFullscreenArgument(imageProvider: imageProvider, picData: notifier.pic!, index: index));
                                                               },
                                                               child: ClipRRect(
                                                                 borderRadius: BorderRadius.circular(20), // Image border
@@ -1279,7 +1279,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                               _networklHasErrorNotifier.value++;
                                                               Random random = new Random();
                                                               int randomNumber = random.nextInt(100); // from 0 upto 99 included
-                                                        
+
                                                               picData?.valueCache = randomNumber.toString();
                                                               setState(() {});
                                                               // reloadImage(index);
@@ -1446,7 +1446,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                             Expanded(
                                               child: GestureDetector(
                                                 onTap: () async {
-                                                  context.handleActionIsGuest(() async  {
+                                                  context.handleActionIsGuest(() async {
                                                     fAliplayer?.pause();
                                                     await ShowBottomSheet.onBuyContent(context, data: picData, fAliplayer: fAliplayer);
                                                   });

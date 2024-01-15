@@ -86,6 +86,7 @@ class RightItems extends StatelessWidget {
                                 context.read<DiariesPlaylistNotifier>().forcePause = false;
                                 notifier.likePost(context, data);
                               },
+                              liked: true,
                             ),
                     ),
                     (data.allowComments ?? false)
@@ -147,6 +148,7 @@ class RightItems extends StatelessWidget {
     String caption, {
     Function? onTap,
     Color? colorIcon,
+    bool liked = false,
   }) {
     return CustomTextButton(
       onPressed: onTap,
@@ -156,8 +158,10 @@ class RightItems extends StatelessWidget {
             iconData: svgIcon,
             color: colorIcon ?? kHyppeLightButtonText,
             defaultColor: false,
+            height: liked ? 28 : 38,
+            width: 38,
           ),
-          fourPx,
+          // fourPx,
           CustomTextWidget(
             textToDisplay: caption,
             textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),

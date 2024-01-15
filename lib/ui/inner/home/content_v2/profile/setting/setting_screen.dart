@@ -43,11 +43,18 @@ class _SettingScreenState extends State<SettingScreen> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
         setState(() {
-          indexKey = mn?.tutorialData.indexWhere((element) => element.key == 'transaction') ?? 0;
-          indexreferral = mn?.tutorialData.indexWhere((element) => element.key == 'idRefferal') ?? 0;
+          indexKey = mn?.tutorialData
+                  .indexWhere((element) => element.key == 'transaction') ??
+              0;
+          indexreferral = mn?.tutorialData
+                  .indexWhere((element) => element.key == 'idRefferal') ??
+              0;
         });
-        if (mn?.tutorialData[indexKey].status == false || mn?.tutorialData[indexreferral].status == false) {
-          WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(myContext).startShowCase([keyTransaction, keyReferral]));
+        if (mn?.tutorialData[indexKey].status == false ||
+            mn?.tutorialData[indexreferral].status == false) {
+          WidgetsBinding.instance.addPostFrameCallback((_) =>
+              ShowCaseWidget.of(myContext)
+                  .startShowCase([keyTransaction, keyReferral]));
         }
       }
     });
@@ -87,9 +94,11 @@ class _SettingScreenState extends State<SettingScreen> {
                 children: [
                   SettingTile(
                     icon: 'transaction-icon.svg',
-                    onTap: (){
-                      context.handleActionIsGuest((){
-                        context.read<SettingNotifier>().validateUser(context, notifier);
+                    onTap: () {
+                      context.handleActionIsGuest(() {
+                        context
+                            .read<SettingNotifier>()
+                            .validateUser(context, notifier);
                       });
                     },
                     caption: '${notifier.translate.transaction}',
@@ -117,8 +126,8 @@ class _SettingScreenState extends State<SettingScreen> {
                     tiles: [
                       SettingTile(
                         icon: 'preferensi-account-icon.svg',
-                        onTap: (){
-                          context.handleActionIsGuest((){
+                        onTap: () {
+                          context.handleActionIsGuest(() {
                             Routing().move(Routes.accountPreferences);
                           });
                         },
@@ -127,7 +136,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       SettingTile(
                         icon: 'lock.svg',
                         onTap: () {
-                          context.handleActionIsGuest((){
+                          context.handleActionIsGuest(() {
                             Routing().move(Routes.homePageSignInSecurity);
                           });
                         },
@@ -137,7 +146,13 @@ class _SettingScreenState extends State<SettingScreen> {
                         onTap: () => Routing().move(Routes.userInterest,
                             argument: UserInterestScreenArgument(
                               fromSetting: true,
-                              userInterested: Provider.of<SelfProfileNotifier>(context, listen: false).user.profile?.interest ?? [],
+                              userInterested: Provider.of<SelfProfileNotifier>(
+                                          context,
+                                          listen: false)
+                                      .user
+                                      .profile
+                                      ?.interest ??
+                                  [],
                             )),
                         caption: '${notifier.translate.interest}',
                         icon: 'heart-icon.svg',
@@ -148,13 +163,15 @@ class _SettingScreenState extends State<SettingScreen> {
                       //   onTap: () => Routing().move(Routes.themeScreen),
                       // ),
                       SettingTile(
-                        onTap: () => ShowGeneralDialog.newAccountLanguageDropDown(context),
+                        onTap: () =>
+                            ShowGeneralDialog.newAccountLanguageDropDown(
+                                context),
                         icon: 'language-icon.svg',
                         caption: '${notifier.translate.language}',
                       ),
                       SettingTile(
-                        onTap: (){
-                          context.handleActionIsGuest((){
+                        onTap: () {
+                          context.handleActionIsGuest(() {
                             Routing().move(Routes.referralScreen);
                           });
                         },
@@ -203,12 +220,14 @@ class _SettingScreenState extends State<SettingScreen> {
                     headerCaption: '${notifier.translate.support}',
                     tiles: [
                       SettingTile(
-                        caption: System().capitalizeFirstLetter(notifier.translate.help ?? ""),
+                        caption: System().capitalizeFirstLetter(
+                            notifier.translate.help ?? ""),
                         icon: 'help-icon.svg',
                         onTap: () => Routing().move(Routes.help),
                       ),
                       SettingTile(
-                        caption: System().capitalizeFirstLetter(notifier.translate.privacyPolicy ?? ""),
+                        caption: System().capitalizeFirstLetter(
+                            notifier.translate.privacyPolicy ?? ""),
                         icon: 'privacy-police-icon.svg',
                         onTap: () => Routing().move(Routes.userAgreement),
                       ),
@@ -230,33 +249,60 @@ class _SettingScreenState extends State<SettingScreen> {
                     color: theme.colorScheme.surface,
                   ),
                   sixteenPx,
-                  SettingComponent(
-                    headerCaption: '${notifier.translate.about}',
-                    tiles: [
-                      SettingTile(
-                        icon: 'info-icon.svg',
-                        caption: System().capitalizeFirstLetter(notifier.translate.version ?? ""),
-                        trailing: Selector<SettingNotifier, String>(
-                          builder: (_, value, __) {
-                            return CustomTextWidget(
-                              textToDisplay: value,
-                              textStyle: theme.textTheme.bodyText1,
-                            );
-                          },
-                          selector: (p0, p1) => p1.appPackage ?? '',
+                  System().showWidgetForGuest(
+                    SettingComponent(
+                      headerCaption: '${notifier.translate.about}',
+                      tiles: [
+                        SettingTile(
+                          icon: 'info-icon.svg',
+                          caption: System().capitalizeFirstLetter(
+                              notifier.translate.version ?? ""),
+                          trailing: Selector<SettingNotifier, String>(
+                            builder: (_, value, __) {
+                              return CustomTextWidget(
+                                textToDisplay: value,
+                                textStyle: theme.textTheme.bodyText1,
+                              );
+                            },
+                            selector: (p0, p1) => p1.appPackage ?? '',
+                          ),
                         ),
-                      ),
-                      SettingTile(
-                        onTap: () => ShowBottomSheet.onShowSignOut(
-                          context,
-                          onSignOut: () {
-                            context.read<SettingNotifier>().logOut(context);
-                          },
+                        SettingTile(
+                          onTap: () => ShowBottomSheet.onShowSignOut(
+                            context,
+                            onSignOut: () {
+                              context.read<SettingNotifier>().logOut(context);
+                            },
+                          ),
+                          icon: 'logout-icon.svg',
+                          caption: '${notifier.translate.logOut}',
                         ),
-                        icon: 'logout-icon.svg',
-                        caption: '${notifier.translate.logOut}',
-                      ),
-                    ],
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        SettingComponent(
+                          headerCaption: '${notifier.translate.about}',
+                          tiles: [
+                            SettingTile(
+                              icon: 'info-icon.svg',
+                              caption: System().capitalizeFirstLetter(
+                                  notifier.translate.version ?? ""),
+                              trailing: Selector<SettingNotifier, String>(
+                                builder: (_, value, __) {
+                                  return CustomTextWidget(
+                                    textToDisplay: value,
+                                    textStyle: theme.textTheme.bodyText1,
+                                  );
+                                },
+                                selector: (p0, p1) => p1.appPackage ?? '',
+                              ),
+                            ),
+                          ],
+                        ),
+                        twentyPx
+                      ],
+                    ),
                   ),
                 ],
               ),

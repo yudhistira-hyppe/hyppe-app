@@ -145,7 +145,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
   }
 
   initAlipayer() {
-    fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'DiaryLandingpage');
+    fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'DiaryLandingFullpage');
     globalAliPlayer = fAliplayer;
     fAliplayer?.pause();
     fAliplayer?.setAutoPlay(true);
@@ -782,11 +782,11 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
               final indexList = notifier.diaryData?.indexWhere((element) => element.postID == _curPostId);
               // final latIndexList = notifier.diaryData?.indexWhere((element) => element.postID == _lastCurPostId);
 
-              fAliplayer?.destroy();
+              // fAliplayer?.destroy();
               fAliplayer?.stop();
               fAliplayer?.clearScreen();
               // Wakelock.disable();
-              initAlipayer();
+              // initAlipayer();
 
               if (mounted) {
                 setState(() {
@@ -911,11 +911,11 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                             final indexList = notifier.diaryData?.indexWhere((element) => element.inBetweenAds?.adsId == _curPostId);
                             // final latIndexList = notifier.diaryData?.indexWhere((element) => element.inBetweenAds?.adsId == _lastCurPostId);
                             if (_lastCurPostId != _curPostId) {
-                              fAliplayer?.destroy();
+                              // fAliplayer?.destroy();
                               fAliplayer?.stop();
                               fAliplayer?.clearScreen();
                               // Wakelock.disable();
-                              initAlipayer();
+                              // initAlipayer();
 
                               if (mounted) {
                                 setState(() {
@@ -1120,136 +1120,146 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
   Widget _buildFillDiary(ContentData? data) {
     // print("[DIARY_PLAYER] _buildFillDiary() started. "+stopwatch.elapsed.toString());
     return SafeArea(
-      child: Stack(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    // storyComplete(not);
-                    if (isPause) {
-                      play();
-                      print('DiaryPlayer pause');
-                    } else {
-                      pause();
-                      print('DiaryPlayer play');
-                    }
-                    setState(() {
-                      opacityLevel = 1.0;
-                    });
-                    Future.delayed(const Duration(seconds: 1), () {
-                      opacityLevel = 0.0;
-                      setState(() {});
-                    });
-                  },
-                  onDoubleTap: () {
-                    final _likeNotifier = context.read<LikeNotifier>();
-                    if (data != null) {
-                      _likeNotifier.likePost(context, data);
-                    }
-                  },
-                  onLongPressEnd: (value) => play(),
-                  onLongPressStart: (value) => pause(),
-                  // onLongPress: () => pause(),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height,
-                    // padding: EdgeInsets.only(bottom: 25.0),
-                    color: Colors.transparent,
-                  ),
-                ),
-              ),
-            ],
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          gradient: LinearGradient(
+            end: const Alignment(0.0, -1),
+            begin: const Alignment(0.0, 1),
+            colors: [const Color(0x8A000000), Colors.black12.withOpacity(0.0)],
           ),
-          data?.reportedStatus == "BLURRED"
-              ? CustomBackgroundLayer(
-                  sigmaX: 30,
-                  sigmaY: 30,
-                  // thumbnail: picData!.content[arguments].contentUrl,
-                  thumbnail: (data?.isApsara ?? false) ? (data?.mediaThumbEndPoint ?? '') : (data?.fullThumbPath ?? ''),
-                )
-              : Container(),
-          (data?.reportedStatus == "BLURRED")
-              ? DiarySensitive(
-                  data: data,
-                  function: () {
-                    changeStatusBlur(data);
-                  },
-                )
-              : Container(),
-          data?.reportedStatus == "BLURRED"
-              ? Align(
-                  alignment: Alignment.topRight,
-                  child: SizedBox(
-                    width: 40,
-                    height: 40,
-                    child: CustomTextButton(
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all(
-                          const EdgeInsets.only(left: 0.0),
-                        ),
-                      ),
-                      onPressed: () => context.read<DiariesPlaylistNotifier>().onWillPop(mounted),
-                      child: const DecoratedIconWidget(
-                        Icons.close_rounded,
-                        color: Colors.white,
-                      ),
+        ),
+        child: Stack(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      // storyComplete(not);
+                      if (isPause) {
+                        play();
+                        print('DiaryPlayer pause');
+                      } else {
+                        pause();
+                        print('DiaryPlayer play');
+                      }
+                      setState(() {
+                        opacityLevel = 1.0;
+                      });
+                      Future.delayed(const Duration(seconds: 1), () {
+                        opacityLevel = 0.0;
+                        setState(() {});
+                      });
+                    },
+                    onDoubleTap: () {
+                      final _likeNotifier = context.read<LikeNotifier>();
+                      if (data != null) {
+                        _likeNotifier.likePost(context, data);
+                      }
+                    },
+                    onLongPressEnd: (value) => play(),
+                    onLongPressStart: (value) => pause(),
+                    // onLongPress: () => pause(),
+                    child: Container(
+                      height: MediaQuery.of(context).size.height,
+                      // padding: EdgeInsets.only(bottom: 25.0),
+                      color: Colors.transparent,
                     ),
                   ),
-                )
-              : TitlePlaylistDiaries(
-                  data: data,
-                  // storyController: _storyController,
                 ),
+              ],
+            ),
+            data?.reportedStatus == "BLURRED"
+                ? CustomBackgroundLayer(
+                    sigmaX: 30,
+                    sigmaY: 30,
+                    // thumbnail: picData!.content[arguments].contentUrl,
+                    thumbnail: (data?.isApsara ?? false) ? (data?.mediaThumbEndPoint ?? '') : (data?.fullThumbPath ?? ''),
+                  )
+                : Container(),
+            (data?.reportedStatus == "BLURRED")
+                ? DiarySensitive(
+                    data: data,
+                    function: () {
+                      changeStatusBlur(data);
+                    },
+                  )
+                : Container(),
+            data?.reportedStatus == "BLURRED"
+                ? Align(
+                    alignment: Alignment.topRight,
+                    child: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: CustomTextButton(
+                        style: ButtonStyle(
+                          padding: MaterialStateProperty.all(
+                            const EdgeInsets.only(left: 0.0),
+                          ),
+                        ),
+                        onPressed: () => context.read<DiariesPlaylistNotifier>().onWillPop(mounted),
+                        child: const DecoratedIconWidget(
+                          Icons.close_rounded,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  )
+                : TitlePlaylistDiaries(
+                    data: data,
+                    // storyController: _storyController,
+                  ),
 
-          // Text(_listData![_curIdx].username!),
-          data?.reportedStatus == "BLURRED"
-              ? Container()
-              : RightItems(
-                  data: data ?? ContentData(),
-                ),
-          data?.reportedStatus == "BLURRED"
-              ? Container()
-              : LeftItems(
-                  aliPlayer: fAliplayer,
-                  description: data?.description,
-                  // tags: data?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" "),
-                  music: data?.music,
-                  authorName: data?.username,
-                  userName: data?.username,
-                  location: data?.location,
-                  postID: data?.postID,
-                  // storyController: _storyController,
-                  tagPeople: data?.tagPeople,
-                  data: data,
-                  animatedController: animatedController,
-                ),
+            // Text(_listData![_curIdx].username!),
+            data?.reportedStatus == "BLURRED"
+                ? Container()
+                : RightItems(
+                    data: data ?? ContentData(),
+                  ),
+            data?.reportedStatus == "BLURRED"
+                ? Container()
+                : LeftItems(
+                    aliPlayer: fAliplayer,
+                    description: data?.description,
+                    // tags: data?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" "),
+                    music: data?.music,
+                    authorName: data?.username,
+                    userName: data?.username,
+                    location: data?.location,
+                    postID: data?.postID,
+                    // storyController: _storyController,
+                    tagPeople: data?.tagPeople,
+                    data: data,
+                    animatedController: animatedController,
+                  ),
 
-          Align(
-            alignment: Alignment.center,
-            child: AnimatedOpacity(
-              opacity: opacityLevel,
-              duration: const Duration(milliseconds: 500),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Opacity(
-                  opacity: 0.4,
-                  child: Icon(
-                    isPause ? Icons.play_arrow_rounded : Icons.pause_rounded,
-                    size: 100,
-                    color: Colors.white,
+            Align(
+              alignment: Alignment.center,
+              child: AnimatedOpacity(
+                opacity: opacityLevel,
+                duration: const Duration(milliseconds: 500),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Opacity(
+                    opacity: 0.4,
+                    child: Icon(
+                      isPause ? Icons.play_arrow_rounded : Icons.pause_rounded,
+                      size: 100,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: data?.email == SharedPreference().readStorage(SpKeys.email) && (data?.reportedStatus == 'OWNED')
-                ? SizedBox(height: 58, child: ContentViolationWidget(data: data ?? ContentData()))
-                : Container(),
-          ),
-        ],
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: data?.email == SharedPreference().readStorage(SpKeys.email) && (data?.reportedStatus == 'OWNED')
+                  ? SizedBox(height: 58, child: ContentViolationWidget(data: data ?? ContentData()))
+                  : Container(),
+            ),
+          ],
+        ),
       ),
     );
   }

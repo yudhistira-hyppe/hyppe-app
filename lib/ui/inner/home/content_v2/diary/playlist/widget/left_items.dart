@@ -145,9 +145,9 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                     textAlign: TextAlign.start,
                     seeLess: ' ${notifier.translate.seeLess}',
                     seeMore: ' ${notifier.translate.seeMoreContent}',
-                    normStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppeLightButtonText),
-                    hrefStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppePrimary),
-                    expandStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primary),
+                    normStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppeLightButtonText, fontSize: 12),
+                    hrefStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppePrimary, fontSize: 12),
+                    expandStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primary, fontSize: 12),
                   ),
                 ],
               ),
@@ -162,7 +162,7 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
               child: Material(
                 color: Colors.transparent,
                 child: Container(
-                  width: SizeConfig.screenWidth! * .4,
+                  width: SizeConfig.screenWidth! * .75,
                   margin: const EdgeInsets.only(left: 0.0, top: 8.0),
                   padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 10),
                   child: Row(
@@ -224,17 +224,13 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                         height: 12.0,
                         width: 5,
                       ),
-                      CustomTextWidget(
-                        textToDisplay: " ${widget.data?.music?.musicTitle ?? ''}",
-                        maxLines: 1,
-                        textStyle: const TextStyle(color: kHyppeTextPrimary, fontSize: 12, fontWeight: FontWeight.w700),
-                        textAlign: TextAlign.left,
-                      ),
-                      CustomTextWidget(
-                        textToDisplay: " ${widget.data?.music?.musicTitle ?? ''}",
-                        maxLines: 1,
-                        textStyle: const TextStyle(color: kHyppeTextPrimary, fontSize: 12, fontWeight: FontWeight.w700),
-                        textAlign: TextAlign.left,
+                      Expanded(
+                        child: CustomTextWidget(
+                          textToDisplay: " ${widget.data?.music?.musicTitle ?? ''}",
+                          maxLines: 2,
+                          textStyle: const TextStyle(color: kHyppeTextPrimary, fontSize: 12, fontWeight: FontWeight.w700),
+                          textAlign: TextAlign.left,
+                        ),
                       ),
                     ],
                   ),

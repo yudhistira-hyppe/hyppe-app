@@ -109,43 +109,43 @@ class UrlConstants {
   ///---------------------------------------------------------------------------------------------------------///
   /* APIs Users */
   /// post sign_up => Send data user to server.
-  static const String signUp = "$userRoute/signup";
+  static const String signUp = "$userRoute/signup/v2";
 
   /// post sign_in
-  static const String login = "$userRoute/login";
+  static const String login = "$userRoute/login/v2";
 
   /// guest mode
   static const String guest = "$userRoute/guest";
 
   /// post login with google
-  static const String loginGoogle = "$userRoute/signup/socmed";
+  static const String loginGoogle = "$userRoute/signup/socmed/v2";
 
   /// post change_password => To change password.
-  static const String changePassword = "$userRoute/changepassword";
+  static const String changePassword = "$userRoute/changepassword/v2";
 
   /// post update_profile
-  static const String updateProfile = "$userRoute/updateprofile";
+  static const String updateProfile = "$userRoute/updateprofile/v2";
 
   /// post recover_password => To recover password with either username or email.
-  static const String recoverPassword = "$userRoute/recoverpassword";
+  static const String recoverPassword = "$userRoute/recoverpassword/v2";
 
   /// post register interest => To register interests of user.
   static const String updateInterest = "$userRoute/profileinterest";
 
   /// post => Upload Profile picture V2.
-  static const String uploadProfilePictureV2 = "$postsRoute/profilepicture";
+  static const String uploadProfilePictureV2 = "$postsRoute/profilepicture/v2";
 
   /// post => Verify Account
-  static const String verifyAccount = "$userRoute/verifyaccount";
+  static const String verifyAccount = "$userRoute/verifyaccount/v2";
 
   /// post => Resend OTP
   static const String resendOTP = "$userRoute/resendotp";
 
   /// user => Referral
-  static const String referral = "$userRoute/referral";
+  static const String referral = "$userRoute/referral/v2";
 
   /// user => Referral Count
-  static const String referralCount = "$userRoute/referral-count";
+  static const String referralCount = "$userRoute/referral-count/v2";
 
   /// user => Change Language
   static const String updateLanguage = "$userRoute/updatelang";
@@ -172,9 +172,9 @@ class UrlConstants {
   static const String getStoriesLandingPage = "$postsRoute/landing-page/recentStory";
 
   /// post => View Like and View.
-  static const String viewLike = "$postRoute/viewlike";
+  static const String viewLike = "$postRoute/viewlike/v2";
 
-  static const String getListMyBoost = "$postsRoute/getboost";
+  static const String getListMyBoost = "$postsRoute/getboost/v2";
 
   ///---------------------------------------------------------------------------------------------------------///
   /* APIs Reaction */
@@ -234,7 +234,7 @@ class UrlConstants {
 
   ///---------------------------------------------------------------------------------------------------------///
   /// post => Get Contents
-  static const String getuserposts = "$postRouteV2/getuserposts";
+  static const String getuserposts = "$postRouteV2/getuserposts/v2";
 
   /// get => Get My Contents.
   static const String getMyUserPosts = "$postRouteV2/getuserposts/my";
@@ -262,10 +262,10 @@ class UrlConstants {
   static const String deviceactivity = "$userRoute/deviceactivity";
 
   /// post => Get User Profiles
-  static const String getuserprofile = "$userRoute/getuserprofile";
+  static const String getuserprofile = "$userRoute/getuserprofile/v2";
 
   /// post => Get User Profiles by username
-  static const String getProfileByUser = "$getuserprofile/byusername";
+  static const String getProfileByUser = "$userRoute/getuserprofile/byusername/v2";
 
   /// post => Log out
   static const String logout = "$userRoute/logout";
@@ -274,10 +274,10 @@ class UrlConstants {
   static const String interactive = "$postRouteV2/interactive";
 
   /// post => Get Interactives
-  static const String getInnteractives = "$postRouteV2/getinteractives";
+  static const String getInnteractives = "$postRouteV2/getinteractives/v2";
 
   /// post => Get/Create Discussion
-  static const String discuss = "$postRouteV2/disqus";
+  static const String discuss = "$postRouteV2/disqus/v2";
 
   /// post => Delete Discuss
   static const String deleteDiscuss = "$postRouteV2/disqus/deletedicuss";
@@ -299,7 +299,7 @@ class UrlConstants {
   static const String getGoogleGeocodingApis = "https://maps.googleapis.com/maps/api/geocode/json";
 
   //get search people
-  static const String getSearchPeople = "$profileRoute/search";
+  static const String getSearchPeople = "$profileRoute/search/v2";
 
   ///---------------------------------------------------------------------------------------------------------///
   /* v3 search data content dan user */
@@ -315,28 +315,28 @@ class UrlConstants {
   static const String deletTagUser = "$postRouteV2/deletetag";
 
   // verification ID
-  static const String verificationID = "$postsRoute/verificationid";
+  static const String verificationID = "$postsRoute/verificationid/v2";
 
   //delete Account
-  static const String deleteAccount = "$userRoute/noneactive";
+  static const String deleteAccount = "$userRoute/noneactive/v2";
 
   /// post => Get Buy Content
-  static const String getBuyContent = "$userContentRoute/buy/details";
+  static const String getBuyContent = "$userContentRoute/buy/details/v2";
 
   /// post => Get Buy Content
   static const String postBuyContent = "$transactionRoute/";
 
   /// post => Get History Transaction
-  static const String transactionHistorys = "$transactionRoute/historys";
+  static const String transactionHistorys = "$transactionRoute/historys/v2";
 
   /// post => Get History Transaction
-  static const String detailTransactionHistorys = "$transactionRoute/historys/details";
+  static const String detailTransactionHistorys = "$transactionRoute/historys/details/v2";
 
   /// post => Get Withdraw Detail
   static const String detailWithdrawal = "$transactionRoute/withdraw/listdetail";
 
   /// post => Get Withdraw Detail
-  static const String withdraw = "$transactionRoute/withdraw";
+  static const String withdraw = "$transactionRoute/withdraw/v2";
 
   /// post => Get Withdraw Detail
   static const String boostContent = "$transactionRoute/boostcontent";
@@ -372,7 +372,7 @@ class UrlConstants {
   static const String verificationIDWithSupportDocs = "$postsRoute/upload";
 
   // get tag people in content
-  static const String tagPeople = "$postsRoute/tagpeople";
+  static const String tagPeople = "$postsRoute/tagpeople/v2";
 
   /// get => Get Ads User
   static const String getAdsVideo = "$adsRoute/getAds/user?type=Content%20Ads";
@@ -384,13 +384,13 @@ class UrlConstants {
   static const String getInAppAds = "$adsRoute/getAds/user?type=In%20App%20Ads";
 
   /// get => Get Ads In Between
-  static const String getAdsInBetween = "$adsRouteV2/get/62e238a4f63d0000510026b3";
+  static const String getAdsInBetween = "$adsRouteV2/get/v2/62e238a4f63d0000510026b3";
 
   /// get => Get Ads In Content
-  static const String getAdsInContent = "$adsRouteV2/get/62f0b435118731ecc0f45772";
+  static const String getAdsInContent = "$adsRouteV2/get/v2/62f0b435118731ecc0f45772";
 
   /// get => Get Pop Up Ads
-  static const String getPopUpAds = "$adsRouteV2/get/632a806ad2770000fd007a62";
+  static const String getPopUpAds = "$adsRouteV2/get/v2/632a806ad2770000fd007a62";
 
   /// post => View Ads User
   /// static const String viewAds = "$adsRoute/viewads";
@@ -427,10 +427,10 @@ class UrlConstants {
   static const String faqList = "/api/faqs/allfaqs";
 
   /// Tiket Histories
-  static const String ticketHistories = "/api/usertickets/filter";
-  static const String ticketComments = "/api/usertickets/comment";
+  static const String ticketHistories = "/api/usertickets/filter/v2";
+  static const String ticketComments = "/api/usertickets/comment/v2";
   static const String replyComment = "/api/usertickets/reply";
-  static const String reportHistories = "/api/reportuser/listreport";
+  static const String reportHistories = "/api/reportuser/listreport/v2";
 
   // Get Old Video
   static const String oldVideo = "/stream/v2?postid=";
@@ -443,7 +443,7 @@ class UrlConstants {
   static const String getLeaderBoard = "$challange/listleaderboard";
   static const String getLeaderBoardSession = "$challange/listleaderboard2";
   static const String getOtherChallange = "$challange/allchallenge";
-  static const String joinChallange = "$challange/join";
+  static const String joinChallange = "$challange/join/v2";
   static const String listAchievement = "$challange/listbadgebyuser";
   static const String collectionBadge = "$challange/listbadgeuserdetail";
   static const String selectBadge = "$challange/badgechoice";

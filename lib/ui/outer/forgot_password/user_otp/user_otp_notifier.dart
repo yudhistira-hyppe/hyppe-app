@@ -267,6 +267,8 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
           ShowBottomSheet.onShowSomethingWhenWrong(context);
         } else {
           SharedPreference().writeStorage(SpKeys.userToken, _result.token);
+
+          SharedPreference().writeStorage(SpKeys.isGuest, false);
           SharedPreference().writeStorage(SpKeys.email, _result.email);
           try {
             DeviceBloc().activityAwake(context);

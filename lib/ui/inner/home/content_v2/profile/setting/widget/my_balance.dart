@@ -69,7 +69,7 @@ class MyBalance extends StatelessWidget {
                       System().showWidgetForGuest(
                         const SizedBox.shrink(),
                         CustomElevatedButton(
-                          width: 68,
+                          width: 90,
                           height: 24,
                           buttonStyle: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(

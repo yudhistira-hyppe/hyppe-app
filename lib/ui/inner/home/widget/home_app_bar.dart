@@ -29,7 +29,7 @@ class HomeAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HomeAppBar');
-    String nameTitle = name == null || name == 'null' ? '' : (name ?? '');
+    String nameTitle = name == null || name == 'null' ? 'Hyppers' : (name ?? 'Hyppers');
     // String nameTitle = "AaaAAAAASKJLKJDiiiiaskdlaksjdlkajsd asdasdas asdasd";
     nameTitle = nameTitle.split(" ").elementAt(0);
 

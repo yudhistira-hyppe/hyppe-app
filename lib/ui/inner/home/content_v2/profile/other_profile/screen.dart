@@ -62,7 +62,7 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
       userData = notifier.manyUser.last;
       otherStoryGroup = sn.otherStoryGroup;
     });
-    _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
+    _scrollController.addListener(() => notifier.onScrollListener(context, scrollController: _scrollController));
     System().disposeBlock();
 
     super.initState();
@@ -199,10 +199,9 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
                   ),
                   IconButton(
                     icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}more.svg"),
-                    onPressed: (){
-                      context.handleActionIsGuest(() async  {
-                        ShowBottomSheet.onShowReportProfile(context,
-                            userID: notifier.userID);
+                    onPressed: () {
+                      context.handleActionIsGuest(() async {
+                        ShowBottomSheet.onShowReportProfile(context, userID: notifier.userID);
                       });
                     },
                   ),

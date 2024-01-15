@@ -30,6 +30,34 @@ class ScrollDiaryNotifier with ChangeNotifier {
 
   List<ContentData>? diaryData = [];
 
+  Future loadMoreFullScreen(BuildContext context, PageSrc pageSrc, String key) async {
+    isLoadingLoadmore = true;
+    bool connect = await System().checkConnections();
+    // final searchNotifier = context.read<SearchNotifier>();
+    connectionError = !connect;
+    if (connect) {
+      if (pageSrc == PageSrc.selfProfile) {
+        if (context.mounted) {
+          final sp = context.read<SelfProfileNotifier>();
+          sp.pageIndex = 1;
+          await sp.onScrollListener(context, isLoad: true);
+          diaryData = sp.user.diaries;
+          isLoadingLoadmore = false;
+        }
+      }
+
+      if (pageSrc == PageSrc.otherProfile) {
+        if (context.mounted) {
+          final op = context.read<OtherProfileNotifier>();
+          op.pageIndex = 1;
+          await op.onScrollListener(context, isLoad: true);
+          diaryData = op.manyUser.last.diaries;
+          isLoadingLoadmore = false;
+        }
+      }
+    } else {}
+  }
+
   Future loadMore(BuildContext context, ScrollController scrollController, PageSrc pageSrc, String key) async {
     isLoadingLoadmore = true;
     bool connect = await System().checkConnections();
@@ -37,42 +65,52 @@ class ScrollDiaryNotifier with ChangeNotifier {
     connectionError = !connect;
     if (connect) {
       if (pageSrc == PageSrc.selfProfile) {
-        final sp = context.read<SelfProfileNotifier>();
-        sp.pageIndex = 1;
-        await sp.onScrollListener(context, scrollController, isLoad: true);
-        diaryData = sp.user.diaries;
-        isLoadingLoadmore = false;
+        if (context.mounted) {
+          final sp = context.read<SelfProfileNotifier>();
+          sp.pageIndex = 1;
+          await sp.onScrollListener(context, scrollController: scrollController, isLoad: true);
+          diaryData = sp.user.diaries;
+          isLoadingLoadmore = false;
+        }
       }
 
       if (pageSrc == PageSrc.otherProfile) {
-        final op = context.read<OtherProfileNotifier>();
-        op.pageIndex = 1;
-        await op.onScrollListener(context, scrollController, isLoad: true);
-        diaryData = op.manyUser.last.diaries;
-        isLoadingLoadmore = false;
+        if (context.mounted) {
+          final op = context.read<OtherProfileNotifier>();
+          op.pageIndex = 1;
+          await op.onScrollListener(context, scrollController: scrollController, isLoad: true);
+          diaryData = op.manyUser.last.diaries;
+          isLoadingLoadmore = false;
+        }
       }
 
       final searchNotifier = context.read<SearchNotifier>();
 
       if (pageSrc == PageSrc.searchData) {
-        final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeDiary, TypeApiSearch.normal, 12, skip: searchNotifier.searchDiary?.length ?? 0);
-        searchNotifier.searchDiary?.addAll(data);
-        diaryData = searchNotifier.searchDiary;
-        isLoadingLoadmore = false;
+        if (context.mounted) {
+          final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeDiary, TypeApiSearch.normal, 12, skip: searchNotifier.searchDiary?.length ?? 0);
+          searchNotifier.searchDiary?.addAll(data);
+          diaryData = searchNotifier.searchDiary;
+          isLoadingLoadmore = false;
+        }
       }
 
       if (pageSrc == PageSrc.hashtag) {
-        final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeDiary, TypeApiSearch.detailHashTag, 12, skip: searchNotifier.mapDetailHashtag[key]?.diary?.length ?? 0);
-        searchNotifier.mapDetailHashtag[key]?.diary?.addAll(data);
-        diaryData = searchNotifier.mapDetailHashtag[key]?.diary;
-        isLoadingLoadmore = false;
+        if (context.mounted) {
+          final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeDiary, TypeApiSearch.detailHashTag, 12, skip: searchNotifier.mapDetailHashtag[key]?.diary?.length ?? 0);
+          searchNotifier.mapDetailHashtag[key]?.diary?.addAll(data);
+          diaryData = searchNotifier.mapDetailHashtag[key]?.diary;
+          isLoadingLoadmore = false;
+        }
       }
 
       if (pageSrc == PageSrc.interest) {
-        final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeDiary, TypeApiSearch.detailInterest, 12, skip: searchNotifier.interestContents[key]?.diary?.length ?? 0);
-        searchNotifier.interestContents[key]?.diary?.addAll(data);
-        diaryData = searchNotifier.interestContents[key]?.diary;
-        isLoadingLoadmore = false;
+        if (context.mounted) {
+          final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeDiary, TypeApiSearch.detailInterest, 12, skip: searchNotifier.interestContents[key]?.diary?.length ?? 0);
+          searchNotifier.interestContents[key]?.diary?.addAll(data);
+          diaryData = searchNotifier.interestContents[key]?.diary;
+          isLoadingLoadmore = false;
+        }
       }
     } else {
       isLoadingLoadmore = false;

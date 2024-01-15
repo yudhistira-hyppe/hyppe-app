@@ -323,6 +323,8 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
         if (_result.userType == null) {
           ShowBottomSheet.onShowSomethingWhenWrong(context);
         } else {
+
+          SharedPreference().writeStorage(SpKeys.isGuest, false);
           SharedPreference().writeStorage(SpKeys.userToken, _result.token);
           SharedPreference().writeStorage(SpKeys.email, _result.email);
           SharedPreference().writeStorage(SpKeys.userID, _result.idUser);

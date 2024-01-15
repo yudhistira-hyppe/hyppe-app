@@ -109,15 +109,15 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       //scroll
-      if (mounted) {
-        Future.delayed(const Duration(milliseconds: 500), () {
-          print("=========== global key prirnt ${widget.scrollController} ");
-          widget.scrollController?.addListener(() {
-            double offset = widget.scrollController?.position.pixels ?? 0;
-            if (mounted) toPosition(offset);
-          });
-        });
-      }
+      // if (mounted) {
+      //   Future.delayed(const Duration(milliseconds: 500), () {
+      //     print("=========== global key prirnt ${widget.scrollController} ");
+      //     widget.scrollController?.addListener(() {
+      //       double offset = widget.scrollController?.position.pixels ?? 0;
+      //       if (mounted) toPosition(offset);
+      //     });
+      //   });
+      // }
     });
 
     _initializeTimer();
@@ -354,12 +354,13 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     // final likeNotifier = Provider.of<LikeNotifier>(context, listen: false);
 
     return Consumer3<PreviewVidNotifier, TranslateNotifierV2, HomeNotifier>(
-      builder: (context, vidNotifier, translateNotifier, homeNotifier, widget) => GestureDetector(
+      builder: (context, vidNotifier, translateNotifier, homeNotifier, widget) => TapRegion(
         behavior: HitTestBehavior.opaque,
-        onPanDown: (details) {
-          print("dari builder");
-          _initializeTimer();
-        },
+        onTapInside: (event) => _initializeTimer(),
+        // onPanDown: (details) {
+        //   print("dari builder");
+        //   _initializeTimer();
+        // },
         child: SizedBox(
           child: Column(
             children: [
@@ -715,7 +716,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                             padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                             child: GestureDetector(
                                               onTap: () {
-                                                context.handleActionIsGuest((){
+                                                context.handleActionIsGuest(() {
                                                   if (vidData.insight?.isloadingFollow != true) {
                                                     picNot.followUser(context, vidData, isUnFollow: vidData.following, isloading: vidData.insight!.isloadingFollow ?? false);
                                                   }
@@ -739,7 +740,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                         ),
                                       GestureDetector(
                                         onTap: () {
-                                          context.handleActionIsGuest((){
+                                          context.handleActionIsGuest(() {
                                             if (vidData.email != email) {
                                               // FlutterAliplayer? fAliplayer
                                               context.read<PreviewPicNotifier>().reportContent(context, vidData, fAliplayer: vidData.fAliplayer, onCompleted: () async {
@@ -1073,7 +1074,6 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                                       await ShowBottomSheet.onBuyContent(context, data: vidData, fAliplayer: vidData.fAliplayer);
                                                       // fAliplayer?.play();
                                                     });
-
                                                   },
                                                   child: const Align(
                                                     alignment: Alignment.centerRight,

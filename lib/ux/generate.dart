@@ -40,6 +40,7 @@ import 'package:hyppe/ui/inner/home/content_v2/content_preferences/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/player/diary_player.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/player/landing_diary_full.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/screen_full.dart';
 // import 'package:hyppe/ui/inner/home/content/wallet/screen_lama.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/see_all/diary_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/FAQ/screen.dart';
@@ -422,6 +423,9 @@ class Generate {
         return MaterialPageRoute(builder: (_) => ScrollDiary(arguments: settings.arguments as SlidedDiaryDetailScreenArgument));
       case Routes.scrollVid:
         return MaterialPageRoute(builder: (_) => ScrollVid(arguments: settings.arguments as SlidedVidDetailScreenArgument));
+
+      case Routes.scrollFullDiary:
+        return MaterialPageRoute(builder: (_) => ScrollFullDiary(arguments: settings.arguments as SlidedDiaryDetailScreenArgument));
 
       case Routes.chalenge:
         return MaterialPageRoute(builder: (_) => const ChalangeScreen());
