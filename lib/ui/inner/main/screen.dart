@@ -351,7 +351,10 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
         }
       }else if(index == 4){
         notifier.pageIndex = index;
-        ShowBottomSheet.onLoginApp(Routing.navigatorKey.currentContext ?? context);
+        if(isGuest ?? false){
+          ShowBottomSheet.onLoginApp(Routing.navigatorKey.currentContext ?? context);
+        }
+
       }else{
         setState(() {
           'pageIndex now: $index'.logger();

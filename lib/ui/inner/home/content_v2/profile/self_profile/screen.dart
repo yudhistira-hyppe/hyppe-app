@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
@@ -168,6 +170,7 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    final isGuest = SharedPreference().readStorage(SpKeys.isGuest);
     return Consumer<SelfProfileNotifier>(
       builder: (_, notifier, __) => WillPopScope(
         onWillPop: () async {
@@ -201,6 +204,13 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
                 ),
               ),
             ],
+            leading: IconButton(
+              icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
+              splashRadius: 1,
+              onPressed: () {
+                context.read<MainNotifier>().pageIndex = 0;
+              },
+            ),
             // flexibleSpace: SafeArea(
             //   child: Row(
             //     mainAxisAlignment: MainAxisAlignment.spaceBetween,

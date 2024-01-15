@@ -8,7 +8,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
-import 'package:flutter_livepush_plugin/live_pusher_preview.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
@@ -95,7 +94,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   LocalizationModelV2? lang;
   ContentData? dataSelected;
   String email = '';
-  String statusKyc = '';
+  String? statusKyc = '';
   double itemHeight = 0;
   double lastOffset = -10;
   MainNotifier? mn;

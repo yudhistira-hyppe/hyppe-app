@@ -158,6 +158,7 @@ class RegisterNotifier with ChangeNotifier {
     }
   }
 
+
   TextStyle nextTextColor(BuildContext context) {
     if (_validationRegister()) {
       return Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText) ?? const TextStyle();
@@ -167,7 +168,7 @@ class RegisterNotifier with ChangeNotifier {
   }
 
   Function? nextButton(BuildContext context) {
-    getLocationDetails(context);
+    // getLocationDetails(context);
     if (_validationRegister()) {
       return () async {
         if (!_system.validateEmail(email)) {
