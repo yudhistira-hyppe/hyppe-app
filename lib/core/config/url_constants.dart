@@ -28,67 +28,67 @@ class UrlConstants {
 
   /// APIs end point
   /* User route */
-  static const String userRoute = "/migration/api/user";
+  static const String userRoute = "/api/user";
 
   /* Utils route */
-  static const String utilsRoute = "/migration/api/utils";
+  static const String utilsRoute = "/api/utils";
 
   /* Post route */
-  static const String postRoute = "/migration/api/post";
+  static const String postRoute = "/api/post";
 
   /* Posts route */
-  static const String postsRoute = "/migration/api/posts";
+  static const String postsRoute = "/api/posts";
 
   /* Follow route */
-  static const String followRoute = "/migration/api/follow";
+  static const String followRoute = "/api/follow";
 
   /* Stories route */
-  static const String storiesRoute = "/migration/api/story";
+  static const String storiesRoute = "/api/story";
 
   /* Search route */
-  static const String searchRoute = "/migration/api/search";
+  static const String searchRoute = "/api/search";
 
   /* Chat route */
-  static const String chatRoute = "/migration/api/chat";
+  static const String chatRoute = "/api/chat";
 
   /* Notification route */
-  static const String notificationRoute = "/migration/api/inapp";
+  static const String notificationRoute = "/api/inapp";
 
   /* Wallet route */
   static const String walletRoute = "/bagea-core";
 
   /* Wallet route */
-  static const String bizRoute = "/migration/api/biz";
+  static const String bizRoute = "/api/biz";
 
   /* v3 user profile */
-  static const String profileRoute = "/migration/api/getuserprofiles";
+  static const String profileRoute = "/api/getuserprofiles";
 
   /* User Content route */
-  static const String userContentRoute = "/migration/api/getusercontents";
+  static const String userContentRoute = "/api/getusercontents";
 
   /* User Content route */
-  static const String bankRoute = "/migration/api/banks";
+  static const String bankRoute = "/api/banks";
 
   /* User Content route */
-  static const String liveStramRoute = "/migration/api/live";
+  static const String liveStramRoute = "/api/live";
 
   /* v3 user ads */
-  static const String adsRoute = "/migration/api/ads";
+  static const String adsRoute = "/api/ads";
 
-  static const String adsRouteV2 = "/migration/api/adsv2/ads";
+  static const String adsRouteV2 = "/api/adsv2/ads";
 
-  static const String transactionRoute = "/migration/api/transactions";
+  static const String transactionRoute = "/api/transactions";
 
-  static const String userbankaccountsRoute = "/migration/api/userbankaccounts";
+  static const String userbankaccountsRoute = "/api/userbankaccounts";
 
-  static const String accountBalancesRoutes = "/migration/api/accountbalances";
+  static const String accountBalancesRoutes = "/api/accountbalances";
 
   /* Post route */
-  static const String contentRouteV3 = "/migration/api/getusercontents";
+  static const String contentRouteV3 = "/api/getusercontents";
 
-  static const String interestCount = "/migration/api/interest-count";
+  static const String interestCount = "/api/interest-count";
 
-  static const String challange = "/migration/api/challenge";
+  static const String challange = "/api/challenge";
 
   ///---------------------------------------------------------------------------------------------------------///
   /* APIs Bookmark */
@@ -230,7 +230,7 @@ class UrlConstants {
 
   /// APIs end point
   /* Post route */
-  static const String postRouteV2 = "/migration/api/posts";
+  static const String postRouteV2 = "/api/posts";
 
   ///---------------------------------------------------------------------------------------------------------///
   /// post => Get Contents
@@ -247,10 +247,10 @@ class UrlConstants {
   static const String getVideoApsara = "$postRouteV2/getvideo";
 
   /// post => Post Contents
-  static const String createuserposts = "$postRouteV2/createpost";
+  static const String createuserposts = "$postRouteV2/createpost/v2";
 
   /// post => Update Contents
-  static const String updatepost = "$postRouteV2/updatepost";
+  static const String updatepost = "$postRouteV2/updatepost/v2";
 
   /// post => post to change value key isViewed
   static const String postViewer = "$postRouteV2/postviewer";
@@ -271,7 +271,7 @@ class UrlConstants {
   static const String logout = "$userRoute/logout";
 
   /// post => Interactives
-  static const String interactive = "$postRouteV2/interactive";
+  static const String interactive = "$postRouteV2/interactive/v2";
 
   /// post => Get Interactives
   static const String getInnteractives = "$postRouteV2/getinteractives/v2";
