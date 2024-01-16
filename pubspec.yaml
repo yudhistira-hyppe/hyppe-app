@@ -21,7 +21,6 @@ dependencies:
   firebase_auth: 4.2.5
   firebase_auth_platform_interface: 6.15.3
   firebase_crashlytics: ^3.0.10
-
   firebase_analytics: ^10.5.0
 
   cached_network_image: ^3.2.3 # Untuk keperluan cache image

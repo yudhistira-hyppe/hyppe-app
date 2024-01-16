@@ -1041,7 +1041,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                                               child: ImageFiltered(
                                                 imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
                                                 child: Image(
-                                                  // width: SizeConfig.screenWidth,
+                                                  width: SizeConfig.screenWidth,
                                                   // height: MediaQuery.of(context).size.width * 16.0 / 11.0,
                                                   image: imageProvider,
                                                   fit: BoxFit.cover,
@@ -1050,12 +1050,12 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                                             )
                                           : Container(
                                               // const EdgeInsets.symmetric(horizontal: 4.5),
-                                              // width: SizeConfig.screenWidth,
+                                              width: SizeConfig.screenWidth,
                                               // height: MediaQuery.of(context).size.width * 16.0 / 11.0,
                                               decoration: BoxDecoration(
                                                 image: DecorationImage(
                                                   image: imageProvider,
-                                                  fit: BoxFit.cover,
+                                                  fit: BoxFit.contain,
                                                 ),
                                                 borderRadius: BorderRadius.circular(16.0),
                                               ),

@@ -102,6 +102,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   int indexKeyProtection = 0;
   int itemIndex = 0;
   bool scroolUp = false;
+  bool isActivePage = true;
 
   @override
   void initState() {
@@ -445,7 +446,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
   Future start(BuildContext context, ContentData data) async {
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
-
+    isPrepare = false;
     fAliplayer?.stop();
     fAliplayer?.clearScreen();
 
@@ -477,15 +478,18 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
     if (data.reportedStatus == 'BLURRED') {
     } else {
-      print("=====prepare=====");
-      fAliplayer?.prepare();
+      if (isActivePage) {
+        print("=====prepare=====");
+        fAliplayer?.prepare();
+        fAliplayer?.play();
+      }
     }
     // this syntax below to prevent video play after changing video
-    Future.delayed(const Duration(seconds: 1), () {
-      if (context.read<MainNotifier>().isInactiveState) {
-        fAliplayer?.pause();
-      }
-    });
+    // Future.delayed(const Duration(seconds: 1), () {
+    //   if (context.read<MainNotifier>().isInactiveState) {
+    //     fAliplayer?.pause();
+    //   }
+    // });
 
     // fAliplayer?.play();
   }
@@ -681,8 +685,13 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
   @override
   void didPopNext() {
-    print("=======didpop diary page ==========");
+    print("=======didpop diary page $isPrepare ==========");
     isHomeScreen = true;
+    isActivePage = true;
+    if (!isPrepare) {
+      fAliplayer?.prepare();
+    }
+
     fAliplayer?.play();
     _initializeTimer();
     // System().disposeBlock();
@@ -693,6 +702,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   @override
   void didPushNext() {
     isHomeScreen = false;
+    isActivePage = false;
     fAliplayer?.pause();
     _pauseScreen();
     super.didPushNext();

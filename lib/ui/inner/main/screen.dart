@@ -332,7 +332,6 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
   }
 
   void tapMenu(int index, MainNotifier notifier, consumerContext) async {
-
     String newUser = SharedPreference().readStorage(SpKeys.newUser) ?? '';
     if (newUser == "TRUE" || globalTultipShow) {
       return;
@@ -340,39 +339,34 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
     if ((Routing.navigatorKey.currentContext ?? context).read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
     final bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
     if (index != 2) {
-      if(index == 3){
-        if(isGuest ?? false){
+      if (index == 3) {
+        if (isGuest ?? false) {
           ShowBottomSheet.onLoginApp(Routing.navigatorKey.currentContext ?? context);
-        }else{
+        } else {
           setState(() {
             'pageIndex now: $index'.logger();
             notifier.pageIndex = index;
           });
         }
-      }else if(index == 4){
+      } else if (index == 4) {
         notifier.pageIndex = index;
-        if(isGuest ?? false){
+        if (isGuest ?? false) {
           ShowBottomSheet.onLoginApp(Routing.navigatorKey.currentContext ?? context);
         }
-
-      }else{
+      } else {
         setState(() {
           'pageIndex now: $index'.logger();
           notifier.pageIndex = index;
         });
       }
-
-
     } else {
-
-      if(isGuest ?? false){
+      if (isGuest ?? false) {
         ShowBottomSheet.onLoginApp(Routing.navigatorKey.currentContext ?? context);
-      }else{
+      } else {
         PreUploadContentNotifier pn = (Routing.navigatorKey.currentContext ?? context).read<PreUploadContentNotifier>();
         pn.hastagChallange = '';
         notifier.onShowPostContent(consumerContext);
       }
-
     }
   }
 }

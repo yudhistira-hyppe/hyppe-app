@@ -153,15 +153,15 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
 
       //scroll
-      if (mounted) {
-        Future.delayed(Duration(milliseconds: 500), () {
-          print("=========== global key prirnt ${widget.scrollController} ");
-          widget.scrollController?.addListener(() async {
-            double offset = widget.scrollController?.position.pixels ?? 0;
-            if (mounted) await toPosition(offset, notifier);
-          });
-        });
-      }
+      // if (mounted) {
+      //   Future.delayed(Duration(milliseconds: 500), () {
+      //     print("=========== global key prirnt ${widget.scrollController} ");
+      //     widget.scrollController?.addListener(() async {
+      //       double offset = widget.scrollController?.position.pixels ?? 0;
+      //       if (mounted) await toPosition(offset, notifier);
+      //     });
+      //   });
+      // }
 
       _initListener();
     });

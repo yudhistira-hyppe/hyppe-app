@@ -808,11 +808,11 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
                         : Container(
                             // const EdgeInsets.symmetric(horizontal: 4.5),
                             // height: MediaQuery.of(context).size.height,
-                            // width: MediaQuery.of(context).size.width,
+                            width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image: imageProvider,
-                                fit: BoxFit.cover,
+                                fit: BoxFit.contain,
                               ),
                               borderRadius: BorderRadius.circular(16.0),
                             ),
