@@ -1091,6 +1091,9 @@ class LocalizationModelV2 {
   String? noteShowView99;
   String? viewers;
   String? liveVideoHasStarted;
+  String? notLikeyet;
+  String? notviewyet;
+  String? inthisphoto;
   String? addATitle;
 
   LocalizationModelV2({
@@ -2186,6 +2189,9 @@ class LocalizationModelV2 {
     this.noteShowView99,
     this.viewers,
     this.liveVideoHasStarted,
+    this.notLikeyet,
+    this.notviewyet,
+    this.inthisphoto,
     this.addATitle,
   });
 
@@ -3300,6 +3306,9 @@ class LocalizationModelV2 {
     noteShowView99 = json['noteShowView99'];
     viewers = json['viewers'];
     liveVideoHasStarted = json['liveVideoHasStarted'];
+    notLikeyet = json['notLikeyet'];
+    notviewyet = json['notviewyet'];
+    inthisphoto = json['inthisphoto'];
     addATitle = json['addATitle'];
   }
 }

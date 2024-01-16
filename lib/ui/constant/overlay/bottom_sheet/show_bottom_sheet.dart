@@ -1246,6 +1246,7 @@ class ShowBottomSheet {
     required Function() function,
     required postId,
     // StoryController? storyController,
+    String? title,
     FlutterAliplayer? fAliplayer,
   }) {
     showModalBottomSheet<dynamic>(
@@ -1273,6 +1274,7 @@ class ShowBottomSheet {
                   value: value,
                   function: function,
                   postId: postId,
+                  title: title,
                 ),
               ),
             )

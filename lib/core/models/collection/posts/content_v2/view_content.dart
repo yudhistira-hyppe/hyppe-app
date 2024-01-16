@@ -18,18 +18,21 @@ class ViewContent {
     this.username,
     this.avatar,
     this.urluserBadge,
+    this.isFollowing,
   });
 
   String? fullName;
   String? email;
   String? username;
   Avatar? avatar;
+  String? isFollowing;
   UserBadgeModel? urluserBadge;
 
   factory ViewContent.fromJson(Map<String, dynamic> json) => ViewContent(
         fullName: json["fullName"],
         email: json["email"],
         username: json["username"],
+        isFollowing: json["isFollowing"]??'none',
         avatar: json['avatar'] != null ? Avatar.fromJson(json['avatar']) : null,
         urluserBadge:
             json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty
@@ -43,6 +46,7 @@ class ViewContent {
         "fullName": fullName,
         "email": email,
         "username": username,
+        "isFollowing": isFollowing,
         "avatar": avatar?.toJson(),
         "urluserBadge": urluserBadge?.toJson(),
       };

@@ -35,6 +35,7 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/profile_component.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/offline_mode.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ux/path.dart';
@@ -69,7 +70,6 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
   bool isMute = false;
   double opacityLevel = 0.0;
 
-
   List<ContentData>? picData;
   ContentData? selectedData;
   String auth = '';
@@ -102,15 +102,17 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
     super.didChangeDependencies();
   }
 
-  void initialPage() async {
+  Future<void> initialPage() async {
     //Ads
     final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
+    notifier.initialPicConnection(context);
     notifier.initAdsCounter();
     lang = context.read<TranslateNotifierV2>().translate;
     email = SharedPreference().readStorage(SpKeys.email);
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPicFullScreen');
+      fAliplayer =
+          FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPicFullScreen');
       WidgetsBinding.instance.addObserver(this);
       fAliplayer?.setAutoPlay(true);
       fAliplayer?.setLoop(true);
@@ -196,24 +198,11 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
             statusBarIconBrightness: Brightness.light),
         child: Consumer2<PreviewPicNotifier, HomeNotifier>(
             builder: (_, notifier, home, __) {
-              // if (isPrepare){
-              //   return Center(
-              //     child: Container(
-              //       alignment: Alignment.center,
-              //       width: 80 * SizeConfig.scaleDiagonal,
-              //       height: 80 * SizeConfig.scaleDiagonal,
-              //       child: const CustomLoading(),
-              //     ),
-              //   );
-              // }
-
           if (notifier.pic == null && home.isLoadingPict) {
             return CustomShimmer(
-              width:
-                  (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+              width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
               height: double.infinity,
-              margin:
-                  const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+              margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
               padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
             );
           }
@@ -235,13 +224,11 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
                   return const CustomShimmer(
                     width: double.infinity,
                     height: double.infinity,
-                    margin: EdgeInsets.symmetric(
-                        horizontal: 4.5, vertical: 10),
-                    padding:
-                        EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                    margin: EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                    padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
                   );
                 }
-    
+
                 return imagePic(
                     picData: notifier.pic![index],
                     index: index,
@@ -259,6 +246,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
       PreviewPicNotifier? notifier,
       HomeNotifier? homeNotifier}) {
     final isAds = picData!.inBetweenAds != null && picData.postID == null;
+    // notifier!.initialPicConnection(context);
     return picData.isContentLoading ?? false
         ? Builder(builder: (context) {
             Future.delayed(const Duration(seconds: 1), () {
@@ -389,106 +377,128 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
                         }
                       },
                       child: Center(
-                          child: ZoomableImage(
-                            enable: true,
-                            onScaleStart: () {
-                              print("================masuk zoom============");
-                              // widget.onScaleStart?.call();
-                            }, // optional
-                            onScaleStop: () {
-                              // widget.onScaleStop?.call();
-                            },
-                            child: CustomBaseCacheImage(
-                              memCacheWidth: 100,
-                              memCacheHeight: 100,
-                              widthPlaceHolder: 80,
-                              heightPlaceHolder: 80,
-                              imageUrl: (picData.isApsara ?? false)
-                              ? ("${picData.mediaEndpoint}?key=${picData.valueCache}")
-                              : ("${picData.fullThumbPath}&key=${picData.valueCache}"),
-                                                  imageBuilder: (context, imageProvider) {
-                            return GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onTapDown: (details){
-                                var position = details.globalPosition;
-                                notifier!.positionDxDy = position;
-                              },
-                              onDoubleTap: (){
-                                context.read<LikeNotifier>().likePost(context, notifier!.pic![index]);
-                              },
-                              onTap: (){
-                                setState(() {
-                                  isMute = !isMute;
-                                  opacityLevel = 1.0;
-                                });
-                                fAliplayer?.setMuted(isMute);
-                                if (isMute){
-                                  animatedController.stop();
-                                }else{
-                                  animatedController.repeat();
-                                }
-                                Future.delayed(const Duration(seconds: 1),(){
-                                  opacityLevel = 0.0;
-                                  setState(() {});
-                                });
-                              },
-                              child: ImageSize(
-                                onChange: (Size size) {
-                                  if ((picData.imageHeightTemp ?? 0) == 0) {
-                                    setState(() {
-                                      picData.imageHeightTemp = size.height;
-                                    });
-                                  }
-                                },
-                                child: picData.reportedStatus == 'BLURRED'
-                                    ? ImageFiltered(
-                                        imageFilter: ImageFilter.blur(
-                                            sigmaX: 30, sigmaY: 30),
-                                        child: Image(
-                                          image: imageProvider,
-                                          fit: BoxFit.cover,
-                                          width: SizeConfig.screenWidth,
-                                          // height: picData?.imageHeightTemp == 0 ? null : picData?.imageHeightTemp,
-                                        ),
-                                      )
-                                    : Image(
-                                        image: imageProvider,
-                                        fit: BoxFit.cover,
-                                        width: SizeConfig.screenWidth,
-                                        // height: picData?.imageHeightTemp == 0 || (picData?.imageHeightTemp ?? 0) <= 100 ? null : picData?.imageHeightTemp,
-                                      ),
-                              ),
-                            );
-                                                  },
-                                                  emptyWidget: Container(
-                              decoration: BoxDecoration(
-                                  color: kHyppeNotConnect,
-                                  borderRadius: BorderRadius.circular(16)),
-                              width: SizeConfig.screenWidth,
-                              height: 250,
-                              padding: const EdgeInsets.all(20),
-                              alignment: Alignment.center,
-                              child: CustomTextWidget(
-                                textToDisplay: lang?.couldntLoadImage ?? 'Error',
-                                maxLines: 3,
-                              )),
-                                                  errorWidget: (context, url, error) {
-                            return Container(
-                                decoration: BoxDecoration(
-                                    color: kHyppeNotConnect,
-                                    borderRadius: BorderRadius.circular(16)),
-                                width: SizeConfig.screenWidth,
-                                height: 250,
-                                padding: const EdgeInsets.all(20),
-                                alignment: Alignment.center,
-                                child: CustomTextWidget(
-                                  textToDisplay:
-                                      lang?.couldntLoadImage ?? 'Error',
-                                  maxLines: 3,
-                                ));
-                                                  },
+                          child: !notifier!.isConnect
+                              ? OfflineMode(
+                                  function: () async {
+                                    var connect =
+                                        await System().checkConnections();
+                                    if (connect) {
+                                      notifier.initialPic(context);
+                                    }
+                                  },
+                                )
+                              : ZoomableImage(
+                                  enable: true,
+                                  onScaleStart: () {
+                                    print(
+                                        "================masuk zoom============");
+                                    // widget.onScaleStart?.call();
+                                  }, // optional
+                                  onScaleStop: () {
+                                    // widget.onScaleStop?.call();
+                                  },
+                                  child: CustomBaseCacheImage(
+                                    memCacheWidth: 100,
+                                    memCacheHeight: 100,
+                                    widthPlaceHolder: 80,
+                                    heightPlaceHolder: 80,
+                                    imageUrl: (picData.isApsara ?? false)
+                                        ? ("${picData.mediaEndpoint}?key=${picData.valueCache}")
+                                        : ("${picData.fullThumbPath}&key=${picData.valueCache}"),
+                                    imageBuilder: (context, imageProvider) {
+                                      return GestureDetector(
+                                        behavior: HitTestBehavior.translucent,
+                                        onTapDown: (details) {
+                                          var position = details.globalPosition;
+                                          notifier.positionDxDy = position;
+                                        },
+                                        onDoubleTap: () {
+                                          context.read<LikeNotifier>().likePost(
+                                              context, notifier!.pic![index]);
+                                        },
+                                        onTap: () {
+                                          setState(() {
+                                            isMute = !isMute;
+                                            opacityLevel = 1.0;
+                                          });
+                                          fAliplayer?.setMuted(isMute);
+                                          if (isMute) {
+                                            animatedController.stop();
+                                          } else {
+                                            animatedController.repeat();
+                                          }
+                                          Future.delayed(
+                                              const Duration(seconds: 1), () {
+                                            opacityLevel = 0.0;
+                                            setState(() {});
+                                          });
+                                        },
+                                        child: ImageSize(
+                                          onChange: (Size size) {
+                                            if ((picData.imageHeightTemp ??
+                                                    0) ==
+                                                0) {
+                                              setState(() {
+                                                picData.imageHeightTemp =
+                                                    size.height;
+                                              });
+                                            }
+                                          },
+                                          child: picData.reportedStatus ==
+                                                  'BLURRED'
+                                              ? ImageFiltered(
+                                                  imageFilter: ImageFilter.blur(
+                                                      sigmaX: 30, sigmaY: 30),
+                                                  child: Image(
+                                                    image: imageProvider,
+                                                    fit: BoxFit.cover,
+                                                    width:
+                                                        SizeConfig.screenWidth,
+                                                    // height: picData?.imageHeightTemp == 0 ? null : picData?.imageHeightTemp,
+                                                  ),
+                                                )
+                                              : Image(
+                                                  image: imageProvider,
+                                                  fit: BoxFit.cover,
+                                                  width: SizeConfig.screenWidth,
+                                                  // height: picData?.imageHeightTemp == 0 || (picData?.imageHeightTemp ?? 0) <= 100 ? null : picData?.imageHeightTemp,
                                                 ),
-                          )),
+                                        ),
+                                      );
+                                    },
+                                    emptyWidget: Container(
+                                        decoration: BoxDecoration(
+                                            color: kHyppeNotConnect,
+                                            borderRadius:
+                                                BorderRadius.circular(16)),
+                                        width: SizeConfig.screenWidth,
+                                        height: 250,
+                                        padding: const EdgeInsets.all(20),
+                                        alignment: Alignment.center,
+                                        child: CustomTextWidget(
+                                          textToDisplay:
+                                              lang?.couldntLoadImage ?? 'Error',
+                                          maxLines: 3,
+                                        )),
+                                    errorWidget: (context, url, error) {
+                                      return Container(
+                                          decoration: BoxDecoration(
+                                              color: kHyppeNotConnect,
+                                              borderRadius:
+                                                  BorderRadius.circular(16)),
+                                          width: SizeConfig.screenWidth,
+                                          height: 250,
+                                          padding: const EdgeInsets.all(20),
+                                          alignment: Alignment.center,
+                                          child: CustomTextWidget(
+                                            textToDisplay:
+                                                lang?.couldntLoadImage ??
+                                                    'Error',
+                                            maxLines: 3,
+                                          ));
+                                    },
+                                  ),
+                                )),
                     ),
                   ),
                   _buildBody(context, SizeConfig.screenWidth, picData),
@@ -506,24 +516,25 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
                         height: kToolbarHeight * 2,
                         child: appBar(picData)),
                   ),
-
                   if (picData.music != null)
-                  Positioned(
-                    top: notifier!.positionDxDy.dy - 36,
-                    left: notifier.positionDxDy.dx - 36,
-                    child: AnimatedOpacity(
-                      opacity: opacityLevel,
-                      duration: const Duration(milliseconds: 500),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: CustomIconWidget(
-                          iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
-                          defaultColor: false,
-                          height: 32,
+                    Positioned(
+                      top: notifier!.positionDxDy.dy - 36,
+                      left: notifier.positionDxDy.dx - 36,
+                      child: AnimatedOpacity(
+                        opacity: opacityLevel,
+                        duration: const Duration(milliseconds: 500),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: CustomIconWidget(
+                            iconData: isMute
+                                ? '${AssetPath.vectorPath}sound-off.svg'
+                                : '${AssetPath.vectorPath}sound-on.svg',
+                            defaultColor: false,
+                            height: 32,
+                          ),
                         ),
                       ),
                     ),
-                  ),
                 ],
               );
   }
@@ -551,18 +562,21 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
                             fAliplayer?.pause();
                             context.read<PicDetailNotifier>().showUserTag(
                                 context, data.tagPeople, data.postID,
+                                title: lang!.inthisphoto,
                                 fAliplayer: fAliplayer);
                           },
                           child: Row(
                             children: [
                               const CustomIconWidget(
-                                iconData: '${AssetPath.vectorPath}tag_people.svg',
+                                iconData:
+                                    '${AssetPath.vectorPath}tag_people.svg',
                                 defaultColor: false,
                                 height: 24,
                               ),
                               Text(
                                 '${data.tagPeople!.length} ${lang!.people}',
-                                style: const TextStyle(color: kHyppeTextPrimary),
+                                style:
+                                    const TextStyle(color: kHyppeTextPrimary),
                               )
                             ],
                           ),
@@ -570,15 +584,20 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
                       if (data.location != '')
                         Padding(
                           padding: EdgeInsets.symmetric(
-                              horizontal: (data.tagPeople?.isNotEmpty ?? false) ? 12.0 : 0.0, vertical: 16.0),
+                              horizontal: (data.tagPeople?.isNotEmpty ?? false)
+                                  ? 12.0
+                                  : 0.0,
+                              vertical: 16.0),
                           child: Align(
                             alignment: Alignment.bottomLeft,
                             child: Row(
                               children: [
                                 const Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 8.0),
                                   child: CustomIconWidget(
-                                    iconData: '${AssetPath.vectorPath}map-light.svg',
+                                    iconData:
+                                        '${AssetPath.vectorPath}map-light.svg',
                                     defaultColor: false,
                                     height: 16,
                                   ),
@@ -589,7 +608,8 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
                                     '${data.location}',
                                     maxLines: 1,
                                     style: const TextStyle(
-                                        color: kHyppeLightBackground, fontSize: 10),
+                                        color: kHyppeLightBackground,
+                                        fontSize: 10),
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
@@ -612,8 +632,8 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
                         ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
                     seeMore:
                         '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
-                    normStyle: const TextStyle(
-                        fontSize: 12, color: kHyppeTextPrimary),
+                    normStyle:
+                        const TextStyle(fontSize: 12, color: kHyppeTextPrimary),
                     hrefStyle: Theme.of(context)
                         .textTheme
                         .subtitle2
@@ -621,8 +641,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
                     expandStyle: Theme.of(context)
                         .textTheme
                         .subtitle2
-                        ?.copyWith(
-                            color: kHyppeTextPrimary),
+                        ?.copyWith(color: kHyppeTextPrimary),
                   ),
                 ),
                 if (data.music != null)
@@ -636,13 +655,13 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
                           radius: 18,
                           backgroundColor: kHyppeSurface.withOpacity(.9),
                           child: AnimatedBuilder(
-                              animation: animatedController,
-                              builder: (_, child) {
-                                return Transform.rotate(
-                                  angle: animatedController.value * 2 * math.pi,
-                                  child: child,
-                                );
-                              },
+                            animation: animatedController,
+                            builder: (_, child) {
+                              return Transform.rotate(
+                                angle: animatedController.value * 2 * math.pi,
+                                child: child,
+                              );
+                            },
                             child: CustomBaseCacheImage(
                               imageUrl: data.music?.apsaraThumnailUrl ?? '',
                               imageBuilder: (_, imageProvider) {
@@ -679,7 +698,9 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
                             ),
                           ),
                         ),
-                        const SizedBox(height: 12.0,),
+                        const SizedBox(
+                          height: 12.0,
+                        ),
                         SizedBox(
                           width: SizeConfig.screenWidth! * .55,
                           child: CustomTextWidget(
@@ -733,7 +754,9 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
                           data: picData));
                 },
                 iconData: '${AssetPath.vectorPath}comment-shadow.svg',
-                value: picData.comments! > 0 ? picData.comments.toString() : lang?.comments??'',
+                value: picData.comments! > 0
+                    ? picData.comments.toString()
+                    : lang?.comments ?? '',
               ),
             if ((picData.isShared ?? false))
               buttonRight(

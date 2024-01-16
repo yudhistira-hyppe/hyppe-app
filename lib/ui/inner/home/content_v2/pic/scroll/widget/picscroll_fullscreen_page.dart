@@ -31,6 +31,7 @@ import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/profile_component.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/screen.dart';
@@ -571,6 +572,18 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
                     ),
                   ),
                 ),
+              picData.email == SharedPreference().readStorage(SpKeys.email) && (picData.reportedStatus == 'OWNED' || picData.reportedStatus == 'OWNED')
+              ? Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: ContentViolationWidget(
+                      radius: 0.0,
+                      data: picData,
+                      text: lang!.thisHyppeVidisSubjectToModeration ?? '',
+                    ),
+              )
+              : const SizedBox.shrink()
             ],
           );
   }

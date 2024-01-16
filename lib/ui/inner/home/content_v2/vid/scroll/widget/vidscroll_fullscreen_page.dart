@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/vid_fullscreen_argument.dart';
 import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/vid_player_page.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
@@ -41,6 +44,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> {
 
   @override
   Widget build(BuildContext context) {
+    TranslateNotifierV2 lang = context.read<TranslateNotifierV2>();
     var map = {
       DataSourceRelated.vidKey: data!.apsaraId,
       DataSourceRelated.regionKey: DataSourceRelated.defaultRegion,
@@ -74,7 +78,24 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> {
                   }
                 },
                 itemBuilder: (context, index) {
-                  return itemVid(map, vidNotifier.vidData![index]);
+                  return Stack(
+                    children: [
+                      Positioned.fill(child: itemVid(map, vidNotifier.vidData![index]),),
+                      vidNotifier.vidData![index].email == SharedPreference().readStorage(SpKeys.email) && (vidNotifier.vidData![index].reportedStatus == 'OWNED' || vidNotifier.vidData![index].reportedStatus == 'OWNED')
+                      ? Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: ContentViolationWidget(
+                              radius: 0.0,
+                              data: vidData?[index] ?? ContentData(),
+                              text: lang.translate.thisHyppeVidisSubjectToModeration ?? '',
+                            ),
+                      )
+                      : const SizedBox.shrink()
+                    ],
+                  );
+                  
                 },
               )
             ],

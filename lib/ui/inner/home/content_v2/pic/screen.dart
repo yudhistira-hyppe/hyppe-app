@@ -4,6 +4,8 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
@@ -42,6 +44,7 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
+import 'package:hyppe/ui/inner/home/widget/view_like.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
@@ -1457,10 +1460,30 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                         ],
                                       ),
                                       twelvePx,
-                                      Text(
-                                        "${picData?.insight?.likes}  ${notifier.language.like}",
-                                        style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                                      RichText(
+                                        text: TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text: "${picData?.insight?.likes} ${notifier.language.like}",
+                                              recognizer: TapGestureRecognizer()..onTap = () => Navigator.push(context, CupertinoPageRoute(builder: (context) => ViewLiked(postId: picData?.postID??'', eventType: 'LIKE',))),
+                                              style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                                            ),
+                                            const TextSpan(
+                                              text: " . ",
+                                              style: TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 22),
+                                            ),
+                                            TextSpan(
+                                              text: "${picData?.insight!.views?.getCountShort()} ${notifier.language.views}",
+                                              recognizer: TapGestureRecognizer()..onTap = () => Navigator.push(context, CupertinoPageRoute(builder: (context) => ViewLiked(postId: picData?.postID??'', eventType: 'VIEW',))),
+                                              style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                                            ),
+                                          ]
+                                        ),
                                       ),
+                                      // Text(
+                                      //   "${picData?.insight?.likes}  ${notifier.language.like}",
+                                      //   style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                                      // ),
                                     ],
                                   ),
                                 ),
@@ -1577,7 +1600,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
               child: GestureDetector(
                 onTap: () {
                   fAliplayer?.pause();
-                  context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID, fAliplayer: fAliplayer);
+                  context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID, fAliplayer: fAliplayer, title: lang!.inthisphoto);
                 },
                 child: const CustomIconWidget(
                   iconData: '${AssetPath.vectorPath}tag_people.svg',
