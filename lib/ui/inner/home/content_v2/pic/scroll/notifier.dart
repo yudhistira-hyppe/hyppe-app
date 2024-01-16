@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../../../../../../core/services/system.dart';
 
 class ScrollPicNotifier with ChangeNotifier {
+  Offset positionDxDy = const Offset(0, 0);
   bool _isLoadingLoadmore = false;
   bool get isLoadingLoadmore => _isLoadingLoadmore;
   set isLoadingLoadmore(bool state) {

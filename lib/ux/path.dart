@@ -54,6 +54,8 @@ class Routes {
 
   //Fullscreen Pic
   static const String picFullScreenDetail = '/pic-fullscreen';
+  static const String picScrollFullScreenDetail = '/pic-scroll-fullscreen';
+  static const String vidScrollFullScreenDetail = '/vid-scroll-fullscreen';
 
   static const String diaryDetail = '/diary-detail';
   static const String diaryView = '/diary-view';

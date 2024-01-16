@@ -19,6 +19,7 @@ import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/models/collection/utils/zoom_pic/zoom_pic.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
@@ -27,6 +28,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_desc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -68,7 +70,6 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
   ContentData? selectedData;
   String auth = '';
   int indexPic = 0;
-  late ImageProvider<Object> imageProvider;
   LocalizationModelV2? lang;
   String email = '';
 
@@ -80,30 +81,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
 
   @override
   void initState() {
-    //Ads
-    final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
-    notifier.initAdsCounter();
-
-    lang = context.read<TranslateNotifierV2>().translate;
-    email = SharedPreference().readStorage(SpKeys.email);
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPic');
-      WidgetsBinding.instance.addObserver(this);
-      fAliplayer?.setAutoPlay(true);
-      fAliplayer?.setLoop(true);
-
-      //Turn on mix mode
-      if (Platform.isIOS) {
-        FlutterAliplayer.enableMix(true);
-        // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
-      }
-
-      //set player
-      fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
-      fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
-    });
-    // context.read<HomeNotifier>().removeWakelock();
-    controller = PageController(initialPage: widget.argument?.index ?? 0);
+    initialPage();
     super.initState();
   }
 
@@ -112,7 +90,6 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
     picData = widget.argument?.picData;
     indexPic = widget.argument!.index;
 
-    imageProvider = widget.argument!.imageProvider;
     if (picData![indexPic].certified ?? false) {
       System().block(context);
     } else {
@@ -121,9 +98,35 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
     super.didChangeDependencies();
   }
 
+  void initialPage() async {
+    //Ads
+    final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
+    notifier.initAdsCounter();
+    lang = context.read<TranslateNotifierV2>().translate;
+    email = SharedPreference().readStorage(SpKeys.email);
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPicFullScreen');
+      WidgetsBinding.instance.addObserver(this);
+      fAliplayer?.setAutoPlay(true);
+      fAliplayer?.setLoop(true);
+
+      //Turn on mix mode
+      if (Platform.isIOS) {
+        FlutterAliplayer.enableMix(true);
+      }
+
+      //set player
+      fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
+      fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+    });
+    controller = PageController(initialPage: widget.argument?.index ?? 0);
+  }
+
   @override
   void dispose() {
-    if (fAliplayer != null) fAliplayer!.destroy();
+    fAliplayer?.stop();
+    fAliplayer!.destroy();
     animatedController.dispose();
     super.dispose();
   }
@@ -179,55 +182,56 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        fAliplayer?.stop();
-        return true;
-      },
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: AnnotatedRegion<SystemUiOverlayStyle>(
-          value: const SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarIconBrightness: Brightness.light),
-          child: Consumer2<PreviewPicNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
-            if (notifier.pic == null && home.isLoadingPict) {
-              return CustomShimmer(
-                width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                height: double.infinity,
-                margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-              );
-            }
-            return Stack(
-              children: [
-                PageView.builder(
-                    controller: controller,
-                    scrollDirection: Axis.vertical,
-                    itemCount: notifier.pic?.length ?? 0,
-                    onPageChanged: (value) {
-                      indexPic = value;
-                      if ((notifier.pic?.length ?? 0) - 1 == indexPic) {
-                        //This loadmore data
-                        notifier.initialPic(context);
-                      }
-                    },
-                    itemBuilder: (context, index) {
-                      if (notifier.pic == null || home.isLoadingPict) {
-                        fAliplayer?.pause();
-                        _lastCurPostId = '';
-                        return const CustomShimmer(
-                          width: double.infinity,
-                          height: double.infinity,
-                          margin: EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                          padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                        );
-                      }
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: const SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.light, statusBarIconBrightness: Brightness.light),
+        child: Consumer2<PreviewPicNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
+          // if (isPrepare){
+          //   return Center(
+          //     child: Container(
+          //       alignment: Alignment.center,
+          //       width: 80 * SizeConfig.scaleDiagonal,
+          //       height: 80 * SizeConfig.scaleDiagonal,
+          //       child: const CustomLoading(),
+          //     ),
+          //   );
+          // }
 
-                      return imagePic(picData: notifier.pic![index], index: index, notifier: notifier, homeNotifier: home);
-                    }),
-              ],
+          if (notifier.pic == null && home.isLoadingPict) {
+            return CustomShimmer(
+              width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+              height: double.infinity,
+              margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
             );
-          }),
-        ),
+          }
+          return PageView.builder(
+              controller: controller,
+              scrollDirection: Axis.vertical,
+              itemCount: notifier.pic?.length ?? 0,
+              onPageChanged: (value) {
+                indexPic = value;
+                if ((notifier.pic?.length ?? 0) - 1 == indexPic) {
+                  //This loadmore data
+                  notifier.initialPic(context);
+                }
+              },
+              itemBuilder: (context, index) {
+                if (notifier.pic == null || home.isLoadingPict) {
+                  fAliplayer?.pause();
+                  _lastCurPostId = '';
+                  return const CustomShimmer(
+                    width: double.infinity,
+                    height: double.infinity,
+                    margin: EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                    padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                  );
+                }
+
+                return imagePic(picData: notifier.pic![index], index: index, notifier: notifier, homeNotifier: home);
+              });
+        }),
       ),
     );
   }
@@ -342,80 +346,75 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                         }
                       },
                       child: Center(
-                          child: CustomBaseCacheImage(
-                        memCacheWidth: 100,
-                        memCacheHeight: 100,
-                        widthPlaceHolder: 80,
-                        heightPlaceHolder: 80,
-                        imageUrl: (picData.isApsara ?? false) ? ("${picData.mediaEndpoint}?key=${picData.valueCache}") : ("${picData.fullThumbPath}&key=${picData.valueCache}"),
-                        imageBuilder: (context, imageProvider) {
-                          return GestureDetector(
-                            behavior: HitTestBehavior.translucent,
-                            onTapDown: (details) {
-                              var position = details.globalPosition;
-                              notifier!.positionDxDy = position;
-                            },
-                            onTap: () {
-                              setState(() {
-                                isMute = !isMute;
-                                opacityLevel = 1.0;
-                              });
-                              fAliplayer?.setMuted(isMute);
-                              if (isMute) {
-                                animatedController.stop();
-                              } else {
-                                animatedController.repeat();
-                              }
-                              Future.delayed(const Duration(seconds: 1), () {
-                                opacityLevel = 0.0;
-                                setState(() {});
-                              });
-                            },
-                            child: ImageSize(
-                              onChange: (Size size) {
-                                if ((picData.imageHeightTemp ?? 0) == 0) {
-                                  setState(() {
-                                    picData.imageHeightTemp = size.height;
-                                  });
-                                }
+                          child: ZoomableImage(
+                        enable: true,
+                        onScaleStart: () {
+                          print("================masuk zoom============");
+                          // widget.onScaleStart?.call();
+                        }, // optional
+                        onScaleStop: () {
+                          // widget.onScaleStop?.call();
+                        },
+                        child: CustomBaseCacheImage(
+                          memCacheWidth: 100,
+                          memCacheHeight: 100,
+                          widthPlaceHolder: 80,
+                          heightPlaceHolder: 80,
+                          imageUrl: (picData.isApsara ?? false) ? ("${picData.mediaEndpoint}?key=${picData.valueCache}") : ("${picData.fullThumbPath}&key=${picData.valueCache}"),
+                          imageBuilder: (context, imageProvider) {
+                            return GestureDetector(
+                              behavior: HitTestBehavior.translucent,
+                              onTapDown: (details) {
+                                var position = details.globalPosition;
+                                notifier!.positionDxDy = position;
                               },
-                              child: picData.reportedStatus == 'BLURRED'
-                                  ? ImageFiltered(
-                                      imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                      child: Image(
+                              onDoubleTap: () {
+                                context.read<LikeNotifier>().likePost(context, notifier!.pic![index]);
+                              },
+                              onTap: () {
+                                setState(() {
+                                  isMute = !isMute;
+                                  opacityLevel = 1.0;
+                                });
+                                fAliplayer?.setMuted(isMute);
+                                if (isMute) {
+                                  animatedController.stop();
+                                } else {
+                                  animatedController.repeat();
+                                }
+                                Future.delayed(const Duration(seconds: 1), () {
+                                  opacityLevel = 0.0;
+                                  setState(() {});
+                                });
+                              },
+                              child: ImageSize(
+                                onChange: (Size size) {
+                                  if ((picData.imageHeightTemp ?? 0) == 0) {
+                                    setState(() {
+                                      picData.imageHeightTemp = size.height;
+                                    });
+                                  }
+                                },
+                                child: picData.reportedStatus == 'BLURRED'
+                                    ? ImageFiltered(
+                                        imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                        child: Image(
+                                          image: imageProvider,
+                                          fit: BoxFit.cover,
+                                          width: SizeConfig.screenWidth,
+                                          // height: picData?.imageHeightTemp == 0 ? null : picData?.imageHeightTemp,
+                                        ),
+                                      )
+                                    : Image(
                                         image: imageProvider,
                                         fit: BoxFit.cover,
                                         width: SizeConfig.screenWidth,
-                                        // height: picData?.imageHeightTemp == 0 ? null : picData?.imageHeightTemp,
+                                        // height: picData?.imageHeightTemp == 0 || (picData?.imageHeightTemp ?? 0) <= 100 ? null : picData?.imageHeightTemp,
                                       ),
-                                    )
-                                  : PhotoView(
-                                      imageProvider: imageProvider,
-                                      maxScale: PhotoViewComputedScale.covered * 2.0,
-                                      minScale: PhotoViewComputedScale.contained * 0.8,
-                                      initialScale: PhotoViewComputedScale.contained,
-                                    ),
-                              // Image(
-                              //     image: imageProvider,
-                              //     fit: BoxFit.cover,
-                              //     width: SizeConfig.screenWidth,
-                              //     // height: picData?.imageHeightTemp == 0 || (picData?.imageHeightTemp ?? 0) <= 100 ? null : picData?.imageHeightTemp,
-                              //   ),
-                            ),
-                          );
-                        },
-                        emptyWidget: Container(
-                            decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                            width: SizeConfig.screenWidth,
-                            height: 250,
-                            padding: const EdgeInsets.all(20),
-                            alignment: Alignment.center,
-                            child: CustomTextWidget(
-                              textToDisplay: lang?.couldntLoadImage ?? 'Error',
-                              maxLines: 3,
-                            )),
-                        errorWidget: (context, url, error) {
-                          return Container(
+                              ),
+                            );
+                          },
+                          emptyWidget: Container(
                               decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
                               width: SizeConfig.screenWidth,
                               height: 250,
@@ -424,8 +423,20 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                               child: CustomTextWidget(
                                 textToDisplay: lang?.couldntLoadImage ?? 'Error',
                                 maxLines: 3,
-                              ));
-                        },
+                              )),
+                          errorWidget: (context, url, error) {
+                            return Container(
+                                decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                width: SizeConfig.screenWidth,
+                                height: 250,
+                                padding: const EdgeInsets.all(20),
+                                alignment: Alignment.center,
+                                child: CustomTextWidget(
+                                  textToDisplay: lang?.couldntLoadImage ?? 'Error',
+                                  maxLines: 3,
+                                ));
+                          },
+                        ),
                       )),
                     ),
                   ),
@@ -477,7 +488,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: Row(
                     children: [
                       if (data.tagPeople?.isNotEmpty ?? false)
@@ -502,9 +513,9 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                         ),
                       if (data.location != '')
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+                          padding: EdgeInsets.symmetric(horizontal: (data.tagPeople?.isNotEmpty ?? false) ? 12.0 : 0.0, vertical: 16.0),
                           child: Align(
-                            alignment: Alignment.bottomRight,
+                            alignment: Alignment.bottomLeft,
                             child: Row(
                               children: [
                                 const Padding(
@@ -556,39 +567,39 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                         CircleAvatar(
                           radius: 18,
                           backgroundColor: kHyppeSurface.withOpacity(.9),
-                          child: CustomBaseCacheImage(
-                            imageUrl: data.music?.apsaraThumnailUrl ?? '',
-                            imageBuilder: (_, imageProvider) {
-                              return Container(
-                                width: 32,
-                                height: 32,
-                                decoration: BoxDecoration(
-                                  color: kDefaultIconDarkColor,
-                                  borderRadius: const BorderRadius.all(Radius.circular(24)),
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: imageProvider,
+                          child: AnimatedBuilder(
+                            animation: animatedController,
+                            builder: (_, child) {
+                              return Transform.rotate(
+                                angle: animatedController.value * 2 * math.pi,
+                                child: child,
+                              );
+                            },
+                            child: CustomBaseCacheImage(
+                              imageUrl: data.music?.apsaraThumnailUrl ?? '',
+                              imageBuilder: (_, imageProvider) {
+                                return Container(
+                                  width: 32,
+                                  height: 32,
+                                  decoration: BoxDecoration(
+                                    color: kDefaultIconDarkColor,
+                                    borderRadius: const BorderRadius.all(Radius.circular(24)),
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: imageProvider,
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
-                            errorWidget: (_, __, ___) {
-                              return const CustomIconWidget(
-                                iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
-                                defaultColor: false,
-                                color: kHyppeLightIcon,
-                                height: 18,
-                              );
-                            },
-                            emptyWidget: AnimatedBuilder(
-                              animation: animatedController,
-                              builder: (_, child) {
-                                return Transform.rotate(
-                                  angle: animatedController.value * 2 * math.pi,
-                                  child: child,
                                 );
                               },
-                              child: const CustomIconWidget(
+                              errorWidget: (_, __, ___) {
+                                return const CustomIconWidget(
+                                  iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                  defaultColor: false,
+                                  color: kHyppeLightIcon,
+                                  height: 18,
+                                );
+                              },
+                              emptyWidget: const CustomIconWidget(
                                 iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
                                 defaultColor: false,
                                 color: kHyppeTextPrimary,
@@ -599,13 +610,15 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                         ),
                         const SizedBox(
                           height: 12.0,
-                          width: 8,
                         ),
-                        CustomTextWidget(
-                          textToDisplay: " ${data.music?.musicTitle ?? ''}",
-                          maxLines: 1,
-                          textStyle: const TextStyle(color: kHyppeTextPrimary, fontSize: 12, fontWeight: FontWeight.w700),
-                          textAlign: TextAlign.left,
+                        SizedBox(
+                          width: SizeConfig.screenWidth! * .55,
+                          child: CustomTextWidget(
+                            textToDisplay: " ${data.music?.musicTitle ?? ''}",
+                            maxLines: 1,
+                            textStyle: const TextStyle(color: kHyppeTextPrimary, fontSize: 12, fontWeight: FontWeight.w700),
+                            textAlign: TextAlign.left,
+                          ),
                         ),
                       ],
                     ),
@@ -642,7 +655,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                   Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: picData.postID ?? '', fromFront: true, data: picData));
                 },
                 iconData: '${AssetPath.vectorPath}comment-shadow.svg',
-                value: picData.comments.toString(),
+                value: picData.comments! > 0 ? picData.comments.toString() : lang?.comments ?? '',
               ),
             if ((picData.isShared ?? false))
               buttonRight(
@@ -690,7 +703,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
               value,
               style: const TextStyle(shadows: [
                 Shadow(offset: Offset(0.0, 1.0), blurRadius: 2.0, color: Colors.black54),
-                Shadow(offset: Offset(0.0, 1.0), blurRadius: 8.0, color: Colors.black54),
+                Shadow(offset: Offset(0.0, 1.0), blurRadius: 2.0, color: Colors.black54),
               ], color: kHyppePrimaryTransparent, fontWeight: FontWeight.w500, fontSize: 12),
             ),
           ],
@@ -730,8 +743,12 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
               isCelebrity: false,
               isUserVerified: data.privacy!.isIdVerified ?? false,
               onTapOnProfileImage: () {
-                fAliplayer?.pause();
+                fAliplayer?.setMuted(true);
+                // fAliplayer?.pause();
                 System().navigateToProfile(context, data.email ?? '');
+                setState(() {
+                  isMute = true;
+                });
               },
               featureType: FeatureType.pic,
               imageUrl: '${System().showUserPicture(data.avatar?.mediaEndpoint)}',
@@ -775,7 +792,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
 
   Widget actionWidget({Function()? onTap, ContentData? data}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
       child: Row(
         children: [
           Visibility(

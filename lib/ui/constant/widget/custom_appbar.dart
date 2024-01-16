@@ -22,6 +22,7 @@ class CustomAppBar extends StatelessWidget {
   final bool isMute;
   final FlutterAliplayer fAliplayer;
   final Function()? onTap;
+  final Function onTapOnProfileImage;
   const CustomAppBar(
       {super.key,
       required this.orientation,
@@ -32,6 +33,7 @@ class CustomAppBar extends StatelessWidget {
       this.currentPositionText = 0,
       this.showTipsWidget = false,
       required this.fAliplayer,
+      required this.onTapOnProfileImage,
       this.isMute = false});
 
   @override
@@ -50,7 +52,7 @@ class CustomAppBar extends StatelessWidget {
                 if (changevalue > videoDuration) {
                   changevalue = videoDuration;
                 }
-
+            
                 data.isLoading = true;
                 Navigator.pop(
                     context,
@@ -70,7 +72,7 @@ class CustomAppBar extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 32),
+              padding: orientation == Orientation.portrait ? const EdgeInsets.only(top: 32.0) : const EdgeInsets.only(top: 8.0),
               child: ProfileComponent(
                 show: true,
                 following: true,
@@ -81,10 +83,7 @@ class CustomAppBar extends StatelessWidget {
                 haveStory: false,
                 isCelebrity: false,
                 isUserVerified: data.privacy!.isIdVerified ?? false,
-                onTapOnProfileImage: () {
-                  fAliplayer.pause();
-                  System().navigateToProfile(context, data.email ?? '');
-                },
+                onTapOnProfileImage: onTapOnProfileImage,
                 featureType: FeatureType.pic,
                 imageUrl:
                     '${System().showUserPicture(data.avatar?.mediaEndpoint)}',
@@ -100,7 +99,7 @@ class CustomAppBar extends StatelessWidget {
           ],
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 32.0),
+          padding: orientation == Orientation.portrait ? const EdgeInsets.only(top: 32.0) : const EdgeInsets.only(top: 8.0),
           child: actionWidget(onTap: onTap),
         ),
       ],
