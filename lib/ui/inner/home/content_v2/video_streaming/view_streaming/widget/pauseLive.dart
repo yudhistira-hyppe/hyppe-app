@@ -3,16 +3,13 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:provider/provider.dart';
 
 class PauseLiveView extends StatelessWidget {
   const PauseLiveView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final tn = context.read<TranslateNotifierV2>().translate;
     return Container(
       // padding: const EdgeInsets.only(bottom: 100),
       height: SizeConfig.screenHeight,

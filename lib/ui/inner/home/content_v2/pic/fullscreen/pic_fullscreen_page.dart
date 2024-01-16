@@ -318,7 +318,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                             }
                             setState(() {
                               Future.delayed(const Duration(milliseconds: 400), () {
-                                itemHeight = notifier.pic?[indexList ?? 0].height ?? 0;
+                                itemHeight = notifier.pic?[indexList].height ?? 0;
                               });
                             });
 

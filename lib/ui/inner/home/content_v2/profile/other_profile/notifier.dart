@@ -686,7 +686,6 @@ class OtherProfileNotifier with ChangeNotifier {
 
   void showContentSensitive(BuildContext context, {required String postID, required String content, bool? isReport}) {
     ContentData? updatedData;
-    ContentData? updatedData2;
 
     switch (content) {
       case hyppeVid:

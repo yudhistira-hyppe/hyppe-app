@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter_livepush_plugin/live_base.dart';
 import 'package:flutter_livepush_plugin/live_push_config.dart';
-import 'package:flutter_livepush_plugin/live_push_def.dart';
 import 'package:flutter_livepush_plugin/live_pusher.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';

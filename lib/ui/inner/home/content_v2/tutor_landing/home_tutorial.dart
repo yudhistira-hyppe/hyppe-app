@@ -28,12 +28,11 @@ class HomeTutorScreen extends StatefulWidget {
 }
 
 class _HomeTutorScreenState extends State<HomeTutorScreen> with AfterFirstLayoutMixin {
-  late MainNotifier _mainNotifier;
   GlobalKey keyPostButton = GlobalKey();
 
   @override
   void afterFirstLayout(BuildContext context) {
-    // _mainNotifier.initMain(context, isInitSocket: true);
+
   }
 
   @override

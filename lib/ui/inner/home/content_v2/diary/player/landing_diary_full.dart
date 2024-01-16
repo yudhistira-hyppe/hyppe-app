@@ -293,10 +293,10 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
           duration: Duration(milliseconds: 350),
           curve: Curves.easeIn,
         );
-        double position = 0.0;
-        for (var i = 0; i <= _curIdx; i++) {
-          position += notifier.diaryData?[i].height ?? 0.0;
-        }
+        // double position = 0.0;
+        // for (var i = 0; i <= _curIdx; i++) {
+        //   position += notifier.diaryData?[i].height ?? 0.0;
+        // }
         if (notifier.diaryData?[_curIdx] != notifier.diaryData?.last) {
           // widget.scrollController?.animateTo(
           //   position,
@@ -405,7 +405,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
         }
 
         if (offset <= totItemHeightParam && offset > 0) {
-          var position = totItemHeight;
+          // var position = totItemHeight;
           if (mounted) {
             // widget.scrollController?.animateTo(position, duration: const Duration(milliseconds: 200), curve: Curves.ease);
             itemIndex--;

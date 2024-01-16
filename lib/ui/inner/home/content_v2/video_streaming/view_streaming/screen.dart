@@ -9,7 +9,6 @@ import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
 import 'package:hyppe/core/arguments/view_streaming_argument.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/love_lottie.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/love_lottie.dart';
@@ -28,10 +27,7 @@ import '../../../../../../core/constants/asset_path.dart';
 import '../../../../../../core/constants/shared_preference_keys.dart';
 import '../../../../../../core/services/shared_preference.dart';
 import '../../../../../../core/services/system.dart';
-import '../../../../../constant/widget/custom_icon_widget.dart';
 import '../../../../../constant/widget/custom_loading.dart';
-import '../../../../../constant/widget/custom_spacer.dart';
-import '../../../../../constant/widget/custom_text_widget.dart';
 import '../streamer/screen.dart';
 import '../streamer/widget/love_lottielarge.dart';
 
@@ -130,8 +126,6 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
   @override
   void initState() {
     _showLoading = true;
-
-    bool theme = SharedPreference().readStorage(SpKeys.themeData) ?? false;
     super.initState();
     final notifier = (Routing.navigatorKey.currentContext ?? context).read<ViewStreamingNotifier>();
     notifier.initViewStreaming(widget.args.data);

@@ -71,7 +71,7 @@ class _BuildStickerWidgetState extends State<BuildStickerWidget> {
                 child: SizedBox.expand(
                   child: FittedBox(
                     fit: BoxFit.contain,
-                    child: (widget.image ?? '').toLowerCase().endsWith('.gif') ? CustomGifWidget(
+                    child: (widget.image ).toLowerCase().endsWith('.gif') ? CustomGifWidget(
                       url: widget.image,
                       isPause: false,
                     ) : CachedNetworkImage(

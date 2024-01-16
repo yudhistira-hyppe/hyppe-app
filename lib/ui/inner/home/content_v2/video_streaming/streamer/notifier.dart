@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_livepush_plugin/live_base.dart';
 import 'package:flutter_livepush_plugin/live_push_def.dart';
@@ -46,7 +45,6 @@ import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'dart:math' as math;
-import 'package:hyppe/core/interface/pagination_query_interface.dart';
 
 class StreamerNotifier with ChangeNotifier {
   final UsersDataQuery _usersFollowingQuery = UsersDataQuery()

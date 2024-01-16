@@ -665,7 +665,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
                                     alignment: Alignment.center,
                                     padding: EdgeInsets.all(20),
                                     child: CustomTextWidget(
-                                      textToDisplay: lang?.couldntLoadVideo ?? 'Error',
+                                      textToDisplay: lang.couldntLoadVideo ?? 'Error',
                                       maxLines: 3,
                                     )),
                               );
@@ -681,7 +681,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
                                   alignment: Alignment.center,
                                   padding: EdgeInsets.all(20),
                                   child: CustomTextWidget(
-                                    textToDisplay: lang?.couldntLoadVideo ?? 'Error',
+                                    textToDisplay: lang.couldntLoadVideo ?? 'Error',
                                     maxLines: 3,
                                   )),
                             ),

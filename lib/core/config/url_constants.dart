@@ -109,10 +109,10 @@ class UrlConstants {
   ///---------------------------------------------------------------------------------------------------------///
   /* APIs Users */
   /// post sign_up => Send data user to server.
-  static const String signUp = "$userRoute/signup";
+  static const String signUp = "$userRoute/signup/v2";
 
   /// post sign_in
-  static const String login = "$userRoute/login";
+  static const String login = "$userRoute/login/v2";
 
   /// guest mode
   static const String guest = "$userRoute/guest";
@@ -259,10 +259,10 @@ class UrlConstants {
   static const String removeComment = "$postRouteV2/removecomment";
 
   /// post => Post Device Activity
-  static const String deviceactivity = "$userRoute/deviceactivity";
+  static const String deviceactivity = "$userRoute/deviceactivity/v2";
 
   /// post => Get User Profiles
-  static const String getuserprofile = "$userRoute/getuserprofile";
+  static const String getuserprofile = "$userRoute/getuserprofile/v2";
 
   /// post => Get User Profiles by username
   static const String getProfileByUser = "$getuserprofile/byusername";
@@ -277,7 +277,7 @@ class UrlConstants {
   static const String getInnteractives = "$postRouteV2/getinteractives";
 
   /// post => Get/Create Discussion
-  static const String discuss = "$postRouteV2/disqus";
+  static const String discuss = "$postRouteV2/disqus/v2";
 
   /// post => Delete Discuss
   static const String deleteDiscuss = "$postRouteV2/disqus/deletedicuss";
@@ -303,11 +303,11 @@ class UrlConstants {
 
   ///---------------------------------------------------------------------------------------------------------///
   /* v3 search data content dan user */
-  static const String getSearchContentV3 = "$contentRouteV3/searchdata";
-  static const String getSearchContentV4 = "$contentRouteV3/searchdatanew";
+  static const String getSearchContentV3 = "$contentRouteV3/searchdata/v2";
+  static const String getSearchContentV4 = "$contentRouteV3/searchdatanew/v2";
   static const String landingPageSearch = "$interestCount/default-page";
-  static const String getDetailHashtag = "$contentRouteV3/searchdatanew/detailtag";
-  static const String getDetailInterest = "$contentRouteV3/searchdatanew/detailinterest";
+  static const String getDetailHashtag = "$contentRouteV3/searchdatanew/detailtag/v2";
+  static const String getDetailInterest = "$contentRouteV3/searchdatanew/detailinterest/v2";
   static const String getSearchContentV5 = "$contentRouteV3/searchdatanew/v2";
   static const String getDetailHashtagV2 = "$contentRouteV3/searchdatanew/detailtag/v2";
   static const String getDetailInterestV2 = "$contentRouteV3/searchdatanew/detailinterest/v2";

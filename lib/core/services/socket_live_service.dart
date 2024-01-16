@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:socket_io_client/socket_io_client.dart';
-import 'package:hyppe/core/services/event_service.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 
 class SocketLiveService {
