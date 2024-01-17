@@ -326,3 +326,5 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
     }
   }
 }
+
+ 
