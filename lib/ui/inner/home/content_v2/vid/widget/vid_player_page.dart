@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:ui';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,7 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
+import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/button_boost.dart';
 import 'package:hyppe/ui/constant/widget/custom_appbar.dart';
@@ -236,7 +238,6 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
     }
 
     bool autoPlay = widget.isAutoPlay ?? false;
-
     // _playMode = widget.playMode;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       try {
@@ -1053,32 +1054,33 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
     return Consumer<VideoNotifier>(builder: (context, notifier, _) {
       if (isloading) {
         return Stack(
-          key: ValueKey<bool>(isloading),
-          children: [
-            Container(
-              height: widget.height,
-              width: widget.width,
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(widget.fromFullScreen ? 0 : 16),
-              ),
-              child: VideoThumbnail(
-                videoData: widget.data,
-                onDetail: false,
-                fn: () {},
-                withMargin: true,
-              ),
-            ),
-            const Positioned.fill(
-              child: Align(
-                alignment: Alignment.center,
-                child: CircularProgressIndicator(
-                  color: kHyppePrimary,
+            key: ValueKey<bool>(isloading),
+            children: [
+              Container(
+                height: widget.height,
+                width: widget.width,
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(widget.fromFullScreen ? 0 : 16),
                 ),
               ),
-            )
-          ],
-        );
+              //   child: VideoThumbnail(
+              //     videoData: widget.data,
+              //     onDetail: false,
+              //     fn: () {},
+              //     withMargin: true,
+              //   ),
+              // ),
+              const Positioned.fill(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: CircularProgressIndicator(
+                    color: kHyppePrimary,
+                  ),
+                ),
+              )
+            ],
+          );
       } else {
         // print("onViewPlayerCreated ${onViewPlayerCreated}");
         aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height);
@@ -1152,7 +1154,6 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             orientation: Orientation.portrait,
           );
         }
-
         return AnimatedSwitcher(
           duration: const Duration(),
           transitionBuilder: (child, animation) => FadeTransition(opacity: animation, child: child),
@@ -1162,7 +1163,16 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                 if (notifier.isPlay) {
                   isPlay = true;
                 }
-                return GestureDetector(
+                if (widget.data!.reportedStatus == 'BLURRED' && widget.fromFullScreen){
+                  WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                    fAliplayer!.pause();
+                    isPlay = false;
+                  });
+                }
+
+                return (widget.data!.reportedStatus =='BLURRED' && widget.fromFullScreen) 
+                ? blurContentWidget(context, widget.data!)
+                : GestureDetector(
                   onTap: () async {
                     onTapCtrl = true;
                     setState(() {});
@@ -1335,6 +1345,9 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                             child: Offstage(offstage: _isLock, child: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, widget.orientation, notifier))),
 
                       if (widget.fromFullScreen)
+                      // if (widget.data!.reportedStatus != 'BLURRED')
+                        //  blurContentWidget(context, widget.data!),
+                        
                         AnimatedOpacity(
                           opacity: onTapCtrl || isPause ? 1.0 : 0.0,
                           duration: const Duration(milliseconds: 500),
@@ -1388,17 +1401,17 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                             ),
                           ),
                         ),
-                      if (!isPlay)
-                        SizedBox(
-                          height: widget.height,
-                          width: widget.width,
-                          child: VideoThumbnail(
-                            videoData: widget.data,
-                            onDetail: false,
-                            fn: () {},
-                            withMargin: true,
-                          ),
-                        ),
+                      // if (!isPlay)
+                      //   SizedBox(
+                      //     height: widget.height,
+                      //     width: widget.width,
+                      //     child: VideoThumbnail(
+                      //       videoData: widget.data,
+                      //       onDetail: false,
+                      //       fn: () {},
+                      //       withMargin: true,
+                      //     ),
+                      //   ),
                       // Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
                       // if (isPlay && adsData != null) skipAds(),
                       if (!isPlay && !_showLoading & !(widget.isAutoPlay ?? false))
@@ -2276,6 +2289,80 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
     }
   }
 
+  Widget blurContentWidget(BuildContext context, ContentData data) {
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: VideoThumbnail(
+            videoData: data,
+            onDetail: false,
+            fn: () {},
+            withMargin: true,
+          ),
+        ),
+        BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+          child: Container(
+            color: kHyppeBackground.withOpacity(.8),
+            child: Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Spacer(),
+                      const CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}eye-off.svg",
+                        defaultColor: false,
+                        height: 30,
+                      ),
+                      Text(lang!.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                      Text("HyppeVid ${lang!.contentContainsSensitiveMaterial}",
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                          )),
+                      const Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          System().increaseViewCount2(context, data);
+                          setState(() {
+                            widget.data!.reportedStatus = '';
+                          });
+                          fAliplayer!.play();
+                          isPlay = true;
+                          // context.read<ReportNotifier>().seeContent(context, data, hyppePic);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.only(top: 8),
+                          margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
+                          width: SizeConfig.screenWidth,
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              top: BorderSide(
+                                color: Colors.white,
+                                width: 1,
+                              ),
+                            ),
+                          ),
+                          child: Text(
+                            "${lang!.see} HyppeVid",
+                            style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )),
+          ),
+        ),
+      ],
+    );
+  }
+  
   Future onFullscreen(VideoNotifier notifier) async {
     int changeValue;
     changeValue = _currentPosition;
