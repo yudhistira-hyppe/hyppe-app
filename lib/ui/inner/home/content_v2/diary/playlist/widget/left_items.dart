@@ -105,8 +105,9 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                     children: [
                       (widget.tagPeople?.isNotEmpty ?? false)
                           ? PicTagLabel(
+                              width: 24,
                               icon: 'tag_people',
-                              label: '${widget.tagPeople?.length} people',
+                              label: '${widget.tagPeople?.length} ${notifier.translate.people}',
                               function: () {
                                 // widget.storyController?.pause();
                                 context.read<PicDetailNotifier>().showUserTag(context, widget.tagPeople, widget.postID);

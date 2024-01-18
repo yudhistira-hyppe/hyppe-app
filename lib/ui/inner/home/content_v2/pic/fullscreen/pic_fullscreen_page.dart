@@ -297,6 +297,8 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                           _curPostId = picData.postID ?? index.toString();
                           // if (_lastCurIndex != _curIdx) {
                           if (_lastCurPostId != _curPostId) {
+                            // widget.argument!.function!(10000, notifier!);
+
                             final indexList = notifier!.pic!.indexWhere((element) => element.postID == _curPostId);
 
                             if (indexList == (notifier.pic?.length ?? 0) - 1) {

@@ -311,15 +311,15 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   Future toPosition(double offset, PreviewPicNotifier notifier) async {
     double totItemHeight = 0;
     double totItemHeightParam = 0;
-    // print("======== ${offset}---====");
+    print("======== to position ${offset}---====");
     if (offset < 10) {
       itemIndex = 0;
     }
 
     // if (offset >= lastOffset) {
-    // print("============== to position");
+    print("============== to position");
     if (!scroolUp) {
-      // print("============== $scroolUp");
+      print("============== $scroolUp");
       for (var i = 0; i <= itemIndex; i++) {
         if (i == itemIndex) {
           totItemHeightParam += (notifier.pic?[i].height ?? 0.0) * 30 / 100;
@@ -331,15 +331,23 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
       var sizeMax = (SizeConfig.screenHeight ?? 0) + (SizeConfig.screenHeight ?? 0) * 0.633;
       if ((notifier.pic?.length ?? 0) > (_curIdx + 1)) {
+        print("====erpppppp");
+        print("====offset $offset");
+        print("====totItemHeightParam $totItemHeightParam");
+        print("====totItemHeightParam $sizeMax");
+
         if (offset >= totItemHeightParam && (notifier.pic?[itemIndex + 1].height ?? 0) <= sizeMax) {
           var position = totItemHeight;
           // if (notifier.pic?[_curIdx + 1].height >= sizeMax) {
           //   position += notifier.pic?[_curIdx + 1].height;
           // }
           if (!homeClick) {
-            if (mounted) {
-              widget.scrollController?.animateTo(position, duration: Duration(milliseconds: 200), curve: Curves.ease);
+            print("====erpppppp");
+            try {
+              widget.scrollController?.animateTo(position, duration: const Duration(milliseconds: 200), curve: Curves.ease);
               itemIndex++;
+            } catch (e) {
+              print("====erroorrroooo $e");
             }
           }
         }
@@ -1204,7 +1212,17 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                 fAliplayer?.setMuted(isMute);
                                               }
                                               fAliplayer?.pause();
-                                              Routing().move(Routes.picFullScreenDetail, argument: PicFullscreenArgument(picData: notifier.pic!, index: index, scrollPic: false));
+                                              Routing().move(
+                                                Routes.picFullScreenDetail,
+                                                argument: PicFullscreenArgument(
+                                                  picData: notifier.pic!,
+                                                  index: index,
+                                                  scrollPic: false,
+                                                  function: (offset, notifier) {
+                                                    toPosition(offset, notifier);
+                                                  },
+                                                ),
+                                              );
                                               // Navigator.push(context, PageRouteBuilder(opaque: false, pageBuilder: (_, __, ___) => PicFullscreenPage(argument: PicFullscreenArgument(picData: notifier.pic!, index: index, scrollPic: false),)));
                                             },
                                             onDoubleTap: () {

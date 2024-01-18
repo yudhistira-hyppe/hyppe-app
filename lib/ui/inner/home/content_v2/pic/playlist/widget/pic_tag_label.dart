@@ -31,6 +31,7 @@ class PicTagLabel extends StatelessWidget {
                 width: width,
                 iconData: "${AssetPath.vectorPath + icon}.svg",
                 defaultColor: false,
+                // color: Colors.white,
               ),
               sixPx,
               Text(

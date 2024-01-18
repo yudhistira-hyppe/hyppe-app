@@ -93,7 +93,7 @@ class RightItems extends StatelessWidget {
                         ? _customIcon2(
                             context,
                             "${AssetPath.vectorPath}comment-shadow.svg",
-                            value2.translate.comment ?? 'comment',
+                            (data.comments ?? 0) > 0 ? _system.formatterNumber((data.comments ?? 0)) : value2.translate.comment ?? 'comment',
                             onTap: () async {
                               // if (context.read<ProfileNotifier>().myProfile != null) {
                               //   if (context.read<ProfileNotifier>().myProfile.profileOverviewData.userOverviewData.isComplete) {

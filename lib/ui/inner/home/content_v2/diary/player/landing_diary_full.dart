@@ -120,7 +120,6 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
     lastOffset = -10;
     mn = Provider.of<MainNotifier>(context, listen: false);
     _pageController = PageController(initialPage: widget.argument.index.toInt());
-
     _curIdx = widget.argument.index.toInt();
     _lastCurIndex = widget.argument.index.toInt();
 
@@ -150,6 +149,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
     fAliplayer?.pause();
     fAliplayer?.setAutoPlay(true);
     vidConfig();
+    isMute = widget.argument.ismute ?? false;
     // fAliplayer?.setLoop(true);
     fAliplayer?.setMuted(isMute);
 
@@ -773,6 +773,13 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                 if (!isShowingDialog) {
                   globalAdsPopUp?.pause();
                 }
+
+                //====scrollfunction
+
+                // widget.argument.function!(100);
+
+                //===================
+
                 context.read<VideoNotifier>().currentPostID = notifier.diaryData?[index].postID ?? '';
                 _curIdx = index;
                 _lastCurPostId = _curPostId;
@@ -992,6 +999,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                                             });
                                           }
                                           fAliplayer?.setMuted(isMute);
+                                          widget.argument.function!(1);
                                         },
                                         onDoubleTap: () {
                                           final _likeNotifier = context.read<LikeNotifier>();

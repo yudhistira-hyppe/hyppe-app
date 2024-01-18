@@ -736,6 +736,26 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     }
   }
 
+  void muteFunction() {
+    if (mounted) {
+      setState(() {
+        isMute = !isMute;
+      });
+    }
+    fAliplayer?.setMuted(isMute);
+  }
+
+  void toFullScreen(index) {
+    context.read<PreviewDiaryNotifier>().navigateToShortVideoPlayer(
+      context,
+      index,
+      function: (e) {
+        muteFunction();
+      },
+      isMute: isMute,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -805,7 +825,6 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                 isPlay = false;
                                 fAliplayer?.stop();
                               }
-
                               return itemDiary(context, notifier, index, home);
                             },
                           ),
@@ -1011,7 +1030,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                   tenPx,
                                   GestureDetector(
                                     onTap: () {
-                                      context.read<PreviewDiaryNotifier>().navigateToShortVideoPlayer(context, index);
+                                      toFullScreen(index);
                                     },
                                     child: VisibilityDetector(
                                       // key: Key(index.toString()),
@@ -1138,7 +1157,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                                   ? Positioned.fill(
                                                       child: GestureDetector(
                                                         onTap: () {
-                                                          context.read<PreviewDiaryNotifier>().navigateToShortVideoPlayer(context, index);
+                                                          toFullScreen(index);
 
                                                           // fAliplayer?.play();
                                                           // if (mounted) {
@@ -1567,12 +1586,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
             alignment: Alignment.bottomRight,
             child: GestureDetector(
               onTap: () {
-                if (mounted) {
-                  setState(() {
-                    isMute = !isMute;
-                  });
-                }
-                fAliplayer?.setMuted(isMute);
+                muteFunction();
               },
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
