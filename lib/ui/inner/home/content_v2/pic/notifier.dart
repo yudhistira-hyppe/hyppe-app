@@ -29,6 +29,7 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
   ScrollController scrollController = ScrollController();
   bool isConnect = true;
   bool isLoading = false;
+  bool isMute = true;
 
   LocalizationModelV2 language = LocalizationModelV2();
   translate(LocalizationModelV2 translate) {
@@ -304,9 +305,7 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
   }
 
   void initialPicConnection(BuildContext context) async {
-    print('connection pic disini');
     final connect = await _system.checkConnections();
-    print('connection pic $connect');
       if (!connect) {
         isConnect = false;
         notifyListeners();

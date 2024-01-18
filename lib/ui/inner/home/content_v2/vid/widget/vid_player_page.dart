@@ -15,6 +15,7 @@ import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -27,6 +28,7 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/widget/button_boost.dart';
 import 'package:hyppe/ui/constant/widget/custom_appbar.dart';
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -1334,9 +1336,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                         SizedBox(
                           width: widget.width,
                           height: widget.height,
-                          // padding: EdgeInsets.only(bottom: 25.0),
-                          child: Offstage(offstage: _isLock, child: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, widget.orientation, notifier)),
-                        ),
+                          child: Offstage(offstage: _isLock, child: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, widget.orientation, notifier))),
                         
                       if (widget.fromFullScreen)
                         AnimatedOpacity(
@@ -1345,56 +1345,59 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                           onEnd: _onPlayerHide,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 18.0),
-                            child: CustomAppBar(orientation: widget.orientation, data: widget.data!, 
-                              currentPosition: _currentPosition,
-                              currentPositionText: _currentPositionText,
-                              showTipsWidget: _showTipsWidget,
-                              videoDuration: _videoDuration,
-                              isMute: isMute,
-                              fAliplayer: fAliplayer!,
-                              onTapOnProfileImage: (){
-                                System().navigateToProfile(context, widget.data!.email ?? '');
-                                fAliplayer?.pause();
-                                isPause = true;
-                                setState(() {});
-                              },
-                              onTap: (){
-                              if (widget.data!.email != email) {
-                                // FlutterAliplayer? fAliplayer
-                                context.read<PreviewPicNotifier>().reportContent(
-                                    context, widget.data!,
-                                    fAliplayer: widget.data!.fAliplayer,
-                                    onCompleted: () async {
-                                  imageCache.clear();
-                                  imageCache.clearLiveImages();
-                                  await (Routing.navigatorKey.currentContext ??
-                                          context)
-                                      .read<HomeNotifier>()
-                                      .initNewHome(context, mounted,
-                                          isreload: true, forceIndex: 2);
-                                });
-                              } else {
-                                // if (_curIdx != -1) {
-                                //   "=============== pause 11".logger();
-                                //   notifier.vidData?[_curIdx].fAliplayer?.pause();
-                                // }
-                        
-                                ShowBottomSheet().onShowOptionContent(
-                                  context,
-                                  contentData: widget.data!,
-                                  captionTitle: hyppeVid,
-                                  onDetail: false,
-                                  isShare: widget.data!.isShared,
-                                  onUpdate: () {
-                                    (Routing.navigatorKey.currentContext ?? context)
-                                        .read<HomeNotifier>()
-                                        .initNewHome(context, mounted,
-                                            isreload: true, forceIndex: 2);
+                            child: Stack(
+                              children: [
+                                CustomAppBar(orientation: widget.orientation, data: widget.data??ContentData(), 
+                                  currentPosition: _currentPosition,
+                                  currentPositionText: _currentPositionText,
+                                  showTipsWidget: _showTipsWidget,
+                                  videoDuration: _videoDuration,
+                                  isMute: isMute,
+                                  onTapOnProfileImage: (){
+                                    System().navigateToProfile(context, widget.data?.email ?? '');
+                                    fAliplayer?.pause();
+                                    isPause = true;
+                                    setState(() {});
                                   },
-                                  fAliplayer: widget.data!.fAliplayer,
-                                );
-                              }
-                            }),
+                                  onTap: (){
+                                  if (widget.data?.email != email) {
+                                    context.read<PreviewPicNotifier>().reportContent(
+                                        context, widget.data!,
+                                        fAliplayer: widget.data!.fAliplayer,
+                                        onCompleted: () async {
+                                      imageCache.clear();
+                                      imageCache.clearLiveImages();
+                                      await (Routing.navigatorKey.currentContext ??
+                                              context)
+                                          .read<HomeNotifier>()
+                                          .initNewHome(context, mounted,
+                                              isreload: true, forceIndex: 2);
+                                    });
+                                  } else {
+                                    // if (_curIdx != -1) {
+                                    //   "=============== pause 11".logger();
+                                    //   notifier.vidData?[_curIdx].fAliplayer?.pause();
+                                    // }
+                        
+                                    ShowBottomSheet().onShowOptionContent(
+                                      context,
+                                      contentData: widget.data!,
+                                      captionTitle: hyppeVid,
+                                      onDetail: false,
+                                      isShare: widget.data!.isShared,
+                                      onUpdate: () {
+                                        (Routing.navigatorKey.currentContext ?? context)
+                                            .read<HomeNotifier>()
+                                            .initNewHome(context, mounted,
+                                                isreload: true, forceIndex: 2);
+                                      },
+                                      fAliplayer: widget.data!.fAliplayer,
+                                    );
+                                  }
+                                }),
+                                _buttomBodyRight(),
+                              ],
+                            ),
                           ),
                         ),
                       if (!isPlay)
@@ -1515,8 +1518,8 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                               Colors.transparent,
                               Colors.white,
                               100,
-                              widget.width ?? 0,
-                              widget.height ?? 0,
+                              widget.width! * 0.8,
+                              widget.height! * 0.8,
                             ),
                           ),
                         ),
@@ -1638,9 +1641,11 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Expanded(child: _buildSkipBack(iconColor, height)),
+            if (widget.fromFullScreen)
+            Expanded(child: _buildSkipBack(iconColor, height)),
             _buildPlayPause(iconColor, barHeight),
-            // Expanded(child: _buildSkipForward(iconColor, height)),
+            if (widget.fromFullScreen)
+            Expanded(child: _buildSkipForward(iconColor, height)),
           ],
         ),
       ),
@@ -1933,110 +1938,113 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                       ),
                     )
                   : null,
-                child: Stack(
-                  children: [
-                    Positioned(
-                      right: 18,
-                      bottom: 0,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: !widget.fromFullScreen ? 0 : orientation == Orientation.landscape
+                            ? SizeConfig.screenHeight! * .2
+                            : SizeConfig.screenHeight! * .08,
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Consumer<LikeNotifier>(
-                              builder: (context, likeNotifier, child) =>
-                                  buttonVideoRight(
-                                      onFunctionTap: () {
-                                        likeNotifier.likePost(context, widget.data!);
-                                      },
-                                      iconData:
-                                          '${AssetPath.vectorPath}${(widget.data?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'love-shadow.svg'}',
-                                      value:
-                                          '${widget.data?.insight?.likes}  ${lang?.like}',
-                                      liked:
-                                          widget.data?.insight?.isPostLiked ?? false)),
-                          buttonVideoRight(
-                              onFunctionTap: () {
-                                Routing().move(Routes.commentsDetail,
-                                    argument: CommentsArgument(
-                                        postID: widget.data?.postID ?? '',
-                                        fromFront: true,
-                                        data: widget.data!));
-                              },
-                              iconData: '${AssetPath.vectorPath}comment-shadow.svg',
-                              value: widget.data!.comment!.length.toString()),
-                          if (widget.data?.isShared ?? false)
-                            buttonVideoRight(
-                                onFunctionTap: () {
-                                  context
-                                      .read<VidDetailNotifier>()
-                                      .createdDynamicLink(context, data: widget.data);
-                                },
-                                iconData: '${AssetPath.vectorPath}share-shadow.svg',
-                                value: lang!.share ?? 'Share'),
-                          if ((widget.data?.saleAmount ?? 0) > 0 &&
-                              email != widget.data?.email)
-                            buttonVideoRight(
-                                onFunctionTap: () async {
-                                  widget.data?.fAliplayer?.pause();
-                                  await ShowBottomSheet.onBuyContent(context,
-                                      data: widget.data,
-                                      fAliplayer: widget.data?.fAliplayer);
-                                },
-                                iconData: '${AssetPath.vectorPath}cart-shadow.svg',
-                                value: lang!.buy ?? 'Buy'),
-                        ],
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      left: 0,
-                      right: !widget.fromFullScreen ? 0 : orientation == Orientation.landscape
-                          ? SizeConfig.screenHeight! * .2
-                          : SizeConfig.screenHeight! * .08,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: orientation == Orientation.landscape
-                              ? SizeConfig.screenWidth! * .35
-                              : SizeConfig.screenWidth!,
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: CustomDescContent(
-                            desc: "${widget.data!.description}",
-                            trimLines: 2,
-                            textAlign: TextAlign.start,
-                            seeLess:
-                                ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
-                            seeMore:
-                                '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
-                            normStyle: const TextStyle(
-                                fontSize: 12, color: kHyppePrimaryTransparent),
-                            hrefStyle: Theme.of(context)
-                                .textTheme
-                                .subtitle2
-                                ?.copyWith(color: kHyppePrimary),
-                            expandStyle: Theme.of(context)
-                                .textTheme
-                                .subtitle2
-                                ?.copyWith(
-                                    color: Theme.of(context).colorScheme.primary),
+                          Container(
+                            width: orientation == Orientation.landscape
+                                ? SizeConfig.screenWidth! * .35
+                                : SizeConfig.screenWidth!,
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: CustomDescContent(
+                              desc: widget.data?.description??'',
+                              trimLines: 2,
+                              textAlign: TextAlign.start,
+                              seeLess:
+                                  ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
+                              seeMore:
+                                  '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                              normStyle: const TextStyle(
+                                  fontSize: 12, color: kHyppePrimaryTransparent),
+                              hrefStyle: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  ?.copyWith(color: kHyppePrimary),
+                              expandStyle: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  ?.copyWith(
+                                      color: Theme.of(context).colorScheme.primary),
+                            ),
                           ),
-                        ),
-                        Column(
-                          children: [
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Padding(
-                                padding: const EdgeInsets.only(right: 8.0),
-                                child: Text(
-                                  "${System.getTimeformatByMs(_currentPositionText)}/${System.getTimeformatByMs(_videoDuration)}",
-                                  textAlign: TextAlign.end,
-                                  style: const TextStyle(
-                                      color: Colors.white, fontSize: 11),
+                          SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
+                          (widget.data!.boosted.isEmpty) &&
+                          (widget.data!.reportedStatus != 'OWNED' && widget.data!.reportedStatus != 'BLURRED' && widget.data!.reportedStatus2 != 'BLURRED') &&
+                          widget.data!.email == SharedPreference().readStorage(SpKeys.email)
+                          ? Container(
+                              width: double.infinity,
+                              margin: const EdgeInsets.only(bottom: 16),
+                              padding: const EdgeInsets.only(top: 12, left: 8.0, right: 8.0),
+                              child: ButtonBoost(
+                                onDetail: false,
+                                marginBool: true,
+                                contentData: widget.data ?? ContentData(),
+                                startState: () {
+                                  SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                                },
+                                afterState: () {
+                                  SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                                },
+                              ),
+                            )
+                          : Container(),
+                          if (widget.data!.email == email && (widget.data!.boostCount ?? 0) >= 0 && (widget.data!.boosted.isNotEmpty))
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            margin: const EdgeInsets.only(bottom: 10, left: 8.0, top: 12.0),
+                            width: MediaQuery.of(context).size.width * .75,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6),
+                              color: kHyppeGreyLight.withOpacity(.9),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const CustomIconWidget(
+                                  iconData: "${AssetPath.vectorPath}reach.svg",
+                                  defaultColor: false,
+                                  height: 24,
+                                  color: kHyppeTextLightPrimary,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 13),
+                                  child: CustomTextWidget(
+                                    textToDisplay:
+                                        "${widget.data!.boostJangkauan ?? '0'} ${lang?.reach}",
+                                    textStyle: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w700,
+                                        color: kHyppeTextLightPrimary),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Text(
+                                    "${System.getTimeformatByMs(_currentPositionText)}/${System.getTimeformatByMs(_videoDuration)}",
+                                    textAlign: TextAlign.end,
+                                    style: const TextStyle(
+                                        color: Colors.white, fontSize: 11),
+                                  ),
                                 ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 8.0),
-                              child: Row(
+                              Row(
                                 children: [
                                   Expanded(
                                     child: SliderTheme(
@@ -2080,7 +2088,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                             fAliplayer
                                                 ?.requestBitmapAtPosition(
                                                     value.ceil());
-              
+                              
                                             setState(() {
                                               _currentPosition = value.ceil();
                                             });
@@ -2089,93 +2097,93 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                   ),
                                 ],
                               ),
-                            ),
-                          ],
-                        ),
-                        if (widget.data!.music?.musicTitle != '' &&
-                            widget.data!.music?.musicTitle != null)
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 0.0, bottom: 12.0, left: 8.0, right: 12.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const CustomIconWidget(
-                                  iconData:
-                                      "${AssetPath.vectorPath}music_stroke_black.svg",
-                                  defaultColor: false,
-                                  color: kHyppeTextLightPrimary,
-                                  height: 10,
-                                ),
-                                Expanded(
-                                  child: CustomTextWidget(
-                                    textToDisplay:
-                                        " ${widget.data!.music?.musicTitle ?? ''}",
-                                    maxLines: 1,
-                                    textStyle: const TextStyle(
-                                        color: kHyppeTextLightPrimary,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w700),
-                                    textAlign: TextAlign.left,
+                            ],
+                          ),
+                          if (widget.data!.music?.musicTitle != '' &&
+                              widget.data!.music?.musicTitle != null)
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 0.0, bottom: 12.0, left: 8.0, right: 12.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const CustomIconWidget(
+                                    iconData:
+                                        "${AssetPath.vectorPath}music_stroke_black.svg",
+                                    defaultColor: false,
+                                    color: kHyppeTextLightPrimary,
+                                    height: 10,
                                   ),
-                                ),
-                                CircleAvatar(
-                                  radius: 18,
-                                  backgroundColor: kHyppeSurface.withOpacity(.9),
-                                  child: CustomBaseCacheImage(
-                                    imageUrl:
-                                        widget.data!.music?.apsaraThumnailUrl ?? '',
-                                    imageBuilder: (_, imageProvider) {
-                                      return Container(
-                                        width: 48,
-                                        height: 48,
-                                        decoration: BoxDecoration(
-                                          color: kDefaultIconDarkColor,
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(24)),
-                                          image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: imageProvider,
+                                  Expanded(
+                                    child: CustomTextWidget(
+                                      textToDisplay:
+                                          " ${widget.data!.music?.musicTitle ?? ''}",
+                                      maxLines: 1,
+                                      textStyle: const TextStyle(
+                                          color: kHyppeTextLightPrimary,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w700),
+                                      textAlign: TextAlign.left,
+                                    ),
+                                  ),
+                                  CircleAvatar(
+                                    radius: 18,
+                                    backgroundColor: kHyppeSurface.withOpacity(.9),
+                                    child: CustomBaseCacheImage(
+                                      imageUrl:
+                                          widget.data!.music?.apsaraThumnailUrl ?? '',
+                                      imageBuilder: (_, imageProvider) {
+                                        return Container(
+                                          width: 48,
+                                          height: 48,
+                                          decoration: BoxDecoration(
+                                            color: kDefaultIconDarkColor,
+                                            borderRadius: const BorderRadius.all(
+                                                Radius.circular(24)),
+                                            image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: imageProvider,
+                                            ),
                                           ),
-                                        ),
-                                      );
-                                    },
-                                    errorWidget: (_, __, ___) {
-                                      return const CustomIconWidget(
-                                        iconData:
-                                            "${AssetPath.vectorPath}music_stroke_black.svg",
-                                        defaultColor: false,
-                                        color: kHyppeLightIcon,
-                                        height: 18,
-                                      );
-                                    },
-                                    emptyWidget: AnimatedBuilder(
-                                      animation: animatedController,
-                                      builder: (_, child) {
-                                        return Transform.rotate(
-                                          angle: animatedController.value *
-                                              2 *
-                                              math.pi,
-                                          child: child,
                                         );
                                       },
-                                      child: const CustomIconWidget(
-                                        iconData:
-                                            "${AssetPath.vectorPath}music_stroke_black.svg",
-                                        defaultColor: false,
-                                        color: kHyppeLightIcon,
-                                        height: 18,
+                                      errorWidget: (_, __, ___) {
+                                        return const CustomIconWidget(
+                                          iconData:
+                                              "${AssetPath.vectorPath}music_stroke_black.svg",
+                                          defaultColor: false,
+                                          color: kHyppeLightIcon,
+                                          height: 18,
+                                        );
+                                      },
+                                      emptyWidget: AnimatedBuilder(
+                                        animation: animatedController,
+                                        builder: (_, child) {
+                                          return Transform.rotate(
+                                            angle: animatedController.value *
+                                                2 *
+                                                math.pi,
+                                            child: child,
+                                          );
+                                        },
+                                        child: const CustomIconWidget(
+                                          iconData:
+                                              "${AssetPath.vectorPath}music_stroke_black.svg",
+                                          defaultColor: false,
+                                          color: kHyppeLightIcon,
+                                          height: 18,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -2583,6 +2591,64 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buttomBodyRight() {
+    return Positioned(
+      right: 18,
+      bottom: 12,
+      child: Column(
+        children: [
+          Consumer<LikeNotifier>(
+              builder: (context, likeNotifier, child) =>
+                  buttonVideoRight(
+                      onFunctionTap: () {
+                        likeNotifier.likePost(context, widget.data!);
+                      },
+                      iconData:
+                          '${AssetPath.vectorPath}${(widget.data?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'love-shadow.svg'}',
+                      value: widget.data!.insight!.likes! > 0 
+                          ? '${widget.data?.insight?.likes}' 
+                          : '${lang?.like}',
+                      liked:
+                          widget.data?.insight?.isPostLiked ?? false)),
+                  if (widget.data!.allowComments ?? false)
+                  buttonVideoRight(
+                      onFunctionTap: () {
+                        Routing().move(Routes.commentsDetail,
+                            argument: CommentsArgument(
+                                postID: widget.data?.postID ?? '',
+                                fromFront: true,
+                                data: widget.data!));
+                      },
+                      iconData: '${AssetPath.vectorPath}comment-shadow.svg',
+                      value: widget.data!.comments! > 0
+                          ? widget.data!.comments.toString()
+                          : lang?.comments ?? '',
+                    ),
+                if (widget.data?.isShared ?? false)
+                  buttonVideoRight(
+                      onFunctionTap: () {
+                        context
+                            .read<VidDetailNotifier>()
+                            .createdDynamicLink(context, data: widget.data);
+                      },
+                      iconData: '${AssetPath.vectorPath}share-shadow.svg',
+                      value: lang!.share ?? 'Share'),
+                if ((widget.data?.saleAmount ?? 0) > 0 &&
+                    email != widget.data?.email)
+                  buttonVideoRight(
+                      onFunctionTap: () async {
+                        widget.data?.fAliplayer?.pause();
+                        await ShowBottomSheet.onBuyContent(context,
+                            data: widget.data,
+                            fAliplayer: widget.data?.fAliplayer);
+                      },
+                      iconData: '${AssetPath.vectorPath}cart-shadow.svg',
+                      value: lang!.buy ?? 'Buy'),
+        ],
       ),
     );
   }

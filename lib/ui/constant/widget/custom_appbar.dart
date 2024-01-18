@@ -14,13 +14,12 @@ import 'profile_component.dart';
 
 class CustomAppBar extends StatelessWidget {
   final Orientation orientation;
-  final ContentData data;
+  final ContentData? data;
   final int currentPosition;
   final int videoDuration;
   final int currentPositionText;
   final bool showTipsWidget;
   final bool isMute;
-  final FlutterAliplayer fAliplayer;
   final Function()? onTap;
   final Function onTapOnProfileImage;
   const CustomAppBar(
@@ -32,7 +31,6 @@ class CustomAppBar extends StatelessWidget {
       this.videoDuration = 1,
       this.currentPositionText = 0,
       this.showTipsWidget = false,
-      required this.fAliplayer,
       required this.onTapOnProfileImage,
       this.isMute = false});
 
@@ -53,7 +51,7 @@ class CustomAppBar extends StatelessWidget {
                   changevalue = videoDuration;
                 }
             
-                data.isLoading = true;
+                data!.isLoading = true;
                 Navigator.pop(
                     context,
                     VideoIndicator(
@@ -77,19 +75,19 @@ class CustomAppBar extends StatelessWidget {
                 show: true,
                 following: true,
                 onFollow: () {},
-                username: data.username,
+                username: data!.username??'',
                 textColor: kHyppeLightBackground,
                 spaceProfileAndId: eightPx,
                 haveStory: false,
                 isCelebrity: false,
-                isUserVerified: data.privacy!.isIdVerified ?? false,
+                isUserVerified: data!.privacy?.isIdVerified ?? false,
                 onTapOnProfileImage: onTapOnProfileImage,
                 featureType: FeatureType.pic,
                 imageUrl:
-                    '${System().showUserPicture(data.avatar?.mediaEndpoint)}',
-                badge: data.urluserBadge,
+                    '${System().showUserPicture(data!.avatar?.mediaEndpoint??'')}',
+                badge: data!.urluserBadge,
                 createdAt: '${System().readTimestamp(
-                  DateTime.parse(System().dateTimeRemoveT(data.createdAt ?? ''))
+                  DateTime.parse(System().dateTimeRemoveT(data!.createdAt ?? ''))
                       .millisecondsSinceEpoch,
                   context,
                   fullCaption: true,
@@ -107,30 +105,42 @@ class CustomAppBar extends StatelessWidget {
   }
 
   Widget actionWidget({Function()? onTap}) {
-    return Row(
-      children: [
-        Visibility(
-          visible: (data.saleAmount ?? 0) > 0,
-          child: Container(
-            padding: EdgeInsets.all(
-                data.email == SharedPreference().readStorage(SpKeys.email)
-                    ? 2.0
-                    : 13),
-            child: const CustomIconWidget(
-              iconData: "${AssetPath.vectorPath}sale.svg",
-              defaultColor: false,
-              height: 22,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
+      child: Row(
+        children: [
+          Visibility(
+            visible: (data!.saleAmount ?? 0) > 0,
+            child: Container(
+              padding: EdgeInsets.all(
+                  data!.email == SharedPreference().readStorage(SpKeys.email)
+                      ? 2.0
+                      : 13),
+              child: const CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}sale.svg",
+                defaultColor: false,
+                height: 22,
+              ),
             ),
           ),
-        ),
-        GestureDetector(
-          onTap: onTap,
-          child: const Icon(
-            Icons.more_vert,
-            color: kHyppeLightBackground,
+          if ((data!.certified ?? false) && (data!.saleAmount ?? 0) == 0)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 13),
+              child: const CustomIconWidget(
+                iconData: '${AssetPath.vectorPath}ownership.svg',
+                defaultColor: false,
+                height: 22,
+              ),
+            ),
+          GestureDetector(
+            onTap: onTap,
+            child: const Icon(
+              Icons.more_vert,
+              color: kHyppeLightBackground,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

@@ -175,11 +175,13 @@ class _ButtonBoostState extends State<ButtonBoost> {
                   ? const CustomLoading(
                       size: 3,
                     )
-                  : Text(
-                      language.postBoost ?? 'Boost Post',
-                      style: Theme.of(context).primaryTextTheme.subtitle2?.copyWith(color: Colors.white, fontWeight: FontWeight.w700),
-                      textAlign: TextAlign.center,
-                    ),
+                  : Center(
+                    child: Text(
+                        language.postBoost ?? 'Boost Post',
+                        style: Theme.of(context).primaryTextTheme.subtitle2?.copyWith(color: Colors.white, fontWeight: FontWeight.w700),
+                        textAlign: TextAlign.center,
+                      ),
+                  ),
             ),
           ),
         ),

@@ -10,7 +10,8 @@ import 'package:provider/provider.dart';
 
 class OfflineMode extends StatelessWidget {
   final Function()? function;
-  const OfflineMode({Key? key, this.function}) : super(key: key);
+  final bool fullscreen;
+  const OfflineMode({Key? key, this.function, this.fullscreen=false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class OfflineMode extends StatelessWidget {
                 CustomTextWidget(
                   textToDisplay: tn.translate.oopsYoureOffline ?? '',
                   maxLines: 2,
-                  textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  textStyle: fullscreen ? const TextStyle(color: kHyppeTextPrimary, fontWeight: FontWeight.bold, fontSize: 16) : const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 eightPx,
                 CustomTextWidget(
@@ -41,12 +42,12 @@ class OfflineMode extends StatelessWidget {
                 twentyPx,
                 CustomTextButton(
                   onPressed: () => function?.call(),
-                  style: ButtonStyle(side: MaterialStateProperty.all(const BorderSide(color: kHyppePrimary, width: 1.0, style: BorderStyle.solid))),
+                  style: ButtonStyle(side: MaterialStateProperty.all(BorderSide(color: fullscreen ? kHyppeLightBackground : kHyppePrimary, width: 1.0, style: BorderStyle.solid))),
                   child: Padding(
                     padding: const EdgeInsets.only(left: 40.0, right: 40.0),
                     child: CustomTextWidget(
                       textToDisplay: tn.translate.tryAgain ?? '',
-                      textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppePrimary),
+                      textStyle: fullscreen ? Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightBackground) : Theme.of(context).textTheme.button?.copyWith(color: kHyppePrimary),
                     ),
                   ),
                 ),
