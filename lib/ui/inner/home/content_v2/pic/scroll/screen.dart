@@ -100,7 +100,7 @@ class _ScrollPicState extends State<ScrollPic>
   // ModeTypeAliPLayer? _playMode = ModeTypeAliPLayer.auth;
   LocalizationModelV2? lang;
   ContentData? dataSelected;
-  bool isMute = false;
+  // bool isMute = false;
   String email = '';
   // String statusKyc = '';
   bool isInPage = true;
@@ -157,7 +157,7 @@ class _ScrollPicState extends State<ScrollPic>
       itemScrollController.jumpTo(index: widget.arguments?.page ?? 0);
       // scrollIndex = widget.arguments?.page ?? 0;
       print("00000000000000 ${widget.arguments?.page}");
-      _initListener();
+      _initListener(notifier);
     });
     var index = 0;
     var lastIndex = 0;
@@ -224,14 +224,14 @@ class _ScrollPicState extends State<ScrollPic>
     }
   }
 
-  _initListener() {
+  _initListener(ScrollPicNotifier notifier) {
     fAliplayer?.setOnEventReportParams((params, playerId) {
       print("EventReportParams=${params}");
     });
     fAliplayer?.setOnPrepared((playerId) {
       // Fluttertoast.showToast(msg: "OnPrepared ");
       if (SharedPreference().readStorage(SpKeys.isShowPopAds)) {
-        isMute = true;
+        notifier.isMute = true;
         fAliplayer?.pause();
       }
 
@@ -364,7 +364,7 @@ class _ScrollPicState extends State<ScrollPic>
     });
   }
 
-  void start(ContentData data) async {
+  void start(ContentData data, ScrollPicNotifier notifier) async {
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
 
     fAliplayer?.stop();
@@ -418,9 +418,7 @@ class _ScrollPicState extends State<ScrollPic>
     if (data.reportedStatus != 'BLURRED') {
       fAliplayer?.prepare();
     }
-    if (isMute) {
-      fAliplayer?.setMuted(true);
-    }
+    fAliplayer?.setMuted(notifier.isMute);
     // fAliplayer?.play();
   }
 
@@ -942,7 +940,7 @@ class _ScrollPicState extends State<ScrollPic>
                       if (pics?[index].music?.musicTitle != null) {
                         // print("ada musiknya ${pics?[index].music}");
                         Future.delayed(const Duration(milliseconds: 100), () {
-                          start(pics?[index] ?? ContentData());
+                          start(pics?[index] ?? ContentData(), notifier);
                         });
                       } else {
                         fAliplayer?.stop();
@@ -1025,27 +1023,30 @@ class _ScrollPicState extends State<ScrollPic>
 
                         !notifier.connectionError
                             ? GestureDetector(
-                                onTap: () {
-                                  if (pics?[index].reportedStatus !=
-                                      'BLURRED') {
-                                    fAliplayer?.play();
-                                    setState(() {
-                                      isMute = !isMute;
-                                    });
-                                    fAliplayer?.setMuted(isMute);
-                                  }
-                                  print('index pic $index');
-                                  Routing().move(
+                                onTap: () async {
+                                  // if (pics?[index].reportedStatus !=
+                                  //     'BLURRED') {
+                                  //   fAliplayer?.play();
+                                  //   setState(() {
+                                  //     notifier.isMute = !isMute;
+                                  //   });
+                                  //   fAliplayer?.setMuted(isMute);
+                                  // }
+                                  var res = await Routing().move(
                                       Routes.picScrollFullScreenDetail,
                                       argument: SlidedPicDetailScreenArgument(
                                         page: index,
                                         type: TypePlaylist.mine,
                                         titleAppbar: widget.arguments!.titleAppbar,
                                         pageSrc: PageSrc.selfProfile,
-                                        picData: widget.arguments!.picData,
+                                        picData: pics,
                                         scrollController: widget.arguments!.scrollController,
                                         heightTopProfile: widget.arguments!.heightTopProfile,
                                       ));
+                                  if (res != null || res == null){
+                                    fAliplayer?.play();
+                                    fAliplayer?.setMuted(notifier.isMute);
+                                  }
                                 },
                                 onDoubleTap: () {
                                   final _likeNotifier =
@@ -1323,7 +1324,7 @@ class _ScrollPicState extends State<ScrollPic>
                                               )),
                               ),
                         _buildBody(context, SizeConfig.screenWidth,
-                            pics?[index] ?? ContentData()),
+                            pics?[index] ?? ContentData(), notifier),
                         blurContentWidget(
                             context, pics?[index] ?? ContentData()),
                       ],
@@ -1630,7 +1631,7 @@ class _ScrollPicState extends State<ScrollPic>
     );
   }
 
-  Widget _buildBody(BuildContext context, width, ContentData data) {
+  Widget _buildBody(BuildContext context, width, ContentData data, ScrollPicNotifier notifier) {
     return Positioned.fill(
       child: Stack(
         children: [
@@ -1662,14 +1663,14 @@ class _ScrollPicState extends State<ScrollPic>
               child: GestureDetector(
                 onTap: () {
                   setState(() {
-                    isMute = !isMute;
+                    notifier.isMute = !notifier.isMute;
                   });
-                  fAliplayer?.setMuted(isMute);
+                  fAliplayer?.setMuted(notifier.isMute);
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: CustomIconWidget(
-                    iconData: isMute
+                    iconData: notifier.isMute
                         ? '${AssetPath.vectorPath}sound-off.svg'
                         : '${AssetPath.vectorPath}sound-on.svg',
                     defaultColor: false,

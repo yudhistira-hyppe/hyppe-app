@@ -62,6 +62,7 @@ class LeftItems extends StatefulWidget {
 class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMixin {
   // AnimationController? _controller;
   // Animation<Offset>? _offsetAnimation;
+  bool isShowMore = false;
 
   @override
   void initState() {
@@ -105,8 +106,8 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                     children: [
                       (widget.tagPeople?.isNotEmpty ?? false)
                           ? PicTagLabel(
-                              width: 24,
-                              icon: 'tag_people',
+                              width: 20,
+                              icon: 'tag-people-light',
                               label: '${widget.tagPeople?.length} ${notifier.translate.people}',
                               function: () {
                                 // widget.storyController?.pause();
@@ -117,6 +118,7 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                       widget.location == '' || widget.location == null
                           ? const SizedBox()
                           : PicTagLabel(
+                              width: 17,
                               icon: 'maptag',
                               label: "${widget.location}",
                               function: () {},
@@ -126,9 +128,16 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                 )
               : const SizedBox(),
           Container(
-            width: SizeConfig.screenWidth! / 1.3,
-            padding: const EdgeInsets.all(2),
-            constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
+            // width: SizeConfig.screenWidth! / 1.3,
+            // padding: const EdgeInsets.all(2),
+            constraints: BoxConstraints(
+                maxWidth: SizeConfig.screenWidth! * .7,
+                // minHeight: SizeConfig.screenHeight! * .02,
+                maxHeight: widget.description!.length > 24
+                    ? isShowMore
+                        ? 42
+                        : SizeConfig.screenHeight! * .1
+                    : 42),
             // color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
             child: SingleChildScrollView(
               child: Column(
@@ -141,14 +150,19 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                     afterGone: () {
                       widget.aliPlayer?.play();
                     },
+                    callbackIsMore: (val) {
+                      setState(() {
+                        isShowMore = val;
+                      });
+                    },
                     desc: "${widget.description}",
-                    trimLines: 5,
+                    trimLines: 2,
                     textAlign: TextAlign.start,
-                    seeLess: ' ${notifier.translate.seeLess}',
-                    seeMore: ' ${notifier.translate.seeMoreContent}',
-                    normStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppeLightButtonText, fontSize: 12),
-                    hrefStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppePrimary, fontSize: 12),
-                    expandStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primary, fontSize: 12),
+                    seeLess: ' ${notifier.translate.seeLess}', // ${notifier2.translate.seeLess}',
+                    seeMore: '  ${notifier.translate.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                    normStyle: const TextStyle(fontSize: 14, color: kHyppeTextPrimary),
+                    hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
+                    expandStyle: const TextStyle(fontSize: 14, color: kHyppeTextPrimary, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),

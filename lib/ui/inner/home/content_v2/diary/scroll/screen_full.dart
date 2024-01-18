@@ -861,7 +861,7 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
           child: _buildFillDiary(diaryData?[index]),
         ),
         // _buildBody(context, SizeConfig.screenWidth, diaryData?[index] ?? ContentData()),
-        blurContentWidget(context, diaryData?[index] ?? ContentData()),
+        // blurContentWidget(context, diaryData?[index] ?? ContentData()),
       ],
     );
   }

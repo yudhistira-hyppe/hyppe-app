@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
@@ -9,8 +11,12 @@ import 'package:provider/provider.dart';
 import '../../../../../../core/services/system.dart';
 
 class ScrollPicNotifier with ChangeNotifier {
+  LocalizationModelV2 language = LocalizationModelV2();
   Offset positionDxDy = const Offset(0, 0);
   bool _isLoadingLoadmore = false;
+  bool isConnect = true;
+  bool isMute = true;
+  
   bool get isLoadingLoadmore => _isLoadingLoadmore;
   set isLoadingLoadmore(bool state) {
     _isLoadingLoadmore = state;
@@ -183,5 +189,22 @@ class ScrollPicNotifier with ChangeNotifier {
       connectionError = true;
       isLoadingLoadmore = false;
     }
+  }
+
+  void initialPicConnection(BuildContext context) async {
+    final connect = await System().checkConnections();
+      if (!connect) {
+        isConnect = false;
+        notifyListeners();
+        // ignore: use_build_context_synchronously
+        ShowGeneralDialog.showToastAlert(
+          context,
+          language.internetConnectionLost ?? ' Error',
+          () async {},
+        );
+      } else {
+        isConnect = true;
+        notifyListeners();
+      }
   }
 }

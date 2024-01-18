@@ -14,6 +14,7 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 import 'package:hyppe/ui/constant/entities/general_mixin/general_mixin.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -26,6 +27,9 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
   final _system = System();
   final _routing = Routing();
   ScrollController scrollController = ScrollController();
+  bool isConnect = true;
+  bool isLoading = false;
+  bool isMute = true;
 
   LocalizationModelV2 language = LocalizationModelV2();
   translate(LocalizationModelV2 translate) {
@@ -298,5 +302,22 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
       fAliplayer.pause();
     }
     ShowBottomSheet().onReportContent(context, postData: data, type: hyppePic, inDetail: false, fAliplayer: fAliplayer, onCompleted: onCompleted, key: key);
+  }
+
+  void initialPicConnection(BuildContext context) async {
+    final connect = await _system.checkConnections();
+      if (!connect) {
+        isConnect = false;
+        notifyListeners();
+        // ignore: use_build_context_synchronously
+        ShowGeneralDialog.showToastAlert(
+          context,
+          language.internetConnectionLost ?? ' Error',
+          () async {},
+        );
+      } else {
+        isConnect = true;
+        notifyListeners();
+      }
   }
 }

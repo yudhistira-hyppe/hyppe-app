@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
@@ -45,6 +47,7 @@ import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/fullscreen/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
+import 'package:hyppe/ui/inner/home/widget/view_like.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -1427,9 +1430,37 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                           ],
                                         ),
                                         twelvePx,
-                                        Text(
-                                          "${data?.insight?.likes}  ${lang?.like}",
-                                          style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                                        RichText(
+                                          text: TextSpan(children: [
+                                            TextSpan(
+                                              text: "${data?.insight?.likes} ${lang?.like}",
+                                              recognizer: TapGestureRecognizer()
+                                                ..onTap = () => Navigator.push(
+                                                    context,
+                                                    CupertinoPageRoute(
+                                                        builder: (context) => ViewLiked(
+                                                              postId: data?.postID ?? '',
+                                                              eventType: 'LIKE',
+                                                            ))),
+                                              style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                                            ),
+                                            const TextSpan(
+                                              text: " . ",
+                                              style: TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 22),
+                                            ),
+                                            TextSpan(
+                                              text: "${data?.insight!.views?.getCountShort()} ${lang?.views}",
+                                              recognizer: TapGestureRecognizer()
+                                                ..onTap = () => Navigator.push(
+                                                    context,
+                                                    CupertinoPageRoute(
+                                                        builder: (context) => ViewLiked(
+                                                              postId: data?.postID ?? '',
+                                                              eventType: 'VIEW',
+                                                            ))),
+                                              style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                                            ),
+                                          ]),
                                         ),
                                       ],
                                     ),

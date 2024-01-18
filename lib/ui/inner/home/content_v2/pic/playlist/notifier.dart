@@ -361,13 +361,15 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
     return true;
   }
 
-  void showUserTag(BuildContext context, data, postId, {FlutterAliplayer? fAliplayer}) {
+  void showUserTag(BuildContext context, data, postId, {FlutterAliplayer? fAliplayer, String? title}) {
+    print('title $title');
     fAliplayer?.pause();
     ShowBottomSheet.onShowUserTag(
       context,
       value: data,
       function: () {},
       postId: postId,
+      title: title,
       // storyController: storyController,
       fAliplayer: fAliplayer,
     );

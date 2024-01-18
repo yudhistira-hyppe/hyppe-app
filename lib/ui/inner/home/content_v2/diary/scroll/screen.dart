@@ -349,10 +349,12 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
         // _playMode = ModeTypeAliPLayer.url;
         await getOldVideoUrl(data.postID ?? '', data);
       }
-    }
-    if (isActivePage) {
-      fAliplayer?.prepare();
-      fAliplayer?.play();
+      if (isActivePage) {
+        fAliplayer?.prepare();
+        fAliplayer?.play();
+      }
+    } else {
+      // fAliplayer?.prepare();
     }
   }
 

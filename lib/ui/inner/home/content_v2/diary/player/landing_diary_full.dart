@@ -1110,7 +1110,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                                     )
                                   : const SizedBox.shrink(),
 
-                              blurContentWidget(context, data ?? ContentData()),
+                              // blurContentWidget(context, data ?? ContentData()),
                             ],
                           ),
                         ],

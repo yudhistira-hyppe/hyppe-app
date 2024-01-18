@@ -22,7 +22,7 @@ class PicTagLabel extends StatelessWidget {
         onTap: function,
         child: Container(
           padding: const EdgeInsets.all(5),
-          margin: EdgeInsets.only(right: 4),
+          margin: const EdgeInsets.only(right: 4),
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: kHyppeSurface.withOpacity(0.2)),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -31,7 +31,7 @@ class PicTagLabel extends StatelessWidget {
                 width: width,
                 iconData: "${AssetPath.vectorPath + icon}.svg",
                 defaultColor: false,
-                // color: Colors.white,
+                color: icon == 'maptag' ? Colors.white : null,
               ),
               sixPx,
               Text(
