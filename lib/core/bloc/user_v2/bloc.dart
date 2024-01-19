@@ -478,35 +478,32 @@ class UserBloc {
   }
 
   Future getUserProfilesBloc(BuildContext context, {String? search, required bool withAlertMessage, bool isByUsername = false}) async {
-    final isGuest = SharedPreference().readStorage(SpKeys.isGuest);
-    if(!isGuest){
-      setUserFetch(UserFetch(UserState.loading));
-      var formData = FormData();
-      formData.fields.add(MapEntry('search', search ?? (SharedPreference().readStorage(SpKeys.email) ?? '')));
-      await Repos().reposPost(
-        context,
-            (onResult) {
-          if ((onResult.statusCode ?? 300) != 202) {
-            setUserFetch(UserFetch(UserState.getUserProfilesError));
-          } else {
-            UserProfileModel _result = UserProfileModel.fromJson(onResult.data["data"][0]);
-            setUserFetch(UserFetch(UserState.getUserProfilesSuccess, data: _result));
-          }
-        },
-            (errorData) {
-          context.read<ErrorService>().addErrorObject(ErrorType.gGetUserDetail, errorData.message);
+    setUserFetch(UserFetch(UserState.loading));
+    var formData = FormData();
+    formData.fields.add(MapEntry('search', search ?? (SharedPreference().readStorage(SpKeys.email) ?? '')));
+    await Repos().reposPost(
+      context,
+          (onResult) {
+        if ((onResult.statusCode ?? 300) != 202) {
           setUserFetch(UserFetch(UserState.getUserProfilesError));
-        },
-        data: formData,
-        headers: {
-          "x-auth-user": SharedPreference().readStorage(SpKeys.email),
-        },
-        host: isByUsername ? UrlConstants.getProfileByUser : UrlConstants.getuserprofile,
-        withCheckConnection: false,
-        methodType: MethodType.post,
-        withAlertMessage: withAlertMessage,
-      );
-    }
+        } else {
+          UserProfileModel _result = UserProfileModel.fromJson(onResult.data["data"][0]);
+          setUserFetch(UserFetch(UserState.getUserProfilesSuccess, data: _result));
+        }
+      },
+          (errorData) {
+        context.read<ErrorService>().addErrorObject(ErrorType.gGetUserDetail, errorData.message);
+        setUserFetch(UserFetch(UserState.getUserProfilesError));
+      },
+      data: formData,
+      headers: {
+        "x-auth-user": SharedPreference().readStorage(SpKeys.email),
+      },
+      host: isByUsername ? UrlConstants.getProfileByUser : UrlConstants.getuserprofile,
+      withCheckConnection: false,
+      methodType: MethodType.post,
+      withAlertMessage: withAlertMessage,
+    );
   }
 
   Future getMyUserProfilesBloc(

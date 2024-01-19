@@ -443,10 +443,10 @@ class UrlConstants {
   static const String getBannerChalange = "$challange/listing/bannerlandingpage";
   static const String getLeaderBoard = "$challange/listleaderboard";
   static const String getLeaderBoardSession = "$challange/listleaderboard2";
-  static const String getOtherChallange = "$challange/allchallenge";
+  static const String getOtherChallange = "$challange/allchallenge/v2";
   static const String joinChallange = "$challange/join/v2";
-  static const String listAchievement = "$challange/listbadgebyuser";
-  static const String collectionBadge = "$challange/listbadgeuserdetail";
+  static const String listAchievement = "$challange/listbadgebyuser/v2";
+  static const String collectionBadge = "$challange/listbadgeuserdetail/v2";
   static const String selectBadge = "$challange/badgechoice";
   static const String checkChallengeStatus = "$challange/join/currentstatus";
 
