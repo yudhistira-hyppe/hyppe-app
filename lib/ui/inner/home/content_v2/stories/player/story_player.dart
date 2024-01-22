@@ -620,159 +620,134 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       }
       return Scaffold(
         resizeToAvoidBottomInset: false,
-        body: isloading
-            ? Container(
-                width: double.infinity,
-                height: double.infinity,
-                color: Colors.black,
-                child: const Center(
-                  child: SizedBox(
-                    height: 40,
-                    width: 40,
-                    child: Column(
-                      children: [
-                        CircularProgressIndicator(
-                          backgroundColor: Colors.white,
-                          strokeWidth: 3.0,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                // child: _buildBody(index),
-              )
-            : PageView.builder(
-                controller: _pageController,
-                scrollDirection: Axis.horizontal,
-                itemCount: widget.argument.postID != null
-                    ? 1
-                    : widget.argument.myStories != null
-                        ? 1
-                        : storyNot.storiesGroups?.length,
-                onPageChanged: (index) async {
-                  shown = [];
-                  _curIdx = index;
-                  if (mounted) {
-                    setState(() {});
-                  }
-                  if (_lastCurIndex != _curIdx) {
-                    // notifier.isPreventedEmoji = true;
-                    _curChildIdx = 0;
-                    start();
-                  }
-                  _lastCurIndex = _curIdx;
-                },
-                itemBuilder: (context, index) {
-                  // final player = AliPlayerView(
-                  //   onCreated: (id) {
-                  //     final isImage = _groupUserStories?[index].story?[_curChildIdx].mediaType == 'image';
-                  //     onViewPlayerCreated(id, isImage);
-                  //   },
-                  //   x: 0,
-                  //   y: _playerY,
-                  //   width: MediaQuery.of(context).size.width,
-                  //   height: MediaQuery.of(context).size.height,
-                  // );
-                  return Stack(
-                    children: [
-                      // Text("${_groupUserStories?[_curIdx].story?[_curChildIdx].music?.apsaraMusic != null || _groupUserStories?[_curIdx].story?[_curChildIdx].mediaType != 'image'}"),
-                      // _groupUserStories?[_curIdx].story?[_curChildIdx].music?.apsaraMusic != null || _groupUserStories?[_curIdx].story?[_curChildIdx].mediaType != 'image'
-                      //     ? AliPlayerView(
-                      //         onCreated: onViewPlayerCreated,
-                      //         x: 0,
-                      //         y: _playerY,
-                      //         width: MediaQuery.of(context).size.width,
-                      //         height: MediaQuery.of(context).size.height,
-                      //       )
-                      //     : Container(),
-                      Positioned.fill(
-                          child: Container(
-                        color: Colors.black,
-                      )),
-                      Builder(builder: (context) {
-                        return !isOnPageTurning
-                            // ? AliPlayerView(
-                            //     onCreated: (id) {
-                            //       final isImage = _groupUserStories?[index].story?[_curChildIdx].mediaType == 'image';
-                            //       onViewPlayerCreated(id, isImage);
-                            //     },
-                            //     x: 0,
-                            //     y: _playerY,
-                            //     width: MediaQuery.of(context).size.width,
-                            //     height: MediaQuery.of(context).size.height,
-                            //   )
-                            ? FutureBuilder(
-                                future: Future.wait([
-                                  for (StickerModel sticker in _groupUserStories?[index].story?[_curChildIdx].stickers ?? []) precacheImage(NetworkImage(sticker.image ?? ''), context),
-                                ]),
-                                builder: (context, snapshot) {
-                                  if (!snapshot.hasData) {
-                                    Container();
-                                  }
-                                  return Center(
-                                    child: Stack(
-                                      children: [
-                                        Center(
-                                          child: Container(
-                                            clipBehavior: Clip.hardEdge,
-                                            width: MediaQuery.of(context).size.width,
-                                            height: MediaQuery.of(context).size.width * (16 / 9),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(8.0),
-                                            ),
-                                            child: AliPlayerView(
-                                              onCreated: (id) {
-                                                final isImage = _groupUserStories?[index].story?[_curChildIdx].mediaType == 'image';
-                                                onViewPlayerCreated(id, isImage);
-                                              },
-                                              x: 0,
-                                              y: _playerY,
-                                              width: MediaQuery.of(context).size.width,
-                                              height: MediaQuery.of(context).size.width * (16 / 9),
-                                            ),
-                                          ),
-                                        ),
-                                        Center(
-                                          child: Visibility(
-                                            visible: isPlay,
-                                            child: Container(
-                                              clipBehavior: Clip.hardEdge,
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(8.0),
-                                              ),
-                                              child: StickerOverlay(
-                                                stickers: _groupUserStories?[index].story?[_curChildIdx].stickers,
-                                                fullscreen: true,
-                                                width: double.infinity,
-                                                height: MediaQuery.of(context).size.width * (16 / 9),
-                                                isPause: isPause || _showLoading,
-                                                canPause: true,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+        body: PageView.builder(
+          controller: _pageController,
+          scrollDirection: Axis.horizontal,
+          itemCount: widget.argument.myStories != null ? 1 : storyNot.storiesGroups?.length,
+          onPageChanged: (index) async {
+            shown = [];
+            _curIdx = index;
+            if (mounted) {
+              setState(() {});
+            }
+            if (_lastCurIndex != _curIdx) {
+              // notifier.isPreventedEmoji = true;
+              _curChildIdx = 0;
+              start();
+            }
+            _lastCurIndex = _curIdx;
+          },
+          itemBuilder: (context, index) {
+            // final player = AliPlayerView(
+            //   onCreated: (id) {
+            //     final isImage = _groupUserStories?[index].story?[_curChildIdx].mediaType == 'image';
+            //     onViewPlayerCreated(id, isImage);
+            //   },
+            //   x: 0,
+            //   y: _playerY,
+            //   width: MediaQuery.of(context).size.width,
+            //   height: MediaQuery.of(context).size.height,
+            // );
+            return Stack(
+              children: [
+                // Text("${_groupUserStories?[_curIdx].story?[_curChildIdx].music?.apsaraMusic != null || _groupUserStories?[_curIdx].story?[_curChildIdx].mediaType != 'image'}"),
+                // _groupUserStories?[_curIdx].story?[_curChildIdx].music?.apsaraMusic != null || _groupUserStories?[_curIdx].story?[_curChildIdx].mediaType != 'image'
+                //     ? AliPlayerView(
+                //         onCreated: onViewPlayerCreated,
+                //         x: 0,
+                //         y: _playerY,
+                //         width: MediaQuery.of(context).size.width,
+                //         height: MediaQuery.of(context).size.height,
+                //       )
+                //     : Container(),
+                Positioned.fill(
+                    child: Container(
+                  color: Colors.black,
+                )),
+                Builder(builder: (context) {
+                  return !isOnPageTurning
+                      // ? AliPlayerView(
+                      //     onCreated: (id) {
+                      //       final isImage = _groupUserStories?[index].story?[_curChildIdx].mediaType == 'image';
+                      //       onViewPlayerCreated(id, isImage);
+                      //     },
+                      //     x: 0,
+                      //     y: _playerY,
+                      //     width: MediaQuery.of(context).size.width,
+                      //     height: MediaQuery.of(context).size.height,
+                      //   )
+                      ? FutureBuilder(
+                          future: Future.wait([
+                            for (StickerModel sticker in _groupUserStories?[index].story?[_curChildIdx].stickers ?? []) precacheImage(NetworkImage(sticker.image ?? ''), context),
+                          ]),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              Container();
+                            }
+                            return Center(
+                              child: Stack(
+                                children: [
+                                  Center(
+                                    child: Container(
+                                      clipBehavior: Clip.hardEdge,
+                                      width: MediaQuery.of(context).size.width,
+                                      height: MediaQuery.of(context).size.width * (16 / 9),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8.0),
+                                      ),
+                                      child: AliPlayerView(
+                                        onCreated: (id) {
+                                          final isImage = _groupUserStories?[index].story?[_curChildIdx].mediaType == 'image';
+                                          onViewPlayerCreated(id, isImage);
+                                        },
+                                        x: 0,
+                                        y: _playerY,
+                                        width: MediaQuery.of(context).size.width,
+                                        height: MediaQuery.of(context).size.width * (16 / 9),
+                                      ),
                                     ),
-                                  );
-                                })
-                            : Container(
-                                color: Colors.black,
-                                alignment: Alignment.center,
-                                child: const CircularProgressIndicator(),
-                              );
-                        // ? (value.onChangingVid
-                        //     ? Container(
-                        //         color: Colors.black,
-                        //         alignment: Alignment.center,
-                        //         child: const CircularProgressIndicator(),
-                        //       )
-                        //     : player)
-                        // : Container(
-                        //     color: Colors.black,
-                        //     alignment: Alignment.center,
-                        //     child: const CircularProgressIndicator(),
-                        //   );
-                      }),
+                                  ),
+                                  Center(
+                                    child: Visibility(
+                                      visible: isPlay,
+                                      child: Container(
+                                        clipBehavior: Clip.hardEdge,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(8.0),
+                                        ),
+                                        child: StickerOverlay(
+                                          stickers: _groupUserStories?[index].story?[_curChildIdx].stickers,
+                                          fullscreen: true,
+                                          width: double.infinity,
+                                          height: MediaQuery.of(context).size.width * (16 / 9),
+                                          isPause: isPause || _showLoading,
+                                          canPause: true,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          })
+                      : Container(
+                          color: Colors.black,
+                          alignment: Alignment.center,
+                          child: const CircularProgressIndicator(),
+                        );
+                  // ? (value.onChangingVid
+                  //     ? Container(
+                  //         color: Colors.black,
+                  //         alignment: Alignment.center,
+                  //         child: const CircularProgressIndicator(),
+                  //       )
+                  //     : player)
+                  // : Container(
+                  //     color: Colors.black,
+                  //     alignment: Alignment.center,
+                  //     child: const CircularProgressIndicator(),
+                  //   );
+                }),
 
                       Container(
                         width: MediaQuery.of(context).size.width,
