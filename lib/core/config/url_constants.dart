@@ -247,10 +247,10 @@ class UrlConstants {
   static const String getVideoApsara = "$postRouteV2/getvideo";
 
   /// post => Post Contents
-  static const String createuserposts = "$postRouteV2/createpost";
+  static const String createuserposts = "$postRouteV2/createpost/v2";
 
   /// post => Update Contents
-  static const String updatepost = "$postRouteV2/updatepost";
+  static const String updatepost = "$postRouteV2/updatepost/v2";
 
   /// post => post to change value key isViewed
   static const String postViewer = "$postRouteV2/postviewer";
@@ -271,7 +271,7 @@ class UrlConstants {
   static const String logout = "$userRoute/logout";
 
   /// post => Interactives
-  static const String interactive = "$postRouteV2/interactive";
+  static const String interactive = "$postRouteV2/interactive/v2";
 
   /// post => Get Interactives
   static const String getInnteractives = "$postRouteV2/getinteractives/v2";
