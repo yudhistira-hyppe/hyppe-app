@@ -393,7 +393,7 @@ class ContentData {
     if (json['stiker'] != null) {
       stickers = <StickerModel>[];
       json['stiker'].forEach((v) {
-        stickers!.add( StickerModel.fromJson(v));
+        stickers!.add(StickerModel.fromJson(v));
       });
     }
 

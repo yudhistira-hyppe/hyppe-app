@@ -10,9 +10,19 @@ class DiaryDetailScreenArgument extends ContentScreenArgument {
   final TypePlaylist type;
   final Function(int e)? function;
   final bool? ismute;
+  final int? seekPosition;
 
   @override
   FeatureType get featureType => FeatureType.diary;
 
-  DiaryDetailScreenArgument({this.index = 0, this.diaryData, this.page, this.limit, required this.type, this.function, this.ismute});
+  DiaryDetailScreenArgument({
+    this.index = 0,
+    this.diaryData,
+    this.page,
+    this.limit,
+    required this.type,
+    this.function,
+    this.ismute,
+    this.seekPosition,
+  });
 }

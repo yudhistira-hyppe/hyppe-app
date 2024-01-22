@@ -371,12 +371,12 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                           color: kHyppeLightSurface,
                           child: HyppePreviewPic(
                             onScaleStart: () {
-                              zoom(true);
-                              globalTultipShow = true;
+                              // zoom(true);
+                              // globalTultipShow = true;
                             },
                             onScaleStop: () {
-                              zoom(false);
-                              globalTultipShow = false;
+                              // zoom(false);
+                              // globalTultipShow = false;
                             },
                             appbarSeen: appbarSeen,
                             scrollController: globalKey.currentState?.innerController,

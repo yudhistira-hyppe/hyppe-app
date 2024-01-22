@@ -1008,7 +1008,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
     print("-=-=-=-=-=-=disepose vid");
     fAliplayer?.stop();
     fAliplayer?.destroy();
-    animatedController.dispose();
+    // animatedController.dispose();
     // Wakelock.disable();
     globalAliPlayer = null;
     if (Platform.isIOS) {
@@ -1054,33 +1054,33 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
     return Consumer<VideoNotifier>(builder: (context, notifier, _) {
       if (isloading) {
         return Stack(
-            key: ValueKey<bool>(isloading),
-            children: [
-              Container(
-                height: widget.height,
-                width: widget.width,
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(widget.fromFullScreen ? 0 : 16),
+          key: ValueKey<bool>(isloading),
+          children: [
+            Container(
+              height: widget.height,
+              width: widget.width,
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(widget.fromFullScreen ? 0 : 16),
+              ),
+            ),
+            //   child: VideoThumbnail(
+            //     videoData: widget.data,
+            //     onDetail: false,
+            //     fn: () {},
+            //     withMargin: true,
+            //   ),
+            // ),
+            const Positioned.fill(
+              child: Align(
+                alignment: Alignment.center,
+                child: CircularProgressIndicator(
+                  color: kHyppePrimary,
                 ),
               ),
-              //   child: VideoThumbnail(
-              //     videoData: widget.data,
-              //     onDetail: false,
-              //     fn: () {},
-              //     withMargin: true,
-              //   ),
-              // ),
-              const Positioned.fill(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: CircularProgressIndicator(
-                    color: kHyppePrimary,
-                  ),
-                ),
-              )
-            ],
-          );
+            )
+          ],
+        );
       } else {
         // print("onViewPlayerCreated ${onViewPlayerCreated}");
         aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height);
@@ -1163,377 +1163,377 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                 if (notifier.isPlay) {
                   isPlay = true;
                 }
-                if (widget.data!.reportedStatus == 'BLURRED' && widget.fromFullScreen){
+                if (widget.data!.reportedStatus == 'BLURRED' && widget.fromFullScreen) {
                   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
                     fAliplayer!.pause();
                     isPlay = false;
                   });
                 }
 
-                return (widget.data!.reportedStatus =='BLURRED' && widget.fromFullScreen) 
-                ? blurContentWidget(context, widget.data!)
-                : GestureDetector(
-                  onTap: () async {
-                    onTapCtrl = true;
-                    setState(() {});
+                return (widget.data!.reportedStatus == 'BLURRED' && widget.fromFullScreen)
+                    ? blurContentWidget(context, widget.data!)
+                    : GestureDetector(
+                        onTap: () async {
+                          onTapCtrl = true;
+                          setState(() {});
 
-                    print('data Fullscreen ${widget.fromFullScreen}');
+                          print('data Fullscreen ${widget.fromFullScreen}');
 
-                    if (widget.fromFullScreen) {
-                      // Routing().moveBack();
-                    } else {
-                      if (widget.isVidFormProfile ?? false) {
-                        print('Route ${widget.isVidFormProfile}');
-                        Routing().move(Routes.vidScrollFullScreenDetail, argument: VidFullscreenArgument(vidData: widget.vidData!, index: widget.index!, data: widget.data!));
-                      } else {
-                        int changevalue;
-                        changevalue = _currentPosition + 1000;
-                        if (changevalue > _videoDuration) {
-                          changevalue = _videoDuration;
-                        }
-                        if (widget.orientation == Orientation.portrait) {
-                          "=============== pause 3".logger();
-                          // fAliplayer?.pause();
-                          // setState(() {
-                          //   isloading = true;
-                          // });
-                          await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-                          if ((widget.data?.metadata?.height ?? 0) < (widget.data?.metadata?.width ?? 0)) {
-                            print('Landscape VidPlayerPage');
-                            SystemChrome.setPreferredOrientations([
-                              DeviceOrientation.landscapeLeft,
-                              DeviceOrientation.landscapeRight,
-                            ]);
+                          if (widget.fromFullScreen) {
+                            // Routing().moveBack();
                           } else {
-                            print('Portrait VidPlayerPage');
-                          }
-                          VideoIndicator value = await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-                              builder: (_) => VideoFullscreenPage(
-                                  enableWakelock: widget.enableWakelock,
-                                  aliPlayerView: aliPlayerView!,
-                                  thumbnail: (widget.data?.isApsara ?? false) ? (widget.data?.mediaThumbEndPoint ?? '') : '${widget.data?.fullThumbPath}',
-                                  fAliplayer: fAliplayer,
-                                  data: widget.data ?? ContentData(),
-                                  onClose: () {
-                                    notifier.setMapAdsContent(widget.data?.postID ?? '', null);
-                                    setState(() {
-                                      isPlay = true;
-                                      if (widget.onShowAds != null) {
-                                        widget.onShowAds!(notifier.mapInContentAds[widget.data?.postID ?? '']);
-                                      }
-                                    });
-                                    notifier.hasShowedAds = true;
-                                    notifier.tempAdsData = null;
-                                    notifier.isShowingAds = false;
-                                    // Routing().moveBack();
-                                  },
-                                  slider: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, widget.orientation, notifier),
-                                  videoIndicator: VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentAdsPositionText, isMute: isMute),
-                                  vidData: widget.vidData,
-                                  index: widget.index,
-                                  clearPostId: widget.clearPostId,
-                                  loadMoreFunction: () {
-                                    print("loadmore function vidplayer");
-                                    widget.loadMoreFunction?.call();
-                                  },
-                                  isAutoPlay: widget.isAutoPlay,
-                                  isLanding: widget.inLanding),
-                              settings: const RouteSettings()));
-                          notifier.isLoading = true;
-                          Future.delayed(const Duration(seconds: 6), () {
-                            notifier.isLoading = false;
-                          });
-                          if (mounted) {
-                            setState(() {
-                              _videoDuration = value.videoDuration ?? 0;
-                              _currentPosition = value.seekValue ?? 0;
-                              _currentPositionText = value.positionText ?? 0;
-                              _showTipsWidget = value.showTipsWidget ?? false;
-                              isMute = value.isMute ?? false;
-                              isPlay = !_showTipsWidget;
-                            });
-                          } else {
-                            _videoDuration = value.videoDuration ?? 0;
-                            _currentPosition = value.seekValue ?? 0;
-                            _currentPositionText = value.positionText ?? 0;
-                            _showTipsWidget = value.showTipsWidget ?? false;
-                            isMute = value.isMute ?? false;
-                            isPlay = !_showTipsWidget;
-                          }
-
-                          fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
-                            if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
-                              if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
-                                _currentPosition = extraValue ?? 0;
+                            if (widget.isVidFormProfile ?? false) {
+                              print('Route ${widget.isVidFormProfile}');
+                              Routing().move(Routes.vidScrollFullScreenDetail, argument: VidFullscreenArgument(vidData: widget.vidData!, index: widget.index!, data: widget.data!));
+                            } else {
+                              int changevalue;
+                              changevalue = _currentPosition + 1000;
+                              if (changevalue > _videoDuration) {
+                                changevalue = _videoDuration;
                               }
-                              if (!_inSeek) {
-                                try {
-                                  setState(() {
-                                    _currentPositionText = extraValue ?? 0;
-                                  });
-                                } catch (e) {
-                                  print(e);
+                              if (widget.orientation == Orientation.portrait) {
+                                "=============== pause 3".logger();
+                                // fAliplayer?.pause();
+                                // setState(() {
+                                //   isloading = true;
+                                // });
+                                await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+                                if ((widget.data?.metadata?.height ?? 0) < (widget.data?.metadata?.width ?? 0)) {
+                                  print('Landscape VidPlayerPage');
+                                  SystemChrome.setPreferredOrientations([
+                                    DeviceOrientation.landscapeLeft,
+                                    DeviceOrientation.landscapeRight,
+                                  ]);
+                                } else {
+                                  print('Portrait VidPlayerPage');
                                 }
-                              }
-                            } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
-                              // _bufferPosition = extraValue ?? 0;
-                              if (mounted) {
-                                setState(() {});
-                              }
-                            } else if (infoCode == FlutterAvpdef.AUTOPLAYSTART) {
-                              // Fluttertoast.showToast(msg: "AutoPlay");
-                            } else if (infoCode == FlutterAvpdef.CACHESUCCESS) {
-                              // Fluttertoast.showToast(msg: "Cache Success");
-                            } else if (infoCode == FlutterAvpdef.CACHEERROR) {
-                              // Fluttertoast.showToast(msg: "Cache Error $extraMsg");
-                            } else if (infoCode == FlutterAvpdef.LOOPINGSTART) {
-                              // Fluttertoast.showToast(msg: "Looping Start");
-                            } else if (infoCode == FlutterAvpdef.SWITCHTOSOFTWAREVIDEODECODER) {
-                              // Fluttertoast.showToast(msg: "change to soft ware decoder");
-                              // mOptionsFragment.switchHardwareDecoder();
-                            }
-                          });
-                          fAliplayer?.setOnCompletion((playerId) {
-                            _showTipsWidget = true;
-                            _showLoading = false;
-                            _tipsContent = "Play Again";
-                            isPause = true;
-                            setState(() {
-                              _currentPosition = _videoDuration;
-                            });
-                          });
-                        } else {
-                          Navigator.pop(context, changevalue);
-                        }
-                      }
-                    }
-                  },
-                  onDoubleTap: () {
-                    final likeNotifier = context.read<LikeNotifier>();
-                    if (widget.data != null) {
-                      likeNotifier.likePost(context, widget.data!);
-                    }
-                  },
-                  child: Stack(
-                    children: [
-                      // Text("${(adsData != null && !widget.inLanding)}"),
-                      // if (adsData != null && !isCompleteAds && widget.inLanding)
-                      //   Builder(
-                      //     builder: (context) {
-                      //       print('show content ads');
-                      //       return ClipRRect(
-                      //           borderRadius: const BorderRadius.all(
-                      //             Radius.circular(16),
-                      //           ),
-                      //           child: Container(color: Colors.black, width: widget.width, height: widget.height, child: aliPlayerAdsView));
-                      //     }
-                      //   ),
-                      if (notifier.mapInContentAds[widget.data?.postID ?? ''] == null || (notifier.mapInContentAds[widget.data?.postID ?? ''] != null && !widget.inLanding))
-                        ClipRRect(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(widget.fromFullScreen ? 0 : 16),
-                            ),
-                            child: Container(color: Colors.black, width: widget.width, height: widget.height, child: isPlay ? aliPlayerView : const SizedBox.shrink())),
+                                VideoIndicator value = await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+                                    builder: (_) => VideoFullscreenPage(
+                                        enableWakelock: widget.enableWakelock,
+                                        aliPlayerView: aliPlayerView!,
+                                        thumbnail: (widget.data?.isApsara ?? false) ? (widget.data?.mediaThumbEndPoint ?? '') : '${widget.data?.fullThumbPath}',
+                                        fAliplayer: fAliplayer,
+                                        data: widget.data ?? ContentData(),
+                                        onClose: () {
+                                          notifier.setMapAdsContent(widget.data?.postID ?? '', null);
+                                          setState(() {
+                                            isPlay = true;
+                                            if (widget.onShowAds != null) {
+                                              widget.onShowAds!(notifier.mapInContentAds[widget.data?.postID ?? '']);
+                                            }
+                                          });
+                                          notifier.hasShowedAds = true;
+                                          notifier.tempAdsData = null;
+                                          notifier.isShowingAds = false;
+                                          // Routing().moveBack();
+                                        },
+                                        slider: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, widget.orientation, notifier),
+                                        videoIndicator: VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentAdsPositionText, isMute: isMute),
+                                        vidData: widget.vidData,
+                                        index: widget.index,
+                                        clearPostId: widget.clearPostId,
+                                        loadMoreFunction: () {
+                                          print("loadmore function vidplayer");
+                                          widget.loadMoreFunction?.call();
+                                        },
+                                        isAutoPlay: widget.isAutoPlay,
+                                        isLanding: widget.inLanding),
+                                    settings: const RouteSettings()));
+                                notifier.isLoading = true;
+                                Future.delayed(const Duration(seconds: 6), () {
+                                  notifier.isLoading = false;
+                                });
+                                if (mounted) {
+                                  setState(() {
+                                    _videoDuration = value.videoDuration ?? 0;
+                                    _currentPosition = value.seekValue ?? 0;
+                                    _currentPositionText = value.positionText ?? 0;
+                                    _showTipsWidget = value.showTipsWidget ?? false;
+                                    isMute = value.isMute ?? false;
+                                    isPlay = !_showTipsWidget;
+                                  });
+                                } else {
+                                  _videoDuration = value.videoDuration ?? 0;
+                                  _currentPosition = value.seekValue ?? 0;
+                                  _currentPositionText = value.positionText ?? 0;
+                                  _showTipsWidget = value.showTipsWidget ?? false;
+                                  isMute = value.isMute ?? false;
+                                  isPlay = !_showTipsWidget;
+                                }
 
-                      // Text("${adsData == null}"),
-                      // Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
-                      // /====slide dan tombol fullscreen
-                      if (isPlay)
-                        SizedBox(
-                            width: widget.width,
-                            height: widget.height,
-                            child: Offstage(offstage: _isLock, child: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, widget.orientation, notifier))),
-
-                      if (widget.fromFullScreen)
-                      // if (widget.data!.reportedStatus != 'BLURRED')
-                        //  blurContentWidget(context, widget.data!),
-                        
-                        AnimatedOpacity(
-                          opacity: onTapCtrl || isPause ? 1.0 : 0.0,
-                          duration: const Duration(milliseconds: 500),
-                          onEnd: _onPlayerHide,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 18.0),
-                            child: Stack(
-                              children: [
-                                CustomAppBar(
-                                    orientation: widget.orientation,
-                                    data: widget.data ?? ContentData(),
-                                    currentPosition: _currentPosition,
-                                    currentPositionText: _currentPositionText,
-                                    showTipsWidget: _showTipsWidget,
-                                    videoDuration: _videoDuration,
-                                    isMute: isMute,
-                                    onTapOnProfileImage: () {
-                                      System().navigateToProfile(context, widget.data?.email ?? '');
-                                      fAliplayer?.pause();
-                                      isPause = true;
-                                      setState(() {});
-                                    },
-                                    onTap: () {
-                                      if (widget.data?.email != email) {
-                                        context.read<PreviewPicNotifier>().reportContent(context, widget.data!, fAliplayer: widget.data!.fAliplayer, onCompleted: () async {
-                                          imageCache.clear();
-                                          imageCache.clearLiveImages();
-                                          await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
+                                fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
+                                  if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
+                                    if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
+                                      _currentPosition = extraValue ?? 0;
+                                    }
+                                    if (!_inSeek) {
+                                      try {
+                                        setState(() {
+                                          _currentPositionText = extraValue ?? 0;
                                         });
-                                      } else {
-                                        // if (_curIdx != -1) {
-                                        //   "=============== pause 11".logger();
-                                        //   notifier.vidData?[_curIdx].fAliplayer?.pause();
-                                        // }
-
-                                        ShowBottomSheet().onShowOptionContent(
-                                          context,
-                                          contentData: widget.data!,
-                                          captionTitle: hyppeVid,
-                                          onDetail: false,
-                                          isShare: widget.data!.isShared,
-                                          onUpdate: () {
-                                            (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
-                                          },
-                                          fAliplayer: widget.data!.fAliplayer,
-                                        );
+                                      } catch (e) {
+                                        print(e);
                                       }
-                                    }),
-                                _buttomBodyRight(),
-                              ],
-                            ),
-                          ),
-                        ),
-                      // if (!isPlay)
-                      //   SizedBox(
-                      //     height: widget.height,
-                      //     width: widget.width,
-                      //     child: VideoThumbnail(
-                      //       videoData: widget.data,
-                      //       onDetail: false,
-                      //       fn: () {},
-                      //       withMargin: true,
-                      //     ),
-                      //   ),
-                      // Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
-                      // if (isPlay && adsData != null) skipAds(),
-                      if (!isPlay && !_showLoading & !(widget.isAutoPlay ?? false))
-                        Center(
-                          child: GestureDetector(
-                            onTap: () async {
-                              globalAliPlayer = widget.data?.fAliplayer;
-                              print("ini play");
-                              print("=========================================");
-                              print(urlVid);
-                              print(widget.data?.description);
-                              print(widget.data?.postID);
-
-                              if (widget.onPlay != null) {
-                                widget.onPlay!(widget.data ?? ContentData());
-                              }
-
-                              // if (widget.inLanding) {
-                              // _initAds(context);
-                              //   context.incrementAdsCount();
-                              // }
-                              setState(() {
-                                isPlay = true;
-                                _showLoading = true;
-                              });
-                              notifier.hasShowedAds = false;
-                              fAliplayer?.play();
-                              await fAliplayer?.prepare().whenComplete(() {}).onError((error, stackTrace) => print('Error Loading video: $error'));
-                              Future.delayed(const Duration(seconds: 1), () {
-                                if (isPlay) {
-                                  fAliplayer?.play();
+                                    }
+                                  } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
+                                    // _bufferPosition = extraValue ?? 0;
+                                    if (mounted) {
+                                      setState(() {});
+                                    }
+                                  } else if (infoCode == FlutterAvpdef.AUTOPLAYSTART) {
+                                    // Fluttertoast.showToast(msg: "AutoPlay");
+                                  } else if (infoCode == FlutterAvpdef.CACHESUCCESS) {
+                                    // Fluttertoast.showToast(msg: "Cache Success");
+                                  } else if (infoCode == FlutterAvpdef.CACHEERROR) {
+                                    // Fluttertoast.showToast(msg: "Cache Error $extraMsg");
+                                  } else if (infoCode == FlutterAvpdef.LOOPINGSTART) {
+                                    // Fluttertoast.showToast(msg: "Looping Start");
+                                  } else if (infoCode == FlutterAvpdef.SWITCHTOSOFTWAREVIDEODECODER) {
+                                    // Fluttertoast.showToast(msg: "change to soft ware decoder");
+                                    // mOptionsFragment.switchHardwareDecoder();
+                                  }
+                                });
+                                fAliplayer?.setOnCompletion((playerId) {
+                                  _showTipsWidget = true;
+                                  _showLoading = false;
+                                  _tipsContent = "Play Again";
+                                  isPause = true;
                                   setState(() {
-                                    isPlay = true;
-                                    // _showLoading = false;
+                                    _currentPosition = _videoDuration;
                                   });
-                                }
-                              });
+                                });
+                              } else {
+                                Navigator.pop(context, changevalue);
+                              }
+                            }
+                          }
+                        },
+                        onDoubleTap: () {
+                          final likeNotifier = context.read<LikeNotifier>();
+                          if (widget.data != null) {
+                            likeNotifier.likePost(context, widget.data!);
+                          }
+                        },
+                        child: Stack(
+                          children: [
+                            // Text("${(adsData != null && !widget.inLanding)}"),
+                            // if (adsData != null && !isCompleteAds && widget.inLanding)
+                            //   Builder(
+                            //     builder: (context) {
+                            //       print('show content ads');
+                            //       return ClipRRect(
+                            //           borderRadius: const BorderRadius.all(
+                            //             Radius.circular(16),
+                            //           ),
+                            //           child: Container(color: Colors.black, width: widget.width, height: widget.height, child: aliPlayerAdsView));
+                            //     }
+                            //   ),
+                            if (notifier.mapInContentAds[widget.data?.postID ?? ''] == null || (notifier.mapInContentAds[widget.data?.postID ?? ''] != null && !widget.inLanding))
+                              ClipRRect(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(widget.fromFullScreen ? 0 : 16),
+                                  ),
+                                  child: Container(color: Colors.black, width: widget.width, height: widget.height, child: isPlay ? aliPlayerView : const SizedBox.shrink())),
 
-                              System().increaseViewCount2(context, widget.data ?? ContentData()).whenComplete(() async {
-                                // final count = context.getAdsCount();
-                                // if(count == 5){
-                                //   final adsData = await context.getInBetweenAds();
-                                //   widget.betweenAds(adsData);
-                                // }
-                                // context.incrementAdsCount();
-                              });
-                              // if (adsData != null && widget.inLanding) {
-                              //   fAliplayerAds?.prepare().whenComplete(() {
-                              //     setState(() {
-                              //       _showLoading = false;
-                              //     });
-                              //   }).onError((error, stackTrace) => print('Error Loading video: $error'));
-                              //   fAliplayerAds?.play();
-                              //   setState(() {
-                              //     isActiveAds = true;
-                              //   });
-                              // } else {
-                              //   fAliplayer?.prepare().whenComplete(() {
-                              //     setState(() {
-                              //       _showLoading = false;
-                              //     });
-                              //   }).onError((error, stackTrace) => print('Error Loading video: $error'));
-                              //   fAliplayer?.play();
-                              //   System().increaseViewCount2(context, widget.data ?? ContentData());
-                              // }
-                            },
-                            child: Visibility(
-                              visible: (widget.data?.reportedStatus != "BLURRED"),
-                              child: SizedBox(
-                                width: widget.width,
-                                height: widget.height,
-                                child: const CustomIconWidget(
-                                  defaultColor: false,
-                                  width: 40,
-                                  iconData: '${AssetPath.vectorPath}pause2.svg',
-                                  // color: kHyppeLightButtonText,
+                            // Text("${adsData == null}"),
+                            // Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
+                            // /====slide dan tombol fullscreen
+                            if (isPlay)
+                              SizedBox(
+                                  width: widget.width,
+                                  height: widget.height,
+                                  child: Offstage(offstage: _isLock, child: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, widget.orientation, notifier))),
+
+                            if (widget.fromFullScreen)
+                              // if (widget.data!.reportedStatus != 'BLURRED')
+                              //  blurContentWidget(context, widget.data!),
+
+                              AnimatedOpacity(
+                                opacity: onTapCtrl || isPause ? 1.0 : 0.0,
+                                duration: const Duration(milliseconds: 500),
+                                onEnd: _onPlayerHide,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 18.0),
+                                  child: Stack(
+                                    children: [
+                                      CustomAppBar(
+                                          orientation: widget.orientation,
+                                          data: widget.data ?? ContentData(),
+                                          currentPosition: _currentPosition,
+                                          currentPositionText: _currentPositionText,
+                                          showTipsWidget: _showTipsWidget,
+                                          videoDuration: _videoDuration,
+                                          isMute: isMute,
+                                          onTapOnProfileImage: () {
+                                            System().navigateToProfile(context, widget.data?.email ?? '');
+                                            fAliplayer?.pause();
+                                            isPause = true;
+                                            setState(() {});
+                                          },
+                                          onTap: () {
+                                            if (widget.data?.email != email) {
+                                              context.read<PreviewPicNotifier>().reportContent(context, widget.data!, fAliplayer: widget.data!.fAliplayer, onCompleted: () async {
+                                                imageCache.clear();
+                                                imageCache.clearLiveImages();
+                                                await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
+                                              });
+                                            } else {
+                                              // if (_curIdx != -1) {
+                                              //   "=============== pause 11".logger();
+                                              //   notifier.vidData?[_curIdx].fAliplayer?.pause();
+                                              // }
+
+                                              ShowBottomSheet().onShowOptionContent(
+                                                context,
+                                                contentData: widget.data!,
+                                                captionTitle: hyppeVid,
+                                                onDetail: false,
+                                                isShare: widget.data!.isShared,
+                                                onUpdate: () {
+                                                  (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
+                                                },
+                                                fAliplayer: widget.data!.fAliplayer,
+                                              );
+                                            }
+                                          }),
+                                      _buttomBodyRight(),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                        ),
-                      if (!isPlay && (widget.data?.tagPeople?.isNotEmpty ?? false))
-                        Positioned(
-                          bottom: 18,
-                          left: 12,
-                          child: GestureDetector(
-                            onTap: () {
-                              context.read<PicDetailNotifier>().showUserTag(context, widget.data?.tagPeople, widget.data?.postID);
-                            },
-                            child: const CustomIconWidget(
-                              iconData: '${AssetPath.vectorPath}tag_people.svg',
-                              defaultColor: false,
-                              height: 24,
-                            ),
-                          ),
-                        ),
+                            // if (!isPlay)
+                            //   SizedBox(
+                            //     height: widget.height,
+                            //     width: widget.width,
+                            //     child: VideoThumbnail(
+                            //       videoData: widget.data,
+                            //       onDetail: false,
+                            //       fn: () {},
+                            //       withMargin: true,
+                            //     ),
+                            //   ),
+                            // Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
+                            // if (isPlay && adsData != null) skipAds(),
+                            if (!isPlay && !_showLoading & !(widget.isAutoPlay ?? false))
+                              Center(
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    globalAliPlayer = widget.data?.fAliplayer;
+                                    print("ini play");
+                                    print("=========================================");
+                                    print(urlVid);
+                                    print(widget.data?.description);
+                                    print(widget.data?.postID);
 
-                      _buildProgressBar(widget.width ?? 0, widget.height ?? 0),
-                      // _buildTipsWidget(widget.width ?? 0, widget.height ?? 0),
-                      if (isPlay)
-                        Positioned.fill(
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: _buildController(
-                              Colors.transparent,
-                              Colors.white,
-                              100,
-                              widget.width! * 0.8,
-                              widget.height! * 0.8,
-                            ),
-                          ),
-                        ),
-                      if (notifier.mapInContentAds[widget.data?.postID ?? ''] != null && isPlay)
-                        Positioned.fill(
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(widget.fromFullScreen ? 0 : 16),
+                                    if (widget.onPlay != null) {
+                                      widget.onPlay!(widget.data ?? ContentData());
+                                    }
+
+                                    // if (widget.inLanding) {
+                                    // _initAds(context);
+                                    //   context.incrementAdsCount();
+                                    // }
+                                    setState(() {
+                                      isPlay = true;
+                                      _showLoading = true;
+                                    });
+                                    notifier.hasShowedAds = false;
+                                    fAliplayer?.play();
+                                    await fAliplayer?.prepare().whenComplete(() {}).onError((error, stackTrace) => print('Error Loading video: $error'));
+                                    Future.delayed(const Duration(seconds: 1), () {
+                                      if (isPlay) {
+                                        fAliplayer?.play();
+                                        setState(() {
+                                          isPlay = true;
+                                          // _showLoading = false;
+                                        });
+                                      }
+                                    });
+
+                                    System().increaseViewCount2(context, widget.data ?? ContentData()).whenComplete(() async {
+                                      // final count = context.getAdsCount();
+                                      // if(count == 5){
+                                      //   final adsData = await context.getInBetweenAds();
+                                      //   widget.betweenAds(adsData);
+                                      // }
+                                      // context.incrementAdsCount();
+                                    });
+                                    // if (adsData != null && widget.inLanding) {
+                                    //   fAliplayerAds?.prepare().whenComplete(() {
+                                    //     setState(() {
+                                    //       _showLoading = false;
+                                    //     });
+                                    //   }).onError((error, stackTrace) => print('Error Loading video: $error'));
+                                    //   fAliplayerAds?.play();
+                                    //   setState(() {
+                                    //     isActiveAds = true;
+                                    //   });
+                                    // } else {
+                                    //   fAliplayer?.prepare().whenComplete(() {
+                                    //     setState(() {
+                                    //       _showLoading = false;
+                                    //     });
+                                    //   }).onError((error, stackTrace) => print('Error Loading video: $error'));
+                                    //   fAliplayer?.play();
+                                    //   System().increaseViewCount2(context, widget.data ?? ContentData());
+                                    // }
+                                  },
+                                  child: Visibility(
+                                    visible: (widget.data?.reportedStatus != "BLURRED"),
+                                    child: SizedBox(
+                                      width: widget.width,
+                                      height: widget.height,
+                                      child: const CustomIconWidget(
+                                        defaultColor: false,
+                                        width: 40,
+                                        iconData: '${AssetPath.vectorPath}pause2.svg',
+                                        // color: kHyppeLightButtonText,
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                                child: Container(color: Colors.black, width: widget.width, height: widget.height, child: adsPlayerPage))),
-                    ],
-                  ),
-                );
+                              ),
+                            if (!isPlay && (widget.data?.tagPeople?.isNotEmpty ?? false))
+                              Positioned(
+                                bottom: 18,
+                                left: 12,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    context.read<PicDetailNotifier>().showUserTag(context, widget.data?.tagPeople, widget.data?.postID);
+                                  },
+                                  child: const CustomIconWidget(
+                                    iconData: '${AssetPath.vectorPath}tag_people.svg',
+                                    defaultColor: false,
+                                    height: 24,
+                                  ),
+                                ),
+                              ),
+
+                            _buildProgressBar(widget.width ?? 0, widget.height ?? 0),
+                            // _buildTipsWidget(widget.width ?? 0, widget.height ?? 0),
+                            if (isPlay)
+                              Positioned.fill(
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: _buildController(
+                                    Colors.transparent,
+                                    Colors.white,
+                                    100,
+                                    widget.width! * 0.8,
+                                    widget.height! * 0.8,
+                                  ),
+                                ),
+                              ),
+                            if (notifier.mapInContentAds[widget.data?.postID ?? ''] != null && isPlay)
+                              Positioned.fill(
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(widget.fromFullScreen ? 0 : 16),
+                                      ),
+                                      child: Container(color: Colors.black, width: widget.width, height: widget.height, child: adsPlayerPage))),
+                          ],
+                        ),
+                      );
               }),
         );
       }
@@ -2362,7 +2362,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
       ],
     );
   }
-  
+
   Future onFullscreen(VideoNotifier notifier) async {
     int changeValue;
     changeValue = _currentPosition;

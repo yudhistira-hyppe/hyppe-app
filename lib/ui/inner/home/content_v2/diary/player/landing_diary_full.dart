@@ -183,6 +183,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
       });
       isPlay = true;
       dataSelected?.isDiaryPlay = true;
+      fAliplayer?.seekTo(widget.argument.seekPosition ?? 0, 1);
       // _initAds(context);
     });
     fAliplayer?.setOnRenderingStart((playerId) {
@@ -482,7 +483,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
     if (data.reportedStatus == 'BLURRED') {
     } else {
       print("=====prepare=====");
-      fAliplayer?.prepare();
+      await fAliplayer?.prepare().then((value) async {});
     }
     // this syntax below to prevent video play after changing video
     Future.delayed(const Duration(seconds: 1), () {
@@ -986,19 +987,37 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                                       ),
                                     )
                                   : Container(),
+                              Align(
+                                alignment: Alignment.center,
+                                child: AnimatedOpacity(
+                                  opacity: opacityLevel,
+                                  duration: const Duration(milliseconds: 500),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Opacity(
+                                      opacity: 0.4,
+                                      child: Icon(
+                                        isPause ? Icons.play_arrow_rounded : Icons.pause_rounded,
+                                        size: 100,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
                               // _buildProgressBar(SizeConfig.screenWidth!, 500),
                               !notifier.connectionError
                                   ? Positioned.fill(
                                       child: GestureDetector(
                                         onTap: () {
-                                          context.read<PreviewDiaryNotifier>().navigateToShortVideoPlayer(context, index);
-                                          fAliplayer?.play();
-                                          if (mounted) {
-                                            setState(() {
-                                              isMute = !isMute;
-                                            });
-                                          }
-                                          fAliplayer?.setMuted(isMute);
+                                          // context.read<PreviewDiaryNotifier>().navigateToShortVideoPlayer(context, index);
+                                          // fAliplayer?.play();
+                                          // if (mounted) {
+                                          //   setState(() {
+                                          //     isMute = !isMute;
+                                          //   });
+                                          // }
+                                          // fAliplayer?.setMuted(isMute);
                                           widget.argument.function!(1);
                                         },
                                         onDoubleTap: () {
@@ -1145,17 +1164,16 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      // storyComplete(not);
+                      //storyComplete(not);
                       if (isPause) {
                         play();
-                        print('DiaryPlayer pause');
                       } else {
                         pause();
-                        print('DiaryPlayer play');
                       }
                       setState(() {
                         opacityLevel = 1.0;
                       });
+
                       Future.delayed(const Duration(seconds: 1), () {
                         opacityLevel = 0.0;
                         setState(() {});
@@ -1243,24 +1261,6 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                     animatedController: animatedController,
                   ),
 
-            Align(
-              alignment: Alignment.center,
-              child: AnimatedOpacity(
-                opacity: opacityLevel,
-                duration: const Duration(milliseconds: 500),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Opacity(
-                    opacity: 0.4,
-                    child: Icon(
-                      isPause ? Icons.play_arrow_rounded : Icons.pause_rounded,
-                      size: 100,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            ),
             Align(
               alignment: Alignment.bottomCenter,
               child: data?.email == SharedPreference().readStorage(SpKeys.email) && (data?.reportedStatus == 'OWNED')

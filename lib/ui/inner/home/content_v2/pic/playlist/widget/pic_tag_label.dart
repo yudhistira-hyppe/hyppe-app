@@ -23,7 +23,7 @@ class PicTagLabel extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(5),
           margin: const EdgeInsets.only(right: 4),
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: kHyppeSurface.withOpacity(0.2)),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: kHyppeSurface.withOpacity(0.5)),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [

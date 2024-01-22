@@ -93,6 +93,8 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
   int indexKeySell = 0;
   int indexKeyProtection = 0;
 
+  bool isZoom = false;
+
   @override
   void initState() {
     initialPage();
@@ -217,6 +219,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
           }
           return PageView.builder(
               controller: controller,
+              physics: isZoom ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
               scrollDirection: Axis.vertical,
               itemCount: notifier.pic?.length ?? 0,
               onPageChanged: (value) {
@@ -439,11 +442,14 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
         return ZoomableImage(
           enable: true,
           onScaleStart: () {
-            print("================masuk zoom============");
-            // widget.onScaleStart?.call();
+            setState(() {
+              isZoom = true;
+            });
           }, // optional
           onScaleStop: () {
-            // widget.onScaleStop?.call();
+            setState(() {
+              isZoom = false;
+            });
           },
           child: CustomBaseCacheImage(
             memCacheWidth: 100,

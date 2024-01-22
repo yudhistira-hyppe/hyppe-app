@@ -627,7 +627,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
               if (vidData?[index].email == email && (vidData?[index].boostCount ?? 0) >= 0 && (vidData?[index].boosted.isNotEmpty ?? [].isEmpty))
                 Container(
                   padding: const EdgeInsets.all(10),
-                  margin: EdgeInsets.only(bottom: 10),
+                  margin: const EdgeInsets.only(bottom: 10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(6),
                     color: kHyppeGreyLight,
