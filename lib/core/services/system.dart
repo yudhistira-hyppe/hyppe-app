@@ -2064,12 +2064,10 @@ class System {
   }
 
   void analyticSetUser(String name) async {
-    await FirebaseAnalytics.instance.setUserId(
-      id: SharedPreference().readStorage(SpKeys.userID),
-    );
+    await FirebaseAnalytics.instance.setUserId(id: SharedPreference().readStorage(SpKeys.userID));
     await FirebaseAnalytics.instance.setUserProperty(
-      name: SharedPreference().readStorage(SpKeys.email),
-      value: name,
+      name: SharedPreference().readStorage(SpKeys.email).toString().substring(0, 24),
+      value: name.toString().substring(0, 24),
     );
   }
 
