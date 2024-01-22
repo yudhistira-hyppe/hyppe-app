@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
@@ -45,6 +47,7 @@ import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/fullscreen/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
+import 'package:hyppe/ui/inner/home/widget/view_like.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -79,7 +82,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   int _loadingPercent = 0;
   // int _currentPlayerState = 0;
   int _videoDuration = 1;
-  // int _currentPosition = 0;
+  int _currentPosition = 0;
   // int _bufferPosition = 0;
   // int _currentPositionText = 0;
   int _curIdx = 0;
@@ -102,6 +105,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   int indexKeyProtection = 0;
   int itemIndex = 0;
   bool scroolUp = false;
+  bool isActivePage = true;
 
   @override
   void initState() {
@@ -174,6 +178,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       // Fluttertoast.showToast(msg: "OnPrepared ");
       fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
+        _videoDuration = value['duration'];
         try {
           isPrepare = true;
           _showLoading = false;
@@ -254,8 +259,11 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     });
     fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
       if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
+        print("====detik===");
+        print(extraValue);
+        print(_videoDuration);
         if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
-          // _currentPosition = extraValue ?? 0;
+          _currentPosition = extraValue ?? 0;
         }
         // if (!_inSeek) {
         //   setState(() {
@@ -445,7 +453,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
   Future start(BuildContext context, ContentData data) async {
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
-
+    isPrepare = false;
     fAliplayer?.stop();
     fAliplayer?.clearScreen();
 
@@ -477,15 +485,18 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
     if (data.reportedStatus == 'BLURRED') {
     } else {
-      print("=====prepare=====");
-      fAliplayer?.prepare();
+      if (isActivePage) {
+        print("=====prepare=====");
+        fAliplayer?.prepare();
+        fAliplayer?.play();
+      }
     }
     // this syntax below to prevent video play after changing video
-    Future.delayed(const Duration(seconds: 1), () {
-      if (context.read<MainNotifier>().isInactiveState) {
-        fAliplayer?.pause();
-      }
-    });
+    // Future.delayed(const Duration(seconds: 1), () {
+    //   if (context.read<MainNotifier>().isInactiveState) {
+    //     fAliplayer?.pause();
+    //   }
+    // });
 
     // fAliplayer?.play();
   }
@@ -681,9 +692,15 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
   @override
   void didPopNext() {
-    print("=======didpop diary page ==========");
+    print("=======didpop diary page $isPrepare ==========");
     isHomeScreen = true;
-    fAliplayer?.play();
+    isActivePage = true;
+    if (!isPrepare) {
+      fAliplayer?.prepare();
+    }
+    if (dataSelected?.reportedStatus != 'BLURRED') {
+      fAliplayer?.play();
+    }
     _initializeTimer();
     // System().disposeBlock();
 
@@ -693,6 +710,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   @override
   void didPushNext() {
     isHomeScreen = false;
+    isActivePage = false;
     fAliplayer?.pause();
     _pauseScreen();
     super.didPushNext();
@@ -709,7 +727,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         break;
       case AppLifecycleState.resumed:
         if (isHomeScreen) _initializeTimer();
-        if (context.read<PreviewVidNotifier>().canPlayOpenApps && !context.read<MainNotifier>().isInactiveState) {
+        if (context.read<PreviewVidNotifier>().canPlayOpenApps && !context.read<MainNotifier>().isInactiveState && isActivePage) {
           fAliplayer?.play();
         }
         break;
@@ -724,6 +742,28 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       default:
         break;
     }
+  }
+
+  void muteFunction() {
+    if (mounted) {
+      setState(() {
+        isMute = !isMute;
+      });
+    }
+    fAliplayer?.setMuted(isMute);
+  }
+
+  void toFullScreen(index) {
+    print("asdasdad $_currentPosition");
+    context.read<PreviewDiaryNotifier>().navigateToShortVideoPlayer(
+      context,
+      index,
+      function: (e) {
+        muteFunction();
+      },
+      isMute: isMute,
+      seekPosition: _currentPosition,
+    );
   }
 
   @override
@@ -795,7 +835,6 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                 isPlay = false;
                                 fAliplayer?.stop();
                               }
-
                               return itemDiary(context, notifier, index, home);
                             },
                           ),
@@ -1001,7 +1040,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                   tenPx,
                                   GestureDetector(
                                     onTap: () {
-                                      context.read<PreviewDiaryNotifier>().navigateToShortVideoPlayer(context, index);
+                                      toFullScreen(index);
                                     },
                                     child: VisibilityDetector(
                                       // key: Key(index.toString()),
@@ -1128,7 +1167,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                                   ? Positioned.fill(
                                                       child: GestureDetector(
                                                         onTap: () {
-                                                          context.read<PreviewDiaryNotifier>().navigateToShortVideoPlayer(context, index);
+                                                          toFullScreen(index);
 
                                                           // fAliplayer?.play();
                                                           // if (mounted) {
@@ -1252,7 +1291,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                                       ),
                                                     )
                                                   : const SizedBox.shrink(),
-                                              _buildBody(context, SizeConfig.screenWidth, data ?? ContentData()),
+                                              if (data?.reportedStatus != 'BLURRED') _buildBody(context, SizeConfig.screenWidth, data ?? ContentData()),
                                               blurContentWidget(context, data ?? ContentData()),
                                             ],
                                           ),
@@ -1398,9 +1437,37 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                           ],
                                         ),
                                         twelvePx,
-                                        Text(
-                                          "${data?.insight?.likes}  ${lang?.like}",
-                                          style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                                        RichText(
+                                          text: TextSpan(children: [
+                                            TextSpan(
+                                              text: "${data?.insight?.likes} ${lang?.like}",
+                                              recognizer: TapGestureRecognizer()
+                                                ..onTap = () => Navigator.push(
+                                                    context,
+                                                    CupertinoPageRoute(
+                                                        builder: (context) => ViewLiked(
+                                                              postId: data?.postID ?? '',
+                                                              eventType: 'LIKE',
+                                                            ))),
+                                              style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                                            ),
+                                            const TextSpan(
+                                              text: " . ",
+                                              style: TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 22),
+                                            ),
+                                            TextSpan(
+                                              text: "${data?.insight!.views?.getCountShort()} ${lang?.views}",
+                                              recognizer: TapGestureRecognizer()
+                                                ..onTap = () => Navigator.push(
+                                                    context,
+                                                    CupertinoPageRoute(
+                                                        builder: (context) => ViewLiked(
+                                                              postId: data?.postID ?? '',
+                                                              eventType: 'VIEW',
+                                                            ))),
+                                              style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                                            ),
+                                          ]),
                                         ),
                                       ],
                                     ),
@@ -1544,7 +1611,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
               child: GestureDetector(
                 onTap: () {
                   fAliplayer?.pause();
-                  context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID, fAliplayer: fAliplayer);
+                  context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID, fAliplayer: fAliplayer, title: lang?.inThisDiary);
                 },
                 child: const CustomIconWidget(
                   iconData: '${AssetPath.vectorPath}tag_people.svg',
@@ -1557,12 +1624,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
             alignment: Alignment.bottomRight,
             child: GestureDetector(
               onTap: () {
-                if (mounted) {
-                  setState(() {
-                    isMute = !isMute;
-                  });
-                }
-                fAliplayer?.setMuted(isMute);
+                muteFunction();
               },
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -1623,7 +1685,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                           fAliplayer?.play();
                         },
                         child: Container(
-                          padding: const EdgeInsets.only(top: 8),
+                          padding: const EdgeInsets.only(top: 16, bottom: 16),
                           width: SizeConfig.screenWidth,
                           decoration: const BoxDecoration(
                             border: Border(

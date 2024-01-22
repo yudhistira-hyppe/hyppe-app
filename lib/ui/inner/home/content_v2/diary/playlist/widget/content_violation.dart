@@ -17,8 +17,8 @@ import '../../../../../../../core/services/system.dart';
 class ContentViolationWidget extends StatelessWidget {
   final ContentData data;
   final String text;
-
-  const ContentViolationWidget({Key? key, required this.data, this.text = ''}) : super(key: key);
+  final double? radius;
+  const ContentViolationWidget({Key? key, required this.data, this.text = '', this.radius}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class ContentViolationWidget extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(radius??16),
           color: Color(0xFFE6094B),
         ),
         child: Row(

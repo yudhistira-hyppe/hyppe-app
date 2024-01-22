@@ -221,7 +221,7 @@ class PreviewDiaryNotifier with ChangeNotifier {
     }
   }
 
-  void navigateToShortVideoPlayer(BuildContext context, int index, {List<ContentData>? data}) async {
+  void navigateToShortVideoPlayer(BuildContext context, int index, {List<ContentData>? data, Function(int e)? function, bool? isMute, int? seekPosition}) async {
     final connect = await _system.checkConnections();
     if (connect) {
       _routing.move(
@@ -232,6 +232,9 @@ class PreviewDiaryNotifier with ChangeNotifier {
           page: contentsQuery.page,
           limit: contentsQuery.limit,
           type: TypePlaylist.landingpage,
+          function: function,
+          ismute: isMute,
+          seekPosition: seekPosition,
         ),
       );
     } else {

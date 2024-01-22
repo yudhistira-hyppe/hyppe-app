@@ -4,6 +4,7 @@ import 'package:hyppe/core/bloc/postviewer/bloc.dart';
 import 'package:hyppe/core/bloc/postviewer/state.dart';
 import 'package:hyppe/core/bloc/reaction/bloc.dart';
 import 'package:hyppe/core/bloc/reaction/state.dart';
+import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/comment/comments.dart';
 import 'package:hyppe/core/models/collection/comment/update_comment_reaction.dart';
@@ -23,7 +24,8 @@ import 'package:provider/provider.dart';
 
 class LikeNotifier with ChangeNotifier {
   LocalizationModelV2 language = LocalizationModelV2();
-
+  StatusFollowing statusFollowingViewer = StatusFollowing.requested;
+  
   translate(LocalizationModelV2 translate) {
     language = translate;
 
@@ -176,8 +178,9 @@ class LikeNotifier with ChangeNotifier {
   }
 
   void viewLikeContent(BuildContext context, postId, eventType, title, emailData) {
-    final email = SharedPreference().readStorage(SpKeys.email);
-    if (email == emailData) ShowBottomSheet.onShowUserViewContent(context, postId: postId, eventType: eventType, title: title);
+    // final email = SharedPreference().readStorage(SpKeys.email);
+    // if (email == emailData) 
+    ShowBottomSheet.onShowUserViewContent(context, postId: postId, eventType: eventType, title: title);
   }
 
   Future getLikeView(BuildContext context, postId, eventType, limit, {bool isScroll = false}) async {

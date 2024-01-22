@@ -32,6 +32,7 @@ class CustomDescContent extends StatefulWidget {
   final bool? isloading;
 
   final Function(bool val)? callback;
+  final Function(bool val)? callbackIsMore;
 
   CustomDescContent({
     Key? key,
@@ -40,6 +41,7 @@ class CustomDescContent extends StatefulWidget {
     this.trimLength = 240,
     this.textAlign,
     this.callback,
+    this.callbackIsMore,
     this.hrefStyle,
     this.normStyle,
     this.expandStyle,
@@ -69,6 +71,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
     (_readMore ? 'test click seeMore' : 'test click seeLess ').logger();
     setState(() {
       _readMore = !_readMore;
+      widget.callbackIsMore!(_readMore);
     });
   }
 

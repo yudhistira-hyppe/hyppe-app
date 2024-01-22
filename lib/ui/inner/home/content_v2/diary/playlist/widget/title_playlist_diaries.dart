@@ -124,6 +124,13 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                   ),
                   Row(
                     children: [
+                      Visibility(
+                        visible: (data?.saleAmount == 0 && (data?.certified ?? false)),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: IconOwnership(correct: true),
+                        ),
+                      ),
                       (data?.saleAmount ?? 0) > 0
                           ? const Padding(
                               padding: EdgeInsets.all(2.0),
@@ -194,13 +201,7 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                               ),
                             )
                           : const SizedBox(),
-                      Visibility(
-                        visible: (data?.saleAmount == 0 && (data?.certified ?? false)),
-                        child: const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: IconOwnership(correct: true),
-                        ),
-                      ),
+
                       // SizedBox(
                       //   width: 40,
                       //   height: 40,

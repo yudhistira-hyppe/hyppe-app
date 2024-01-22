@@ -254,7 +254,7 @@ class UserBloc {
     );
   }
 
-  Future guestMode(BuildContext context, { required String email, String? latitude, String? longtitude}) async {
+  Future guestMode(BuildContext context, {required String email, String? latitude, String? longtitude}) async {
     setUserFetch(UserFetch(UserState.loading));
     final lang = SharedPreference().readStorage(SpKeys.isoCode);
     deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
@@ -276,7 +276,7 @@ class UserBloc {
 
     await Repos().reposPost(
       context,
-          (onResult) {
+      (onResult) {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUserFetch(UserFetch(UserState.LoginError, data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
@@ -284,7 +284,7 @@ class UserBloc {
           SharedPreference().removeValue(SpKeys.referralFrom);
         }
       },
-          (errorData) {
+      (errorData) {
         ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setUserFetch(UserFetch(UserState.LoginError));
       },
@@ -513,13 +513,13 @@ class UserBloc {
   }) async {
     bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
 
-    if(!(isGuest ?? true)){
+    if (!(isGuest ?? true)) {
       setUserFetch(UserFetch(UserState.loading));
       var formData = FormData();
       // formData.fields.add(MapEntry('search', search ?? SharedPreference().readStorage(SpKeys.email)));
       await Repos().reposPost(
         context,
-            (onResult) {
+        (onResult) {
           if ((onResult.statusCode ?? 300) != 202) {
             setUserFetch(UserFetch(UserState.getUserProfilesError));
           } else {
@@ -527,7 +527,7 @@ class UserBloc {
             setUserFetch(UserFetch(UserState.getUserProfilesSuccess, data: _result));
           }
         },
-            (errorData) {
+        (errorData) {
           context.read<ErrorService>().addErrorObject(ErrorType.gGetUserDetail, errorData.message);
           setUserFetch(UserFetch(UserState.getUserProfilesError));
         },
@@ -541,7 +541,6 @@ class UserBloc {
         withAlertMessage: withAlertMessage,
       );
     }
-
   }
 
   Future logOut(

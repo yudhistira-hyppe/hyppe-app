@@ -120,7 +120,6 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
     lastOffset = -10;
     mn = Provider.of<MainNotifier>(context, listen: false);
     _pageController = PageController(initialPage: widget.argument.index.toInt());
-
     _curIdx = widget.argument.index.toInt();
     _lastCurIndex = widget.argument.index.toInt();
 
@@ -150,6 +149,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
     fAliplayer?.pause();
     fAliplayer?.setAutoPlay(true);
     vidConfig();
+    isMute = widget.argument.ismute ?? false;
     // fAliplayer?.setLoop(true);
     fAliplayer?.setMuted(isMute);
 
@@ -183,6 +183,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
       });
       isPlay = true;
       dataSelected?.isDiaryPlay = true;
+      fAliplayer?.seekTo(widget.argument.seekPosition ?? 0, 1);
       // _initAds(context);
     });
     fAliplayer?.setOnRenderingStart((playerId) {
@@ -482,7 +483,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
     if (data.reportedStatus == 'BLURRED') {
     } else {
       print("=====prepare=====");
-      fAliplayer?.prepare();
+      await fAliplayer?.prepare().then((value) async {});
     }
     // this syntax below to prevent video play after changing video
     Future.delayed(const Duration(seconds: 1), () {
@@ -756,119 +757,127 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
     SizeConfig().init(context);
     context.select((ErrorService value) => value.getError(ErrorType.pic));
     // AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-      ),
-      child: Consumer2<PreviewDiaryNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
-        return PageView.builder(
-          controller: _pageController,
-          scrollDirection: Axis.vertical,
-          // controller: notifier.scrollController,
-          // scrollDirection: Axis.horizontal,
-          itemCount: notifier.diaryData?.length,
-          onPageChanged: (index) async {
-            _curIdx = index;
-            if (_lastCurIndex != _curIdx) {
-              if (!isShowingDialog) {
-                globalAdsPopUp?.pause();
-              }
-              context.read<VideoNotifier>().currentPostID = notifier.diaryData?[index].postID ?? '';
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: const SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.light, statusBarIconBrightness: Brightness.light),
+        child: Consumer2<PreviewDiaryNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
+          return PageView.builder(
+            controller: _pageController,
+            scrollDirection: Axis.vertical,
+            // controller: notifier.scrollController,
+            // scrollDirection: Axis.horizontal,
+            itemCount: notifier.diaryData?.length,
+            onPageChanged: (index) async {
               _curIdx = index;
-              _lastCurPostId = _curPostId;
+              if (_lastCurIndex != _curIdx) {
+                if (!isShowingDialog) {
+                  globalAdsPopUp?.pause();
+                }
 
-              _curPostId = notifier.diaryData?[index].postID ?? index.toString();
-              // if (_lastCurIndex != _curIdx) {
-              final indexList = notifier.diaryData?.indexWhere((element) => element.postID == _curPostId);
-              // final latIndexList = notifier.diaryData?.indexWhere((element) => element.postID == _lastCurPostId);
+                //====scrollfunction
 
-              // fAliplayer?.destroy();
-              fAliplayer?.stop();
-              fAliplayer?.clearScreen();
-              // Wakelock.disable();
-              // initAlipayer();
+                // widget.argument.function!(100);
 
-              if (mounted) {
-                setState(() {
-                  Future.delayed(Duration(milliseconds: 400), () {
-                    itemHeight = notifier.diaryData?[indexList ?? 0].height ?? 0;
-                  });
-                });
-              }
-              // final totalWithAds = notifier.diaryData?.where((element) => element.inBetweenAds != null).length;
+                //===================
 
-              Future.delayed(const Duration(milliseconds: 700), () {
-                start(Routing.navigatorKey.currentContext ?? context, notifier.diaryData?[index] ?? ContentData());
-                System().increaseViewCount2(Routing.navigatorKey.currentContext ?? context, notifier.diaryData?[index] ?? ContentData(), check: false);
-              });
-              if (notifier.diaryData?[index].certified ?? false) {
-                System().block(Routing.navigatorKey.currentContext ?? context);
-              } else {
-                System().disposeBlock();
-              }
+                context.read<VideoNotifier>().currentPostID = notifier.diaryData?[index].postID ?? '';
+                _curIdx = index;
+                _lastCurPostId = _curPostId;
 
-              if (indexList == (notifier.diaryData?.length ?? 0) - 1) {
-                Future.delayed(const Duration(milliseconds: 1000), () async {
-                  await context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {
-                    // notifier.getTemp(indexList, latIndexList, indexList);
-                  });
-                });
-              } else {
-                Future.delayed(const Duration(milliseconds: 2000), () {
-                  // notifier.getTemp(indexList, latIndexList, indexList);
-                });
-              }
+                _curPostId = notifier.diaryData?[index].postID ?? index.toString();
+                // if (_lastCurIndex != _curIdx) {
+                final indexList = notifier.diaryData?.indexWhere((element) => element.postID == _curPostId);
+                // final latIndexList = notifier.diaryData?.indexWhere((element) => element.postID == _lastCurPostId);
 
-              ///ADS IN BETWEEN === Hariyanto Lukman ===
-              if (!notifier.loadAds) {
-                if ((notifier.diaryData?.length ?? 0) > notifier.nextAdsShowed) {
-                  notifier.loadAds = true;
-                  context.getInBetweenAds().then((value) {
-                    if (value != null) {
-                      notifier.setAdsData(index, value);
-                    } else {
-                      notifier.loadAds = false;
-                    }
+                // fAliplayer?.destroy();
+                fAliplayer?.stop();
+                fAliplayer?.clearScreen();
+                // Wakelock.disable();
+                // initAlipayer();
+
+                if (mounted) {
+                  setState(() {
+                    Future.delayed(Duration(milliseconds: 400), () {
+                      itemHeight = notifier.diaryData?[indexList ?? 0].height ?? 0;
+                    });
                   });
                 }
+                // final totalWithAds = notifier.diaryData?.where((element) => element.inBetweenAds != null).length;
+
+                Future.delayed(const Duration(milliseconds: 700), () {
+                  start(Routing.navigatorKey.currentContext ?? context, notifier.diaryData?[index] ?? ContentData());
+                  System().increaseViewCount2(Routing.navigatorKey.currentContext ?? context, notifier.diaryData?[index] ?? ContentData(), check: false);
+                });
+                if (notifier.diaryData?[index].certified ?? false) {
+                  System().block(Routing.navigatorKey.currentContext ?? context);
+                } else {
+                  System().disposeBlock();
+                }
+
+                if (indexList == (notifier.diaryData?.length ?? 0) - 1) {
+                  Future.delayed(const Duration(milliseconds: 1000), () async {
+                    await context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {
+                      // notifier.getTemp(indexList, latIndexList, indexList);
+                    });
+                  });
+                } else {
+                  Future.delayed(const Duration(milliseconds: 2000), () {
+                    // notifier.getTemp(indexList, latIndexList, indexList);
+                  });
+                }
+
+                ///ADS IN BETWEEN === Hariyanto Lukman ===
+                if (!notifier.loadAds) {
+                  if ((notifier.diaryData?.length ?? 0) > notifier.nextAdsShowed) {
+                    notifier.loadAds = true;
+                    context.getInBetweenAds().then((value) {
+                      if (value != null) {
+                        notifier.setAdsData(index, value);
+                      } else {
+                        notifier.loadAds = false;
+                      }
+                    });
+                  }
+                }
+                // _lastCurIndex = _curIdx;
               }
-              // _lastCurIndex = _curIdx;
-            }
 
-            _lastCurIndex = _curIdx;
-          },
-          itemBuilder: (context, index) {
-            if (notifier.diaryData == null || home.isLoadingDiary) {
-              fAliplayer?.pause();
-              // _lastCurIndex = -1;
-              _lastCurPostId = '';
-              return CustomShimmer(
-                width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                height: 168,
-                radius: 8,
-                margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-              );
-            } else if (index == notifier.diaryData?.length && notifier.hasNext) {
-              return UnconstrainedBox(
-                child: Container(
-                  alignment: Alignment.center,
-                  width: 80 * SizeConfig.scaleDiagonal,
-                  height: 80 * SizeConfig.scaleDiagonal,
-                  child: const CustomLoading(),
-                ),
-              );
-            }
-            // if (_curIdx == 0 && notifier.diaryData?[0].reportedStatus == 'BLURRED') {
-            if (notifier.diaryData?[0].reportedStatus == 'BLURRED') {
-              isPlay = false;
-              fAliplayer?.stop();
-            }
+              _lastCurIndex = _curIdx;
+            },
+            itemBuilder: (context, index) {
+              if (notifier.diaryData == null || home.isLoadingDiary) {
+                fAliplayer?.pause();
+                // _lastCurIndex = -1;
+                _lastCurPostId = '';
+                return CustomShimmer(
+                  width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                  height: 168,
+                  radius: 8,
+                  margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                  padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                );
+              } else if (index == notifier.diaryData?.length && notifier.hasNext) {
+                return UnconstrainedBox(
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: 80 * SizeConfig.scaleDiagonal,
+                    height: 80 * SizeConfig.scaleDiagonal,
+                    child: const CustomLoading(),
+                  ),
+                );
+              }
+              // if (_curIdx == 0 && notifier.diaryData?[0].reportedStatus == 'BLURRED') {
+              if (notifier.diaryData?[0].reportedStatus == 'BLURRED') {
+                isPlay = false;
+                fAliplayer?.stop();
+              }
 
-            return itemDiary(context, notifier, index, home);
-          },
-        );
-      }),
+              return itemDiary(context, notifier, index, home);
+            },
+          );
+        }),
+      ),
     );
   }
 
@@ -978,19 +987,38 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                                       ),
                                     )
                                   : Container(),
+                              Align(
+                                alignment: Alignment.center,
+                                child: AnimatedOpacity(
+                                  opacity: opacityLevel,
+                                  duration: const Duration(milliseconds: 500),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Opacity(
+                                      opacity: 0.4,
+                                      child: Icon(
+                                        isPause ? Icons.play_arrow_rounded : Icons.pause_rounded,
+                                        size: 100,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
                               // _buildProgressBar(SizeConfig.screenWidth!, 500),
                               !notifier.connectionError
                                   ? Positioned.fill(
                                       child: GestureDetector(
                                         onTap: () {
-                                          context.read<PreviewDiaryNotifier>().navigateToShortVideoPlayer(context, index);
-                                          fAliplayer?.play();
-                                          if (mounted) {
-                                            setState(() {
-                                              isMute = !isMute;
-                                            });
-                                          }
-                                          fAliplayer?.setMuted(isMute);
+                                          // context.read<PreviewDiaryNotifier>().navigateToShortVideoPlayer(context, index);
+                                          // fAliplayer?.play();
+                                          // if (mounted) {
+                                          //   setState(() {
+                                          //     isMute = !isMute;
+                                          //   });
+                                          // }
+                                          // fAliplayer?.setMuted(isMute);
+                                          widget.argument.function!(1);
                                         },
                                         onDoubleTap: () {
                                           final _likeNotifier = context.read<LikeNotifier>();
@@ -1040,7 +1068,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                                               child: ImageFiltered(
                                                 imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
                                                 child: Image(
-                                                  // width: SizeConfig.screenWidth,
+                                                  width: SizeConfig.screenWidth,
                                                   // height: MediaQuery.of(context).size.width * 16.0 / 11.0,
                                                   image: imageProvider,
                                                   fit: BoxFit.cover,
@@ -1049,12 +1077,12 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                                             )
                                           : Container(
                                               // const EdgeInsets.symmetric(horizontal: 4.5),
-                                              // width: SizeConfig.screenWidth,
+                                              width: SizeConfig.screenWidth,
                                               // height: MediaQuery.of(context).size.width * 16.0 / 11.0,
                                               decoration: BoxDecoration(
                                                 image: DecorationImage(
                                                   image: imageProvider,
-                                                  fit: BoxFit.cover,
+                                                  fit: BoxFit.contain,
                                                 ),
                                                 borderRadius: BorderRadius.circular(16.0),
                                               ),
@@ -1101,7 +1129,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                                     )
                                   : const SizedBox.shrink(),
 
-                              blurContentWidget(context, data ?? ContentData()),
+                              // blurContentWidget(context, data ?? ContentData()),
                             ],
                           ),
                         ],
@@ -1136,17 +1164,16 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      // storyComplete(not);
+                      //storyComplete(not);
                       if (isPause) {
                         play();
-                        print('DiaryPlayer pause');
                       } else {
                         pause();
-                        print('DiaryPlayer play');
                       }
                       setState(() {
                         opacityLevel = 1.0;
                       });
+
                       Future.delayed(const Duration(seconds: 1), () {
                         opacityLevel = 0.0;
                         setState(() {});
@@ -1234,24 +1261,6 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                     animatedController: animatedController,
                   ),
 
-            Align(
-              alignment: Alignment.center,
-              child: AnimatedOpacity(
-                opacity: opacityLevel,
-                duration: const Duration(milliseconds: 500),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Opacity(
-                    opacity: 0.4,
-                    child: Icon(
-                      isPause ? Icons.play_arrow_rounded : Icons.pause_rounded,
-                      size: 100,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            ),
             Align(
               alignment: Alignment.bottomCenter,
               child: data?.email == SharedPreference().readStorage(SpKeys.email) && (data?.reportedStatus == 'OWNED')

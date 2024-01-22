@@ -247,10 +247,10 @@ class UrlConstants {
   static const String getVideoApsara = "$postRouteV2/getvideo";
 
   /// post => Post Contents
-  static const String createuserposts = "$postRouteV2/createpost/v2";
+  static const String createuserposts = "$postRouteV2/createpost";
 
   /// post => Update Contents
-  static const String updatepost = "$postRouteV2/updatepost/v2";
+  static const String updatepost = "$postRouteV2/updatepost";
 
   /// post => post to change value key isViewed
   static const String postViewer = "$postRouteV2/postviewer";
@@ -265,13 +265,13 @@ class UrlConstants {
   static const String getuserprofile = "$userRoute/getuserprofile/v2";
 
   /// post => Get User Profiles by username
-  static const String getProfileByUser = "$getuserprofile/byusername/v2";
+  static const String getProfileByUser = "$userRoute/getuserprofile/byusername/v2";
 
   /// post => Log out
   static const String logout = "$userRoute/logout";
 
   /// post => Interactives
-  static const String interactive = "$postRouteV2/interactive/v2";
+  static const String interactive = "$postRouteV2/interactive";
 
   /// post => Get Interactives
   static const String getInnteractives = "$postRouteV2/getinteractives/v2";
@@ -328,7 +328,7 @@ class UrlConstants {
   static const String postBuyContent = "$transactionRoute/v2";
 
   /// post => Get History Transaction
-  static const String transactionHistorys = "$transactionRoute/historys";
+  static const String transactionHistorys = "$transactionRoute/historys/v2";
 
   /// post => Get History Transaction
   static const String detailTransactionHistorys = "$transactionRoute/historys/details/v2";
@@ -337,7 +337,7 @@ class UrlConstants {
   static const String detailWithdrawal = "$transactionRoute/withdraw/listdetail";
 
   /// post => Get Withdraw Detail
-  static const String withdraw = "$transactionRoute/withdraw";
+  static const String withdraw = "$transactionRoute/withdraw/v2";
 
   /// post => Get Withdraw Detail
   static const String boostContent = "$transactionRoute/boostcontent";

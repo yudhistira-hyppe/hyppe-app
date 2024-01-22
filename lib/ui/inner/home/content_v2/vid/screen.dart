@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_aliplayer/flutter_alilistplayer.dart';
@@ -32,6 +34,7 @@ import 'package:hyppe/ui/inner/home/content_v2/vid/widget/vid_player_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail_report.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
+import 'package:hyppe/ui/inner/home/widget/view_like.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -1089,10 +1092,30 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                           ],
                                         ),
                                         twelvePx,
-                                        Text(
-                                          "${vidData.insight?.likes}  ${lang?.like}",
-                                          style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                                        RichText(
+                                          text: TextSpan(
+                                            children: [
+                                              TextSpan(
+                                                text: "${vidData.insight?.likes} ${lang!.like}",
+                                                recognizer: TapGestureRecognizer()..onTap = () => Navigator.push(context, CupertinoPageRoute(builder: (context) => ViewLiked(postId: vidData.postID??'', eventType: 'LIKE',))),
+                                                style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                                              ),
+                                              const TextSpan(
+                                                text: " . ",
+                                                style: TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 22),
+                                              ),
+                                              TextSpan(
+                                                text: "${vidData.insight!.views?.getCountShort()} ${lang!.views}",
+                                                recognizer: TapGestureRecognizer()..onTap = () => Navigator.push(context, CupertinoPageRoute(builder: (context) => ViewLiked(postId: vidData.postID??'', eventType: 'VIEW',))),
+                                                style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                                              ),
+                                            ]
+                                          ),
                                         ),
+                                        // Text(
+                                        //   "${vidData.insight?.likes}  ${lang?.like}",
+                                        //   style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                                        // ),
                                       ],
                                     ),
                                   ),

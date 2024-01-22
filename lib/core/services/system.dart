@@ -66,6 +66,7 @@ import 'package:exif/exif.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 import '../models/collection/advertising/view_ads_request.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 class System {
   System._private();
@@ -2055,5 +2056,33 @@ class System {
     } else {
       return forUser;
     }
+  }
+
+  void analyticSetUser(String name) async {
+    await FirebaseAnalytics.instance.setUserId(
+      id: SharedPreference().readStorage(SpKeys.userID),
+    );
+    await FirebaseAnalytics.instance.setUserProperty(
+      name: SharedPreference().readStorage(SpKeys.email),
+      value: name,
+    );
+  }
+
+  void analyticSetScreen(String screenName, {String? subScreenName}) async {
+    await FirebaseAnalytics.instance.setCurrentScreen(
+      screenName: screenName,
+      screenClassOverride: subScreenName ?? '',
+    );
+  }
+
+  void analyticLogEvent(String nameLog, Map<String, Object> data) async {
+    await FirebaseAnalytics.instance
+        .logEvent(
+      name: nameLog,
+      parameters: data,
+    )
+        .whenComplete(() {
+      print("sudah kirim analitic");
+    });
   }
 }

@@ -4,6 +4,8 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
@@ -42,6 +44,7 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
+import 'package:hyppe/ui/inner/home/widget/view_like.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
@@ -56,6 +59,7 @@ import 'package:showcaseview/showcaseview.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import '../../../../../ux/path.dart';
 import '../../../../constant/entities/report/notifier.dart';
+// import 'fullscreen/pic_fullscreen_page.dart';
 
 class HyppePreviewPic extends StatefulWidget {
   final ScrollController? scrollController;
@@ -104,7 +108,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   // ModeTypeAliPLayer? _playMode = ModeTypeAliPLayer.auth;
   LocalizationModelV2? lang;
   ContentData? dataSelected;
-  bool isMute = true;
+  // bool isMute = true;
   String email = '';
   // String statusKyc = '';
   bool isInPage = true;
@@ -123,6 +127,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
   @override
   void initState() {
+    print('data screen pic');
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppePreviewPic');
     final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
     lang = context.read<TranslateNotifierV2>().translate;
@@ -152,31 +157,31 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
 
       //scroll
-      if (mounted) {
-        Future.delayed(Duration(milliseconds: 500), () {
-          print("=========== global key prirnt ${widget.scrollController} ");
-          widget.scrollController?.addListener(() async {
-            double offset = widget.scrollController?.position.pixels ?? 0;
-            if (mounted) await toPosition(offset, notifier);
-          });
-        });
-      }
+      // if (mounted) {
+      //   Future.delayed(Duration(milliseconds: 500), () {
+      //     print("=========== global key prirnt ${widget.scrollController} ");
+      //     widget.scrollController?.addListener(() async {
+      //       double offset = widget.scrollController?.position.pixels ?? 0;
+      //       if (mounted) await toPosition(offset, notifier);
+      //     });
+      //   });
+      // }
 
-      _initListener();
+      _initListener(notifier);
     });
     context.read<HomeNotifier>().removeWakelock();
 
     super.initState();
   }
 
-  _initListener() {
+  _initListener(PreviewPicNotifier notifier) {
     fAliplayer?.setOnEventReportParams((params, playerId) {
       print("EventReportParams=${params}");
     });
     fAliplayer?.setOnPrepared((playerId) {
       // Fluttertoast.showToast(msg: "OnPrepared ");
       if (SharedPreference().readStorage(SpKeys.isShowPopAds)) {
-        isMute = true;
+        notifier.isMute = true;
         fAliplayer?.pause();
       }
 
@@ -310,15 +315,15 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   Future toPosition(double offset, PreviewPicNotifier notifier) async {
     double totItemHeight = 0;
     double totItemHeightParam = 0;
-    // print("======== ${offset}---====");
+    print("======== to position ${offset}---====");
     if (offset < 10) {
       itemIndex = 0;
     }
 
     // if (offset >= lastOffset) {
-    // print("============== to position");
+    print("============== to position");
     if (!scroolUp) {
-      // print("============== $scroolUp");
+      print("============== $scroolUp");
       for (var i = 0; i <= itemIndex; i++) {
         if (i == itemIndex) {
           totItemHeightParam += (notifier.pic?[i].height ?? 0.0) * 30 / 100;
@@ -330,15 +335,23 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
       var sizeMax = (SizeConfig.screenHeight ?? 0) + (SizeConfig.screenHeight ?? 0) * 0.633;
       if ((notifier.pic?.length ?? 0) > (_curIdx + 1)) {
+        print("====erpppppp");
+        print("====offset $offset");
+        print("====totItemHeightParam $totItemHeightParam");
+        print("====totItemHeightParam $sizeMax");
+
         if (offset >= totItemHeightParam && (notifier.pic?[itemIndex + 1].height ?? 0) <= sizeMax) {
           var position = totItemHeight;
           // if (notifier.pic?[_curIdx + 1].height >= sizeMax) {
           //   position += notifier.pic?[_curIdx + 1].height;
           // }
           if (!homeClick) {
-            if (mounted) {
-              widget.scrollController?.animateTo(position, duration: Duration(milliseconds: 200), curve: Curves.ease);
+            print("====erpppppp");
+            try {
+              widget.scrollController?.animateTo(position, duration: const Duration(milliseconds: 200), curve: Curves.ease);
               itemIndex++;
+            } catch (e) {
+              print("====erroorrroooo $e");
             }
           }
         }
@@ -428,7 +441,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     });
   }
 
-  void start(BuildContext context, ContentData data) async {
+  void start(BuildContext context, ContentData data, PreviewPicNotifier notifier) async {
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
 
     fAliplayer?.stop();
@@ -482,10 +495,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     //   /// Specify whether to enable the cache feature.
     // };
     // fAliplayer?.setCacheConfig(map);
-    print("sedang prepare");
-    print("sedang prepare $isMute");
     fAliplayer?.prepare();
-    if (isMute) {
+    if (notifier.isMute) {
       fAliplayer?.setMuted(true);
     }
     // fAliplayer?.play();
@@ -819,6 +830,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   Widget itemPict(BuildContext context, PreviewPicNotifier notifier, int index, HomeNotifier homeNotifier) {
     var picData = notifier.pic?[index];
     final isAds = picData?.inBetweenAds != null && picData?.postID == null;
+
     return picData?.isContentLoading ?? false
         ? Builder(builder: (context) {
             Future.delayed(const Duration(seconds: 1), () {
@@ -1065,7 +1077,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                         if (picData?.music != null) {
                                           print("ada musiknya ${picData?.music}");
                                           Future.delayed(const Duration(milliseconds: 100), () {
-                                            start(context, picData ?? ContentData());
+                                            start(context, picData ?? ContentData(), notifier);
                                           });
                                         } else {
                                           fAliplayer?.stop();
@@ -1197,13 +1209,24 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                           // ),
 
                                           GestureDetector(
-                                            onTap: () {
-                                              if (picData?.reportedStatus != 'BLURRED') {
+                                            onTap: () async {
+                                              // if (picData?.reportedStatus != 'BLURRED') {
+                                              //   // fAliplayer?.play();
+                                              //   setState(() {
+                                              //     notifier.isMute = true;
+                                              //   });
+                                              //   fAliplayer?.setMuted(notifier.isMute);
+                                              // }
+
+                                              // fAliplayer?.pause();
+                                              var res = await Routing().move(Routes.picFullScreenDetail, argument: PicFullscreenArgument(picData: notifier.pic!, index: index, scrollPic: false));
+                                              if (res != null || res == null) {
                                                 fAliplayer?.play();
-                                                setState(() {
-                                                  isMute = !isMute;
-                                                });
-                                                fAliplayer?.setMuted(isMute);
+                                                fAliplayer?.setMuted(notifier.isMute);
+                                              }
+
+                                              if (res is int) {
+                                                print('index screen $index');
                                               }
                                             },
                                             onDoubleTap: () {
@@ -1241,39 +1264,32 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                               ? ("${picData?.mediaEndpoint}?key=${picData?.valueCache}")
                                                               : ("${picData?.fullThumbPath}&key=${picData?.valueCache}"),
                                                           imageBuilder: (context, imageProvider) {
-                                                            return InkWell(
-                                                              onTap: () {
-                                                                // Navigator.pushNamed(context, Routes.picFullScreenDetail, arguments: picData);
-                                                                Routing().move(Routes.picFullScreenDetail,
-                                                                    argument: PicFullscreenArgument(imageProvider: imageProvider, picData: notifier.pic!, index: index));
-                                                              },
-                                                              child: ClipRRect(
-                                                                borderRadius: BorderRadius.circular(20), // Image border
-                                                                child: ImageSize(
-                                                                  onChange: (Size size) {
-                                                                    if ((picData?.imageHeightTemp ?? 0) == 0) {
-                                                                      setState(() {
-                                                                        picData?.imageHeightTemp = size.height;
-                                                                      });
-                                                                    }
-                                                                  },
-                                                                  child: picData?.reportedStatus == 'BLURRED'
-                                                                      ? ImageFiltered(
-                                                                          imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                                                          child: Image(
-                                                                            image: imageProvider,
-                                                                            fit: BoxFit.fitHeight,
-                                                                            width: SizeConfig.screenWidth,
-                                                                            // height: picData?.imageHeightTemp == 0 ? null : picData?.imageHeightTemp,
-                                                                          ),
-                                                                        )
-                                                                      : Image(
+                                                            return ClipRRect(
+                                                              borderRadius: BorderRadius.circular(20), // Image border
+                                                              child: ImageSize(
+                                                                onChange: (Size size) {
+                                                                  if ((picData?.imageHeightTemp ?? 0) == 0) {
+                                                                    setState(() {
+                                                                      picData?.imageHeightTemp = size.height;
+                                                                    });
+                                                                  }
+                                                                },
+                                                                child: picData?.reportedStatus == 'BLURRED'
+                                                                    ? ImageFiltered(
+                                                                        imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                                                        child: Image(
                                                                           image: imageProvider,
                                                                           fit: BoxFit.fitHeight,
                                                                           width: SizeConfig.screenWidth,
-                                                                          // height: picData?.imageHeightTemp == 0 || (picData?.imageHeightTemp ?? 0) <= 100 ? null : picData?.imageHeightTemp,
+                                                                          // height: picData?.imageHeightTemp == 0 ? null : picData?.imageHeightTemp,
                                                                         ),
-                                                                ),
+                                                                      )
+                                                                    : Image(
+                                                                        image: imageProvider,
+                                                                        fit: BoxFit.fitHeight,
+                                                                        width: SizeConfig.screenWidth,
+                                                                        // height: picData?.imageHeightTemp == 0 || (picData?.imageHeightTemp ?? 0) <= 100 ? null : picData?.imageHeightTemp,
+                                                                      ),
                                                               ),
                                                             );
                                                           },
@@ -1326,7 +1342,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                               ),
                                             ),
                                           ),
-                                          _buildBody(context, SizeConfig.screenWidth, picData ?? ContentData()),
+                                          _buildBody(context, SizeConfig.screenWidth, picData ?? ContentData(), notifier),
                                           blurContentWidget(context, picData ?? ContentData()),
                                         ],
                                       ),
@@ -1468,10 +1484,42 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                         ],
                                       ),
                                       twelvePx,
-                                      Text(
-                                        "${picData?.insight?.likes}  ${notifier.language.like}",
-                                        style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                                      RichText(
+                                        text: TextSpan(children: [
+                                          TextSpan(
+                                            text: "${picData?.insight?.likes} ${notifier.language.like}",
+                                            recognizer: TapGestureRecognizer()
+                                              ..onTap = () => Navigator.push(
+                                                  context,
+                                                  CupertinoPageRoute(
+                                                      builder: (context) => ViewLiked(
+                                                            postId: picData?.postID ?? '',
+                                                            eventType: 'LIKE',
+                                                          ))),
+                                            style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                                          ),
+                                          const TextSpan(
+                                            text: " . ",
+                                            style: TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 22),
+                                          ),
+                                          TextSpan(
+                                            text: "${picData?.insight!.views?.getCountShort()} ${notifier.language.views}",
+                                            recognizer: TapGestureRecognizer()
+                                              ..onTap = () => Navigator.push(
+                                                  context,
+                                                  CupertinoPageRoute(
+                                                      builder: (context) => ViewLiked(
+                                                            postId: picData?.postID ?? '',
+                                                            eventType: 'VIEW',
+                                                          ))),
+                                            style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                                          ),
+                                        ]),
                                       ),
+                                      // Text(
+                                      //   "${picData?.insight?.likes}  ${notifier.language.like}",
+                                      //   style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                                      // ),
                                     ],
                                   ),
                                 ),
@@ -1553,7 +1601,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
           );
   }
 
-  Widget _buildBody(BuildContext context, width, ContentData data) {
+  Widget _buildBody(BuildContext context, width, ContentData data, PreviewPicNotifier notifier) {
     // final indexKeySell = mn?.tutorialData.indexWhere((element) => element.key == 'sell') ?? 0;
     // final indexKey = mn?.tutorialData.indexWhere((element) => element.key == 'protection') ?? 0;
 
@@ -1588,7 +1636,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
               child: GestureDetector(
                 onTap: () {
                   fAliplayer?.pause();
-                  context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID, fAliplayer: fAliplayer);
+                  context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID, fAliplayer: fAliplayer, title: lang!.inthisphoto);
                 },
                 child: const CustomIconWidget(
                   iconData: '${AssetPath.vectorPath}tag_people.svg',
@@ -1603,14 +1651,14 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
               child: GestureDetector(
                 onTap: () {
                   setState(() {
-                    isMute = !isMute;
+                    notifier.isMute = !notifier.isMute;
                   });
-                  fAliplayer?.setMuted(isMute);
+                  fAliplayer?.setMuted(notifier.isMute);
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: CustomIconWidget(
-                    iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
+                    iconData: notifier.isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
                     defaultColor: false,
                     height: 24,
                   ),

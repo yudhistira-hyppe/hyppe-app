@@ -24,11 +24,13 @@ class OnShowUserTagBottomSheet extends StatefulWidget {
   final List<TagPeople> value;
   final Function() function;
   final String postId;
+  final String? title;
   const OnShowUserTagBottomSheet({
     Key? key,
     required this.value,
     required this.function,
     required this.postId,
+    this.title,
   }) : super(key: key);
 
   @override
@@ -63,7 +65,7 @@ class _OnShowUserTagBottomSheetState extends State<OnShowUserTagBottomSheet> wit
                 padding: const EdgeInsets.all(8.0),
                 child: Center(
                   child: CustomTextWidget(
-                    textToDisplay: hyppeVid,
+                    textToDisplay: widget.title??hyppeVid,
                     textStyle: Theme.of(context).textTheme.titleMedium,
                     textAlign: TextAlign.start,
                   ),

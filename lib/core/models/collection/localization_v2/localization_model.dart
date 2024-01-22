@@ -1091,7 +1091,11 @@ class LocalizationModelV2 {
   String? noteShowView99;
   String? viewers;
   String? liveVideoHasStarted;
+  String? notLikeyet;
+  String? notviewyet;
+  String? inthisphoto;
   String? addATitle;
+  String? inThisDiary;
 
   LocalizationModelV2({
     this.login,
@@ -2186,7 +2190,11 @@ class LocalizationModelV2 {
     this.noteShowView99,
     this.viewers,
     this.liveVideoHasStarted,
+    this.notLikeyet,
+    this.notviewyet,
+    this.inthisphoto,
     this.addATitle,
+    this.inThisDiary,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -3300,6 +3308,10 @@ class LocalizationModelV2 {
     noteShowView99 = json['noteShowView99'];
     viewers = json['viewers'];
     liveVideoHasStarted = json['liveVideoHasStarted'];
+    notLikeyet = json['notLikeyet'];
+    notviewyet = json['notViewsyet'];
+    inthisphoto = json['inthisphoto'];
     addATitle = json['addATitle'];
+    inThisDiary = json['inThisDiary'];
   }
 }

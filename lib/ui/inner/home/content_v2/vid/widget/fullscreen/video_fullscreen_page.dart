@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
@@ -15,6 +16,7 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
+import 'package:hyppe/ui/constant/widget/button_boost.dart';
 import 'package:hyppe/ui/constant/widget/custom_appbar.dart';
 import 'package:hyppe/ui/constant/widget/custom_desc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -82,6 +84,8 @@ class VideoFullscreenPage extends StatefulWidget {
 }
 
 class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFirstLayoutMixin, SingleTickerProviderStateMixin {
+  final GlobalKey<ScaffoldState> _scaffoldKeyPlayer = GlobalKey<ScaffoldState>();
+
   PageController controller = PageController();
   late final AnimationController animatedController = AnimationController(vsync: this, duration: const Duration(seconds: 2))..repeat();
 
@@ -427,318 +431,310 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
     };
     print('view ads: ${widget.isAutoPlay ?? false}');
     return Consumer<VideoNotifier>(builder: (context, notifier, _) {
-      return WillPopScope(
-        onWillPop: () async {
-          widget.data.isLoading = true;
-          int changevalue;
-          changevalue = _currentPosition + 1000;
-          if (changevalue > _videoDuration) {
-            changevalue = _videoDuration;
-          }
-          // widget.fAliplayer?.pause();
-          setState(() {});
-          Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
-          return false;
+      return GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onPanDown: (detail) {
+          _initializeTimer();
         },
-        child: GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onPanDown: (detail) {
-            _initializeTimer();
-          },
-          child: Scaffold(
-            body: notifier.loadVideo
-                ? Container(
-                    color: Colors.black,
-                    child: const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  )
-                : widget.isAutoPlay ?? false
-                    ? PageView.builder(
-                        controller: controller,
-                        scrollDirection: Axis.vertical,
-                        itemCount: vidData?.length ?? 0,
-                        onPageChanged: (value) {
-                          curentIndex = value;
-                          scrollPage(vidData?[value].metadata?.height, vidData?[value].metadata?.width);
-                          if ((vidData?.length ?? 0) - 1 == curentIndex) {
-                            //get new data;
-                            getNewData();
-                          }
-                        },
-                        itemBuilder: (context, index) {
-                          if (index != curentIndex) {
-                            return Container(
-                              color: Colors.black,
-                            );
-                          }
-                          "================== isPause $isPause $isScrolled".logger();
-                          if (isScrolled) {
-                            // return Container(
-                            //   height: MediaQuery.of(context).size.height,
-                            //   width: MediaQuery.of(context).size.width,
-                            //   child: Center(child: Text("data ${index}")),
-                            // );
-                            print('view ads: 1');
+        child: Scaffold(
+          key: _scaffoldKeyPlayer,
+          body: notifier.loadVideo
+              ? Container(
+                  color: Colors.black,
+                  child: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+              : widget.isAutoPlay ?? false
+                  ? PageView.builder(
+                      controller: controller,
+                      scrollDirection: Axis.vertical,
+                      itemCount: vidData?.length ?? 0,
+                      onPageChanged: (value) {
+                        curentIndex = value;
+                        scrollPage(vidData?[value].metadata?.height, vidData?[value].metadata?.width);
+                        if ((vidData?.length ?? 0) - 1 == curentIndex) {
+                          //get new data;
+                          getNewData();
+                        }
+                      },
+                      itemBuilder: (context, index) {
+                        if (index != curentIndex) {
+                          return Container(
+                            color: Colors.black,
+                          );
+                        }
+                        "================== isPause $isPause $isScrolled".logger();
+                        if (isScrolled) {
+                          // return Container(
+                          //   height: MediaQuery.of(context).size.height,
+                          //   width: MediaQuery.of(context).size.width,
+                          //   child: Center(child: Text("data ${index}")),
+                          // );
+                          print('view ads: 1');
 
-                            return isloadingRotate
-                                ? Container(
-                                    color: Colors.black,
+                          return isloadingRotate
+                              ? Container(
+                                  color: Colors.black,
+                                  height: MediaQuery.of(context).size.height,
+                                  width: MediaQuery.of(context).size.width,
+                                  child: const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                )
+                              : OrientationBuilder(builder: (context, orientation) {
+                                  final player = VidPlayerPage(
+                                    // vidData: notifier.vidData,
+                                    fromFullScreen: true,
+                                    orientation: orientation,
+                                    playMode: (vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
+                                    dataSourceMap: map,
+                                    data: vidData?[index],
                                     height: MediaQuery.of(context).size.height,
                                     width: MediaQuery.of(context).size.width,
-                                    child: const Center(
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                  )
-                                : OrientationBuilder(builder: (context, orientation) {
-                                    final player = VidPlayerPage(
-                                      // vidData: notifier.vidData,
-                                      fromFullScreen: true,
-                                      orientation: orientation,
-                                      playMode: (vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
-                                      dataSourceMap: map,
-                                      data: vidData?[index],
-                                      height: MediaQuery.of(context).size.height,
-                                      width: MediaQuery.of(context).size.width,
-                                      inLanding: widget.isLanding,
-                                      fromDeeplink: false,
-                                      clearPostId: widget.clearPostId,
-                                      clearing: true,
-                                      isAutoPlay: true,
-                                      functionFullTriger: (value) {
-                                        print('===========hahhahahahaa===========');
-                                      },
-                                      isPlaying: !isPause,
-                                      onPlay: (exec) {},
-                                      getPlayer: (main, id) {},
-                                      getAdsPlayer: (ads) {
-                                        // notifier.vidData?[index].fAliplayerAds = ads;
-                                      },
-                                      autoScroll: () {
-                                        nextPage();
-                                      },
-                                      // fAliplayer: notifier.vidData?[index].fAliplayer,
-                                      // fAliplayerAds: notifier.vidData?[index].fAliplayerAds,
+                                    inLanding: widget.isLanding,
+                                    fromDeeplink: false,
+                                    clearPostId: widget.clearPostId,
+                                    clearing: true,
+                                    isAutoPlay: true,
+                                    functionFullTriger: (value) {
+                                      print('===========hahhahahahaa===========');
+                                    },
+                                    isPlaying: !isPause,
+                                    onPlay: (exec) {},
+                                    getPlayer: (main, id) {},
+                                    getAdsPlayer: (ads) {
+                                      // notifier.vidData?[index].fAliplayerAds = ads;
+                                    },
+                                    autoScroll: () {
+                                      nextPage();
+                                    },
+                                    // fAliplayer: notifier.vidData?[index].fAliplayer,
+                                    // fAliplayerAds: notifier.vidData?[index].fAliplayerAds,
+                                  );
+                                  if (orientation == Orientation.landscape) {
+                                    return Container(
+                                      width: context.getWidth(),
+                                      height: context.getHeight(),
+                                      child: player,
                                     );
-                                    if (orientation == Orientation.landscape) {
-                                      return Container(
-                                        width: context.getWidth(),
-                                        height: context.getHeight(),
-                                        child: player,
-                                      );
-                                    }
-                                    return player;
-                                  });
-                          } else {
-                            print('view ads: 2 ${notifier.isShowingAds} ${notifier.hasShowedAds}');
-                            return GestureDetector(
-                              onTap: () {
-                                onTapCtrl = true;
-                                setState(() {});
-                              },
-                              child: Stack(
-                                children: [
-                                  if (!notifier.isShowingAds)
-                                    Container(
-                                      width: context.getWidth(),
-                                      height: SizeConfig.screenHeight,
-                                      decoration: const BoxDecoration(color: Colors.black),
-                                      child: widget.aliPlayerView,
-                                    ),
-                                  if (!_showTipsWidget)
-                                    SizedBox(
-                                      width: context.getWidth(),
-                                      height: SizeConfig.screenHeight,
-                                      // padding: EdgeInsets.only(bottom: 25.0),
-                                      child: Offstage(offstage: false, child: _buildContentWidget(context, orientation)),
-                                    ),
-                                  Align(
-                                    alignment: Alignment.topCenter,
-                                    child: _buildController(
-                                      Colors.transparent,
-                                      Colors.white,
-                                      100,
-                                      context.getWidth(),
-                                      SizeConfig.screenHeight ?? 0,
-                                    ),
+                                  }
+                                  return player;
+                                });
+                        } else {
+                          print('view ads: 2 ${notifier.isShowingAds} ${notifier.hasShowedAds}');
+                          return GestureDetector(
+                            onTap: () {
+                              onTapCtrl = true;
+                              setState(() {});
+                            },
+                            child: Stack(
+                              children: [
+                                if (!notifier.isShowingAds)
+                                  Container(
+                                    width: context.getWidth(),
+                                    height: SizeConfig.screenHeight,
+                                    decoration: const BoxDecoration(color: Colors.black),
+                                    child: widget.aliPlayerView,
                                   ),
-                                  // if (Platform.isIOS)
-                                  AnimatedOpacity(
-                                    opacity: onTapCtrl || isPause ? 1.0 : 0.0,
-                                    duration: const Duration(milliseconds: 500),
-                                    onEnd: _onPlayerHide,
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 18.0),
-                                      child: CustomAppBar(
-                                          orientation: orientation,
-                                          data: widget.data,
-                                          currentPosition: _currentPosition,
-                                          currentPositionText: _currentPositionText,
-                                          videoDuration: _videoDuration,
-                                          showTipsWidget: _showTipsWidget,
-                                          isMute: isMute,
-                                          fAliplayer: widget.fAliplayer!,
-                                          onTap: () {
-                                            if (widget.data.email != email) {
-                                              // FlutterAliplayer? fAliplayer
-                                              context.read<PreviewPicNotifier>().reportContent(context, widget.data, fAliplayer: widget.data.fAliplayer, onCompleted: () async {
-                                                imageCache.clear();
-                                                imageCache.clearLiveImages();
-                                                await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
-                                              });
-                                            } else {
-                                              // if (_curIdx != -1) {
-                                              //   "=============== pause 11".logger();
-                                              //   notifier.vidData?[_curIdx].fAliplayer?.pause();
-                                              // }
+                                if (!_showTipsWidget)
+                                  SizedBox(
+                                    width: context.getWidth(),
+                                    height: SizeConfig.screenHeight,
+                                    // padding: EdgeInsets.only(bottom: 25.0),
+                                    child: Offstage(offstage: false, child: _buildContentWidget(context, orientation)),
+                                  ),
+                                Align(
+                                  alignment: Alignment.topCenter,
+                                  child: _buildController(
+                                    Colors.transparent,
+                                    Colors.white,
+                                    100,
+                                    context.getWidth(),
+                                    SizeConfig.screenHeight ?? 0,
+                                  ),
+                                ),
+                                // if (Platform.isIOS)
+                                AnimatedOpacity(
+                                  opacity: onTapCtrl || isPause ? 1.0 : 0.0,
+                                  duration: const Duration(milliseconds: 500),
+                                  onEnd: _onPlayerHide,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 18.0),
+                                    child: CustomAppBar(
+                                        orientation: orientation,
+                                        data: widget.data,
+                                        currentPosition: _currentPosition,
+                                        currentPositionText: _currentPositionText,
+                                        videoDuration: _videoDuration,
+                                        showTipsWidget: _showTipsWidget,
+                                        isMute: isMute,
+                                        onTapOnProfileImage: () {
+                                          System().navigateToProfile(context, widget.data.email ?? '');
+                                          widget.fAliplayer?.pause();
+                                          isPause = true;
+                                          setState(() {});
+                                        },
+                                        onTap: () {
+                                          if (widget.data.email != email) {
+                                            // FlutterAliplayer? fAliplayer
+                                            context.read<PreviewPicNotifier>().reportContent(context, widget.data, fAliplayer: widget.data.fAliplayer, onCompleted: () async {
+                                              imageCache.clear();
+                                              imageCache.clearLiveImages();
+                                              await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
+                                            });
+                                          } else {
+                                            // if (_curIdx != -1) {
+                                            //   "=============== pause 11".logger();
+                                            //   notifier.vidData?[_curIdx].fAliplayer?.pause();
+                                            // }
 
-                                              ShowBottomSheet().onShowOptionContent(
-                                                context,
-                                                contentData: widget.data,
-                                                captionTitle: hyppeVid,
-                                                onDetail: false,
-                                                isShare: widget.data.isShared,
-                                                onUpdate: () {
-                                                  (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
-                                                },
-                                                fAliplayer: widget.data.fAliplayer,
-                                              );
-                                            }
-                                          }),
+                                            ShowBottomSheet().onShowOptionContent(
+                                              context,
+                                              contentData: widget.data,
+                                              captionTitle: hyppeVid,
+                                              onDetail: false,
+                                              isShare: widget.data.isShared,
+                                              onUpdate: () {
+                                                (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
+                                              },
+                                              fAliplayer: widget.data.fAliplayer,
+                                            );
+                                          }
+                                        }),
+                                  ),
+                                ),
+                                if (isLoadingVid)
+                                  Container(
+                                    width: context.getWidth(),
+                                    height: SizeConfig.screenHeight,
+                                    padding: EdgeInsets.only(bottom: 20),
+                                    color: Colors.transparent,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        const CircularProgressIndicator(),
+                                        sixPx,
+                                        Text(
+                                          "$_loadingPercent%",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  if (isLoadingVid)
-                                    Container(
-                                      width: context.getWidth(),
-                                      height: SizeConfig.screenHeight,
-                                      padding: EdgeInsets.only(bottom: 20),
-                                      color: Colors.transparent,
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          const CircularProgressIndicator(),
-                                          sixPx,
-                                          Text(
-                                            "$_loadingPercent%",
-                                            style: TextStyle(color: Colors.white),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  if (notifier.isShowingAds && !notifier.hasShowedAds)
-                                    Container(
-                                      width: context.getWidth(),
-                                      height: SizeConfig.screenHeight,
-                                      decoration: const BoxDecoration(color: Colors.black),
-                                      child: notifier.adsAliPlayerView,
-                                    ),
-                                  if (notifier.isShowingAds && !notifier.hasShowedAds)
-                                    SizedBox(
-                                      width: context.getWidth(),
-                                      height: SizeConfig.screenHeight,
-                                      // padding: EdgeInsets.only(bottom: 25.0),
-                                      child: Offstage(offstage: false, child: _adsBuildContentWidget(context, Orientation.portrait, notifier)),
-                                    ),
-                                  checkDetail(context, notifier),
+                                if (notifier.isShowingAds && !notifier.hasShowedAds)
+                                  Container(
+                                    width: context.getWidth(),
+                                    height: SizeConfig.screenHeight,
+                                    decoration: const BoxDecoration(color: Colors.black),
+                                    child: notifier.adsAliPlayerView,
+                                  ),
+                                if (notifier.isShowingAds && !notifier.hasShowedAds)
+                                  SizedBox(
+                                    width: context.getWidth(),
+                                    height: SizeConfig.screenHeight,
+                                    // padding: EdgeInsets.only(bottom: 25.0),
+                                    child: Offstage(offstage: false, child: _adsBuildContentWidget(context, Orientation.portrait, notifier)),
+                                  ),
+                                checkDetail(context, notifier),
+                              ],
+                            ),
+                          );
+                        }
+                      })
+                  : GestureDetector(
+                      onTap: () {
+                        onTapCtrl = true;
+                        setState(() {});
+                      },
+                      child: Stack(
+                        children: [
+                          Container(
+                            width: context.getWidth(),
+                            height: SizeConfig.screenHeight,
+                            decoration: const BoxDecoration(color: Colors.black),
+                            child: widget.aliPlayerView,
+                          ),
+                          if (!_showTipsWidget)
+                            SizedBox(
+                              width: context.getWidth(),
+                              height: SizeConfig.screenHeight,
+                              // padding: EdgeInsets.only(bottom: 25.0),
+                              child: Offstage(offstage: false, child: _buildContentWidget(context, orientation)),
+                            ),
+                          Align(
+                            alignment: Alignment.topCenter,
+                            child: _buildController(
+                              Colors.transparent,
+                              Colors.white,
+                              100,
+                              context.getWidth(),
+                              SizeConfig.screenHeight ?? 0,
+                            ),
+                          ),
+                          // if (Platform.isIOS)
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: IconButton(
+                                onPressed: () {
+                                  int changevalue;
+                                  changevalue = _currentPosition + 1000;
+                                  if (changevalue > _videoDuration) {
+                                    changevalue = _videoDuration;
+                                  }
+                                  widget.data.isLoading = true;
+                                  setState(() {});
+                                  Navigator.pop(context,
+                                      VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
+                                },
+                                padding:
+                                    orientation == Orientation.portrait ? const EdgeInsets.symmetric(horizontal: 8.0, vertical: 42.0) : const EdgeInsets.symmetric(horizontal: 46.0, vertical: 8.0),
+                                icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg", defaultColor: false),
+                              ),
+                            ),
+                          ),
+                          if (isLoadingVid)
+                            Container(
+                              width: context.getWidth(),
+                              height: SizeConfig.screenHeight,
+                              padding: EdgeInsets.only(bottom: 20),
+                              color: Colors.transparent,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const CircularProgressIndicator(),
+                                  sixPx,
+                                  Text(
+                                    "$_loadingPercent%",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                 ],
                               ),
-                            );
-                          }
-                        })
-                    : GestureDetector(
-                        onTap: () {
-                          onTapCtrl = true;
-                          setState(() {});
-                        },
-                        child: Stack(
-                          children: [
+                            ),
+                          if (notifier.isShowingAds && !notifier.hasShowedAds)
                             Container(
                               width: context.getWidth(),
                               height: SizeConfig.screenHeight,
                               decoration: const BoxDecoration(color: Colors.black),
-                              child: widget.aliPlayerView,
+                              child: notifier.adsAliPlayerView,
                             ),
-                            if (!_showTipsWidget)
-                              SizedBox(
-                                width: context.getWidth(),
-                                height: SizeConfig.screenHeight,
-                                // padding: EdgeInsets.only(bottom: 25.0),
-                                child: Offstage(offstage: false, child: _buildContentWidget(context, orientation)),
-                              ),
-                            Align(
-                              alignment: Alignment.topCenter,
-                              child: _buildController(
-                                Colors.transparent,
-                                Colors.white,
-                                100,
-                                context.getWidth(),
-                                SizeConfig.screenHeight ?? 0,
-                              ),
+                          if (notifier.isShowingAds && !notifier.hasShowedAds)
+                            SizedBox(
+                              width: context.getWidth(),
+                              height: SizeConfig.screenHeight,
+                              // padding: EdgeInsets.only(bottom: 25.0),
+                              child: Offstage(offstage: false, child: _adsBuildContentWidget(context, Orientation.portrait, notifier)),
                             ),
-                            // if (Platform.isIOS)
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: IconButton(
-                                  onPressed: () {
-                                    int changevalue;
-                                    changevalue = _currentPosition + 1000;
-                                    if (changevalue > _videoDuration) {
-                                      changevalue = _videoDuration;
-                                    }
-                                    widget.data.isLoading = true;
-                                    setState(() {});
-                                    Navigator.pop(context,
-                                        VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
-                                  },
-                                  padding:
-                                      orientation == Orientation.portrait ? const EdgeInsets.symmetric(horizontal: 8.0, vertical: 42.0) : const EdgeInsets.symmetric(horizontal: 46.0, vertical: 8.0),
-                                  icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg", defaultColor: false),
-                                ),
-                              ),
-                            ),
-                            if (isLoadingVid)
-                              Container(
-                                width: context.getWidth(),
-                                height: SizeConfig.screenHeight,
-                                padding: EdgeInsets.only(bottom: 20),
-                                color: Colors.transparent,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    const CircularProgressIndicator(),
-                                    sixPx,
-                                    Text(
-                                      "$_loadingPercent%",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            if (notifier.isShowingAds && !notifier.hasShowedAds)
-                              Container(
-                                width: context.getWidth(),
-                                height: SizeConfig.screenHeight,
-                                decoration: const BoxDecoration(color: Colors.black),
-                                child: notifier.adsAliPlayerView,
-                              ),
-                            if (notifier.isShowingAds && !notifier.hasShowedAds)
-                              SizedBox(
-                                width: context.getWidth(),
-                                height: SizeConfig.screenHeight,
-                                // padding: EdgeInsets.only(bottom: 25.0),
-                                child: Offstage(offstage: false, child: _adsBuildContentWidget(context, Orientation.portrait, notifier)),
-                              ),
-                            checkDetail(context, notifier),
-                          ],
-                        ),
+                          checkDetail(context, notifier),
+                        ],
                       ),
-          ),
+                    ),
         ),
       );
     });
@@ -1233,243 +1229,296 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                   ),
                 )
               : null,
-          child: Stack(
-            children: [
-              Positioned(
-                right: 18,
-                bottom: 0,
-                child: Column(
-                  children: [
-                    Consumer<LikeNotifier>(
-                        builder: (context, likeNotifier, child) => buttonVideoRight(
-                            onFunctionTap: () {
-                              likeNotifier.likePost(context, widget.data);
-                            },
-                            iconData: '${AssetPath.vectorPath}${(widget.data.insight?.isPostLiked ?? false) ? 'liked.svg' : 'love-shadow.svg'}',
-                            value: '${widget.data.insight?.likes}',
-                            liked: widget.data.insight?.isPostLiked ?? false)),
-                    if (widget.data.allowComments ?? false)
-                      buttonVideoRight(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 18.0),
+            child: Stack(
+              children: [
+                Positioned(
+                  right: 0,
+                  bottom: 0,
+                  child: Column(
+                    children: [
+                      Consumer<LikeNotifier>(
+                          builder: (context, likeNotifier, child) => buttonVideoRight(
+                              onFunctionTap: () {
+                                likeNotifier.likePost(context, widget.data);
+                              },
+                              iconData: '${AssetPath.vectorPath}${(widget.data.insight?.isPostLiked ?? false) ? 'liked.svg' : 'love-shadow.svg'}',
+                              value: widget.data.insight!.likes! > 0 ? '${widget.data.insight?.likes}' : '${lang?.like}',
+                              liked: widget.data.insight?.isPostLiked ?? false)),
+                      if (widget.data.allowComments ?? false)
+                        buttonVideoRight(
                           onFunctionTap: () {
                             Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: widget.data.postID ?? '', fromFront: true, data: widget.data));
                           },
                           iconData: '${AssetPath.vectorPath}comment-shadow.svg',
-                          value: widget.data.comment!.length.toString()),
-                    if (widget.data.isShared ?? false)
-                      buttonVideoRight(
-                          onFunctionTap: () {
-                            context.read<VidDetailNotifier>().createdDynamicLink(context, data: widget.data);
-                          },
-                          iconData: '${AssetPath.vectorPath}share-shadow.svg',
-                          value: lang!.share ?? 'Share'),
-                    if ((widget.data.saleAmount ?? 0) > 0 && email != widget.data.email)
-                      buttonVideoRight(
-                          onFunctionTap: () async {
-                            widget.data.fAliplayer?.pause();
-                            await ShowBottomSheet.onBuyContent(context, data: widget.data, fAliplayer: widget.data.fAliplayer);
-                          },
-                          iconData: '${AssetPath.vectorPath}cart-shadow.svg',
-                          value: lang!.buy ?? 'Buy'),
-                  ],
-                ),
-              ),
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: orientation == Orientation.landscape ? SizeConfig.screenHeight! * .2 : SizeConfig.screenHeight! * .08,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: orientation == Orientation.landscape ? SizeConfig.screenWidth! * .35 : SizeConfig.screenWidth!,
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: CustomDescContent(
-                        desc: "${widget.data.description}",
-                        trimLines: 2,
-                        textAlign: TextAlign.start,
-                        seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
-                        seeMore: '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
-                        normStyle: const TextStyle(fontSize: 12, color: kHyppePrimaryTransparent),
-                        hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                        expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
-                      ),
-                    ),
-                    Column(
-                      children: [
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Text(
-                              "${System.getTimeformatByMs(_currentPositionText)}/${System.getTimeformatByMs(_videoDuration)}",
-                              textAlign: TextAlign.end,
-                              style: const TextStyle(color: Colors.white, fontSize: 11),
-                            ),
-                          ),
+                          value: widget.data.comments! > 0 ? widget.data.comments.toString() : lang?.comments ?? '',
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: SliderTheme(
-                                  data: SliderTheme.of(context).copyWith(
-                                    overlayShape: SliderComponentShape.noThumb,
-                                    activeTrackColor: const Color(0xAA7d7d7d),
-                                    inactiveTrackColor: const Color.fromARGB(170, 156, 155, 155),
-                                    // trackShape: RectangularSliderTrackShape(),
-                                    trackHeight: 3.0,
-                                    thumbColor: Colors.purple,
-                                    thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8.0),
-                                  ),
-                                  child: Slider(
-                                      min: 0,
-                                      max: _videoDuration == 0 ? 1 : _videoDuration.toDouble(),
-                                      value: _currentPosition.toDouble(),
-                                      activeColor: Colors.purple,
-                                      // trackColor: Color(0xAA7d7d7d),
-                                      thumbColor: Colors.purple,
-                                      onChangeStart: (value) {
-                                        _inSeek = true;
-                                        // _showLoading = false;
-                                        setState(() {});
-                                      },
-                                      onChangeEnd: (value) {
-                                        _inSeek = false;
-                                        setState(() {
-                                          if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
-                                            setState(() {
-                                              _showTipsWidget = false;
-                                            });
-                                          }
-                                        });
-                                        // isActiveAds
-                                        //     ? fAliplayerAds?.seekTo(value.ceil(), GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE)
-                                        //     : fAliplayer?.seekTo(value.ceil(), GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
-                                        widget.fAliplayer?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE);
-                                      },
-                                      onChanged: (value) {
-                                        print('on change');
-
-                                        widget.fAliplayer?.requestBitmapAtPosition(value.ceil());
-
-                                        setState(() {
-                                          _currentPosition = value.ceil();
-                                        });
-                                      }),
-                                ),
+                      if (widget.data.isShared ?? false)
+                        buttonVideoRight(
+                            onFunctionTap: () {
+                              context.read<VidDetailNotifier>().createdDynamicLink(context, data: widget.data);
+                            },
+                            iconData: '${AssetPath.vectorPath}share-shadow.svg',
+                            value: lang!.share ?? 'Share'),
+                      if ((widget.data.saleAmount ?? 0) > 0 && email != widget.data.email)
+                        buttonVideoRight(
+                            onFunctionTap: () async {
+                              widget.data.fAliplayer?.pause();
+                              await ShowBottomSheet.onBuyContent(context, data: widget.data, fAliplayer: widget.data.fAliplayer);
+                            },
+                            iconData: '${AssetPath.vectorPath}cart-shadow.svg',
+                            value: lang!.buy ?? 'Buy'),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  bottom: -5,
+                  left: 0,
+                  right: orientation == Orientation.landscape ? SizeConfig.screenHeight! * .2 : SizeConfig.screenHeight! * .07,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: orientation == Orientation.landscape ? SizeConfig.screenWidth! * .35 : SizeConfig.screenWidth!,
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: CustomDescContent(
+                          desc: "${widget.data.description}",
+                          trimLines: 2,
+                          textAlign: TextAlign.start,
+                          seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
+                          seeMore: '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                          normStyle: const TextStyle(fontSize: 12, color: kHyppePrimaryTransparent),
+                          hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
+                          expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                        ),
+                      ),
+                      SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
+                              (widget.data.boosted.isEmpty) &&
+                              (widget.data.reportedStatus != 'OWNED' && widget.data.reportedStatus != 'BLURRED' && widget.data.reportedStatus2 != 'BLURRED') &&
+                              widget.data.email == SharedPreference().readStorage(SpKeys.email)
+                          ? Container(
+                              width: double.infinity,
+                              margin: const EdgeInsets.only(bottom: 16),
+                              padding: const EdgeInsets.only(top: 12, left: 8.0, right: 8.0),
+                              child: ButtonBoost(
+                                onDetail: false,
+                                marginBool: true,
+                                contentData: widget.data,
+                                startState: () {
+                                  SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                                },
+                                afterState: () {
+                                  SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                                },
                               ),
-                              // GestureDetector(
-                              //   onTap: () {
-                              //     setState(() {
-                              //       isMute = !isMute;
-                              //     });
-                              //     widget.fAliplayer?.setMuted(isMute);
-                              //   },
-                              //   child: Padding(
-                              //     padding: const EdgeInsets.only(right: 2.0),
-                              //     child: CustomIconWidget(
-                              //       iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
-                              //       defaultColor: false,
-                              //       height: 24,
-                              //     ),
-                              //   ),
-                              // ),
-                              // GestureDetector(
-                              //   onTap: () async {
-                              //     int changevalue;
-                              //     changevalue = _currentPosition + 1000;
-                              //     if (changevalue > _videoDuration) {
-                              //       changevalue = _videoDuration;
-                              //     }
-                              //     widget.data.isLoading = true;
-                              //     setState(() {});
-                              //     Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
-                              //   },
-                              //   child: const Padding(
-                              //     padding: EdgeInsets.only(right: 12.0),
-                              //     child: Icon(
-                              //       Icons.fullscreen_exit,
-                              //       color: Colors.white,
-                              //     ),
-                              //   ),
-                              // ),
+                            )
+                          : Container(),
+                      if (widget.data.email == email && (widget.data.boostCount ?? 0) >= 0 && (widget.data.boosted.isNotEmpty))
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          margin: const EdgeInsets.only(bottom: 10, left: 18.0),
+                          width: MediaQuery.of(context).size.width * .75,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(6),
+                            color: kHyppeGreyLight.withOpacity(.9),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const CustomIconWidget(
+                                iconData: "${AssetPath.vectorPath}reach.svg",
+                                defaultColor: false,
+                                height: 24,
+                                color: kHyppeTextLightPrimary,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 13),
+                                child: CustomTextWidget(
+                                  textToDisplay: "${widget.data.boostJangkauan ?? '0'} ${lang?.reach}",
+                                  textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                                ),
+                              )
                             ],
                           ),
                         ),
-                      ],
-                    ),
-                    if (widget.data.music?.musicTitle != '' && widget.data.music?.musicTitle != null)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 0.0, bottom: 12.0, left: 8.0, right: 12.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const CustomIconWidget(
-                              iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
-                              defaultColor: false,
-                              color: kHyppeTextLightPrimary,
-                              height: 10,
-                            ),
-                            Expanded(
-                              child: CustomTextWidget(
-                                textToDisplay: " ${widget.data.music?.musicTitle ?? ''}",
-                                maxLines: 1,
-                                textStyle: const TextStyle(color: kHyppeTextLightPrimary, fontSize: 12, fontWeight: FontWeight.w700),
-                                textAlign: TextAlign.left,
+                      Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 6.0),
+                              child: Text(
+                                "${System.getTimeformatByMs(_currentPositionText)}/${System.getTimeformatByMs(_videoDuration)}",
+                                textAlign: TextAlign.end,
+                                style: const TextStyle(color: Colors.white, fontSize: 11),
                               ),
                             ),
-                            CircleAvatar(
-                              radius: 18,
-                              backgroundColor: kHyppeSurface.withOpacity(.9),
-                              child: CustomBaseCacheImage(
-                                imageUrl: widget.data.music?.apsaraThumnailUrl ?? '',
-                                imageBuilder: (_, imageProvider) {
-                                  return Container(
-                                    width: 48,
-                                    height: 48,
-                                    color: kDefaultIconDarkColor,
-                                    decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.all(Radius.circular(24)),
-                                      image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: imageProvider,
-                                      ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: SliderTheme(
+                                    data: SliderTheme.of(context).copyWith(
+                                      overlayShape: SliderComponentShape.noThumb,
+                                      activeTrackColor: const Color(0xAA7d7d7d),
+                                      inactiveTrackColor: const Color.fromARGB(170, 156, 155, 155),
+                                      // trackShape: RectangularSliderTrackShape(),
+                                      trackHeight: 3.0,
+                                      thumbColor: Colors.purple,
+                                      thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8.0),
                                     ),
-                                  );
-                                },
-                                errorWidget: (_, __, ___) {
-                                  return const CustomIconWidget(
-                                    iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
-                                    defaultColor: false,
-                                    color: kHyppeLightIcon,
-                                    height: 18,
-                                  );
-                                },
-                                emptyWidget: AnimatedBuilder(
-                                  animation: animatedController,
-                                  builder: (_, child) {
-                                    return Transform.rotate(
-                                      angle: animatedController.value * 2 * math.pi,
-                                      child: child,
+                                    child: Slider(
+                                        min: 0,
+                                        max: _videoDuration == 0 ? 1 : _videoDuration.toDouble(),
+                                        value: _currentPosition.toDouble(),
+                                        activeColor: Colors.purple,
+                                        // trackColor: Color(0xAA7d7d7d),
+                                        thumbColor: Colors.purple,
+                                        onChangeStart: (value) {
+                                          _inSeek = true;
+                                          // _showLoading = false;
+                                          setState(() {});
+                                        },
+                                        onChangeEnd: (value) {
+                                          _inSeek = false;
+                                          setState(() {
+                                            if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
+                                              setState(() {
+                                                _showTipsWidget = false;
+                                              });
+                                            }
+                                          });
+                                          // isActiveAds
+                                          //     ? fAliplayerAds?.seekTo(value.ceil(), GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE)
+                                          //     : fAliplayer?.seekTo(value.ceil(), GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
+                                          widget.fAliplayer?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE);
+                                        },
+                                        onChanged: (value) {
+                                          print('on change');
+
+                                          widget.fAliplayer?.requestBitmapAtPosition(value.ceil());
+
+                                          setState(() {
+                                            _currentPosition = value.ceil();
+                                          });
+                                        }),
+                                  ),
+                                ),
+                                // GestureDetector(
+                                //   onTap: () {
+                                //     setState(() {
+                                //       isMute = !isMute;
+                                //     });
+                                //     widget.fAliplayer?.setMuted(isMute);
+                                //   },
+                                //   child: Padding(
+                                //     padding: const EdgeInsets.only(right: 2.0),
+                                //     child: CustomIconWidget(
+                                //       iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
+                                //       defaultColor: false,
+                                //       height: 24,
+                                //     ),
+                                //   ),
+                                // ),
+                                // GestureDetector(
+                                //   onTap: () async {
+                                //     int changevalue;
+                                //     changevalue = _currentPosition + 1000;
+                                //     if (changevalue > _videoDuration) {
+                                //       changevalue = _videoDuration;
+                                //     }
+                                //     widget.data.isLoading = true;
+                                //     setState(() {});
+                                //     Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
+                                //   },
+                                //   child: const Padding(
+                                //     padding: EdgeInsets.only(right: 12.0),
+                                //     child: Icon(
+                                //       Icons.fullscreen_exit,
+                                //       color: Colors.white,
+                                //     ),
+                                //   ),
+                                // ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      if (widget.data.music?.musicTitle != '' && widget.data.music?.musicTitle != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 0.0, bottom: 12.0, left: 8.0, right: 12.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const CustomIconWidget(
+                                iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                defaultColor: false,
+                                color: kHyppeTextLightPrimary,
+                                height: 10,
+                              ),
+                              Expanded(
+                                child: CustomTextWidget(
+                                  textToDisplay: " ${widget.data.music?.musicTitle ?? ''}",
+                                  maxLines: 1,
+                                  textStyle: const TextStyle(color: kHyppeTextLightPrimary, fontSize: 12, fontWeight: FontWeight.w700),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                              CircleAvatar(
+                                radius: 18,
+                                backgroundColor: kHyppeSurface.withOpacity(.9),
+                                child: CustomBaseCacheImage(
+                                  imageUrl: widget.data.music?.apsaraThumnailUrl ?? '',
+                                  imageBuilder: (_, imageProvider) {
+                                    return Container(
+                                      width: 48,
+                                      height: 48,
+                                      decoration: BoxDecoration(
+                                        color: kDefaultIconDarkColor,
+                                        borderRadius: const BorderRadius.all(Radius.circular(24)),
+                                        image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: imageProvider,
+                                        ),
+                                      ),
                                     );
                                   },
-                                  child: const CustomIconWidget(
-                                    iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
-                                    defaultColor: false,
-                                    color: kHyppeLightIcon,
-                                    height: 18,
+                                  errorWidget: (_, __, ___) {
+                                    return const CustomIconWidget(
+                                      iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                      defaultColor: false,
+                                      color: kHyppeLightIcon,
+                                      height: 18,
+                                    );
+                                  },
+                                  emptyWidget: AnimatedBuilder(
+                                    animation: animatedController,
+                                    builder: (_, child) {
+                                      return Transform.rotate(
+                                        angle: animatedController.value * 2 * math.pi,
+                                        child: child,
+                                      );
+                                    },
+                                    child: const CustomIconWidget(
+                                      iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                      defaultColor: false,
+                                      color: kHyppeLightIcon,
+                                      height: 18,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                  ],
-                ),
-              )
-            ],
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
