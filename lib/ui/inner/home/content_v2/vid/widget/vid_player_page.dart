@@ -1176,7 +1176,6 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                         onTap: () async {
                           onTapCtrl = true;
                           setState(() {});
-
                           print('data Fullscreen ${widget.fromFullScreen}');
 
                           if (widget.fromFullScreen) {

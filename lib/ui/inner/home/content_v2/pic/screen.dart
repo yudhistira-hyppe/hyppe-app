@@ -127,6 +127,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
   @override
   void initState() {
+    super.initState();
     print('data screen pic');
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppePreviewPic');
     final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
@@ -138,11 +139,11 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     // statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
     // stopwatch = new Stopwatch()..start();
     lastOffset = -10;
-    super.initState();
+
     // _primaryScrollController = widget.scrollController!;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPic');
       WidgetsBinding.instance.addObserver(this);
+      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPic');
       fAliplayer?.setAutoPlay(true);
       fAliplayer?.setLoop(true);
 
@@ -495,11 +496,17 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     //   /// Specify whether to enable the cache feature.
     // };
     // fAliplayer?.setCacheConfig(map);
-    fAliplayer?.prepare();
-    if (notifier.isMute) {
-      fAliplayer?.setMuted(true);
+    print("====---- ---==== ali ${fAliplayer?.getPlayerName()}");
+
+    try {
+      fAliplayer?.prepare();
+    } catch (e) {
+      print(e);
     }
-    // fAliplayer?.play();
+    fAliplayer?.play();
+    // if (notifier.isMute) {
+    //   fAliplayer?.setMuted(true);
+    // }
   }
 
   Future getAuth(BuildContext context, String apsaraId) async {
@@ -1650,6 +1657,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                   setState(() {
                     notifier.isMute = !notifier.isMute;
                   });
+                  print("muteeee----------------- ${notifier.isMute}");
                   fAliplayer?.setMuted(notifier.isMute);
                 },
                 child: Padding(
