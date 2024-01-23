@@ -15,6 +15,7 @@ import 'custom_verified_widget.dart';
 import 'story_color_validator.dart';
 
 class ProfileComponent extends StatelessWidget {
+  final bool? isFullscreen;
   final bool isDetail;
   final bool show;
   final bool following;
@@ -38,6 +39,7 @@ class ProfileComponent extends StatelessWidget {
 
   const ProfileComponent({
     Key? key,
+    this.isFullscreen = false,
     required this.show,
     required this.onTapOnProfileImage,
     required this.imageUrl,
@@ -107,6 +109,7 @@ class ProfileComponent extends StatelessWidget {
                                     textToDisplay: username ?? '',
                                     maxLines: 1,
                                     textStyle: TextStyle(
+                                      fontWeight: isFullscreen ?? false ? FontWeight.bold : FontWeight.normal,
                                       color: textColor,
                                       shadows: const [
                                         Shadow(

@@ -138,19 +138,10 @@ class StreamerNotifier with ChangeNotifier {
     
     await _alivcBase.registerSDK();
     await _alivcBase.setObserver();
-
-    // _alivcBase.setOnLicenceCheck((result, reason) {
-    //   print("======== belum ada lisensi $reason ========");
-    //   if (result != AlivcLiveLicenseCheckResultCode.success) {
-    //     print("======== belum ada lisensi $reason ========");
-    //   }
-    // });
     if (!forConfig) {
-      print("-------- init stream 2 ---------");
       
       await setLiveConfig();
       await _setLivePusher();
-      // await Future.delayed(const Duration(milliseconds: 500));
       
       if (isFirst && mounted) {
         isFirst = false;

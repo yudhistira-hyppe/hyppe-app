@@ -33,6 +33,7 @@ import 'package:hyppe/ui/constant/widget/button_boost.dart';
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_desc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -45,6 +46,7 @@ import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
+import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -91,6 +93,8 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
   String _curPostId = '';
   String _lastCurPostId = '';
   double itemHeight = 0;
+
+  bool isZoom = false;
 
   MainNotifier? mn;
   int indexKeySell = 0;
@@ -226,6 +230,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
           }
           return PageView.builder(
               controller: controller,
+              physics: isZoom ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
               scrollDirection: Axis.vertical,
               itemCount: notifier.pic?.length ?? 0,
               onPageChanged: (value) {
@@ -247,7 +252,8 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
                   );
                 }
 
-                return imagePic(
+                return notifier.pic![index].reportedStatus ==
+                        'BLURRED' ? blurContentWidget(context, notifier.pic![index]) : imagePic(
                     notifier.pic![index],
                     index: index,
                     notifier: notifier,
@@ -438,7 +444,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
                             top: kTextTabBarHeight - 12, left: 12.0),
                         padding: const EdgeInsets.symmetric(vertical: 18.0),
                         width: double.infinity,
-                        height: kToolbarHeight * 2,
+                        height: kToolbarHeight * 1.6,
                         child: appBar(picData, notifier!)),
                   ),
                   
@@ -475,12 +481,14 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
       return ZoomableImage(
         enable: true,
         onScaleStart: () {
-          print(
-              "================masuk zoom============");
-          // widget.onScaleStart?.call();
+          setState(() {
+            isZoom = true;
+          });
         }, // optional
         onScaleStop: () {
-          // widget.onScaleStop?.call();
+          setState(() {
+            isZoom = false;
+          });
         },
         child: CustomBaseCacheImage(
           memCacheWidth: 100,
@@ -533,7 +541,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
                         'BLURRED'
                     ? ImageFiltered(
                         imageFilter: ImageFilter.blur(
-                            sigmaX: 30, sigmaY: 30),
+                            sigmaX: 50, sigmaY: 50),
                         child: Image(
                           image: imageProvider,
                           fit: BoxFit.cover,
@@ -690,63 +698,74 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
                   child: Row(
                     children: [
-                      // if (data.tagPeople?.isNotEmpty ?? false)
                         Visibility(
                           visible: data.tagPeople?.isNotEmpty ?? false,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: GestureDetector(
-                              onTap: () {
-                                fAliplayer?.pause();
-                                context.read<PicDetailNotifier>().showUserTag(
-                                    context, data.tagPeople, data.postID,
-                                    title: lang!.inthisphoto,
-                                    fAliplayer: fAliplayer);
-                              },
-                              child: Row(
-                                children: [
-                                  const CustomIconWidget(
-                                    iconData:
-                                        '${AssetPath.vectorPath}tag-people-light.svg',
-                                    defaultColor: false,
-                                    height: 22,
-                                  ),
-                                  Text(
-                                    '${data.tagPeople!.length} ${lang!.people}',
-                                    style:
-                                        const TextStyle(color: kHyppeTextPrimary),
-                                  )
-                                ],
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: kHyppeBackground.withOpacity(.4),
+                              borderRadius: BorderRadius.circular(8.0)
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+                            margin: const EdgeInsets.only(right: 12.0),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  fAliplayer?.pause();
+                                  context.read<PicDetailNotifier>().showUserTag(
+                                      context, data.tagPeople, data.postID,
+                                      title: lang!.inthisphoto,
+                                      fAliplayer: fAliplayer);
+                                },
+                                child: Row(
+                                  children: [
+                                    const CustomIconWidget(
+                                      iconData:
+                                          '${AssetPath.vectorPath}tag-people-light.svg',
+                                      defaultColor: false,
+                                      height: 18,
+                                    ),
+                                    const SizedBox(width: 4.0,),
+                                    Text(
+                                      '${data.tagPeople!.length} ${lang!.people}',
+                                      style:
+                                          const TextStyle(color: kHyppeTextPrimary),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                         ),
                         Visibility(
                           visible: data.location != '',
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: (data.tagPeople?.isNotEmpty ?? false)
-                                    ? 12.0
-                                    : 0.0,),
-                            child: Align(
-                              alignment: Alignment.bottomLeft,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: kHyppeBackground.withOpacity(.4),
+                              borderRadius: BorderRadius.circular(8.0)
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4.0),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: (data.tagPeople?.isNotEmpty ?? false)
+                                      ? 12.0
+                                      : 0.0,),
                               child: Row(
                                 children: [
-                                  const Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 8.0),
-                                    child: CustomIconWidget(
-                                      iconData:
-                                          '${AssetPath.vectorPath}map-light.svg',
-                                      defaultColor: false,
-                                      height: 16,
-                                    ),
+                                  const CustomIconWidget(
+                                    iconData:
+                                        '${AssetPath.vectorPath}map-light.svg',
+                                    defaultColor: false,
+                                    height: 16,
                                   ),
+                                  const SizedBox(width: 4.0,),
                                   SizedBox(
-                                    width: MediaQuery.of(context).size.width * .5,
+                                    width: data.tagPeople?.isNotEmpty ?? false 
+                                          ? SizeConfig.screenWidth! * .4
+                                          : SizeConfig.screenWidth! * .7,
                                     child: Text(
                                       '${data.location}',
                                       maxLines: 1,
@@ -766,7 +785,6 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
                 Container(
                   constraints: BoxConstraints(
                     maxWidth: SizeConfig.screenWidth! * .7,
-                    // minHeight: SizeConfig.screenHeight! * .02,
                     maxHeight: data.description!.length > 24 ? isShowMore ?  42
                               : SizeConfig.screenHeight! * .1
                               : 42
@@ -785,9 +803,9 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
                         });
                       },
                       seeLess:
-                          ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
+                          ' ${lang?.less}',
                       seeMore:
-                          '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                          '  ${lang?.more}',
                       normStyle:
                           const TextStyle(fontSize: 14, color: kHyppeTextPrimary),
                       hrefStyle: Theme.of(context)
@@ -861,7 +879,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
                     child: Container(
                       width: SizeConfig.screenWidth! * .7,
                       height: SizeConfig.screenHeight! * .05,
-                      margin: const EdgeInsets.only(left: 16.0, top: 12.0),
+                      margin: const EdgeInsets.only(left: 16.0),
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Row(
                         children: [
@@ -872,7 +890,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
                               animation: animatedController,
                               builder: (_, child) {
                                 return Transform.rotate(
-                                  angle: animatedController.value * 2 * math.pi,
+                                  angle: animatedController.value * 2 * - math.pi,
                                   child: child,
                                 );
                               },
@@ -916,14 +934,18 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
                             height: 12.0,
                           ),
                           SizedBox(
-                            width: SizeConfig.screenWidth! * .55,
-                            child: CustomTextWidget(
+                            width: SizeConfig.screenWidth! * .56,
+                            child: _textSize(data.music?.musicTitle ?? '', const TextStyle(fontWeight: FontWeight.normal)).width > SizeConfig.screenWidth! * .56 
+                            ? Marquee(
+                              text: '  ${data.music?.musicTitle ?? ''}',
+                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),
+                            )
+                            : CustomTextWidget(
                               textToDisplay: " ${data.music?.musicTitle ?? ''}",
                               maxLines: 1,
                               textStyle: const TextStyle(
                                   color: kHyppeTextPrimary,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w700),
+                                  fontSize: 12),
                               textAlign: TextAlign.left,
                             ),
                           ),
@@ -1005,9 +1027,9 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
     return InkResponse(
       onTap: onFunctionTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        padding: const EdgeInsets.symmetric(vertical: 4.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             GestureDetector(
@@ -1016,7 +1038,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
                 defaultColor: false,
                 color: liked ? kHyppeRed : kHyppePrimaryTransparent,
                 iconData: iconData,
-                height: liked ? 24 : 38,
+                height: liked ? 28 : 42,
                 width: 38,
               ),
             ),
@@ -1028,23 +1050,26 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
               const SizedBox(
                 height: 8.0,
               ),
-            Text(
-              value,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                  shadows: [
-                    Shadow(
-                        offset: Offset(0.0, 1.0),
-                        blurRadius: 2.0,
-                        color: Colors.black54),
-                    Shadow(
-                        offset: Offset(0.0, 1.0),
-                        blurRadius: 2.0,
-                        color: Colors.black54),
-                  ],
-                  color: kHyppePrimaryTransparent,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 12),
+            Container(
+              transform: Matrix4.translationValues(0.0, -5.0, 0.0),
+              child: Text(
+                value,
+                textAlign: TextAlign.start,
+                style: const TextStyle(
+                    shadows: [
+                      Shadow(
+                          offset: Offset(0.0, 1.0),
+                          blurRadius: 2.0,
+                          color: Colors.black54),
+                      Shadow(
+                          offset: Offset(0.0, 1.0),
+                          blurRadius: 2.0,
+                          color: Colors.black54),
+                    ],
+                    color: kHyppePrimaryTransparent,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12),
+              ),
             ),
           ],
         ),
@@ -1056,9 +1081,12 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
               onPressed: () {
@@ -1077,9 +1105,16 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
             Padding(
               padding: const EdgeInsets.symmetric(vertical:8.0),
               child: ProfileComponent(
+                isFullscreen: true,
                 show: true,
                 following: true,
                 onFollow: () {},
+                widthText: _textSize(System().readTimestamp(
+                  DateTime.parse(System().dateTimeRemoveT(data.createdAt ?? ''))
+                      .millisecondsSinceEpoch,
+                  context,
+                  fullCaption: true,
+                ), const TextStyle(fontWeight: FontWeight.bold)).width,
                 username: data.username ?? 'No Name',
                 textColor: kHyppeLightBackground,
                 spaceProfileAndId: eightPx,
@@ -1106,6 +1141,45 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
                 )}',
               ),
             ),
+            if (data.email != email && (data.isNewFollowing ?? false))
+              Consumer<PreviewPicNotifier>(
+                builder: (context, picNot, child) => GestureDetector(
+                  onTap: () {
+                    if (data.insight?.isloadingFollow != true) {
+                      picNot.followUser(context, data, isUnFollow: data.following, isloading: data.insight!.isloadingFollow ?? false);
+                    }
+                  },
+                  child: data.insight?.isloadingFollow ?? false
+                      ? const SizedBox(
+                          height: 40,
+                          width: 30,
+                          child: Align(
+                            alignment: Alignment.bottomRight,
+                            child: CustomLoading(),
+                          ),
+                        )
+                      : Center(
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.white),
+                            borderRadius: BorderRadius.circular(8.0)
+                          ),
+                          // transform: Matrix4.translationValues(-40.0, 0.0, 0.0),
+                          child: Text(
+                              (data.following ?? false)
+                                  ? (lang?.following ?? '')
+                                  : (lang?.follow ?? ''),
+                              style: const TextStyle(
+                                  color: kHyppeLightButtonText,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: "Lato"),
+                            ),
+                        ),
+                      ),
+                ),
+              ),
           ],
         ),
         actionWidget(
@@ -1146,18 +1220,16 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
 
   Widget actionWidget({Function()? onTap, ContentData? data}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
+      padding: const EdgeInsets.only(right: 18.0, top: 12.0, bottom: 12.0),
       child: Row(
         children: [
-          Visibility(
-            visible: (data!.saleAmount ?? 0) > 0,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 13),
-              child: const CustomIconWidget(
-                iconData: "${AssetPath.vectorPath}sale.svg",
-                defaultColor: false,
-                height: 22,
-              ),
+          if ((data!.saleAmount ?? 0) > 0)
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 13),
+            child: const CustomIconWidget(
+              iconData: "${AssetPath.vectorPath}sale.svg",
+              defaultColor: false,
+              height: 28,
             ),
           ),
           if ((data.certified ?? false) && (data.saleAmount ?? 0) == 0)
@@ -1166,7 +1238,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
             child: const CustomIconWidget(
               iconData: '${AssetPath.vectorPath}ownership.svg',
               defaultColor: false,
-              height: 22,
+              height: 28,
             ),
           ),
           GestureDetector(
@@ -1180,5 +1252,12 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
         ],
       ),
     );
+  }
+
+  Size _textSize(String text, TextStyle style) {
+    final TextPainter textPainter = TextPainter(
+        text: TextSpan(text: text, style: style), maxLines: 1, textDirection: TextDirection.ltr)
+      ..layout(minWidth: 0, maxWidth: double.infinity);
+    return textPainter.size;
   }
 }

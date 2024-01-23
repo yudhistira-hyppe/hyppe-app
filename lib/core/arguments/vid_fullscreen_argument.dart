@@ -1,3 +1,4 @@
+import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 
 class VidFullscreenArgument {
@@ -5,5 +6,7 @@ class VidFullscreenArgument {
   ContentData data;
   int index;
   bool? scrollVid;
-  VidFullscreenArgument({required this.vidData, required this.data, required this.index, this.scrollVid});
+  final PageSrc? pageSrc;
+  final String? key;
+  VidFullscreenArgument({required this.vidData, required this.data, required this.index, this.scrollVid, this.pageSrc, this.key});
 }

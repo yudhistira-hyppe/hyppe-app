@@ -68,6 +68,7 @@ class ScrollDiary extends StatefulWidget {
 
 class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, TickerProviderStateMixin, WidgetsBindingObserver, RouteAware {
   List<ContentData>? diaryData = [];
+  int indexDiary = 0;
   FlutterAliplayer? fAliplayer;
   bool isPrepare = false;
   bool isPlay = false;
@@ -114,6 +115,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
     // stopwatch = new Stopwatch()..start();
     super.initState();
     diaryData = widget.arguments?.diaryData;
+    indexDiary = widget.arguments?.page??0;
     notifier.diaryData = widget.arguments?.diaryData;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       fAliplayer = FlutterAliPlayerFactory.createAliPlayer();
@@ -618,9 +620,45 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ListTile(
-                        title: Align(
-                          alignment: const Alignment(-1.2, 0),
-                          child: Container(margin: const EdgeInsets.symmetric(horizontal: 10), child: widget.arguments?.titleAppbar ?? Container()),
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              transform: Matrix4.translationValues(-18.0, 0.0, 0.0),
+                              margin: const EdgeInsets.symmetric(horizontal: 10), 
+                              child: widget.arguments?.titleAppbar ?? Container()),
+                            if (diaryData?[indexDiary].email != email && (diaryData?[indexDiary].isNewFollowing ?? false))
+                              Consumer<PreviewPicNotifier>(
+                                builder: (context, picNot, child) => Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      if (diaryData?[indexDiary].insight?.isloadingFollow != true) {
+                                        picNot.followUser(context, diaryData?[indexDiary] ?? ContentData(), isUnFollow: diaryData?[indexDiary].following, isloading: diaryData?[indexDiary].insight!.isloadingFollow ?? false);
+                                      }
+                                    },
+                                    child: diaryData?[indexDiary].insight?.isloadingFollow ?? false
+                                        ? const SizedBox(
+                                            height: 30,
+                                            width: 30,
+                                            child: Center(
+                                              child: CustomLoading(),
+                                            ),
+                                          )
+                                        : SizedBox(
+                                          height: 40,
+                                          child: Center(
+                                            child: Text(
+                                                (diaryData?[indexDiary].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+                                                style: const TextStyle(color: kHyppePrimary, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                                              ),
+                                          ),
+                                        ),
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
                         leading: IconButton(
                             icon: const Icon(
@@ -761,32 +799,6 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                       badge: diaryData?[index].urluserBadge,
                     ),
                   ),
-                  if (diaryData?[index].email != email && (diaryData?[index].isNewFollowing ?? false))
-                    Consumer<PreviewPicNotifier>(
-                      builder: (context, picNot, child) => Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            if (diaryData?[index].insight?.isloadingFollow != true) {
-                              picNot.followUser(context, diaryData?[index] ?? ContentData(), isUnFollow: diaryData?[index].following, isloading: diaryData?[index].insight!.isloadingFollow ?? false);
-                            }
-                          },
-                          child: diaryData?[index].insight?.isloadingFollow ?? false
-                              ? Container(
-                                  height: 40,
-                                  width: 30,
-                                  child: Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: CustomLoading(),
-                                  ),
-                                )
-                              : Text(
-                                  (diaryData?[index].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
-                                  style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
-                                ),
-                        ),
-                      ),
-                    ),
                   GestureDetector(
                     onTap: () {
                       if (diaryData?[index].email != email) {
@@ -1203,11 +1215,14 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                 desc: "${diaryData?[index].description}",
                 trimLines: 2,
                 textAlign: TextAlign.start,
-                seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
-                seeMore: '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                seeLess: ' ${lang?.less}', // ${notifier2.translate.seeLess}',
+                seeMore: '  ${lang?.more}', //${notifier2.translate.seeMoreContent}',
                 normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
                 hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                expandStyle: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold),
               ),
               GestureDetector(
                 onTap: () {

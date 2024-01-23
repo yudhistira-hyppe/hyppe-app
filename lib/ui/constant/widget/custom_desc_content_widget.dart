@@ -253,7 +253,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
         }
         String fixdesc = '';
         if(error && isSeeLess && lastIndex != null){
-          final texts = item.desc.split(' ');
+          final texts = item.desc.split('');
           for(final item in texts){
             if(!item.hasEmoji()){
               fixdesc += '$item ';
@@ -277,7 +277,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
                         callback(true);
                       }
                       var fixKeyword = item.desc[0] == '#' ? item.desc.substring(1, item.desc.length) : item.desc;
-                      fixKeyword = fixKeyword.replaceAll(',', '');
+                      fixKeyword = fixKeyword.replaceAll(',', ' ');
                       globalAliPlayer?.pause();
                       if (widget.isReplace) {
                         await Routing().moveReplacement(Routes.hashtagDetail, argument: HashtagArgument(isTitle: false, hashtag: Tags(tag: fixKeyword, id: fixKeyword), fromRoute: true));
@@ -348,7 +348,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
               descItems.add(ItemDesc(desc: '$tempDesc ', type: CaptionType.normal));
               tempDesc = '';
             }
-            descItems.add(ItemDesc(desc: '${splitDesc[i]}  ', type: CaptionType.hashtag));
+            descItems.add(ItemDesc(desc: '${splitDesc[i]} ', type: CaptionType.hashtag));
           }
         } else {
           tempDesc = '$tempDesc ${splitDesc[i]}';

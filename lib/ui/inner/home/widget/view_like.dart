@@ -70,7 +70,7 @@ class _ViewLikedState extends State<ViewLiked> {
                             ? ListView.builder(
                                 shrinkWrap: true,
                                 controller: _scrollController,
-                                itemCount: notifier.listLikeView?.length,
+                                itemCount: notifier.listLikeView?.length??0,
                                 itemBuilder: (context, index) {
                                   final data = notifier.listLikeView?[index];
                                   if (data != null) {
