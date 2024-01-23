@@ -102,7 +102,7 @@ class ProfileComponent extends StatelessWidget {
                                   ? CustomStrokeTextWidget(
                                       textToDisplay: username ?? '',
                                       maxLines: 1,
-                                      textStyle: Theme.of(context).textTheme.button,
+                                      textStyle: Theme.of(context).textTheme.button?.copyWith(fontWeight: FontWeight.w700),
                                       textAlign: TextAlign.left,
                                     )
                                   : CustomTextWidget(
@@ -139,7 +139,7 @@ class ProfileComponent extends StatelessWidget {
                               maxLines: 1,
                               textToDisplay: createdAt,
                               textAlign: TextAlign.left,
-                              textStyle: Theme.of(context).textTheme.caption,
+                              textStyle: Theme.of(context).textTheme.caption?.copyWith(fontSize: 12),
                             )
                           : CustomTextWidget(
                               maxLines: 1,

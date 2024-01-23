@@ -6,7 +6,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_livepush_plugin/live_base.dart';
 import 'package:flutter_livepush_plugin/live_push_config.dart';
 import 'package:flutter_livepush_plugin/live_push_def.dart';
-import 'package:flutter_livepush_plugin/live_pusher.dart';
 import 'package:hyppe/core/bloc/user_v2/bloc.dart' as userV2;
 import 'package:hyppe/core/bloc/user_v2/state.dart';
 import 'package:hyppe/core/bloc/utils_v2/bloc.dart';
@@ -28,7 +27,6 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/screen.dart';
-import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/home/screen.dart';
 import 'package:hyppe/ui/inner/notification/screen.dart';
@@ -165,7 +163,7 @@ class MainNotifier with ChangeNotifier {
       System().userVerified(selfProfile.user.profile?.statusKyc);
       SharedPreference().writeStorage(SpKeys.setPin, selfProfile.user.profile?.pinVerified.toString());
       SharedPreference().writeStorage(SpKeys.userID, context.read<SelfProfileNotifier>().user.profile?.idUser);
-      System().analyticSetUser(selfProfile.user.profile?.username ?? '');
+      System().analyticSetUser(name: selfProfile.user.profile?.username ?? '');
       // SharedPreference().writeStorage(SpKeys.statusVerificationId, 'sdsd')asdasd
       notifyListeners();
     }

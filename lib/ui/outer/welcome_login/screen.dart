@@ -14,8 +14,6 @@ import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_form_field.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-import 'package:hyppe/ui/outer/welcome_login/widget/page_bottom.dart';
-import 'package:hyppe/ui/outer/welcome_login/widget/page_top.dart';
 import 'package:hyppe/ui/outer/welcome_login/widget/position_welcome.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';

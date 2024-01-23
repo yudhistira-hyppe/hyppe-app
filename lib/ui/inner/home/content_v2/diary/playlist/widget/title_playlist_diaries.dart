@@ -7,7 +7,6 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_balloon_widget.dart';
-import 'package:hyppe/ui/constant/widget/decorated_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_ownership.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
@@ -20,9 +19,7 @@ import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/profile_component.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
-// import 'package:story_view/story_view.dart';
 
 import '../../../../../../../app.dart';
 
@@ -82,7 +79,6 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                         child: IconButton(
                           onPressed: () {
                             // fAliplayer?.pause();
-
                             Routing().moveBack();
                           },
                           icon: const Icon(

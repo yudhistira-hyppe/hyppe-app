@@ -23,6 +23,7 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/utils/zoom_pic/zoom_pic.dart';
+import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
@@ -61,7 +62,7 @@ class PicFullscreenPage extends StatefulWidget {
   State<PicFullscreenPage> createState() => _PicFullscreenPageState();
 }
 
-class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindingObserver, SingleTickerProviderStateMixin {
+class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindingObserver, SingleTickerProviderStateMixin, RouteAware {
   PageController controller = PageController();
   late final AnimationController animatedController = AnimationController(vsync: this, duration: const Duration(seconds: 2))..repeat();
 
@@ -111,6 +112,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
     } else {
       System().disposeBlock();
     }
+    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
     super.didChangeDependencies();
   }
 
@@ -199,6 +201,62 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
       setState(() {
         isloading = false;
       });
+    }
+  }
+
+  @override
+  void didPop() {
+    print("====== didpop ");
+    super.didPop();
+  }
+
+  @override
+  void didPopNext() {
+    print("======= didPopNext");
+
+    fAliplayer?.play();
+    fAliplayer?.setMuted(false);
+    // System().disposeBlock();
+    super.didPopNext();
+  }
+
+  @override
+  void didPush() {
+    print("========= didPush");
+    super.didPush();
+  }
+
+  @override
+  void didPushNext() {
+    print("========= didPushNext");
+    fAliplayer?.pause();
+    System().disposeBlock();
+    super.didPushNext();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    switch (state) {
+      case AppLifecycleState.inactive:
+        print("========= inactive");
+        break;
+      case AppLifecycleState.resumed:
+        print("========= resumed");
+        // if (context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds)) {
+        fAliplayer?.play();
+        // }
+        break;
+      case AppLifecycleState.paused:
+        print("========= paused");
+        fAliplayer?.pause();
+        break;
+      case AppLifecycleState.detached:
+        print("========= detached");
+        break;
+      default:
+        break;
     }
   }
 

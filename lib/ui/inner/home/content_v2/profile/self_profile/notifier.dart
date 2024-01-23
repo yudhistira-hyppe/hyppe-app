@@ -280,21 +280,25 @@ class SelfProfileNotifier with ChangeNotifier {
     picContentsQuery.searchText = SharedPreference().readStorage(SpKeys.email);
     diaryContentsQuery.searchText = SharedPreference().readStorage(SpKeys.email);
     vidContentsQuery.searchText = SharedPreference().readStorage(SpKeys.email);
+    final bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
+    if(!(isGuest ?? true)){
+      final usersNotifier = UserBloc();
 
-    final usersNotifier = UserBloc();
-    await usersNotifier.getUserProfilesBloc(context, withAlertMessage: true);
-    final usersFetch = usersNotifier.userFetch;
+      await usersNotifier.getUserProfilesBloc(context, withAlertMessage: true);
+      final usersFetch = usersNotifier.userFetch;
 
-    if (usersFetch.userState == UserState.getUserProfilesSuccess) {
-      user.profile = null;
-      user.profile = usersFetch.data;
-      user.profile?.avatar?.imageKey = SharedPreference().readStorage(SpKeys.uniqueKey);
-      // SharedPreference().writeStorage(SpKeys.isLoginSosmed, user.profile?.loginSource);
-      SharedPreference().writeStorage(SpKeys.userID, user.profile?.idUser);
-      notifyListeners();
+      if (usersFetch.userState == UserState.getUserProfilesSuccess) {
+        user.profile = null;
+        user.profile = usersFetch.data;
+        user.profile?.avatar?.imageKey = SharedPreference().readStorage(SpKeys.uniqueKey);
+        // SharedPreference().writeStorage(SpKeys.isLoginSosmed, user.profile?.loginSource);
+        SharedPreference().writeStorage(SpKeys.userID, user.profile?.idUser);
+        notifyListeners();
+      }
+      // user.vids = await vidContentsQuery.reload(context, myContent: true);
+      user.pics = await picContentsQuery.reload(context, myContent: true);
     }
-    // user.vids = await vidContentsQuery.reload(context, myContent: true);
-    user.pics = await picContentsQuery.reload(context, myContent: true);
+
 
     // context.read<ScrollPicNotifier>().pics = user.pics;
 
@@ -339,20 +343,26 @@ class SelfProfileNotifier with ChangeNotifier {
       notifyListeners();
     }
     if (isReload) {
-      final usersNotifier = UserBloc();
+      final bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
+
+      if(!(isGuest ?? true)){
+        final usersNotifier = UserBloc();
+        await usersNotifier.getUserProfilesBloc(context, withAlertMessage: true);
+        final usersFetch = usersNotifier.userFetch;
+
+        if (usersFetch.userState == UserState.getUserProfilesSuccess) {
+          var keyImageCache = key();
+          user.profile = null;
+          user.profile = usersFetch.data;
+          user.profile?.avatar?.imageKey = keyImageCache;
+          // SharedPreference().writeStorage(SpKeys.isLoginSosmed, user.profile?.loginSource);
+          notifyListeners();
+        }
+      }
+
       PreviewStoriesNotifier stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
       stories.initialStories(context);
-      await usersNotifier.getUserProfilesBloc(context, withAlertMessage: true);
-      final usersFetch = usersNotifier.userFetch;
 
-      if (usersFetch.userState == UserState.getUserProfilesSuccess) {
-        var keyImageCache = key();
-        user.profile = null;
-        user.profile = usersFetch.data;
-        user.profile?.avatar?.imageKey = keyImageCache;
-        // SharedPreference().writeStorage(SpKeys.isLoginSosmed, user.profile?.loginSource);
-        notifyListeners();
-      }
     }
     switch (pageIndex) {
       case 0:

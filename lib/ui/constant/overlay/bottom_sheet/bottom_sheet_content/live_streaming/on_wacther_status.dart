@@ -10,8 +10,6 @@ import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier
 import 'package:provider/provider.dart';
 
 import '../../../../../../core/constants/asset_path.dart';
-import '../../../../../../core/constants/shared_preference_keys.dart';
-import '../../../../../../core/services/shared_preference.dart';
 import '../../../../../../initial/hyppe/translate_v2.dart';
 import '../../../../widget/custom_icon_widget.dart';
 import '../../../../widget/custom_spacer.dart';
@@ -42,7 +40,6 @@ class _OnWatcherStatusState extends State<OnWatcherStatus> {
   @override
   Widget build(BuildContext context) {
     final language = context.read<TranslateNotifierV2>().translate;
-    final isIndo = SharedPreference().readStorage(SpKeys.isoCode) == 'id';
     return Consumer<StreamerNotifier>(
       builder: (_, notifier, __) => Container(
         height: double.infinity,

@@ -1,3 +1,6 @@
+import 'package:hyppe/core/arguments/follow_user_argument.dart';
+import 'package:hyppe/core/bloc/follow/bloc.dart';
+import 'package:hyppe/core/bloc/follow/state.dart';
 import 'package:hyppe/core/bloc/like/bloc.dart';
 import 'package:hyppe/core/bloc/like/state.dart';
 import 'package:hyppe/core/bloc/postviewer/bloc.dart';
@@ -25,7 +28,7 @@ import 'package:provider/provider.dart';
 class LikeNotifier with ChangeNotifier {
   LocalizationModelV2 language = LocalizationModelV2();
   StatusFollowing statusFollowingViewer = StatusFollowing.requested;
-  
+
   translate(LocalizationModelV2 translate) {
     language = translate;
 
@@ -38,8 +41,8 @@ class LikeNotifier with ChangeNotifier {
   int _skip = 0;
   int get skip => _skip;
 
-  List<ViewContent>? _listLikeView;
-  List<ViewContent>? get listLikeView => _listLikeView;
+  ViewContent? _listLikeView;
+  ViewContent? get listLikeView => _listLikeView;
 
   List _visibiltyList = [];
   List get visibiltyList => _visibiltyList;
@@ -66,7 +69,7 @@ class LikeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  set listLikeView(List<ViewContent>? val) {
+  set listLikeView(ViewContent? val) {
     _listLikeView = val;
     notifyListeners();
   }
@@ -87,12 +90,11 @@ class LikeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  initViews(String postId, String eventType){
+  initViews(String postId, String eventType) {
     final context = Routing.navigatorKey.currentContext!;
     _skip = 0;
-    _listLikeView = [];
+    _listLikeView = ViewContent();
     getLikeView(context, postId, eventType, 20);
-
   }
 
   bool? change;
@@ -179,7 +181,7 @@ class LikeNotifier with ChangeNotifier {
 
   void viewLikeContent(BuildContext context, postId, eventType, title, emailData) {
     // final email = SharedPreference().readStorage(SpKeys.email);
-    // if (email == emailData) 
+    // if (email == emailData)
     ShowBottomSheet.onShowUserViewContent(context, postId: postId, eventType: eventType, title: title);
   }
 
@@ -191,11 +193,11 @@ class LikeNotifier with ChangeNotifier {
     final fetch = notifier.postViewerFetch;
     if (fetch.postViewerState == PostViewerState.likeViewSuccess) {
       if (!isScroll) {
-        _listLikeView = [];
+        _listLikeView = null;
       }
-      fetch.data.forEach((v) {
-        _listLikeView?.add(ViewContent.fromJson(v));
-      });
+      _listLikeView = ViewContent.fromJson(fetch.data[0]);
+      print("=====data $_listLikeView");
+
       isLoading = false;
     }
   }
@@ -223,6 +225,46 @@ class LikeNotifier with ChangeNotifier {
       notifyListeners();
       await getLikeView(context, postId, eventType, limit, isScroll: true).whenComplete(() => _isScrollLoading = false);
       notifyListeners();
+    }
+  }
+
+  Future<void> followUserLikeView(BuildContext context, User dataUser, {bool checkIdCard = true, isUnFollow = false, String receiverParty = '', bool isloading = false}) async {
+    try {
+      dataUser.isloadingFollow = true;
+      notifyListeners();
+      final notifier = FollowBloc();
+      await notifier.followUserBlocV2(
+        context,
+        data: FollowUserArgument(
+          receiverParty: dataUser.email ?? '',
+          eventType: isUnFollow ? InteractiveEventType.unfollow : InteractiveEventType.following,
+        ),
+      );
+      final fetch = notifier.followFetch;
+      if (fetch.followState == FollowState.followUserSuccess) {
+        print('asdasdasd');
+        if (isUnFollow) {
+          print('1');
+          dataUser.following = false;
+          dataUser.isloadingFollow = false;
+          notifyListeners();
+        } else {
+          print('3');
+          dataUser.following = true;
+          dataUser.isloadingFollow = false;
+          notifyListeners();
+        }
+      }
+      // context.read<HomeNotifier>().updateFollowing(context, email: dataContent.email ?? '', statusFollowing: !isUnFollow);
+
+      //   },
+      //   uploadContentAction: false,
+      // );
+
+      notifyListeners();
+    } catch (e) {
+      isloading = false;
+      'follow user: ERROR: $e'.logger();
     }
   }
 }

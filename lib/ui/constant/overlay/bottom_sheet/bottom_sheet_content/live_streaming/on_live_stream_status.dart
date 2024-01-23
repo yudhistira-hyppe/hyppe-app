@@ -8,7 +8,6 @@ import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
-import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
@@ -57,8 +56,6 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
   @override
   Widget build(BuildContext context) {
     final language = context.read<TranslateNotifierV2>().translate;
-    var profileImage = context.read<HomeNotifier>().profileImage;
-    var profileImageKey = context.read<HomeNotifier>().profileImageKey;
     final isIndo = SharedPreference().readStorage(SpKeys.isoCode) == 'id';
 
     return Consumer<StreamerNotifier>(
@@ -87,7 +84,7 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                 ),
                 child: CustomTextWidget(
                   textAlign: TextAlign.center,
-                  textToDisplay: (notifier.titleLive.isNotEmpty) ? (notifier.titleLive ?? '') : "${isIndo ? language.liveVideo : ''} ${notifier.userName} ${!isIndo ? language.liveVideo : ''}",
+                  textToDisplay: (notifier.titleLive.isNotEmpty) ? (notifier.titleLive) : "${isIndo ? language.liveVideo : ''} ${notifier.userName} ${!isIndo ? language.liveVideo : ''}",
                   textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700),
                 ),
               ),
@@ -254,7 +251,7 @@ class _ItemAccountState extends State<ItemAccount> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final streampro = Provider.of<StreamerNotifier>(context, listen: false);
       if (widget.isHost && widget.isViewer) {
-        streampro.getProfileNCheckViewer(context, widget.email ?? '');
+        streampro.getProfileNCheckViewer(context, widget.email);
       }
     });
   }

@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter_livepush_plugin/live_base.dart';
 import 'package:flutter_livepush_plugin/live_push_config.dart';
-import 'package:flutter_livepush_plugin/live_push_def.dart';
 import 'package:flutter_livepush_plugin/live_pusher.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -200,25 +199,25 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                           ],
                         )
                       : Container(),
-                  widget.isVid
+                  widget.isPict
                       ? Column(
                           children: [
                             menu(
-                                title: "HyppeVid".toLowerCase(),
-                                subTitle: notifier.language.shareWithUsYourCreatifity ?? '',
-                                icon: "${AssetPath.vectorPath}vid.svg",
+                                title: "HyppePic".toLowerCase(),
+                                subTitle: notifier.language.captureYourMoment ?? '',
+                                icon: "${AssetPath.vectorPath}pic.svg",
                                 function: () async {
                                   if (newUser == "FALSE") {
                                     context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
                                     // notifier.thumbnailLocalMedia();
-                                    notifier.featureType = FeatureType.vid;
-                                    notifier.isVideo = true;
+                                    notifier.featureType = FeatureType.pic;
+                                    notifier.isVideo = false;
                                     notifier.selectedDuration = 15;
                                     final tempIsHome = isHomeScreen;
                                     if (tempIsHome) {
                                       isHomeScreen = false;
                                     }
-                                    Routing().moveAndPop(Routes.makeContent);
+                                    await Routing().moveAndPop(Routes.makeContent);
                                     if (tempIsHome) {
                                       isHomeScreen = true;
                                     }
@@ -228,6 +227,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                           ],
                         )
                       : Container(),
+
                   widget.isDiary
                       ? Column(
                           children: [
@@ -256,25 +256,25 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                           ],
                         )
                       : Container(),
-                  widget.isPict
+                  widget.isVid
                       ? Column(
                           children: [
                             menu(
-                                title: "HyppePic".toLowerCase(),
-                                subTitle: notifier.language.captureYourMoment ?? '',
-                                icon: "${AssetPath.vectorPath}pic.svg",
+                                title: "HyppeVid".toLowerCase(),
+                                subTitle: notifier.language.shareWithUsYourCreatifity ?? '',
+                                icon: "${AssetPath.vectorPath}vid.svg",
                                 function: () async {
                                   if (newUser == "FALSE") {
                                     context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
                                     // notifier.thumbnailLocalMedia();
-                                    notifier.featureType = FeatureType.pic;
-                                    notifier.isVideo = false;
+                                    notifier.featureType = FeatureType.vid;
+                                    notifier.isVideo = true;
                                     notifier.selectedDuration = 15;
                                     final tempIsHome = isHomeScreen;
                                     if (tempIsHome) {
                                       isHomeScreen = false;
                                     }
-                                    await Routing().moveAndPop(Routes.makeContent);
+                                    Routing().moveAndPop(Routes.makeContent);
                                     if (tempIsHome) {
                                       isHomeScreen = true;
                                     }

@@ -204,7 +204,7 @@ class ViewStreamingNotifier with ChangeNotifier {
         Map data = {'_id': model.sId, "type": "LIKE", "like": likes};
 
         await notifier.getLinkStream(context, data, UrlConstants.updateStream);
-        final fetch = notifier.liveStreamFetch;
+        // final fetch = notifier.liveStreamFetch;
         // if (fetch.postsState == LiveStreamState.getApiSuccess) {
         //   returnNext = true;
         // }
@@ -303,7 +303,7 @@ class ViewStreamingNotifier with ChangeNotifier {
         Map data = {'_id': model.sId, "type": "CLOSE_VIEW"};
 
         await notifier.getLinkStream(context, data, UrlConstants.updateStream);
-        final fetch = notifier.liveStreamFetch;
+        // final fetch = notifier.liveStreamFetch;
         // if (fetch.postsState == LiveStreamState.getApiSuccess) {
         //   returnNext = true;
         // }

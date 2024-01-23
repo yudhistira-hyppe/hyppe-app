@@ -10,15 +10,12 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/button_boost.dart';
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
-import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-import 'package:hyppe/ui/constant/widget/jangakauan_status.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_tag_label.dart';
 
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-// import 'package:story_view/controller/story_controller.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../../core/models/collection/music/music.dart';
@@ -168,6 +165,28 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
               ),
             ),
           ),
+
+          SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
+                  (widget.data?.boosted.isEmpty ?? [].isEmpty) &&
+                  (widget.data?.reportedStatus != 'OWNED' && widget.data?.reportedStatus != 'BLURRED' && widget.data?.reportedStatus2 != 'BLURRED') &&
+                  widget.data?.email == SharedPreference().readStorage(SpKeys.email)
+              ? Container(
+                  width: MediaQuery.of(context).size.width,
+                  margin: const EdgeInsets.only(bottom: 16),
+                  padding: const EdgeInsets.only(left: 0.0, right: 74, top: 10),
+                  child: ButtonBoost(
+                    onDetail: false,
+                    marginBool: true,
+                    contentData: widget.data,
+                    startState: () {
+                      SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                    },
+                    afterState: () {
+                      SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                    },
+                  ),
+                )
+              : Container(),
 
           // twelvePx,
           Container(),

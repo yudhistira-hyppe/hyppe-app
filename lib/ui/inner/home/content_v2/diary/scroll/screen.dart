@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
@@ -14,6 +16,7 @@ import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/sticker/sticker_model.dart';
@@ -41,6 +44,7 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
+import 'package:hyppe/ui/inner/home/widget/view_like.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
@@ -1236,9 +1240,33 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                       ],
                     ),
                     twelvePx,
-                    Text(
-                      "${diaryData?[index].insight?.likes}  ${lang?.like}",
-                      style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                    RichText(
+                      text: TextSpan(children: [
+                        TextSpan(
+                          text: "${diaryData?[index].insight?.likes} ${lang!.like}",
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) => ViewLiked(
+                                          postId: diaryData?[index].postID ?? '',
+                                          eventType: 'LIKE',
+                                        ))),
+                          style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                        ),
+                        TextSpan(
+                          text: "${diaryData?[index].insight!.views?.getCountShort()} ${lang!.views}",
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) => ViewLiked(
+                                          postId: diaryData?[index].postID ?? '',
+                                          eventType: 'VIEW',
+                                        ))),
+                          style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                        ),
+                      ]),
                     ),
                   ],
                 ),

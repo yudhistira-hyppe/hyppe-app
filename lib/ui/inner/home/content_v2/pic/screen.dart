@@ -1143,7 +1143,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                     }
                                   },
                                   child: Container(
-                                    height: picData?.imageHeightTemp == 0 ? null : picData?.imageHeightTemp,
+                                    // height: picData?.imageHeightTemp == 0 ? null : picData?.imageHeightTemp,
                                     margin: const EdgeInsets.only(bottom: 20),
                                     width: SizeConfig.screenWidth,
                                     child: Container(

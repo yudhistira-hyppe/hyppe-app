@@ -4,8 +4,6 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
-import 'package:ffmpeg_kit_flutter/return_code.dart';
 import 'package:flutter/foundation.dart';
 import 'package:heif_converter/heif_converter.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
@@ -69,7 +67,6 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 import '../models/collection/advertising/view_ads_request.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 class System {
   System._private();
@@ -864,13 +861,11 @@ class System {
                 // );
                 String? jpgPath = await HeifConverter.convert(_pickerResult.files[element].path ?? '', format: 'jpg');
                 final result = File(jpgPath ?? '');
-                if (result != null) {
-                  if (_filePickerResult == null) {
-                    _filePickerResult = [];
-                  }
-                  if (_pickerResult.files.isNotEmpty) {
-                    _filePickerResult?.add(result);
-                  }
+                if (_filePickerResult == null) {
+                  _filePickerResult = [];
+                }
+                if (_pickerResult.files.isNotEmpty) {
+                  _filePickerResult?.add(result);
                 }
               } else if (_pickerResult.files[element].extension?.toLowerCase() == MP4 || _pickerResult.files[element].extension?.toLowerCase() == MOV) {
                 await getVideoMetadata(_pickerResult.files[element].path ?? '').then((value) {
@@ -2063,7 +2058,7 @@ class System {
     }
   }
 
-  void analyticSetUser(String name) async {
+  void analyticSetUser({String name = ''}) async {
     await FirebaseAnalytics.instance.setUserId(id: SharedPreference().readStorage(SpKeys.userID));
     await FirebaseAnalytics.instance.setUserProperty(
       name: SharedPreference().readStorage(SpKeys.email).toString().substring(0, 24),

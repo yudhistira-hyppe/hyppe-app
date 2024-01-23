@@ -43,6 +43,7 @@ class _HyppeState extends State<Hyppe> {
 
   @override
   void dispose() {
+    _intentDataStreamSubscription.cancel();
     super.dispose();
   }
 

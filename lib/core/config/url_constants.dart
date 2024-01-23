@@ -81,7 +81,7 @@ class UrlConstants {
 
   static const String userbankaccountsRoute = "/api/userbankaccounts";
 
-  static const String accountBalancesRoutes = "/api/accountbalances";
+  static const String accountBalancesRoutes = "/api/accountbalances/v2";
 
   /* Post route */
   static const String contentRouteV3 = "/api/getusercontents";
@@ -247,10 +247,10 @@ class UrlConstants {
   static const String getVideoApsara = "$postRouteV2/getvideo";
 
   /// post => Post Contents
-  static const String createuserposts = "$postRouteV2/createpost";
+  static const String createuserposts = "$postRouteV2/createpost/v2";
 
   /// post => Update Contents
-  static const String updatepost = "$postRouteV2/updatepost";
+  static const String updatepost = "$postRouteV2/updatepost/v2";
 
   /// post => post to change value key isViewed
   static const String postViewer = "$postRouteV2/postviewer";
@@ -259,7 +259,7 @@ class UrlConstants {
   static const String removeComment = "$postRouteV2/removecomment";
 
   /// post => Post Device Activity
-  static const String deviceactivity = "$userRoute/deviceactivity";
+  static const String deviceactivity = "$userRoute/deviceactivity/v2";
 
   /// post => Get User Profiles
   static const String getuserprofile = "$userRoute/getuserprofile/v2";
@@ -271,7 +271,7 @@ class UrlConstants {
   static const String logout = "$userRoute/logout";
 
   /// post => Interactives
-  static const String interactive = "$postRouteV2/interactive";
+  static const String interactive = "$postRouteV2/interactive/v2";
 
   /// post => Get Interactives
   static const String getInnteractives = "$postRouteV2/getinteractives/v2";
@@ -301,13 +301,14 @@ class UrlConstants {
   //get search people
   static const String getSearchPeople = "$profileRoute/search/v2";
 
+  
   ///---------------------------------------------------------------------------------------------------------///
   /* v3 search data content dan user */
-  static const String getSearchContentV3 = "$contentRouteV3/searchdata";
+  static const String getSearchContentV3 = "$contentRouteV3/searchdata/v2";
   static const String getSearchContentV4 = "$contentRouteV3/searchdatanew";
   static const String landingPageSearch = "$interestCount/default-page";
-  static const String getDetailHashtag = "$contentRouteV3/searchdatanew/detailtag";
-  static const String getDetailInterest = "$contentRouteV3/searchdatanew/detailinterest";
+  static const String getDetailHashtag = "$contentRouteV3/searchdatanew/detailtag/v2";
+  static const String getDetailInterest = "$contentRouteV3/searchdatanew/detailinterest/v2";
   static const String getSearchContentV5 = "$contentRouteV3/searchdatanew/v2";
   static const String getDetailHashtagV2 = "$contentRouteV3/searchdatanew/detailtag/v2";
   static const String getDetailInterestV2 = "$contentRouteV3/searchdatanew/detailinterest/v2";
@@ -324,7 +325,7 @@ class UrlConstants {
   static const String getBuyContent = "$userContentRoute/buy/details/v2";
 
   /// post => Get Buy Content
-  static const String postBuyContent = "$transactionRoute/";
+  static const String postBuyContent = "$transactionRoute/v2";
 
   /// post => Get History Transaction
   static const String transactionHistorys = "$transactionRoute/historys/v2";
@@ -442,10 +443,10 @@ class UrlConstants {
   static const String getBannerChalange = "$challange/listing/bannerlandingpage";
   static const String getLeaderBoard = "$challange/listleaderboard";
   static const String getLeaderBoardSession = "$challange/listleaderboard2";
-  static const String getOtherChallange = "$challange/allchallenge";
+  static const String getOtherChallange = "$challange/allchallenge/v2";
   static const String joinChallange = "$challange/join/v2";
-  static const String listAchievement = "$challange/listbadgebyuser";
-  static const String collectionBadge = "$challange/listbadgeuserdetail";
+  static const String listAchievement = "$challange/listbadgebyuser/v2";
+  static const String collectionBadge = "$challange/listbadgeuserdetail/v2";
   static const String selectBadge = "$challange/badgechoice";
   static const String checkChallengeStatus = "$challange/join/currentstatus";
 
