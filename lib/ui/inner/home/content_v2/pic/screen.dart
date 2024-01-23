@@ -21,6 +21,7 @@ import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/utils/zoom_pic/zoom_pic.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
@@ -127,7 +128,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
   @override
   void initState() {
-    super.initState();
     print('data screen pic');
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppePreviewPic');
     final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
@@ -143,19 +143,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     // _primaryScrollController = widget.scrollController!;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       WidgetsBinding.instance.addObserver(this);
+      print("===============init ali player ===========");
       fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPic');
-      fAliplayer?.setAutoPlay(true);
-      fAliplayer?.setLoop(true);
-
-      //Turn on mix mode
-      if (Platform.isIOS) {
-        FlutterAliplayer.enableMix(true);
-        // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
-      }
-
-      //set player
-      fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
-      fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+      initAlipayer();
+      print("===============init ali player ${fAliplayer?.playerId} ===========");
 
       //scroll
       // if (mounted) {
@@ -167,12 +158,60 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       //     });
       //   });
       // }
-
-      _initListener(notifier);
     });
     context.read<HomeNotifier>().removeWakelock();
-
     super.initState();
+  }
+
+  void vidConfig() {
+    var configMap = {
+      'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
+      'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
+      'mMaxBufferDuration': GlobalSettings.mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
+      'mMaxDelayTime': GlobalSettings.mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
+      'mNetworkTimeout': GlobalSettings.mNetworkTimeout, // The network timeout period. Unit: milliseconds.
+      'mNetworkRetryCount': GlobalSettings.mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
+      'mEnableLocalCache': GlobalSettings.mEnableCacheConfig,
+      'mLocalCacheDir': GlobalSettings.mDirController,
+      'mClearFrameWhenStop': true
+    };
+    // Configure the application.
+    fAliplayer?.setConfig(configMap);
+    var map = {
+      "mMaxSizeMB": GlobalSettings.mMaxSizeMBController,
+
+      /// The maximum space that can be occupied by the cache directory.
+      "mMaxDurationS": GlobalSettings.mMaxDurationSController,
+
+      /// The maximum cache duration of a single file.
+      "mDir": GlobalSettings.mDirController,
+
+      /// The cache directory.
+      "mEnable": GlobalSettings.mEnableCacheConfig
+
+      /// Specify whether to enable the cache feature.
+    };
+    fAliplayer?.setCacheConfig(map);
+  }
+
+  initAlipayer() {
+    globalAliPlayer = fAliplayer;
+    vidConfig();
+    fAliplayer?.pause();
+    fAliplayer?.setAutoPlay(true);
+    fAliplayer?.setLoop(true);
+
+    //Turn on mix mode
+    if (Platform.isIOS) {
+      FlutterAliplayer.enableMix(true);
+      // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
+    }
+
+    //set player
+    fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
+    fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+    final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
+    _initListener(notifier);
   }
 
   _initListener(PreviewPicNotifier notifier) {
@@ -276,7 +315,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       // Fluttertoast.showToast(msg: "SnapShot Save : $path");
     });
     fAliplayer?.setOnError((errorCode, errorExtra, errorMsg, playerId) {
-      // _showLoading = false;
+      print("============init ali player error $errorCode - $errorExtra - $errorMsg - $playerId");
 
       setState(() {});
     });
@@ -444,17 +483,19 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
   void start(BuildContext context, ContentData data, PreviewPicNotifier notifier) async {
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
-
+    print("===-=-=-=-=-start--0-0-0-");
     fAliplayer?.stop();
     dataSelected = data;
 
     isPlay = false;
     dataSelected?.isDiaryPlay = false;
+
     // fAliplayer?.setVidAuth(
-    //   vid: "c1b24d30b2c671edbfcb542280e90102",
+    //   vid: "c7d74ee240dd4fe288b1a897a7f8b0ab",
     //   region: DataSourceRelated.defaultRegion,
     //   playAuth:
-    //       "eyJTZWN1cml0eVRva2VuIjoiQ0FJU2lBTjFxNkZ0NUIyeWZTaklyNURISnUvWnJvZFIrb1d2VlY2SmdHa0RPdFZjaDZMRG96ejJJSDFLZlhadEJPQWN0ZlF3bFdwVDdQNGJsckl1RjhJWkdoR2ZONU10dE1RUHJGL3dKb0hidk5ldTBic0hoWnY5bGNNTHJaaWpqcUhvZU96Y1lJNzMwWjdQQWdtMlEwWVJySkwrY1RLOUphYk1VL21nZ29KbWFkSTZSeFN4YVNFOGF2NWRPZ3BscnIwSVZ4elBNdnIvSFJQMnVtN1pIV3R1dEEwZTgzMTQ1ZmFRejlHaTZ4YlRpM2I5ek9FVXFPYVhKNFMvUGZGb05ZWnlTZjZvd093VUVxL2R5M3hvN3hGYjFhRjRpODRpL0N2YzdQMlFDRU5BK3dtbFB2dTJpOE5vSUYxV2E3UVdJWXRncmZQeGsrWjEySmJOa0lpbDVCdFJFZHR3ZUNuRldLR216c3krYjRIUEROc2ljcXZoTUhuZ3k4MkdNb0tQMHprcGVuVUdMZ2hIQ2JGRFF6MVNjVUZ3RjIyRmQvVDlvQTJRTWwvK0YvbS92ZnRvZ2NvbC9UTEI1c0dYSWxXRGViS2QzQnNETjRVMEIwRlNiRU5JaERPOEwvOWNLRndUSWdrOFhlN01WL2xhYUJGUHRLWFdtaUgrV3lOcDAzVkxoZnI2YXVOcGJnUHIxVVFwTlJxQUFaT3kybE5GdndoVlFObjZmbmhsWFpsWVA0V3paN24wTnVCbjlILzdWZHJMOGR5dHhEdCtZWEtKNWI4SVh2c0lGdGw1cmFCQkF3ZC9kakhYTjJqZkZNVFJTekc0T3pMS1dKWXVzTXQycXcwMSt4SmNHeE9iMGtKZjRTcnFpQ1RLWVR6UHhwakg0eDhvQTV6Z0cvZjVIQ3lFV3pISmdDYjhEeW9EM3NwRUh4RGciLCJBdXRoSW5mbyI6IntcIkNJXCI6XCJmOUc0eExxaHg2Tkk3YThaY1Q2N3hObmYrNlhsM05abmJXR1VjRmxTelljS0VKVTN1aVRjQ29Hd3BrcitqL2phVVRXclB2L2xxdCs3MEkrQTJkb3prd0IvKzc5ZlFyT2dLUzN4VmtFWUt6TT1cIixcIkNhbGxlclwiOlwiV2NKTEpvUWJHOXR5UmM2ZXg3LzNpQXlEcS9ya3NvSldhcXJvTnlhTWs0Yz1cIixcIkV4cGlyZVRpbWVcIjpcIjIwMjMtMDMtMTZUMDk6NDE6MzdaXCIsXCJNZWRpYUlkXCI6XCJjMWIyNGQzMGIyYzY3MWVkYmZjYjU0MjI4MGU5MDEwMlwiLFwiUGxheURvbWFpblwiOlwidm9kLmh5cHBlLmNsb3VkXCIsXCJTaWduYXR1cmVcIjpcIk9pbHhxelNyaVVhOGlRZFhaVEVZZEJpbUhJUT1cIn0iLCJWaWRlb01ldGEiOnsiU3RhdHVzIjoiTm9ybWFsIiwiVmlkZW9JZCI6ImMxYjI0ZDMwYjJjNjcxZWRiZmNiNTQyMjgwZTkwMTAyIiwiVGl0bGUiOiIyODg4MTdkYi1jNzdjLWM0ZTQtNjdmYi0zYjk1MTlmNTc0ZWIiLCJDb3ZlclVSTCI6Imh0dHBzOi8vdm9kLmh5cHBlLmNsb3VkL2MxYjI0ZDMwYjJjNjcxZWRiZmNiNTQyMjgwZTkwMTAyL3NuYXBzaG90cy9jYzM0MjVkNzJiYjM0YTE3OWU5NmMzZTA3NTViZjJjNi0wMDAwNC5qcGciLCJEdXJhdGlvbiI6NTkuMDQ5fSwiQWNjZXNzS2V5SWQiOiJTVFMuTlNybVVtQ1hwTUdEV3g4ZGlWNlpwaGdoQSIsIlBsYXlEb21haW4iOiJ2b2QuaHlwcGUuY2xvdWQiLCJBY2Nlc3NLZXlTZWNyZXQiOiIzU1NRUkdkOThGMU04TkZ0b00xa2NlU01IZlRLNkJvZm93VXlnS1Y5aEpQdyIsIlJlZ2lvbiI6ImFwLXNvdXRoZWFzdC01IiwiQ3VzdG9tZXJJZCI6NTQ1NDc1MzIwNTI4MDU0OX0=",
+    //       "eyJTZWN1cml0eVRva2VuIjoiQ0FJU2lBTjFxNkZ0NUIyeWZTaklyNWJGQ2NuR3I3RlkvWVNDTm4vRm8yc3ZRZXBrM291Zm9UejJJSDFLZlhadEJPQWN0ZlF3bFdwVDdQNGJsckl1RjhJWkdoR2ZONU10dE1RUHJGL3dKb0hidk5ldTBic0hoWnY5bGFZcHlhV2lqcUhvZU96Y1lJNzMwWjdQQWdtMlEwWVJySkwrY1RLOUphYk1VL21nZ29KbWFkSTZSeFN4YVNFOGF2NWRPZ3BscnIwSVZ4elBNdnIvSFJQMnVtN1pIV3R1dEEwZTgzMTQ1ZmFRejlHaTZ4YlRpM2I5ek9FVXFPYVhKNFMvUGZGb05ZWnlTZjZvd093VUVxL2R5M3hvN3hGYjFhRjRpODRpL0N2YzdQMlFDRU5BK3dtbFB2dTJpOE5vSUYxV2E3UVdJWXRncmZQeGsrWjEySmJOa0lpbDVCdFJFZHR3ZUNuRldLR216c3krYjRIUEROc2ljcXZoTUhuZ3k4MkdNb0tQMHprcGVuVUdMZ2hIQ2JGRFF6MVNjVUZ3RjIyRmQvVDlvQTJRTWwvK0YvbS92ZnRvZ2NvbC9UTEI1c0dYSWxXRGViS2QzQnNETjRVMEIwRlNiRU5JaERPOEwvOWNLRndUSWdrOFhlN01WL2xhYUJGUHRLWFdtaUgrV3lOcDAzVkxoZnI2YXVOcGJnUHIxVVFwTlJxQUFTUHlvYjNkZ1lCTUtXZ25DRVVRMXVJY09TSG90ekJHWWVPdUhERGhMYVN2OTBuQmFQNHYzWDIzbFpXNU5rYnlqbFJWQlJCRTVaVVpJbXBLcjNtVzZUdU9TWWY0Y2RKaTR6bHU2NkplWHNJM1AyQTlLWm9VVjhjOHlJV3RrSUYwdjVpaEFRTk53aCtmN2pLZnNSenQ0bkVuOGhqZFNmcTBYM0NmZ3NyQjBqMUdJQUE9IiwiQXV0aEluZm8iOiJ7XCJDSVwiOlwieVBacGpLVERNbVgrMXVhSDUwTGVuclRlZEs4YzBpdDNtZDhjWGdaQWhmUFR2MkxNeGY4NllVRCsyS3lJNkJoclBLVmMvS0N4YnlMMWR1aEF1aXpCQWV4VmU0VS9GNGlHdjByVVJwaU1KMk09XCIsXCJDYWxsZXJcIjpcIlE0cTdKSE5sUlYwRVNKZjdWaHFKVEZNakVRQUdGaG10U1hGR0N3eU9WYkE9XCIsXCJFeHBpcmVUaW1lXCI6XCIyMDI0LTAxLTIzVDA3OjQ3OjQwWlwiLFwiTWVkaWFJZFwiOlwiYzdkNzRlZTI0MGRkNGZlMjg4YjFhODk3YTdmOGIwYWJcIixcIlBsYXlEb21haW5cIjpcInZvZC5oeXBwZS5jbG91ZFwiLFwiU2lnbmF0dXJlXCI6XCJLbTNmbGZMRHZNOGJWWW1DRTJKN3FaTlVvWUk9XCJ9IiwiVmlkZW9NZXRhIjp7IlN0YXR1cyI6Ik5vcm1hbCIsIlZpZGVvSWQiOiJjN2Q3NGVlMjQwZGQ0ZmUyODhiMWE4OTdhN2Y4YjBhYiIsIlRpdGxlIjoiMzU3Njc3YjYtZjRkYi0yM2RkLTBmMWYtNGU0MTJjZDE1OWJjIiwiQ292ZXJVUkwiOiJodHRwczovL3ZvZC5oeXBwZS5jbG91ZC9jN2Q3NGVlMjQwZGQ0ZmUyODhiMWE4OTdhN2Y4YjBhYi9zbmFwc2hvdHMvNTM3YTliNmVmOWFmNDk0NWFiY2IwNDk2ZWY3NDZiMWYtMDAwMDQuanBnIiwiRHVyYXRpb24iOjU4LjMzMzN9LCJBY2Nlc3NLZXlJZCI6IlNUUy5OVXBCc3JCbnlKRmk0WXRHa3pNZUgxTjRDIiwiUGxheURvbWFpbiI6InZvZC5oeXBwZS5jbG91ZCIsIkFjY2Vzc0tleVNlY3JldCI6IjZMZDI5NlN6WVVaWWI5dkhmSG5YSm1GWlhQeUtuY1d0ZXJOTGlHSGVVcExRIiwiUmVnaW9uIjoiYXAtc291dGhlYXN0LTUiLCJDdXN0b21lcklkIjo1NDU0NzUzMjA1MjgwNTQ5fQ==",
+    //   definitionList: [DataSourceRelated.definitionList],
     // );
 
     // _playMode = ModeTypeAliPLayer.auth;
@@ -499,14 +540,17 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     print("====---- ---==== ali ${fAliplayer?.getPlayerName()}");
 
     try {
-      fAliplayer?.prepare();
+      print("===============init ali player ${fAliplayer?.playerId} ===========");
+      fAliplayer?.prepare().then((value) {
+        print("===============init ali player 22 ${fAliplayer?.playerId} ===========");
+      });
     } catch (e) {
       print(e);
     }
-    fAliplayer?.play();
-    // if (notifier.isMute) {
-    //   fAliplayer?.setMuted(true);
-    // }
+
+    if (notifier.isMute) {
+      fAliplayer?.setMuted(true);
+    }
   }
 
   Future getAuth(BuildContext context, String apsaraId) async {
@@ -526,7 +570,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
           vid: apsaraId,
           region: DataSourceRelated.defaultRegion,
           playAuth: auth,
+          definitionList: [DataSourceRelated.definitionList],
         );
+
         setState(() {
           isloading = false;
         });
@@ -578,7 +624,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void dispose() {
     print("---=-=-=-=--===-=-=-=-DiSPOSE--=-=-=-=-=-=-=-=-=-=-=----==-=");
-    fAliplayer?.destroy();
+    // fAliplayer?.destroy();
 
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
@@ -590,7 +636,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     fAliplayer?.stop();
     System().disposeBlock();
     if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
-      fAliplayer?.destroy();
+      // fAliplayer?.destroy();
     }
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
@@ -1078,6 +1124,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                         if (indexList == (notifier.pic?.length ?? 0) - 1) {
                                           context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {});
                                         }
+
                                         if (picData?.music != null) {
                                           print("ada musiknya ${picData?.music}");
                                           Future.delayed(const Duration(milliseconds: 100), () {
