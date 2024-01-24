@@ -5,6 +5,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -33,7 +34,7 @@ class OtherProfileTop extends StatelessWidget {
 
   void showTap(BuildContext context, List<ContentData> dataStory, OtherProfileNotifier notifier) {
     if (dataStory.isNotEmpty) {
-      context.read<PreviewStoriesNotifier>().navigateToOtherStoryGroup(context, dataStory, email ?? '');
+      context.read<PreviewStoriesNotifier>().navigateToOtherStoryGroup(context, dataStory, email ?? '', isOther: true);
     } else {
       showPict(context, notifier);
     }
@@ -240,11 +241,14 @@ class OtherProfileTop extends StatelessWidget {
                           function: notifier.isCheckLoading
                               ? null
                               : () {
-                                  if (notifier.statusFollowing == StatusFollowing.none || notifier.statusFollowing == StatusFollowing.rejected) {
-                                    notifier.followUser(context);
-                                  } else if (notifier.statusFollowing == StatusFollowing.following) {
-                                    notifier.followUser(context, isUnFollow: true);
-                                  }
+                            context.handleActionIsGuest(() {
+                              if (notifier.statusFollowing == StatusFollowing.none || notifier.statusFollowing == StatusFollowing.rejected) {
+                                notifier.followUser(context);
+                              } else if (notifier.statusFollowing == StatusFollowing.following) {
+                                notifier.followUser(context, isUnFollow: true);
+                              }
+                            });
+
                                 },
                           child: notifier.isCheckLoading
                               ? const CustomLoading()
@@ -264,15 +268,18 @@ class OtherProfileTop extends StatelessWidget {
                           height: 42 * SizeConfig.scaleDiagonal,
                           buttonStyle: Theme.of(context).elevatedButtonTheme.style,
                           function: () async {
-                            if (notifier.manyUser.first.profile != null) {
-                              try {
-                                await notifier.createDiscussion(context);
-                              } catch (e) {
-                                e.logger();
+                            context.handleActionIsGuest(() async {
+                              if (notifier.manyUser.first.profile != null) {
+                                try {
+                                  await notifier.createDiscussion(context);
+                                } catch (e) {
+                                  e.logger();
+                                }
+                              } else {
+                                // ShowBottomSheet.onInternalServerError(context, statusCode: 500, onReload: await notifier.createDiscussion(context));
                               }
-                            } else {
-                              // ShowBottomSheet.onInternalServerError(context, statusCode: 500, onReload: await notifier.createDiscussion(context));
-                            }
+                            });
+
                           },
                           child: CustomTextWidget(
                             textToDisplay: notifier.language.message ?? 'message',

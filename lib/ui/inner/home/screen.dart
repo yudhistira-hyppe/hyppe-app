@@ -9,6 +9,7 @@ import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
@@ -209,6 +210,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     }
     super.initState();
     '++++++++++++++++ iniststate'.logger();
+    System().analyticSetScreen('landingpage');
   }
 
   _initLicense() {
@@ -284,8 +286,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                   }
                 },
                 child: AbsorbPointer(
-                  // absorbing: true,
-                  absorbing: isZoom,
+                  absorbing: false,
+                  // absorbing: isZoom,
                   child: NestedScrollView(
                     // key: context.read<MainNotifier>().globalKey,
                     key: globalKey,
@@ -360,7 +362,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                     },
                     body: TabBarView(
                       controller: _tabController,
-                      physics: isZoom ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
+                      // physics: isZoom ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
                       children: [
                         // Pict
                         Container(
@@ -369,12 +371,12 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                           color: kHyppeLightSurface,
                           child: HyppePreviewPic(
                             onScaleStart: () {
-                              zoom(true);
-                              globalTultipShow = true;
+                              // zoom(true);
+                              // globalTultipShow = true;
                             },
                             onScaleStop: () {
-                              zoom(false);
-                              globalTultipShow = false;
+                              // zoom(false);
+                              // globalTultipShow = false;
                             },
                             appbarSeen: appbarSeen,
                             scrollController: globalKey.currentState?.innerController,
@@ -382,6 +384,20 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                             // offset: offset,
                           ),
                         ),
+                        // Container(
+                        //     padding: const EdgeInsets.only(left: 6.0, right: 6),
+                        //     color: kHyppeLightSurface,
+                        //     child: ListView.builder(
+                        //       itemCount: 100,
+                        //       itemBuilder: (context, index) {
+                        //         return Container(
+                        //           margin: EdgeInsets.only(bottom: 30),
+                        //           height: 50,
+                        //           width: 50,
+                        //           color: Colors.red,
+                        //         );
+                        //       },
+                        //     )),
                         Container(
                           padding: const EdgeInsets.only(left: 6.0, right: 6),
                           color: kHyppeLightSurface,

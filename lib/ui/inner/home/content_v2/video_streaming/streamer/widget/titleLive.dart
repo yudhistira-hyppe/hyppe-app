@@ -45,7 +45,7 @@ class TitleLive extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        (notifier.titleLive.isNotEmpty ?? false) ? notifier.titleLive: notifier.userName,
+                        (notifier.titleLive.isNotEmpty) ? notifier.titleLive : notifier.userName,
                         style: const TextStyle(
                           color: kHyppeTextPrimary,
                           fontWeight: FontWeight.w700,
@@ -73,7 +73,6 @@ class TitleLive extends StatelessWidget {
                   color: kHyppeTextPrimary,
                 ),
               )
-
             ],
           )),
     );

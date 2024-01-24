@@ -40,7 +40,9 @@ import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/screen.dart'
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/shimmer_slider.dart';
 import 'package:hyppe/ui/inner/home/content_v2/content_preferences/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/player/diary_player.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/player/landing_diary_full.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/screen_full.dart';
 // import 'package:hyppe/ui/inner/home/content/wallet/screen_lama.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/see_all/diary_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/FAQ/screen.dart';
@@ -110,7 +112,6 @@ import 'package:hyppe/ui/inner/upload/pre_upload_content/ownerhip_selling/screen
 import 'package:hyppe/ui/inner/upload/pre_upload_content/payment_summary/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/screen.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/screen.dart';
-// import 'package:hyppe/ui/outer/ads/screen.dart';
 import 'package:hyppe/ui/outer/forgot_password/forgot_password/forgot_password_screen.dart';
 import 'package:hyppe/ui/outer/forgot_password/set_new_password/screen.dart';
 import 'package:hyppe/ui/outer/forgot_password/user_otp/user_otp_screen.dart';
@@ -140,8 +141,6 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_detail.da
 import 'package:hyppe/ui/inner/home/content_v2/profile/setting/setting_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/sign_in_security/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/change_password/screen.dart';
-// import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/screen.dart';
-
 import '../core/arguments/detail_ticket_argument.dart';
 import '../core/arguments/main_argument.dart';
 import '../ui/inner/home/content_v2/help/detail_ticket/screen.dart';
@@ -233,6 +232,9 @@ class Generate {
 
       case Routes.diaryDetail:
         return MaterialPageRoute(builder: (_) => DiaryPlayerPage(argument: settings.arguments as DiaryDetailScreenArgument));
+
+      case Routes.diaryFull:
+        return CupertinoPageRoute(builder: (_) => LandingDiaryFullPage(argument: settings.arguments as DiaryDetailScreenArgument));
 
       // case Routes.storyDetail:
       //   return MaterialPageRoute(builder: (_) => HyppePlaylistStories(argument: settings.arguments as StoryDetailScreenArgument));
@@ -421,6 +423,9 @@ class Generate {
       case Routes.scrollVid:
         return MaterialPageRoute(builder: (_) => ScrollVid(arguments: settings.arguments as SlidedVidDetailScreenArgument));
 
+      case Routes.scrollFullDiary:
+        return CupertinoPageRoute(builder: (_) => ScrollFullDiary(arguments: settings.arguments as SlidedDiaryDetailScreenArgument));
+
       case Routes.chalenge:
         return MaterialPageRoute(builder: (_) => const ChalangeScreen());
       case Routes.chalengeDetail:
@@ -440,7 +445,10 @@ class Generate {
       case Routes.listStreamers:
         return MaterialPageRoute(builder: (_) => const ListStreamersScreen());
       case Routes.viewStreaming:
-        return MaterialPageRoute(builder: (_) => ViewStreamingScreen(args: settings.arguments as ViewStreamingArgument,));
+        return MaterialPageRoute(
+            builder: (_) => ViewStreamingScreen(
+                  args: settings.arguments as ViewStreamingArgument,
+                ));
       case Routes.picFullScreenDetail:
         return CupertinoPageRoute(builder: (_) => PicFullscreenPage(argument: settings.arguments as PicFullscreenArgument));
       case Routes.picScrollFullScreenDetail:

@@ -182,6 +182,17 @@ extension ContextScreen on BuildContext {
     );
   }
 
+  handleActionIsGuest(Function() onSlipOut, {Function()? addAction}){
+    final bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
+    if(isGuest ?? false){
+      if(addAction != null){
+        addAction();
+      }
+      ShowBottomSheet.onLoginApp(this);
+    }else{
+      onSlipOut();
+    }
+  }
 
 }
 

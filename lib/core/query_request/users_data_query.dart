@@ -52,6 +52,7 @@ class UsersDataQuery extends PaginationQueryInterface {
       hasNext = res?.length == limit;
       if (res?.length != null) page++;
     } catch (e) {
+      loading = false;
       '$e'.logger();
       rethrow;
     } finally {

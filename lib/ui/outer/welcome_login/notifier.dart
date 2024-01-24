@@ -32,6 +32,7 @@ import 'package:provider/provider.dart';
 import 'package:hyppe/core/services/fcm_service.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:unique_identifier/unique_identifier.dart';
 
 import '../../../core/constants/themes/hyppe_colors.dart';
 
@@ -192,6 +193,58 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
     });
   }
 
+  bool _goToGuest = false;
+  bool get goToGuest => _goToGuest;
+  set goToGuest(bool state){
+    _goToGuest = state;
+    notifyListeners();
+  }
+
+  Future onClickGuest(BuildContext context) async {
+    bool connection = await System().checkConnections();
+    if(!goToGuest){
+      goToGuest = true;
+      await System().getLocation(context).then((value) async {
+        if (value) {
+          if (connection) {
+            unFocusController();
+            incorrect = false;
+            // ignore: avoid_print
+            // print(a.latitude);
+            var email = await UniqueIdentifier.serial;
+            email = "$email@hyppeguest.com";
+            await FcmService().initializeFcmIfNot();
+            final notifier = UserBloc();
+            await notifier.guestMode(
+              context,
+              email: email,
+              latitude: latitude.toString(),
+              longtitude: longitude.toString(),
+            );
+
+            final fetch = notifier.userFetch;
+            if (fetch.userState == UserState.LoginSuccess) {
+              hide = true;
+              final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
+              _validateUserData(context, _result, false, onlineVersion: fetch.version, onlineIosVersion: fetch.versionIos, isGuest: true);
+            }
+            if (fetch.userState == UserState.LoginError) {
+              if (fetch.data != null) {
+                clearTextController();
+                incorrect = true;
+              }
+            }
+          } else {
+            ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
+          }
+          goToGuest = false;
+        }
+        goToGuest = false;
+      });
+    }
+
+  }
+
   void onClickSignUpHere() {
     incorrect = false;
     _routing.move(Routes.register);
@@ -231,10 +284,22 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
   //   }
   // }
 
-  _validateUserData(BuildContext context, UserProfileModel signData, bool isSociaMediaLogin, {String? onlineVersion, String? onlineIosVersion}) async {
+  _validateUserData(BuildContext context, UserProfileModel signData, bool isSociaMediaLogin, {String? onlineVersion, String? onlineIosVersion, bool isGuest = false}) async {
     await CheckVersion().check(context, onlineVersion, onlineIosVersion);
-    if (isSociaMediaLogin) {
+    if(isGuest){
       clearTextController();
+      SharedPreference().writeStorage(SpKeys.isGuest, isGuest);
+      SharedPreference().writeStorage(SpKeys.userToken, signData.token);
+      SharedPreference().writeStorage(SpKeys.email, signData.email);
+      SharedPreference().writeStorage(SpKeys.userID, signData.idUser);
+      SharedPreference().writeStorage(SpKeys.isoCode, signData.langIso);
+      SharedPreference().writeStorage(SpKeys.isLoginSosmed, 'guest');
+      await context.read<TranslateNotifierV2>().initTranslate(context);
+      DeviceBloc().activityAwake(context);
+      Routing().moveAndRemoveUntil(Routes.lobby, Routes.lobby);
+    }else if (isSociaMediaLogin) {
+      clearTextController();
+      SharedPreference().writeStorage(SpKeys.isGuest, isGuest);
       SharedPreference().writeStorage(SpKeys.userToken, signData.token);
       SharedPreference().writeStorage(SpKeys.email, signData.email);
       SharedPreference().writeStorage(SpKeys.isLoginSosmed, 'socmed');
@@ -257,6 +322,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
       ShowBottomSheet.onShowSomethingWhenWrong(context);
     } else if (signData.userType == UserType.verified) {
       clearTextController();
+      SharedPreference().writeStorage(SpKeys.isGuest, isGuest);
       SharedPreference().writeStorage(SpKeys.userToken, signData.token);
       SharedPreference().writeStorage(SpKeys.email, signData.email);
       SharedPreference().writeStorage(SpKeys.isLoginSosmed, 'manual');

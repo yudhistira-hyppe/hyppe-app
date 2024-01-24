@@ -205,13 +205,13 @@ class OtherProfileNotifier with ChangeNotifier {
     }
   }
 
-  onScrollListener(BuildContext context, ScrollController scrollController, {bool isLoad = false}) async {
+  onScrollListener(BuildContext context, {ScrollController? scrollController, bool isLoad = false}) async {
     var connection = await System().checkConnections();
     if (!connection) {
       return false;
     }
 
-    if (isLoad || (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange)) {
+    if (isLoad || (scrollController != null && scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange)) {
       switch (pageIndex) {
         case 0:
           {
@@ -686,7 +686,6 @@ class OtherProfileNotifier with ChangeNotifier {
 
   void showContentSensitive(BuildContext context, {required String postID, required String content, bool? isReport}) {
     ContentData? updatedData;
-    ContentData? updatedData2;
 
     switch (content) {
       case hyppeVid:

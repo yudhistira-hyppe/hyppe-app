@@ -68,15 +68,16 @@ class _OnShowUserViewContentBottomSheetState extends State<OnShowUserViewContent
                 ],
               ),
               notifier.isLoading
-                  ? const Center(child: CustomLoading()) : Expanded(
+                  ? const Center(child: CustomLoading())
+                  : Expanded(
                       child: ListView.builder(
                         shrinkWrap: true,
                         controller: _scrollController,
                         // scrollDirection: Axis.vertical,
                         // physics: const NeverScrollableScrollPhysics(),
-                        itemCount: notifier.listLikeView?.length,
+                        itemCount: notifier.listLikeView?.user?.length,
                         itemBuilder: (context, index) {
-                          final data = notifier.listLikeView?[index];
+                          final data = notifier.listLikeView?.user?[index];
                           // print(System().showUserPicture(value[index].avatar));
                           if (data != null) {
                             return ListTile(

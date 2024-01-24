@@ -17,99 +17,134 @@ class AdsDataBloc {
   setCommentFetch(AdsDataFetch val) => _adsDataFetch = val;
 
   Future adsVideoBloc(BuildContext context, bool isContent) async {
-    setCommentFetch(AdsDataFetch(AdsDataState.loading));
-    final email = SharedPreference().readStorage(SpKeys.email);
-    final token = SharedPreference().readStorage(SpKeys.userToken);
-    await Repos().reposPost(context, (onResult) {
-      if ((onResult.statusCode ?? 300) > HTTP_CODE) {
-        setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError));
-      } else {
-        print('data: ${onResult.data}');
-        final response = AdsVideo.fromJson(onResult.data);
-        setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocSuccess, data: response));
-      }
-    }, (errorData) => setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError)),
-        host: isContent ? UrlConstants.getAdsVideo : UrlConstants.getSponsoredAds,
-        withAlertMessage: false,
-        withCheckConnection: false,
-        methodType: MethodType.get,
-        headers: {
-          'x-auth-user': email,
-          'x-auth-token': token,
-        });
+    final isGuest = SharedPreference().readStorage(SpKeys.isGuest);
+    if(!isGuest){
+      setCommentFetch(AdsDataFetch(AdsDataState.loading));
+      final email = SharedPreference().readStorage(SpKeys.email);
+      final token = SharedPreference().readStorage(SpKeys.userToken);
+      await Repos().reposPost(context, (onResult) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+          setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError));
+        } else {
+          print('data: ${onResult.data}');
+          final response = AdsVideo.fromJson(onResult.data);
+          setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocSuccess, data: response));
+        }
+      }, (errorData) => setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError)),
+          host: isContent ? UrlConstants.getAdsVideo : UrlConstants.getSponsoredAds,
+          withAlertMessage: false,
+          withCheckConnection: false,
+          methodType: MethodType.get,
+          headers: {
+            'x-auth-user': email,
+            'x-auth-token': token,
+          });
+    }
   }
 
   Future adsVideoBlocV2(BuildContext context, AdsType adsType) async {
-    setCommentFetch(AdsDataFetch(AdsDataState.loading));
-    final email = SharedPreference().readStorage(SpKeys.email);
-    final token = SharedPreference().readStorage(SpKeys.userToken);
-    await Repos().reposPost(context, (onResult) {
-      if ((onResult.statusCode ?? 300) > HTTP_CODE) {
-        setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError));
-      } else {
-        print('data: ${onResult.data}');
-        final response = AdsVideo.fromJson(onResult.data);
-        setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocSuccess, data: response));
-      }
-    }, (errorData) => setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError)),
-        host: adsType == AdsType.content
-            ? UrlConstants.getAdsInContent
-            : adsType == AdsType.between
-                ? UrlConstants.getAdsInBetween
-                : UrlConstants.getPopUpAds,
-        withAlertMessage: false,
-        withCheckConnection: false,
-        methodType: MethodType.get,
-        headers: {
-          'x-auth-user': email,
-          'x-auth-token': token,
-        });
+    final isGuest = SharedPreference().readStorage(SpKeys.isGuest);
+    if(!isGuest){
+      setCommentFetch(AdsDataFetch(AdsDataState.loading));
+      final email = SharedPreference().readStorage(SpKeys.email);
+      final token = SharedPreference().readStorage(SpKeys.userToken);
+      await Repos().reposPost(context, (onResult) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+          setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError));
+        } else {
+          print('data: ${onResult.data}');
+          final response = AdsVideo.fromJson(onResult.data);
+          setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocSuccess, data: response));
+        }
+      }, (errorData) => setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError)),
+          host: adsType == AdsType.content
+              ? UrlConstants.getAdsInContent
+              : adsType == AdsType.between
+              ? UrlConstants.getAdsInBetween
+              : UrlConstants.getPopUpAds,
+          withAlertMessage: false,
+          withCheckConnection: false,
+          methodType: MethodType.get,
+          headers: {
+            'x-auth-user': email,
+            'x-auth-token': token,
+          });
+    }else if(adsType == AdsType.between){
+      setCommentFetch(AdsDataFetch(AdsDataState.loading));
+      final email = SharedPreference().readStorage(SpKeys.email);
+      final token = SharedPreference().readStorage(SpKeys.userToken);
+      await Repos().reposPost(context, (onResult) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+          setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError));
+        } else {
+          print('data: ${onResult.data}');
+          final response = AdsVideo.fromJson(onResult.data);
+          setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocSuccess, data: response));
+        }
+      }, (errorData) => setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError)),
+          host: UrlConstants.getAdsInBetween,
+          withAlertMessage: false,
+          withCheckConnection: false,
+          methodType: MethodType.get,
+          headers: {
+            'x-auth-user': email,
+            'x-auth-token': token,
+          });
+    }
   }
 
   Future appAdsBloc(BuildContext context) async {
-    setCommentFetch(AdsDataFetch(AdsDataState.loading));
-    final email = SharedPreference().readStorage(SpKeys.email);
-    final token = SharedPreference().readStorage(SpKeys.userToken);
-    await Repos().reposPost(context, (onResult) {
-      if ((onResult.statusCode ?? 300) > HTTP_CODE) {
-        setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError));
-      } else {
-        print('data: ${onResult.data}');
-        final response = AdsVideo.fromJson(onResult.data);
-        setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocSuccess, data: response));
-      }
-    }, (errorData) => setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError)),
-        host: UrlConstants.getInAppAds,
-        withAlertMessage: false,
-        withCheckConnection: false,
-        methodType: MethodType.get,
-        headers: {
-          'x-auth-user': email,
-          'x-auth-token': token,
-        });
+    final isGuest = SharedPreference().readStorage(SpKeys.isGuest);
+    if(!isGuest){
+      setCommentFetch(AdsDataFetch(AdsDataState.loading));
+      final email = SharedPreference().readStorage(SpKeys.email);
+      final token = SharedPreference().readStorage(SpKeys.userToken);
+      await Repos().reposPost(context, (onResult) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+          setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError));
+        } else {
+          print('data: ${onResult.data}');
+          final response = AdsVideo.fromJson(onResult.data);
+          setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocSuccess, data: response));
+        }
+      }, (errorData) => setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError)),
+          host: UrlConstants.getInAppAds,
+          withAlertMessage: false,
+          withCheckConnection: false,
+          methodType: MethodType.get,
+          headers: {
+            'x-auth-user': email,
+            'x-auth-token': token,
+          });
+    }
+
   }
 
   Future viewAdsBloc(BuildContext context, ViewAdsRequest request, {bool isClick = false}) async {
-    setCommentFetch(AdsDataFetch(AdsDataState.loading));
-    final email = SharedPreference().readStorage(SpKeys.email);
-    final token = SharedPreference().readStorage(SpKeys.userToken);
-    await Repos().reposPost(context, (onResult) {
-      if ((onResult.statusCode ?? 300) > HTTP_CODE) {
-        setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError));
-      } else {
-        print('data: ${onResult.data}');
-        final response = GenericResponse.fromJson(onResult.data).responseData;
-        setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocSuccess, data: response));
-      }
-    }, (errorData) => setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError)),
-        host: isClick ? UrlConstants.clickAds : UrlConstants.viewAds,
-        withAlertMessage: false,
-        data: request.toJson(),
-        methodType: MethodType.post,
-        withCheckConnection: false,
-        headers: {
-          'x-auth-user': email,
-          'x-auth-token': token,
-        });
+    final isGuest = SharedPreference().readStorage(SpKeys.isGuest);
+    if(!isGuest){
+      setCommentFetch(AdsDataFetch(AdsDataState.loading));
+      final email = SharedPreference().readStorage(SpKeys.email);
+      final token = SharedPreference().readStorage(SpKeys.userToken);
+      await Repos().reposPost(context, (onResult) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+          setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError));
+        } else {
+          print('data: ${onResult.data}');
+          final response = GenericResponse.fromJson(onResult.data).responseData;
+          setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocSuccess, data: response));
+        }
+      }, (errorData) => setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError)),
+          host: isClick ? UrlConstants.clickAds : UrlConstants.viewAds,
+          withAlertMessage: false,
+          data: request.toJson(),
+          methodType: MethodType.post,
+          withCheckConnection: false,
+          headers: {
+            'x-auth-user': email,
+            'x-auth-token': token,
+          });
+    }
+
   }
 }

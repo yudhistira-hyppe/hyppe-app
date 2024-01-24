@@ -49,7 +49,7 @@ class UploadContent extends StatelessWidget {
               /// Camera / Video
               // Align(alignment: Alignment.bottomCenter, child: BuildSwitchButton()),
               /// Flash button
-              if (Platform.isAndroid && !notifier.conditionalCaptureVideoIcon())
+              if (!notifier.conditionalCaptureVideoIcon())
                 SafeArea(
                   child: Visibility(
                     visible: !notifier.isRecordingVideo,
@@ -204,7 +204,7 @@ class UploadContent extends StatelessWidget {
               // Camera / Video
               // Align(alignment: Alignment.bottomCenter, child: BuildSwitchButton()),
               // Flash button
-              if (Platform.isAndroid && !notifier.conditionalCaptureVideoIcon())
+              if (!notifier.conditionalCaptureVideoIcon())
                 SafeArea(
                   child: Visibility(
                     visible: !notifier.isRecordingVideo,
@@ -285,14 +285,16 @@ class UploadContent extends StatelessWidget {
               if (notifier.conditionalCaptureVideoIcon())
                 Builder(builder: (context) {
                   final tempDuration = Duration(seconds: notifier.elapsedProgress);
-                  return Align(
-                    alignment: Alignment.topCenter,
-                    child: Container(
-                        margin: EdgeInsets.only(top: Platform.isIOS ? 60 : 10),
-                        child: CustomTextWidget(
-                          textToDisplay: tempDuration.formatter(),
-                          textStyle: const TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700),
-                        )),
+                  return SafeArea(
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: Container(
+                          margin: EdgeInsets.only(top: Platform.isIOS ? 60 : 10),
+                          child: CustomTextWidget(
+                            textToDisplay: tempDuration.formatter(),
+                            textStyle: const TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700),
+                          )),
+                    ),
                   );
                 }),
               Align(

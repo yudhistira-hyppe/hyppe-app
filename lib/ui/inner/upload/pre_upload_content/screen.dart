@@ -73,6 +73,8 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
       notifier.captionController.selection = TextSelection.collapsed(offset: 0);
     }
     // notifier.initThumbnail();
+    
+    notifier.getInitialInterest(context);
 
     // Future.microtask(() => context.read<PreUploadContentNotifier>().checkLandingpage(context));
     if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
@@ -404,12 +406,11 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                 onChanged: (value) {
                   if (timeHandle != null) {
                     timeHandle!.cancel();
-                  }  
+                  }
                   timeHandle = Timer(Duration(milliseconds: 500), () {
                     notifier.showAutoComplete(value, context);
                     _handleTextChange(value);
                   });
-                  
                 },
                 onTap: () {
                   tapCursor(notifier);
@@ -426,11 +427,8 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                     child: CustomBaseCacheImage(
                       widthPlaceHolder: 80,
                       heightPlaceHolder: 80,
-                      imageUrl: (notifier.editData?.isApsara ?? false) ? (notifier.editData?.mediaThumbEndPoint ?? '') : '${notifier.editData?.fullThumbPath ?? ''}',
+                      imageUrl: (notifier.editData?.isApsara ?? false) ? (notifier.editData?.mediaThumbEndPoint ?? '') : notifier.editData?.fullThumbPath ?? '',
                       imageBuilder: (context, imageProvider) => Container(
-                        // margin: margin,
-                        // // const EdgeInsets.symmetric(horizontal: 4.5),
-                        // width: _scaling,
                         height: 168,
                         decoration: BoxDecoration(
                           image: DecorationImage(
@@ -560,17 +558,27 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
       disposeOnTap: false,
       onToolTipClick: () async {
         context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKey].key ?? '');
-        controller.animateTo(controller.position.maxScrollExtent + kToolbarHeight, curve: Curves.easeOut,
-        duration: const Duration(milliseconds: 200),).then((value) => ShowCaseWidget.of(myContext).next());
-        
+        controller
+            .animateTo(
+              controller.position.maxScrollExtent + kToolbarHeight,
+              curve: Curves.easeOut,
+              duration: const Duration(milliseconds: 200),
+            )
+            .then((value) => ShowCaseWidget.of(myContext).next());
+
         mn?.tutorialData[indexKey].status = true;
       },
       closeWidget: GestureDetector(
         onTap: () async {
           context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKey].key ?? '');
-          controller.animateTo(controller.position.maxScrollExtent + kToolbarHeight, curve: Curves.easeOut,
-          duration: const Duration(milliseconds: 200),).then((value) => ShowCaseWidget.of(myContext).next());
-          
+          controller
+              .animateTo(
+                controller.position.maxScrollExtent + kToolbarHeight,
+                curve: Curves.easeOut,
+                duration: const Duration(milliseconds: 200),
+              )
+              .then((value) => ShowCaseWidget.of(myContext).next());
+
           mn?.tutorialData[indexKey].status = true;
         },
         child: const Padding(

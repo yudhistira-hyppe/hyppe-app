@@ -48,7 +48,7 @@ class SocketService {
     });
 
     _socket?.onConnectError((message) {
-      'Your connection error from socket'.logger();
+      'Your connection error from socket $onEvent $host'.logger();
       _eventService.notifyRootSocketError(message);
     });
 

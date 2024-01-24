@@ -93,49 +93,46 @@ class ProfileComponent extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      width: SizeWidget().calculateSize(widthText, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()),
-                      child: Row(
-                        children: [
-                          Flexible(
-                            child: isDetail
-                                ? CustomStrokeTextWidget(
-                                    textToDisplay: username ?? '',
-                                    maxLines: 1,
-                                    textStyle: Theme.of(context).textTheme.button,
-                                    textAlign: TextAlign.left,
-                                  )
-                                : CustomTextWidget(
-                                    textToDisplay: username ?? '',
-                                    maxLines: 1,
-                                    textStyle: TextStyle(
-                                      fontWeight: isFullscreen ?? false ? FontWeight.bold : FontWeight.normal,
-                                      color: textColor,
-                                      shadows: const [
-                                        Shadow(
-                                            offset: Offset(0.0, 1.0),
-                                            blurRadius: 2.0,
-                                            color: Colors.black12),
-                                        Shadow(
-                                            offset: Offset(0.0, 1.0),
-                                            blurRadius: 4.0,
-                                            color: Colors.black12),
-                                      ],
+                    GestureDetector(
+                      onTap: onTapOnProfileImage as void Function(),
+                      child: SizedBox(
+                        width: SizeWidget().calculateSize(widthText, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()),
+                        child: Row(
+                          children: [
+                            Flexible(
+                              child: isDetail
+                                  ? CustomStrokeTextWidget(
+                                      textToDisplay: username ?? '',
+                                      maxLines: 1,
+                                      textStyle: Theme.of(context).textTheme.button?.copyWith(fontWeight: FontWeight.w700),
+                                      textAlign: TextAlign.left,
+                                    )
+                                  : CustomTextWidget(
+                                      textToDisplay: username ?? '',
+                                      maxLines: 1,
+                                      textStyle: TextStyle(
+                                        fontWeight: isFullscreen ?? false ? FontWeight.bold : FontWeight.normal,
+                                        color: textColor,
+                                        shadows: const [
+                                          Shadow(offset: Offset(0.0, 1.0), blurRadius: 2.0, color: Colors.black12),
+                                          Shadow(offset: Offset(0.0, 1.0), blurRadius: 4.0, color: Colors.black12),
+                                        ],
+                                      ),
+                                      textAlign: TextAlign.left,
                                     ),
-                                    textAlign: TextAlign.left,
-                                  ),
-                          ),
-                          if (isUserVerified) twoPx,
-                          if (isUserVerified)
-                            const CustomIconWidget(
-                              iconData: '${AssetPath.vectorPath}ic_verified.svg',
-                              defaultColor: false,
-                              width: 16,
-                              height: 16,
                             ),
-                          tenPx,
-                          CustomVerifiedWidget(verified: isCelebrity)
-                        ],
+                            if (isUserVerified) twoPx,
+                            if (isUserVerified)
+                              const CustomIconWidget(
+                                iconData: '${AssetPath.vectorPath}ic_verified.svg',
+                                defaultColor: false,
+                                width: 16,
+                                height: 16,
+                              ),
+                            tenPx,
+                            CustomVerifiedWidget(verified: isCelebrity)
+                          ],
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -145,7 +142,7 @@ class ProfileComponent extends StatelessWidget {
                               maxLines: 1,
                               textToDisplay: createdAt,
                               textAlign: TextAlign.left,
-                              textStyle: Theme.of(context).textTheme.caption,
+                              textStyle: Theme.of(context).textTheme.caption?.copyWith(fontSize: 12),
                             )
                           : CustomTextWidget(
                               maxLines: 1,
@@ -154,14 +151,8 @@ class ProfileComponent extends StatelessWidget {
                               textStyle: TextStyle(
                                 color: textColor,
                                 shadows: const [
-                                  Shadow(
-                                      offset: Offset(0.0, 1.0),
-                                      blurRadius: 2.0,
-                                      color: Colors.black12),
-                                  Shadow(
-                                      offset: Offset(0.0, 1.0),
-                                      blurRadius: 4.0,
-                                      color: Colors.black12),
+                                  Shadow(offset: Offset(0.0, 1.0), blurRadius: 2.0, color: Colors.black12),
+                                  Shadow(offset: Offset(0.0, 1.0), blurRadius: 4.0, color: Colors.black12),
                                 ],
                               ),
                             ),

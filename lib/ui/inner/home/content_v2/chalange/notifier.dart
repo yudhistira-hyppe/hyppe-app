@@ -161,40 +161,45 @@ class ChallangeNotifier with ChangeNotifier {
   }
 
   Future getBannerLanding(BuildContext context, {bool ispopUp = false, bool isSearch = false, bool isLeaderBoard = false}) async {
-    checkInet(context);
-    isLoadingBanner = true;
-    notifyListeners();
+    bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
 
-    Map data = {"page": 0};
-    if (ispopUp) {
-      data['target'] = "popup";
-    } else {
-      data['target'] = "search";
-      if (isLeaderBoard) {
-        data['jenischallenge'] = "647055de0435000059003462";
-      }
-    }
+    if(!(isGuest ?? true)){
+      checkInet(context);
+      isLoadingBanner = true;
+      notifyListeners();
 
-    final bannerNotifier = ChallangeBloc();
-    await bannerNotifier.postChallange(context, data: data, url: UrlConstants.getBannerChalange);
-    final bannerFatch = bannerNotifier.userFetch;
-
-    if (bannerFatch.challengeState == ChallengeState.getPostSuccess) {
+      Map data = {"page": 0};
       if (ispopUp) {
-        bannerData = [];
-        bannerFatch.data.forEach((v) => bannerData.add(BannerChalangeModel.fromJson(v)));
+        data['target'] = "popup";
       } else {
-        if (isSearch) {
-          bannerSearchData = [];
-          bannerFatch.data.forEach((v) => bannerSearchData.add(BannerChalangeModel.fromJson(v)));
-        } else {
-          bannerLeaderboardData = [];
-          bannerFatch.data.forEach((v) => bannerLeaderboardData.add(BannerChalangeModel.fromJson(v)));
+        data['target'] = "search";
+        if (isLeaderBoard) {
+          data['jenischallenge'] = "647055de0435000059003462";
         }
       }
-      isLoadingBanner = false;
-      notifyListeners();
+
+      final bannerNotifier = ChallangeBloc();
+      await bannerNotifier.postChallange(context, data: data, url: UrlConstants.getBannerChalange);
+      final bannerFatch = bannerNotifier.userFetch;
+
+      if (bannerFatch.challengeState == ChallengeState.getPostSuccess) {
+        if (ispopUp) {
+          bannerData = [];
+          bannerFatch.data.forEach((v) => bannerData.add(BannerChalangeModel.fromJson(v)));
+        } else {
+          if (isSearch) {
+            bannerSearchData = [];
+            bannerFatch.data.forEach((v) => bannerSearchData.add(BannerChalangeModel.fromJson(v)));
+          } else {
+            bannerLeaderboardData = [];
+            bannerFatch.data.forEach((v) => bannerLeaderboardData.add(BannerChalangeModel.fromJson(v)));
+          }
+        }
+        isLoadingBanner = false;
+        notifyListeners();
+      }
     }
+
   }
 
   Future initLeaderboard(BuildContext context) async {

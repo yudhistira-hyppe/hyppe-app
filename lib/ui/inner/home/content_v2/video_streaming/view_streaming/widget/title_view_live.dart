@@ -192,7 +192,7 @@ class TitleViewLive extends StatelessWidget {
               Routing().moveBack();
             });
           },
-          child: CustomIconWidget(
+          child: const CustomIconWidget(
             iconData: "${AssetPath.vectorPath}close.svg",
             defaultColor: false,
           ),

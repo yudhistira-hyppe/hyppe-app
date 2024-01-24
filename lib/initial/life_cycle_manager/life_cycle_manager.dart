@@ -44,9 +44,6 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
 
   Timer? _timerLink;
   final _socketService = SocketService();
-  // final _isolateService = IsolateService();
-
-  static final _routing = Routing();
 
   Future<void> _initializeFlutterFire() async {
     if (kDebugMode) {

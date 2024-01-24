@@ -94,7 +94,7 @@ class ShowBottomSheet {
           return Padding(
             padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Container(
-              decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
+              decoration: BoxDecoration(color: Color(0xFFFDFDFD), borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
               height: context.getHeight() * 0.92,
               child: const OnLoginApp(),
             ),
@@ -1153,7 +1153,7 @@ class ShowBottomSheet {
       isScrollControlled: true,
       builder: (builder) {
         return Container(
-          padding: const EdgeInsets.symmetric(vertical: 15),
+          padding: const EdgeInsets.symmetric(vertical: 24),
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(8),

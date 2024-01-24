@@ -49,6 +49,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'dart:async';
+
+import '../../../../../../core/arguments/main_argument.dart';
 // import 'package:story_view/story_view.dart';
 
 class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
@@ -56,6 +58,11 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     ..page = 2
     ..limit = 5
     ..onlyMyData = true
+    ..featureType = FeatureType.story;
+
+  ContentsDataQuery contentsQuery = ContentsDataQuery()
+    ..page = 0
+    ..limit = 5
     ..featureType = FeatureType.story;
 
   final _sharedPrefs = SharedPreference();
@@ -225,8 +232,8 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
-  setViewed(int index, int indexItem){
-    if(groupUserStories.isNotEmpty){
+  setViewed(int index, int indexItem) {
+    if (groupUserStories.isNotEmpty) {
       groupUserStories[index].story?[indexItem].isViewed = true;
     }
     notifyListeners();
@@ -472,6 +479,28 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
+  Future initialStoryId(BuildContext context, String postID) async {
+    contentsQuery.postID = postID;
+
+    try {
+      // final String myEmail = SharedPreference().readStorage(SpKeys.email);
+      final res = await contentsQuery.reload(context);
+      var data = res.firstOrNull;
+      if (data != null) {
+        List<ContentData>? story = [];
+        story.add(data);
+        var storys = StoriesGroup(email: data.email, username: data.username, story: story);
+        List<StoriesGroup> groupUserStories = [];
+        groupUserStories.add(storys);
+        _groupUserStories = groupUserStories;
+      } else {
+        Routing().moveBack();
+      }
+    } catch (e) {
+      'load vid: ERROR: $e'.logger();
+    }
+  }
+
   void initStateGroup(BuildContext context, StoryDetailScreenArgument routeArgument) {
     // final myEmail = _sharedPrefs.readStorage(SpKeys.email);
     _routeArgument = _routeArgument;
@@ -490,7 +519,6 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
       _groupUserStories = groups;
     } else if (myGroup != null) {
       _groupUserStories.add(StoriesGroup(email: myGroup[email]?[0].email, username: myGroup[email]?[0].username, story: myGroup[email]));
-
     }
   }
 
@@ -651,13 +679,14 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
   Future<void> createdDynamicLink(
     context,
-    ContentData? data,) async {
+    ContentData? data,
+  ) async {
     _isShareAction = true;
 
     await createdDynamicLinkMixin(
       context,
       data: DynamicLinkData(
-        routes: Routes.vidDetail,
+        routes: Routes.showStories,
         postID: data?.postID,
         fullName: data?.username,
         description: 'Hyppe Story',
@@ -667,11 +696,15 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     ).whenComplete(() => _isShareAction = false);
   }
 
+  bool loadSend = false;
+
   void sendMessage(BuildContext context, ContentData? data) async {
     // _system.actionReqiredIdCard(
     //   context,
     //   action: () async {
-    if (_textEditingController.text.isNotEmpty) {
+    if (_textEditingController.text.isNotEmpty && !loadSend) {
+      loadSend = true;
+      notifyListeners();
       try {
         textEditingController.text.logger();
 
@@ -687,6 +720,8 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
           'Your message was sent'.logger();
         });
       } finally {
+        loadSend = false;
+        notifyListeners();
         _textEditingController.clear();
         // Future.delayed(const Duration(milliseconds: 500), (){
         //   // FocusScopeNode currentFocus = FocusScope.of(context);
@@ -812,20 +847,21 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   }
 
   bool _ableClose = true;
-  void onCloseStory(bool mounted) {
+  void onCloseStory(BuildContext context, bool mounted, bool isFromProfile, bool isOther) async {
     if (mounted) {
       if (_ableClose) {
         _textEditingController.clear();
-        if (_routeArgument?.postID != null) {
+        if(isOther){
+          _routing.moveBack();
+        }else if (_routeArgument?.postID != null) {
           print('onCloseStory moveAndPop ');
-          _routing.moveAndPop(Routes.lobby);
+          await _routing.moveAndPop(Routes.lobby, argument: MainArgument(canShowAds: false, page: isFromProfile ? 4 : 0));
         } else {
           print('onCloseStory moveBack');
-          Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
+          await Routing().moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false, page: isFromProfile ? 4 : 0));
         }
         _ableClose = false;
       }
-
       Future.delayed(const Duration(milliseconds: 700), () {
         _ableClose = true;
       });
@@ -861,3 +897,5 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     ShowBottomSheet().onReportContent(context, postData: data, type: hyppeStory);
   }
 }
+
+

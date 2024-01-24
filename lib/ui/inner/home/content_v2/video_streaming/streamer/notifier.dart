@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_livepush_plugin/live_base.dart';
 import 'package:flutter_livepush_plugin/live_push_def.dart';
@@ -32,7 +31,7 @@ import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.
 import 'package:hyppe/core/query_request/users_data_query.dart';
 import 'package:hyppe/core/response/generic_response.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
-import 'package:hyppe/core/services/socket_service.dart';
+import 'package:hyppe/core/services/socket_live_service.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
@@ -57,7 +56,7 @@ class StreamerNotifier with ChangeNotifier {
   static const String eventLikeStream = 'LIKE_STREAM';
   static const String eventCommentDisable = 'COMMENT_STREAM_DISABLED';
 
-  final _socketService = SocketService();
+  final _socketService = SocketLiveService();
 
   int livePushMode = 0;
   int timeReady = 3;
@@ -133,16 +132,16 @@ class StreamerNotifier with ChangeNotifier {
     print("-------- init stream $forConfig ---------");
     isloading = true;
     isloadingPreview = true;
+    notifyListeners();
 
     _alivcBase = AlivcBase.init();
-    
+
     await _alivcBase.registerSDK();
     await _alivcBase.setObserver();
     if (!forConfig) {
-      
       await setLiveConfig();
       await _setLivePusher();
-      
+
       if (isFirst && mounted) {
         isFirst = false;
         await init(context, mounted);
@@ -358,7 +357,7 @@ class StreamerNotifier with ChangeNotifier {
   }
 
   Future<void> setLiveConfig() async {
-    AlivcLivePusherConfig pusherConfig =  AlivcLivePusherConfig.init();
+    AlivcLivePusherConfig pusherConfig = AlivcLivePusherConfig.init();
     pusherConfig.setCameraType(AlivcLivePushCameraType.front);
 
     /// Set the resolution to 540p.
@@ -444,7 +443,9 @@ class StreamerNotifier with ChangeNotifier {
       Future.delayed(const Duration(seconds: 1));
       _alivcLivePusher.startPushWithURL(dataStream.urlIngest ?? '');
       if (_socketService.isRunning) {
-        _socketService.closeSocket();
+        _socketService.closeSocket(eventComment);
+        _socketService.closeSocket(eventLikeStream);
+        _socketService.closeSocket(eventViewStream);
       }
       _connectAndListenToSocket(eventComment);
       _connectAndListenToSocket(eventLikeStream);
@@ -458,13 +459,14 @@ class StreamerNotifier with ChangeNotifier {
   }
 
   Future<void> destoryPusher() async {
-    print("====1=====");
+    _socketService.closeSocket(eventComment);
+    _socketService.closeSocket(eventLikeStream);
+    _socketService.closeSocket(eventViewStream);
     _alivcLivePusher.stopPush();
-    print("====2=====");
     _alivcLivePusher.stopPreview();
-    print("====3=====");
+
     _alivcLivePusher.destroy();
-    print("====4=====");
+
     WakelockPlus.disable();
     statusLive = StatusStream.offline;
     livePushMode = 0;
@@ -492,7 +494,7 @@ class StreamerNotifier with ChangeNotifier {
     dataViewers = [];
     comment = [];
     animationIndexes = [];
-    _socketService.closeSocket();
+
     commentCtrl.clear();
     inactivityTimer?.cancel();
     inactivityTimer = null;
@@ -848,16 +850,12 @@ class StreamerNotifier with ChangeNotifier {
   }
 
   Future getProfileNCheck(BuildContext context, String email) async {
-    int totLoading = 0;
     isloadingProfile = true;
-    statusFollowing = StatusFollowing.none;
     notifyListeners();
-    await checkFollowingToUser(context, email).then((value) => totLoading++);
-    await getProfile(context, email).then((value) => totLoading++);
-    if (totLoading >= 2) {
-      isloadingProfile = false;
-      notifyListeners();
-    }
+    statusFollowing = StatusFollowing.none;
+    await getProfile(context, email, withCheckFollow: false);
+    isloadingProfile = false;
+    notifyListeners();
   }
 
   Future getProfileNCheckViewer(BuildContext context, String email) async {
@@ -870,15 +868,24 @@ class StreamerNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future getProfile(BuildContext context, String email) async {
+  Future getProfile(BuildContext context, String email, {bool withCheckFollow = true}) async {
     final usersNotifier = UserBloc();
-    checkFollowingToUser(context, email);
+    print("========== withCheckFollow $withCheckFollow");
+    if (withCheckFollow) {
+      checkFollowingToUser(context, email);
+    }
+
     await usersNotifier.getUserProfilesBloc(context, search: email, withAlertMessage: true);
 
     final usersFetch = usersNotifier.userFetch;
 
     if (usersFetch.userState == UserState.getUserProfilesSuccess) {
       audienceProfile = usersFetch.data;
+      if (audienceProfile.following ?? false) {
+        statusFollowing = StatusFollowing.following;
+      } else {
+        statusFollowing = StatusFollowing.none;
+      }
     }
   }
 
@@ -894,7 +901,7 @@ class StreamerNotifier with ChangeNotifier {
     }
   }
 
-  Future<void> checkFollowingToUser(BuildContext context, String email) async {
+  Future<bool> checkFollowingToUser(BuildContext context, String email) async {
     try {
       _usersFollowingQuery.senderOrReceiver = email;
       _usersFollowingQuery.limit = 200;
@@ -909,10 +916,13 @@ class StreamerNotifier with ChangeNotifier {
           statusFollowing = StatusFollowing.requested;
         }
       }
+
+      notifyListeners();
+      return true;
     } catch (e) {
       'load following request list: ERROR: $e'.logger();
+      return false;
     }
-    notifyListeners();
   }
 
   Future<void> checkFollowingToUserViewer(BuildContext context, String email) async {
@@ -1099,14 +1109,14 @@ class StreamerNotifier with ChangeNotifier {
           (message) {
             try {
               handleSocket(message, events);
-              print('ini message dari socket $events ----- ${message}');
+              print('ini message dari stremaer socket $events ----- ${message}');
             } catch (e) {
               e.toString().logger();
             }
           },
         );
       },
-      host: Env.data.baseUrl,
+      host: Env.data.baseUrlSocket,
       options: OptionBuilder()
           .setAuth({
             "x-auth-user": "$email",
@@ -1130,7 +1140,8 @@ class StreamerNotifier with ChangeNotifier {
     } else if (event == eventLikeStream) {
       var messages = CountLikeLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
       if (messages.idStream == dataStream.sId) {
-        totLikes += messages.likeCount ?? 0;
+        // totLikes += messages.likeCount ?? 0;
+        totLikes = messages.likeCountTotal ?? 0;
         print("totalnya ${animationIndexes}");
         // for (var i = 0; i < (messages.likeCount ?? 0); i++) {
         var run = getRandomDouble(1, 999999999999999);

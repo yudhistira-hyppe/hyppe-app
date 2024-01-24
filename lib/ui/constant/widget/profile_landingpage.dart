@@ -91,23 +91,26 @@ class ProfileLandingPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: UserTemplate(
-                        username: username ?? 'No Username',
-                        isVerified: isIdVerified ?? false,
+                GestureDetector(
+                  onTap: onTapOnProfileImage as void Function()?,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: UserTemplate(
+                          username: username ?? 'No Username',
+                          isVerified: isIdVerified ?? false,
+                        ),
+                        // CustomTextWidget(
+                        //   textToDisplay: username ?? '',
+                        //   maxLines: 1,
+                        //   textStyle: TextStyle(color: textColor, fontSize: 12, fontWeight: FontWeight.w700),
+                        //   textAlign: TextAlign.left,
+                        // ),
                       ),
-                      // CustomTextWidget(
-                      //   textToDisplay: username ?? '',
-                      //   maxLines: 1,
-                      //   textStyle: TextStyle(color: textColor, fontSize: 12, fontWeight: FontWeight.w700),
-                      //   textAlign: TextAlign.left,
-                      // ),
-                    ),
-                    tenPx,
-                    CustomVerifiedWidget(verified: isCelebrity),
-                  ],
+                      tenPx,
+                      CustomVerifiedWidget(verified: isCelebrity),
+                    ],
+                  ),
                 ),
                 if (location != '')
                   Padding(

@@ -10,6 +10,7 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/inner/home/widget/profile.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -23,6 +24,7 @@ import 'package:showcaseview/showcaseview.dart';
 import '../../../core/arguments/main_argument.dart';
 import '../../../core/constants/shared_preference_keys.dart';
 import '../../../core/services/shared_preference.dart';
+import '../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 
 class MainScreen extends StatefulWidget {
   final MainArgument? args;
@@ -334,16 +336,37 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
     if (newUser == "TRUE" || globalTultipShow) {
       return;
     }
-    if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
+    if ((Routing.navigatorKey.currentContext ?? context).read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
+    final bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
     if (index != 2) {
-      setState(() {
-        'pageIndex now: $index'.logger();
+      if (index == 3) {
+        if (isGuest ?? false) {
+          ShowBottomSheet.onLoginApp(Routing.navigatorKey.currentContext ?? context);
+        } else {
+          setState(() {
+            'pageIndex now: $index'.logger();
+            notifier.pageIndex = index;
+          });
+        }
+      } else if (index == 4) {
         notifier.pageIndex = index;
-      });
+        if (isGuest ?? false) {
+          ShowBottomSheet.onLoginApp(Routing.navigatorKey.currentContext ?? context);
+        }
+      } else {
+        setState(() {
+          'pageIndex now: $index'.logger();
+          notifier.pageIndex = index;
+        });
+      }
     } else {
-      PreUploadContentNotifier pn = context.read<PreUploadContentNotifier>();
-      pn.hastagChallange = '';
-      await notifier.onShowPostContent(consumerContext);
+      if (isGuest ?? false) {
+        ShowBottomSheet.onLoginApp(Routing.navigatorKey.currentContext ?? context);
+      } else {
+        PreUploadContentNotifier pn = (Routing.navigatorKey.currentContext ?? context).read<PreUploadContentNotifier>();
+        pn.hastagChallange = '';
+        notifier.onShowPostContent(consumerContext);
+      }
     }
   }
 }

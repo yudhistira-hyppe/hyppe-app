@@ -60,8 +60,9 @@ class Routes {
   static const String diaryDetail = '/diary-detail';
   static const String diaryView = '/diary-view';
   static const String diarySeeAllScreen = '/diary-see-all-screen';
+  static const String diaryFull = '/diary-full';
 
-  // static const String storyDetail = '/story-detail';
+  static const String storyDetail = '/story-detail';
   static const String showStories = '/show-stories';
 
   static const String appSettings = '/app-settings';
@@ -146,6 +147,8 @@ class Routes {
   static const String scrollPic = '/scroll-pict';
   static const String scrollDiary = '/scroll-diary';
   static const String scrollVid = '/scroll-vid';
+
+  static const String scrollFullDiary = '/scroll-full-diary';
 
   //======================== chalange ============
   static const String chalenge = '/chalenge';

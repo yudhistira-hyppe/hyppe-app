@@ -1,5 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/common/user_badge_model.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -33,7 +34,14 @@ class BuildCircleProfile extends StatelessWidget {
     SizeConfig().init(context);
     return InkWell(
       // onTap: () => context.read<PreviewStoriesNotifier>().onTapHandler(context),
-      onTap: () => context.read<PreviewStoriesNotifier>().navigateToMyStoryGroup(context, listStory ?? []),
+      onTap: () {
+        context.handleActionIsGuest((){
+          context
+              .read<PreviewStoriesNotifier>()
+              .navigateToMyStoryGroup(context, listStory ?? [], false);
+        });
+
+      },
       child: Stack(
         alignment: Alignment.bottomRight,
         children: [

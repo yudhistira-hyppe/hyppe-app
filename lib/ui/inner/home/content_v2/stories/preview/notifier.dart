@@ -346,7 +346,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
     }
   }
 
-  void navigateToMyStoryGroup(BuildContext context, List stories) {
+  void navigateToMyStoryGroup(BuildContext context, List stories, bool fromProfile) {
     print('navigateToStoryGroup: ${myStoryGroup.isNotEmpty} : $myStoryGroup');
     print(myStoryGroup);
     if (stories.isNotEmpty) {
@@ -354,6 +354,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
         Routes.showStories,
         argument: StoryDetailScreenArgument(
           myStories: myStoryGroup,
+          fromProfile: fromProfile
         ),
       );
     } else {
@@ -407,13 +408,15 @@ class PreviewStoriesNotifier with ChangeNotifier {
     }
   }
 
-  void navigateToOtherStoryGroup(BuildContext context, List stories, String email) {
+  void navigateToOtherStoryGroup(BuildContext context, List stories, String email,
+      {bool isOther = false}) {
     if (stories.isNotEmpty) {
       _routing.move(
         Routes.showStories,
         argument: StoryDetailScreenArgument(
           myStories: otherStoryGroup,
           email: email,
+          isOther: isOther
         ),
       );
     } else {

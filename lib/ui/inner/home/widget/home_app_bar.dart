@@ -2,11 +2,11 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:flutter/material.dart';
-import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +28,7 @@ class HomeAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HomeAppBar');
-    String nameTitle = name == null || name == 'null' ? '' : (name ?? '');
+    String nameTitle = name == null || name == 'null' ? 'Hyppers' : (name ?? 'Hyppers');
     // String nameTitle = "AaaAAAAASKJLKJDiiiiaskdlaksjdlkajsd asdasdas asdasd";
     nameTitle = nameTitle.split(" ").elementAt(0);
 
@@ -47,7 +47,9 @@ class HomeAppBar extends StatelessWidget {
         // Doku(),
         GestureDetector(
             onTap: () {
-              Routing().move(Routes.listStreamers);
+              context.handleActionIsGuest((){
+                Routing().move(Routes.listStreamers);
+              });
             },
             child: CustomIconWidget(
               width: 30,
@@ -62,8 +64,11 @@ class HomeAppBar extends StatelessWidget {
           final isReceived = notifier.receivedMsg;
           return GestureDetector(
             onTap: () {
-              Routing().move(Routes.message);
-              notifier.receivedMsg = false;
+              context.handleActionIsGuest((){
+                Routing().move(Routes.message);
+                notifier.receivedMsg = false;
+              });
+
             },
             child: isReceived
                 ? CustomIconWidget(
