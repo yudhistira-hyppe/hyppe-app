@@ -75,6 +75,7 @@ class ScrollPic extends StatefulWidget {
 class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
   FlutterAliplayer? fAliplayer;
   List<ContentData>? pics = [];
+  int pageIndex = 0;
   final scrollGlobal = GlobalKey<SelfProfileScreenState>();
   final a = SelfProfileScreenState();
 
@@ -130,6 +131,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     print("================profile");
     print("${widget.arguments?.picData}");
     pics = widget.arguments?.picData;
+    pageIndex = widget.arguments!.page ?? 0;
     notifier.pics = widget.arguments?.picData;
     print("${pics}");
 
@@ -619,9 +621,43 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ListTile(
-                      title: Align(
-                        alignment: const Alignment(-1.2, 0),
-                        child: Container(margin: const EdgeInsets.symmetric(horizontal: 10), child: widget.arguments?.titleAppbar ?? Container()),
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(margin: const EdgeInsets.symmetric(horizontal: 10), transform: Matrix4.translationValues(-18.0, 0.0, 0.0), child: widget.arguments?.titleAppbar ?? Container()),
+                          if (pics?[pageIndex].email != email && (pics?[pageIndex].isNewFollowing ?? false))
+                            Consumer<PreviewPicNotifier>(
+                              builder: (context, picNot, child) => Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    if (widget.arguments?.picData?[pageIndex].insight?.isloadingFollow != true) {
+                                      picNot.followUser(context, pics?[pageIndex] ?? ContentData(),
+                                          isUnFollow: pics?[pageIndex].following, isloading: pics?[pageIndex].insight!.isloadingFollow ?? false);
+                                    }
+                                  },
+                                  child: pics?[pageIndex].insight?.isloadingFollow ?? false
+                                      ? const SizedBox(
+                                          height: 30,
+                                          width: 30,
+                                          child: Center(
+                                            child: CustomLoading(),
+                                          ),
+                                        )
+                                      : SizedBox(
+                                          height: 40,
+                                          child: Center(
+                                            child: Text(
+                                              (pics?[pageIndex].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+                                              style: const TextStyle(color: kHyppePrimary, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                                            ),
+                                          ),
+                                        ),
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
                       leading: IconButton(
                           icon: const Icon(
@@ -785,32 +821,6 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                       badge: pics?[index].urluserBadge,
                     ),
                   ),
-                  if (pics?[index].email != email && (pics?[index].isNewFollowing ?? false))
-                    Consumer<PreviewPicNotifier>(
-                      builder: (context, picNot, child) => Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            if (pics?[index].insight?.isloadingFollow != true) {
-                              picNot.followUser(context, pics?[index] ?? ContentData(), isUnFollow: pics?[index].following, isloading: pics?[index].insight!.isloadingFollow ?? false);
-                            }
-                          },
-                          child: pics?[index].insight?.isloadingFollow ?? false
-                              ? Container(
-                                  height: 40,
-                                  width: 30,
-                                  child: Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: CustomLoading(),
-                                  ),
-                                )
-                              : Text(
-                                  (pics?[index].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
-                                  style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
-                                ),
-                        ),
-                      ),
-                    ),
                   GestureDetector(
                     onTap: () {
                       // fAliplayer?.pause();
@@ -1341,11 +1351,11 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                 desc: "${pics?[index].description}",
                 trimLines: 2,
                 textAlign: TextAlign.start,
-                seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
-                seeMore: '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                seeLess: ' ${lang?.less}', // ${notifier2.translate.seeLess}',
+                seeMore: '  ${lang?.more}', //${notifier2.translate.seeMoreContent}',
                 normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
                 hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary, fontSize: 12),
-                expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                expandStyle: const TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
               ),
               if (pics?[index].allowComments ?? true)
                 GestureDetector(
@@ -1387,7 +1397,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                               seeMore: '  Selengkapnya ', //${notifier2.translate.seeMoreContent}',
                               normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
                               hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                              expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                              expandStyle: const TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
                             ),
                           );
                         },

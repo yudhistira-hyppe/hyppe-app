@@ -28,7 +28,6 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
-import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/button_boost.dart';
 import 'package:hyppe/ui/constant/widget/custom_appbar.dart';
@@ -45,6 +44,7 @@ import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
+import 'package:marquee/marquee.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:provider/provider.dart';
@@ -82,6 +82,7 @@ class VidPlayerPage extends StatefulWidget {
   final bool? isAutoPlay;
   final Function()? autoScroll; //netral player
   final bool enableWakelock;
+  final Function()? prevScroll;
 
   // FlutterAliplayer? fAliplayer;
   // FlutterAliplayer? fAliplayerAds;
@@ -112,6 +113,7 @@ class VidPlayerPage extends StatefulWidget {
     this.isAutoPlay = false,
     this.autoScroll,
     this.enableWakelock = true,
+    this.prevScroll,
 
     // this.fAliplayer,
     // this.fAliplayerAds
@@ -158,6 +160,8 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
 
   //是否展示loading
   bool _showLoading = false;
+
+  bool isShowMore = false;
 
   //loading进度
   int _loadingPercent = 0;
@@ -1176,13 +1180,13 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                         onTap: () async {
                           onTapCtrl = true;
                           setState(() {});
+
                           print('data Fullscreen ${widget.fromFullScreen}');
 
                           if (widget.fromFullScreen) {
                             // Routing().moveBack();
                           } else {
                             if (widget.isVidFormProfile ?? false) {
-                              print('Route ${widget.isVidFormProfile}');
                               Routing().move(Routes.vidScrollFullScreenDetail, argument: VidFullscreenArgument(vidData: widget.vidData!, index: widget.index!, data: widget.data!));
                             } else {
                               int changevalue;
@@ -1248,7 +1252,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                     _currentPosition = value.seekValue ?? 0;
                                     _currentPositionText = value.positionText ?? 0;
                                     _showTipsWidget = value.showTipsWidget ?? false;
-                                    isMute = value.isMute ?? false;
+                                    isMute = !(value.isMute ?? false);
                                     isPlay = !_showTipsWidget;
                                   });
                                 } else {
@@ -1256,10 +1260,9 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                   _currentPosition = value.seekValue ?? 0;
                                   _currentPositionText = value.positionText ?? 0;
                                   _showTipsWidget = value.showTipsWidget ?? false;
-                                  isMute = value.isMute ?? false;
+                                  isMute = !(value.isMute ?? false);
                                   isPlay = !_showTipsWidget;
                                 }
-
                                 fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
                                   if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
                                     if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
@@ -1328,11 +1331,13 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                             //     }
                             //   ),
                             if (notifier.mapInContentAds[widget.data?.postID ?? ''] == null || (notifier.mapInContentAds[widget.data?.postID ?? ''] != null && !widget.inLanding))
-                              ClipRRect(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(widget.fromFullScreen ? 0 : 16),
-                                  ),
-                                  child: Container(color: Colors.black, width: widget.width, height: widget.height, child: isPlay ? aliPlayerView : const SizedBox.shrink())),
+                              widget.data!.isLoading
+                                  ? Container(color: Colors.black, width: widget.width, height: widget.height)
+                                  : ClipRRect(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(widget.fromFullScreen ? 0 : 16),
+                                      ),
+                                      child: Container(color: Colors.black, width: widget.width, height: widget.height, child: isPlay ? aliPlayerView : const SizedBox.shrink())),
 
                             // Text("${adsData == null}"),
                             // Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
@@ -1362,6 +1367,8 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                           currentPositionText: _currentPositionText,
                                           showTipsWidget: _showTipsWidget,
                                           videoDuration: _videoDuration,
+                                          email: email,
+                                          lang: lang!,
                                           isMute: isMute,
                                           onTapOnProfileImage: () {
                                             System().navigateToProfile(context, widget.data?.email ?? '');
@@ -1400,17 +1407,17 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                   ),
                                 ),
                               ),
-                            // if (!isPlay)
-                            //   SizedBox(
-                            //     height: widget.height,
-                            //     width: widget.width,
-                            //     child: VideoThumbnail(
-                            //       videoData: widget.data,
-                            //       onDetail: false,
-                            //       fn: () {},
-                            //       withMargin: true,
-                            //     ),
-                            //   ),
+                            if (!isPlay && !widget.fromFullScreen)
+                              SizedBox(
+                                height: widget.height,
+                                width: widget.width,
+                                child: VideoThumbnail(
+                                  videoData: widget.data,
+                                  onDetail: false,
+                                  fn: () {},
+                                  withMargin: true,
+                                ),
+                              ),
                             // Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
                             // if (isPlay && adsData != null) skipAds(),
                             if (!isPlay && !_showLoading & !(widget.isAutoPlay ?? false))
@@ -1517,8 +1524,8 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                   child: _buildController(
                                     Colors.transparent,
                                     Colors.white,
-                                    100,
-                                    widget.width! * 0.8,
+                                    120,
+                                    widget.width!,
                                     widget.height! * 0.8,
                                   ),
                                 ),
@@ -1633,7 +1640,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
       duration: const Duration(milliseconds: 500),
       onEnd: _onPlayerHide,
       child: Container(
-        height: height * 0.8,
+        // height: height * 0.8,
         width: SizeConfig.screenWidth! * .8,
         decoration: BoxDecoration(
           color: backgroundColor,
@@ -1641,11 +1648,39 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            if (widget.fromFullScreen) Expanded(child: _buildSkipPrev(iconColor, height)),
             if (widget.fromFullScreen) Expanded(child: _buildSkipBack(iconColor, height)),
             _buildPlayPause(iconColor, barHeight),
             if (widget.fromFullScreen) Expanded(child: _buildSkipForward(iconColor, height)),
+            if (widget.fromFullScreen) Expanded(child: _buildSkipNext(iconColor, height)),
           ],
         ),
+      ),
+    );
+  }
+
+  GestureDetector _buildSkipPrev(Color iconColor, double barHeight) {
+    return GestureDetector(
+      onTap: () {
+        // if (!onTapCtrl) return;
+        // previousPage();
+        widget.prevScroll?.call();
+      },
+      child: const CustomIconWidget(
+        iconData: "${AssetPath.vectorPath}previous.svg",
+        defaultColor: false,
+      ),
+    );
+  }
+
+  GestureDetector _buildSkipNext(Color iconColor, double barHeight) {
+    return GestureDetector(
+      onTap: () {
+        widget.autoScroll?.call();
+      },
+      child: const CustomIconWidget(
+        iconData: "${AssetPath.vectorPath}next.svg",
+        defaultColor: false,
       ),
     );
   }
@@ -1673,8 +1708,13 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         }
       },
       child: CustomIconWidget(
-        iconData: isPause ? "${AssetPath.vectorPath}pause.svg" : "${AssetPath.vectorPath}play.svg",
+        iconData: isPause
+            ? widget.fromFullScreen
+                ? '${AssetPath.vectorPath}play3.svg'
+                : '${AssetPath.vectorPath}pause2.svg'
+            : "${AssetPath.vectorPath}pause3.svg",
         defaultColor: false,
+        width: 42,
       ),
       // Icon(
       //   isPause ? Icons.pause : Icons.play_arrow_rounded,
@@ -1938,7 +1978,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                       child: Stack(
                         children: [
                           Positioned(
-                            bottom: 0,
+                            bottom: 28,
                             left: 0,
                             right: !widget.fromFullScreen
                                 ? 0
@@ -1949,17 +1989,26 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
-                                  width: orientation == Orientation.landscape ? SizeConfig.screenWidth! * .35 : SizeConfig.screenWidth!,
+                                  constraints: BoxConstraints(
+                                      maxWidth: orientation == Orientation.landscape ? SizeConfig.screenWidth! * .35 : SizeConfig.screenWidth!,
+                                      maxHeight: isShowMore ? 52 : SizeConfig.screenHeight! * .1),
                                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: CustomDescContent(
-                                    desc: widget.data?.description ?? '',
-                                    trimLines: 2,
-                                    textAlign: TextAlign.start,
-                                    seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
-                                    seeMore: '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
-                                    normStyle: const TextStyle(fontSize: 12, color: kHyppePrimaryTransparent),
-                                    hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                                    expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                                  child: SingleChildScrollView(
+                                    child: CustomDescContent(
+                                      desc: widget.data?.description ?? '',
+                                      trimLines: 2,
+                                      textAlign: TextAlign.start,
+                                      callbackIsMore: (val) {
+                                        setState(() {
+                                          isShowMore = val;
+                                        });
+                                      },
+                                      seeLess: ' ${lang?.less}', // ${notifier2.translate.seeLess}',
+                                      seeMore: '  ${lang?.more}', //${notifier2.translate.seeMoreContent}',
+                                      normStyle: const TextStyle(fontSize: 14, color: kHyppeTextPrimary),
+                                      hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
+                                      expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppeTextPrimary, fontWeight: FontWeight.bold),
+                                    ),
                                   ),
                                 ),
                                 SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
@@ -2072,23 +2121,35 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                 ),
                                 if (widget.data!.music?.musicTitle != '' && widget.data!.music?.musicTitle != null)
                                   Padding(
-                                    padding: const EdgeInsets.only(top: 0.0, bottom: 12.0, left: 8.0, right: 12.0),
+                                    padding: const EdgeInsets.only(top: 0.0, left: 8.0, right: 12.0),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        const CustomIconWidget(
-                                          iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
-                                          defaultColor: false,
-                                          color: kHyppeTextLightPrimary,
-                                          height: 10,
+                                        const Padding(
+                                          padding: EdgeInsets.only(right: 8.0),
+                                          child: CustomIconWidget(
+                                            iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                            defaultColor: false,
+                                            color: kHyppeLightBackground,
+                                            height: 18,
+                                          ),
                                         ),
                                         Expanded(
-                                          child: CustomTextWidget(
-                                            textToDisplay: " ${widget.data!.music?.musicTitle ?? ''}",
-                                            maxLines: 1,
-                                            textStyle: const TextStyle(color: kHyppeTextLightPrimary, fontSize: 12, fontWeight: FontWeight.w700),
-                                            textAlign: TextAlign.left,
-                                          ),
+                                          child: _textSize(widget.data?.music?.musicTitle ?? '', const TextStyle(fontWeight: FontWeight.bold)).width > SizeConfig.screenWidth! * .56
+                                              ? SizedBox(
+                                                  width: SizeConfig.screenWidth! * .56,
+                                                  height: kTextTabBarHeight,
+                                                  child: Marquee(
+                                                    text: '  ${widget.data?.music?.musicTitle ?? ''}',
+                                                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),
+                                                  ),
+                                                )
+                                              : CustomTextWidget(
+                                                  textToDisplay: " ${widget.data!.music?.musicTitle ?? ''}",
+                                                  maxLines: 1,
+                                                  textStyle: const TextStyle(color: kHyppeTextLightPrimary, fontSize: 12, fontWeight: FontWeight.w700),
+                                                  textAlign: TextAlign.left,
+                                                ),
                                         ),
                                         CircleAvatar(
                                           radius: 18,
@@ -2113,7 +2174,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                               return const CustomIconWidget(
                                                 iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
                                                 defaultColor: false,
-                                                color: kHyppeLightIcon,
+                                                color: kHyppeLightBackground,
                                                 height: 18,
                                               );
                                             },
@@ -2121,14 +2182,14 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                               animation: animatedController,
                                               builder: (_, child) {
                                                 return Transform.rotate(
-                                                  angle: animatedController.value * 2 * math.pi,
+                                                  angle: animatedController.value * 2 * -math.pi,
                                                   child: child,
                                                 );
                                               },
                                               child: const CustomIconWidget(
                                                 iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
                                                 defaultColor: false,
-                                                color: kHyppeLightIcon,
+                                                color: kHyppeLightBackground,
                                                 height: 18,
                                               ),
                                             ),
@@ -2593,12 +2654,15 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
               const SizedBox(
                 height: 10.0,
               ),
-            Text(
-              value,
-              style: const TextStyle(shadows: [
-                Shadow(offset: Offset(0.0, 1.0), blurRadius: 2.0, color: Colors.black54),
-                Shadow(offset: Offset(0.0, 1.0), blurRadius: 8.0, color: Colors.black54),
-              ], color: kHyppePrimaryTransparent, fontWeight: FontWeight.w500, fontSize: 12),
+            Container(
+              transform: Matrix4.translationValues(0.0, -5.0, 0.0),
+              child: Text(
+                value,
+                style: const TextStyle(shadows: [
+                  Shadow(offset: Offset(0.0, 1.0), blurRadius: 2.0, color: Colors.black54),
+                  Shadow(offset: Offset(0.0, 1.0), blurRadius: 8.0, color: Colors.black54),
+                ], color: kHyppePrimaryTransparent, fontWeight: FontWeight.w500, fontSize: 12),
+              ),
             ),
           ],
         ),
@@ -2609,7 +2673,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
   Widget _buttomBodyRight() {
     return Positioned(
       right: 18,
-      bottom: 12,
+      bottom: 0,
       child: Column(
         children: [
           Consumer<LikeNotifier>(
@@ -2646,5 +2710,10 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         ],
       ),
     );
+  }
+
+  Size _textSize(String text, TextStyle style) {
+    final TextPainter textPainter = TextPainter(text: TextSpan(text: text, style: style), maxLines: 1, textDirection: TextDirection.ltr)..layout(minWidth: 0, maxWidth: double.infinity);
+    return textPainter.size;
   }
 }

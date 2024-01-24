@@ -501,7 +501,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                 ),
               ),
               child: CustomTextWidget(
-                textToDisplay: '#Hastag',
+                textToDisplay: '#Hashtag',
                 textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
               ),
             ),

@@ -4,10 +4,13 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_balloon_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/icon_ownership.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -53,6 +56,7 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    var lang = context.read<TranslateNotifierV2>().translate;
     return Consumer2<DiariesPlaylistNotifier, FollowRequestUnfollowNotifier>(builder: (context, ref, follRef, _) {
       final data = ref.data ?? widget.data;
       return Column(
@@ -94,6 +98,14 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                               isDetail: true,
                               show: true,
                               onFollow: () {},
+                              widthText: _textSize(
+                                      System().readTimestamp(
+                                        DateTime.parse(System().dateTimeRemoveT(widget.data?.createdAt ?? '')).millisecondsSinceEpoch,
+                                        context,
+                                        fullCaption: true,
+                                      ),
+                                      const TextStyle(fontWeight: FontWeight.bold))
+                                  .width,
                               following: true,
                               haveStory: false,
                               onTapOnProfileImage: () => System().navigateToProfile(context, data?.email ?? ''),
@@ -121,6 +133,36 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                             ),
                     ],
                   ),
+                  if (widget.data?.email != SharedPreference().readStorage(SpKeys.email) && (widget.data?.isNewFollowing ?? false))
+                    Consumer<PreviewPicNotifier>(
+                      builder: (context, picNot, child) => GestureDetector(
+                        onTap: () {
+                          if (widget.data?.insight?.isloadingFollow != true) {
+                            picNot.followUser(context, widget.data!, isUnFollow: widget.data?.following, isloading: widget.data?.insight!.isloadingFollow ?? false);
+                          }
+                        },
+                        child: widget.data?.insight?.isloadingFollow ?? false
+                            ? const SizedBox(
+                                height: 40,
+                                width: 30,
+                                child: Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: CustomLoading(),
+                                ),
+                              )
+                            : Center(
+                                child: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(8.0)),
+                                  // transform: Matrix4.translationValues(-40.0, 0.0, 0.0),
+                                  child: Text(
+                                    (widget.data?.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+                                    style: const TextStyle(color: kHyppeLightButtonText, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                                  ),
+                                ),
+                              ),
+                      ),
+                    ),
                   Row(
                     children: [
                       Visibility(
@@ -226,5 +268,10 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
         ],
       );
     });
+  }
+
+  Size _textSize(String text, TextStyle style) {
+    final TextPainter textPainter = TextPainter(text: TextSpan(text: text, style: style), maxLines: 1, textDirection: TextDirection.ltr)..layout(minWidth: 0, maxWidth: double.infinity);
+    return textPainter.size;
   }
 }

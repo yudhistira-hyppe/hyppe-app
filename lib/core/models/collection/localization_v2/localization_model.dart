@@ -191,6 +191,8 @@ class LocalizationModelV2 {
   String? category;
   String? selectCategory;
   String? seeMore;
+  String? more;
+  String? less;
   String? advancedSettings;
   String? allowComment;
   String? turnOffCommenting;
@@ -1290,6 +1292,8 @@ class LocalizationModelV2 {
     this.category,
     this.selectCategory,
     this.seeMore,
+    this.more,
+    this.less,
     this.advancedSettings,
     this.allowComment,
     this.turnOffCommenting,
@@ -2390,6 +2394,8 @@ class LocalizationModelV2 {
     category = json['category'];
     selectCategory = json['selectCategory'];
     seeMore = json['seeMore'];
+    more = json['more'];
+    less = json['less'];
     advancedSettings = json['advancedSettings'];
     allowComment = json['allowComment'];
     turnOffCommenting = json['turnOffCommenting'];

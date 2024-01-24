@@ -39,7 +39,7 @@ class _OtherProfileBottomState extends State<OtherProfileBottom> {
                     ),
                     SizedBox(width: 8 * SizeConfig.scaleDiagonal),
                     CustomTextWidget(
-                      textToDisplay: "Pics",
+                      textToDisplay: "Pic",
                       textStyle: TextStyle(
                         fontSize: 14,
                         color: notifier.pageIndex == 0 ? Theme.of(context).colorScheme.primary : Theme.of(context).tabBarTheme.unselectedLabelColor,
@@ -75,7 +75,7 @@ class _OtherProfileBottomState extends State<OtherProfileBottom> {
                     ),
                     SizedBox(width: 8 * SizeConfig.scaleDiagonal),
                     CustomTextWidget(
-                      textToDisplay: "Diaries",
+                      textToDisplay: "Diary",
                       textStyle: TextStyle(
                         fontSize: 14,
                         color: notifier.pageIndex == 1 ? Theme.of(context).colorScheme.primary : Theme.of(context).tabBarTheme.unselectedLabelColor,
@@ -111,7 +111,7 @@ class _OtherProfileBottomState extends State<OtherProfileBottom> {
                     ),
                     SizedBox(width: 8 * SizeConfig.scaleDiagonal),
                     CustomTextWidget(
-                      textToDisplay: "Vids",
+                      textToDisplay: "Vid",
                       textStyle: TextStyle(
                         fontSize: 14,
                         color: notifier.pageIndex == 2 ? Theme.of(context).colorScheme.primary : Theme.of(context).tabBarTheme.unselectedLabelColor,

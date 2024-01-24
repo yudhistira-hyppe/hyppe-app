@@ -68,6 +68,7 @@ class ScrollVid extends StatefulWidget {
 
 class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
   List<ContentData>? vidData = [];
+  int indexVid = 0;
   bool isPrepare = false;
   bool isPlay = false;
   bool isPause = false;
@@ -102,6 +103,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
     // notifier.initialVid(context, reload: true);
     lang = context.read<TranslateNotifierV2>().translate;
     vidData = widget.arguments?.vidData;
+    indexVid = widget.arguments!.page??0;
     notifier.vidData = widget.arguments?.vidData;
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -248,9 +250,45 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
               child: Column(
                 children: [
                   ListTile(
-                    title: Align(
-                      alignment: const Alignment(-1.2, 0),
-                      child: Container(margin: const EdgeInsets.symmetric(horizontal: 10), child: widget.arguments?.titleAppbar ?? Container()),
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          transform: Matrix4.translationValues(-18.0, 0.0, 0.0),
+                          margin: const EdgeInsets.symmetric(horizontal: 10), 
+                          child: widget.arguments?.titleAppbar ?? Container()),
+                        if (vidData?[indexVid].email != email && (vidData?[indexVid].isNewFollowing ?? false))
+                        Consumer<PreviewPicNotifier>(
+                          builder: (context, picNot, child) => Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                if (vidData?[indexVid].insight?.isloadingFollow != true) {
+                                  picNot.followUser(context, vidData![indexVid], isUnFollow: vidData?[indexVid].following, isloading: vidData?[indexVid].insight!.isloadingFollow ?? false);
+                                }
+                              },
+                              child: vidData?[indexVid].insight?.isloadingFollow ?? false
+                                  ? const SizedBox(
+                                      height: 30,
+                                      width: 30,
+                                      child: Center(
+                                        child: CustomLoading(),
+                                      ),
+                                    )
+                                  : SizedBox(
+                                    height: 40,
+                                    child: Center(
+                                      child: Text(
+                                          (vidData?[indexVid].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+                                          style: const TextStyle(color: kHyppePrimary, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                                        ),
+                                    ),
+                                  ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     leading: IconButton(
                         icon: const Icon(
@@ -397,32 +435,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                       badge: vidData?[index].urluserBadge,
                     ),
                   ),
-                  if (vidData?[index].email != email && (vidData?[index].isNewFollowing ?? false))
-                    Consumer<PreviewPicNotifier>(
-                      builder: (context, picNot, child) => Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            if (vidData?[index].insight?.isloadingFollow != true) {
-                              picNot.followUser(context, vidData![index], isUnFollow: vidData?[index].following, isloading: vidData?[index].insight!.isloadingFollow ?? false);
-                            }
-                          },
-                          child: vidData?[index].insight?.isloadingFollow ?? false
-                              ? Container(
-                                  height: 40,
-                                  width: 30,
-                                  child: const Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: CustomLoading(),
-                                  ),
-                                )
-                              : Text(
-                                  (vidData?[index].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
-                                  style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
-                                ),
-                        ),
-                      ),
-                    ),
+                  
                   GestureDetector(
                     onTap: () {
                       if (vidData?[index].email != email) {
@@ -788,11 +801,14 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                 desc: "${vidData?[index].description}",
                 trimLines: 2,
                 textAlign: TextAlign.start,
-                seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
-                seeMore: '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                seeLess: ' ${lang?.less}', // ${notifier2.translate.seeLess}',
+                seeMore: '  ${lang?.more}', //${notifier2.translate.seeMoreContent}',
                 normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
                 hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                expandStyle: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
               ),
               if (vidData?[index].allowComments ?? true)
                 GestureDetector(
