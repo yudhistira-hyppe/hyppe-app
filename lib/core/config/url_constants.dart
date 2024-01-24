@@ -130,7 +130,7 @@ class UrlConstants {
   static const String recoverPassword = "$userRoute/recoverpassword/v2";
 
   /// post register interest => To register interests of user.
-  static const String updateInterest = "$userRoute/profileinterest";
+  static const String updateInterest = "$userRoute/profileinterest/v2";
 
   /// post => Upload Profile picture V2.
   static const String uploadProfilePictureV2 = "$postsRoute/profilepicture/v2";
@@ -307,8 +307,8 @@ class UrlConstants {
   static const String getSearchContentV3 = "$contentRouteV3/searchdata/v2";
   static const String getSearchContentV4 = "$contentRouteV3/searchdatanew";
   static const String landingPageSearch = "$interestCount/default-page";
-  static const String getDetailHashtag = "$contentRouteV3/searchdatanew/detailtag";
-  static const String getDetailInterest = "$contentRouteV3/searchdatanew/detailinterest";
+  static const String getDetailHashtag = "$contentRouteV3/searchdatanew/detailtag/v2";
+  static const String getDetailInterest = "$contentRouteV3/searchdatanew/detailinterest/v2";
   static const String getSearchContentV5 = "$contentRouteV3/searchdatanew/v2";
   static const String getDetailHashtagV2 = "$contentRouteV3/searchdatanew/newdetailtag/v2";
   static const String getDetailInterestV2 = "$contentRouteV3/searchdatanew/detailinterest/v2";
@@ -412,7 +412,7 @@ class UrlConstants {
 
   //==========report============
   static const String getOptionReport = "/api/reportreasons/all";
-  static const String insertReport = "/api/reportuser/create";
+  static const String insertReport = "/api/reportuser/create/v2";
   static const String detailTypeAppeal = "/api/reportuser/detailreason";
 
   static const String appealPost = "/api/reportuser/appeal";
