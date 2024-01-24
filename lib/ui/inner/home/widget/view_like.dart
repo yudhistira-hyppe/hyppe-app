@@ -68,55 +68,103 @@ class _ViewLikedState extends State<ViewLiked> {
                                   widget.eventType == 'LIKE' ? lang.translate.notLikeyet! : lang.translate.notviewyet!,
                                   textAlign: TextAlign.center,
                                 ))
-                            : notifier.listLikeView!.isNotEmpty
-                                ? ListView.builder(
-                                    shrinkWrap: true,
-                                    controller: _scrollController,
-                                    itemCount: notifier.listLikeView?.length,
-                                    itemBuilder: (context, index) {
-                                      final data = notifier.listLikeView?[index];
-                                      if (data != null) {
-                                        return ListTile(
-                                            onTap: () => System().navigateToProfile(context, data.email ?? ''),
-                                            contentPadding: EdgeInsets.zero,
-                                            leading: StoryColorValidator(
-                                              haveStory: false,
-                                              featureType: FeatureType.pic,
-                                              child: CustomProfileImage(
-                                                width: 40,
-                                                height: 40,
+                            : notifier.listLikeView?.user != null && (notifier.listLikeView!.user!.isNotEmpty)
+                                ? Column(
+                                    children: [
+                                      ListView.builder(
+                                        shrinkWrap: true,
+                                        controller: _scrollController,
+                                        itemCount: notifier.listLikeView?.user?.length,
+                                        itemBuilder: (context, index) {
+                                          final data = notifier.listLikeView?.user?[index];
+                                          if (data != null) {
+                                            return ListTile(
                                                 onTap: () => System().navigateToProfile(context, data.email ?? ''),
-                                                imageUrl: System().showUserPicture(data.avatar == null ? '' : data.avatar?.mediaEndpoint),
-                                                badge: data.urluserBadge,
-                                                following: true,
-                                                onFollow: () {},
-                                              ),
-                                            ),
-                                            title: CustomTextWidget(
-                                              textToDisplay: data.username ?? '',
-                                              textStyle: Theme.of(context).textTheme.titleSmall,
-                                              textAlign: TextAlign.start,
-                                            ),
-                                            subtitle: CustomTextWidget(
-                                              textToDisplay: data.fullName.capitalized,
-                                              // textStyle: Theme.of(context).textTheme.titleSmall,
-                                              textAlign: TextAlign.start,
-                                            ),
-                                            trailing: CustomElevatedButton(
-                                                width: 100,
-                                                height: 24,
-                                                buttonStyle: ButtonStyle(
-                                                  backgroundColor: (notifier.statusFollowingViewer == StatusFollowing.requested || notifier.statusFollowingViewer == StatusFollowing.following)
-                                                      ? null
-                                                      : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                                contentPadding: EdgeInsets.zero,
+                                                leading: StoryColorValidator(
+                                                  haveStory: false,
+                                                  featureType: FeatureType.pic,
+                                                  child: CustomProfileImage(
+                                                    width: 40,
+                                                    height: 40,
+                                                    onTap: () => System().navigateToProfile(context, data.email ?? ''),
+                                                    imageUrl: System().showUserPicture(data.avatar == null ? '' : data.avatar?.mediaEndpoint),
+                                                    badge: data.urluserBadge,
+                                                    following: true,
+                                                    onFollow: () {},
+                                                  ),
                                                 ),
-                                                function: null,
-                                                child: CustomTextWidget(
-                                                    textToDisplay: lang.translate.follow!, textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(color: kHyppeLightButtonText))));
-                                      } else {
-                                        return Container();
-                                      }
-                                    },
+                                                title: CustomTextWidget(
+                                                  textToDisplay: data.username ?? '',
+                                                  textStyle: Theme.of(context).textTheme.titleSmall,
+                                                  textAlign: TextAlign.start,
+                                                ),
+                                                subtitle: CustomTextWidget(
+                                                  textToDisplay: data.fullName.capitalized,
+                                                  // textStyle: Theme.of(context).textTheme.titleSmall,
+                                                  textAlign: TextAlign.start,
+                                                ),
+                                                trailing: CustomElevatedButton(
+                                                    width: 100,
+                                                    height: 24,
+                                                    buttonStyle: ButtonStyle(
+                                                      backgroundColor: (data.following ?? false) ? null : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                                    ),
+                                                    function: () {
+                                                      if (!(data.isloadingFollow ?? false)) {
+                                                        if (data.following ?? false) {
+                                                          notifier.followUserLikeView(context, data, isUnFollow: true);
+                                                        } else {
+                                                          notifier.followUserLikeView(context, data);
+                                                        }
+                                                      }
+                                                    },
+                                                    child: data.isloadingFollow ?? false
+                                                        ? Container(
+                                                            height: 40,
+                                                            width: 30,
+                                                            child: const Align(
+                                                              alignment: Alignment.bottomRight,
+                                                              child: CustomLoading(),
+                                                            ),
+                                                          )
+                                                        : CustomTextWidget(
+                                                            textToDisplay: (data.following ?? false) ? lang.translate.following! : lang.translate.follow!,
+                                                            textStyle:
+                                                                Theme.of(context).textTheme.labelLarge?.copyWith(color: (data.following ?? false) ? kHyppeTextLightPrimary : kHyppeLightButtonText))));
+                                          } else {
+                                            return Container();
+                                          }
+                                        },
+                                      ),
+                                      if ((notifier.listLikeView?.guest ?? 0) > 0)
+                                        ListTile(
+                                          contentPadding: EdgeInsets.zero,
+                                          leading: StoryColorValidator(
+                                            haveStory: false,
+                                            featureType: FeatureType.pic,
+                                            child: CustomProfileImage(
+                                              width: 40,
+                                              height: 40,
+                                              onTap: null,
+                                              imageUrl: '',
+                                              badge: null,
+                                              following: true,
+                                              onFollow: () {},
+                                            ),
+                                          ),
+                                          title: CustomTextWidget(
+                                            textToDisplay: 'Guest mode',
+                                            textStyle: Theme.of(context).textTheme.titleSmall,
+                                            textAlign: TextAlign.start,
+                                          ),
+                                          trailing: CustomTextWidget(
+                                            textToDisplay: '${notifier.listLikeView?.guest}',
+                                            textStyle: Theme.of(context).textTheme.titleSmall,
+                                            textAlign: TextAlign.start,
+                                          ),
+                                        )
+                                    ],
                                   )
                                 : Container(
                                     alignment: Alignment.center,

@@ -1,53 +1,67 @@
-// To parse this JSON data, do
-//
-//     final ViewContent = ViewContentFromJson(jsonString);
-
-import 'dart:convert';
-
-import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
 import 'package:hyppe/core/models/collection/common/user_badge_model.dart';
 
-List<ViewContent> viewContentFromJson(String str) => List<ViewContent>.from(json.decode(str).map((x) => ViewContent.fromJson(x)));
-
-String viewContentToJson(List<ViewContent> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-
 class ViewContent {
-  ViewContent({
-    this.fullName,
-    this.email,
-    this.username,
-    this.avatar,
-    this.urluserBadge,
-    this.isFollowing,
-  });
+  List<User>? user;
+  int? guest;
 
-  String? fullName;
+  ViewContent({this.user, this.guest});
+
+  ViewContent.fromJson(Map<String, dynamic> json) {
+    if (json['user'] != null) {
+      user = <User>[];
+      json['user'].forEach((v) {
+        user!.add(User.fromJson(v));
+      });
+    }
+    guest = json['guest'];
+  }
+}
+
+class User {
+  String? sId;
   String? email;
+  String? fullName;
   String? username;
-  Avatar? avatar;
-  String? isFollowing;
   UserBadgeModel? urluserBadge;
+  Avatar? avatar;
+  bool? following;
+  bool? guest;
+  bool? isloadingFollow;
 
-  factory ViewContent.fromJson(Map<String, dynamic> json) => ViewContent(
-        fullName: json["fullName"],
-        email: json["email"],
-        username: json["username"],
-        isFollowing: json["isFollowing"]??'none',
-        avatar: json['avatar'] != null ? Avatar.fromJson(json['avatar']) : null,
-        urluserBadge:
-            json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty
-                ? json['urluserBadge'] is List
-                    ? UserBadgeModel.fromJson(json['urluserBadge'].first)
-                    : UserBadgeModel.fromJson(json['urluserBadge'])
-                : null,
-      );
+  User({this.sId, this.email, this.fullName, this.username, this.urluserBadge, this.avatar, this.following, this.guest, this.isloadingFollow});
 
-  Map<String, dynamic> toJson() => {
-        "fullName": fullName,
-        "email": email,
-        "username": username,
-        "isFollowing": isFollowing,
-        "avatar": avatar?.toJson(),
-        "urluserBadge": urluserBadge?.toJson(),
-      };
+  User.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    email = json['email'];
+    fullName = json['fullName'];
+    username = json['username'];
+
+    if (json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty) {
+      if (json['urluserBadge'] is List) {
+        urluserBadge = UserBadgeModel.fromJson(json['urluserBadge'].first);
+      } else {
+        urluserBadge = UserBadgeModel.fromJson(json['urluserBadge']);
+      }
+    }
+
+    avatar = json['avatar'] != null ? Avatar.fromJson(json['avatar']) : null;
+    following = json['following'];
+    guest = json['guest'];
+  }
+}
+
+class Avatar {
+  String? mediaBasePath;
+  String? mediaUri;
+  String? mediaType;
+  String? mediaEndpoint;
+
+  Avatar({this.mediaBasePath, this.mediaUri, this.mediaType, this.mediaEndpoint});
+
+  Avatar.fromJson(Map<String, dynamic> json) {
+    mediaBasePath = json['mediaBasePath'];
+    mediaUri = json['mediaUri'];
+    mediaType = json['mediaType'];
+    mediaEndpoint = json['mediaEndpoint'];
+  }
 }

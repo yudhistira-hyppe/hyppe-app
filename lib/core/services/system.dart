@@ -2058,14 +2058,12 @@ class System {
     }
   }
 
-  void analyticSetUser(String name) async {
-    await FirebaseAnalytics.instance.setUserId(
-      id: SharedPreference().readStorage(SpKeys.userID),
-    );
-    await FirebaseAnalytics.instance.setUserProperty(
-      name: SharedPreference().readStorage(SpKeys.email),
-      value: name,
-    );
+  void analyticSetUser({String name = ''}) async {
+    await FirebaseAnalytics.instance.setUserId(id: SharedPreference().readStorage(SpKeys.userID));
+    // await FirebaseAnalytics.instance.setUserProperty(
+    //   name: SharedPreference().readStorage(SpKeys.email).toString().substring(0, 24),
+    //   value: '',
+    // );
   }
 
   void analyticSetScreen(String screenName, {String? subScreenName}) async {

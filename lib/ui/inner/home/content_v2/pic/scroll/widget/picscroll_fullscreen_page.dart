@@ -46,6 +46,7 @@ import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
+import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'dart:math' as math;
@@ -73,7 +74,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
   bool isPlay = false;
   bool isPause = false;
   bool isloading = false;
-  bool isShowMore = false;
+  bool isShowMore = true;
   bool isShowShowcase = false;
   double opacityLevel = 0.0;
 
@@ -234,6 +235,8 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
                 }
               },
               itemBuilder: (context, index) {
+                
+
                 if (picData![index].reportedStatus == 'BLURRED'){
                   notifier.isMute = true;
                   if (picData![index].music != null) {
@@ -245,7 +248,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
                     }
                   return blurContentWidget(context, picData![index]);
                 }else{
-                  notifier.isMute = false;
+                  // notifier.isMute = false;
                   
                   return imagePic(picData![index],
                     index: index, notifier: notifier, homeNotifier: home);
@@ -444,7 +447,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
               behavior: HitTestBehavior.translucent,
               onTapDown: (details) {
                 var position = details.globalPosition;
-                notifier!.positionDxDy = position;
+                notifier?.positionDxDy = position;
               },
               onDoubleTap: () {
                 context.read<LikeNotifier>().likePost(
@@ -468,7 +471,6 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
                     setState(() {});
                   });
                 }
-                
               },
               child: ImageSize(
                 onChange: (Size size) {
@@ -591,6 +593,31 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
                         color: Colors.white,
                         fontSize: 13,
                       )),
+                  data.email == SharedPreference().readStorage(SpKeys.email)
+                    ? GestureDetector(
+                        onTap: () async {
+                          System().checkConnections().then((value) {
+                            if (value) {
+                              Routing()
+                                  .move(Routes.appeal, argument: data);
+                            }
+                          });
+                        },
+                        child: Container(
+                            padding: const EdgeInsets.all(8),
+                            margin: const EdgeInsets.all(18),
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.white),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Text(
+                                lang!.appealThisWarning ??
+                                          'Appeal This Warning',
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600))),
+                            )
+                          : const SizedBox(),
                   const Spacer(),
                   GestureDetector(
                     onTap: () {
@@ -637,64 +664,76 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
                   child: Row(
                     children: [
-                      // if (data.tagPeople?.isNotEmpty ?? false)
                       Visibility(
                         visible: data.tagPeople?.isNotEmpty ?? false,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              fAliplayer?.pause();
-                              context.read<PicDetailNotifier>().showUserTag(
-                                  context, data.tagPeople, data.postID,
-                                  title: lang!.inthisphoto,
-                                  fAliplayer: fAliplayer);
-                            },
-                            child: Row(
-                              children: [
-                                const CustomIconWidget(
-                                  iconData:
-                                      '${AssetPath.vectorPath}tag-people-light.svg',
-                                  defaultColor: false,
-                                  height: 22,
-                                ),
-                                Text(
-                                  '${data.tagPeople!.length} ${lang!.people}',
-                                  style:
-                                      const TextStyle(color: kHyppeTextPrimary),
-                                )
-                              ],
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: kHyppeBackground.withOpacity(.4),
+                            borderRadius: BorderRadius.circular(8.0)
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+                          margin: const EdgeInsets.only(right: 12.0),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                fAliplayer?.pause();
+                                context.read<PicDetailNotifier>().showUserTag(
+                                    context, data.tagPeople, data.postID,
+                                    title: lang!.inthisphoto,
+                                    fAliplayer: fAliplayer);
+                              },
+                              child: Row(
+                                children: [
+                                  const CustomIconWidget(
+                                    iconData:
+                                        '${AssetPath.vectorPath}tag-people-light.svg',
+                                    defaultColor: false,
+                                    height: 18,
+                                  ),
+                                  const SizedBox(width: 4.0,),
+                                  Text(
+                                    '${data.tagPeople!.length} ${lang!.people}',
+                                    style:
+                                        const TextStyle(color: kHyppeTextPrimary),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         ),
                       ),
                       Visibility(
                         visible: data.location != '',
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: (data.tagPeople?.isNotEmpty ?? false)
-                                ? 12.0
-                                : 0.0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: kHyppeBackground.withOpacity(.4),
+                            borderRadius: BorderRadius.circular(8.0)
                           ),
-                          child: Align(
-                            alignment: Alignment.bottomLeft,
+                          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: (data.tagPeople?.isNotEmpty ?? false)
+                                    ? 12.0
+                                    : 0.0,),
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: CustomIconWidget(
-                                    iconData:
-                                        '${AssetPath.vectorPath}map-light.svg',
-                                    defaultColor: false,
-                                    height: 16,
-                                  ),
+                                const CustomIconWidget(
+                                  iconData:
+                                      '${AssetPath.vectorPath}map-light.svg',
+                                  defaultColor: false,
+                                  height: 16,
                                 ),
+                                const SizedBox(width: 4.0,),
                                 SizedBox(
-                                  width: MediaQuery.of(context).size.width * .5,
+                                  width: data.tagPeople?.isNotEmpty ?? false 
+                                        ? SizeConfig.screenWidth! * .4
+                                        : SizeConfig.screenWidth! * .65,
                                   child: Text(
                                     '${data.location}',
                                     maxLines: 1,
@@ -714,11 +753,10 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
                 Container(
                   constraints: BoxConstraints(
                       maxWidth: SizeConfig.screenWidth! * .7,
-                      // minHeight: SizeConfig.screenHeight! * .1,
                       maxHeight: isShowMore
-                              ? 42
+                              ? 52
                               : SizeConfig.screenHeight! * .1),
-                  alignment: Alignment.centerLeft,
+                  alignment: Alignment.bottomLeft,
                   margin: const EdgeInsets.symmetric(horizontal: 16.0),
                   padding: const EdgeInsets.only(left: 8.0, top: 8.0),
                   child: SingleChildScrollView(
@@ -727,14 +765,15 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
                       trimLines: 2,
                       textAlign: TextAlign.start,
                       callbackIsMore: (val) {
+                        print('desciption ${data.description}');
                         setState(() {
                           isShowMore = val;
                         });
                       },
                       seeLess:
-                          ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
+                          ' ${lang?.less}',
                       seeMore:
-                          '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                          '  ${lang?.more}',
                       normStyle: const TextStyle(
                           fontSize: 14, color: kHyppeTextPrimary),
                       hrefStyle: Theme.of(context)
@@ -814,7 +853,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
                   child: Container(
                     width: SizeConfig.screenWidth! * .7,
                     height: SizeConfig.screenHeight! * .05,
-                    margin: const EdgeInsets.only(left: 16.0, top: 12.0),
+                    margin: const EdgeInsets.only(left: 16.0),
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Row(
                       children: [
@@ -825,7 +864,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
                             animation: animatedController,
                             builder: (_, child) {
                               return Transform.rotate(
-                                angle: animatedController.value * 2 * math.pi,
+                                angle: animatedController.value * 2 * -math.pi,
                                 child: child,
                               );
                             },
@@ -870,13 +909,17 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
                         ),
                         SizedBox(
                           width: SizeConfig.screenWidth! * .55,
-                          child: CustomTextWidget(
+                          child: _textSize(data.music?.musicTitle ?? '', const TextStyle(fontWeight: FontWeight.normal)).width > SizeConfig.screenWidth! * .55
+                            ? Marquee(
+                              text: '  ${data.music?.musicTitle ?? ''}',
+                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),
+                            )
+                            : CustomTextWidget(
                             textToDisplay: " ${data.music?.musicTitle ?? ''}",
                             maxLines: 1,
                             textStyle: const TextStyle(
                                 color: kHyppeTextPrimary,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w700),
+                                fontSize: 12,),
                             textAlign: TextAlign.left,
                           ),
                         ),
@@ -918,14 +961,16 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
               buttonRight(
                 onFunctionTap: () {
                   Routing().move(Routes.commentsDetail,
-                      argument: CommentsArgument(
-                          postID: picData.postID ?? '',
+                        argument: CommentsArgument(
+                          postID: notifier?.pics?[index].postID ?? '',
                           fromFront: true,
-                          data: picData));
+                          data: notifier?.pics?[index] ?? ContentData(),
+                          pageDetail: true,
+                        ));
                 },
                 iconData: '${AssetPath.vectorPath}comment-shadow.svg',
-                value: picData.comments! > 0
-                    ? picData.comments.toString()
+                value: (notifier?.pics?[index].comments??0) > 0
+                    ? (notifier!.pics![index].comments).toString()
                     : lang?.comments ?? '',
               ),
             if ((picData.isShared ?? false))
@@ -960,7 +1005,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
     return InkResponse(
       onTap: onFunctionTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        padding: const EdgeInsets.symmetric(vertical: 4.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -971,7 +1016,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
                 defaultColor: false,
                 color: liked ? kHyppeRed : kHyppePrimaryTransparent,
                 iconData: iconData,
-                height: liked ? 24 : 38,
+                height: liked ? 24 : 40,
                 width: 38,
               ),
             ),
@@ -983,23 +1028,26 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
               const SizedBox(
                 height: 8.0,
               ),
-            Text(
-              value,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                  shadows: [
-                    Shadow(
-                        offset: Offset(0.0, 1.0),
-                        blurRadius: 2.0,
-                        color: Colors.black54),
-                    Shadow(
-                        offset: Offset(0.0, 1.0),
-                        blurRadius: 2.0,
-                        color: Colors.black54),
-                  ],
-                  color: kHyppePrimaryTransparent,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 12),
+            Container(
+              transform: Matrix4.translationValues(0.0, -5.0, 0.0),
+              child: Text(
+                value,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                    shadows: [
+                      Shadow(
+                          offset: Offset(0.0, 1.0),
+                          blurRadius: 2.0,
+                          color: Colors.black54),
+                      Shadow(
+                          offset: Offset(0.0, 1.0),
+                          blurRadius: 2.0,
+                          color: Colors.black54),
+                    ],
+                    color: kHyppePrimaryTransparent,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12),
+              ),
             ),
           ],
         ),
@@ -1032,6 +1080,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: ProfileComponent(
+                isFullscreen: true,
                 show: true,
                 following: true,
                 onFollow: () {},
@@ -1112,7 +1161,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
                 child: const CustomIconWidget(
                   iconData: "${AssetPath.vectorPath}sale.svg",
                   defaultColor: false,
-                  height: 22,
+                  height: 28,
                 ),
               ),
             ),
@@ -1124,7 +1173,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
                 child: const CustomIconWidget(
                   iconData: '${AssetPath.vectorPath}ownership.svg',
                   defaultColor: false,
-                  height: 22,
+                  height: 28,
                 ),
               ),
             ),
@@ -1139,5 +1188,12 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
         ],
       ),
     );
+  }
+
+  Size _textSize(String text, TextStyle style) {
+    final TextPainter textPainter = TextPainter(
+        text: TextSpan(text: text, style: style), maxLines: 1, textDirection: TextDirection.ltr)
+      ..layout(minWidth: 0, maxWidth: double.infinity);
+    return textPainter.size;
   }
 }

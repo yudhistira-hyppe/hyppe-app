@@ -1126,11 +1126,14 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                     desc: "${vidData.description}",
                                     trimLines: 3,
                                     textAlign: TextAlign.start,
-                                    seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
-                                    seeMore: '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                                    seeLess: ' ${lang?.less}', // ${notifier2.translate.seeLess}',
+                                    seeMore: '  ${lang?.more}', //${notifier2.translate.seeMoreContent}',
                                     normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
                                     hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                                    expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                                    expandStyle: const TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
                                   ),
                                   GestureDetector(
                                     onTap: () {

@@ -175,6 +175,7 @@ class _ZoomablePhotoViewerState extends State<ZoomablePhotoViewer> with TickerPr
 
   Widget _build(BuildContext context) {
     return IgnorePointer(
+      ignoring: false,
       child: Stack(
         children: [
           const ModalBarrier(

@@ -163,7 +163,7 @@ class MainNotifier with ChangeNotifier {
       System().userVerified(selfProfile.user.profile?.statusKyc);
       SharedPreference().writeStorage(SpKeys.setPin, selfProfile.user.profile?.pinVerified.toString());
       SharedPreference().writeStorage(SpKeys.userID, context.read<SelfProfileNotifier>().user.profile?.idUser);
-      System().analyticSetUser(selfProfile.user.profile?.username ?? '');
+      System().analyticSetUser(name: selfProfile.user.profile?.username ?? '');
       // SharedPreference().writeStorage(SpKeys.statusVerificationId, 'sdsd')asdasd
       notifyListeners();
     }

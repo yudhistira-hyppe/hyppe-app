@@ -15,6 +15,7 @@ import 'custom_verified_widget.dart';
 import 'story_color_validator.dart';
 
 class ProfileComponent extends StatelessWidget {
+  final bool? isFullscreen;
   final bool isDetail;
   final bool show;
   final bool following;
@@ -38,6 +39,7 @@ class ProfileComponent extends StatelessWidget {
 
   const ProfileComponent({
     Key? key,
+    this.isFullscreen = false,
     required this.show,
     required this.onTapOnProfileImage,
     required this.imageUrl,
@@ -102,13 +104,14 @@ class ProfileComponent extends StatelessWidget {
                                   ? CustomStrokeTextWidget(
                                       textToDisplay: username ?? '',
                                       maxLines: 1,
-                                      textStyle: Theme.of(context).textTheme.button,
+                                      textStyle: Theme.of(context).textTheme.button?.copyWith(fontWeight: FontWeight.w700),
                                       textAlign: TextAlign.left,
                                     )
                                   : CustomTextWidget(
                                       textToDisplay: username ?? '',
                                       maxLines: 1,
                                       textStyle: TextStyle(
+                                        fontWeight: isFullscreen ?? false ? FontWeight.bold : FontWeight.normal,
                                         color: textColor,
                                         shadows: const [
                                           Shadow(offset: Offset(0.0, 1.0), blurRadius: 2.0, color: Colors.black12),
@@ -139,7 +142,7 @@ class ProfileComponent extends StatelessWidget {
                               maxLines: 1,
                               textToDisplay: createdAt,
                               textAlign: TextAlign.left,
-                              textStyle: Theme.of(context).textTheme.caption,
+                              textStyle: Theme.of(context).textTheme.caption?.copyWith(fontSize: 12),
                             )
                           : CustomTextWidget(
                               maxLines: 1,
