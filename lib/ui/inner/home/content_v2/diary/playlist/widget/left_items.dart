@@ -57,6 +57,7 @@ class LeftItems extends StatefulWidget {
 }
 
 class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMixin {
+  late final AnimationController animatedController = AnimationController(vsync: this, duration: const Duration(seconds: 2))..repeat();
   // AnimationController? _controller;
   // Animation<Offset>? _offsetAnimation;
   bool isShowMore = false;
@@ -204,10 +205,48 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                       CircleAvatar(
                         radius: 18,
                         backgroundColor: kHyppeSurface.withOpacity(.9),
-                        child: CustomBaseCacheImage(
-                          imageUrl: widget.data?.music?.apsaraThumnailUrl ?? '',
-                          imageBuilder: (_, imageProvider) {
-                            return AnimatedBuilder(
+                        child: AnimatedBuilder(
+                          animation: animatedController,
+                          builder: (_, child) {
+                            return Transform.rotate(
+                              angle: animatedController.value * 2 * -math.pi,
+                              child: child,
+                            );
+                          },
+                          child: CustomBaseCacheImage(
+                            imageUrl: widget.data?.music?.apsaraThumnailUrl ?? '',
+                            imageBuilder: (_, imageProvider) {
+                              return AnimatedBuilder(
+                                animation: widget.animatedController!,
+                                builder: (_, child) {
+                                  return Transform.rotate(
+                                    angle: widget.animatedController!.value * 2 * math.pi,
+                                    child: child,
+                                  );
+                                },
+                                child: Container(
+                                  width: 30,
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                    color: kDefaultIconDarkColor,
+                                    borderRadius: const BorderRadius.all(Radius.circular(24)),
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: imageProvider,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                            errorWidget: (_, __, ___) {
+                              return const CustomIconWidget(
+                                iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                defaultColor: false,
+                                color: kHyppeLightIcon,
+                                height: 18,
+                              );
+                            },
+                            emptyWidget: AnimatedBuilder(
                               animation: widget.animatedController!,
                               builder: (_, child) {
                                 return Transform.rotate(
@@ -215,41 +254,12 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                                   child: child,
                                 );
                               },
-                              child: Container(
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                  color: kDefaultIconDarkColor,
-                                  borderRadius: const BorderRadius.all(Radius.circular(24)),
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: imageProvider,
-                                  ),
-                                ),
+                              child: const CustomIconWidget(
+                                iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                defaultColor: false,
+                                color: kHyppeTextPrimary,
+                                height: 18,
                               ),
-                            );
-                          },
-                          errorWidget: (_, __, ___) {
-                            return const CustomIconWidget(
-                              iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
-                              defaultColor: false,
-                              color: kHyppeLightIcon,
-                              height: 18,
-                            );
-                          },
-                          emptyWidget: AnimatedBuilder(
-                            animation: widget.animatedController!,
-                            builder: (_, child) {
-                              return Transform.rotate(
-                                angle: widget.animatedController!.value * 2 * math.pi,
-                                child: child,
-                              );
-                            },
-                            child: const CustomIconWidget(
-                              iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
-                              defaultColor: false,
-                              color: kHyppeTextPrimary,
-                              height: 18,
                             ),
                           ),
                         ),
