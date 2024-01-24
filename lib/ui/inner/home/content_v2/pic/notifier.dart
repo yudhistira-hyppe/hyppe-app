@@ -19,6 +19,7 @@ import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 import '../../../../../app.dart';
 import '../../../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
 import '../../notifier_v2.dart';
@@ -30,7 +31,9 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
   bool isConnect = true;
   bool isLoading = false;
   bool isMute = true;
-
+  int currIndex = 0;
+  int get currentIndex => currIndex;
+  
   LocalizationModelV2 language = LocalizationModelV2();
   translate(LocalizationModelV2 translate) {
     language = translate;

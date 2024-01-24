@@ -1769,7 +1769,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
       },
       child: Container(
         // color: Colors.blue,
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(8.0),
         child: const CustomIconWidget(
           iconData: "${AssetPath.vectorPath}replay10.svg",
           defaultColor: false,
@@ -1811,7 +1811,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
       },
       child: Container(
         // color: Colors.red,
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(8.0),
         child: const CustomIconWidget(
           iconData: "${AssetPath.vectorPath}forward10.svg",
           defaultColor: false,
@@ -1987,7 +1987,8 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                       ),
                     )
                   : null,
-                child: Padding(
+                child: Container(
+                  width: MediaQuery.of(context).size.width * .7,
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Stack(
                     children: [
@@ -2000,6 +2001,93 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Row(
+                              children: [
+                                  Visibility(
+                                    visible: widget.data?.tagPeople?.isNotEmpty ?? false,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: kHyppeBackground.withOpacity(.4),
+                                        borderRadius: BorderRadius.circular(8.0)
+                                      ),
+                                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+                                      margin: const EdgeInsets.only(right: 12.0),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            fAliplayer?.pause();
+                                            context.read<PicDetailNotifier>().showUserTag(
+                                                context, widget.data?.tagPeople, widget.data?.postID,
+                                                title: lang!.inthisphoto,
+                                                fAliplayer: fAliplayer);
+                                          },
+                                          child: Row(
+                                            children: [
+                                              const CustomIconWidget(
+                                                iconData:
+                                                    '${AssetPath.vectorPath}tag-people-light.svg',
+                                                defaultColor: false,
+                                                height: 18,
+                                              ),
+                                              const SizedBox(width: 4.0,),
+                                              Text(
+                                                '${widget.data?.tagPeople!.length} ${lang!.people}',
+                                                style:
+                                                    const TextStyle(color: kHyppeTextPrimary),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Visibility(
+                                    visible: widget.data?.location != '',
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: kHyppeBackground.withOpacity(.4),
+                                        borderRadius: BorderRadius.circular(8.0)
+                                      ),
+                                      padding: const EdgeInsets.symmetric(vertical: 6,),
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: (widget.data?.tagPeople?.isNotEmpty ?? false)
+                                                ? 12.0
+                                                : 0.0,),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            const CustomIconWidget(
+                                              iconData:
+                                                  '${AssetPath.vectorPath}map-light.svg',
+                                              defaultColor: false,
+                                              height: 16,
+                                            ),
+                                            const SizedBox(width: 4.0,),
+                                            SizedBox(
+                                              width: widget.data?.tagPeople?.isNotEmpty ?? false 
+                                                    ? SizeConfig.screenWidth! * .4
+                                                    : SizeConfig.screenWidth! * .65,
+                                              child: Text(
+                                                '${widget.data?.location}',
+                                                maxLines: 1,
+                                                style: const TextStyle(
+                                                    color: kHyppeLightBackground),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
                           Container(
                             constraints: BoxConstraints(
                               maxWidth: orientation == Orientation.landscape
@@ -2008,7 +2096,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                               maxHeight: isShowMore
                                       ? 52
                                       : SizeConfig.screenHeight! * .1),
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
                             child: SingleChildScrollView(
                               child: CustomDescContent(
                                 desc: widget.data?.description??'',

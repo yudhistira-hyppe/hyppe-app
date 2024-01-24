@@ -1567,7 +1567,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage>
                                   ? 52
                                   : SizeConfig.screenHeight! * .1),
                         margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                        padding: const EdgeInsets.only(left: 8.0),
+                        padding: const EdgeInsets.only(left: 8.0, bottom: 12.0),
                         child: SingleChildScrollView(
                           child: CustomDescContent(
                             desc: "${widget.data.description}",

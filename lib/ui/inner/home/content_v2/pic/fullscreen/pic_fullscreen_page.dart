@@ -77,7 +77,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
   bool isPlay = false;
   bool isPause = false;
   bool isloading = false;
-  bool isShowMore = false;
+  bool isShowMore = true;
   bool isShowShowcase = false;
   double opacityLevel = 0.0;
 
@@ -146,6 +146,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
           ?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
     });
     controller = PageController(initialPage: widget.argument?.index ?? 0);
+    notifier.currIndex = widget.argument?.index??0;
   }
 
   @override
@@ -235,6 +236,8 @@ class _PicFullscreenPageState extends State<PicFullscreenPage>
               itemCount: notifier.pic?.length ?? 0,
               onPageChanged: (value) {
                 indexPic = value;
+                notifier.currIndex = value;
+                print('current index ${notifier.currentIndex}');
                 if ((notifier.pic?.length ?? 0) - 1 == indexPic) {
                   //This loadmore data
                   notifier.initialPic(context);
