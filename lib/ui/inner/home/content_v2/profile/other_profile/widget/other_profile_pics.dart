@@ -11,7 +11,6 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/empt
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/sensitive_content.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-// import 'package:measured_size/measured_size.dart';
 import '../../../../../../constant/widget/custom_loading.dart';
 
 class OtherProfilePics extends StatelessWidget {

@@ -48,8 +48,10 @@ class _ImageComponentState extends State<ImageComponent> {
         fetch.data.forEach((v) => _listContentData.add(ContentData.fromJson(v)));
         if (featureType == FeatureType.pic || featureType == FeatureType.vid) {
           callback(_listContentData[0]);
+        }else{
+          callback(_listContentData);
         }
-        callback(_listContentData);
+
       } else {
         callback(null);
       }

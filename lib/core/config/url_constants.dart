@@ -241,7 +241,7 @@ class UrlConstants {
   // static const String getMyUserPostsV2 = "$postRouteV2/getuserposts/my/v2";
 
   /// get => Get My Contents.
-  static const String getOtherUserPosts = "$postRouteV2/getuserposts/byprofile";
+  static const String getOtherUserPosts = "$postRouteV2/getuserposts/byprofile/v2";
 
   /// post => Get Apsara Video.
   static const String getVideoApsara = "$postRouteV2/getvideo";
@@ -307,10 +307,10 @@ class UrlConstants {
   static const String getSearchContentV3 = "$contentRouteV3/searchdata/v2";
   static const String getSearchContentV4 = "$contentRouteV3/searchdatanew";
   static const String landingPageSearch = "$interestCount/default-page";
-  static const String getDetailHashtag = "$contentRouteV3/searchdatanew/detailtag/v2";
-  static const String getDetailInterest = "$contentRouteV3/searchdatanew/detailinterest/v2";
+  static const String getDetailHashtag = "$contentRouteV3/searchdatanew/detailtag";
+  static const String getDetailInterest = "$contentRouteV3/searchdatanew/detailinterest";
   static const String getSearchContentV5 = "$contentRouteV3/searchdatanew/v2";
-  static const String getDetailHashtagV2 = "$contentRouteV3/searchdatanew/detailtag/v2";
+  static const String getDetailHashtagV2 = "$contentRouteV3/searchdatanew/newdetailtag/v2";
   static const String getDetailInterestV2 = "$contentRouteV3/searchdatanew/detailinterest/v2";
   // v3 delete tag
   static const String deletTagUser = "$postRouteV2/deletetag";
