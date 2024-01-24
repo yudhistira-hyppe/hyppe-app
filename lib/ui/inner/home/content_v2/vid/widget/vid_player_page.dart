@@ -1178,6 +1178,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                     ? blurContentWidget(context, widget.data!)
                     : GestureDetector(
                         onTap: () async {
+                          print('data Fullscreen ${widget.fromFullScreen}');
                           onTapCtrl = true;
                           setState(() {});
 
@@ -1315,6 +1316,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                           if (widget.data != null) {
                             likeNotifier.likePost(context, widget.data!);
                           }
+                          print('data Fullscreen ${widget.fromFullScreen}');
                         },
                         child: Stack(
                           children: [
@@ -1338,10 +1340,23 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                         Radius.circular(widget.fromFullScreen ? 0 : 16),
                                       ),
                                       child: Container(color: Colors.black, width: widget.width, height: widget.height, child: isPlay ? aliPlayerView : const SizedBox.shrink())),
-
+                            if (widget.fromFullScreen)
+                              GestureDetector(
+                                onTap: () {
+                                  //// fungsi tap dimana saja
+                                  onTapCtrl = true;
+                                  setState(() {});
+                                },
+                                child: Container(
+                                  color: Colors.transparent,
+                                  height: SizeConfig.screenHeight,
+                                  width: SizeConfig.screenWidth,
+                                ),
+                              ),
                             // Text("${adsData == null}"),
                             // Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
                             // /====slide dan tombol fullscreen
+
                             if (isPlay)
                               SizedBox(
                                   width: widget.width,
@@ -1521,13 +1536,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                               Positioned.fill(
                                 child: Align(
                                   alignment: Alignment.center,
-                                  child: _buildController(
-                                    Colors.transparent,
-                                    Colors.white,
-                                    120,
-                                    widget.width!,
-                                    widget.height! * 0.8,
-                                  ),
+                                  child: _buildController(Colors.transparent, Colors.white, 120, widget.width!, widget.height! * 0.8, widget.orientation),
                                 ),
                               ),
                             if (notifier.mapInContentAds[widget.data?.postID ?? ''] != null && isPlay)
@@ -1634,14 +1643,14 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
     double barHeight,
     double width,
     double height,
+    Orientation orientation,
   ) {
     return AnimatedOpacity(
       opacity: onTapCtrl || isPause ? 1.0 : 0.0,
       duration: const Duration(milliseconds: 500),
       onEnd: _onPlayerHide,
       child: Container(
-        // height: height * 0.8,
-        width: SizeConfig.screenWidth! * .8,
+        width: orientation == Orientation.landscape ? width * .35 : width * .8,
         decoration: BoxDecoration(
           color: backgroundColor,
         ),
@@ -1758,7 +1767,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
       },
       child: Container(
         // color: Colors.blue,
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(8.0),
         child: const CustomIconWidget(
           iconData: "${AssetPath.vectorPath}replay10.svg",
           defaultColor: false,
@@ -1800,7 +1809,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
       },
       child: Container(
         // color: Colors.red,
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(8.0),
         child: const CustomIconWidget(
           iconData: "${AssetPath.vectorPath}forward10.svg",
           defaultColor: false,
@@ -1960,237 +1969,105 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
           duration: const Duration(milliseconds: 500),
           onEnd: _onPlayerHide,
           child: SafeArea(
-            child: _currentPosition <= 0
-                ? Container()
-                : Container(
-                    decoration: orientation == Orientation.portrait
-                        ? BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            gradient: LinearGradient(
-                              end: const Alignment(0.0, -1),
-                              begin: const Alignment(0.0, 1),
-                              colors: [const Color(0x8A000000), Colors.black12.withOpacity(0.0)],
-                            ),
-                          )
-                        : null,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            bottom: 28,
-                            left: 0,
-                            right: !widget.fromFullScreen
-                                ? 0
-                                : orientation == Orientation.landscape
-                                    ? SizeConfig.screenHeight! * .2
-                                    : SizeConfig.screenHeight! * .08,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  constraints: BoxConstraints(
-                                      maxWidth: orientation == Orientation.landscape ? SizeConfig.screenWidth! * .35 : SizeConfig.screenWidth!,
-                                      maxHeight: isShowMore ? 52 : SizeConfig.screenHeight! * .1),
-                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: SingleChildScrollView(
-                                    child: CustomDescContent(
-                                      desc: widget.data?.description ?? '',
-                                      trimLines: 2,
-                                      textAlign: TextAlign.start,
-                                      callbackIsMore: (val) {
-                                        setState(() {
-                                          isShowMore = val;
-                                        });
-                                      },
-                                      seeLess: ' ${lang?.less}', // ${notifier2.translate.seeLess}',
-                                      seeMore: '  ${lang?.more}', //${notifier2.translate.seeMoreContent}',
-                                      normStyle: const TextStyle(fontSize: 14, color: kHyppeTextPrimary),
-                                      hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                                      expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppeTextPrimary, fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                ),
-                                SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                                        (widget.data!.boosted.isEmpty) &&
-                                        (widget.data!.reportedStatus != 'OWNED' && widget.data!.reportedStatus != 'BLURRED' && widget.data!.reportedStatus2 != 'BLURRED') &&
-                                        widget.data!.email == SharedPreference().readStorage(SpKeys.email)
-                                    ? Container(
-                                        width: double.infinity,
-                                        margin: const EdgeInsets.only(bottom: 16),
-                                        padding: const EdgeInsets.only(top: 12, left: 8.0, right: 8.0),
-                                        child: ButtonBoost(
-                                          onDetail: false,
-                                          marginBool: true,
-                                          contentData: widget.data ?? ContentData(),
-                                          startState: () {
-                                            SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
-                                          },
-                                          afterState: () {
-                                            SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
-                                          },
-                                        ),
-                                      )
-                                    : Container(),
-                                if (widget.data!.email == email && (widget.data!.boostCount ?? 0) >= 0 && (widget.data!.boosted.isNotEmpty))
-                                  Container(
-                                    padding: const EdgeInsets.all(10),
-                                    margin: const EdgeInsets.only(bottom: 10, left: 8.0, top: 12.0),
-                                    width: MediaQuery.of(context).size.width * .75,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(6),
-                                      color: kHyppeGreyLight.withOpacity(.9),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        const CustomIconWidget(
-                                          iconData: "${AssetPath.vectorPath}reach.svg",
-                                          defaultColor: false,
-                                          height: 24,
-                                          color: kHyppeTextLightPrimary,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(left: 13),
-                                          child: CustomTextWidget(
-                                            textToDisplay: "${widget.data!.boostJangkauan ?? '0'} ${lang?.reach}",
-                                            textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                Column(
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(right: 8.0),
-                                        child: Text(
-                                          "${System.getTimeformatByMs(_currentPositionText)}/${System.getTimeformatByMs(_videoDuration)}",
-                                          textAlign: TextAlign.end,
-                                          style: const TextStyle(color: Colors.white, fontSize: 11),
-                                        ),
-                                      ),
-                                    ),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: SliderTheme(
-                                            data: SliderTheme.of(context).copyWith(
-                                              overlayShape: SliderComponentShape.noThumb,
-                                              activeTrackColor: const Color(0xAA7d7d7d),
-                                              inactiveTrackColor: const Color.fromARGB(170, 156, 155, 155),
-                                              trackHeight: 3.0,
-                                              thumbColor: Colors.purple,
-                                              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8.0),
-                                            ),
-                                            child: Slider(
-                                                min: 0,
-                                                max: _videoDuration == 0 ? 1 : _videoDuration.toDouble(),
-                                                value: _currentPosition.toDouble(),
-                                                activeColor: Colors.purple,
-                                                thumbColor: Colors.purple,
-                                                onChangeStart: (value) {
-                                                  _inSeek = true;
-                                                  setState(() {});
-                                                },
-                                                onChangeEnd: (value) {
-                                                  _inSeek = false;
-                                                  setState(() {
-                                                    if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
-                                                      setState(() {
-                                                        _showTipsWidget = false;
-                                                      });
-                                                    }
-                                                  });
-                                                  fAliplayer?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE);
-                                                },
-                                                onChanged: (value) {
-                                                  fAliplayer?.requestBitmapAtPosition(value.ceil());
-
-                                                  setState(() {
-                                                    _currentPosition = value.ceil();
-                                                  });
-                                                }),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                if (widget.data!.music?.musicTitle != '' && widget.data!.music?.musicTitle != null)
+              child: _currentPosition <= 0
+                  ? Container()
+                  : Container(
+                      decoration: orientation == Orientation.portrait
+                          ? BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              gradient: LinearGradient(
+                                end: const Alignment(0.0, -1),
+                                begin: const Alignment(0.0, 1),
+                                colors: [const Color(0x8A000000), Colors.black12.withOpacity(0.0)],
+                              ),
+                            )
+                          : null,
+                      child: Container(
+                          width: MediaQuery.of(context).size.width * .7,
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Stack(children: [
+                            Positioned(
+                              bottom: 28,
+                              left: 0,
+                              right: !widget.fromFullScreen
+                                  ? 0
+                                  : orientation == Orientation.landscape
+                                      ? SizeConfig.screenHeight! * .2
+                                      : SizeConfig.screenHeight! * .08,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(top: 0.0, left: 8.0, right: 12.0),
+                                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                     child: Row(
-                                      mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        const Padding(
-                                          padding: EdgeInsets.only(right: 8.0),
-                                          child: CustomIconWidget(
-                                            iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
-                                            defaultColor: false,
-                                            color: kHyppeLightBackground,
-                                            height: 18,
+                                        Visibility(
+                                          visible: widget.data?.tagPeople?.isNotEmpty ?? false,
+                                          child: Container(
+                                            decoration: BoxDecoration(color: kHyppeBackground.withOpacity(.4), borderRadius: BorderRadius.circular(8.0)),
+                                            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+                                            margin: const EdgeInsets.only(right: 12.0),
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  fAliplayer?.pause();
+                                                  context.read<PicDetailNotifier>().showUserTag(context, widget.data?.tagPeople, widget.data?.postID, title: lang!.inthisphoto, fAliplayer: fAliplayer);
+                                                },
+                                                child: Row(
+                                                  children: [
+                                                    const CustomIconWidget(
+                                                      iconData: '${AssetPath.vectorPath}tag-people-light.svg',
+                                                      defaultColor: false,
+                                                      height: 18,
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 4.0,
+                                                    ),
+                                                    Text(
+                                                      '${widget.data?.tagPeople!.length} ${lang!.people}',
+                                                      style: const TextStyle(color: kHyppeTextPrimary),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                         ),
-                                        Expanded(
-                                          child: _textSize(widget.data?.music?.musicTitle ?? '', const TextStyle(fontWeight: FontWeight.bold)).width > SizeConfig.screenWidth! * .56
-                                              ? SizedBox(
-                                                  width: SizeConfig.screenWidth! * .56,
-                                                  height: kTextTabBarHeight,
-                                                  child: Marquee(
-                                                    text: '  ${widget.data?.music?.musicTitle ?? ''}',
-                                                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),
+                                        Visibility(
+                                          visible: widget.data?.location != '',
+                                          child: Container(
+                                            width: SizeConfig.screenWidth! * .18,
+                                            decoration: BoxDecoration(color: kHyppeBackground.withOpacity(.4), borderRadius: BorderRadius.circular(8.0)),
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 6,
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: (widget.data?.tagPeople?.isNotEmpty ?? false) ? 12.0 : 0.0,
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  const CustomIconWidget(
+                                                    iconData: '${AssetPath.vectorPath}map-light.svg',
+                                                    defaultColor: false,
+                                                    height: 16,
                                                   ),
-                                                )
-                                              : CustomTextWidget(
-                                                  textToDisplay: " ${widget.data!.music?.musicTitle ?? ''}",
-                                                  maxLines: 1,
-                                                  textStyle: const TextStyle(color: kHyppeTextLightPrimary, fontSize: 12, fontWeight: FontWeight.w700),
-                                                  textAlign: TextAlign.left,
-                                                ),
-                                        ),
-                                        CircleAvatar(
-                                          radius: 18,
-                                          backgroundColor: kHyppeSurface.withOpacity(.9),
-                                          child: CustomBaseCacheImage(
-                                            imageUrl: widget.data!.music?.apsaraThumnailUrl ?? '',
-                                            imageBuilder: (_, imageProvider) {
-                                              return Container(
-                                                width: 48,
-                                                height: 48,
-                                                decoration: BoxDecoration(
-                                                  color: kDefaultIconDarkColor,
-                                                  borderRadius: const BorderRadius.all(Radius.circular(24)),
-                                                  image: DecorationImage(
-                                                    fit: BoxFit.cover,
-                                                    image: imageProvider,
+                                                  const SizedBox(
+                                                    width: 4.0,
                                                   ),
-                                                ),
-                                              );
-                                            },
-                                            errorWidget: (_, __, ___) {
-                                              return const CustomIconWidget(
-                                                iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
-                                                defaultColor: false,
-                                                color: kHyppeLightBackground,
-                                                height: 18,
-                                              );
-                                            },
-                                            emptyWidget: AnimatedBuilder(
-                                              animation: animatedController,
-                                              builder: (_, child) {
-                                                return Transform.rotate(
-                                                  angle: animatedController.value * 2 * -math.pi,
-                                                  child: child,
-                                                );
-                                              },
-                                              child: const CustomIconWidget(
-                                                iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
-                                                defaultColor: false,
-                                                color: kHyppeLightBackground,
-                                                height: 18,
+                                                  SizedBox(
+                                                    width: widget.data?.tagPeople?.isNotEmpty ?? false ? SizeConfig.screenWidth! * .13 : SizeConfig.screenWidth! * .13,
+                                                    child: Text(
+                                                      '${widget.data?.location}',
+                                                      maxLines: 1,
+                                                      style: const TextStyle(color: kHyppeLightBackground),
+                                                      overflow: TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                           ),
@@ -2198,14 +2075,220 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                       ],
                                     ),
                                   ),
-                              ],
+                                  Container(
+                                    constraints: BoxConstraints(
+                                        maxWidth: orientation == Orientation.landscape ? SizeConfig.screenWidth! * .35 : SizeConfig.screenWidth!,
+                                        maxHeight: isShowMore ? 52 : SizeConfig.screenHeight! * .2),
+                                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                                    child: SingleChildScrollView(
+                                      child: CustomDescContent(
+                                        desc: widget.data?.description ?? '',
+                                        trimLines: 2,
+                                        textAlign: TextAlign.start,
+                                        callbackIsMore: (val) {
+                                          setState(() {
+                                            isShowMore = val;
+                                          });
+                                        },
+                                        seeLess: ' ${lang?.less}', // ${notifier2.translate.seeLess}',
+                                        seeMore: '  ${lang?.more}', //${notifier2.translate.seeMoreContent}',
+                                        normStyle: const TextStyle(fontSize: 14, color: kHyppeTextPrimary),
+                                        hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
+                                        expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppeTextPrimary, fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                  SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
+                                          (widget.data!.boosted.isEmpty) &&
+                                          (widget.data!.reportedStatus != 'OWNED' && widget.data!.reportedStatus != 'BLURRED' && widget.data!.reportedStatus2 != 'BLURRED') &&
+                                          widget.data!.email == SharedPreference().readStorage(SpKeys.email)
+                                      ? Container(
+                                          width: orientation == Orientation.landscape ? SizeConfig.screenWidth! * .32 : SizeConfig.screenWidth!,
+                                          margin: const EdgeInsets.only(bottom: 16),
+                                          padding: const EdgeInsets.only(top: 12, left: 8.0, right: 8.0),
+                                          child: ButtonBoost(
+                                            onDetail: false,
+                                            marginBool: true,
+                                            contentData: widget.data ?? ContentData(),
+                                            startState: () {
+                                              SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                                            },
+                                            afterState: () {
+                                              SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                                            },
+                                          ),
+                                        )
+                                      : Container(),
+                                  if (widget.data!.email == email && (widget.data!.boostCount ?? 0) >= 0 && (widget.data!.boosted.isNotEmpty))
+                                    Container(
+                                      padding: const EdgeInsets.all(10),
+                                      margin: const EdgeInsets.only(bottom: 10, left: 18.0),
+                                      width: MediaQuery.of(context).size.width * .18,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(6),
+                                        color: kHyppeGreyLight.withOpacity(.9),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          const CustomIconWidget(
+                                            iconData: "${AssetPath.vectorPath}reach.svg",
+                                            defaultColor: false,
+                                            height: 24,
+                                            color: kHyppeTextLightPrimary,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 13),
+                                            child: CustomTextWidget(
+                                              textToDisplay: "${widget.data?.boostJangkauan ?? '0'} ${lang?.reach}",
+                                              textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  Column(
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(right: 8.0),
+                                          child: Text(
+                                            "${System.getTimeformatByMs(_currentPositionText)}/${System.getTimeformatByMs(_videoDuration)}",
+                                            textAlign: TextAlign.end,
+                                            style: const TextStyle(color: Colors.white, fontSize: 11),
+                                          ),
+                                        ),
+                                      ),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: SliderTheme(
+                                              data: SliderTheme.of(context).copyWith(
+                                                overlayShape: SliderComponentShape.noThumb,
+                                                activeTrackColor: const Color(0xAA7d7d7d),
+                                                inactiveTrackColor: const Color.fromARGB(170, 156, 155, 155),
+                                                trackHeight: 3.0,
+                                                thumbColor: Colors.purple,
+                                                thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8.0),
+                                              ),
+                                              child: Slider(
+                                                  min: 0,
+                                                  max: _videoDuration == 0 ? 1 : _videoDuration.toDouble(),
+                                                  value: _currentPosition.toDouble(),
+                                                  activeColor: Colors.purple,
+                                                  thumbColor: Colors.purple,
+                                                  onChangeStart: (value) {
+                                                    _inSeek = true;
+                                                    setState(() {});
+                                                  },
+                                                  onChangeEnd: (value) {
+                                                    _inSeek = false;
+                                                    setState(() {
+                                                      if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
+                                                        setState(() {
+                                                          _showTipsWidget = false;
+                                                        });
+                                                      }
+                                                    });
+                                                    fAliplayer?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE);
+                                                  },
+                                                  onChanged: (value) {
+                                                    fAliplayer?.requestBitmapAtPosition(value.ceil());
+
+                                                    setState(() {
+                                                      _currentPosition = value.ceil();
+                                                    });
+                                                  }),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  if (widget.data!.music?.musicTitle != '' && widget.data!.music?.musicTitle != null)
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 0.0, left: 8.0, right: 12.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Padding(
+                                            padding: EdgeInsets.only(right: 8.0),
+                                            child: CustomIconWidget(
+                                              iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                              defaultColor: false,
+                                              color: kHyppeLightBackground,
+                                              height: 18,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: _textSize(widget.data?.music?.musicTitle ?? '', const TextStyle(fontWeight: FontWeight.bold)).width > SizeConfig.screenWidth! * .56
+                                                ? SizedBox(
+                                                    width: SizeConfig.screenWidth! * .56,
+                                                    height: kTextTabBarHeight,
+                                                    child: Marquee(
+                                                      text: '  ${widget.data?.music?.musicTitle ?? ''}',
+                                                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),
+                                                    ),
+                                                  )
+                                                : CustomTextWidget(
+                                                    textToDisplay: " ${widget.data!.music?.musicTitle ?? ''}",
+                                                    maxLines: 1,
+                                                    textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700),
+                                                    textAlign: TextAlign.left,
+                                                  ),
+                                          ),
+                                          CircleAvatar(
+                                            radius: 18,
+                                            backgroundColor: kHyppeSurface.withOpacity(.9),
+                                            child: CustomBaseCacheImage(
+                                              imageUrl: widget.data!.music?.apsaraThumnailUrl ?? '',
+                                              imageBuilder: (_, imageProvider) {
+                                                return Container(
+                                                  width: 48,
+                                                  height: 48,
+                                                  decoration: BoxDecoration(
+                                                    color: kDefaultIconDarkColor,
+                                                    borderRadius: const BorderRadius.all(Radius.circular(24)),
+                                                    image: DecorationImage(
+                                                      fit: BoxFit.cover,
+                                                      image: imageProvider,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              errorWidget: (_, __, ___) {
+                                                return const CustomIconWidget(
+                                                  iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                                  defaultColor: false,
+                                                  color: kHyppeLightBackground,
+                                                  height: 18,
+                                                );
+                                              },
+                                              emptyWidget: AnimatedBuilder(
+                                                animation: animatedController,
+                                                builder: (_, child) {
+                                                  return Transform.rotate(
+                                                    angle: animatedController.value * 2 * -math.pi,
+                                                    child: child,
+                                                  );
+                                                },
+                                                child: const CustomIconWidget(
+                                                  iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                                  defaultColor: false,
+                                                  color: kHyppeLightBackground,
+                                                  height: 18,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-          ),
+                          ])))),
         );
 
       default:

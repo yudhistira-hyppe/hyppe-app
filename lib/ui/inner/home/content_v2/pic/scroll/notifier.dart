@@ -16,6 +16,8 @@ class ScrollPicNotifier with ChangeNotifier {
   bool _isLoadingLoadmore = false;
   bool isConnect = true;
   bool isMute = true;
+  int currIndex = 0;
+  int get currentIndex => currIndex;
   
   bool get isLoadingLoadmore => _isLoadingLoadmore;
   set isLoadingLoadmore(bool state) {

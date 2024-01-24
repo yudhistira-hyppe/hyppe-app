@@ -749,7 +749,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                       ? const NoResultFound()
                       : NotificationListener<OverscrollIndicatorNotification>(
                           onNotification: (overscroll) {
-                            print(overscroll);
                             overscroll.disallowIndicator();
                             return true;
                           },
@@ -1274,6 +1273,24 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                               if (res != null || res == null) {
                                                 fAliplayer?.play();
                                                 fAliplayer?.setMuted(notifier.isMute);
+                                                print('current index notif ${notifier.currentIndex}');
+                                                print('current index list ${index}');
+                                                var temp1 = notifier.pic![_curIdx];
+                                                var temp2 = notifier.pic![notifier.currentIndex];
+                                                if (index < notifier.currentIndex ){
+                                                    setState(() {
+                                                      index = notifier.currentIndex;
+                                                      notifier.pic!.removeRange(_curIdx, notifier.currentIndex);
+                                                      // notifier.pic![_curIdx] = temp2;
+                                                      // notifier.pic![notifier.currentIndex] = temp1;
+                                                    });
+                                                }else if (index > notifier.currentIndex) {
+                                                    
+                                                    setState(() {
+                                                      notifier.pic![_curIdx] = temp2;
+                                                      notifier.pic![notifier.currentIndex] = temp1;
+                                                    });
+                                                }
                                               }
 
                                               if (res is int) {

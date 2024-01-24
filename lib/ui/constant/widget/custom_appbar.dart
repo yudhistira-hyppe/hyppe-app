@@ -85,25 +85,15 @@ class CustomAppBar extends StatelessWidget {
                 ),
               ),
               Container(
-                width: _textSize('${System().readTimestamp(
-                    DateTime.parse(System().dateTimeRemoveT(data!.createdAt ?? ''))
-                        .millisecondsSinceEpoch,
-                    context,
-                    fullCaption: true,
-                  )}', const TextStyle(fontWeight: FontWeight.bold)).width + 52,
+                
                 padding: orientation == Orientation.portrait ? const EdgeInsets.only(top: 32.0) : const EdgeInsets.only(top: 8.0),
                 child: ProfileComponent(
                   isFullscreen: true,
                   show: true,
                   following: true,
                   onFollow: () {},
-                  widthText: _textSize('${System().readTimestamp(
-                    DateTime.parse(System().dateTimeRemoveT(data!.createdAt ?? ''))
-                        .millisecondsSinceEpoch,
-                    context,
-                    fullCaption: true,
-                  )}', const TextStyle(fontWeight: FontWeight.bold)).width - 12,
                   username: data!.username??'',
+                  widthText: data!.username!.length > 10 ? _textSize(data!.username??'', const TextStyle(fontWeight: FontWeight.bold)).width + 32 : 110,
                   textColor: kHyppeLightBackground,
                   spaceProfileAndId: eightPx,
                   haveStory: false,
