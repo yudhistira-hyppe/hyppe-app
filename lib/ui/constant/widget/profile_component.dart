@@ -24,7 +24,7 @@ class ProfileComponent extends StatelessWidget {
   final Color? textColor;
   final bool? isCelebrity;
   final String createdAt;
-  final double widthText;
+  final double? widthText;
   final double widthCircle;
   final double heightCircle;
   final Widget spaceProfileAndId;
@@ -96,7 +96,7 @@ class ProfileComponent extends StatelessWidget {
                     GestureDetector(
                       onTap: onTapOnProfileImage as void Function(),
                       child: SizedBox(
-                        width: SizeWidget().calculateSize(widthText, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()),
+                        width: SizeWidget().calculateSize(widthText ?? 150, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()),
                         child: Row(
                           children: [
                             Flexible(
@@ -136,7 +136,7 @@ class ProfileComponent extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      width: SizeWidget().calculateSize(widthText, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()),
+                      width: SizeWidget().calculateSize(widthText ?? 150, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()),
                       child: isDetail
                           ? CustomStrokeTextWidget(
                               maxLines: 1,
@@ -150,6 +150,7 @@ class ProfileComponent extends StatelessWidget {
                               textAlign: TextAlign.left,
                               textStyle: TextStyle(
                                 color: textColor,
+                                fontSize: 10,
                                 shadows: const [
                                   Shadow(offset: Offset(0.0, 1.0), blurRadius: 2.0, color: Colors.black12),
                                   Shadow(offset: Offset(0.0, 1.0), blurRadius: 4.0, color: Colors.black12),

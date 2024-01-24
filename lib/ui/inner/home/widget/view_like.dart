@@ -96,7 +96,7 @@ class _ViewLikedState extends State<ViewLiked> {
                                                 ),
                                                 title: CustomTextWidget(
                                                   textToDisplay: data.username ?? '',
-                                                  textStyle: Theme.of(context).textTheme.titleSmall,
+                                                  textStyle: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
                                                   textAlign: TextAlign.start,
                                                 ),
                                                 subtitle: CustomTextWidget(
@@ -104,34 +104,41 @@ class _ViewLikedState extends State<ViewLiked> {
                                                   // textStyle: Theme.of(context).textTheme.titleSmall,
                                                   textAlign: TextAlign.start,
                                                 ),
-                                                trailing: CustomElevatedButton(
-                                                    width: 100,
-                                                    height: 24,
-                                                    buttonStyle: ButtonStyle(
-                                                      backgroundColor: (data.following ?? false) ? null : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                                                    ),
-                                                    function: () {
-                                                      if (!(data.isloadingFollow ?? false)) {
-                                                        if (data.following ?? false) {
-                                                          notifier.followUserLikeView(context, data, isUnFollow: true);
-                                                        } else {
-                                                          notifier.followUserLikeView(context, data);
-                                                        }
-                                                      }
-                                                    },
-                                                    child: data.isloadingFollow ?? false
-                                                        ? Container(
-                                                            height: 40,
-                                                            width: 30,
-                                                            child: const Align(
-                                                              alignment: Alignment.bottomRight,
-                                                              child: CustomLoading(),
-                                                            ),
-                                                          )
-                                                        : CustomTextWidget(
-                                                            textToDisplay: (data.following ?? false) ? lang.translate.following! : lang.translate.follow!,
-                                                            textStyle:
-                                                                Theme.of(context).textTheme.labelLarge?.copyWith(color: (data.following ?? false) ? kHyppeTextLightPrimary : kHyppeLightButtonText))));
+                                                trailing: System().isMy(data.email)
+                                                    ? const SizedBox(
+                                                        height: 40,
+                                                        width: 30,
+                                                      )
+                                                    : CustomElevatedButton(
+                                                        width: 100,
+                                                        height: 24,
+                                                        buttonStyle: ButtonStyle(
+                                                          backgroundColor: (data.following ?? false) ? null : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                                        ),
+                                                        function: () {
+                                                          if (!(data.isloadingFollow ?? false)) {
+                                                            if (data.following ?? false) {
+                                                              notifier.followUserLikeView(context, data, isUnFollow: true);
+                                                            } else {
+                                                              notifier.followUserLikeView(context, data);
+                                                            }
+                                                          }
+                                                        },
+                                                        child: data.isloadingFollow ?? false
+                                                            ? const SizedBox(
+                                                                height: 40,
+                                                                width: 30,
+                                                                child: Align(
+                                                                  alignment: Alignment.bottomRight,
+                                                                  child: CustomLoading(),
+                                                                ),
+                                                              )
+                                                            : CustomTextWidget(
+                                                                textToDisplay: (data.following ?? false) ? lang.translate.following! : lang.translate.follow!,
+                                                                textStyle: Theme.of(context)
+                                                                    .textTheme
+                                                                    .labelLarge
+                                                                    ?.copyWith(color: (data.following ?? false) ? kHyppeTextLightPrimary : kHyppeLightButtonText))));
                                           } else {
                                             return Container();
                                           }

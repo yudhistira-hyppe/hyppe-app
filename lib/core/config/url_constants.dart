@@ -130,7 +130,7 @@ class UrlConstants {
   static const String recoverPassword = "$userRoute/recoverpassword/v2";
 
   /// post register interest => To register interests of user.
-  static const String updateInterest = "$userRoute/profileinterest";
+  static const String updateInterest = "$userRoute/profileinterest/v2";
 
   /// post => Upload Profile picture V2.
   static const String uploadProfilePictureV2 = "$postsRoute/profilepicture/v2";
@@ -241,7 +241,7 @@ class UrlConstants {
   // static const String getMyUserPostsV2 = "$postRouteV2/getuserposts/my/v2";
 
   /// get => Get My Contents.
-  static const String getOtherUserPosts = "$postRouteV2/getuserposts/byprofile";
+  static const String getOtherUserPosts = "$postRouteV2/getuserposts/byprofile/v2";
 
   /// post => Get Apsara Video.
   static const String getVideoApsara = "$postRouteV2/getvideo";
@@ -286,7 +286,7 @@ class UrlConstants {
   static const String deleteChat = "$postRouteV2/disqus/deletedicusslog";
 
   /// post => Get Notification
-  static const String getNotification = "$postRouteV2/getnotification2";
+  static const String getNotification = "$postRouteV2/getnotification2/v2";
 
   /// post => Get auth apsara
   static const String apsaraauth = "$postRouteV2/apsaraauth?apsaraId=";
@@ -310,7 +310,7 @@ class UrlConstants {
   static const String getDetailHashtag = "$contentRouteV3/searchdatanew/detailtag/v2";
   static const String getDetailInterest = "$contentRouteV3/searchdatanew/detailinterest/v2";
   static const String getSearchContentV5 = "$contentRouteV3/searchdatanew/v2";
-  static const String getDetailHashtagV2 = "$contentRouteV3/searchdatanew/detailtag/v2";
+  static const String getDetailHashtagV2 = "$contentRouteV3/searchdatanew/newdetailtag/v2";
   static const String getDetailInterestV2 = "$contentRouteV3/searchdatanew/detailinterest/v2";
   // v3 delete tag
   static const String deletTagUser = "$postRouteV2/deletetag";
@@ -412,7 +412,7 @@ class UrlConstants {
 
   //==========report============
   static const String getOptionReport = "/api/reportreasons/all";
-  static const String insertReport = "/api/reportuser/create";
+  static const String insertReport = "/api/reportuser/create/v2";
   static const String detailTypeAppeal = "/api/reportuser/detailreason";
 
   static const String appealPost = "/api/reportuser/appeal";
@@ -441,8 +441,8 @@ class UrlConstants {
 
   // Get Chalange
   static const String getBannerChalange = "$challange/listing/bannerlandingpage";
-  static const String getLeaderBoard = "$challange/listleaderboard";
-  static const String getLeaderBoardSession = "$challange/listleaderboard2";
+  static const String getLeaderBoard = "$challange/listleaderboard/v2";
+  static const String getLeaderBoardSession = "$challange/listleaderboard2/v2";
   static const String getOtherChallange = "$challange/allchallenge/v2";
   static const String joinChallange = "$challange/join/v2";
   static const String listAchievement = "$challange/listbadgebyuser/v2";

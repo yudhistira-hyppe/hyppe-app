@@ -29,6 +29,7 @@ import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:measured_size/measured_size.dart';
 
@@ -207,7 +208,11 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
               icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
               splashRadius: 1,
               onPressed: () {
-                context.read<MainNotifier>().pageIndex = 0;
+                if (widget.arguments?.isTrue == null) {
+                  context.read<MainNotifier>().pageIndex = 0;
+                } else {
+                  Routing().moveBack();
+                }
               },
             ),
             // flexibleSpace: SafeArea(

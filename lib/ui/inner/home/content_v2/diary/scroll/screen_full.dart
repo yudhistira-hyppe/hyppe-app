@@ -121,7 +121,7 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
       WidgetsBinding.instance.addObserver(this);
       fAliplayer?.pause();
       fAliplayer?.setAutoPlay(true);
-      fAliplayer?.setLoop(false);
+      fAliplayer?.setLoop(true);
 
       //Turn on mix mode
       if (Platform.isIOS) {

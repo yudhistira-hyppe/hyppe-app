@@ -443,6 +443,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
       return GestureDetector(
         behavior: HitTestBehavior.translucent,
         onPanDown: (detail) {
+          print("--=====---=-=-=-=-=");
           _initializeTimer();
         },
         child: Scaffold(

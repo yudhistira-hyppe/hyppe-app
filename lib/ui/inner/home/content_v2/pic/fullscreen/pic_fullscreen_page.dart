@@ -1037,16 +1037,19 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            IconButton(
-              onPressed: () {
-                fAliplayer?.pause();
-
-                Routing().moveBack();
-              },
-              icon: const Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-                shadows: <Shadow>[Shadow(color: Colors.black54, blurRadius: 8.0)],
+            SizedBox(
+              width: 30,
+              child: IconButton(
+                padding: const EdgeInsets.all(0.0),
+                onPressed: () {
+                  fAliplayer?.pause();
+                  Routing().moveBack();
+                },
+                icon: const Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.white,
+                  shadows: <Shadow>[Shadow(color: Colors.black54, blurRadius: 8.0)],
+                ),
               ),
             ),
             Padding(

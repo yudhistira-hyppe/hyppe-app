@@ -2083,4 +2083,12 @@ class System {
       print("sudah kirim analitic");
     });
   }
+
+  bool isMy(email) {
+    if (email == SharedPreference().readStorage(SpKeys.email)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

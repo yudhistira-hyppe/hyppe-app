@@ -93,225 +93,230 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
       // alignment: Alignment(widget.music != null ? 0 : -1.0, 0.75),
       alignment: Alignment.bottomRight,
       padding: const EdgeInsets.only(left: 15.0, right: 20, bottom: 50.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          (widget.tagPeople?.isNotEmpty ?? false) || widget.location != ''
-              ? Padding(
-                  padding: const EdgeInsets.only(bottom: 5),
-                  child: Row(
-                    children: [
-                      (widget.tagPeople?.isNotEmpty ?? false)
-                          ? PicTagLabel(
-                              width: 24,
-                              icon: 'tag-people-light',
-                              label: '${widget.tagPeople?.length} ${notifier.translate.people}',
-                              function: () {
-                                // widget.storyController?.pause();
-                                context.read<PicDetailNotifier>().showUserTag(context, widget.tagPeople, widget.postID, title: notifier.translate.inThisDiary);
-                              },
-                            )
-                          : const SizedBox(),
-                      widget.location == '' || widget.location == null
-                          ? const SizedBox()
-                          : PicTagLabel(
-                              width: 17,
-                              icon: 'maptag',
-                              label: "${widget.location}",
-                              function: () {},
-                            ),
-                    ],
-                  ),
-                )
-              : const SizedBox(),
-          Container(
-            // width: SizeConfig.screenWidth! / 1.3,
-            // padding: const EdgeInsets.all(2),
-            constraints: BoxConstraints(
-                maxWidth: SizeConfig.screenWidth! * .7,
-                // minHeight: SizeConfig.screenHeight! * .02,
-                maxHeight: widget.description!.length > 24
-                    ? isShowMore
-                        ? 42
-                        : SizeConfig.screenHeight! * .1
-                    : 42),
-            // color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomDescContent(
-                    beforeGone: () {
-                      widget.aliPlayer?.pause();
-                    },
-                    afterGone: () {
-                      widget.aliPlayer?.play();
-                    },
-                    callbackIsMore: (val) {
-                      setState(() {
-                        isShowMore = val;
-                      });
-                    },
-                    desc: "${widget.description}",
-                    trimLines: 2,
-                    textAlign: TextAlign.start,
-                    seeLess: ' ${notifier.translate.seeLess}', // ${notifier2.translate.seeLess}',
-                    seeMore: '  ${notifier.translate.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
-                    normStyle: const TextStyle(fontSize: 14, color: kHyppeTextPrimary),
-                    hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                    expandStyle: const TextStyle(fontSize: 14, color: kHyppeTextPrimary, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                  (widget.data?.boosted.isEmpty ?? [].isEmpty) &&
-                  (widget.data?.reportedStatus != 'OWNED' && widget.data?.reportedStatus != 'BLURRED' && widget.data?.reportedStatus2 != 'BLURRED') &&
-                  widget.data?.email == SharedPreference().readStorage(SpKeys.email)
-              ? Container(
-                  width: MediaQuery.of(context).size.width,
-                  margin: const EdgeInsets.only(bottom: 16),
-                  padding: const EdgeInsets.only(left: 0.0, right: 74, top: 10),
-                  child: ButtonBoost(
-                    onDetail: false,
-                    marginBool: true,
-                    contentData: widget.data,
-                    startState: () {
-                      SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
-                    },
-                    afterState: () {
-                      SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
-                    },
-                  ),
-                )
-              : Container(),
-
-          // twelvePx,
-          Container(),
-          if (widget.data?.music != null)
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: Material(
-                color: Colors.transparent,
-                child: Container(
-                  width: SizeConfig.screenWidth! * .75,
-                  margin: const EdgeInsets.only(left: 0.0, top: 8.0),
-                  padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 10),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 18,
-                        backgroundColor: kHyppeSurface.withOpacity(.9),
-                        child: AnimatedBuilder(
-                          animation: animatedController,
-                          builder: (_, child) {
-                            return Transform.rotate(
-                              angle: animatedController.value * 2 * -math.pi,
-                              child: child,
-                            );
-                          },
-                          child: CustomBaseCacheImage(
-                            imageUrl: widget.data?.music?.apsaraThumnailUrl ?? '',
-                            imageBuilder: (_, imageProvider) {
-                              return AnimatedBuilder(
-                                animation: widget.animatedController!,
-                                builder: (_, child) {
-                                  return Transform.rotate(
-                                    angle: widget.animatedController!.value * 2 * math.pi,
-                                    child: child,
-                                  );
-                                },
-                                child: Container(
-                                  width: 30,
-                                  height: 30,
-                                  decoration: BoxDecoration(
-                                    color: kDefaultIconDarkColor,
-                                    borderRadius: const BorderRadius.all(Radius.circular(24)),
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: imageProvider,
-                                    ),
-                                  ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              (widget.tagPeople?.isNotEmpty ?? false) || widget.location != ''
+                  ? Padding(
+                      padding: const EdgeInsets.only(bottom: 5),
+                      child: Row(
+                        children: [
+                          (widget.tagPeople?.isNotEmpty ?? false)
+                              ? PicTagLabel(
+                                  width: 24,
+                                  icon: 'tag-people-light',
+                                  label: '${widget.tagPeople?.length} ${notifier.translate.people}',
+                                  function: () {
+                                    // widget.storyController?.pause();
+                                    context.read<PicDetailNotifier>().showUserTag(context, widget.tagPeople, widget.postID, title: notifier.translate.inThisDiary);
+                                  },
+                                )
+                              : const SizedBox(),
+                          widget.location == '' || widget.location == null
+                              ? const SizedBox()
+                              : PicTagLabel(
+                                  width: 17,
+                                  icon: 'maptag',
+                                  label: "${widget.location}",
+                                  function: () {},
                                 ),
-                              );
-                            },
-                            errorWidget: (_, __, ___) {
-                              return const CustomIconWidget(
-                                iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
-                                defaultColor: false,
-                                color: kHyppeLightIcon,
-                                height: 18,
-                              );
-                            },
-                            emptyWidget: AnimatedBuilder(
-                              animation: widget.animatedController!,
-                              builder: (_, child) {
-                                return Transform.rotate(
-                                  angle: widget.animatedController!.value * 2 * math.pi,
-                                  child: child,
-                                );
-                              },
-                              child: const CustomIconWidget(
-                                iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
-                                defaultColor: false,
-                                color: kHyppeTextPrimary,
-                                height: 18,
-                              ),
-                            ),
-                          ),
-                        ),
+                        ],
                       ),
-                      const SizedBox(
-                        height: 12.0,
-                        width: 5,
-                      ),
-                      Expanded(
-                        child: CustomTextWidget(
-                          textToDisplay: " ${widget.data?.music?.musicTitle ?? ''}",
-                          maxLines: 2,
-                          textStyle: const TextStyle(color: kHyppeTextPrimary, fontSize: 12, fontWeight: FontWeight.w700),
-                          textAlign: TextAlign.left,
-                        ),
+                    )
+                  : const SizedBox(),
+              Container(
+                // width: SizeConfig.screenWidth! / 1.3,
+                // padding: const EdgeInsets.all(2),
+                constraints: BoxConstraints(
+                    maxWidth: SizeConfig.screenWidth! * .7,
+                    // minHeight: SizeConfig.screenHeight! * .02,
+                    maxHeight: widget.description!.length > 24
+                        ? isShowMore
+                            ? 42
+                            : SizeConfig.screenHeight! * .1
+                        : 42),
+                // color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomDescContent(
+                        beforeGone: () {
+                          widget.aliPlayer?.pause();
+                        },
+                        afterGone: () {
+                          widget.aliPlayer?.play();
+                        },
+                        callbackIsMore: (val) {
+                          setState(() {
+                            isShowMore = val;
+                          });
+                        },
+                        desc: "${widget.description}",
+                        trimLines: 2,
+                        textAlign: TextAlign.start,
+                        seeLess: ' ${notifier.translate.seeLess}', // ${notifier2.translate.seeLess}',
+                        seeMore: '  ${notifier.translate.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                        normStyle: const TextStyle(fontSize: 14, color: kHyppeTextPrimary),
+                        hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
+                        expandStyle: const TextStyle(fontSize: 14, color: kHyppeTextPrimary, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
                 ),
               ),
-            )
-          // SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-          //         (widget.data?.reportedStatus != 'OWNED' && widget.data?.reportedStatus != 'BLURRED' && widget.data?.reportedStatus2 != 'BLURRED') &&
-          //         (widget.data?.boosted.isEmpty ?? [].isEmpty) &&
-          //         widget.data?.email == SharedPreference().readStorage(SpKeys.email)
-          //     ? Container(
-          //         width: MediaQuery.of(context).size.width * 0.8,
-          //         margin: const EdgeInsets.only(bottom: 16),
-          //         child: ButtonBoost(
-          //           marginBool: true,
-          //           contentData: widget.data,
-          //           startState: () {
-          //             SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
-          //           },
-          //           afterState: () {
-          //             SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
-          //           },
-          //         ),
-          //       )
-          //     : Container(),
-          // (widget.data?.boosted.isNotEmpty ?? [].isNotEmpty) && widget.data?.email == SharedPreference().readStorage(SpKeys.email)
-          //     ? SizedBox(
-          //         width: MediaQuery.of(context).size.width * 0.8,
-          //         child: JangkaunStatus(
-          //           jangkauan: widget.data?.boostJangkauan ?? 0,
-          //           isDiary: true,
-          //         ),
-          //       )
-          //     : Container(),
 
-          // SizedBox(height: 40.0 * SizeConfig.scaleDiagonal),
-          // _musicInfo(),
+              SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
+                      (widget.data?.boosted.isEmpty ?? [].isEmpty) &&
+                      (widget.data?.reportedStatus != 'OWNED' && widget.data?.reportedStatus != 'BLURRED' && widget.data?.reportedStatus2 != 'BLURRED') &&
+                      widget.data?.email == SharedPreference().readStorage(SpKeys.email)
+                  ? Container(
+                      width: SizeConfig.screenWidth,
+                      margin: const EdgeInsets.only(bottom: 16),
+                      padding: const EdgeInsets.only(left: 0.0, right: 80, top: 10),
+                      child: ButtonBoost(
+                        onDetail: false,
+                        marginBool: true,
+                        contentData: widget.data,
+                        startState: () {
+                          SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                        },
+                        afterState: () {
+                          SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                        },
+                      ),
+                    )
+                  : Container(),
+
+              // twelvePx,
+              Container(),
+              if (widget.data?.music != null)
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: Container(
+                      width: SizeConfig.screenWidth! * .75,
+                      margin: const EdgeInsets.only(left: 0.0, top: 8.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 10),
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 18,
+                            backgroundColor: kHyppeSurface.withOpacity(.9),
+                            child: AnimatedBuilder(
+                              animation: animatedController,
+                              builder: (_, child) {
+                                return Transform.rotate(
+                                  angle: animatedController.value * 2 * -math.pi,
+                                  child: child,
+                                );
+                              },
+                              child: CustomBaseCacheImage(
+                                imageUrl: widget.data?.music?.apsaraThumnailUrl ?? '',
+                                imageBuilder: (_, imageProvider) {
+                                  return AnimatedBuilder(
+                                    animation: widget.animatedController!,
+                                    builder: (_, child) {
+                                      return Transform.rotate(
+                                        angle: widget.animatedController!.value * 2 * math.pi,
+                                        child: child,
+                                      );
+                                    },
+                                    child: Container(
+                                      width: 30,
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                        color: kDefaultIconDarkColor,
+                                        borderRadius: const BorderRadius.all(Radius.circular(24)),
+                                        image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: imageProvider,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                errorWidget: (_, __, ___) {
+                                  return const CustomIconWidget(
+                                    iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                    defaultColor: false,
+                                    color: kHyppeLightIcon,
+                                    height: 18,
+                                  );
+                                },
+                                emptyWidget: AnimatedBuilder(
+                                  animation: widget.animatedController!,
+                                  builder: (_, child) {
+                                    return Transform.rotate(
+                                      angle: widget.animatedController!.value * 2 * math.pi,
+                                      child: child,
+                                    );
+                                  },
+                                  child: const CustomIconWidget(
+                                    iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                    defaultColor: false,
+                                    color: kHyppeTextPrimary,
+                                    height: 18,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 12.0,
+                            width: 5,
+                          ),
+                          Expanded(
+                            child: CustomTextWidget(
+                              textToDisplay: " ${widget.data?.music?.musicTitle ?? ''}",
+                              maxLines: 2,
+                              textStyle: const TextStyle(color: kHyppeTextPrimary, fontSize: 12, fontWeight: FontWeight.w700),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              // SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
+              //         (widget.data?.reportedStatus != 'OWNED' && widget.data?.reportedStatus != 'BLURRED' && widget.data?.reportedStatus2 != 'BLURRED') &&
+              //         (widget.data?.boosted.isEmpty ?? [].isEmpty) &&
+              //         widget.data?.email == SharedPreference().readStorage(SpKeys.email)
+              //     ? Container(
+              //         width: MediaQuery.of(context).size.width * 0.8,
+              //         margin: const EdgeInsets.only(bottom: 16),
+              //         child: ButtonBoost(
+              //           marginBool: true,
+              //           contentData: widget.data,
+              //           startState: () {
+              //             SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+              //           },
+              //           afterState: () {
+              //             SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+              //           },
+              //         ),
+              //       )
+              //     : Container(),
+              // (widget.data?.boosted.isNotEmpty ?? [].isNotEmpty) && widget.data?.email == SharedPreference().readStorage(SpKeys.email)
+              //     ? SizedBox(
+              //         width: MediaQuery.of(context).size.width * 0.8,
+              //         child: JangkaunStatus(
+              //           jangkauan: widget.data?.boostJangkauan ?? 0,
+              //           isDiary: true,
+              //         ),
+              //       )
+              //     : Container(),
+
+              // SizedBox(height: 40.0 * SizeConfig.scaleDiagonal),
+              // _musicInfo(),
+            ],
+          ),
         ],
       ),
     );

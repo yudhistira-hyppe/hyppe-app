@@ -176,7 +176,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                       ? Column(
                           children: [
                             menu(
-                                title: "HyppeStory".toLowerCase(),
+                                title: "HyppeStory",
                                 subTitle: notifier.language.shareYourMoment ?? '',
                                 icon: "${AssetPath.vectorPath}story.svg",
                                 function: () async {
@@ -203,7 +203,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                       ? Column(
                           children: [
                             menu(
-                                title: "HyppePic".toLowerCase(),
+                                title: "HyppePic",
                                 subTitle: notifier.language.captureYourMoment ?? '',
                                 icon: "${AssetPath.vectorPath}pic.svg",
                                 function: () async {
@@ -232,7 +232,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                       ? Column(
                           children: [
                             menu(
-                                title: "HyppeDiary".toLowerCase(),
+                                title: "HyppeDiary",
                                 subTitle: notifier.language.howAreYouToday ?? '',
                                 icon: "${AssetPath.vectorPath}diary.svg",
                                 function: () async {
@@ -260,7 +260,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                       ? Column(
                           children: [
                             menu(
-                                title: "HyppeVid".toLowerCase(),
+                                title: "HyppeVid",
                                 subTitle: notifier.language.shareWithUsYourCreatifity ?? '',
                                 icon: "${AssetPath.vectorPath}vid.svg",
                                 function: () async {
@@ -288,7 +288,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                   widget.isLive
                       ? menu(
                           isCreators: isCreator,
-                          title: "Hyppelive".toLowerCase(),
+                          title: "HyppeLive",
                           subTitle: notifier.language.itstimetoLIVEandinteract ?? '',
                           icon: "${AssetPath.vectorPath}hyppeLive.svg",
                           function: () async {
