@@ -125,6 +125,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   int indexKeySell = 0;
   int indexKeyProtection = 0;
   int itemIndex = 0;
+  bool isActivePage = true;
 
   @override
   void initState() {
@@ -656,6 +657,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     print("======= didPopNext");
     isInPage = true;
     fAliplayer?.play();
+    isActivePage = true;
     // System().disposeBlock();
     super.didPopNext();
   }
@@ -670,6 +672,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   void didPushNext() {
     print("========= didPushNext");
     fAliplayer?.pause();
+    isActivePage = false;
     System().disposeBlock();
     isInPage = false;
     super.didPushNext();
@@ -685,7 +688,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         break;
       case AppLifecycleState.resumed:
         print("========= resumed");
-        if (context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds)) {
+        if (context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds) && isActivePage) {
           fAliplayer?.play();
         }
         break;

@@ -125,6 +125,10 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
       fAliplayer?.setAutoPlay(true);
       fAliplayer?.setLoop(true);
 
+      isMute = widget.arguments?.isTrue ?? false;
+      // fAliplayer?.setLoop(true);
+      fAliplayer?.setMuted(isMute);
+
       //Turn on mix mode
       if (Platform.isIOS) {
         FlutterAliplayer.enableMix(true);
@@ -739,6 +743,24 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
                         canPause: true,
                       ),
                     ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: AnimatedOpacity(
+                        opacity: opacityLevel,
+                        duration: const Duration(milliseconds: 500),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Opacity(
+                            opacity: 0.4,
+                            child: Icon(
+                              isPause ? Icons.play_arrow_rounded : Icons.pause_rounded,
+                              size: 100,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 );
               });
@@ -847,7 +869,7 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
                           // width: SizeConfig.screenWidth,
                           // height: MediaQuery.of(context).size.width * 16.0 / 9.0,
                           alignment: Alignment.center,
-                          padding: EdgeInsets.all(20),
+                          padding: const EdgeInsets.all(20),
                           child: CustomTextWidget(
                             textToDisplay: lang?.couldntLoadVideo ?? 'Error',
                             maxLines: 3,
@@ -856,7 +878,7 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
                   )
                 : Container(),
         _showLoading && !notifier.connectionError
-            ? Positioned.fill(
+            ? const Positioned.fill(
                 child: Align(
                 alignment: Alignment.center,
                 child: CircularProgressIndicator(),
@@ -992,24 +1014,6 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
                     animatedController: animatedController,
                   ),
 
-            Align(
-              alignment: Alignment.center,
-              child: AnimatedOpacity(
-                opacity: opacityLevel,
-                duration: const Duration(milliseconds: 500),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Opacity(
-                    opacity: 0.4,
-                    child: Icon(
-                      isPause ? Icons.play_arrow_rounded : Icons.pause_rounded,
-                      size: 100,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            ),
             Align(
               alignment: Alignment.bottomCenter,
               child: data?.email == SharedPreference().readStorage(SpKeys.email) && (data?.reportedStatus == 'OWNED')

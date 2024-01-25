@@ -34,6 +34,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/ui/inner/search_v2/screen.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:hyppe/core/bloc/google_map_place/bloc.dart';
@@ -108,6 +109,7 @@ class MainNotifier with ChangeNotifier {
 
   Future initMain(BuildContext context, {bool onUpdateProfile = false, bool isInitSocket = false, bool updateProfilePict = false}) async {
     // Connect to socket
+    permsissionNotif();
     if (isInitSocket) {
       _connectAndListenToSocket();
       // _connectAndListenToSocketAds();
@@ -191,6 +193,17 @@ class MainNotifier with ChangeNotifier {
     });
     _alivcLivePusherConfig = AlivcLivePusherConfig.init();
     _alivcLivePusherConfig?.setCameraType(AlivcLivePushCameraType.front);
+  }
+
+  void permsissionNotif() async {
+    var status = await System().checkPermission(permission: Permission.notification);
+    if (status == PermissionStatus.denied) {
+      try {
+        Permission.notification.request();
+      } catch (e) {
+        print(e);
+      }
+    }
   }
 
   Future getProvinceName(BuildContext context, {required UserProfileModel? profile}) async {

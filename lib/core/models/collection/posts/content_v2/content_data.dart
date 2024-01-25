@@ -355,6 +355,7 @@ class ContentData {
     isBoost = json['isBoost'];
     boostJangkauan = json['boostJangkauan'] ?? 0;
     statusBoost = json['statusBoost'] ?? '';
+    // reportedStatus = "BLURRED";
     reportedStatus = json['reportedStatus'] ?? 'ALL';
     reportedStatus2 = json['reportedStatus'] ?? 'ALL';
     reportedUserCount = json['reportedUserCount'] ?? 0;
@@ -367,7 +368,6 @@ class ContentData {
             : MediaModel.fromJSON(json['media']);
     following = json['following'] ?? false;
     if (json['comment'] != null && json['comment'].length > 0) {
-      print("json length ${json['postID']} ${json['comment'].length}");
       comment = <Comment>[];
       json['comment'].forEach((v) {
         comment!.add(Comment.fromJson(v));

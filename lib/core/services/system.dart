@@ -335,7 +335,11 @@ class System {
   }
 
   Future<void> shareText({required String dynamicLink, required BuildContext context}) async {
-    await Share.share(dynamicLink);
+    try {
+      await Share.share(dynamicLink);
+    } catch (e) {
+      print("error log $e");
+    }
   }
 
   String postStatusFollow(StatusFollowing? sts) {
@@ -1452,9 +1456,9 @@ class System {
 
       if (!(data.insight?.isView ?? true)) {
         if (fetch.viewState == ViewState.viewUserPostSuccess) {
+          data.insight?.isView = true;
           if (!System().isMy(data.email)) {
             data.insight?.views = (data.insight?.views ?? 0) + 1;
-            data.insight?.isView = true;
           }
         }
       }

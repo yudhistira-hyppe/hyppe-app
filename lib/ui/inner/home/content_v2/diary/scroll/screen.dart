@@ -891,7 +891,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                       // color: Colors.yellow,
                     ),
                     child: AspectRatio(
-                      aspectRatio: 9 / 16,
+                      aspectRatio: 4 / 5,
                       child: Stack(
                         children: [
                           _curIdx == index
@@ -912,12 +912,16 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                                         // }
                                         return Stack(
                                           children: [
-                                            AliPlayerView(
-                                              onCreated: onViewPlayerCreated,
-                                              x: 0,
-                                              y: 0,
-                                              height: MediaQuery.of(context).size.width * 16.0 / 9.0,
-                                              width: MediaQuery.of(context).size.width,
+                                            OverflowBox(
+                                              maxHeight: MediaQuery.of(context).size.height,
+                                              maxWidth: MediaQuery.of(context).size.width,
+                                              child: AliPlayerView(
+                                                onCreated: onViewPlayerCreated,
+                                                x: 0,
+                                                y: 0,
+                                                height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                                                width: MediaQuery.of(context).size.width,
+                                              ),
                                             ),
                                             Visibility(
                                               visible: isPlay,
@@ -953,6 +957,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                                             limit: widget.arguments?.limit,
                                             page: index,
                                             pageSrc: widget.arguments?.pageSrc,
+                                            isTrue: isMute,
                                             scrollController: widget.arguments?.scrollController);
                                         Routing().move(Routes.scrollFullDiary, argument: param);
                                       }
