@@ -1047,7 +1047,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                   )
                                                 : Text(
                                                     (picData?.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
-                                                    style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                                                    style: const TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
                                                   ),
                                           ),
                                         ),
@@ -1277,19 +1277,18 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                 print('current index list ${index}');
                                                 var temp1 = notifier.pic![_curIdx];
                                                 var temp2 = notifier.pic![notifier.currentIndex];
-                                                if (index < notifier.currentIndex ){
-                                                    setState(() {
-                                                      index = notifier.currentIndex;
-                                                      notifier.pic!.removeRange(_curIdx, notifier.currentIndex);
-                                                      // notifier.pic![_curIdx] = temp2;
-                                                      // notifier.pic![notifier.currentIndex] = temp1;
-                                                    });
-                                                }else if (index > notifier.currentIndex) {
-                                                    
-                                                    setState(() {
-                                                      notifier.pic![_curIdx] = temp2;
-                                                      notifier.pic![notifier.currentIndex] = temp1;
-                                                    });
+                                                if (index < notifier.currentIndex) {
+                                                  setState(() {
+                                                    index = notifier.currentIndex;
+                                                    notifier.pic!.removeRange(_curIdx, notifier.currentIndex);
+                                                    // notifier.pic![_curIdx] = temp2;
+                                                    // notifier.pic![notifier.currentIndex] = temp1;
+                                                  });
+                                                } else if (index > notifier.currentIndex) {
+                                                  setState(() {
+                                                    notifier.pic![_curIdx] = temp2;
+                                                    notifier.pic![notifier.currentIndex] = temp1;
+                                                  });
                                                 }
                                               }
 

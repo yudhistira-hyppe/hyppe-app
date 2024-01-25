@@ -70,7 +70,7 @@ class ScrollDiary extends StatefulWidget {
   _ScrollDiaryState createState() => _ScrollDiaryState();
 }
 
-class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, TickerProviderStateMixin, WidgetsBindingObserver, RouteAware {
+class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
   List<ContentData>? diaryData = [];
   int indexDiary = 0;
   FlutterAliplayer? fAliplayer;

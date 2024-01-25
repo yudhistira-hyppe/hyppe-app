@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/contents/slided_diary_detail_screen_argument.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
@@ -49,9 +50,9 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
-import 'package:showcaseview/showcaseview.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:hyppe/ui/constant/widget/sticker_overlay.dart';
+import 'dart:math' as math;
 
 class ScrollFullDiary extends StatefulWidget {
   final SlidedDiaryDetailScreenArgument? arguments;
@@ -64,8 +65,9 @@ class ScrollFullDiary extends StatefulWidget {
   _ScrollFullDiaryState createState() => _ScrollFullDiaryState();
 }
 
-class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingObserver, TickerProviderStateMixin, WidgetsBindingObserver, RouteAware {
+class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
   late final AnimationController animatedController = AnimationController(vsync: this, duration: const Duration(seconds: 2))..repeat();
+
   List<ContentData>? diaryData = [];
   FlutterAliplayer? fAliplayer;
   bool isPrepare = false;
@@ -134,8 +136,10 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+      globalAliPlayer = fAliplayer;
       vidConfig();
       _initListener();
+      animatedController.repeat();
     });
 
     super.initState();
@@ -381,6 +385,7 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
       await notifier.getAuthApsara(context, apsaraId: apsaraId, check: false);
       final fetch = notifier.postsFetch;
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        animatedController.repeat();
         Map jsonMap = json.decode(fetch.data.toString());
         setState(() {
           auth = jsonMap['PlayAuth'];
@@ -486,15 +491,14 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
 
   @override
   void dispose() {
+    print("========--------dispose fullscreen----=========");
+    fAliplayer?.stop();
+    fAliplayer?.destroy();
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
       // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
     }
-    fAliplayer?.stop();
-    // if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
-    //   fAliplayer?.destroy();
-    // }
-    fAliplayer?.destroy();
+
     print("========--------dispose----=========");
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
@@ -502,7 +506,9 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
 
   @override
   void deactivate() {
-    print("====== deactivate dari diary");
+    print("====== deactivate dari diary full sc");
+    fAliplayer?.stop();
+    fAliplayer?.destroy();
 
     super.deactivate();
   }
@@ -567,6 +573,7 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
     });
 
     fAliplayer?.play();
+    animatedController.repeat();
   }
 
   void pause() {
@@ -576,6 +583,7 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
     });
 
     fAliplayer?.pause();
+    animatedController.stop();
   }
 
   void changeStatusBlur(ContentData? data) {
@@ -699,7 +707,7 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
     return Stack(
       children: [
         FutureBuilder(
-            future: Future.wait([for (StickerModel sticker in diaryData?[_curIdx].stickers ?? []) precacheImage(NetworkImage(sticker.image ?? ''), context)]),
+            future: Future.wait([for (StickerModel sticker in diaryData?[index].stickers ?? []) precacheImage(NetworkImage(sticker.image ?? ''), context)]),
             builder: (context, snapshot) {
               return Builder(builder: (context) {
                 // if (!isloading) {
@@ -724,7 +732,7 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
                       visible: isPlay,
                       child: StickerOverlay(
                         fullscreen: false,
-                        stickers: diaryData?[_curIdx].stickers,
+                        stickers: diaryData?[index].stickers,
                         width: MediaQuery.of(context).size.width,
                         height: (MediaQuery.of(context).size.width) * (16 / 9),
                         isPause: isPause || _showLoading,
@@ -919,6 +927,7 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
                 ),
               ],
             ),
+
             data?.reportedStatus == "BLURRED"
                 ? CustomBackgroundLayer(
                     sigmaX: 30,

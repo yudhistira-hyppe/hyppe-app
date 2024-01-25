@@ -77,9 +77,12 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
+                    // crossAxisAlignment: CrossAxisAlignment.center,
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Material(
-                        color: Colors.transparent,
+                      SizedBox(
+                        width: 30,
                         child: IconButton(
                           onPressed: () {
                             // fAliplayer?.pause();
@@ -95,18 +98,11 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                       (data?.isReport ?? false)
                           ? Container()
                           : ProfileComponent(
-                              isDetail: true,
+                              isFullscreen: true,
                               show: true,
-                              onFollow: () {},
-                              widthText: _textSize(
-                                      System().readTimestamp(
-                                        DateTime.parse(System().dateTimeRemoveT(widget.data?.createdAt ?? '')).millisecondsSinceEpoch,
-                                        context,
-                                        fullCaption: true,
-                                      ),
-                                      const TextStyle(fontWeight: FontWeight.bold))
-                                  .width,
                               following: true,
+                              onFollow: () {},
+                              isDetail: true,
                               haveStory: false,
                               onTapOnProfileImage: () => System().navigateToProfile(context, data?.email ?? ''),
                               username: "${data?.username}",

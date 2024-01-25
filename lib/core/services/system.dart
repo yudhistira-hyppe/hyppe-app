@@ -1449,10 +1449,13 @@ class System {
       final notifier = ViewBloc();
       await notifier.viewPostUserBloc(context, postId: data.postID ?? '', emailOwner: data.email ?? '', check: check);
       final fetch = notifier.viewFetch;
+
       if (!(data.insight?.isView ?? true)) {
         if (fetch.viewState == ViewState.viewUserPostSuccess) {
-          data.insight?.views = (data.insight?.views ?? 0) + 1;
-          data.insight?.isView = true;
+          if (!System().isMy(data.email)) {
+            data.insight?.views = (data.insight?.views ?? 0) + 1;
+            data.insight?.isView = true;
+          }
         }
       }
     } catch (e) {

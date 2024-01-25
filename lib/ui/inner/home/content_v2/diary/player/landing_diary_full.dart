@@ -484,11 +484,13 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
     } else {
       print("=====prepare=====");
       await fAliplayer?.prepare().then((value) async {});
+      animatedController.repeat();
     }
     // this syntax below to prevent video play after changing video
     Future.delayed(const Duration(seconds: 1), () {
       if (context.read<MainNotifier>().isInactiveState) {
         fAliplayer?.pause();
+        animatedController.stop();
       }
     });
 
@@ -735,6 +737,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
     });
 
     fAliplayer?.play();
+    animatedController.repeat();
   }
 
   void pause() {
@@ -744,6 +747,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
     });
 
     fAliplayer?.pause();
+    animatedController.stop();
   }
 
   void changeStatusBlur(ContentData? data) {
