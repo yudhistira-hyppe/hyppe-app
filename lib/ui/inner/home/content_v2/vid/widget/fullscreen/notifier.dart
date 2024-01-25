@@ -18,6 +18,14 @@ class VideoNotifier with ChangeNotifier{
 
   bool _isShowingAds = false;
   bool get isShowingAds => _isShowingAds;
+
+  int firstIndex = 0;
+  int get firstcurrentIndex => firstIndex;
+    
+  int currIndex = 0;
+  int get currentIndex => currIndex;
+
+
   set isShowingAds(bool state){
     _isShowingAds = state;
     notifyListeners();

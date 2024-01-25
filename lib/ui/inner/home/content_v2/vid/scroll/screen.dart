@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_aliplayer/flutter_alilistplayer.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/contents/slided_vid_detail_screen_argument.dart';
@@ -165,6 +166,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
   @override
   void didChangeDependencies() {
     CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    // await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     super.didChangeDependencies();
   }
 

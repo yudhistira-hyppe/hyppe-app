@@ -48,13 +48,14 @@ class CustomAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: SizeConfig.screenWidth,
-      padding: orientation == Orientation.portrait ? null : const EdgeInsets.symmetric(horizontal: 16.0),
+      height: kToolbarHeight,
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -77,15 +78,14 @@ class CustomAppBar extends StatelessWidget {
                           isMute: isMute));
                 },
                 padding: orientation == Orientation.portrait
-                    ? const EdgeInsets.symmetric(horizontal: 8.0, vertical: 42.0)
+                    ? const EdgeInsets.symmetric(horizontal: 8.0, vertical: 40.0)
                     : const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
                 icon: const Icon(
                   Icons.arrow_back_ios,
                   color: Colors.white,
                 ),
               ),
-              Container(
-                
+              Padding(
                 padding: orientation == Orientation.portrait ? const EdgeInsets.only(top: 32.0) : const EdgeInsets.only(top: 8.0),
                 child: ProfileComponent(
                   isFullscreen: true,
@@ -93,7 +93,7 @@ class CustomAppBar extends StatelessWidget {
                   following: true,
                   onFollow: () {},
                   username: data!.username??'',
-                  widthText: data!.username!.length > 10 ? _textSize(data!.username??'', const TextStyle(fontWeight: FontWeight.bold)).width + 32 : 110,
+                  widthText: data!.username!.length >= 10 ? 120 : 90,
                   textColor: kHyppeLightBackground,
                   spaceProfileAndId: eightPx,
                   haveStory: false,
@@ -152,59 +152,53 @@ class CustomAppBar extends StatelessWidget {
               ),
             ],
           ),
-          Padding(
-            padding: orientation == Orientation.portrait ? const EdgeInsets.only(top: 32.0) : const EdgeInsets.only(top: 8.0),
-            child: actionWidget(onTap: onTap),
-          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: actionWidget(onTap: onTap)),
         ],
       ),
     );
   }
 
   Widget actionWidget({Function()? onTap}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 8.0),
-      child: Row(
-        children: [
-          Visibility(
-            visible: (data!.saleAmount ?? 0) > 0,
-            child: Container(
-              padding: EdgeInsets.all(
-                  data!.email == SharedPreference().readStorage(SpKeys.email)
-                      ? 2.0
-                      : 13),
-              child: const CustomIconWidget(
-                iconData: "${AssetPath.vectorPath}sale.svg",
-                defaultColor: false,
-                height: 28,
-              ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Visibility(
+          visible: ((data!.saleAmount ?? 0) > 0),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal:
+                data!.email == SharedPreference().readStorage(SpKeys.email)
+                    ? 2.0
+                    : 13, vertical: 12),
+            child: const CustomIconWidget(
+              iconData: "${AssetPath.vectorPath}sale.svg",
+              defaultColor: false,
+              height: 28,
             ),
           ),
-          if ((data!.certified ?? false) && (data!.saleAmount ?? 0) == 0)
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 13),
+        ),
+          Visibility(
+            visible: ((data!.certified ?? false) && (data!.saleAmount ?? 0) == 0),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
               child: const CustomIconWidget(
                 iconData: '${AssetPath.vectorPath}ownership.svg',
                 defaultColor: false,
                 height: 28,
               ),
             ),
-          GestureDetector(
-            onTap: onTap,
-            child: const Icon(
-              Icons.more_vert,
-              color: kHyppeLightBackground,
-            ),
           ),
-        ],
-      ),
+        IconButton(
+          onPressed: onTap,
+          icon: const Icon(
+            Icons.more_vert,
+            color: kHyppeLightBackground,
+          ),
+        ),
+      ],
     );
   }
 
-  Size _textSize(String text, TextStyle style) {
-    final TextPainter textPainter = TextPainter(
-        text: TextSpan(text: text, style: style), maxLines: 1, textDirection: TextDirection.ltr)
-      ..layout(minWidth: 0, maxWidth: double.infinity);
-    return textPainter.size;
-  }
 }

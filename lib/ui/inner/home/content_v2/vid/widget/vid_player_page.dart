@@ -371,7 +371,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
       });
       fAliplayer?.setOnStateChanged((newState, playerId) {
         _currentPlayerState = newState;
-        print("aliyun : onStateChanged $newState");
+        print("aliyun : onStateChanged $newState ${_currentPlayerState = newState}");
         switch (newState) {
           case FlutterAvpdef.AVPStatus_AVPStatusStarted:
             // Wakelock.enable();
@@ -548,7 +548,11 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         setState(() {
           _currentPosition = _videoDuration;
         });
-        widget.functionFullTriger();
+        if (widget.isVidFormProfile!  == true){
+          widget.functionFullTriger();
+         
+          setState(() {});
+        }
       });
 
       fAliplayer?.setOnSnapShot((path, playerId) {
@@ -692,17 +696,17 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
           });
 
           fAliplayer?.prepare().then((value) {
-            try {
-              if (mounted) {
-                setState(() {
-                  isloading = false;
-                });
-              } else {
-                isloading = false;
-              }
-            } catch (e) {
-              isloading = false;
-            }
+            // try {
+            //   if (mounted) {
+            //     setState(() {
+            //       isloading = false;
+            //     });
+            //   } else {
+            //     isloading = false;
+            //   }
+            // } catch (e) {
+            //   isloading = false;
+            // }
           });
           final isViewed = widget.data?.isViewed ?? true;
           print('isViewed Setting: ${widget.index} | ${widget.data?.isViewed} | $isViewed');
@@ -811,6 +815,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         isPlay = true;
         _showLoading = true;
       });
+      fAliplayer?.setMuted(isMute);
       fAliplayer?.play();
       await fAliplayer?.prepare().whenComplete(() {}).onError((error, stackTrace) => print('Error Loading video: $error'));
 
@@ -1067,14 +1072,13 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                 color: Colors.black,
                 borderRadius: BorderRadius.circular(widget.fromFullScreen ? 0 : 16),
               ),
+              // child: VideoThumbnail(
+              //   videoData: widget.data,
+              //   onDetail: false,
+              //   fn: () {},
+              //   withMargin: true,
+              // ),
             ),
-            //   child: VideoThumbnail(
-            //     videoData: widget.data,
-            //     onDetail: false,
-            //     fn: () {},
-            //     withMargin: true,
-            //   ),
-            // ),
             const Positioned.fill(
               child: Align(
                 alignment: Alignment.center,
@@ -1087,7 +1091,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         );
       } else {
         // print("onViewPlayerCreated ${onViewPlayerCreated}");
-        aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height);
+        aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height, aliPlayerViewType: AliPlayerViewTypeForAndroid.surfaceview,);
         // AliPlayerView aliPlayerAdsView = AliPlayerView(onCreated: onViewPlayerAdsCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height);
         if (notifier.mapInContentAds[widget.data?.postID ?? ''] != null) {
           adsPlayerPage = AdsPlayerPage(
@@ -1188,7 +1192,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                             // Routing().moveBack();
                           } else {
                             if (widget.isVidFormProfile ?? false) {
-                              Routing().move(Routes.vidScrollFullScreenDetail, argument: VidFullscreenArgument(vidData: widget.vidData!, index: widget.index!, data: widget.data!));
+                              Routing().move(Routes.vidScrollFullScreenDetail, argument: VidFullscreenArgument(vidData: widget.vidData!, index: widget.index!, data: widget.data!, isMute: isMute));
                             } else {
                               int changevalue;
                               changevalue = _currentPosition + 1000;
@@ -1211,7 +1215,8 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                 } else {
                                   print('Portrait VidPlayerPage');
                                 }
-                                VideoIndicator value = await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+                                notifier.firstIndex = widget.index??0;
+                                var value = await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
                                     builder: (_) => VideoFullscreenPage(
                                         enableWakelock: widget.enableWakelock,
                                         aliPlayerView: aliPlayerView!,
@@ -1243,6 +1248,9 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                         isAutoPlay: widget.isAutoPlay,
                                         isLanding: widget.inLanding),
                                     settings: const RouteSettings()));
+
+                                print('index change player ${notifier.firstcurrentIndex} ${notifier.currentIndex}');
+
                                 notifier.isLoading = true;
                                 Future.delayed(const Duration(seconds: 6), () {
                                   notifier.isLoading = false;
@@ -1339,7 +1347,8 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                       borderRadius: BorderRadius.all(
                                         Radius.circular(widget.fromFullScreen ? 0 : 16),
                                       ),
-                                      child: Container(color: Colors.black, width: widget.width, height: widget.height, child: isPlay ? aliPlayerView : const SizedBox.shrink())),
+                                      child: Container(color: Colors.black, 
+                                      width: widget.width, height: widget.height, child: isPlay ? aliPlayerView : const SizedBox.shrink())),
                             if (widget.fromFullScreen)
                               GestureDetector(
                                 onTap: () {
@@ -1371,55 +1380,59 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                 opacity: onTapCtrl || isPause ? 1.0 : 0.0,
                                 duration: const Duration(milliseconds: 500),
                                 onEnd: _onPlayerHide,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 18.0),
-                                  child: Stack(
-                                    children: [
-                                      CustomAppBar(
-                                          orientation: widget.orientation,
-                                          data: widget.data ?? ContentData(),
-                                          currentPosition: _currentPosition,
-                                          currentPositionText: _currentPositionText,
-                                          showTipsWidget: _showTipsWidget,
-                                          videoDuration: _videoDuration,
-                                          email: email,
-                                          lang: lang!,
-                                          isMute: isMute,
-                                          onTapOnProfileImage: () {
-                                            System().navigateToProfile(context, widget.data?.email ?? '');
-                                            fAliplayer?.pause();
-                                            isPause = true;
-                                            setState(() {});
-                                          },
-                                          onTap: () {
-                                            if (widget.data?.email != email) {
-                                              context.read<PreviewPicNotifier>().reportContent(context, widget.data!, fAliplayer: widget.data!.fAliplayer, onCompleted: () async {
-                                                imageCache.clear();
-                                                imageCache.clearLiveImages();
-                                                await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
-                                              });
-                                            } else {
-                                              // if (_curIdx != -1) {
-                                              //   "=============== pause 11".logger();
-                                              //   notifier.vidData?[_curIdx].fAliplayer?.pause();
-                                              // }
-
-                                              ShowBottomSheet().onShowOptionContent(
-                                                context,
-                                                contentData: widget.data!,
-                                                captionTitle: hyppeVid,
-                                                onDetail: false,
-                                                isShare: widget.data!.isShared,
-                                                onUpdate: () {
-                                                  (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
-                                                },
-                                                fAliplayer: widget.data!.fAliplayer,
-                                              );
-                                            }
-                                          }),
-                                      _buttomBodyRight(),
-                                    ],
-                                  ),
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                      top: 0,
+                                      child: Container(
+                                        height: widget.orientation == Orientation.portrait ? kToolbarHeight * 2 : kToolbarHeight * 1.4,
+                                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 18.0),
+                                        child: CustomAppBar(
+                                            orientation: widget.orientation,
+                                            data: widget.data ?? ContentData(),
+                                            currentPosition: _currentPosition,
+                                            currentPositionText: _currentPositionText,
+                                            showTipsWidget: _showTipsWidget,
+                                            videoDuration: _videoDuration,
+                                            email: email,
+                                            lang: lang!,
+                                            isMute: isMute,
+                                            onTapOnProfileImage: () {
+                                              System().navigateToProfile(context, widget.data?.email ?? '');
+                                              fAliplayer?.pause();
+                                              isPause = true;
+                                              setState(() {});
+                                            },
+                                            onTap: () {
+                                              if (widget.data?.email != email) {
+                                                context.read<PreviewPicNotifier>().reportContent(context, widget.data!, fAliplayer: widget.data!.fAliplayer, onCompleted: () async {
+                                                  imageCache.clear();
+                                                  imageCache.clearLiveImages();
+                                                  await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
+                                                });
+                                              } else {
+                                                // if (_curIdx != -1) {
+                                                //   "=============== pause 11".logger();
+                                                //   notifier.vidData?[_curIdx].fAliplayer?.pause();
+                                                // }
+                                        
+                                                ShowBottomSheet().onShowOptionContent(
+                                                  context,
+                                                  contentData: widget.data!,
+                                                  captionTitle: hyppeVid,
+                                                  onDetail: false,
+                                                  isShare: widget.data!.isShared,
+                                                  onUpdate: () {
+                                                    (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
+                                                  },
+                                                  fAliplayer: widget.data!.fAliplayer,
+                                                );
+                                              }
+                                            }),
+                                      ),
+                                    ),
+                                    _buttomBodyRight(),
+                                  ],
                                 ),
                               ),
                             if (!isPlay && !widget.fromFullScreen)
@@ -1987,7 +2000,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: Stack(children: [
                             Positioned(
-                              bottom: 28,
+                              bottom: widget.orientation == Orientation.portrait ? 28 : 0,
                               left: 0,
                               right: !widget.fromFullScreen
                                   ? 0
@@ -2037,38 +2050,15 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                         Visibility(
                                           visible: widget.data?.location != '',
                                           child: Container(
-                                            width: SizeConfig.screenWidth! * .18,
                                             decoration: BoxDecoration(color: kHyppeBackground.withOpacity(.4), borderRadius: BorderRadius.circular(8.0)),
                                             padding: const EdgeInsets.symmetric(
                                               vertical: 6,
                                             ),
                                             child: Padding(
                                               padding: EdgeInsets.symmetric(
-                                                horizontal: (widget.data?.tagPeople?.isNotEmpty ?? false) ? 12.0 : 0.0,
+                                                horizontal: 8.0,
                                               ),
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  const CustomIconWidget(
-                                                    iconData: '${AssetPath.vectorPath}map-light.svg',
-                                                    defaultColor: false,
-                                                    height: 16,
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 4.0,
-                                                  ),
-                                                  SizedBox(
-                                                    width: widget.data?.tagPeople?.isNotEmpty ?? false ? SizeConfig.screenWidth! * .13 : SizeConfig.screenWidth! * .13,
-                                                    child: Text(
-                                                      '${widget.data?.location}',
-                                                      maxLines: 1,
-                                                      style: const TextStyle(color: kHyppeLightBackground),
-                                                      overflow: TextOverflow.ellipsis,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
+                                              child: location()
                                             ),
                                           ),
                                         ),
@@ -2077,7 +2067,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                   ),
                                   Container(
                                     constraints: BoxConstraints(
-                                        maxWidth: orientation == Orientation.landscape ? SizeConfig.screenWidth! * .35 : SizeConfig.screenWidth!,
+                                        maxWidth: orientation == Orientation.landscape ? SizeConfig.screenWidth! * .29 : SizeConfig.screenWidth!,
                                         maxHeight: isShowMore ? 52 : SizeConfig.screenHeight! * .2),
                                     padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
                                     child: SingleChildScrollView(
@@ -2103,7 +2093,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                           (widget.data!.reportedStatus != 'OWNED' && widget.data!.reportedStatus != 'BLURRED' && widget.data!.reportedStatus2 != 'BLURRED') &&
                                           widget.data!.email == SharedPreference().readStorage(SpKeys.email)
                                       ? Container(
-                                          width: orientation == Orientation.landscape ? SizeConfig.screenWidth! * .32 : SizeConfig.screenWidth!,
+                                          width: orientation == Orientation.landscape ? SizeConfig.screenWidth! * .29 : SizeConfig.screenWidth!,
                                           margin: const EdgeInsets.only(bottom: 16),
                                           padding: const EdgeInsets.only(top: 12, left: 8.0, right: 8.0),
                                           child: ButtonBoost(
@@ -2778,6 +2768,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
           if (widget.data?.isShared ?? false)
             buttonVideoRight(
                 onFunctionTap: () {
+                  fAliplayer?.pause();
                   context.read<VidDetailNotifier>().createdDynamicLink(context, data: widget.data);
                 },
                 iconData: '${AssetPath.vectorPath}share-shadow.svg',
@@ -2785,7 +2776,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
           if ((widget.data?.saleAmount ?? 0) > 0 && email != widget.data?.email)
             buttonVideoRight(
                 onFunctionTap: () async {
-                  widget.data?.fAliplayer?.pause();
+                  fAliplayer?.pause();
                   await ShowBottomSheet.onBuyContent(context, data: widget.data, fAliplayer: widget.data?.fAliplayer);
                 },
                 iconData: '${AssetPath.vectorPath}cart-shadow.svg',
@@ -2798,5 +2789,63 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
   Size _textSize(String text, TextStyle style) {
     final TextPainter textPainter = TextPainter(text: TextSpan(text: text, style: style), maxLines: 1, textDirection: TextDirection.ltr)..layout(minWidth: 0, maxWidth: double.infinity);
     return textPainter.size;
+  }
+
+  Widget location(){
+    switch (widget.orientation) {
+      case Orientation.portrait:
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const CustomIconWidget(
+              iconData: '${AssetPath.vectorPath}map-light.svg',
+              defaultColor: false,
+              height: 16,
+            ),
+            const SizedBox(
+              width: 4.0,
+            ),
+            SizedBox(
+              width: widget.data?.tagPeople?.isNotEmpty ?? false 
+                ? SizeConfig.screenWidth! * .4
+                :  SizeConfig.screenWidth! * .65,
+              child: Text(
+                '${widget.data?.location}',
+                maxLines: 1,
+                style: const TextStyle(color: kHyppeLightBackground),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        );
+
+      default:
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const CustomIconWidget(
+              iconData: '${AssetPath.vectorPath}map-light.svg',
+              defaultColor: false,
+              height: 16,
+            ),
+            const SizedBox(
+              width: 4.0,
+            ),
+            SizedBox(
+              width: widget.data?.tagPeople?.isNotEmpty ?? false 
+                ? SizeConfig.screenWidth! * .13 
+                : SizeConfig.screenWidth! * .24,
+              child: Text(
+                '${widget.data?.location}',
+                maxLines: 1,
+                style: const TextStyle(color: kHyppeLightBackground),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        );
+    }
   }
 }

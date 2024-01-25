@@ -286,7 +286,6 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
               onPageChanged: (value) {
                 indexPic = value;
                 notifier.currIndex = value;
-                print('current index ${notifier.currentIndex}');
                 if ((notifier.pic?.length ?? 0) - 1 == indexPic) {
                   //This loadmore data
                   notifier.initialPic(context);
@@ -649,7 +648,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                     height: 30,
                   ),
                   Text(lang!.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                  Text("HyppePic ${lang!.contentContainsSensitiveMaterial}",
+                  Text("${lang!.contentContainsSensitiveMaterialNew}",
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: Colors.white,
@@ -674,7 +673,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                         ),
                       ),
                       child: Text(
-                        "${lang!.see} HyppePic",
+                        "${lang!.see} Pic",
                         style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
                         textAlign: TextAlign.center,
                       ),
@@ -740,33 +739,38 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                       Visibility(
                         visible: data.location != '',
                         child: Container(
-                          decoration: BoxDecoration(color: kHyppeBackground.withOpacity(.4), borderRadius: BorderRadius.circular(8.0)),
-                          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4.0),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: (data.tagPeople?.isNotEmpty ?? false) ? 12.0 : 0.0,
-                            ),
-                            child: Row(
-                              children: [
-                                const CustomIconWidget(
-                                  iconData: '${AssetPath.vectorPath}map-light.svg',
-                                  defaultColor: false,
-                                  height: 16,
+                          decoration: BoxDecoration(
+                            color: kHyppeBackground.withOpacity(.4),
+                            borderRadius: BorderRadius.circular(8.0)
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              const CustomIconWidget(
+                                iconData: '${AssetPath.vectorPath}map-light.svg',
+                                defaultColor: false,
+                                height: 16,
+                              ),
+                              const SizedBox(
+                                width: 4.0,
+                              ),
+                              Container(
+                                constraints: BoxConstraints(
+                                  maxWidth: data.tagPeople?.isNotEmpty ?? false 
+                                      ? SizeConfig.screenWidth! * .4
+                                      : SizeConfig.screenWidth! * .65,
                                 ),
-                                const SizedBox(
-                                  width: 4.0,
+                                child: Text(
+                                  '${data.location}',
+                                  maxLines: 1,
+                                  style: const TextStyle(color: kHyppeLightBackground),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                SizedBox(
-                                  width: data.tagPeople?.isNotEmpty ?? false ? SizeConfig.screenWidth! * .4 : SizeConfig.screenWidth! * .7,
-                                  child: Text(
-                                    '${data.location}',
-                                    maxLines: 1,
-                                    style: const TextStyle(color: kHyppeLightBackground),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -961,7 +965,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
               ),
             if ((picData.isShared ?? false))
               buttonRight(
-                  onFunctionTap: () {
+                  onFunctionTap: () async {
                     context.read<PicDetailNotifier>().createdDynamicLink(context, data: picData);
                   },
                   iconData: '${AssetPath.vectorPath}share-shadow.svg',
@@ -1057,8 +1061,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                 show: true,
                 following: true,
                 onFollow: () {},
-                // widthText: _textSize(,const TextStyle(fontWeight: FontWeight.bold))
-                //     .width,
+                widthText: 120,
                 username: data.username ?? 'No Name',
                 textColor: kHyppeLightBackground,
                 spaceProfileAndId: eightPx,

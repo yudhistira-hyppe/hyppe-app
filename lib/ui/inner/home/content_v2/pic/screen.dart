@@ -149,15 +149,15 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       print("===============init ali player ${fAliplayer?.playerId} ===========");
 
       //scroll
-      // if (mounted) {
-      //   Future.delayed(Duration(milliseconds: 500), () {
-      //     print("=========== global key prirnt ${widget.scrollController} ");
-      //     widget.scrollController?.addListener(() async {
-      //       double offset = widget.scrollController?.position.pixels ?? 0;
-      //       if (mounted) await toPosition(offset, notifier);
-      //     });
-      //   });
-      // }
+      if (mounted) {
+        Future.delayed(const Duration(milliseconds: 500), () {
+          print("=========== global key prirnt ${widget.scrollController} ");
+          widget.scrollController?.addListener(() async {
+            double offset = widget.scrollController?.position.pixels ?? 0;
+            if (mounted) await toPosition(offset, notifier);
+          });
+        });
+      }
     });
     context.read<HomeNotifier>().removeWakelock();
     super.initState();
@@ -1273,28 +1273,19 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                               if (res != null || res == null) {
                                                 fAliplayer?.play();
                                                 fAliplayer?.setMuted(notifier.isMute);
-                                                print('current index notif ${notifier.currentIndex}');
-                                                print('current index list ${index}');
                                                 var temp1 = notifier.pic![_curIdx];
                                                 var temp2 = notifier.pic![notifier.currentIndex];
                                                 if (index < notifier.currentIndex ){
                                                     setState(() {
                                                       index = notifier.currentIndex;
                                                       notifier.pic!.removeRange(_curIdx, notifier.currentIndex);
-                                                      // notifier.pic![_curIdx] = temp2;
-                                                      // notifier.pic![notifier.currentIndex] = temp1;
                                                     });
                                                 }else if (index > notifier.currentIndex) {
-                                                    
                                                     setState(() {
                                                       notifier.pic![_curIdx] = temp2;
                                                       notifier.pic![notifier.currentIndex] = temp1;
                                                     });
                                                 }
-                                              }
-
-                                              if (res is int) {
-                                                print('index screen $index');
                                               }
                                             },
                                             onDoubleTap: () {

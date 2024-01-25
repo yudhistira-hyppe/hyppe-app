@@ -116,6 +116,7 @@ class LocalizationModelV2 {
   String? yourStory;
   String? justNow;
   String? seeAll;
+  String? viewAll;
   String? seeSome;
   String? replyTo;
   String? posts;
@@ -844,6 +845,7 @@ class LocalizationModelV2 {
   String? appealsReceived;
   String? weWillSendYouaNotificationasSoonasweHaveanUpdate;
   String? contentContainsSensitiveMaterial;
+  String? contentContainsSensitiveMaterialNew;
   String? hasBeenSuccessfullyRegisteredForOwnershipBoostedCheckYourProfileForDetails;
   String? hasBeenSuccessfullyRegisteredForBoostedCheckYourProfileForDetails;
   String? appealThisWarning;
@@ -1217,6 +1219,7 @@ class LocalizationModelV2 {
     this.yourStory,
     this.justNow,
     this.seeAll,
+    this.viewAll,
     this.seeSome,
     this.replyTo,
     this.posts,
@@ -1945,6 +1948,7 @@ class LocalizationModelV2 {
     this.appealsReceived,
     this.weWillSendYouaNotificationasSoonasweHaveanUpdate,
     this.contentContainsSensitiveMaterial,
+    this.contentContainsSensitiveMaterialNew,
     this.hasBeenSuccessfullyRegisteredForOwnershipBoostedCheckYourProfileForDetails,
     this.hasBeenSuccessfullyRegisteredForBoostedCheckYourProfileForDetails,
     this.appealThisWarning,
@@ -2319,6 +2323,7 @@ class LocalizationModelV2 {
     yourStory = json['yourStory'];
     justNow = json['justNow'];
     seeAll = json['seeAll'];
+    viewAll = json['viewAll'];
     seeSome = json['seeSome'];
     replyTo = json['replyTo'];
     posts = json['posts'];
@@ -3070,6 +3075,7 @@ class LocalizationModelV2 {
     appealsReceived = json["appealsReceived"];
     weWillSendYouaNotificationasSoonasweHaveanUpdate = json["weWillSendYouaNotificationasSoonasweHaveanUpdate"];
     contentContainsSensitiveMaterial = json["ContentContainsSensitiveMaterial"];
+    contentContainsSensitiveMaterialNew = json["ContentContainsSensitiveMaterialNew"];
     hasBeenSuccessfullyRegisteredForOwnershipBoostedCheckYourProfileForDetails = json["hasBeenSuccessfullyRegisteredForOwnershipBoostedCheckYourProfileForDetails"];
     hasBeenSuccessfullyRegisteredForBoostedCheckYourProfileForDetails = json["hasBeenSuccessfullyRegisteredForBoostedCheckYourProfileForDetails"];
     appealThisWarning = json["appealThisWarning"];

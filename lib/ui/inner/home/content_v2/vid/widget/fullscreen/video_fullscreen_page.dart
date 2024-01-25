@@ -456,6 +456,9 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                     itemCount: vidData?.length ?? 0,
                     onPageChanged: (value) {
                       curentIndex = value;
+                      
+                      notifier.currIndex = value;
+                      print('index change ${notifier.currentIndex}');
                       scrollPage(vidData?[value].metadata?.height, vidData?[value].metadata?.width);
                       if ((vidData?.length ?? 0) - 1 == curentIndex) {
                         //get new data;
@@ -578,7 +581,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                     Colors.white,
                                     100,
                                     context.getWidth(),
-                                    SizeConfig.screenHeight ?? 0,
+                                    SizeConfig.screenHeight! * 0.8,
+                                    orientation
                                   ),
                                 ),
                                 // if (Platform.isIOS)
@@ -586,7 +590,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                   opacity: onTapCtrl || isPause ? 1.0 : 0.0,
                                   duration: const Duration(milliseconds: 500),
                                   onEnd: _onPlayerHide,
-                                  child: Padding(
+                                  child: Container(
+                                    height: orientation == Orientation.portrait ? kToolbarHeight * 2 : kToolbarHeight * 1.4,
                                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 18.0),
                                     child: CustomAppBar(
                                         orientation: orientation,
@@ -701,7 +706,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                             Colors.white,
                             100,
                             context.getWidth(),
-                            SizeConfig.screenHeight ?? 0,
+                            SizeConfig.screenHeight! * 0.8,
+                            orientation
                           ),
                         ),
                         // if (Platform.isIOS)
@@ -1285,6 +1291,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                       if (widget.data.isShared ?? false)
                         buttonVideoRight(
                             onFunctionTap: () {
+                              widget.fAliplayer?.pause();
                               context.read<VidDetailNotifier>().createdDynamicLink(context, data: widget.data);
                             },
                             iconData: '${AssetPath.vectorPath}share-shadow.svg',
@@ -1346,41 +1353,22 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                 ),
                               ),
                             ),
-                            Visibility(
-                              visible: widget.data.location != '',
-                              child: Container(
-                                decoration: BoxDecoration(color: kHyppeBackground.withOpacity(.4), borderRadius: BorderRadius.circular(8.0)),
-                                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: (widget.data.tagPeople?.isNotEmpty ?? false) ? 12.0 : 0.0,
+                             Visibility(
+                                visible: widget.data.location != '',
+                                child: Container(
+                                  // width: SizeConfig.screenWidth! * .18,
+                                  decoration: BoxDecoration(color: kHyppeBackground.withOpacity(.4), borderRadius: BorderRadius.circular(8.0)),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 6,
                                   ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const CustomIconWidget(
-                                        iconData: '${AssetPath.vectorPath}map-light.svg',
-                                        defaultColor: false,
-                                        height: 16,
-                                      ),
-                                      const SizedBox(
-                                        width: 4.0,
-                                      ),
-                                      SizedBox(
-                                        width: widget.data.tagPeople?.isNotEmpty ?? false ? SizeConfig.screenWidth! * .4 : SizeConfig.screenWidth! * .65,
-                                        child: Text(
-                                          '${widget.data.location}',
-                                          maxLines: 1,
-                                          style: const TextStyle(color: kHyppeLightBackground),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ],
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 8.0,
+                                    ),
+                                    child: location()
                                   ),
                                 ),
                               ),
-                            ),
                           ],
                         ),
                       ),
@@ -1663,6 +1651,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
     double barHeight,
     double width,
     double height,
+    Orientation orientation,
   ) {
     return AnimatedOpacity(
       opacity: onTapCtrl || isPause ? 1.0 : 0.0,
@@ -1670,8 +1659,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
       onEnd: _onPlayerHide,
       child: Center(
         child: Container(
-          width: SizeConfig.screenWidth! * .7,
-          // height: height * 0.8,
+          width: orientation == Orientation.landscape ? width * .35 : width * .8,
           decoration: BoxDecoration(
             color: backgroundColor,
           ),
@@ -1881,6 +1869,64 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
   Size _textSize(String text, TextStyle style) {
     final TextPainter textPainter = TextPainter(text: TextSpan(text: text, style: style), maxLines: 1, textDirection: TextDirection.ltr)..layout(minWidth: 0, maxWidth: double.infinity);
     return textPainter.size;
+  }
+
+  Widget location(){
+    switch (orientation) {
+      case Orientation.portrait:
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const CustomIconWidget(
+              iconData: '${AssetPath.vectorPath}map-light.svg',
+              defaultColor: false,
+              height: 16,
+            ),
+            const SizedBox(
+              width: 4.0,
+            ),
+            SizedBox(
+              width: widget.data.tagPeople?.isNotEmpty ?? false 
+                ? SizeConfig.screenWidth! * .4
+                :  SizeConfig.screenWidth! * .65,
+              child: Text(
+                '${widget.data.location}',
+                maxLines: 1,
+                style: const TextStyle(color: kHyppeLightBackground),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        );
+
+      default:
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const CustomIconWidget(
+              iconData: '${AssetPath.vectorPath}map-light.svg',
+              defaultColor: false,
+              height: 16,
+            ),
+            const SizedBox(
+              width: 4.0,
+            ),
+            SizedBox(
+              width: widget.data.tagPeople?.isNotEmpty ?? false 
+                ? SizeConfig.screenWidth! * .13 
+                : SizeConfig.screenWidth! * .24,
+              child: Text(
+                '${widget.data.location}',
+                maxLines: 1,
+                style: const TextStyle(color: kHyppeLightBackground),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        );
+    }
   }
 }
 

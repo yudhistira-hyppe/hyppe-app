@@ -124,7 +124,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       fAliplayer =
-          FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPicProfileFullScreen');
+          FlutterAliPlayerFactory.createAliPlayer(playerId: 'HyppePreviewPicR');
       WidgetsBinding.instance.addObserver(this);
       fAliplayer?.setAutoPlay(true);
       fAliplayer?.setLoop(true);
@@ -201,6 +201,32 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
       setState(() {
         isloading = false;
       });
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    switch (state) {
+      case AppLifecycleState.inactive:
+        print("========= inactive");
+        break;
+      case AppLifecycleState.resumed:
+        print("========= resumed");
+        // if (context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds)) {
+        fAliplayer?.play();
+        // }
+        break;
+      case AppLifecycleState.paused:
+        print("========= paused");
+        fAliplayer?.pause();
+        break;
+      case AppLifecycleState.detached:
+        print("========= detached");
+        break;
+      default:
+        break;
     }
   }
 
@@ -587,7 +613,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
                     height: 30,
                   ),
                   Text(lang!.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                  Text("HyppePic ${lang!.contentContainsSensitiveMaterial}",
+                  Text("HyppePic ${lang!.contentContainsSensitiveMaterialNew}",
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: Colors.white,
@@ -621,8 +647,15 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
                   const Spacer(),
                   GestureDetector(
                     onTap: () {
-                      System().increaseViewCount2(context, data);
-                      context.read<ReportNotifier>().seeContent(context, data, hyppePic);
+                      if (data.music?.musicTitle != null) {
+                          fAliplayer?.prepare();
+                          fAliplayer?.play();
+                        }
+                        System().increaseViewCount2(context, data);
+                        setState(() {
+                          data.reportedStatus = '';
+                        });
+                        context.read<ReportNotifier>().seeContent(context, data, hyppePic);
                     },
                     child: Container(
                       padding: const EdgeInsets.only(top: 8),
@@ -637,7 +670,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
                         ),
                       ),
                       child: Text(
-                        "${lang!.see} HyppePic",
+                        "${lang!.see} Pic",
                         style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
                         textAlign: TextAlign.center,
                       ),
@@ -662,6 +695,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 18.0),
@@ -713,37 +747,34 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
                             color: kHyppeBackground.withOpacity(.4),
                             borderRadius: BorderRadius.circular(8.0)
                           ),
-                          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: (data.tagPeople?.isNotEmpty ?? false)
-                                    ? 12.0
-                                    : 0.0,),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const CustomIconWidget(
-                                  iconData:
-                                      '${AssetPath.vectorPath}map-light.svg',
-                                  defaultColor: false,
-                                  height: 16,
+                          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              const CustomIconWidget(
+                                iconData: '${AssetPath.vectorPath}map-light.svg',
+                                defaultColor: false,
+                                height: 16,
+                              ),
+                              const SizedBox(
+                                width: 4.0,
+                              ),
+                              Container(
+                                constraints: BoxConstraints(
+                                  maxWidth: data.tagPeople?.isNotEmpty ?? false 
+                                      ? SizeConfig.screenWidth! * .4
+                                      : SizeConfig.screenWidth! * .65,
                                 ),
-                                const SizedBox(width: 4.0,),
-                                SizedBox(
-                                  width: data.tagPeople?.isNotEmpty ?? false 
-                                        ? SizeConfig.screenWidth! * .4
-                                        : SizeConfig.screenWidth! * .65,
-                                  child: Text(
-                                    '${data.location}',
-                                    maxLines: 1,
-                                    style: const TextStyle(
-                                        color: kHyppeLightBackground),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
+                                child: Text(
+                                  '${data.location}',
+                                  maxLines: 1,
+                                  style: const TextStyle(color: kHyppeLightBackground),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -755,8 +786,8 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
                       maxWidth: SizeConfig.screenWidth! * .7,
                       maxHeight: isShowMore
                               ? 52
-                              : SizeConfig.screenHeight! * .1),
-                  alignment: Alignment.bottomLeft,
+                              : SizeConfig.screenHeight! * .05),
+                  alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.symmetric(horizontal: 16.0),
                   padding: const EdgeInsets.only(left: 8.0, top: 8.0),
                   child: SingleChildScrollView(
@@ -765,7 +796,6 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
                       trimLines: 2,
                       textAlign: TextAlign.start,
                       callbackIsMore: (val) {
-                        print('desciption ${data.description}');
                         setState(() {
                           isShowMore = val;
                         });
@@ -1084,6 +1114,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
                 show: true,
                 following: true,
                 onFollow: () {},
+                widthText: 120,
                 username: data.username ?? 'No Name',
                 textColor: kHyppeLightBackground,
                 spaceProfileAndId: eightPx,

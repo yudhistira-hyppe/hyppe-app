@@ -1372,7 +1372,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4.0),
                     child: Text(
-                      "${lang?.seeAll} ${pics?[index].comments} ${lang?.comment}",
+                      "${lang?.viewAll} ${pics?[index].comments} ${lang?.comment}",
                       style: const TextStyle(fontSize: 12, color: kHyppeBurem),
                     ),
                   ),

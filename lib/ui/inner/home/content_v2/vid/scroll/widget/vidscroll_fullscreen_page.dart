@@ -108,8 +108,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> {
   whileDispose() async {
     await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: SystemUiOverlay.values);
-    await SystemChrome.setPreferredOrientations(
-        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   }
   @override
   Widget build(BuildContext context) {
@@ -212,7 +211,14 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> {
         getPlayer: (main, id) {},
         getAdsPlayer: (ads) {},
         autoScroll: () {
-          // nextPage();
+          Future.delayed(Duration(milliseconds: 500), () {
+            controller.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.ease);
+          });
+        },
+        prevScroll: (){
+          Future.delayed(Duration(milliseconds: 500), () {
+            controller.previousPage(duration: const Duration(milliseconds: 500), curve: Curves.ease);
+          });
         },
       );
       if (orientation == Orientation.landscape) {
