@@ -237,8 +237,7 @@ class UrlConstants {
   static const String getuserposts = "$postRouteV2/getuserposts/v2";
 
   /// get => Get My Contents.
-  static const String getMyUserPosts = "$postRouteV2/getuserposts/my";
-  // static const String getMyUserPostsV2 = "$postRouteV2/getuserposts/my/v2";
+  static const String getMyUserPosts = "$postRouteV2/getuserposts/my/v2";
 
   /// get => Get My Contents.
   static const String getOtherUserPosts = "$postRouteV2/getuserposts/byprofile/v2";
@@ -266,7 +265,7 @@ class UrlConstants {
 
   /// post => Get User Profiles by username
   static const String getProfileByUser = "$userRoute/getuserprofile/byusername/v2";
-
+  
   /// post => Log out
   static const String logout = "$userRoute/logout/v2";
 
@@ -275,7 +274,7 @@ class UrlConstants {
 
   /// post => Get Interactives
   static const String getInnteractives = "$postRouteV2/getinteractives/v2";
-
+   
   /// post => Get/Create Discussion
   static const String discuss = "$postRouteV2/disqus/v2";
 
