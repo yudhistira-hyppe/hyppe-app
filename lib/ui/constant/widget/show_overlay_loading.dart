@@ -9,6 +9,8 @@ import 'package:hyppe/core/event/upload_event_handler.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/notifier.dart';
 
+import '../../../app.dart';
+
 class ShowOverlayLoading extends StatefulWidget {
   const ShowOverlayLoading({super.key});
 
@@ -35,21 +37,25 @@ class _ShowOverlayLoadingState extends State<ShowOverlayLoading> with UploadEven
 
   @override
   void onUploadSendProgress(double count, double total, bool isCompressing) {
+    globalPreventAction = true;
     _uploadNotifier.progress = '${(count / total * 100).toStringAsFixed(0)}%';
   }
 
   @override
   void onUploadSuccess(Response response) {
+    globalPreventAction = false;
     'Upload Success with message ${response.statusMessage}'.logger();
   }
 
   @override
   void onUploadFailed(DioError message) {
+    globalPreventAction = false;
     'Upload Failed with message ${message.message}'.logger();
   }
 
   @override
   void onUploadCancel(DioError message) {
+    globalPreventAction = false;
     'Upload Canceled with message ${message.message}'.logger();
   }
 

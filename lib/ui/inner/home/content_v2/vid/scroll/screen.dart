@@ -249,6 +249,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
             child: SizedBox(
               child: Column(
                 children: [
+                  if(vidData?.isNotEmpty ?? false)
                   ListTile(
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -299,11 +300,10 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                           Navigator.pop(context, '$_cardIndex');
                         }),
                   ),
-                  (vidData != null)
-                      ? (vidData?.isEmpty ?? true)
-                          ? const NoResultFound()
-                          : Expanded(
-                              child: RefreshIndicator(
+                  Expanded(
+                              child: (vidData?.isEmpty ?? true)
+                                  ? const NoResultFound()
+                                  : RefreshIndicator(
                                 onRefresh: () async {
                                   bool connect = await System().checkConnections();
                                   if (connect) {
@@ -372,14 +372,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                   ),
                                 ),
                               ),
-                            )
-                      : const AspectRatio(
-                          aspectRatio: 16 / 9,
-                          child: CustomShimmer(
-                            height: double.infinity,
-                            width: double.infinity,
-                          ),
-                        ),
+                            ),
                 ],
               ),
             ),

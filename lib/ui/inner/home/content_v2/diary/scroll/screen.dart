@@ -681,7 +681,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                             }),
                       ),
                       Expanded(
-                        child: diaryData?.isEmpty ?? [].isEmpty
+                        child: (diaryData?.isEmpty ?? true)
                             ? const NoResultFound()
                             : RefreshIndicator(
                                 onRefresh: () async {
