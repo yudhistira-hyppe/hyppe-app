@@ -42,6 +42,7 @@ import 'package:flutter/rendering.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_video_info/flutter_video_info.dart';
+import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
@@ -793,6 +794,7 @@ class System {
           if (_validateCountPost(_pickerResult.files.length) == false) {
             for (int element = 0; element < _pickerResult.files.length; element++) {
               // validasi content type
+
               print('path directory: ${_pickerResult.files[element].extension}');
               // if (_pickerResult.files[element].extension?.toLowerCase() == PVT) {
               //   final tmpDir = (await getTemporaryDirectory()).path;
@@ -871,7 +873,7 @@ class System {
               //   if (_pickerResult.files.isNotEmpty) {
               //     _filePickerResult?.add(result);
               //   }
-              // } else 
+              // } else
               if (_pickerResult.files[element].extension?.toLowerCase() == MP4 || _pickerResult.files[element].extension?.toLowerCase() == MOV) {
                 await getVideoMetadata(_pickerResult.files[element].path ?? '').then((value) {
                   _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
@@ -929,6 +931,11 @@ class System {
                       _filePickerResult = _pickerResult.files.map((file) => File(file.path ?? '')).toList();
                     }
                     break;
+                  case 'gif':
+                    File image22 = await convertGifToJpeg(_pickerResult.files[element].path ?? '');
+                    print("======ini gif jadi imageeee ${image22.path}");
+                    _filePickerResult = [image22];
+                    break;
                   default:
                     _filePickerResult = _pickerResult.files.map((file) => File(file.path ?? '')).toList();
                     break;
@@ -941,6 +948,26 @@ class System {
       }
     }
     return {_errorMsg: _filePickerResult};
+  }
+
+  Future convertGifToJpeg(String gifPath) async {
+    // Read the GIF file
+    Uint8List gifBytes = await File(gifPath).readAsBytes();
+
+    // Decode GIF into frames
+
+    img.Image? frames = img.decodeGif(gifBytes);
+
+    // We'll just take the first frame for simplicity
+    // img.Image firstFrame = frames[0];
+
+    // Convert to JPEG format
+    Uint8List jpegBytes = img.encodeJpg(frames!);
+
+    // Write the JPEG data to a file
+    final tmpDir = (await getTemporaryDirectory()).path;
+    final target = '$tmpDir/${DateTime.now().millisecondsSinceEpoch}.jpg';
+    return File(target).writeAsBytes(jpegBytes);
   }
 
   Future<Uint8List?> createThumbnail(String path, {int quality = 25}) async {

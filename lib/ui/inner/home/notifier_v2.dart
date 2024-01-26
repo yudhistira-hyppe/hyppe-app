@@ -293,7 +293,7 @@ class HomeNotifier with ChangeNotifier {
           data['skip'] = skipvid;
           break;
       }
-      if (!isgetMore && stories.storiesGroups == null || isreload) {
+      if (!isgetMore && stories.storiesGroups!.isEmpty || isreload) {
         stories.myStoryGroup = {};
         stories.storiesGroups = [];
 

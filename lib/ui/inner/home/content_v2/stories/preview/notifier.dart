@@ -39,7 +39,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   int page = 0;
 
-  List<StoriesGroup>? _storiesGroups;
+  List<StoriesGroup>? _storiesGroups = [];
 
   List<ContentData>? _myStoriesData;
 
@@ -352,10 +352,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
     if (stories.isNotEmpty) {
       _routing.move(
         Routes.showStories,
-        argument: StoryDetailScreenArgument(
-          myStories: myStoryGroup,
-          fromProfile: fromProfile
-        ),
+        argument: StoryDetailScreenArgument(myStories: myStoryGroup, fromProfile: fromProfile),
       );
     } else {
       uploadStories(context);
@@ -408,16 +405,11 @@ class PreviewStoriesNotifier with ChangeNotifier {
     }
   }
 
-  void navigateToOtherStoryGroup(BuildContext context, List stories, String email,
-      {bool isOther = false}) {
+  void navigateToOtherStoryGroup(BuildContext context, List stories, String email, {bool isOther = false}) {
     if (stories.isNotEmpty) {
       _routing.move(
         Routes.showStories,
-        argument: StoryDetailScreenArgument(
-          myStories: otherStoryGroup,
-          email: email,
-          isOther: isOther
-        ),
+        argument: StoryDetailScreenArgument(myStories: otherStoryGroup, email: email, isOther: isOther),
       );
     } else {
       uploadStories(context);

@@ -69,7 +69,7 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                     VisibilityDetector(
                       key: Key(widget.data.adsId ?? ''),
                       onVisibilityChanged: (VisibilityInfo info) {
-                        if(info.visibleFraction >= 0.9){
+                        if (info.visibleFraction >= 0.9) {
                           setState(() {
                             isSeeing = true;
                           });
@@ -79,23 +79,22 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                           //   }
                           // });
                         }
-                        if(info.visibleFraction < 0.3){
-                          try{
-                            if(mounted){
+                        if (info.visibleFraction < 0.3) {
+                          try {
+                            if (mounted) {
                               setState(() {
                                 isSeeing = false;
                               });
-                            }else{
+                            } else {
                               isSeeing = false;
                             }
-                          }catch(e){
+                          } catch (e) {
                             isSeeing = false;
                           }
-
                         }
                       },
                       child: GestureDetector(
-                        onTap:(){
+                        onTap: () {
                           Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: widget.data.email));
                         },
                         child: CustomBaseCacheImage(
@@ -116,38 +115,33 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                             );
                           },
                           errorWidget: (_, url, ___) {
-                            if(url.isNotEmpty && url.withHttp()){
+                            if (url.isNotEmpty && url.withHttp()) {
                               return ClipRRect(
                                   borderRadius: BorderRadius.circular(18),
-                                  child: Image.network(url, width: 36, height: 36, fit: BoxFit.cover,loadingBuilder: (BuildContext context, Widget child,
-                                      ImageChunkEvent? loadingProgress) {
+                                  child: Image.network(url, width: 36, height: 36, fit: BoxFit.cover, loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
                                     if (loadingProgress == null) return child;
                                     return Center(
                                       child: SizedBox(
                                         width: 20,
                                         height: 20,
                                         child: CircularProgressIndicator(
-                                          value: loadingProgress.expectedTotalBytes != null
-                                              ? loadingProgress.cumulativeBytesLoaded /
-                                              loadingProgress.expectedTotalBytes!
-                                              : null,
+                                          value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
                                         ),
                                       ),
                                     );
-                                  },
-                                      errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                                        return Container(
-                                          width: 36,
-                                          height: 36,
-                                          decoration: const BoxDecoration(
-                                            borderRadius: BorderRadius.all(Radius.circular(18)),
-                                            image: DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
-                                            ),
-                                          ),
-                                        );
-                                      }));
+                                  }, errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                                    return Container(
+                                      width: 36,
+                                      height: 36,
+                                      decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.all(Radius.circular(18)),
+                                        image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
+                                        ),
+                                      ),
+                                    );
+                                  }));
                             }
                             return Container(
                               width: 36,
@@ -176,28 +170,33 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                       ),
                     ),
                     twelvePx,
-                    Expanded(child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomTextWidget(textToDisplay: widget.data.username ?? '', textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w700, ),),
-                        CustomTextWidget(textToDisplay: language.sponsored ?? 'Sponsored', textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w400, ),)
-                      ],
-                    ),),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomTextWidget(
+                            textToDisplay: widget.data.username ?? '',
+                            textStyle: context.getTextTheme().caption?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                ),
+                          ),
+                          CustomTextWidget(
+                            textToDisplay: language.sponsored ?? 'Sponsored',
+                            textStyle: context.getTextTheme().caption?.copyWith(
+                                  fontWeight: FontWeight.w400,
+                                ),
+                          )
+                        ],
+                      ),
+                    ),
                     twelvePx,
                     GestureDetector(
-                      onTap: (){
-                        ShowBottomSheet().onReportContent(
-                            context,
-                            adsData: widget.data,
-                            type: adsPopUp,
-                            postData: null,
-                            onUpdate: () {
-                              setState(() {
-                                widget.data.isReport = true;
-                              });
-                            },
-                            onCompleted: widget.afterReport
-                        );
+                      onTap: () {
+                        ShowBottomSheet().onReportContent(context, adsData: widget.data, type: adsPopUp, postData: null, onUpdate: () {
+                          setState(() {
+                            widget.data.isReport = true;
+                          });
+                        }, onCompleted: widget.afterReport);
                       },
                       child: const CustomIconWidget(
                         defaultColor: false,
@@ -266,7 +265,8 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                               });
                             });
                           } else {
-                            if((data.adsUrlLink ?? '').withHttp()){
+                            if ((data.adsUrlLink ?? '').withHttp()) {
+                              print("=====mauk uooooyyy");
                               try {
                                 final uri = Uri.parse(data.adsUrlLink ?? '');
                                 print('bottomAdsLayout ${data.adsUrlLink}');
@@ -302,41 +302,40 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                             alignment: Alignment.center,
                             padding: const EdgeInsets.only(top: 10, bottom: 10),
                             decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)), color: KHyppeButtonAds),
-                            child: loadLaunch ? const SizedBox(width: 40, height: 20, child: CustomLoading()) : Text(
-                              learnMore,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
+                            child: loadLaunch
+                                ? const SizedBox(width: 40, height: 20, child: CustomLoading())
+                                : Text(
+                                    learnMore,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
                           );
                         }),
                       ),
                       twelvePx,
-                      if(widget.data.adsDescription != null)
-                        Builder(
-                            builder: (context) {
-                              final notifier = context.read<TranslateNotifierV2>();
-                              return CustomDescContent(
-                                  desc: widget.data.adsDescription!,
-                                  trimLines: 2,
-                                  textAlign: TextAlign.justify,
-                                  seeLess: ' ${notifier.translate.seeLess}',
-                                  seeMore: ' ${notifier.translate.seeMoreContent}',
-                                  textOverflow: TextOverflow.visible,
-                                  normStyle: Theme.of(context).textTheme.bodyText2,
-                                  hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
-                                  expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary));
-                            }
-                        )
+                      if (widget.data.adsDescription != null)
+                        Builder(builder: (context) {
+                          final notifier = context.read<TranslateNotifierV2>();
+                          return CustomDescContent(
+                              desc: widget.data.adsDescription!,
+                              trimLines: 2,
+                              textAlign: TextAlign.justify,
+                              seeLess: ' ${notifier.translate.seeLess}',
+                              seeMore: ' ${notifier.translate.seeMoreContent}',
+                              textOverflow: TextOverflow.visible,
+                              normStyle: Theme.of(context).textTheme.bodyText2,
+                              hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                              expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary));
+                        })
                     ],
                   ),
                 )
               ],
             ),
           ),
-
         ],
       ),
     );

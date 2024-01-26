@@ -973,7 +973,13 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                                     onDoubleTap: () {
                                       final _likeNotifier = context.read<LikeNotifier>();
                                       if (diaryData?[index] != null) {
-                                        _likeNotifier.likePost(context, diaryData![index]);
+                                        _likeNotifier.likePost(context, diaryData![index]).then((value) {
+                                          List<ContentData>? diaryData = context.read<PreviewDiaryNotifier>().diaryData;
+                                          int idx = diaryData!.indexWhere((e) => e.postID == value['_id']);
+                                          diaryData[idx].insight?.isPostLiked = value['isPostLiked'];
+                                          diaryData[idx].insight?.likes = value['likes'];
+                                          diaryData[idx].isLiked = value['isLiked'];
+                                        });
                                       }
                                     },
                                     child: Container(
@@ -1191,7 +1197,13 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                                       ),
                                       onTap: () {
                                         if (diaryData?[index] != null) {
-                                          likeNotifier.likePost(context, diaryData![index]);
+                                          likeNotifier.likePost(context, diaryData![index]).then((value) {
+                                            List<ContentData>? diaryData = context.read<PreviewDiaryNotifier>().diaryData;
+                                            int idx = diaryData!.indexWhere((e) => e.postID == value['_id']);
+                                            diaryData[idx].insight?.isPostLiked = value['isPostLiked'];
+                                            diaryData[idx].insight?.likes = value['likes'];
+                                            diaryData[idx].isLiked = value['isLiked'];
+                                          });
                                         }
                                       },
                                     ),
