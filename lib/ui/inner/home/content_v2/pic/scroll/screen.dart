@@ -1244,7 +1244,13 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                     ),
                                     onTap: () {
                                       if (pics?[index] != null) {
-                                        likeNotifier.likePost(context, pics![index]);
+                                        likeNotifier.likePost(context, pics![index]).then((value) {
+                                          List<ContentData>? pic = context.read<PreviewPicNotifier>().pic;
+                                          int idx = pic!.indexWhere((e) => e.postID == value['_id']);
+                                          pic[idx].insight?.isPostLiked = value['isPostLiked'];
+                                          pic[idx].insight?.likes = value['likes'];
+                                          pic[idx].isLiked = value['isLiked'];
+                                        });
                                       }
                                     },
                                   ),
@@ -1393,8 +1399,8 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                               desc: pics?[index].comment?[indexComment].txtMessages ?? '',
                               trimLines: 2,
                               textAlign: TextAlign.start,
-                              seeLess: ' seeLess', // ${notifier2.translate.seeLess}',
-                              seeMore: '  Selengkapnya ', //${notifier2.translate.seeMoreContent}',
+                              seeLess: ' ${lang?.less}', // ${notifier2.translate.seeLess}',
+                              seeMore: ' ${lang?.more}',
                               normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
                               hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
                               expandStyle: const TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),

@@ -198,9 +198,9 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
         }
       } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
         // _bufferPosition = extraValue ?? 0;
-        if (mounted) {
-          setState(() {});
-        }
+        // if (mounted) {
+        //   setState(() {});
+        // }
       } else if (infoCode == FlutterAvpdef.AUTOPLAYSTART) {
         // Fluttertoast.showToast(msg: "AutoPlay");
       } else if (infoCode == FlutterAvpdef.CACHESUCCESS) {
@@ -479,7 +479,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                         //   child: Center(child: Text("data ${index}")),
                         // );
                         print('view ads: 1');
-
+        
                         return isloadingRotate
                             ? Container(
                                 color: Colors.black,
@@ -622,7 +622,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                             //   "=============== pause 11".logger();
                                             //   notifier.vidData?[_curIdx].fAliplayer?.pause();
                                             // }
-
+        
                                             ShowBottomSheet().onShowOptionContent(
                                               context,
                                               contentData: widget.data,
@@ -1388,7 +1388,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                               });
                             },
                             seeLess: ' ${lang?.less}', // ${notifier2.translate.seeLess}',
-                            seeMore: '  ${lang?.more}', //${notifier2.translate.seeMoreContent}',
+                            seeMore: ' ${lang?.more}', //${notifier2.translate.seeMoreContent}',
                             normStyle: const TextStyle(fontSize: 14, color: kHyppeTextPrimary),
                             hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
                             expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppeTextPrimary, fontWeight: FontWeight.bold),

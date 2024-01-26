@@ -19,7 +19,8 @@ class VidScrollFullScreenPage extends StatefulWidget {
   const VidScrollFullScreenPage({super.key, required this.argument});
 
   @override
-  State<VidScrollFullScreenPage> createState() => _VidScrollFullScreenPageState();
+  State<VidScrollFullScreenPage> createState() =>
+      _VidScrollFullScreenPageState();
 }
 
 class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> {
@@ -44,7 +45,8 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
     controller = PageController(initialPage: widget.argument?.index ?? 0);
-    print('desciption ${widget.argument!.data.metadata?.height ?? 0} ${widget.argument!.data.metadata?.width ?? 0}');
+    print(
+        'desciption ${widget.argument!.data.metadata?.height ?? 0} ${widget.argument!.data.metadata?.width ?? 0}');
     if ((widget.argument!.data.metadata?.height ?? 0) <
         (widget.argument!.data.metadata?.width ?? 0)) {
       orientation = Orientation.landscape;
@@ -52,14 +54,14 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> {
       orientation = Orientation.portrait;
     }
     if (orientation == Orientation.landscape) {
-        SystemChrome.setPreferredOrientations([
-          DeviceOrientation.landscapeLeft,
-          DeviceOrientation.landscapeRight,
-        ]);
-      } else {
-        SystemChrome.setPreferredOrientations(
-            [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-      }
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ]);
+    } else {
+      SystemChrome.setPreferredOrientations(
+          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    }
     super.initState();
   }
 
@@ -108,8 +110,10 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> {
   whileDispose() async {
     await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: SystemUiOverlay.values);
-    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    await SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   }
+
   @override
   Widget build(BuildContext context) {
     TranslateNotifierV2 lang = context.read<TranslateNotifierV2>();
@@ -117,37 +121,39 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> {
       DataSourceRelated.vidKey: data!.apsaraId,
       DataSourceRelated.regionKey: DataSourceRelated.defaultRegion,
     };
-    
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Consumer3<ScrollVidNotifier, TranslateNotifierV2, HomeNotifier>(
-        builder: (_, vidNotifier, translateNotifier, homeNotifier, __) {
-          return Stack(
-            children: [
-              PageView.builder(
-                controller: controller,
-                scrollDirection: Axis.vertical,
-                itemCount: vidNotifier.vidData?.length ?? 0,
-                onPageChanged: (value) async {
-                  widget.argument!.index = value;
-                  scrollPage(vidData?[value].metadata?.height,
-                            vidData?[value].metadata?.width);
-                  if ((vidNotifier.vidData?.length ?? 0) - 1 == widget.argument?.index) {
-                    // final pageSrc =
-                    //     widget.argument?.pageSrc ?? PageSrc.otherProfile;
-                    // //This loadmore data
-                    await vidNotifier.loadMore(context, controller, PageSrc.selfProfile, '');
-                     if (mounted) {
-                      setState(() {
-                        vidData = vidNotifier.vidData;
-                      });
-                    } else {
+          builder: (_, vidNotifier, translateNotifier, homeNotifier, __) {
+        return Stack(
+          children: [
+            PageView.builder(
+              controller: controller,
+              scrollDirection: Axis.vertical,
+              itemCount: vidNotifier.vidData?.length ?? 0,
+              onPageChanged: (value) async {
+                widget.argument!.index = value;
+                scrollPage(vidData?[value].metadata?.height,
+                    vidData?[value].metadata?.width);
+                if ((vidNotifier.vidData?.length ?? 0) - 1 ==
+                    widget.argument?.index) {
+                  // final pageSrc =
+                  //     widget.argument?.pageSrc ?? PageSrc.otherProfile;
+                  // //This loadmore data
+                  await vidNotifier.loadMore(
+                      context, controller, PageSrc.selfProfile, '');
+                  if (mounted) {
+                    setState(() {
                       vidData = vidNotifier.vidData;
-                    }
+                    });
+                  } else {
+                    vidData = vidNotifier.vidData;
                   }
-                },
-                itemBuilder: (context, index) {
-                  return isloadingRotate
+                }
+              },
+              itemBuilder: (context, index) {
+                return isloadingRotate
                     ? Container(
                         color: Colors.black,
                         height: MediaQuery.of(context).size.height,
@@ -157,54 +163,59 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> {
                         ),
                       )
                     : Stack(
-                    children: [
-                      Positioned.fill(child: itemVid(map, vidNotifier.vidData![index]),),
-                      vidNotifier.vidData![index].email == SharedPreference().readStorage(SpKeys.email) && (vidNotifier.vidData![index].reportedStatus == 'OWNED' || vidNotifier.vidData![index].reportedStatus == 'OWNED')
-                      ? Positioned(
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: ContentViolationWidget(
-                              radius: 0.0,
-                              data: vidData?[index] ?? ContentData(),
-                              text: lang.translate.thisHyppeVidisSubjectToModeration ?? '',
-                            ),
-                      )
-                      : const SizedBox.shrink()
-                    ],
-                  );
-                  
-                },
-              )
-            ],
-          );
-        }
-      ),
+                        children: [
+                          Positioned.fill(
+                            child: itemVid(map, vidNotifier.vidData![index]),
+                          ),
+                          vidNotifier.vidData![index].email ==
+                                      SharedPreference()
+                                          .readStorage(SpKeys.email) &&
+                                  (vidNotifier.vidData![index].reportedStatus ==
+                                          'OWNED' ||
+                                      vidNotifier
+                                              .vidData![index].reportedStatus ==
+                                          'OWNED')
+                              ? Positioned(
+                                  bottom: 0,
+                                  left: 0,
+                                  right: 0,
+                                  child: ContentViolationWidget(
+                                    radius: 0.0,
+                                    data: vidData?[index] ?? ContentData(),
+                                    text: lang.translate
+                                            .thisHyppeVidisSubjectToModeration ??
+                                        '',
+                                  ),
+                                )
+                              : const SizedBox.shrink()
+                        ],
+                      );
+              },
+            )
+          ],
+        );
+      }),
     );
   }
 
-  Widget itemVid(Map<String, String?> map, ContentData vidData){
-    return OrientationBuilder(
-      builder: (context, orientation) {
+  Widget itemVid(Map<String, String?> map, ContentData vidData) {
+    return OrientationBuilder(builder: (context, orientation) {
       final player = VidPlayerPage(
         fromFullScreen: true,
         orientation: orientation,
-        playMode:
-            (vidData.isApsara ?? false)
-                ? ModeTypeAliPLayer.auth
-                : ModeTypeAliPLayer.url,
+        playMode: (vidData.isApsara ?? false)
+            ? ModeTypeAliPLayer.auth
+            : ModeTypeAliPLayer.url,
         dataSourceMap: map,
         data: vidData,
-        height:
-            MediaQuery.of(context).size.height,
+        height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         inLanding: false,
         fromDeeplink: false,
         clearing: true,
         isAutoPlay: true,
         functionFullTriger: (value) {
-          print(
-              '===========hahhahahahaa===========');
+          print('===========hahhahahahaa===========');
         },
         isPlaying: !isPause,
         onPlay: (exec) {},
@@ -212,12 +223,16 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> {
         getAdsPlayer: (ads) {},
         autoScroll: () {
           Future.delayed(Duration(milliseconds: 500), () {
-            controller.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.ease);
+            controller.nextPage(
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.ease);
           });
         },
-        prevScroll: (){
+        prevScroll: () {
           Future.delayed(Duration(milliseconds: 500), () {
-            controller.previousPage(duration: const Duration(milliseconds: 500), curve: Curves.ease);
+            controller.previousPage(
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.ease);
           });
         },
       );

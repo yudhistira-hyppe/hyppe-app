@@ -994,6 +994,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
       if (oldWidget.isPlaying != widget.isPlaying) {
         "===================== isPlaying ${widget.isPlaying}".logger();
         if (widget.isPlaying ?? true) {
+          fAliplayer?.setMuted(isMute);
           fAliplayer?.play();
         } else {
           "=============== pause 0".logger();
@@ -1192,7 +1193,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                             // Routing().moveBack();
                           } else {
                             if (widget.isVidFormProfile ?? false) {
-                              Routing().move(Routes.vidScrollFullScreenDetail, argument: VidFullscreenArgument(vidData: widget.vidData!, index: widget.index!, data: widget.data!, isMute: isMute));
+                              Routing().move(Routes.vidScrollFullScreenDetail, argument: VidFullscreenArgument(vidData: widget.vidData!, index: widget.index!, data: widget.data!));
                             } else {
                               int changevalue;
                               changevalue = _currentPosition + 1000;
@@ -1251,6 +1252,12 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
 
                                 print('index change player ${notifier.firstcurrentIndex} ${notifier.currentIndex}');
 
+                                // int changevalue;
+                                // changevalue = _currentPosition + 1000;
+                                // if (changevalue > _videoDuration) {
+                                //   changevalue = _videoDuration;
+                                // }
+
                                 notifier.isLoading = true;
                                 Future.delayed(const Duration(seconds: 6), () {
                                   notifier.isLoading = false;
@@ -1261,7 +1268,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                     _currentPosition = value.seekValue ?? 0;
                                     _currentPositionText = value.positionText ?? 0;
                                     _showTipsWidget = value.showTipsWidget ?? false;
-                                    isMute = !(value.isMute ?? false);
+                                    isMute = value.isMute ?? false;
                                     isPlay = !_showTipsWidget;
                                   });
                                 } else {
@@ -1269,7 +1276,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                   _currentPosition = value.seekValue ?? 0;
                                   _currentPositionText = value.positionText ?? 0;
                                   _showTipsWidget = value.showTipsWidget ?? false;
-                                  isMute = !(value.isMute ?? false);
+                                  isMute = value.isMute ?? false;
                                   isPlay = !_showTipsWidget;
                                 }
                                 fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
@@ -2081,7 +2088,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                           });
                                         },
                                         seeLess: ' ${lang?.less}', // ${notifier2.translate.seeLess}',
-                                        seeMore: '  ${lang?.more}', //${notifier2.translate.seeMoreContent}',
+                                        seeMore: ' ${lang?.more}', //${notifier2.translate.seeMoreContent}',
                                         normStyle: const TextStyle(fontSize: 14, color: kHyppeTextPrimary),
                                         hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
                                         expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppeTextPrimary, fontWeight: FontWeight.bold),

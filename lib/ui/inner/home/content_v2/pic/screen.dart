@@ -1481,9 +1481,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                         iconData: '${AssetPath.vectorPath}${(picData?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
                                                         height: 28,
                                                       ),
-                                                      onTap: () {
+                                                      onTap: () async {
                                                         if (picData != null) {
-                                                          likeNotifier.likePost(context, notifier.pic![index]);
+                                                          likeNotifier.likePost(context, notifier.pic![index]).then((value) => print('result data liked ${value['_id']}'));
                                                         }
                                                       },
                                                     ),
@@ -1590,7 +1590,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                   trimLines: 3,
                                   textAlign: TextAlign.start,
                                   seeLess: ' ${lang?.less}', // ${notifier2.translate.seeLess}',
-                                  seeMore: '  ${lang?.more}', //${notifier2.translate.seeMoreContent}',
+                                  seeMore: ' ${lang?.more}', //${notifier2.translate.seeMoreContent}',
                                   normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
                                   hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary, fontSize: 12),
                                   expandStyle: const TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),

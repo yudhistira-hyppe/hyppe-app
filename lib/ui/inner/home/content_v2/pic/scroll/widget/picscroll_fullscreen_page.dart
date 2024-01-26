@@ -800,10 +800,8 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage>
                           isShowMore = val;
                         });
                       },
-                      seeLess:
-                          ' ${lang?.less}',
-                      seeMore:
-                          '  ${lang?.more}',
+                      seeLess: ' ${lang?.less}',
+                      seeMore: ' ${lang?.more}',
                       normStyle: const TextStyle(
                           fontSize: 14, color: kHyppeTextPrimary),
                       hrefStyle: Theme.of(context)
