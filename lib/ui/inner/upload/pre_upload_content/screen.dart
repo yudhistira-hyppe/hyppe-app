@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hyppe/core/arguments/update_contents_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
@@ -64,6 +65,8 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
   @override
   void initState() {
     // final _notifier = context.read<PreUploadContentNotifier>();
+    SystemChrome.setPreferredOrientations(
+          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     mn = Provider.of<MainNotifier>(context, listen: false);
     super.initState();
     statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);

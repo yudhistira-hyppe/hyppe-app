@@ -1183,7 +1183,6 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                     ? blurContentWidget(context, widget.data!)
                     : GestureDetector(
                         onTap: () async {
-                          print('data Fullscreen ${widget.fromFullScreen}');
                           onTapCtrl = true;
                           setState(() {});
 
@@ -1215,6 +1214,10 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                   ]);
                                 } else {
                                   print('Portrait VidPlayerPage');
+                                  SystemChrome.setPreferredOrientations([
+                                    DeviceOrientation.portraitUp,
+                                    DeviceOrientation.portraitDown,
+                                  ]);
                                 }
                                 notifier.firstIndex = widget.index??0;
                                 var value = await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
@@ -1250,7 +1253,6 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                         isLanding: widget.inLanding),
                                     settings: const RouteSettings()));
 
-                                print('index change player ${notifier.firstcurrentIndex} ${notifier.currentIndex}');
 
                                 // int changevalue;
                                 // changevalue = _currentPosition + 1000;
@@ -1263,6 +1265,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                   notifier.isLoading = false;
                                 });
                                 if (mounted) {
+                                  print('index change player ${notifier.firstcurrentIndex} ${notifier.currentIndex}');
                                   setState(() {
                                     _videoDuration = value.videoDuration ?? 0;
                                     _currentPosition = value.seekValue ?? 0;
@@ -1422,18 +1425,18 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                                 //   "=============== pause 11".logger();
                                                 //   notifier.vidData?[_curIdx].fAliplayer?.pause();
                                                 // }
-                                        
                                                 ShowBottomSheet().onShowOptionContent(
                                                   context,
                                                   contentData: widget.data!,
                                                   captionTitle: hyppeVid,
                                                   onDetail: false,
+                                                  orientation: widget.orientation,
                                                   isShare: widget.data!.isShared,
                                                   onUpdate: () {
                                                     (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
                                                   },
                                                   fAliplayer: widget.data!.fAliplayer,
-                                                );
+                                                ).then((value) => print('disini datas popup'));
                                               }
                                             }),
                                       ),
