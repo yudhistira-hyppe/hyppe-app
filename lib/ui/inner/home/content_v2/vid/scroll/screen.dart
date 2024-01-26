@@ -33,6 +33,7 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_vio
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/notifier.dart';
@@ -689,7 +690,13 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                     ),
                                     onTap: () {
                                       if (vidData != null) {
-                                        likeNotifier.likePost(context, vidData?[index] ?? ContentData());
+                                        likeNotifier.likePost(context, vidData?[index] ?? ContentData()).then((value) {
+                                          List<ContentData>? vidData = context.read<PreviewVidNotifier>().vidData;
+                                          int idx = vidData!.indexWhere((e) => e.postID == value['_id']);
+                                          vidData[idx].insight?.isPostLiked = value['isPostLiked'];
+                                          vidData[idx].insight?.likes = value['likes'];
+                                          vidData[idx].isLiked = value['isLiked'];
+                                        });
                                       }
                                     },
                                   ),
@@ -797,7 +804,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                 trimLines: 2,
                 textAlign: TextAlign.start,
                 seeLess: ' ${lang?.less}', // ${notifier2.translate.seeLess}',
-                seeMore: '  ${lang?.more}', //${notifier2.translate.seeMoreContent}',
+                seeMore: ' ${lang?.more}', //${notifier2.translate.seeMoreContent}',
                 normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
                 hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
                 expandStyle: const TextStyle(

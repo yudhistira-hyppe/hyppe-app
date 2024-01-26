@@ -799,7 +799,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                         });
                       },
                       seeLess: ' ${lang?.less}',
-                      seeMore: '  ${lang?.more}',
+                      seeMore: ' ${lang?.more}',
                       normStyle: const TextStyle(fontSize: 14, color: kHyppeTextPrimary),
                       hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
                       expandStyle: const TextStyle(fontSize: 14, color: kHyppeTextPrimary, fontWeight: FontWeight.bold),

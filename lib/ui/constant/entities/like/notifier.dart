@@ -98,8 +98,9 @@ class LikeNotifier with ChangeNotifier {
   }
 
   bool? change;
-  Future<void> likePost(BuildContext context, ContentData postData) async {
+  Future<Map<String,dynamic>> likePost(BuildContext context, ContentData postData) async {
     print('liked ${postData.insight?.isloading}');
+    Map<String,dynamic> isLikedPost = {};
     if (postData.insight?.isloading == false) {
       print('ini like00');
       _isLoading = true;
@@ -114,6 +115,12 @@ class LikeNotifier with ChangeNotifier {
             postData.isLiked = false;
             postData.insight?.isPostLiked = false;
             postData.insight?.likes = (postData.insight?.likes ?? 1) - 1;
+            isLikedPost = {
+              '_id': postData.postID,
+              'isPostLiked': postData.insight?.isPostLiked,
+              'likes': postData.insight?.likes,
+              'isLiked': postData.isLiked
+            };
             notifyListeners();
           }
           _isLoading = false;
@@ -126,6 +133,12 @@ class LikeNotifier with ChangeNotifier {
             postData.isLiked = true;
             postData.insight?.isPostLiked = true;
             postData.insight?.likes = (postData.insight?.likes ?? 0) + 1;
+            isLikedPost = {
+              '_id': postData.postID,
+              'isPostLiked': postData.insight?.isPostLiked,
+              'likes': postData.insight?.likes,
+              'isLiked': postData.isLiked
+            };
             notifyListeners();
           }
           _isLoading = false;
@@ -136,6 +149,8 @@ class LikeNotifier with ChangeNotifier {
         e.logger();
       }
     }
+
+    return isLikedPost;
   }
 
   onLikeComment(BuildContext context, {required Comments comment, required ReactionInteractive rData}) async {

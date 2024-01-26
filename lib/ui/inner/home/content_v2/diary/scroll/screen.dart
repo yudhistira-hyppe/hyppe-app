@@ -59,6 +59,8 @@ import 'package:visibility_detector/visibility_detector.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:hyppe/ui/constant/widget/sticker_overlay.dart';
 
+import '../preview/notifier.dart';
+
 class ScrollDiary extends StatefulWidget {
   final SlidedDiaryDetailScreenArgument? arguments;
   const ScrollDiary({
