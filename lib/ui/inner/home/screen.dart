@@ -267,10 +267,11 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                     return false;
                   } else {
                     // with NestedScrollView local(depth == 2) OverscrollNotification are not sent
-                    if (notification is OverscrollNotification || Platform.isIOS) {
-                      return notification.depth == 2;
-                    }
-                    return notification.depth == 0;
+                    // if (notification is OverscrollNotification || Platform.isIOS) {
+                    //   return notification.depth == 2;
+                    // }
+                    // return notification.depth == 0;
+                    return true;
                     // if (_tabController.index != 0) {}
                     // return notification.depth == 0;
                   }
@@ -292,7 +293,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                     // key: context.read<MainNotifier>().globalKey,
                     key: globalKey,
                     controller: context.read<MainNotifier>().scrollController,
-                    // physics: const NeverScrollableScrollPhysics(),
+                    physics: const AlwaysScrollableScrollPhysics(),
                     // dragStartBehavior: DragStartBehavior.start,
                     headerSliverBuilder: (context, bool innerBoxIsScrolled) {
                       return [

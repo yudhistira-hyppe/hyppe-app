@@ -674,7 +674,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                           }),
                     ),
                     Expanded(
-                      child: pics?.isEmpty ?? [].isEmpty
+                      child: (pics?.isEmpty ?? true)
                           ? const NoResultFound()
                           : RefreshIndicator(
                               onRefresh: () async {

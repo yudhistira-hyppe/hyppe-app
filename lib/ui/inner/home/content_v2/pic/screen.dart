@@ -150,15 +150,15 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       print("===============init ali player ${fAliplayer?.playerId} ===========");
 
       //scroll
-      if (mounted) {
-        Future.delayed(const Duration(milliseconds: 500), () {
-          print("=========== global key prirnt ${widget.scrollController} ");
-          widget.scrollController?.addListener(() async {
-            double offset = widget.scrollController?.position.pixels ?? 0;
-            if (mounted) await toPosition(offset, notifier);
-          });
-        });
-      }
+      // if (mounted) {
+      //   Future.delayed(const Duration(milliseconds: 500), () {
+      //     print("=========== global key prirnt ${widget.scrollController} ");
+      //     widget.scrollController?.addListener(() async {
+      //       double offset = widget.scrollController?.position.pixels ?? 0;
+      //       if (mounted) await toPosition(offset, notifier);
+      //     });
+      //   });
+      // }
     });
     context.read<HomeNotifier>().removeWakelock();
     super.initState();

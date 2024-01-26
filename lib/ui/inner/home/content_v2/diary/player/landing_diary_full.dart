@@ -87,6 +87,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
   int _lastCurIndex = -1;
   String _curPostId = '';
   String _lastCurPostId = '';
+  int seekPosition = 0;
 
   String auth = '';
   String url = '';
@@ -122,6 +123,9 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
     _pageController = PageController(initialPage: widget.argument.index.toInt());
     _curIdx = widget.argument.index.toInt();
     _lastCurIndex = widget.argument.index.toInt();
+    seekPosition = widget.argument.seekPosition ?? 0;
+
+    notifier.currIndex = widget.argument.index.toInt();
 
     // stopwatch = new Stopwatch()..start();
 
@@ -183,7 +187,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
       });
       isPlay = true;
       dataSelected?.isDiaryPlay = true;
-      fAliplayer?.seekTo(widget.argument.seekPosition ?? 0, 1);
+      fAliplayer?.seekTo(seekPosition, 1);
       // _initAds(context);
     });
     fAliplayer?.setOnRenderingStart((playerId) {
@@ -250,6 +254,9 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
       }
     });
     fAliplayer?.setOnSeekComplete((playerId) {
+      setState(() {
+        seekPosition = 0;
+      });
       // _inSeek = false;
     });
     fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
@@ -775,6 +782,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
             onPageChanged: (index) async {
               _curIdx = index;
               if (_lastCurIndex != _curIdx) {
+                notifier.currIndex = _curIdx;
                 if (!isShowingDialog) {
                   globalAdsPopUp?.pause();
                 }

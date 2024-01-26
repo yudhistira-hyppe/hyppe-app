@@ -643,6 +643,7 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
                   physics: const AlwaysScrollableScrollPhysics(),
                   itemCount: diaryData?.length ?? 0,
                   onPageChanged: (index) {
+                    print("===asdasdasd $index");
                     _curIdx = index;
                     if (_lastCurIndex != _curIdx) {
                       try {
@@ -710,61 +711,63 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
   Widget itemDiary(ScrollDiaryNotifier notifier, int index) {
     return Stack(
       children: [
-        FutureBuilder(
-            future: Future.wait([for (StickerModel sticker in diaryData?[index].stickers ?? []) precacheImage(NetworkImage(sticker.image ?? ''), context)]),
-            builder: (context, snapshot) {
-              return Builder(builder: (context) {
-                // if (!isloading) {
-                //   return AliPlayerView(
-                //     onCreated: onViewPlayerCreated,
-                //     x: 0,
-                //     y: 0,
-                //     height: MediaQuery.of(context).size.width * 16.0 / 9.0,
-                //     width: MediaQuery.of(context).size.width,
-                //   );
-                // }
-                return Stack(
-                  children: [
-                    AliPlayerView(
-                      onCreated: onViewPlayerCreated,
-                      x: 0,
-                      y: 0,
-                      height: MediaQuery.of(context).size.width * 16.0 / 9.0,
-                      width: MediaQuery.of(context).size.width,
-                    ),
-                    Visibility(
-                      visible: isPlay,
-                      child: StickerOverlay(
-                        fullscreen: false,
-                        stickers: diaryData?[index].stickers,
-                        width: MediaQuery.of(context).size.width,
-                        height: (MediaQuery.of(context).size.width) * (16 / 9),
-                        isPause: isPause || _showLoading,
-                        canPause: true,
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: AnimatedOpacity(
-                        opacity: opacityLevel,
-                        duration: const Duration(milliseconds: 500),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Opacity(
-                            opacity: 0.4,
-                            child: Icon(
-                              isPause ? Icons.play_arrow_rounded : Icons.pause_rounded,
-                              size: 100,
-                              color: Colors.white,
+        _curIdx == index
+            ? FutureBuilder(
+                future: Future.wait([for (StickerModel sticker in diaryData?[index].stickers ?? []) precacheImage(NetworkImage(sticker.image ?? ''), context)]),
+                builder: (context, snapshot) {
+                  return Builder(builder: (context) {
+                    // if (!isloading) {
+                    //   return AliPlayerView(
+                    //     onCreated: onViewPlayerCreated,
+                    //     x: 0,
+                    //     y: 0,
+                    //     height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                    //     width: MediaQuery.of(context).size.width,
+                    //   );
+                    // }
+                    return Stack(
+                      children: [
+                        AliPlayerView(
+                          onCreated: onViewPlayerCreated,
+                          x: 0,
+                          y: 0,
+                          height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                          width: MediaQuery.of(context).size.width,
+                        ),
+                        Visibility(
+                          visible: isPlay,
+                          child: StickerOverlay(
+                            fullscreen: false,
+                            stickers: diaryData?[index].stickers,
+                            width: MediaQuery.of(context).size.width,
+                            height: (MediaQuery.of(context).size.width) * (16 / 9),
+                            isPause: isPause || _showLoading,
+                            canPause: true,
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: AnimatedOpacity(
+                            opacity: opacityLevel,
+                            duration: const Duration(milliseconds: 500),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Opacity(
+                                opacity: 0.4,
+                                child: Icon(
+                                  isPause ? Icons.play_arrow_rounded : Icons.pause_rounded,
+                                  size: 100,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                  ],
-                );
-              });
-            }),
+                      ],
+                    );
+                  });
+                })
+            : Container(),
 
         // _buildProgressBar(SizeConfig.screenWidth!, 500),
         !notifier.connectionError

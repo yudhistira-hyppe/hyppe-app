@@ -38,6 +38,9 @@ class PreviewDiaryNotifier with ChangeNotifier {
 
   List<ContentData>? get diaryData => _diaryData;
 
+  int currIndex = 0;
+  int get currentIndex => currIndex;
+
   set diaryData(List<ContentData>? val) {
     _diaryData = val;
     notifyListeners();
@@ -221,10 +224,10 @@ class PreviewDiaryNotifier with ChangeNotifier {
     }
   }
 
-  void navigateToShortVideoPlayer(BuildContext context, int index, {List<ContentData>? data, Function(int e)? function, bool? isMute, int? seekPosition}) async {
+  Future navigateToShortVideoPlayer(BuildContext context, int index, {List<ContentData>? data, Function(int e)? function, bool? isMute, int? seekPosition}) async {
     final connect = await _system.checkConnections();
     if (connect) {
-      _routing.move(
+      var res = await _routing.move(
         Routes.diaryFull,
         argument: DiaryDetailScreenArgument(
           diaryData: diaryData,
@@ -237,6 +240,7 @@ class PreviewDiaryNotifier with ChangeNotifier {
           seekPosition: seekPosition,
         ),
       );
+      return res;
     } else {
       ShowBottomSheet.onNoInternetConnection(Routing.navigatorKey.currentContext ?? context);
     }

@@ -287,6 +287,8 @@ class ContentData {
     this.isContentLoading,
   });
 
+
+
   ContentData.fromJson(Map<String, dynamic> json) {
     metadata = json['metadata'] != null ? Metadata.fromJson(json['metadata']) : null;
     mediaBasePath = json['mediaBasePath'];

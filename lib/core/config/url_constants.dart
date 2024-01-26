@@ -81,7 +81,7 @@ class UrlConstants {
 
   static const String userbankaccountsRoute = "/api/userbankaccounts";
 
-  static const String accountBalancesRoutes = "/api/accountbalances/v2";
+  static const String accountBalancesRoutes = "/api/accountbalances";
 
   /* Post route */
   static const String contentRouteV3 = "/api/getusercontents";
@@ -350,16 +350,16 @@ class UrlConstants {
   static const String getBankByCode = "$bankRoute/search";
 
   /// post => Create account Bank
-  static const String userBankAccounts = "$userbankaccountsRoute/";
+  static const String userBankAccounts = "$userbankaccountsRoute/v2";
 
   /// post => Get List bank account
-  static const String myUserBankAccounts = "$userbankaccountsRoute/byuser";
+  static const String myUserBankAccounts = "$userbankaccountsRoute/byuser/v2";
 
   /// post => Get List bank account
   static const String deleteUserBankAccounts = "$userbankaccountsRoute/delete";
 
   /// post => Get Account Balance
-  static const String accountBalances = "$accountBalancesRoutes/";
+  static const String accountBalances = "$accountBalancesRoutes/v2";
 
   /// post => Get Account Balance
   static const String detailRewards = "$accountBalancesRoutes/detailrewards";
@@ -414,7 +414,7 @@ class UrlConstants {
   static const String detailTypeAppeal = "/api/reportuser/detailreason";
 
   static const String appealPost = "/api/reportuser/appeal";
-  static const String createTicket = "/api/usertickets/createticket";
+  static const String createTicket = "/api/usertickets/createticket/v2";
 
   /// ===music===
   static const String getMusicGenre = "/api/genre/";
