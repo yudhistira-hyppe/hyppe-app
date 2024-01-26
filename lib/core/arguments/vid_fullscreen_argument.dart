@@ -6,7 +6,8 @@ class VidFullscreenArgument {
   ContentData data;
   int index;
   bool? scrollVid;
+  bool? isMute;
   final PageSrc? pageSrc;
   final String? key;
-  VidFullscreenArgument({required this.vidData, required this.data, required this.index, this.scrollVid, this.pageSrc, this.key});
+  VidFullscreenArgument({required this.vidData, required this.data, required this.index, this.scrollVid, this.pageSrc, this.key, this.isMute});
 }

@@ -440,330 +440,333 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
     };
     print('view ads: ${widget.isAutoPlay ?? false}');
     return Consumer<VideoNotifier>(builder: (context, notifier, _) {
-      return Scaffold(
-        key: _scaffoldKeyPlayer,
-        body: notifier.loadVideo
-            ? Container(
-                color: Colors.black,
-                child: const Center(
-                  child: CircularProgressIndicator(),
-                ),
-              )
-            : widget.isAutoPlay ?? false
-                ? PageView.builder(
-                    controller: controller,
-                    scrollDirection: Axis.vertical,
-                    itemCount: vidData?.length ?? 0,
-                    onPageChanged: (value) {
-                      curentIndex = value;
-                      scrollPage(vidData?[value].metadata?.height, vidData?[value].metadata?.width);
-                      if ((vidData?.length ?? 0) - 1 == curentIndex) {
-                        //get new data;
-                        getNewData();
-                      }
-                    },
-                    itemBuilder: (context, index) {
-                      if (index != curentIndex) {
-                        return Container(
-                          color: Colors.black,
-                        );
-                      }
-                      "================== isPause $isPause $isScrolled".logger();
-                      if (isScrolled) {
-                        // return Container(
-                        //   height: MediaQuery.of(context).size.height,
-                        //   width: MediaQuery.of(context).size.width,
-                        //   child: Center(child: Text("data ${index}")),
-                        // );
-                        print('view ads: 1');
+      return GestureDetector(
+        onPanUpdate: (details) {
+          print("========popopopopopopopop ${details.delta.dx}========");
+          if (details.delta.dx < -10) {
+            print("========popopopopopopopop========");
+// Upon swiping detection it then pops the screen - reverse animation happens without additional code
+            // Navigator.pop(context);
+          }
+        },
+        child: Scaffold(
+          key: _scaffoldKeyPlayer,
+          body: notifier.loadVideo
+              ? Container(
+                  color: Colors.black,
+                  child: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+              : widget.isAutoPlay ?? false
+                  ? PageView.builder(
+                      controller: controller,
+                      scrollDirection: Axis.vertical,
+                      itemCount: vidData?.length ?? 0,
+                      onPageChanged: (value) {
+                        curentIndex = value;
 
-                        return isloadingRotate
-                            ? Container(
-                                color: Colors.black,
-                                height: MediaQuery.of(context).size.height,
-                                width: MediaQuery.of(context).size.width,
-                                child: const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              )
-                            : OrientationBuilder(builder: (context, orientation) {
-                                final player = VidPlayerPage(
-                                  // vidData: notifier.vidData,
-                                  fromFullScreen: true,
-                                  orientation: orientation,
-                                  playMode: (vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
-                                  dataSourceMap: map,
-                                  data: vidData?[index],
+                        notifier.currIndex = value;
+                        print('index change ${notifier.currentIndex}');
+                        scrollPage(vidData?[value].metadata?.height, vidData?[value].metadata?.width);
+                        if ((vidData?.length ?? 0) - 1 == curentIndex) {
+                          //get new data;
+                          getNewData();
+                        }
+                      },
+                      itemBuilder: (context, index) {
+                        if (index != curentIndex) {
+                          return Container(
+                            color: Colors.black,
+                          );
+                        }
+                        "================== isPause $isPause $isScrolled".logger();
+                        if (isScrolled) {
+                          // return Container(
+                          //   height: MediaQuery.of(context).size.height,
+                          //   width: MediaQuery.of(context).size.width,
+                          //   child: Center(child: Text("data ${index}")),
+                          // );
+                          print('view ads: 1');
+
+                          return isloadingRotate
+                              ? Container(
+                                  color: Colors.black,
                                   height: MediaQuery.of(context).size.height,
                                   width: MediaQuery.of(context).size.width,
-                                  inLanding: widget.isLanding,
-                                  fromDeeplink: false,
-                                  clearPostId: widget.clearPostId,
-                                  clearing: true,
-                                  isAutoPlay: true,
-                                  functionFullTriger: (value) {
-                                    print('===========hahhahahahaa===========');
-                                  },
-                                  isPlaying: !isPause,
-                                  onPlay: (exec) {},
-                                  getPlayer: (main, id) {},
-                                  getAdsPlayer: (ads) {
-                                    // notifier.vidData?[index].fAliplayerAds = ads;
-                                  },
-                                  autoScroll: () {
-                                    nextPage();
-                                  },
-                                  prevScroll: () {
-                                    previousPage();
-                                  },
-                                  // fAliplayer: notifier.vidData?[index].fAliplayer,
-                                  // fAliplayerAds: notifier.vidData?[index].fAliplayerAds,
-                                );
-                                if (orientation == Orientation.landscape) {
-                                  return Container(
-                                    width: context.getWidth(),
-                                    height: context.getHeight(),
-                                    child: player,
+                                  child: const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                )
+                              : OrientationBuilder(builder: (context, orientation) {
+                                  final player = VidPlayerPage(
+                                    // vidData: notifier.vidData,
+                                    fromFullScreen: true,
+                                    orientation: orientation,
+                                    playMode: (vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
+                                    dataSourceMap: map,
+                                    data: vidData?[index],
+                                    height: MediaQuery.of(context).size.height,
+                                    width: MediaQuery.of(context).size.width,
+                                    inLanding: widget.isLanding,
+                                    fromDeeplink: false,
+                                    clearPostId: widget.clearPostId,
+                                    clearing: true,
+                                    isAutoPlay: true,
+                                    functionFullTriger: (value) {
+                                      print('===========hahhahahahaa===========');
+                                    },
+                                    isPlaying: !isPause,
+                                    onPlay: (exec) {},
+                                    getPlayer: (main, id) {},
+                                    getAdsPlayer: (ads) {
+                                      // notifier.vidData?[index].fAliplayerAds = ads;
+                                    },
+                                    autoScroll: () {
+                                      nextPage();
+                                    },
+                                    prevScroll: () {
+                                      previousPage();
+                                    },
+                                    // fAliplayer: notifier.vidData?[index].fAliplayer,
+                                    // fAliplayerAds: notifier.vidData?[index].fAliplayerAds,
                                   );
-                                }
-                                return player;
-                              });
-                      } else {
-                        print('view ads: 2 ${notifier.isShowingAds} ${notifier.hasShowedAds}');
-                        return GestureDetector(
-                          onTap: () {
-                            onTapCtrl = true;
-                            setState(() {});
-                          },
-                          child: Container(
-                            height: SizeConfig.screenHeight,
-                            width: SizeConfig.screenWidth,
-                            foregroundDecoration: BoxDecoration(
-                              color: Colors.transparent,
-                            ),
-                            child: Stack(
-                              children: [
-                                if (!notifier.isShowingAds)
-                                  Positioned.fill(
+                                  if (orientation == Orientation.landscape) {
+                                    return Container(
+                                      width: context.getWidth(),
+                                      height: context.getHeight(),
+                                      child: player,
+                                    );
+                                  }
+                                  return player;
+                                });
+                        } else {
+                          print('view ads: 2 ${notifier.isShowingAds} ${notifier.hasShowedAds}');
+                          return GestureDetector(
+                            onTap: () {
+                              onTapCtrl = true;
+                              setState(() {});
+                            },
+                            child: Container(
+                              height: SizeConfig.screenHeight,
+                              width: SizeConfig.screenWidth,
+                              foregroundDecoration: BoxDecoration(
+                                color: Colors.transparent,
+                              ),
+                              child: Stack(
+                                children: [
+                                  if (!notifier.isShowingAds)
+                                    Positioned.fill(
+                                      child: Container(
+                                        width: context.getWidth(),
+                                        height: SizeConfig.screenHeight,
+                                        decoration: const BoxDecoration(color: Colors.black),
+                                        child: widget.aliPlayerView,
+                                      ),
+                                    ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      //// fungsi tap dimana saja
+                                      onTapCtrl = true;
+                                      setState(() {});
+                                    },
                                     child: Container(
+                                      color: Colors.transparent,
+                                      height: SizeConfig.screenHeight,
+                                      width: SizeConfig.screenWidth,
+                                    ),
+                                  ),
+                                  if (!_showTipsWidget)
+                                    SizedBox(
+                                      width: context.getWidth(),
+                                      height: SizeConfig.screenHeight,
+                                      // padding: EdgeInsets.only(bottom: 25.0),
+                                      child: Offstage(offstage: false, child: _buildContentWidget(context, orientation)),
+                                    ),
+                                  Align(
+                                    alignment: Alignment.topCenter,
+                                    child: _buildController(Colors.transparent, Colors.white, 100, context.getWidth(), SizeConfig.screenHeight! * 0.8, orientation),
+                                  ),
+                                  // if (Platform.isIOS)
+                                  AnimatedOpacity(
+                                    opacity: onTapCtrl || isPause ? 1.0 : 0.0,
+                                    duration: const Duration(milliseconds: 500),
+                                    onEnd: _onPlayerHide,
+                                    child: Container(
+                                      height: orientation == Orientation.portrait ? kToolbarHeight * 2 : kToolbarHeight * 1.4,
+                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 18.0),
+                                      child: CustomAppBar(
+                                          orientation: orientation,
+                                          data: widget.data,
+                                          currentPosition: _currentPosition,
+                                          currentPositionText: _currentPositionText,
+                                          email: email,
+                                          lang: lang!,
+                                          videoDuration: _videoDuration,
+                                          showTipsWidget: _showTipsWidget,
+                                          isMute: isMute,
+                                          onTapOnProfileImage: () {
+                                            System().navigateToProfile(context, widget.data.email ?? '');
+                                            widget.fAliplayer?.pause();
+                                            isPause = true;
+                                            setState(() {});
+                                          },
+                                          onTap: () {
+                                            if (widget.data.email != email) {
+                                              // FlutterAliplayer? fAliplayer
+                                              context.read<PreviewPicNotifier>().reportContent(context, widget.data, fAliplayer: widget.data.fAliplayer, onCompleted: () async {
+                                                imageCache.clear();
+                                                imageCache.clearLiveImages();
+                                                await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
+                                              });
+                                            } else {
+                                              // if (_curIdx != -1) {
+                                              //   "=============== pause 11".logger();
+                                              //   notifier.vidData?[_curIdx].fAliplayer?.pause();
+                                              // }
+
+                                              ShowBottomSheet().onShowOptionContent(
+                                                context,
+                                                contentData: widget.data,
+                                                captionTitle: hyppeVid,
+                                                onDetail: false,
+                                                isShare: widget.data.isShared,
+                                                onUpdate: () {
+                                                  (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
+                                                },
+                                                fAliplayer: widget.data.fAliplayer,
+                                              );
+                                            }
+                                          }),
+                                    ),
+                                  ),
+                                  if (isLoadingVid)
+                                    Container(
+                                      width: context.getWidth(),
+                                      height: SizeConfig.screenHeight,
+                                      padding: EdgeInsets.only(bottom: 20),
+                                      color: Colors.transparent,
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          const CircularProgressIndicator(),
+                                          sixPx,
+                                          Text(
+                                            "$_loadingPercent%",
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  if (notifier.isShowingAds && !notifier.hasShowedAds)
+                                    Container(
                                       width: context.getWidth(),
                                       height: SizeConfig.screenHeight,
                                       decoration: const BoxDecoration(color: Colors.black),
-                                      child: widget.aliPlayerView,
+                                      child: notifier.adsAliPlayerView,
                                     ),
-                                  ),
-                                GestureDetector(
-                                  onTap: () {
-                                    //// fungsi tap dimana saja
-                                    onTapCtrl = true;
-                                    setState(() {});
-                                  },
-                                  child: Container(
-                                    color: Colors.transparent,
-                                    height: SizeConfig.screenHeight,
-                                    width: SizeConfig.screenWidth,
-                                  ),
-                                ),
-                                if (!_showTipsWidget)
-                                  SizedBox(
-                                    width: context.getWidth(),
-                                    height: SizeConfig.screenHeight,
-                                    // padding: EdgeInsets.only(bottom: 25.0),
-                                    child: Offstage(offstage: false, child: _buildContentWidget(context, orientation)),
-                                  ),
-                                Align(
-                                  alignment: Alignment.topCenter,
-                                  child: _buildController(
-                                    Colors.transparent,
-                                    Colors.white,
-                                    100,
-                                    context.getWidth(),
-                                    SizeConfig.screenHeight ?? 0,
-                                  ),
-                                ),
-                                // if (Platform.isIOS)
-                                AnimatedOpacity(
-                                  opacity: onTapCtrl || isPause ? 1.0 : 0.0,
-                                  duration: const Duration(milliseconds: 500),
-                                  onEnd: _onPlayerHide,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 18.0),
-                                    child: CustomAppBar(
-                                        orientation: orientation,
-                                        data: widget.data,
-                                        currentPosition: _currentPosition,
-                                        currentPositionText: _currentPositionText,
-                                        email: email,
-                                        lang: lang!,
-                                        videoDuration: _videoDuration,
-                                        showTipsWidget: _showTipsWidget,
-                                        isMute: isMute,
-                                        onTapOnProfileImage: () {
-                                          System().navigateToProfile(context, widget.data.email ?? '');
-                                          widget.fAliplayer?.pause();
-                                          isPause = true;
-                                          setState(() {});
-                                        },
-                                        onTap: () {
-                                          if (widget.data.email != email) {
-                                            // FlutterAliplayer? fAliplayer
-                                            context.read<PreviewPicNotifier>().reportContent(context, widget.data, fAliplayer: widget.data.fAliplayer, onCompleted: () async {
-                                              imageCache.clear();
-                                              imageCache.clearLiveImages();
-                                              await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
-                                            });
-                                          } else {
-                                            // if (_curIdx != -1) {
-                                            //   "=============== pause 11".logger();
-                                            //   notifier.vidData?[_curIdx].fAliplayer?.pause();
-                                            // }
-
-                                            ShowBottomSheet().onShowOptionContent(
-                                              context,
-                                              contentData: widget.data,
-                                              captionTitle: hyppeVid,
-                                              onDetail: false,
-                                              isShare: widget.data.isShared,
-                                              onUpdate: () {
-                                                (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
-                                              },
-                                              fAliplayer: widget.data.fAliplayer,
-                                            );
-                                          }
-                                        }),
-                                  ),
-                                ),
-                                if (isLoadingVid)
-                                  Container(
-                                    width: context.getWidth(),
-                                    height: SizeConfig.screenHeight,
-                                    padding: EdgeInsets.only(bottom: 20),
-                                    color: Colors.transparent,
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        const CircularProgressIndicator(),
-                                        sixPx,
-                                        Text(
-                                          "$_loadingPercent%",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ],
+                                  if (notifier.isShowingAds && !notifier.hasShowedAds)
+                                    SizedBox(
+                                      width: context.getWidth(),
+                                      height: SizeConfig.screenHeight,
+                                      // padding: EdgeInsets.only(bottom: 25.0),
+                                      child: Offstage(offstage: false, child: _adsBuildContentWidget(context, Orientation.portrait, notifier)),
                                     ),
-                                  ),
-                                if (notifier.isShowingAds && !notifier.hasShowedAds)
-                                  Container(
-                                    width: context.getWidth(),
-                                    height: SizeConfig.screenHeight,
-                                    decoration: const BoxDecoration(color: Colors.black),
-                                    child: notifier.adsAliPlayerView,
-                                  ),
-                                if (notifier.isShowingAds && !notifier.hasShowedAds)
-                                  SizedBox(
-                                    width: context.getWidth(),
-                                    height: SizeConfig.screenHeight,
-                                    // padding: EdgeInsets.only(bottom: 25.0),
-                                    child: Offstage(offstage: false, child: _adsBuildContentWidget(context, Orientation.portrait, notifier)),
-                                  ),
-                                checkDetail(context, notifier),
-                              ],
+                                  checkDetail(context, notifier),
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      }
-                    })
-                : GestureDetector(
-                    onTap: () {
-                      onTapCtrl = true;
-                      setState(() {});
-                    },
-                    child: Stack(
-                      children: [
-                        Container(
-                          width: context.getWidth(),
-                          height: SizeConfig.screenHeight,
-                          decoration: const BoxDecoration(color: Colors.black),
-                          child: widget.aliPlayerView,
-                        ),
-                        if (!_showTipsWidget)
-                          SizedBox(
-                            width: context.getWidth(),
-                            height: SizeConfig.screenHeight,
-                            // padding: EdgeInsets.only(bottom: 25.0),
-                            child: Offstage(offstage: false, child: _buildContentWidget(context, orientation)),
-                          ),
-                        Align(
-                          alignment: Alignment.topCenter,
-                          child: _buildController(
-                            Colors.transparent,
-                            Colors.white,
-                            100,
-                            context.getWidth(),
-                            SizeConfig.screenHeight ?? 0,
-                          ),
-                        ),
-                        // if (Platform.isIOS)
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: IconButton(
-                              onPressed: () {
-                                int changevalue;
-                                changevalue = _currentPosition + 1000;
-                                if (changevalue > _videoDuration) {
-                                  changevalue = _videoDuration;
-                                }
-                                widget.data.isLoading = true;
-                                setState(() {});
-                                Navigator.pop(context,
-                                    VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
-                              },
-                              padding: orientation == Orientation.portrait ? const EdgeInsets.symmetric(horizontal: 8.0, vertical: 42.0) : const EdgeInsets.symmetric(horizontal: 46.0, vertical: 8.0),
-                              icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg", defaultColor: false),
-                            ),
-                          ),
-                        ),
-                        if (isLoadingVid)
-                          Container(
-                            width: context.getWidth(),
-                            height: SizeConfig.screenHeight,
-                            padding: EdgeInsets.only(bottom: 20),
-                            color: Colors.transparent,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const CircularProgressIndicator(),
-                                sixPx,
-                                Text(
-                                  "$_loadingPercent%",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ],
-                            ),
-                          ),
-                        if (notifier.isShowingAds && !notifier.hasShowedAds)
+                          );
+                        }
+                      })
+                  : GestureDetector(
+                      onTap: () {
+                        onTapCtrl = true;
+                        setState(() {});
+                      },
+                      child: Stack(
+                        children: [
                           Container(
                             width: context.getWidth(),
                             height: SizeConfig.screenHeight,
                             decoration: const BoxDecoration(color: Colors.black),
-                            child: notifier.adsAliPlayerView,
+                            child: widget.aliPlayerView,
                           ),
-                        if (notifier.isShowingAds && !notifier.hasShowedAds)
-                          SizedBox(
-                            width: context.getWidth(),
-                            height: SizeConfig.screenHeight,
-                            // padding: EdgeInsets.only(bottom: 25.0),
-                            child: Offstage(offstage: false, child: _adsBuildContentWidget(context, Orientation.portrait, notifier)),
+                          if (!_showTipsWidget)
+                            SizedBox(
+                              width: context.getWidth(),
+                              height: SizeConfig.screenHeight,
+                              // padding: EdgeInsets.only(bottom: 25.0),
+                              child: Offstage(offstage: false, child: _buildContentWidget(context, orientation)),
+                            ),
+                          Align(
+                            alignment: Alignment.topCenter,
+                            child: _buildController(Colors.transparent, Colors.white, 100, context.getWidth(), SizeConfig.screenHeight! * 0.8, orientation),
                           ),
-                        checkDetail(context, notifier),
-                      ],
+                          // if (Platform.isIOS)
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: IconButton(
+                                onPressed: () {
+                                  int changevalue;
+                                  changevalue = _currentPosition + 1000;
+                                  if (changevalue > _videoDuration) {
+                                    changevalue = _videoDuration;
+                                  }
+                                  widget.data.isLoading = true;
+                                  setState(() {});
+                                  Navigator.pop(context,
+                                      VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
+                                },
+                                padding:
+                                    orientation == Orientation.portrait ? const EdgeInsets.symmetric(horizontal: 8.0, vertical: 42.0) : const EdgeInsets.symmetric(horizontal: 46.0, vertical: 8.0),
+                                icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg", defaultColor: false),
+                              ),
+                            ),
+                          ),
+                          if (isLoadingVid)
+                            Container(
+                              width: context.getWidth(),
+                              height: SizeConfig.screenHeight,
+                              padding: EdgeInsets.only(bottom: 20),
+                              color: Colors.transparent,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const CircularProgressIndicator(),
+                                  sixPx,
+                                  Text(
+                                    "$_loadingPercent%",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          if (notifier.isShowingAds && !notifier.hasShowedAds)
+                            Container(
+                              width: context.getWidth(),
+                              height: SizeConfig.screenHeight,
+                              decoration: const BoxDecoration(color: Colors.black),
+                              child: notifier.adsAliPlayerView,
+                            ),
+                          if (notifier.isShowingAds && !notifier.hasShowedAds)
+                            SizedBox(
+                              width: context.getWidth(),
+                              height: SizeConfig.screenHeight,
+                              // padding: EdgeInsets.only(bottom: 25.0),
+                              child: Offstage(offstage: false, child: _adsBuildContentWidget(context, Orientation.portrait, notifier)),
+                            ),
+                          checkDetail(context, notifier),
+                        ],
+                      ),
                     ),
-                  ),
+        ),
       );
     });
     // return WillPopScope(
@@ -1285,6 +1288,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                       if (widget.data.isShared ?? false)
                         buttonVideoRight(
                             onFunctionTap: () {
+                              widget.fAliplayer?.pause();
                               context.read<VidDetailNotifier>().createdDynamicLink(context, data: widget.data);
                             },
                             iconData: '${AssetPath.vectorPath}share-shadow.svg',
@@ -1349,36 +1353,16 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                             Visibility(
                               visible: widget.data.location != '',
                               child: Container(
+                                // width: SizeConfig.screenWidth! * .18,
                                 decoration: BoxDecoration(color: kHyppeBackground.withOpacity(.4), borderRadius: BorderRadius.circular(8.0)),
-                                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: (widget.data.tagPeople?.isNotEmpty ?? false) ? 12.0 : 0.0,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const CustomIconWidget(
-                                        iconData: '${AssetPath.vectorPath}map-light.svg',
-                                        defaultColor: false,
-                                        height: 16,
-                                      ),
-                                      const SizedBox(
-                                        width: 4.0,
-                                      ),
-                                      SizedBox(
-                                        width: widget.data.tagPeople?.isNotEmpty ?? false ? SizeConfig.screenWidth! * .4 : SizeConfig.screenWidth! * .65,
-                                        child: Text(
-                                          '${widget.data.location}',
-                                          maxLines: 1,
-                                          style: const TextStyle(color: kHyppeLightBackground),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 6,
                                 ),
+                                child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 8.0,
+                                    ),
+                                    child: location()),
                               ),
                             ),
                           ],
@@ -1663,6 +1647,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
     double barHeight,
     double width,
     double height,
+    Orientation orientation,
   ) {
     return AnimatedOpacity(
       opacity: onTapCtrl || isPause ? 1.0 : 0.0,
@@ -1670,8 +1655,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
       onEnd: _onPlayerHide,
       child: Center(
         child: Container(
-          width: SizeConfig.screenWidth! * .7,
-          // height: height * 0.8,
+          width: orientation == Orientation.landscape ? width * .35 : width * .8,
           decoration: BoxDecoration(
             color: backgroundColor,
           ),
@@ -1881,6 +1865,60 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
   Size _textSize(String text, TextStyle style) {
     final TextPainter textPainter = TextPainter(text: TextSpan(text: text, style: style), maxLines: 1, textDirection: TextDirection.ltr)..layout(minWidth: 0, maxWidth: double.infinity);
     return textPainter.size;
+  }
+
+  Widget location() {
+    switch (orientation) {
+      case Orientation.portrait:
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const CustomIconWidget(
+              iconData: '${AssetPath.vectorPath}map-light.svg',
+              defaultColor: false,
+              height: 16,
+            ),
+            const SizedBox(
+              width: 4.0,
+            ),
+            SizedBox(
+              width: widget.data.tagPeople?.isNotEmpty ?? false ? SizeConfig.screenWidth! * .4 : SizeConfig.screenWidth! * .65,
+              child: Text(
+                '${widget.data.location}',
+                maxLines: 1,
+                style: const TextStyle(color: kHyppeLightBackground),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        );
+
+      default:
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const CustomIconWidget(
+              iconData: '${AssetPath.vectorPath}map-light.svg',
+              defaultColor: false,
+              height: 16,
+            ),
+            const SizedBox(
+              width: 4.0,
+            ),
+            SizedBox(
+              width: widget.data.tagPeople?.isNotEmpty ?? false ? SizeConfig.screenWidth! * .13 : SizeConfig.screenWidth! * .24,
+              child: Text(
+                '${widget.data.location}',
+                maxLines: 1,
+                style: const TextStyle(color: kHyppeLightBackground),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        );
+    }
   }
 }
 

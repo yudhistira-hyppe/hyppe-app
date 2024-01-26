@@ -302,7 +302,7 @@ class ContentData {
     isIdVerified = json['isIdVerified'];
     title = json['title'];
     isViewed = json['isViewed'] ?? false;
-    tags = json['tags'] != null ? json['tags'].cast<String>() : [];
+    // tags = json['tags'] != null ? json['tags'].cast<String>() : [];
     allowComments = json['allowComments'] ?? false;
     certified = json['saleAmount'] != null
         ? json['saleAmount'] > 0

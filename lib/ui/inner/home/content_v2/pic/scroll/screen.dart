@@ -118,6 +118,8 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
   final ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
   final ScrollController _scrollController = ScrollController();
 
+  PageSrc pageSrc = PageSrc.otherProfile;
+
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppePreviewPic');
@@ -160,7 +162,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     });
     var index = 0;
     var lastIndex = 0;
-    final pageSrc = widget.arguments?.pageSrc ?? PageSrc.otherProfile;
+    pageSrc = widget.arguments?.pageSrc ?? PageSrc.otherProfile;
 
     itemPositionsListener.itemPositions.addListener(() async {
       print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
@@ -176,7 +178,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
         if (index == pics!.length - 2) {
           if (connect) {
             if (!notifier.isLoadingLoadmore) {
-              await notifier.loadMore(context, _scrollController, pageSrc, widget.arguments?.key ?? '');
+              await notifier.loadMore(context, _scrollController, pageSrc!, widget.arguments?.key ?? '');
               if (mounted) {
                 setState(() {
                   pics = notifier.pics;
@@ -983,19 +985,21 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                   //   });
                                   //   fAliplayer?.setMuted(isMute);
                                   // }
-                                  var res = await Routing().move(Routes.picScrollFullScreenDetail,
-                                      argument: SlidedPicDetailScreenArgument(
-                                        page: index,
-                                        type: TypePlaylist.mine,
-                                        titleAppbar: widget.arguments!.titleAppbar,
-                                        pageSrc: PageSrc.selfProfile,
-                                        picData: pics,
-                                        scrollController: widget.arguments!.scrollController,
-                                        heightTopProfile: widget.arguments!.heightTopProfile,
-                                      ));
-                                  if (res != null || res == null) {
-                                    fAliplayer?.play();
-                                    fAliplayer?.setMuted(notifier.isMute);
+                                  if (pageSrc == PageSrc.selfProfile || pageSrc == PageSrc.otherProfile) {
+                                    var res = await Routing().move(Routes.picScrollFullScreenDetail,
+                                        argument: SlidedPicDetailScreenArgument(
+                                          page: index,
+                                          type: TypePlaylist.mine,
+                                          titleAppbar: widget.arguments!.titleAppbar,
+                                          pageSrc: PageSrc.selfProfile,
+                                          picData: pics,
+                                          scrollController: widget.arguments!.scrollController,
+                                          heightTopProfile: widget.arguments!.heightTopProfile,
+                                        ));
+                                    if (res != null || res == null) {
+                                      fAliplayer?.play();
+                                      fAliplayer?.setMuted(notifier.isMute);
+                                    }
                                   }
                                 },
                                 onDoubleTap: () {
@@ -1372,7 +1376,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4.0),
                     child: Text(
-                      "${lang?.seeAll} ${pics?[index].comments} ${lang?.comment}",
+                      "${lang?.viewAll} ${pics?[index].comments} ${lang?.comment}",
                       style: const TextStyle(fontSize: 12, color: kHyppeBurem),
                     ),
                   ),

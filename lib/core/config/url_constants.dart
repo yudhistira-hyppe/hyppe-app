@@ -265,7 +265,7 @@ class UrlConstants {
 
   /// post => Get User Profiles by username
   static const String getProfileByUser = "$userRoute/getuserprofile/byusername/v2";
-  
+
   /// post => Log out
   static const String logout = "$userRoute/logout/v2";
 
@@ -274,7 +274,7 @@ class UrlConstants {
 
   /// post => Get Interactives
   static const String getInnteractives = "$postRouteV2/getinteractives/v2";
-   
+
   /// post => Get/Create Discussion
   static const String discuss = "$postRouteV2/disqus/v2";
 
@@ -307,7 +307,7 @@ class UrlConstants {
   static const String landingPageSearch = "$interestCount/default-page";
   static const String getDetailHashtag = "$contentRouteV3/searchdatanew/newdetailtag";
   static const String getDetailInterest = "$contentRouteV3/searchdatanew/newdetailinterest";
-  static const String getSearchContentV5 = "$contentRouteV3/searchdatanew/v2";
+  static const String getSearchContentV5 = "$contentRouteV3/searchdatanew";
   static const String getDetailHashtagV2 = "$contentRouteV3/searchdatanew/newdetailtag/v2";
   static const String getDetailInterestV2 = "$contentRouteV3/searchdatanew/newdetailinterest/v2";
   // v3 delete tag

@@ -96,7 +96,7 @@ class ProfileComponent extends StatelessWidget {
                     GestureDetector(
                       onTap: onTapOnProfileImage as void Function(),
                       child: SizedBox(
-                        width: SizeWidget().calculateSize(widthText ?? 150, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()),
+                        width: widthText,
                         child: Row(
                           children: [
                             Flexible(
@@ -136,7 +136,7 @@ class ProfileComponent extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      width: SizeWidget().calculateSize(widthText ?? 150, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()),
+                      width: widthText,
                       child: isDetail
                           ? CustomStrokeTextWidget(
                               maxLines: 1,
