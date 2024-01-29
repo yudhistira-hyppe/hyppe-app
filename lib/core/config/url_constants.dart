@@ -307,7 +307,7 @@ class UrlConstants {
   static const String landingPageSearch = "$interestCount/default-page";
   static const String getDetailHashtag = "$contentRouteV3/searchdatanew/newdetailtag";
   static const String getDetailInterest = "$contentRouteV3/searchdatanew/newdetailinterest";
-  static const String getSearchContentV5 = "$contentRouteV3/searchdatanew";
+  static const String getSearchContentV5 = "$contentRouteV3/searchdatanew/v2";
   static const String getDetailHashtagV2 = "$contentRouteV3/searchdatanew/newdetailtag/v2";
   static const String getDetailInterestV2 = "$contentRouteV3/searchdatanew/newdetailinterest/v2";
   // v3 delete tag
