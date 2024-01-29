@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -818,6 +819,7 @@ class ShowBottomSheet {
     required String captionTitle,
     bool onDetail = true,
     // StoryController? storyController,
+    Orientation? orientation,
     Function? onUpdate,
     bool? isShare,
     FlutterAliplayer? fAliplayer,
@@ -854,6 +856,13 @@ class ShowBottomSheet {
       if (fAliplayer != null) {
         fAliplayer.play();
         fAliplayer.setMuted(false);
+      }
+
+      if (orientation != null && orientation == Orientation.landscape){
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.landscapeLeft,
+          DeviceOrientation.landscapeRight,
+        ]);
       }
 
       // if (onUpdate != null) onUpdate();

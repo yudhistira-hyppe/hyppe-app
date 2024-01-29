@@ -99,6 +99,9 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
   @override
   void initState() {
     isStopVideo = true;
+    SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+      ]);
     FirebaseCrashlytics.instance.setCustomKey('layout', 'ScrollVid');
     email = SharedPreference().readStorage(SpKeys.email);
     final notifier = Provider.of<ScrollVidNotifier>(context, listen: false);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -76,6 +77,9 @@ class CustomAppBar extends StatelessWidget {
                           positionText: currentPositionText,
                           showTipsWidget: showTipsWidget,
                           isMute: isMute));
+                  
+                      SystemChrome.setPreferredOrientations(
+                          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
                 },
                 padding: orientation == Orientation.portrait
                     ? const EdgeInsets.symmetric(horizontal: 8.0, vertical: 40.0)

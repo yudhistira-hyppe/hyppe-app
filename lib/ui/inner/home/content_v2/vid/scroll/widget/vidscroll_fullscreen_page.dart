@@ -23,7 +23,7 @@ class VidScrollFullScreenPage extends StatefulWidget {
       _VidScrollFullScreenPageState();
 }
 
-class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> {
+class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage>{
   PageController controller = PageController();
   List<ContentData>? vidData;
   ContentData? data;
@@ -42,9 +42,10 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> {
 
   @override
   void initState() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
     controller = PageController(initialPage: widget.argument?.index ?? 0);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
     print(
         'desciption ${widget.argument!.data.metadata?.height ?? 0} ${widget.argument!.data.metadata?.width ?? 0}');
     if ((widget.argument!.data.metadata?.height ?? 0) <
@@ -110,7 +111,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> {
   whileDispose() async {
     await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: SystemUiOverlay.values);
-    await SystemChrome.setPreferredOrientations(
+    SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   }
 
