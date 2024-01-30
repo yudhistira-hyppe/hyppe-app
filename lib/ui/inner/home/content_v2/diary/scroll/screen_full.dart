@@ -592,105 +592,114 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
 
     return Scaffold(
       backgroundColor: kHyppeLightSurface,
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: const SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.light, statusBarIconBrightness: Brightness.light),
-        child: Consumer2<ScrollDiaryNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
-          return RefreshIndicator(
-            onRefresh: () async {
-              bool connect = await System().checkConnections();
-              if (connect) {
-                setState(() {
-                  isloading = true;
-                });
-                await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
-                setState(() {
-                  diaryData = notifier.diaryData;
-                });
-              } else {
-                if (mounted) {
-                  ShowGeneralDialog.showToastAlert(
-                    context,
-                    lang?.internetConnectionLost ?? ' Error',
-                    () async {},
-                  );
+      body: GestureDetector(
+        onHorizontalDragEnd: (dragEndDetails) {
+          if (dragEndDetails.primaryVelocity! < 0) {
+          } else if (dragEndDetails.primaryVelocity! > 0) {
+            // fAliplayer?.pause();
+            Routing().moveBack();
+          }
+        },
+        child: AnnotatedRegion<SystemUiOverlayStyle>(
+          value: const SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.light, statusBarIconBrightness: Brightness.light),
+          child: Consumer2<ScrollDiaryNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
+            return RefreshIndicator(
+              onRefresh: () async {
+                bool connect = await System().checkConnections();
+                if (connect) {
+                  setState(() {
+                    isloading = true;
+                  });
+                  await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                  setState(() {
+                    diaryData = notifier.diaryData;
+                  });
+                } else {
+                  if (mounted) {
+                    ShowGeneralDialog.showToastAlert(
+                      context,
+                      lang?.internetConnectionLost ?? ' Error',
+                      () async {},
+                    );
+                  }
                 }
-              }
-            },
-            child: NotificationListener<OverscrollIndicatorNotification>(
-              onNotification: (overscroll) {
-                overscroll.disallowIndicator();
-                return false;
               },
-              child: RefreshIndicator(
-                onRefresh: () async {},
-                child: PageView.builder(
-                  scrollDirection: Axis.vertical,
-                  controller: _pageController,
-
-                  // scrollDirection: Axis.horizontal,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  itemCount: diaryData?.length ?? 0,
-                  onPageChanged: (index) {
-                    _curIdx = index;
-                    if (_lastCurIndex != _curIdx) {
-                      try {
-                        widget.arguments?.scrollController?.jumpTo(System().scrollAuto(_curIdx, widget.arguments?.heightTopProfile ?? 0, widget.arguments?.heightBox?.toInt() ?? 175));
-                      } catch (e) {
-                        print("ini error $e");
-                      }
-                      Future.delayed(const Duration(milliseconds: 400), () {
-                        start(diaryData?[index] ?? ContentData());
-                        System().increaseViewCount2(context, diaryData?[index] ?? ContentData(), check: false);
-                      });
-                      if (_curIdx == (notifier.diaryData?.length ?? 0) - 1) {
-                        Future.delayed(const Duration(milliseconds: 1000), () async {
-                          await notifier.loadMoreFullScreen(context, widget.arguments!.pageSrc!, widget.arguments?.key ?? '');
-                          setState(() {
-                            diaryData = notifier.diaryData;
-                          });
+              child: NotificationListener<OverscrollIndicatorNotification>(
+                onNotification: (overscroll) {
+                  overscroll.disallowIndicator();
+                  return false;
+                },
+                child: RefreshIndicator(
+                  onRefresh: () async {},
+                  child: PageView.builder(
+                    scrollDirection: Axis.vertical,
+                    controller: _pageController,
+      
+                    // scrollDirection: Axis.horizontal,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    itemCount: diaryData?.length ?? 0,
+                    onPageChanged: (index) {
+                      _curIdx = index;
+                      if (_lastCurIndex != _curIdx) {
+                        try {
+                          widget.arguments?.scrollController?.jumpTo(System().scrollAuto(_curIdx, widget.arguments?.heightTopProfile ?? 0, widget.arguments?.heightBox?.toInt() ?? 175));
+                        } catch (e) {
+                          print("ini error $e");
+                        }
+                        Future.delayed(const Duration(milliseconds: 400), () {
+                          start(diaryData?[index] ?? ContentData());
+                          System().increaseViewCount2(context, diaryData?[index] ?? ContentData(), check: false);
                         });
+                        if (_curIdx == (notifier.diaryData?.length ?? 0) - 1) {
+                          Future.delayed(const Duration(milliseconds: 1000), () async {
+                            await notifier.loadMoreFullScreen(context, widget.arguments!.pageSrc!, widget.arguments?.key ?? '');
+                            setState(() {
+                              diaryData = notifier.diaryData;
+                            });
+                          });
+                        }
+                        if (diaryData?[index].certified ?? false) {
+                          System().block(context);
+                        } else {
+                          System().disposeBlock();
+                        }
                       }
-                      if (diaryData?[index].certified ?? false) {
-                        System().block(context);
-                      } else {
-                        System().disposeBlock();
+                      _lastCurIndex = _curIdx;
+                    },
+                    itemBuilder: (context, index) {
+                      if (diaryData == null || home.isLoadingDiary) {
+                        fAliplayer?.pause();
+                        _lastCurIndex = -1;
+                        return CustomShimmer(
+                          width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                          height: 168,
+                          radius: 8,
+                          margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                          padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                        );
+                      } else if (index == diaryData?.length) {
+                        return UnconstrainedBox(
+                          child: Container(
+                            alignment: Alignment.center,
+                            width: 80 * SizeConfig.scaleDiagonal,
+                            height: 80 * SizeConfig.scaleDiagonal,
+                            child: const CustomLoading(),
+                          ),
+                        );
                       }
-                    }
-                    _lastCurIndex = _curIdx;
-                  },
-                  itemBuilder: (context, index) {
-                    if (diaryData == null || home.isLoadingDiary) {
-                      fAliplayer?.pause();
-                      _lastCurIndex = -1;
-                      return CustomShimmer(
-                        width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                        height: 168,
-                        radius: 8,
-                        margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                        padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                      );
-                    } else if (index == diaryData?.length) {
-                      return UnconstrainedBox(
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: 80 * SizeConfig.scaleDiagonal,
-                          height: 80 * SizeConfig.scaleDiagonal,
-                          child: const CustomLoading(),
-                        ),
-                      );
-                    }
-                    if (_curIdx == 0 && diaryData?[0].reportedStatus == 'BLURRED') {
-                      isPlay = false;
-                      fAliplayer?.stop();
-                    }
-
-                    return itemDiary(notifier, index);
-                  },
+                      if (_curIdx == 0 && diaryData?[0].reportedStatus == 'BLURRED') {
+                        isPlay = false;
+                        fAliplayer?.stop();
+                      }
+      
+                      return itemDiary(notifier, index);
+                    },
+                  ),
                 ),
               ),
-            ),
-          );
-        }),
+            );
+          }),
+        ),
       ),
     );
   }

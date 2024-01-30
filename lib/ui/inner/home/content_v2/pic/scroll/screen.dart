@@ -988,7 +988,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                         page: index,
                                         type: TypePlaylist.mine,
                                         titleAppbar: widget.arguments!.titleAppbar,
-                                        pageSrc: PageSrc.selfProfile,
+                                        pageSrc: widget.arguments?.pageSrc ?? PageSrc.otherProfile,
                                         picData: pics,
                                         scrollController: widget.arguments!.scrollController,
                                         heightTopProfile: widget.arguments!.heightTopProfile,

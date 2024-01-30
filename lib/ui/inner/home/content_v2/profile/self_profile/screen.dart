@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/services.dart';
 import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -58,7 +59,10 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
     final notifier = context.read<SelfProfileNotifier>();
     notifier.setPageIndex(0);
     _scrollController.addListener(() => notifier.onScrollListener(context, scrollController: _scrollController));
-
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     // ShowGeneralDialog.adsRewardPop(context);
 
     // _globalKey.currentState?.innerController.addListener(() {
@@ -211,7 +215,8 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
                 if (widget.arguments?.isTrue == null) {
                   context.read<MainNotifier>().pageIndex = 0;
                 } else {
-                  Routing().moveBack();
+                  // Routing().moveBack();
+                  Navigator.pop(context, true);
                 }
               },
             ),

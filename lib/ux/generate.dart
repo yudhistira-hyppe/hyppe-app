@@ -23,7 +23,6 @@ import 'package:hyppe/core/arguments/transaction_argument.dart';
 import 'package:hyppe/core/arguments/update_contents_argument.dart';
 import 'package:hyppe/core/arguments/user_otp_screen_argument.dart';
 import 'package:hyppe/core/arguments/verify_page_argument.dart';
-import 'package:hyppe/core/arguments/vid_fullscreen_argument.dart';
 import 'package:hyppe/core/arguments/view_streaming_argument.dart';
 import 'package:hyppe/ui/constant/entities/appeal/screen.dart';
 import 'package:hyppe/ui/constant/entities/appeal/success_appeal.dart';
@@ -93,7 +92,6 @@ import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_docume
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/screen.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/widget/vidscroll_fullscreen_page.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/feedback/screen.dart';
@@ -453,8 +451,6 @@ class Generate {
         return CupertinoPageRoute(builder: (_) => PicFullscreenPage(argument: settings.arguments as PicFullscreenArgument));
       case Routes.picScrollFullScreenDetail:
         return CupertinoPageRoute(builder: (_) => PicScrollFullscreenPage(argument: settings.arguments as SlidedPicDetailScreenArgument));
-      case Routes.vidScrollFullScreenDetail:
-        return CupertinoPageRoute(builder: (_) => VidScrollFullScreenPage(argument: settings.arguments as VidFullscreenArgument));
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

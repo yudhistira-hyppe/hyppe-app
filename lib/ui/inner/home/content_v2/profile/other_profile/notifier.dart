@@ -612,7 +612,7 @@ class OtherProfileNotifier with ChangeNotifier {
       golbalToOther = 0;
     }
     // routing.moveBack();
-    Navigator.pop(context);
+    Navigator.pop(context, true);
     userEmail = null;
   }
 

@@ -1463,7 +1463,8 @@ class System {
     }
   }
 
-  Future<void> navigateToProfile(BuildContext context, String email) async {
+  Future<bool?> navigateToProfile(BuildContext context, String email) async {
+    bool? result;
     // final connect = await checkConnections();
     // if (connect) {
     String myEmail = SharedPreference().readStorage(SpKeys.email) ?? "";
@@ -1493,7 +1494,7 @@ class System {
       if (globalAudioPlayer != null) {
         globalAudioPlayer?.pause();
       }
-      await Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+      result = await Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
       if (globalAliPlayer != null) {
         // globalAliPlayer?.play();
       }
@@ -1521,7 +1522,7 @@ class System {
       if (globalAudioPlayer != null) {
         globalAudioPlayer?.pause();
       }
-      await Routing().move(Routes.selfProfile, argument: GeneralArgument(isTrue: true));
+      result = await Routing().move(Routes.selfProfile, argument: GeneralArgument(isTrue: true));
       if (globalAudioPlayer != null) {
         globalAudioPlayer?.resume();
       }
@@ -1529,6 +1530,7 @@ class System {
     // } else {
     //   ShowBottomSheet.onNoInternetConnection(context);
     // }
+    return result;
   }
 
   int? convertOrientation(NativeDeviceOrientation? orientation) {

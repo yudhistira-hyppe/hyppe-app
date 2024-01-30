@@ -535,7 +535,7 @@ class UserBloc {
         headers: {
           "x-auth-user": SharedPreference().readStorage(SpKeys.email),
         },
-        host: UrlConstants.getMyUserPosts,
+        host: UrlConstants.getMyUserPostsV2,
         withCheckConnection: false,
         methodType: MethodType.get,
         withAlertMessage: withAlertMessage,

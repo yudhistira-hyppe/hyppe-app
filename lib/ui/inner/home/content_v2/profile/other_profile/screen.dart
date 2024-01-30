@@ -1,4 +1,5 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/services.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -50,6 +51,10 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
 
   @override
   void initState() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     FirebaseCrashlytics.instance.setCustomKey('layout', 'OtherProfileScreen');
     print('other profile');
     final notifier = Provider.of<OtherProfileNotifier>(context, listen: false);

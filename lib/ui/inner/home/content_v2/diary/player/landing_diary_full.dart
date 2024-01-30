@@ -759,124 +759,133 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
     // AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
     return Scaffold(
       backgroundColor: Colors.black,
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: const SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.light, statusBarIconBrightness: Brightness.light),
-        child: Consumer2<PreviewDiaryNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
-          return PageView.builder(
-            controller: _pageController,
-            scrollDirection: Axis.vertical,
-            // controller: notifier.scrollController,
-            // scrollDirection: Axis.horizontal,
-            itemCount: notifier.diaryData?.length,
-            onPageChanged: (index) async {
-              _curIdx = index;
-              if (_lastCurIndex != _curIdx) {
-                if (!isShowingDialog) {
-                  globalAdsPopUp?.pause();
-                }
-
-                //====scrollfunction
-
-                // widget.argument.function!(100);
-
-                //===================
-
-                context.read<VideoNotifier>().currentPostID = notifier.diaryData?[index].postID ?? '';
+      body: GestureDetector(
+        onHorizontalDragEnd: (dragEndDetails) {
+          if (dragEndDetails.primaryVelocity! < 0) {
+          } else if (dragEndDetails.primaryVelocity! > 0) {
+            // fAliplayer?.pause();
+            Routing().moveBack();
+          }
+        },
+        child: AnnotatedRegion<SystemUiOverlayStyle>(
+          value: const SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.light, statusBarIconBrightness: Brightness.light),
+          child: Consumer2<PreviewDiaryNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
+            return PageView.builder(
+              controller: _pageController,
+              scrollDirection: Axis.vertical,
+              // controller: notifier.scrollController,
+              // scrollDirection: Axis.horizontal,
+              itemCount: notifier.diaryData?.length,
+              onPageChanged: (index) async {
                 _curIdx = index;
-                _lastCurPostId = _curPostId;
-
-                _curPostId = notifier.diaryData?[index].postID ?? index.toString();
-                // if (_lastCurIndex != _curIdx) {
-                final indexList = notifier.diaryData?.indexWhere((element) => element.postID == _curPostId);
-                // final latIndexList = notifier.diaryData?.indexWhere((element) => element.postID == _lastCurPostId);
-
-                // fAliplayer?.destroy();
-                fAliplayer?.stop();
-                fAliplayer?.clearScreen();
-                // Wakelock.disable();
-                // initAlipayer();
-
-                if (mounted) {
-                  setState(() {
-                    Future.delayed(Duration(milliseconds: 400), () {
-                      itemHeight = notifier.diaryData?[indexList ?? 0].height ?? 0;
-                    });
-                  });
-                }
-                // final totalWithAds = notifier.diaryData?.where((element) => element.inBetweenAds != null).length;
-
-                Future.delayed(const Duration(milliseconds: 700), () {
-                  start(Routing.navigatorKey.currentContext ?? context, notifier.diaryData?[index] ?? ContentData());
-                  System().increaseViewCount2(Routing.navigatorKey.currentContext ?? context, notifier.diaryData?[index] ?? ContentData(), check: false);
-                });
-                if (notifier.diaryData?[index].certified ?? false) {
-                  System().block(Routing.navigatorKey.currentContext ?? context);
-                } else {
-                  System().disposeBlock();
-                }
-
-                if (indexList == (notifier.diaryData?.length ?? 0) - 1) {
-                  Future.delayed(const Duration(milliseconds: 1000), () async {
-                    await context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {
-                      // notifier.getTemp(indexList, latIndexList, indexList);
-                    });
-                  });
-                } else {
-                  Future.delayed(const Duration(milliseconds: 2000), () {
-                    // notifier.getTemp(indexList, latIndexList, indexList);
-                  });
-                }
-
-                ///ADS IN BETWEEN === Hariyanto Lukman ===
-                if (!notifier.loadAds) {
-                  if ((notifier.diaryData?.length ?? 0) > notifier.nextAdsShowed) {
-                    notifier.loadAds = true;
-                    context.getInBetweenAds().then((value) {
-                      if (value != null) {
-                        notifier.setAdsData(index, value);
-                      } else {
-                        notifier.loadAds = false;
-                      }
+                if (_lastCurIndex != _curIdx) {
+                  if (!isShowingDialog) {
+                    globalAdsPopUp?.pause();
+                  }
+      
+                  //====scrollfunction
+      
+                  // widget.argument.function!(100);
+      
+                  //===================
+      
+                  context.read<VideoNotifier>().currentPostID = notifier.diaryData?[index].postID ?? '';
+                  _curIdx = index;
+                  _lastCurPostId = _curPostId;
+      
+                  _curPostId = notifier.diaryData?[index].postID ?? index.toString();
+                  // if (_lastCurIndex != _curIdx) {
+                  final indexList = notifier.diaryData?.indexWhere((element) => element.postID == _curPostId);
+                  // final latIndexList = notifier.diaryData?.indexWhere((element) => element.postID == _lastCurPostId);
+      
+                  // fAliplayer?.destroy();
+                  fAliplayer?.stop();
+                  fAliplayer?.clearScreen();
+                  // Wakelock.disable();
+                  // initAlipayer();
+      
+                  if (mounted) {
+                    setState(() {
+                      Future.delayed(Duration(milliseconds: 400), () {
+                        itemHeight = notifier.diaryData?[indexList ?? 0].height ?? 0;
+                      });
                     });
                   }
+                  // final totalWithAds = notifier.diaryData?.where((element) => element.inBetweenAds != null).length;
+      
+                  Future.delayed(const Duration(milliseconds: 700), () {
+                    start(Routing.navigatorKey.currentContext ?? context, notifier.diaryData?[index] ?? ContentData());
+                    System().increaseViewCount2(Routing.navigatorKey.currentContext ?? context, notifier.diaryData?[index] ?? ContentData(), check: false);
+                  });
+                  if (notifier.diaryData?[index].certified ?? false) {
+                    System().block(Routing.navigatorKey.currentContext ?? context);
+                  } else {
+                    System().disposeBlock();
+                  }
+      
+                  if (indexList == (notifier.diaryData?.length ?? 0) - 1) {
+                    Future.delayed(const Duration(milliseconds: 1000), () async {
+                      await context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {
+                        // notifier.getTemp(indexList, latIndexList, indexList);
+                      });
+                    });
+                  } else {
+                    Future.delayed(const Duration(milliseconds: 2000), () {
+                      // notifier.getTemp(indexList, latIndexList, indexList);
+                    });
+                  }
+      
+                  ///ADS IN BETWEEN === Hariyanto Lukman ===
+                  if (!notifier.loadAds) {
+                    if ((notifier.diaryData?.length ?? 0) > notifier.nextAdsShowed) {
+                      notifier.loadAds = true;
+                      context.getInBetweenAds().then((value) {
+                        if (value != null) {
+                          notifier.setAdsData(index, value);
+                        } else {
+                          notifier.loadAds = false;
+                        }
+                      });
+                    }
+                  }
+                  // _lastCurIndex = _curIdx;
                 }
-                // _lastCurIndex = _curIdx;
-              }
-
-              _lastCurIndex = _curIdx;
-            },
-            itemBuilder: (context, index) {
-              if (notifier.diaryData == null || home.isLoadingDiary) {
-                fAliplayer?.pause();
-                // _lastCurIndex = -1;
-                _lastCurPostId = '';
-                return CustomShimmer(
-                  width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                  height: 168,
-                  radius: 8,
-                  margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                  padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                );
-              } else if (index == notifier.diaryData?.length && notifier.hasNext) {
-                return UnconstrainedBox(
-                  child: Container(
-                    alignment: Alignment.center,
-                    width: 80 * SizeConfig.scaleDiagonal,
-                    height: 80 * SizeConfig.scaleDiagonal,
-                    child: const CustomLoading(),
-                  ),
-                );
-              }
-              // if (_curIdx == 0 && notifier.diaryData?[0].reportedStatus == 'BLURRED') {
-              if (notifier.diaryData?[0].reportedStatus == 'BLURRED') {
-                isPlay = false;
-                fAliplayer?.stop();
-              }
-
-              return itemDiary(context, notifier, index, home);
-            },
-          );
-        }),
+      
+                _lastCurIndex = _curIdx;
+              },
+              itemBuilder: (context, index) {
+                if (notifier.diaryData == null || home.isLoadingDiary) {
+                  fAliplayer?.pause();
+                  // _lastCurIndex = -1;
+                  _lastCurPostId = '';
+                  return CustomShimmer(
+                    width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                    height: 168,
+                    radius: 8,
+                    margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                    padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                  );
+                } else if (index == notifier.diaryData?.length && notifier.hasNext) {
+                  return UnconstrainedBox(
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: 80 * SizeConfig.scaleDiagonal,
+                      height: 80 * SizeConfig.scaleDiagonal,
+                      child: const CustomLoading(),
+                    ),
+                  );
+                }
+                // if (_curIdx == 0 && notifier.diaryData?[0].reportedStatus == 'BLURRED') {
+                if (notifier.diaryData?[0].reportedStatus == 'BLURRED') {
+                  isPlay = false;
+                  fAliplayer?.stop();
+                }
+      
+                return itemDiary(context, notifier, index, home);
+              },
+            );
+          }),
+        ),
       ),
     );
   }
