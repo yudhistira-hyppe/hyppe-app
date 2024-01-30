@@ -125,6 +125,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   int indexKeySell = 0;
   int indexKeyProtection = 0;
   int itemIndex = 0;
+  bool isActivePage = true;
 
   @override
   void initState() {
@@ -149,15 +150,15 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       print("===============init ali player ${fAliplayer?.playerId} ===========");
 
       //scroll
-      if (mounted) {
-        Future.delayed(const Duration(milliseconds: 500), () {
-          print("=========== global key prirnt ${widget.scrollController} ");
-          widget.scrollController?.addListener(() async {
-            double offset = widget.scrollController?.position.pixels ?? 0;
-            if (mounted) await toPosition(offset, notifier);
-          });
-        });
-      }
+      // if (mounted) {
+      //   Future.delayed(const Duration(milliseconds: 500), () {
+      //     print("=========== global key prirnt ${widget.scrollController} ");
+      //     widget.scrollController?.addListener(() async {
+      //       double offset = widget.scrollController?.position.pixels ?? 0;
+      //       if (mounted) await toPosition(offset, notifier);
+      //     });
+      //   });
+      // }
     });
     context.read<HomeNotifier>().removeWakelock();
     super.initState();
@@ -656,6 +657,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     print("======= didPopNext");
     isInPage = true;
     fAliplayer?.play();
+    isActivePage = true;
     // System().disposeBlock();
     super.didPopNext();
   }
@@ -670,6 +672,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   void didPushNext() {
     print("========= didPushNext");
     fAliplayer?.pause();
+    isActivePage = false;
     System().disposeBlock();
     isInPage = false;
     super.didPushNext();
@@ -685,7 +688,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         break;
       case AppLifecycleState.resumed:
         print("========= resumed");
-        if (context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds)) {
+        if (context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds) && isActivePage) {
           fAliplayer?.play();
         }
         break;
@@ -1047,7 +1050,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                   )
                                                 : Text(
                                                     (picData?.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
-                                                    style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                                                    style: const TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
                                                   ),
                                           ),
                                         ),
@@ -1275,16 +1278,16 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                 fAliplayer?.setMuted(notifier.isMute);
                                                 var temp1 = notifier.pic![_curIdx];
                                                 var temp2 = notifier.pic![notifier.currentIndex];
-                                                if (index < notifier.currentIndex ){
-                                                    setState(() {
-                                                      index = notifier.currentIndex;
-                                                      notifier.pic!.removeRange(_curIdx, notifier.currentIndex);
-                                                    });
-                                                }else if (index > notifier.currentIndex) {
-                                                    setState(() {
-                                                      notifier.pic![_curIdx] = temp2;
-                                                      notifier.pic![notifier.currentIndex] = temp1;
-                                                    });
+                                                if (index < notifier.currentIndex) {
+                                                  setState(() {
+                                                    index = notifier.currentIndex;
+                                                    notifier.pic!.removeRange(_curIdx, notifier.currentIndex);
+                                                  });
+                                                } else if (index > notifier.currentIndex) {
+                                                  setState(() {
+                                                    notifier.pic![_curIdx] = temp2;
+                                                    notifier.pic![notifier.currentIndex] = temp1;
+                                                  });
                                                 }
                                               }
                                             },

@@ -50,6 +50,8 @@ bool globalChallengePopUp = true; //untuk menahan tutorial muncul sebelum challa
 int storyMin = 4;
 int vidMin = 15;
 
+bool globalPreventAction = false;
+
 const platform = MethodChannel('app.channel.shared.data');
 
 void disposeGlobalAudio() async {

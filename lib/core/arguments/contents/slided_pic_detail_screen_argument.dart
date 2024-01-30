@@ -16,6 +16,7 @@ class SlidedPicDetailScreenArgument extends ContentScreenArgument {
   final ScrollController? scrollController;
   final double? heightBox;
   final double? heightTopProfile;
+  final bool? isProfile;
   @override
   FeatureType get featureType => FeatureType.pic;
 
@@ -31,5 +32,6 @@ class SlidedPicDetailScreenArgument extends ContentScreenArgument {
     this.scrollController,
     this.heightBox,
     this.heightTopProfile,
+    this.isProfile = false,
   });
 }

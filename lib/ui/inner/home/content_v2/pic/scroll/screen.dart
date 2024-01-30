@@ -80,6 +80,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
   final a = SelfProfileScreenState();
 
   bool isZoom = false;
+  bool isActivePage = true;
   bool isPrepare = false;
   bool isPlay = false;
   bool isPause = false;
@@ -117,6 +118,8 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
   /// Listener that reports the position of items when the list is scrolled.
   final ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
   final ScrollController _scrollController = ScrollController();
+
+  PageSrc pageSrc = PageSrc.otherProfile;
 
   @override
   void initState() {
@@ -161,7 +164,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
 
     var index = 0;
     var lastIndex = 0;
-    final pageSrc = widget.arguments?.pageSrc ?? PageSrc.otherProfile;
+    pageSrc = widget.arguments?.pageSrc ?? PageSrc.otherProfile;
 
     itemPositionsListener.itemPositions.addListener(() async {
       print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
@@ -177,7 +180,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
         if (index == pics!.length - 2) {
           if (connect) {
             if (!notifier.isLoadingLoadmore) {
-              await notifier.loadMore(context, _scrollController, pageSrc, widget.arguments?.key ?? '');
+              await notifier.loadMore(context, _scrollController, pageSrc!, widget.arguments?.key ?? '');
               if (mounted) {
                 setState(() {
                   pics = notifier.pics;
@@ -517,6 +520,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     print("======= didPopNext");
     isInPage = true;
     fAliplayer?.play();
+    isActivePage = true;
     // System().disposeBlock();
     if (toComment) {
       print("====picnotif======");
@@ -537,10 +541,10 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
 
   @override
   void didPushNext() {
-    print("========= didPushNext");
     fAliplayer?.pause();
-    System().disposeBlock();
     isInPage = false;
+    print("========= didPushNext scroll $isInPage");
+    System().disposeBlock();
     super.didPushNext();
   }
 
@@ -553,13 +557,15 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
         print("========= inactive");
         break;
       case AppLifecycleState.resumed:
-        print("========= resumed");
-        if ((Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds)) {
+        print("========= resumed $isActivePage ");
+        if ((Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds) && isInPage) {
+          print("==== hahaha aha ah ah ah ah ah ah  resume $isInPage");
           fAliplayer?.play();
         }
         break;
       case AppLifecycleState.paused:
-        print("========= paused");
+        print(
+            "========= paused scroll ${(Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds) && isInPage}");
         fAliplayer?.pause();
         break;
       case AppLifecycleState.detached:
@@ -627,7 +633,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(margin: const EdgeInsets.symmetric(horizontal: 10), transform: Matrix4.translationValues(-18.0, 0.0, 0.0), child: widget.arguments?.titleAppbar ?? Container()),
-                          if (pics?[pageIndex].email != email && (pics?[pageIndex].isNewFollowing ?? false))
+                          if (pics?[pageIndex].email != email && (pics?[pageIndex].isNewFollowing ?? false) && (widget.arguments?.isProfile ??false))
                             Consumer<PreviewPicNotifier>(
                               builder: (context, picNot, child) => Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -673,7 +679,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                           }),
                     ),
                     Expanded(
-                      child: pics?.isEmpty ?? [].isEmpty
+                      child: (pics?.isEmpty ?? true)
                           ? const NoResultFound()
                           : RefreshIndicator(
                               onRefresh: () async {
@@ -822,6 +828,34 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                       badge: pics?[index].urluserBadge,
                     ),
                   ),
+                  if (pics?[index].email != email && (pics?[index].isNewFollowing ?? false) && !(widget.arguments?.isProfile ?? false))
+                    Consumer<PreviewPicNotifier>(
+                      builder: (context, picNot, child) => Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            context.handleActionIsGuest(() {
+                              if (pics?[index].insight?.isloadingFollow != true) {
+                                picNot.followUser(context, pics?[index] ?? ContentData(), isUnFollow: pics?[index].following, isloading: pics?[index].insight!.isloadingFollow ?? false);
+                              }
+                            });
+                          },
+                          child: pics?[index].insight?.isloadingFollow ?? false
+                              ? Container(
+                                  height: 40,
+                                  width: 30,
+                                  child: const Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: CustomLoading(),
+                                  ),
+                                )
+                              : Text(
+                                  (pics?[index].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+                                  style: const TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                                ),
+                        ),
+                      ),
+                    ),
                   GestureDetector(
                     onTap: () {
                       // fAliplayer?.pause();
@@ -856,7 +890,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                           onDetail: false,
                           isShare: pics?[index].isShared,
                           onUpdate: () {
-                             context.read<HomeNotifier>().onUpdate();
+                            context.read<HomeNotifier>().onUpdate();
                           },
                           fAliplayer: fAliplayer,
                         );
@@ -986,19 +1020,22 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                   //   });
                                   //   fAliplayer?.setMuted(isMute);
                                   // }
-                                  var res = await Routing().move(Routes.picScrollFullScreenDetail,
-                                      argument: SlidedPicDetailScreenArgument(
-                                        page: index,
-                                        type: TypePlaylist.mine,
-                                        titleAppbar: widget.arguments!.titleAppbar,
-                                        pageSrc: widget.arguments?.pageSrc ?? PageSrc.otherProfile,
-                                        picData: pics,
-                                        scrollController: widget.arguments!.scrollController,
-                                        heightTopProfile: widget.arguments!.heightTopProfile,
-                                      ));
-                                  if (res != null || res == null) {
-                                    fAliplayer?.play();
-                                    fAliplayer?.setMuted(notifier.isMute);
+                                  if (pageSrc == PageSrc.selfProfile || pageSrc == PageSrc.otherProfile) {
+                                    var res = await Routing().move(Routes.picScrollFullScreenDetail,
+                                        argument: SlidedPicDetailScreenArgument(
+                                          isProfile: true,
+                                          page: index,
+                                          type: TypePlaylist.mine,
+                                          titleAppbar: widget.arguments!.titleAppbar,
+                                          pageSrc: widget.arguments?.pageSrc ?? PageSrc.otherProfile,
+                                          picData: pics,
+                                          scrollController: widget.arguments!.scrollController,
+                                          heightTopProfile: widget.arguments!.heightTopProfile,
+                                        ));
+                                    if (res != null || res == null) {
+                                      fAliplayer?.play();
+                                      fAliplayer?.setMuted(notifier.isMute);
+                                    }
                                   }
                                 },
                                 onDoubleTap: () {
@@ -1164,7 +1201,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                 ),
               ),
               SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                      (pics?[index].boosted.isEmpty ?? [].isEmpty) &&
+                      pics?[index].statusBoost != 'BERLANGSUNG' &&
                       (pics?[index].reportedStatus != 'OWNED' && pics?[index].reportedStatus != 'BLURRED' && pics?[index].reportedStatus2 != 'BLURRED') &&
                       pics?[index].email == email
                   ? Container(
@@ -1192,7 +1229,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                       ),
                     )
                   : Container(),
-              if (pics?[index].email == email && (pics?[index].boostCount ?? 0) >= 0 && (pics?[index].boosted.isNotEmpty ?? [].isEmpty))
+              if (pics?[index].email == email && (pics?[index].boostCount ?? 0) >= 0 && pics?[index].statusBoost == 'BERLANGSUNG' && (pics?[index].boosted.isNotEmpty ?? [].isEmpty))
                 Container(
                   padding: const EdgeInsets.all(10),
                   margin: EdgeInsets.only(bottom: 10),

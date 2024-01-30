@@ -50,11 +50,6 @@ class Env {
     baseUrlSocket: "https://s1.hyppe.cloud",
     apiBaseUrl: "https://s1.hyppe.cloud",
 
-    // baseUrl: "https://s1.hyppe.cloud",
-    // baseUrl2: "https://s1.hyppe.cloud",
-    // baseUrlSocket: "https://s1.hyppe.cloud",
-    // apiBaseUrl: "https://s1.hyppe.cloud",
-
     deeplinkBaseUrl: "https://share.hyppe.app",
     versionApi: UrlConstants.apiV0,
   );

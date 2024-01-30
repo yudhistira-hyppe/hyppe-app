@@ -87,6 +87,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
   int _lastCurIndex = -1;
   String _curPostId = '';
   String _lastCurPostId = '';
+  int seekPosition = 0;
 
   String auth = '';
   String url = '';
@@ -122,6 +123,9 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
     _pageController = PageController(initialPage: widget.argument.index.toInt());
     _curIdx = widget.argument.index.toInt();
     _lastCurIndex = widget.argument.index.toInt();
+    seekPosition = widget.argument.seekPosition ?? 0;
+
+    notifier.currIndex = widget.argument.index.toInt();
 
     // stopwatch = new Stopwatch()..start();
 
@@ -183,7 +187,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
       });
       isPlay = true;
       dataSelected?.isDiaryPlay = true;
-      fAliplayer?.seekTo(widget.argument.seekPosition ?? 0, 1);
+      fAliplayer?.seekTo(seekPosition, 1);
       // _initAds(context);
     });
     fAliplayer?.setOnRenderingStart((playerId) {
@@ -250,6 +254,9 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
       }
     });
     fAliplayer?.setOnSeekComplete((playerId) {
+      setState(() {
+        seekPosition = 0;
+      });
       // _inSeek = false;
     });
     fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
@@ -484,11 +491,13 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
     } else {
       print("=====prepare=====");
       await fAliplayer?.prepare().then((value) async {});
+      animatedController.repeat();
     }
     // this syntax below to prevent video play after changing video
     Future.delayed(const Duration(seconds: 1), () {
       if (context.read<MainNotifier>().isInactiveState) {
         fAliplayer?.pause();
+        animatedController.stop();
       }
     });
 
@@ -661,7 +670,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
     }
     fAliplayer?.stop();
     fAliplayer?.destroy();
-    _pauseScreen();
+    // _pauseScreen();
     // if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
     //   fAliplayer?.destroy();
     // }
@@ -735,6 +744,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
     });
 
     fAliplayer?.play();
+    animatedController.repeat();
   }
 
   void pause() {
@@ -744,6 +754,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
     });
 
     fAliplayer?.pause();
+    animatedController.stop();
   }
 
   void changeStatusBlur(ContentData? data) {
@@ -782,28 +793,28 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                   if (!isShowingDialog) {
                     globalAdsPopUp?.pause();
                   }
-      
+
                   //====scrollfunction
-      
+
                   // widget.argument.function!(100);
-      
+
                   //===================
-      
+
                   context.read<VideoNotifier>().currentPostID = notifier.diaryData?[index].postID ?? '';
                   _curIdx = index;
                   _lastCurPostId = _curPostId;
-      
+
                   _curPostId = notifier.diaryData?[index].postID ?? index.toString();
                   // if (_lastCurIndex != _curIdx) {
                   final indexList = notifier.diaryData?.indexWhere((element) => element.postID == _curPostId);
                   // final latIndexList = notifier.diaryData?.indexWhere((element) => element.postID == _lastCurPostId);
-      
+
                   // fAliplayer?.destroy();
                   fAliplayer?.stop();
                   fAliplayer?.clearScreen();
                   // Wakelock.disable();
                   // initAlipayer();
-      
+
                   if (mounted) {
                     setState(() {
                       Future.delayed(Duration(milliseconds: 400), () {
@@ -812,7 +823,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                     });
                   }
                   // final totalWithAds = notifier.diaryData?.where((element) => element.inBetweenAds != null).length;
-      
+
                   Future.delayed(const Duration(milliseconds: 700), () {
                     start(Routing.navigatorKey.currentContext ?? context, notifier.diaryData?[index] ?? ContentData());
                     System().increaseViewCount2(Routing.navigatorKey.currentContext ?? context, notifier.diaryData?[index] ?? ContentData(), check: false);
@@ -822,7 +833,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                   } else {
                     System().disposeBlock();
                   }
-      
+
                   if (indexList == (notifier.diaryData?.length ?? 0) - 1) {
                     Future.delayed(const Duration(milliseconds: 1000), () async {
                       await context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {
@@ -834,7 +845,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                       // notifier.getTemp(indexList, latIndexList, indexList);
                     });
                   }
-      
+
                   ///ADS IN BETWEEN === Hariyanto Lukman ===
                   if (!notifier.loadAds) {
                     if ((notifier.diaryData?.length ?? 0) > notifier.nextAdsShowed) {
@@ -850,7 +861,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                   }
                   // _lastCurIndex = _curIdx;
                 }
-      
+
                 _lastCurIndex = _curIdx;
               },
               itemBuilder: (context, index) {
@@ -880,7 +891,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                   isPlay = false;
                   fAliplayer?.stop();
                 }
-      
+
                 return itemDiary(context, notifier, index, home);
               },
             );

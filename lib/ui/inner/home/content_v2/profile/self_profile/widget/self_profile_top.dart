@@ -321,6 +321,8 @@ class SelfProfileTop extends StatelessWidget {
                       children: [
                         CustomDescContent(
                             desc: notifier.user.profile?.bio ?? '',
+                            callback: (val) {},
+                            callbackIsMore: (val) {},
                             trimLines: 3,
                             isloading: notifier.isLoadingBio,
                             textAlign: TextAlign.start,

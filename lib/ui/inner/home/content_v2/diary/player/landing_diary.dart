@@ -753,9 +753,10 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     fAliplayer?.setMuted(isMute);
   }
 
-  void toFullScreen(index) {
+  void toFullScreen(index) async {
     print("asdasdad $_currentPosition");
-    context.read<PreviewDiaryNotifier>().navigateToShortVideoPlayer(
+    final pn = context.read<PreviewDiaryNotifier>();
+    var res = await pn.navigateToShortVideoPlayer(
       context,
       index,
       function: (e) {
@@ -764,6 +765,25 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       isMute: isMute,
       seekPosition: _currentPosition,
     );
+
+    if (res != null || res == null) {
+      fAliplayer?.play();
+      var temp1 = pn.diaryData![_curIdx];
+      var temp2 = pn.diaryData![pn.currentIndex];
+      print('======== $index');
+      print('======== ${pn.currentIndex}');
+      if (index < pn.currentIndex) {
+        setState(() {
+          index = pn.currentIndex;
+          pn.diaryData!.removeRange(_curIdx, pn.currentIndex);
+        });
+      } else if (index > pn.currentIndex) {
+        setState(() {
+          pn.diaryData![_curIdx] = temp2;
+          pn.diaryData![pn.currentIndex] = temp1;
+        });
+      }
+    }
   }
 
   @override

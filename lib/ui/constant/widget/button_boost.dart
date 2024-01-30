@@ -41,7 +41,7 @@ class _ButtonBoostState extends State<ButtonBoost> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         color: isKyc == VERIFIED
-            ? (widget.contentData?.boosted.isEmpty ?? [].isEmpty)
+            ? (widget.contentData?.statusBoost != 'AKAN DATANG')
                 ? kHyppePrimary
                 : kHyppeDisabled
             : kHyppeDisabled,
@@ -52,7 +52,7 @@ class _ButtonBoostState extends State<ButtonBoost> {
           color: Colors.transparent,
           borderRadius: BorderRadius.circular(8),
           child: InkWell(
-            onTap: isKyc == VERIFIED
+            onTap: isKyc == VERIFIED && (widget.contentData?.statusBoost != 'AKAN DATANG')
                 ? () async {
                     bool isPanding = false;
                     setState(() {
@@ -167,7 +167,7 @@ class _ButtonBoostState extends State<ButtonBoost> {
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 8),
               decoration: BoxDecoration(
-                color: isKyc == VERIFIED && (widget.contentData?.boosted.isEmpty ?? [].isEmpty) ? kHyppePrimary : kHyppeLightInactive1,
+                color: isKyc == VERIFIED && (widget.contentData?.statusBoost != 'AKAN DATANG') ? kHyppePrimary : kHyppeLightInactive1,
                 borderRadius: BorderRadius.circular(8),
               ),
               width: SizeConfig.screenWidth,
@@ -176,12 +176,12 @@ class _ButtonBoostState extends State<ButtonBoost> {
                       size: 3,
                     )
                   : Center(
-                    child: Text(
+                      child: Text(
                         language.postBoost ?? 'Boost Post',
                         style: Theme.of(context).primaryTextTheme.subtitle2?.copyWith(color: Colors.white, fontWeight: FontWeight.w700),
                         textAlign: TextAlign.center,
                       ),
-                  ),
+                    ),
             ),
           ),
         ),

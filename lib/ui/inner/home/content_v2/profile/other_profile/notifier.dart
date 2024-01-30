@@ -515,6 +515,7 @@ class OtherProfileNotifier with ChangeNotifier {
       (Routing.navigatorKey.currentContext ?? context).read<ScrollPicNotifier>().connectionError = !connect;
       _routing.move(Routes.scrollPic,
           argument: SlidedPicDetailScreenArgument(
+            isProfile: true,
             page: index,
             type: TypePlaylist.mine,
             titleAppbar: title,
@@ -532,6 +533,7 @@ class OtherProfileNotifier with ChangeNotifier {
       (Routing.navigatorKey.currentContext ?? context).read<ScrollDiaryNotifier>().connectionError = !connect;
       _routing.move(Routes.scrollDiary,
           argument: SlidedDiaryDetailScreenArgument(
+            isProfile: true,
             page: index,
             type: TypePlaylist.mine,
             titleAppbar: title,
@@ -550,6 +552,7 @@ class OtherProfileNotifier with ChangeNotifier {
       _routing.move(Routes.scrollVid,
           argument: SlidedVidDetailScreenArgument(
             page: index,
+            isProfile: true,
             type: TypePlaylist.mine,
             titleAppbar: title,
             pageSrc: PageSrc.otherProfile,

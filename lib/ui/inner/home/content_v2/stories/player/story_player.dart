@@ -451,8 +451,8 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     if (_curChildIdx == ((_groupUserStories![_curIdx].story?.length ?? 0) - 1)) {
       shown = [];
       if (_curIdx == (_groupUserStories!.length - 1)) {
-        // Routing().moveBack();
-        Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
+        Routing().moveBack();
+        // Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
       } else {
         _pageController.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.ease);
         _curChildIdx = 0;
@@ -749,19 +749,19 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                   //   );
                 }),
 
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height,
-                        color: Colors.transparent,
-                        // padding: EdgeInsets.only(bottom: 25.0),
-                        child: _buildFillStory(value, index),
-                      ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  color: Colors.transparent,
+                  // padding: EdgeInsets.only(bottom: 25.0),
+                  child: _buildFillStory(value, index),
+                ),
 
-                      _buildSingleScreen(index, value),
-                    ],
-                  );
-                },
-              ),
+                _buildSingleScreen(index, value),
+              ],
+            );
+          },
+        ),
       );
     });
   }

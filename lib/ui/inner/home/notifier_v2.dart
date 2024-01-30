@@ -293,11 +293,12 @@ class HomeNotifier with ChangeNotifier {
           data['skip'] = skipvid;
           break;
       }
-      if (!isgetMore) {
+      if (!isgetMore && stories.storiesGroups!.isEmpty || isreload) {
         stories.myStoryGroup = {};
         stories.storiesGroups = [];
-        notifyListeners();
+
         stories.initialStories(Routing.navigatorKey.currentContext ?? context);
+        notifyListeners();
         // notifyListeners();
       }
       // if (isreload) {

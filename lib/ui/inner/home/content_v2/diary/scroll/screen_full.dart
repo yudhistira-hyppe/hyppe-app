@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
 import 'dart:ui';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -7,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/contents/slided_diary_detail_screen_argument.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
@@ -49,9 +49,9 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
-import 'package:showcaseview/showcaseview.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:hyppe/ui/constant/widget/sticker_overlay.dart';
+import 'dart:math' as math;
 
 class ScrollFullDiary extends StatefulWidget {
   final SlidedDiaryDetailScreenArgument? arguments;
@@ -64,8 +64,9 @@ class ScrollFullDiary extends StatefulWidget {
   _ScrollFullDiaryState createState() => _ScrollFullDiaryState();
 }
 
-class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingObserver, TickerProviderStateMixin, WidgetsBindingObserver, RouteAware {
+class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
   late final AnimationController animatedController = AnimationController(vsync: this, duration: const Duration(seconds: 2))..repeat();
+
   List<ContentData>? diaryData = [];
   FlutterAliplayer? fAliplayer;
   bool isPrepare = false;
@@ -115,6 +116,7 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
     diaryData = widget.arguments?.diaryData;
     notifier.diaryData = widget.arguments?.diaryData;
     _pageController = PageController(initialPage: widget.arguments?.page ?? 0);
+    _curIdx = widget.arguments?.page ?? 0;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       start(diaryData?[widget.arguments?.page ?? 0] ?? ContentData());
       fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'diaryFullPlayer');
@@ -122,6 +124,10 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
       fAliplayer?.pause();
       fAliplayer?.setAutoPlay(true);
       fAliplayer?.setLoop(true);
+
+      isMute = widget.arguments?.isTrue ?? false;
+      // fAliplayer?.setLoop(true);
+      fAliplayer?.setMuted(isMute);
 
       //Turn on mix mode
       if (Platform.isIOS) {
@@ -134,8 +140,10 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+      globalAliPlayer = fAliplayer;
       vidConfig();
       _initListener();
+      animatedController.repeat();
     });
 
     super.initState();
@@ -381,6 +389,7 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
       await notifier.getAuthApsara(context, apsaraId: apsaraId, check: false);
       final fetch = notifier.postsFetch;
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        animatedController.repeat();
         Map jsonMap = json.decode(fetch.data.toString());
         setState(() {
           auth = jsonMap['PlayAuth'];
@@ -486,15 +495,14 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
 
   @override
   void dispose() {
+    print("========--------dispose fullscreen----=========");
+    fAliplayer?.stop();
+    fAliplayer?.destroy();
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
       // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
     }
-    fAliplayer?.stop();
-    // if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
-    //   fAliplayer?.destroy();
-    // }
-    fAliplayer?.destroy();
+
     print("========--------dispose----=========");
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
@@ -502,7 +510,9 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
 
   @override
   void deactivate() {
-    print("====== deactivate dari diary");
+    print("====== deactivate dari diary full sc");
+    fAliplayer?.stop();
+    fAliplayer?.destroy();
 
     super.deactivate();
   }
@@ -567,6 +577,7 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
     });
 
     fAliplayer?.play();
+    animatedController.repeat();
   }
 
   void pause() {
@@ -576,6 +587,7 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
     });
 
     fAliplayer?.pause();
+    animatedController.stop();
   }
 
   void changeStatusBlur(ContentData? data) {
@@ -624,78 +636,78 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
                   }
                 }
               },
-              child: NotificationListener<OverscrollIndicatorNotification>(
-                onNotification: (overscroll) {
-                  overscroll.disallowIndicator();
-                  return false;
-                },
-                child: RefreshIndicator(
-                  onRefresh: () async {},
-                  child: PageView.builder(
-                    scrollDirection: Axis.vertical,
-                    controller: _pageController,
-      
-                    // scrollDirection: Axis.horizontal,
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    itemCount: diaryData?.length ?? 0,
-                    onPageChanged: (index) {
-                      _curIdx = index;
-                      if (_lastCurIndex != _curIdx) {
-                        try {
-                          widget.arguments?.scrollController?.jumpTo(System().scrollAuto(_curIdx, widget.arguments?.heightTopProfile ?? 0, widget.arguments?.heightBox?.toInt() ?? 175));
-                        } catch (e) {
-                          print("ini error $e");
-                        }
-                        Future.delayed(const Duration(milliseconds: 400), () {
-                          start(diaryData?[index] ?? ContentData());
-                          System().increaseViewCount2(context, diaryData?[index] ?? ContentData(), check: false);
+              child: PageView.builder(
+                scrollDirection: Axis.vertical,
+                controller: _pageController,
+
+                // scrollDirection: Axis.horizontal,
+                physics: const AlwaysScrollableScrollPhysics(),
+                itemCount: diaryData?.length ?? 0,
+                onPageChanged: (index) {
+                  print("===asdasdasd $index");
+                  _curIdx = index;
+                  if (_lastCurIndex != _curIdx) {
+                    try {
+                      widget.arguments?.scrollController?.jumpTo(System().scrollAuto(_curIdx, widget.arguments?.heightTopProfile ?? 0, widget.arguments?.heightBox?.toInt() ?? 175));
+                    } catch (e) {
+                      print("ini error $e");
+                    }
+                    Future.delayed(const Duration(milliseconds: 400), () {
+                      start(diaryData?[index] ?? ContentData());
+                      System().increaseViewCount2(context, diaryData?[index] ?? ContentData(), check: false);
+                    });
+                    if (_curIdx == (notifier.diaryData?.length ?? 0) - 1) {
+                      Future.delayed(const Duration(milliseconds: 1000), () async {
+                        await notifier.loadMoreFullScreen(context, widget.arguments!.pageSrc!, widget.arguments?.key ?? '');
+                        setState(() {
+                          diaryData = notifier.diaryData;
                         });
-                        if (_curIdx == (notifier.diaryData?.length ?? 0) - 1) {
-                          Future.delayed(const Duration(milliseconds: 1000), () async {
-                            await notifier.loadMoreFullScreen(context, widget.arguments!.pageSrc!, widget.arguments?.key ?? '');
-                            setState(() {
-                              diaryData = notifier.diaryData;
-                            });
+                      });
+                      if (_curIdx == (notifier.diaryData?.length ?? 0) - 1) {
+                        Future.delayed(const Duration(milliseconds: 1000), () async {
+                          await notifier.loadMoreFullScreen(context, widget.arguments!.pageSrc!, widget.arguments?.key ?? '');
+                          setState(() {
+                            diaryData = notifier.diaryData;
                           });
-                        }
-                        if (diaryData?[index].certified ?? false) {
-                          System().block(context);
-                        } else {
-                          System().disposeBlock();
-                        }
+                        });
                       }
-                      _lastCurIndex = _curIdx;
-                    },
-                    itemBuilder: (context, index) {
-                      if (diaryData == null || home.isLoadingDiary) {
-                        fAliplayer?.pause();
-                        _lastCurIndex = -1;
-                        return CustomShimmer(
-                          width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                          height: 168,
-                          radius: 8,
-                          margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                          padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                        );
-                      } else if (index == diaryData?.length) {
-                        return UnconstrainedBox(
-                          child: Container(
-                            alignment: Alignment.center,
-                            width: 80 * SizeConfig.scaleDiagonal,
-                            height: 80 * SizeConfig.scaleDiagonal,
-                            child: const CustomLoading(),
-                          ),
-                        );
+                      if (diaryData?[index].certified ?? false) {
+                        System().block(context);
+                      } else {
+                        System().disposeBlock();
                       }
-                      if (_curIdx == 0 && diaryData?[0].reportedStatus == 'BLURRED') {
-                        isPlay = false;
-                        fAliplayer?.stop();
-                      }
-      
-                      return itemDiary(notifier, index);
-                    },
-                  ),
-                ),
+                    }
+                    _lastCurIndex = _curIdx;
+                  }
+                },
+                itemBuilder: (context, index) {
+                  if (diaryData == null || home.isLoadingDiary) {
+                    fAliplayer?.pause();
+                    _lastCurIndex = -1;
+                    return CustomShimmer(
+                      width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                      height: 168,
+                      radius: 8,
+                      margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                      padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                    );
+                  } else if (index == diaryData?.length) {
+                    return UnconstrainedBox(
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: 80 * SizeConfig.scaleDiagonal,
+                        height: 80 * SizeConfig.scaleDiagonal,
+                        child: const CustomLoading(),
+                      ),
+                    );
+                  }
+                  if (_curIdx == 0 && diaryData?[0].reportedStatus == 'BLURRED') {
+                    isPlay = false;
+                    fAliplayer?.stop();
+                  }
+
+                  return itemDiary(notifier, index);
+                },
               ),
             );
           }),
@@ -707,43 +719,62 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
   Widget itemDiary(ScrollDiaryNotifier notifier, int index) {
     return Stack(
       children: [
-        FutureBuilder(
-            future: Future.wait([for (StickerModel sticker in diaryData?[_curIdx].stickers ?? []) precacheImage(NetworkImage(sticker.image ?? ''), context)]),
-            builder: (context, snapshot) {
-              return Builder(builder: (context) {
-                // if (!isloading) {
-                //   return AliPlayerView(
-                //     onCreated: onViewPlayerCreated,
-                //     x: 0,
-                //     y: 0,
-                //     height: MediaQuery.of(context).size.width * 16.0 / 9.0,
-                //     width: MediaQuery.of(context).size.width,
-                //   );
-                // }
-                return Stack(
-                  children: [
-                    AliPlayerView(
-                      onCreated: onViewPlayerCreated,
-                      x: 0,
-                      y: 0,
-                      height: MediaQuery.of(context).size.width * 16.0 / 9.0,
-                      width: MediaQuery.of(context).size.width,
-                    ),
-                    Visibility(
-                      visible: isPlay,
-                      child: StickerOverlay(
-                        fullscreen: false,
-                        stickers: diaryData?[_curIdx].stickers,
+        if (_curIdx == index)
+          FutureBuilder(
+              future: Future.wait([for (StickerModel sticker in diaryData?[index].stickers ?? []) precacheImage(NetworkImage(sticker.image ?? ''), context)]),
+              builder: (context, snapshot) {
+                return Builder(builder: (context) {
+                  // if (!isloading) {
+                  //   return AliPlayerView(
+                  //     onCreated: onViewPlayerCreated,
+                  //     x: 0,
+                  //     y: 0,
+                  //     height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                  //     width: MediaQuery.of(context).size.width,
+                  //   );
+                  // }
+                  return Stack(
+                    children: [
+                      AliPlayerView(
+                        onCreated: onViewPlayerCreated,
+                        x: 0,
+                        y: 0,
+                        height: MediaQuery.of(context).size.width * 16.0 / 9.0,
                         width: MediaQuery.of(context).size.width,
-                        height: (MediaQuery.of(context).size.width) * (16 / 9),
-                        isPause: isPause || _showLoading,
-                        canPause: true,
                       ),
-                    ),
-                  ],
-                );
-              });
-            }),
+                      Visibility(
+                        visible: isPlay,
+                        child: StickerOverlay(
+                          fullscreen: false,
+                          stickers: diaryData?[index].stickers,
+                          width: MediaQuery.of(context).size.width,
+                          height: (MediaQuery.of(context).size.width) * (16 / 9),
+                          isPause: isPause || _showLoading,
+                          canPause: true,
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: AnimatedOpacity(
+                          opacity: opacityLevel,
+                          duration: const Duration(milliseconds: 500),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Opacity(
+                              opacity: 0.4,
+                              child: Icon(
+                                isPause ? Icons.play_arrow_rounded : Icons.pause_rounded,
+                                size: 100,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                });
+              }),
 
         // _buildProgressBar(SizeConfig.screenWidth!, 500),
         !notifier.connectionError
@@ -848,7 +879,7 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
                           // width: SizeConfig.screenWidth,
                           // height: MediaQuery.of(context).size.width * 16.0 / 9.0,
                           alignment: Alignment.center,
-                          padding: EdgeInsets.all(20),
+                          padding: const EdgeInsets.all(20),
                           child: CustomTextWidget(
                             textToDisplay: lang?.couldntLoadVideo ?? 'Error',
                             maxLines: 3,
@@ -857,7 +888,7 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
                   )
                 : Container(),
         _showLoading && !notifier.connectionError
-            ? Positioned.fill(
+            ? const Positioned.fill(
                 child: Align(
                 alignment: Alignment.center,
                 child: CircularProgressIndicator(),
@@ -897,10 +928,8 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
                       // storyComplete(not);
                       if (isPause) {
                         play();
-                        print('DiaryPlayer pause');
                       } else {
                         pause();
-                        print('DiaryPlayer play');
                       }
                       setState(() {
                         opacityLevel = 1.0;
@@ -928,6 +957,7 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
                 ),
               ],
             ),
+
             data?.reportedStatus == "BLURRED"
                 ? CustomBackgroundLayer(
                     sigmaX: 30,
@@ -992,24 +1022,6 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
                     animatedController: animatedController,
                   ),
 
-            Align(
-              alignment: Alignment.center,
-              child: AnimatedOpacity(
-                opacity: opacityLevel,
-                duration: const Duration(milliseconds: 500),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Opacity(
-                    opacity: 0.4,
-                    child: Icon(
-                      isPause ? Icons.play_arrow_rounded : Icons.pause_rounded,
-                      size: 100,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            ),
             Align(
               alignment: Alignment.bottomCenter,
               child: data?.email == SharedPreference().readStorage(SpKeys.email) && (data?.reportedStatus == 'OWNED')

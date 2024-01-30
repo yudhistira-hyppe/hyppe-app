@@ -451,19 +451,11 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
               if (changevalue > _videoDuration) {
                 changevalue = _videoDuration;
               }
-          
+
               widget.data.isLoading = true;
-              Navigator.pop(
-                  context,
-                  VideoIndicator(
-                      videoDuration: _videoDuration,
-                      seekValue: changevalue,
-                      positionText: _currentPositionText,
-                      showTipsWidget: _showTipsWidget,
-                      isMute: isMute));
-              
-                  SystemChrome.setPreferredOrientations(
-                      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+              Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
+
+              SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
             }
           },
           child: notifier.loadVideo
@@ -480,7 +472,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                       itemCount: vidData?.length ?? 0,
                       onPageChanged: (value) {
                         curentIndex = value;
-                        
+
                         notifier.currIndex = value;
                         print('index change ${notifier.currentIndex}');
                         scrollPage(vidData?[value].metadata?.height, vidData?[value].metadata?.width);
@@ -503,7 +495,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                           //   child: Center(child: Text("data ${index}")),
                           // );
                           print('view ads: 1');
-          
+
                           return isloadingRotate
                               ? Container(
                                   color: Colors.black,
@@ -600,14 +592,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                     ),
                                   Align(
                                     alignment: Alignment.topCenter,
-                                    child: _buildController(
-                                      Colors.transparent,
-                                      Colors.white,
-                                      100,
-                                      context.getWidth(),
-                                      SizeConfig.screenHeight! * 0.8,
-                                      orientation
-                                    ),
+                                    child: _buildController(Colors.transparent, Colors.white, 100, context.getWidth(), SizeConfig.screenHeight! * 0.8, orientation),
                                   ),
                                   // if (Platform.isIOS)
                                   AnimatedOpacity(
@@ -633,21 +618,21 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                             isPause = true;
                                             setState(() {});
                                             print('data result $res');
-                                            if (res != null && res == true){
-                                                if ((widget.data.metadata?.height ?? 0) < (widget.data.metadata?.width ?? 0)) {
-                                                  print('Landscape VidPlayerPage');
-                                                  SystemChrome.setPreferredOrientations([
-                                                    DeviceOrientation.landscapeLeft,
-                                                    DeviceOrientation.landscapeRight,
-                                                  ]);
-                                                } else {
-                                                  print('Portrait VidPlayerPage');
-                                                  SystemChrome.setPreferredOrientations([
-                                                    DeviceOrientation.portraitUp,
-                                                    DeviceOrientation.portraitDown,
-                                                  ]);
-                                                }
+                                            if (res != null && res == true) {
+                                              if ((widget.data.metadata?.height ?? 0) < (widget.data.metadata?.width ?? 0)) {
+                                                print('Landscape VidPlayerPage');
+                                                SystemChrome.setPreferredOrientations([
+                                                  DeviceOrientation.landscapeLeft,
+                                                  DeviceOrientation.landscapeRight,
+                                                ]);
+                                              } else {
+                                                print('Portrait VidPlayerPage');
+                                                SystemChrome.setPreferredOrientations([
+                                                  DeviceOrientation.portraitUp,
+                                                  DeviceOrientation.portraitDown,
+                                                ]);
                                               }
+                                            }
                                           },
                                           onTap: () {
                                             if (widget.data.email != email) {
@@ -662,7 +647,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                               //   "=============== pause 11".logger();
                                               //   notifier.vidData?[_curIdx].fAliplayer?.pause();
                                               // }
-          
+
                                               ShowBottomSheet().onShowOptionContent(
                                                 context,
                                                 contentData: widget.data,
@@ -741,14 +726,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                             ),
                           Align(
                             alignment: Alignment.topCenter,
-                            child: _buildController(
-                              Colors.transparent,
-                              Colors.white,
-                              100,
-                              context.getWidth(),
-                              SizeConfig.screenHeight! * 0.8,
-                              orientation
-                            ),
+                            child: _buildController(Colors.transparent, Colors.white, 100, context.getWidth(), SizeConfig.screenHeight! * 0.8, orientation),
                           ),
                           // if (Platform.isIOS)
                           Align(
@@ -767,7 +745,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                   Navigator.pop(context,
                                       VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
                                 },
-                                padding: orientation == Orientation.portrait ? const EdgeInsets.symmetric(horizontal: 8.0, vertical: 42.0) : const EdgeInsets.symmetric(horizontal: 46.0, vertical: 8.0),
+                                padding:
+                                    orientation == Orientation.portrait ? const EdgeInsets.symmetric(horizontal: 8.0, vertical: 42.0) : const EdgeInsets.symmetric(horizontal: 46.0, vertical: 8.0),
                                 icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg", defaultColor: false),
                               ),
                             ),
@@ -1394,29 +1373,27 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                 ),
                               ),
                             ),
-                             Visibility(
-                                visible: widget.data.location != '',
-                                child: Container(
-                                  // width: SizeConfig.screenWidth! * .18,
-                                  decoration: BoxDecoration(color: kHyppeBackground.withOpacity(.4), borderRadius: BorderRadius.circular(8.0)),
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 6,
-                                  ),
-                                  child: Padding(
+                            Visibility(
+                              visible: widget.data.location != '',
+                              child: Container(
+                                // width: SizeConfig.screenWidth! * .18,
+                                decoration: BoxDecoration(color: kHyppeBackground.withOpacity(.4), borderRadius: BorderRadius.circular(8.0)),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 6,
+                                ),
+                                child: Padding(
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0,
                                     ),
-                                    child: location()
-                                  ),
-                                ),
+                                    child: location()),
                               ),
+                            ),
                           ],
                         ),
                       ),
                       Container(
                         constraints: BoxConstraints(
-                          maxWidth: orientation == Orientation.landscape ? SizeConfig.screenWidth! * .29 : SizeConfig.screenWidth!,
-                          maxHeight: isShowMore ? 52 : SizeConfig.screenHeight! * .2),
+                            maxWidth: orientation == Orientation.landscape ? SizeConfig.screenWidth! * .29 : SizeConfig.screenWidth!, maxHeight: isShowMore ? 52 : SizeConfig.screenHeight! * .2),
                         margin: const EdgeInsets.symmetric(horizontal: 4.0),
                         padding: const EdgeInsets.only(left: 8.0, bottom: 12.0),
                         child: SingleChildScrollView(
@@ -1913,7 +1890,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
     return textPainter.size;
   }
 
-  Widget location(){
+  Widget location() {
     switch (orientation) {
       case Orientation.portrait:
         return Row(
@@ -1929,9 +1906,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
               width: 4.0,
             ),
             SizedBox(
-              width: widget.data.tagPeople?.isNotEmpty ?? false 
-                ? SizeConfig.screenWidth! * .4
-                :  SizeConfig.screenWidth! * .65,
+              width: widget.data.tagPeople?.isNotEmpty ?? false ? SizeConfig.screenWidth! * .4 : SizeConfig.screenWidth! * .65,
               child: Text(
                 '${widget.data.location}',
                 maxLines: 1,
@@ -1956,9 +1931,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
               width: 4.0,
             ),
             SizedBox(
-              width: widget.data.tagPeople?.isNotEmpty ?? false 
-                ? SizeConfig.screenWidth! * .13 
-                : SizeConfig.screenWidth! * .22,
+              width: widget.data.tagPeople?.isNotEmpty ?? false ? SizeConfig.screenWidth! * .13 : SizeConfig.screenWidth! * .22,
               child: Text(
                 '${widget.data.location}',
                 maxLines: 1,

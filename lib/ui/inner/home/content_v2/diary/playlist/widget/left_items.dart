@@ -16,6 +16,7 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_tag_label
 
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../../core/models/collection/music/music.dart';
@@ -57,7 +58,7 @@ class LeftItems extends StatefulWidget {
 }
 
 class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMixin {
-  late final AnimationController animatedController = AnimationController(vsync: this, duration: const Duration(seconds: 2))..repeat();
+  // late final AnimationController animatedController = AnimationController(vsync: this, duration: const Duration(seconds: 2))..repeat();
   // AnimationController? _controller;
   // Animation<Offset>? _offsetAnimation;
   bool isShowMore = false;
@@ -66,6 +67,7 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'LeftItems');
     super.initState();
+    // widget.animatedController!.repeat();
     // _controller = AnimationController(
     //   duration: const Duration(seconds: 3),
     //   vsync: this,
@@ -79,6 +81,7 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
   @override
   void dispose() {
     // _controller.dispose();
+    // animatedController.dispose();
     super.dispose();
   }
 
@@ -94,7 +97,6 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
       alignment: Alignment.bottomRight,
       padding: const EdgeInsets.only(left: 15.0, right: 20, bottom: 50.0),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,7 +109,7 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                         children: [
                           (widget.tagPeople?.isNotEmpty ?? false)
                               ? PicTagLabel(
-                                  width: 24,
+                                  width: 20,
                                   icon: 'tag-people-light',
                                   label: '${widget.tagPeople?.length} ${notifier.translate.people}',
                                   function: () {
@@ -129,11 +131,8 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                     )
                   : const SizedBox(),
               Container(
-                // width: SizeConfig.screenWidth! / 1.3,
-                // padding: const EdgeInsets.all(2),
                 constraints: BoxConstraints(
                     maxWidth: SizeConfig.screenWidth! * .7,
-                    // minHeight: SizeConfig.screenHeight! * .02,
                     maxHeight: widget.description!.length > 24
                         ? isShowMore
                             ? 42
@@ -209,10 +208,10 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                             radius: 18,
                             backgroundColor: kHyppeSurface.withOpacity(.9),
                             child: AnimatedBuilder(
-                              animation: animatedController,
+                              animation: widget.animatedController!,
                               builder: (_, child) {
                                 return Transform.rotate(
-                                  angle: animatedController.value * 2 * -math.pi,
+                                  angle: widget.animatedController!.value * 2 * -math.pi,
                                   child: child,
                                 );
                               },
@@ -223,7 +222,7 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                                     animation: widget.animatedController!,
                                     builder: (_, child) {
                                       return Transform.rotate(
-                                        angle: widget.animatedController!.value * 2 * math.pi,
+                                        angle: widget.animatedController!.value * 2 * -math.pi,
                                         child: child,
                                       );
                                     },
@@ -253,7 +252,7 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                                   animation: widget.animatedController!,
                                   builder: (_, child) {
                                     return Transform.rotate(
-                                      angle: widget.animatedController!.value * 2 * math.pi,
+                                      angle: widget.animatedController!.value * 2 * -math.pi,
                                       child: child,
                                     );
                                   },
@@ -271,19 +270,26 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                             height: 12.0,
                             width: 5,
                           ),
-                          Expanded(
-                            child: CustomTextWidget(
-                              textToDisplay: " ${widget.data?.music?.musicTitle ?? ''}",
-                              maxLines: 2,
-                              textStyle: const TextStyle(color: kHyppeTextPrimary, fontSize: 12, fontWeight: FontWeight.w700),
-                              textAlign: TextAlign.left,
-                            ),
+                          SizedBox(
+                            width: SizeConfig.screenWidth! * .56,
+                            height: 40,
+                            child: _textSize(widget.data?.music?.musicTitle ?? '', const TextStyle(fontWeight: FontWeight.normal)).width > SizeConfig.screenWidth! * .56
+                                ? Marquee(
+                                    text: '  ${widget.data?.music?.musicTitle ?? ''}',
+                                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),
+                                  )
+                                : CustomTextWidget(
+                                    textToDisplay: " ${widget.data?.music?.musicTitle ?? ''}",
+                                    maxLines: 1,
+                                    textStyle: const TextStyle(color: kHyppeTextPrimary, fontSize: 12),
+                                    textAlign: TextAlign.left,
+                                  ),
                           ),
                         ],
                       ),
                     ),
                   ),
-                )
+                ),
               // SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
               //         (widget.data?.reportedStatus != 'OWNED' && widget.data?.reportedStatus != 'BLURRED' && widget.data?.reportedStatus2 != 'BLURRED') &&
               //         (widget.data?.boosted.isEmpty ?? [].isEmpty) &&
@@ -347,7 +353,12 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
   //           ),
   //         ),
   //       )
-  //     ],
+  //     ],`
   //   );
   // }
+
+  Size _textSize(String text, TextStyle style) {
+    final TextPainter textPainter = TextPainter(text: TextSpan(text: text, style: style), maxLines: 1, textDirection: TextDirection.ltr)..layout(minWidth: 0, maxWidth: double.infinity);
+    return textPainter.size;
+  }
 }

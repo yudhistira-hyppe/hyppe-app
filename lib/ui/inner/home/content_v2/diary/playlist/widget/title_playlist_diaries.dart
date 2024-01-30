@@ -59,27 +59,39 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
     var lang = context.read<TranslateNotifierV2>().translate;
     return Consumer2<DiariesPlaylistNotifier, FollowRequestUnfollowNotifier>(builder: (context, ref, follRef, _) {
       final data = ref.data ?? widget.data;
+      double widthUsername = _textSize(data?.username ?? '', const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)).width;
+      double widthDate = _textSize(
+              '${System().readTimestamp(
+                DateTime.parse(System().dateTimeRemoveT(data?.createdAt ?? '')).millisecondsSinceEpoch,
+                context,
+                fullCaption: true,
+              )}',
+              const TextStyle(fontSize: 12))
+          .width;
+
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Align(
             alignment: Alignment.topCenter,
             child: Container(
-              width: SizeConfig.screenWidth,
-              padding: const EdgeInsets.only(
-                left: 0,
-                top: 25.96,
-                right: 8.0,
-                bottom: 25.96,
-              ),
+              // color: Colors.red,
+              margin: const EdgeInsets.only(top: kTextTabBarHeight - 45, left: 12.0),
+              padding: const EdgeInsets.symmetric(vertical: 18.0),
+              width: double.infinity,
+              height: kToolbarHeight * 1.6,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Material(
-                        color: Colors.transparent,
+                      SizedBox(
+                        width: 30,
                         child: IconButton(
                           onPressed: () {
                             // fAliplayer?.pause();
@@ -94,42 +106,41 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                       ),
                       (data?.isReport ?? false)
                           ? Container()
-                          : ProfileComponent(
-                              isDetail: true,
-                              show: true,
-                              onFollow: () {},
-                              widthText: _textSize(
-                                      System().readTimestamp(
-                                        DateTime.parse(System().dateTimeRemoveT(widget.data?.createdAt ?? '')).millisecondsSinceEpoch,
-                                        context,
-                                        fullCaption: true,
-                                      ),
-                                      const TextStyle(fontWeight: FontWeight.bold))
-                                  .width,
-                              following: true,
-                              haveStory: false,
-                              onTapOnProfileImage: () => System().navigateToProfile(context, data?.email ?? ''),
-                              username: "${data?.username}",
-                              spaceProfileAndId: fourteenPx,
-                              featureType: FeatureType.diary,
-                              imageUrl: '${System().showUserPicture(data?.avatar?.mediaEndpoint)}',
-                              badge: data?.urluserBadge,
-                              isCelebrity: data?.privacy?.isCelebrity,
-                              isUserVerified: data?.isIdVerified ?? false,
-                              createdAt: '${System().readTimestamp(
-                                DateTime.parse(System().dateTimeRemoveT(data?.createdAt ?? '')).millisecondsSinceEpoch,
-                                context,
-                                fullCaption: true,
-                              )}',
-                              // haveStory: data.isHaveStory ?? false,
-                              // onFollow: () async => await context
-                              //     .read<FollowRequestUnfollowNotifier>()
-                              //     .followRequestUnfollowUser(context, fUserId: data.userID, statusFollowing: StatusFollowing.rejected, currentValue: data),
-                              // username: "${data.fullName}",
-                              // isCelebrity: data.isCelebrity,
-                              // imageUrl: "${data.profilePic}$VERYBIG",
-                              // following: value.statusFollowing == StatusFollowing.following || value.statusFollowing == StatusFollowing.requested ? true : false,
-                              // onTapOnProfileImage: () => context.read<DiariesPlaylistNotifier>().followUser(context),
+                          : Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8.0),
+                              child: ProfileComponent(
+                                isFullscreen: true,
+                                show: true,
+                                following: true,
+                                onFollow: () {},
+                                widthText: (data?.username?.length ?? 0) >= 10
+                                    ? 100
+                                    : widthUsername > widthDate
+                                        ? widthUsername
+                                        : widthDate,
+                                username: data?.username ?? 'No Name',
+                                textColor: kHyppeLightBackground,
+                                spaceProfileAndId: eightPx,
+                                haveStory: false,
+                                isCelebrity: false,
+                                isUserVerified: data?.privacy!.isIdVerified ?? false,
+                                onTapOnProfileImage: () {
+                                  // fAliplayer?.setMuted(true);
+                                  // fAliplayer?.pause();
+                                  System().navigateToProfile(context, data?.email ?? '');
+                                  setState(() {
+                                    // notifier.isMute = true;
+                                  });
+                                },
+                                featureType: FeatureType.pic,
+                                imageUrl: '${System().showUserPicture(data?.avatar?.mediaEndpoint)}',
+                                badge: data?.urluserBadge,
+                                createdAt: '${System().readTimestamp(
+                                  DateTime.parse(System().dateTimeRemoveT(data?.createdAt ?? '')).millisecondsSinceEpoch,
+                                  context,
+                                  fullCaption: true,
+                                )}',
+                              ),
                             ),
                     ],
                   ),
@@ -152,7 +163,7 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                               )
                             : Center(
                                 child: Container(
-                                  padding: const EdgeInsets.all(8),
+                                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
                                   decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(8.0)),
                                   // transform: Matrix4.translationValues(-40.0, 0.0, 0.0),
                                   child: Text(

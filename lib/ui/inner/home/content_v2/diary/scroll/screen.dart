@@ -72,7 +72,7 @@ class ScrollDiary extends StatefulWidget {
   _ScrollDiaryState createState() => _ScrollDiaryState();
 }
 
-class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, TickerProviderStateMixin, WidgetsBindingObserver, RouteAware {
+class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
   List<ContentData>? diaryData = [];
   int indexDiary = 0;
   FlutterAliplayer? fAliplayer;
@@ -640,7 +640,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(transform: Matrix4.translationValues(-18.0, 0.0, 0.0), margin: const EdgeInsets.symmetric(horizontal: 10), child: widget.arguments?.titleAppbar ?? Container()),
-                            if (diaryData?[indexDiary].email != email && (diaryData?[indexDiary].isNewFollowing ?? false))
+                            if (diaryData?[indexDiary].email != email && (diaryData?[indexDiary].isNewFollowing ?? false) && (widget.arguments?.isProfile?? false))
                               Consumer<PreviewPicNotifier>(
                                 builder: (context, picNot, child) => Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -683,7 +683,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                             }),
                       ),
                       Expanded(
-                        child: diaryData?.isEmpty ?? [].isEmpty
+                        child: (diaryData?.isEmpty ?? true)
                             ? const NoResultFound()
                             : RefreshIndicator(
                                 onRefresh: () async {
@@ -812,6 +812,34 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                       badge: diaryData?[index].urluserBadge,
                     ),
                   ),
+                  if (diaryData?[index].email != email && (diaryData?[index].isNewFollowing ?? false) && !(widget.arguments?.isProfile?? false))
+                    Consumer<PreviewPicNotifier>(
+                      builder: (context, picNot, child) => Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            context.handleActionIsGuest(() {
+                              if (diaryData?[index].insight?.isloadingFollow != true) {
+                                picNot.followUser(context, diaryData?[index] ?? ContentData(), isUnFollow: diaryData?[index].following, isloading: diaryData?[index].insight?.isloadingFollow ?? false);
+                              }
+                            });
+                          },
+                          child: diaryData?[index].insight?.isloadingFollow ?? false
+                              ? const SizedBox(
+                                  height: 40,
+                                  width: 30,
+                                  child: Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: CustomLoading(),
+                                  ),
+                                )
+                              : Text(
+                                  (diaryData?[index].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+                                  style: const TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                                ),
+                        ),
+                      ),
+                    ),
                   GestureDetector(
                     onTap: () {
                       if (diaryData?[index].email != email) {
@@ -893,7 +921,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                       // color: Colors.yellow,
                     ),
                     child: AspectRatio(
-                      aspectRatio: 9 / 16,
+                      aspectRatio: 4 / 5,
                       child: Stack(
                         children: [
                           _curIdx == index
@@ -914,12 +942,16 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                                         // }
                                         return Stack(
                                           children: [
-                                            AliPlayerView(
-                                              onCreated: onViewPlayerCreated,
-                                              x: 0,
-                                              y: 0,
-                                              height: MediaQuery.of(context).size.width * 16.0 / 9.0,
-                                              width: MediaQuery.of(context).size.width,
+                                            OverflowBox(
+                                              maxHeight: MediaQuery.of(context).size.height,
+                                              maxWidth: MediaQuery.of(context).size.width,
+                                              child: AliPlayerView(
+                                                onCreated: onViewPlayerCreated,
+                                                x: 0,
+                                                y: 0,
+                                                height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                                                width: MediaQuery.of(context).size.width,
+                                              ),
                                             ),
                                             Visibility(
                                               visible: isPlay,
@@ -955,6 +987,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                                             limit: widget.arguments?.limit,
                                             page: index,
                                             pageSrc: widget.arguments?.pageSrc,
+                                            isTrue: isMute,
                                             scrollController: widget.arguments?.scrollController);
                                         Routing().move(Routes.scrollFullDiary, argument: param);
                                       }
@@ -968,7 +1001,13 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                                     onDoubleTap: () {
                                       final _likeNotifier = context.read<LikeNotifier>();
                                       if (diaryData?[index] != null) {
-                                        _likeNotifier.likePost(context, diaryData![index]);
+                                        _likeNotifier.likePost(context, diaryData![index]).then((value) {
+                                          List<ContentData>? diaryData = context.read<PreviewDiaryNotifier>().diaryData;
+                                          int idx = diaryData!.indexWhere((e) => e.postID == value['_id']);
+                                          diaryData[idx].insight?.isPostLiked = value['isPostLiked'];
+                                          diaryData[idx].insight?.likes = value['likes'];
+                                          diaryData[idx].isLiked = value['isLiked'];
+                                        });
                                       }
                                     },
                                     child: Container(
@@ -1087,13 +1126,13 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                                     )
                                   : Container(),
                           _showLoading && !notifier.connectionError
-                              ? Positioned.fill(
+                              ? const Positioned.fill(
                                   child: Align(
                                   alignment: Alignment.center,
                                   child: CircularProgressIndicator(),
                                 ))
                               : Container(),
-                          _buildBody(context, SizeConfig.screenWidth, diaryData?[index] ?? ContentData()),
+                          if (diaryData?[index].reportedStatus != 'BLURRED') _buildBody(context, SizeConfig.screenWidth, diaryData?[index] ?? ContentData()),
                           blurContentWidget(context, diaryData?[index] ?? ContentData()),
                         ],
                       ),
@@ -1102,7 +1141,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                 ),
               ),
               SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                      (diaryData?[index].boosted.isEmpty ?? [].isEmpty) &&
+                      diaryData?[index].statusBoost != 'BERLANGSUNG' &&
                       (diaryData?[index].reportedStatus != 'OWNED' && diaryData?[index].reportedStatus != 'BLURRED' && diaryData?[index].reportedStatus2 != 'BLURRED') &&
                       diaryData?[index].email == email
                   ? Container(
@@ -1130,7 +1169,10 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                       ),
                     )
                   : Container(),
-              if (diaryData?[index].email == email && (diaryData?[index].boostCount ?? 0) >= 0 && (diaryData?[index].boosted.isNotEmpty ?? [].isEmpty))
+              if (diaryData?[index].email == email &&
+                  (diaryData?[index].boostCount ?? 0) >= 0 &&
+                  diaryData?[index].statusBoost == 'BERLANGSUNG' &&
+                  (diaryData?[index].boosted.isNotEmpty ?? [].isEmpty))
                 Container(
                   padding: const EdgeInsets.all(10),
                   margin: EdgeInsets.only(bottom: 10),
@@ -1186,7 +1228,13 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                                       ),
                                       onTap: () {
                                         if (diaryData?[index] != null) {
-                                          likeNotifier.likePost(context, diaryData![index]);
+                                          likeNotifier.likePost(context, diaryData![index]).then((value) {
+                                            List<ContentData>? diaryData = context.read<PreviewDiaryNotifier>().diaryData;
+                                            int idx = diaryData!.indexWhere((e) => e.postID == value['_id']);
+                                            diaryData[idx].insight?.isPostLiked = value['isPostLiked'];
+                                            diaryData[idx].insight?.likes = value['likes'];
+                                            diaryData[idx].isLiked = value['isLiked'];
+                                          });
                                         }
                                       },
                                     ),

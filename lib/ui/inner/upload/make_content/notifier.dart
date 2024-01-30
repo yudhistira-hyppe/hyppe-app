@@ -91,15 +91,15 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     notifyListeners();
   }
 
-  set showToast(bool state){
+  set showToast(bool state) {
     _showToast = state;
     notifyListeners();
   }
 
-  showVideoToast(Duration duration){
-    if(!showToast){
+  showVideoToast(Duration duration) {
+    if (!showToast) {
       showToast = true;
-      Future.delayed(duration, (){
+      Future.delayed(duration, () {
         showToast = false;
       });
     }
@@ -107,7 +107,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
   String _messageToast = '';
   String get messageToast => _messageToast;
-  set messageToast(String val){
+  set messageToast(String val) {
     _messageToast = val;
     notifyListeners();
   }
@@ -131,11 +131,11 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     //     15: "15${language.timerSecond}",
     //   };
     // }
-    if(featureType == FeatureType.diary){
+    if (featureType == FeatureType.diary) {
       _selectedDuration = 60;
-    }else if(featureType == FeatureType.vid){
+    } else if (featureType == FeatureType.vid) {
       _selectedDuration = 1800;
-    }else if(featureType == FeatureType.story){
+    } else if (featureType == FeatureType.story) {
       _selectedDuration = 15;
     }
     notifyListeners();
@@ -219,7 +219,6 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
         if (_timer != null && (_timer?.isActive ?? false) && timerIn.isActive) {
           _elapsedProgress++;
           if (featureType != FeatureType.pic && selectedDuration != 0) {
-
             _progressDev = _elapsedProgress / _selectedDuration;
           } else {
             _progressDev = 1.0;
@@ -320,16 +319,21 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     try {
       print('isVideo $isVideo');
 
-      await System().getLocalMedia(featureType: featureType, context: context, isVideo: isVideo, onException: (){
-        if(featureType == FeatureType.story){
-          messageToast = language.messageLessLimitStory ?? 'Error';
-          showVideoToast(const Duration(seconds: 3));
-        }else{
-          messageToast = language.messageLessLimitVideo ?? 'Error';
-          showVideoToast(const Duration(seconds: 3));
-        }
-
-      }).then((value) async {
+      await System()
+          .getLocalMedia(
+              featureType: featureType,
+              context: context,
+              isVideo: isVideo,
+              onException: () {
+                if (featureType == FeatureType.story) {
+                  messageToast = language.messageLessLimitStory ?? 'Error';
+                  showVideoToast(const Duration(seconds: 3));
+                } else {
+                  messageToast = language.messageLessLimitVideo ?? 'Error';
+                  showVideoToast(const Duration(seconds: 3));
+                }
+              })
+          .then((value) async {
         Future.delayed(const Duration(milliseconds: 1000), () async {
           if (value.values.single != null) {
             Future.delayed(const Duration(milliseconds: 1000), () => setLoading(false));
@@ -412,22 +416,20 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
         notifyListeners();
         messageToast = notifier.featureType == FeatureType.story ? (notifier.language.recordAtLeast4Seconds ?? 'Error') : (notifier.language.recordAtLeast15Seconds ?? 'Error');
-        if(featureType == FeatureType.story){
-          if(tempDuration.inSeconds >= 4){
+        if (featureType == FeatureType.story) {
+          if (tempDuration.inSeconds >= 4) {
             await _routing.move(Routes.previewContent);
-          }else{
+          } else {
             showVideoToast(const Duration(seconds: 3));
           }
-        }else{
-          if(tempDuration.inSeconds >= 15){
+        } else {
+          if (tempDuration.inSeconds >= 15) {
             await _routing.move(Routes.previewContent);
-          }else{
+          } else {
             showVideoToast(const Duration(seconds: 3));
           }
         }
-
       });
-
     } catch (e) {
       e.logger();
     }

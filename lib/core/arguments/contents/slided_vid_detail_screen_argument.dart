@@ -16,6 +16,7 @@ class SlidedVidDetailScreenArgument extends ContentScreenArgument {
   final ScrollController? scrollController;
   final double? heightBox;
   final double? heightTopProfile;
+  final bool? isProfile;
 
   @override
   FeatureType get featureType => FeatureType.pic;
@@ -23,6 +24,7 @@ class SlidedVidDetailScreenArgument extends ContentScreenArgument {
   SlidedVidDetailScreenArgument({
     this.index = 0,
     this.vidData,
+    this.isProfile = false,
     this.page,
     this.limit,
     required this.type,

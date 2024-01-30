@@ -287,6 +287,8 @@ class ContentData {
     this.isContentLoading,
   });
 
+
+
   ContentData.fromJson(Map<String, dynamic> json) {
     metadata = json['metadata'] != null ? Metadata.fromJson(json['metadata']) : null;
     mediaBasePath = json['mediaBasePath'];
@@ -302,7 +304,7 @@ class ContentData {
     isIdVerified = json['isIdVerified'];
     title = json['title'];
     isViewed = json['isViewed'] ?? false;
-    tags = json['tags'] != null ? json['tags'].cast<String>() : [];
+    // tags = json['tags'] != null ? json['tags'].cast<String>() : [];
     allowComments = json['allowComments'] ?? false;
     certified = json['saleAmount'] != null
         ? json['saleAmount'] > 0
@@ -355,6 +357,7 @@ class ContentData {
     isBoost = json['isBoost'];
     boostJangkauan = json['boostJangkauan'] ?? 0;
     statusBoost = json['statusBoost'] ?? '';
+    // reportedStatus = "BLURRED";
     reportedStatus = json['reportedStatus'] ?? 'ALL';
     reportedStatus2 = json['reportedStatus'] ?? 'ALL';
     reportedUserCount = json['reportedUserCount'] ?? 0;
@@ -367,7 +370,6 @@ class ContentData {
             : MediaModel.fromJSON(json['media']);
     following = json['following'] ?? false;
     if (json['comment'] != null && json['comment'].length > 0) {
-      print("json length ${json['postID']} ${json['comment'].length}");
       comment = <Comment>[];
       json['comment'].forEach((v) {
         comment!.add(Comment.fromJson(v));
