@@ -739,10 +739,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                       Visibility(
                         visible: data.location != '',
                         child: Container(
-                          decoration: BoxDecoration(
-                            color: kHyppeBackground.withOpacity(.4),
-                            borderRadius: BorderRadius.circular(8.0)
-                          ),
+                          decoration: BoxDecoration(color: kHyppeBackground.withOpacity(.4), borderRadius: BorderRadius.circular(8.0)),
                           padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -759,9 +756,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                               ),
                               Container(
                                 constraints: BoxConstraints(
-                                  maxWidth: data.tagPeople?.isNotEmpty ?? false 
-                                      ? SizeConfig.screenWidth! * .4
-                                      : SizeConfig.screenWidth! * .65,
+                                  maxWidth: data.tagPeople?.isNotEmpty ?? false ? SizeConfig.screenWidth! * .4 : SizeConfig.screenWidth! * .65,
                                 ),
                                 child: Text(
                                   '${data.location}',
@@ -1029,6 +1024,15 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
   }
 
   Widget appBar(ContentData data, PreviewPicNotifier notifier) {
+    double widthUsername = _textSize(data.username ?? '', const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)).width;
+    double widthDate = _textSize(
+            '${System().readTimestamp(
+              DateTime.parse(System().dateTimeRemoveT(data.createdAt ?? '')).millisecondsSinceEpoch,
+              context,
+              fullCaption: true,
+            )}',
+            const TextStyle(fontSize: 12))
+        .width;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1061,7 +1065,11 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                 show: true,
                 following: true,
                 onFollow: () {},
-                widthText: 120,
+                widthText: (data.username?.length ?? 0) >= 10
+                    ? 100
+                    : widthUsername > widthDate
+                        ? widthUsername
+                        : widthDate,
                 username: data.username ?? 'No Name',
                 textColor: kHyppeLightBackground,
                 spaceProfileAndId: eightPx,
@@ -1105,7 +1113,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                         )
                       : Center(
                           child: Container(
-                            padding: const EdgeInsets.all(8),
+                            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
                             decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(8.0)),
                             // transform: Matrix4.translationValues(-40.0, 0.0, 0.0),
                             child: Text(

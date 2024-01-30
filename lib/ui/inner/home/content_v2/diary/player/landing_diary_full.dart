@@ -670,7 +670,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
     }
     fAliplayer?.stop();
     fAliplayer?.destroy();
-    _pauseScreen();
+    // _pauseScreen();
     // if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
     //   fAliplayer?.destroy();
     // }

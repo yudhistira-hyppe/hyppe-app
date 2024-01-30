@@ -208,7 +208,7 @@ class CardBoost extends StatelessWidget {
                           color: kHyppePrimary,
                         ),
                         child: CustomTextWidget(
-                          textToDisplay: "Lihat Detail",
+                          textToDisplay: language?.viewDetails ?? '',
                           textStyle: Theme.of(context).textTheme.overline?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                       ),

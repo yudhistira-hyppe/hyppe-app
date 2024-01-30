@@ -1098,13 +1098,13 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                                     )
                                   : Container(),
                           _showLoading && !notifier.connectionError
-                              ? Positioned.fill(
+                              ? const Positioned.fill(
                                   child: Align(
                                   alignment: Alignment.center,
                                   child: CircularProgressIndicator(),
                                 ))
                               : Container(),
-                          _buildBody(context, SizeConfig.screenWidth, diaryData?[index] ?? ContentData()),
+                          if (diaryData?[index].reportedStatus != 'BLURRED') _buildBody(context, SizeConfig.screenWidth, diaryData?[index] ?? ContentData()),
                           blurContentWidget(context, diaryData?[index] ?? ContentData()),
                         ],
                       ),
@@ -1113,7 +1113,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                 ),
               ),
               SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                      (diaryData?[index].boosted.isEmpty ?? [].isEmpty) &&
+                      diaryData?[index].statusBoost != 'BERLANGSUNG' &&
                       (diaryData?[index].reportedStatus != 'OWNED' && diaryData?[index].reportedStatus != 'BLURRED' && diaryData?[index].reportedStatus2 != 'BLURRED') &&
                       diaryData?[index].email == email
                   ? Container(
@@ -1141,7 +1141,10 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                       ),
                     )
                   : Container(),
-              if (diaryData?[index].email == email && (diaryData?[index].boostCount ?? 0) >= 0 && (diaryData?[index].boosted.isNotEmpty ?? [].isEmpty))
+              if (diaryData?[index].email == email &&
+                  (diaryData?[index].boostCount ?? 0) >= 0 &&
+                  diaryData?[index].statusBoost == 'BERLANGSUNG' &&
+                  (diaryData?[index].boosted.isNotEmpty ?? [].isEmpty))
                 Container(
                   padding: const EdgeInsets.all(10),
                   margin: EdgeInsets.only(bottom: 10),

@@ -59,6 +59,16 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
     var lang = context.read<TranslateNotifierV2>().translate;
     return Consumer2<DiariesPlaylistNotifier, FollowRequestUnfollowNotifier>(builder: (context, ref, follRef, _) {
       final data = ref.data ?? widget.data;
+      double widthUsername = _textSize(data?.username ?? '', const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)).width;
+      double widthDate = _textSize(
+              '${System().readTimestamp(
+                DateTime.parse(System().dateTimeRemoveT(data?.createdAt ?? '')).millisecondsSinceEpoch,
+                context,
+                fullCaption: true,
+              )}',
+              const TextStyle(fontSize: 12))
+          .width;
+
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -73,7 +83,7 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                // mainAxisSize: MainAxisSize.min,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,7 +113,11 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                                 show: true,
                                 following: true,
                                 onFollow: () {},
-                                widthText: 120,
+                                widthText: (data?.username?.length ?? 0) >= 10
+                                    ? 100
+                                    : widthUsername > widthDate
+                                        ? widthUsername
+                                        : widthDate,
                                 username: data?.username ?? 'No Name',
                                 textColor: kHyppeLightBackground,
                                 spaceProfileAndId: eightPx,
@@ -149,7 +163,7 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                               )
                             : Center(
                                 child: Container(
-                                  padding: const EdgeInsets.all(8),
+                                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
                                   decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(8.0)),
                                   // transform: Matrix4.translationValues(-40.0, 0.0, 0.0),
                                   child: Text(

@@ -107,3 +107,5 @@ enum VideoShowMode { grid, screen }
 enum PageSrc { selfProfile, otherProfile, interest, hashtag, searchData }
 
 enum ReactStream { bad, neutral, good }
+
+enum BoostedStatus { berlangsung, akandatang, selesai }

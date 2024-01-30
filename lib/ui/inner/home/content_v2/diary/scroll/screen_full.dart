@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
 import 'dart:ui';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -117,6 +116,7 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
     diaryData = widget.arguments?.diaryData;
     notifier.diaryData = widget.arguments?.diaryData;
     _pageController = PageController(initialPage: widget.arguments?.page ?? 0);
+    _curIdx = widget.arguments?.page ?? 0;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       start(diaryData?[widget.arguments?.page ?? 0] ?? ContentData());
       fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'diaryFullPlayer');
@@ -603,7 +603,7 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
     // AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
 
     return Scaffold(
-      backgroundColor: kHyppeLightSurface,
+      backgroundColor: Colors.black,
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: const SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.light, statusBarIconBrightness: Brightness.light),
         child: Consumer2<ScrollDiaryNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
@@ -711,63 +711,62 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
   Widget itemDiary(ScrollDiaryNotifier notifier, int index) {
     return Stack(
       children: [
-        _curIdx == index
-            ? FutureBuilder(
-                future: Future.wait([for (StickerModel sticker in diaryData?[index].stickers ?? []) precacheImage(NetworkImage(sticker.image ?? ''), context)]),
-                builder: (context, snapshot) {
-                  return Builder(builder: (context) {
-                    // if (!isloading) {
-                    //   return AliPlayerView(
-                    //     onCreated: onViewPlayerCreated,
-                    //     x: 0,
-                    //     y: 0,
-                    //     height: MediaQuery.of(context).size.width * 16.0 / 9.0,
-                    //     width: MediaQuery.of(context).size.width,
-                    //   );
-                    // }
-                    return Stack(
-                      children: [
-                        AliPlayerView(
-                          onCreated: onViewPlayerCreated,
-                          x: 0,
-                          y: 0,
-                          height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+        if (_curIdx == index)
+          FutureBuilder(
+              future: Future.wait([for (StickerModel sticker in diaryData?[index].stickers ?? []) precacheImage(NetworkImage(sticker.image ?? ''), context)]),
+              builder: (context, snapshot) {
+                return Builder(builder: (context) {
+                  // if (!isloading) {
+                  //   return AliPlayerView(
+                  //     onCreated: onViewPlayerCreated,
+                  //     x: 0,
+                  //     y: 0,
+                  //     height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                  //     width: MediaQuery.of(context).size.width,
+                  //   );
+                  // }
+                  return Stack(
+                    children: [
+                      AliPlayerView(
+                        onCreated: onViewPlayerCreated,
+                        x: 0,
+                        y: 0,
+                        height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                        width: MediaQuery.of(context).size.width,
+                      ),
+                      Visibility(
+                        visible: isPlay,
+                        child: StickerOverlay(
+                          fullscreen: false,
+                          stickers: diaryData?[index].stickers,
                           width: MediaQuery.of(context).size.width,
+                          height: (MediaQuery.of(context).size.width) * (16 / 9),
+                          isPause: isPause || _showLoading,
+                          canPause: true,
                         ),
-                        Visibility(
-                          visible: isPlay,
-                          child: StickerOverlay(
-                            fullscreen: false,
-                            stickers: diaryData?[index].stickers,
-                            width: MediaQuery.of(context).size.width,
-                            height: (MediaQuery.of(context).size.width) * (16 / 9),
-                            isPause: isPause || _showLoading,
-                            canPause: true,
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.center,
-                          child: AnimatedOpacity(
-                            opacity: opacityLevel,
-                            duration: const Duration(milliseconds: 500),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Opacity(
-                                opacity: 0.4,
-                                child: Icon(
-                                  isPause ? Icons.play_arrow_rounded : Icons.pause_rounded,
-                                  size: 100,
-                                  color: Colors.white,
-                                ),
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: AnimatedOpacity(
+                          opacity: opacityLevel,
+                          duration: const Duration(milliseconds: 500),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Opacity(
+                              opacity: 0.4,
+                              child: Icon(
+                                isPause ? Icons.play_arrow_rounded : Icons.pause_rounded,
+                                size: 100,
+                                color: Colors.white,
                               ),
                             ),
                           ),
                         ),
-                      ],
-                    );
-                  });
-                })
-            : Container(),
+                      ),
+                    ],
+                  );
+                });
+              }),
 
         // _buildProgressBar(SizeConfig.screenWidth!, 500),
         !notifier.connectionError
@@ -921,10 +920,8 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
                       // storyComplete(not);
                       if (isPause) {
                         play();
-                        print('DiaryPlayer pause');
                       } else {
                         pause();
-                        print('DiaryPlayer play');
                       }
                       setState(() {
                         opacityLevel = 1.0;

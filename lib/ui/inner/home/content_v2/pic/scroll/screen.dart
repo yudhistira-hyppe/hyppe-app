@@ -80,6 +80,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
   final a = SelfProfileScreenState();
 
   bool isZoom = false;
+  bool isActivePage = true;
   bool isPrepare = false;
   bool isPlay = false;
   bool isPause = false;
@@ -518,6 +519,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     print("======= didPopNext");
     isInPage = true;
     fAliplayer?.play();
+    isActivePage = true;
     // System().disposeBlock();
     if (toComment) {
       print("====picnotif======");
@@ -538,10 +540,10 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
 
   @override
   void didPushNext() {
-    print("========= didPushNext");
     fAliplayer?.pause();
-    System().disposeBlock();
     isInPage = false;
+    print("========= didPushNext scroll $isInPage");
+    System().disposeBlock();
     super.didPushNext();
   }
 
@@ -554,13 +556,15 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
         print("========= inactive");
         break;
       case AppLifecycleState.resumed:
-        print("========= resumed");
-        if ((Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds)) {
+        print("========= resumed $isActivePage ");
+        if ((Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds) && isInPage) {
+          print("==== hahaha aha ah ah ah ah ah ah  resume $isInPage");
           fAliplayer?.play();
         }
         break;
       case AppLifecycleState.paused:
-        print("========= paused");
+        print(
+            "========= paused scroll ${(Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds) && isInPage}");
         fAliplayer?.pause();
         break;
       case AppLifecycleState.detached:
@@ -1165,7 +1169,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                 ),
               ),
               SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                      (pics?[index].boosted.isEmpty ?? [].isEmpty) &&
+                      pics?[index].statusBoost != 'BERLANGSUNG' &&
                       (pics?[index].reportedStatus != 'OWNED' && pics?[index].reportedStatus != 'BLURRED' && pics?[index].reportedStatus2 != 'BLURRED') &&
                       pics?[index].email == email
                   ? Container(
@@ -1193,7 +1197,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                       ),
                     )
                   : Container(),
-              if (pics?[index].email == email && (pics?[index].boostCount ?? 0) >= 0 && (pics?[index].boosted.isNotEmpty ?? [].isEmpty))
+              if (pics?[index].email == email && (pics?[index].boostCount ?? 0) >= 0 && pics?[index].statusBoost == 'BERLANGSUNG' && (pics?[index].boosted.isNotEmpty ?? [].isEmpty))
                 Container(
                   padding: const EdgeInsets.all(10),
                   margin: EdgeInsets.only(bottom: 10),
