@@ -516,19 +516,27 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
 
   @override
   void didPopNext() {
-    print("======= didPopNext");
+    ScrollPicNotifier notifier = context.read<ScrollPicNotifier>();
+    print("======= didPopNext ${notifier.pics?.length} -- $pageIndex ");
+    if (pageIndex == (notifier.pics?.length ?? 0)) {
+      setState(() {
+        pageIndex = pageIndex - 1;
+      });
+    }
     isInPage = true;
     fAliplayer?.play();
     isActivePage = true;
     // System().disposeBlock();
+
     if (toComment) {
       print("====picnotif======");
-      ScrollPicNotifier notifier = context.read<ScrollPicNotifier>();
+
       setState(() {
         pics = notifier.pics;
         toComment = false;
       });
     }
+
     super.didPopNext();
   }
 
@@ -861,8 +869,11 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                           onDetail: false,
                           isShare: pics?[index].isShared,
                           onUpdate: () {
-                            print(pics?.length);
-                            itemScrollController.jumpTo(index: 0);
+                            if (index == (pics?.length ?? 0 - 1)) {
+                              setState(() {
+                                pageIndex = index - 1;
+                              });
+                            }
                             context.read<HomeNotifier>().onUpdate();
                           },
                           fAliplayer: fAliplayer,

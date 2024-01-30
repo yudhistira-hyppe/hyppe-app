@@ -845,7 +845,14 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                           captionTitle: hyppeDiary,
                           onDetail: false,
                           isShare: diaryData?[index].isShared,
-                          onUpdate: () => context.read<HomeNotifier>().onUpdate(),
+                          onUpdate: () {
+                            if (index == (diaryData?.length ?? 0 - 1)) {
+                              setState(() {
+                                indexDiary = index - 1;
+                              });
+                            }
+                            context.read<HomeNotifier>().onUpdate();
+                          },
                           fAliplayer: fAliplayer,
                         );
                       }
