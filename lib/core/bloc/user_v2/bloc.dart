@@ -483,7 +483,7 @@ class UserBloc {
     formData.fields.add(MapEntry('search', search ?? (SharedPreference().readStorage(SpKeys.email) ?? '')));
     await Repos().reposPost(
       context,
-          (onResult) {
+      (onResult) {
         if ((onResult.statusCode ?? 300) != 202) {
           setUserFetch(UserFetch(UserState.getUserProfilesError));
         } else {
@@ -491,7 +491,7 @@ class UserBloc {
           setUserFetch(UserFetch(UserState.getUserProfilesSuccess, data: _result));
         }
       },
-          (errorData) {
+      (errorData) {
         context.read<ErrorService>().addErrorObject(ErrorType.gGetUserDetail, errorData.message);
         setUserFetch(UserFetch(UserState.getUserProfilesError));
       },

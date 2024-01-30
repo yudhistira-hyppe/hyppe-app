@@ -112,15 +112,15 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       //scroll
-      // if (mounted) {
-      //   Future.delayed(const Duration(milliseconds: 500), () {
-      //     print("=========== global key prirnt ${widget.scrollController} ");
-      //     widget.scrollController?.addListener(() {
-      //       double offset = widget.scrollController?.position.pixels ?? 0;
-      //       if (mounted) toPosition(offset);
-      //     });
-      //   });
-      // }
+      if (mounted) {
+        Future.delayed(const Duration(milliseconds: 500), () {
+          print("=========== global key prirnt ${widget.scrollController} ");
+          widget.scrollController?.addListener(() {
+            double offset = widget.scrollController?.position.pixels ?? 0;
+            if (mounted) toPosition(offset);
+          });
+        });
+      }
     });
 
     _initializeTimer();

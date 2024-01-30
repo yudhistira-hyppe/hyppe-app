@@ -228,45 +228,54 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: const SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.light, statusBarIconBrightness: Brightness.light),
-        child: Consumer2<ScrollPicNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
-          return PageView.builder(
-              physics: isZoom ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
-              controller: controller,
-              scrollDirection: Axis.vertical,
-              itemCount: picData?.length ?? 0,
-              onPageChanged: (value) async {
-                indexPic = value;
-                if ((notifier.pics?.length ?? 0) - 1 == indexPic) {
-                  final pageSrc = widget.argument?.pageSrc ?? PageSrc.otherProfile;
-                  //This loadmore data
-                  await notifier.loadMore(context, controller, pageSrc, widget.argument?.key ?? '');
-                  if (mounted) {
-                    setState(() {
-                      picData = notifier.pics;
-                    });
+      body: GestureDetector(
+        onHorizontalDragEnd: (dragEndDetails) {
+          if (dragEndDetails.primaryVelocity! < 0) {
+          } else if (dragEndDetails.primaryVelocity! > 0) {
+            fAliplayer?.pause();
+            Routing().moveBack();
+          }
+        },
+        child: AnnotatedRegion<SystemUiOverlayStyle>(
+          value: const SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.light, statusBarIconBrightness: Brightness.light),
+          child: Consumer2<ScrollPicNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
+            return PageView.builder(
+                controller: controller,
+                scrollDirection: Axis.vertical,
+                itemCount: picData?.length ?? 0,
+                onPageChanged: (value) async {
+                  indexPic = value;
+                  if ((notifier.pics?.length ?? 0) - 1 == indexPic) {
+                    final pageSrc = widget.argument?.pageSrc ?? PageSrc.otherProfile;
+                    //This loadmore data
+                    print('data pic ${widget.argument?.key}');
+                    await notifier.loadMore(context, controller, pageSrc, widget.argument?.key ?? '');
+                    if (mounted) {
+                      setState(() {
+                        picData = notifier.pics;
+                      });
+                    }
                   }
-                }
-              },
-              itemBuilder: (context, index) {
-                if (picData![index].reportedStatus == 'BLURRED') {
-                  notifier.isMute = true;
-                  if (picData![index].music != null) {
-                    Future.delayed(const Duration(milliseconds: 100), () {
-                      startMusic(context, picData![index], notifier);
-                    });
+                },
+                itemBuilder: (context, index) {
+                  if (picData![index].reportedStatus == 'BLURRED') {
+                    notifier.isMute = true;
+                    if (picData![index].music != null) {
+                      Future.delayed(const Duration(milliseconds: 100), () {
+                        startMusic(context, picData![index], notifier);
+                      });
+                    } else {
+                      fAliplayer?.stop();
+                    }
+                    return blurContentWidget(context, picData![index]);
                   } else {
-                    fAliplayer?.stop();
-                  }
-                  return blurContentWidget(context, picData![index]);
-                } else {
-                  // notifier.isMute = false;
+                    // notifier.isMute = false;
 
-                  return imagePic(picData![index], index: index, notifier: notifier, homeNotifier: home);
-                }
-              });
-        }),
+                    return imagePic(picData![index], index: index, notifier: notifier, homeNotifier: home);
+                  }
+                });
+          }),
+        ),
       ),
     );
   }
@@ -1043,7 +1052,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                   onDetail: false,
                   isShare: data.isShared,
                   onUpdate: () {
-                    (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 0);
+                    context.read<HomeNotifier>().onUpdate();
                   },
                   fAliplayer: fAliplayer,
                 );

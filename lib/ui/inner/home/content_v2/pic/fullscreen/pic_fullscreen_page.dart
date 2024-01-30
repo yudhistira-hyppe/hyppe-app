@@ -267,47 +267,56 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: const SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.light, statusBarIconBrightness: Brightness.light),
-        child: Consumer2<PreviewPicNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
-          if (notifier.pic == null && home.isLoadingPict) {
-            return CustomShimmer(
-              width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-              height: double.infinity,
-              margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-            );
+      body: GestureDetector(
+        onHorizontalDragEnd: (dragEndDetails) {
+          if (dragEndDetails.primaryVelocity! < 0) {
+          } else if (dragEndDetails.primaryVelocity! > 0) {
+            fAliplayer?.pause();
+            Routing().moveBack();
           }
-          return PageView.builder(
-              controller: controller,
-              physics: isZoom ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
-              scrollDirection: Axis.vertical,
-              itemCount: notifier.pic?.length ?? 0,
-              onPageChanged: (value) {
-                indexPic = value;
-                notifier.currIndex = value;
-                if ((notifier.pic?.length ?? 0) - 1 == indexPic) {
-                  //This loadmore data
-                  notifier.initialPic(context);
-                }
-              },
-              itemBuilder: (context, index) {
-                if (notifier.pic == null || home.isLoadingPict) {
-                  fAliplayer?.pause();
-                  _lastCurPostId = '';
-                  return const CustomShimmer(
-                    width: double.infinity,
-                    height: double.infinity,
-                    margin: EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                    padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                  );
-                }
-
-                return notifier.pic![index].reportedStatus == 'BLURRED'
-                    ? blurContentWidget(context, notifier.pic![index])
-                    : imagePic(notifier.pic![index], index: index, notifier: notifier, homeNotifier: home);
-              });
-        }),
+        },
+        child: AnnotatedRegion<SystemUiOverlayStyle>(
+          value: const SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.light, statusBarIconBrightness: Brightness.light),
+          child: Consumer2<PreviewPicNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
+            if (notifier.pic == null && home.isLoadingPict) {
+              return CustomShimmer(
+                width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                height: double.infinity,
+                margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+              );
+            }
+            return PageView.builder(
+                controller: controller,
+                physics: isZoom ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                itemCount: notifier.pic?.length ?? 0,
+                onPageChanged: (value) {
+                  indexPic = value;
+                  notifier.currIndex = value;
+                  if ((notifier.pic?.length ?? 0) - 1 == indexPic) {
+                    //This loadmore data
+                    notifier.initialPic(context);
+                  }
+                },
+                itemBuilder: (context, index) {
+                  if (notifier.pic == null || home.isLoadingPict) {
+                    fAliplayer?.pause();
+                    _lastCurPostId = '';
+                    return const CustomShimmer(
+                      width: double.infinity,
+                      height: double.infinity,
+                      margin: EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                      padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                    );
+                  }
+      
+                  return notifier.pic![index].reportedStatus == 'BLURRED'
+                      ? blurContentWidget(context, notifier.pic![index])
+                      : imagePic(notifier.pic![index], index: index, notifier: notifier, homeNotifier: home);
+                });
+          }),
+        ),
       ),
     );
   }

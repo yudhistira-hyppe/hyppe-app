@@ -543,21 +543,12 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                             fromDeeplink: false,
                             isAutoPlay: false,
                             functionFullTriger: (value) {
-                              print('===========hahhahahahaa===========');
-                              // fullscreen();
-                              // vidData?[_curIdx].fAliplayer?.pause();
-                              // showDialog(context: context, builder: (context){
-                              //     return VideoFullscreenPage(data: vidData?[_curIdx] ?? ContentData(), onClose: (){
-                              //       // Routing().moveBack();
-                              //     }, seekValue: value ?? 0);
-                              //   });
                             },
                             onPlay: (exec) async {
                               await notifier.checkConnection();
                               try {
                                 if (_curIdx != -1) {
                                   if (_curIdx != index) {
-                                    print('Vid Landing Page: stop $_curIdx ${vidData?[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
                                     if (vidData?[_curIdx].fAliplayer != null) {
                                       vidData?[_curIdx].fAliplayer?.stop();
                                     } else {
