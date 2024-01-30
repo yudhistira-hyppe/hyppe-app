@@ -158,6 +158,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
       print("00000000000000 ${widget.arguments?.page}");
       _initListener(notifier);
     });
+
     var index = 0;
     var lastIndex = 0;
     final pageSrc = widget.arguments?.pageSrc ?? PageSrc.otherProfile;
@@ -854,7 +855,9 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                           captionTitle: hyppePic,
                           onDetail: false,
                           isShare: pics?[index].isShared,
-                          onUpdate: () => context.read<HomeNotifier>().onUpdate(),
+                          onUpdate: () {
+                             context.read<HomeNotifier>().onUpdate();
+                          },
                           fAliplayer: fAliplayer,
                         );
                       }
