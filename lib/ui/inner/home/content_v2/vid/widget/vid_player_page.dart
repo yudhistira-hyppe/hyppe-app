@@ -525,7 +525,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
           // _bufferPosition = extraValue ?? 0;
           if (mounted) {
-            setState(() {});
+            // setState(() {});
           }
         } else if (infoCode == FlutterAvpdef.AUTOPLAYSTART) {
           // Fluttertoast.showToast(msg: "AutoPlay");
@@ -1062,7 +1062,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             index: widget.index,
             clearPostId: widget.clearPostId,
             loadMoreFunction: () {
-              widget.loadMoreFunction?.call();
+              // widget.loadMoreFunction?.call();
             },
             isAutoPlay: widget.isAutoPlay,
             isLanding: widget.inLanding),
@@ -2057,7 +2057,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                               child: GestureDetector(
                                                 onTap: () {
                                                   fAliplayer?.pause();
-                                                  context.read<PicDetailNotifier>().showUserTag(context, widget.data?.tagPeople, widget.data?.postID, title: lang!.inthisphoto, fAliplayer: fAliplayer);
+                                                  context.read<PicDetailNotifier>().showUserTag(context, widget.data?.tagPeople, widget.data?.postID, title: lang!.inthisphoto, fAliplayer: fAliplayer, orientation: orientation);
                                                 },
                                                 child: Row(
                                                   children: [

@@ -357,7 +357,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
 
   @override
   void dispose() {
-    _pauseScreen();
+    // _pauseScreen();
     whileDispose();
     animatedController.dispose();
     // closePage();
@@ -365,10 +365,10 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
   }
 
   whileDispose() async {
-    // widget.fAliplayer?.pause();
+    widget.fAliplayer?.pause();
     await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  //  widget.fAliplayer?.destroy();
+   widget.fAliplayer?.play();
   }
 
   void closePage() {
@@ -415,11 +415,18 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
           onHorizontalDragEnd: (dragEndDetails) {
             if (dragEndDetails.primaryVelocity! < 0) {
             } else if (dragEndDetails.primaryVelocity! > 0) {
-              print('datas index ${widget.index} ${curentIndex} ${widget.index == curentIndex}');
               if (widget.index == curentIndex){
                 closePage();
               }else{
-                Routing().moveBack();
+                widget.data.isLoading = true;
+                Navigator.pop(
+                context,
+                VideoIndicator(
+                    videoDuration: _videoDuration,
+                    seekValue: 0,
+                    positionText: _currentPositionText,
+                    showTipsWidget: _showTipsWidget,
+                    isMute: isMute));
               }
               
               
@@ -731,7 +738,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                                   child: GestureDetector(
                                     onTap: () {
                                       widget.fAliplayer?.pause();
-                                      context.read<PicDetailNotifier>().showUserTag(context, widget.data.tagPeople, widget.data.postID, title: lang!.inthisphoto, fAliplayer: widget.fAliplayer);
+                                      context.read<PicDetailNotifier>().showUserTag(context, widget.data.tagPeople, widget.data.postID, title: lang!.inthisphoto, fAliplayer: widget.fAliplayer, orientation: orientation);
                                     },
                                     child: Row(
                                       children: [

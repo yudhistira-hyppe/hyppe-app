@@ -618,7 +618,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                             isPause = true;
                                             setState(() {});
                                             print('data result $res');
-                                            if (res != null && res == true) {
+                                            // if (mounted){
                                               if ((widget.data.metadata?.height ?? 0) < (widget.data.metadata?.width ?? 0)) {
                                                 print('Landscape VidPlayerPage');
                                                 SystemChrome.setPreferredOrientations([
@@ -632,7 +632,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                                   DeviceOrientation.portraitDown,
                                                 ]);
                                               }
-                                            }
+                                            // }
                                           },
                                           onTap: () {
                                             context.handleActionIsGuest(() async {
@@ -1353,7 +1353,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                   child: GestureDetector(
                                     onTap: () {
                                       widget.fAliplayer?.pause();
-                                      context.read<PicDetailNotifier>().showUserTag(context, widget.data.tagPeople, widget.data.postID, title: lang!.inthisphoto, fAliplayer: widget.fAliplayer);
+                                      context.read<PicDetailNotifier>().showUserTag(context, widget.data.tagPeople, widget.data.postID, title: lang!.inthisphoto, fAliplayer: widget.fAliplayer, orientation: orientation);
                                     },
                                     child: Row(
                                       children: [
