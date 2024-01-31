@@ -51,6 +51,7 @@ int storyMin = 4;
 int vidMin = 15;
 
 bool globalPreventAction = false;
+bool fromGuest = false;
 
 const platform = MethodChannel('app.channel.shared.data');
 

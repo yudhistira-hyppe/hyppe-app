@@ -3,6 +3,7 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/custom_extension.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
@@ -68,9 +69,10 @@ class _ViewLikedState extends State<ViewLiked> {
                                   widget.eventType == 'LIKE' ? lang.translate.notLikeyet! : lang.translate.notviewyet!,
                                   textAlign: TextAlign.center,
                                 ))
-                            : notifier.listLikeView?.user != null && (notifier.listLikeView!.user!.isNotEmpty)
+                            : (notifier.listLikeView?.user != null && (notifier.listLikeView!.user!.isNotEmpty)) || ((notifier.listLikeView?.guest ?? 0) > 0)
                                 ? Column(
                                     children: [
+                                      if(notifier.listLikeView?.user != null && (notifier.listLikeView!.user!.isNotEmpty))
                                       ListView.builder(
                                         shrinkWrap: true,
                                         controller: _scrollController,
@@ -116,13 +118,15 @@ class _ViewLikedState extends State<ViewLiked> {
                                                           backgroundColor: (data.following ?? false) ? null : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                                                         ),
                                                         function: () {
-                                                          if (!(data.isloadingFollow ?? false)) {
-                                                            if (data.following ?? false) {
-                                                              notifier.followUserLikeView(context, data, isUnFollow: true);
-                                                            } else {
-                                                              notifier.followUserLikeView(context, data);
+                                                          context.handleActionIsGuest(() {
+                                                            if (!(data.isloadingFollow ?? false)) {
+                                                              if (data.following ?? false) {
+                                                                notifier.followUserLikeView(context, data, isUnFollow: true);
+                                                              } else {
+                                                                notifier.followUserLikeView(context, data);
+                                                              }
                                                             }
-                                                          }
+                                                          });
                                                         },
                                                         child: data.isloadingFollow ?? false
                                                             ? const SizedBox(
@@ -161,7 +165,7 @@ class _ViewLikedState extends State<ViewLiked> {
                                             ),
                                           ),
                                           title: CustomTextWidget(
-                                            textToDisplay: 'Guest mode',
+                                            textToDisplay: 'Guest',
                                             textStyle: Theme.of(context).textTheme.titleSmall,
                                             textAlign: TextAlign.start,
                                           ),

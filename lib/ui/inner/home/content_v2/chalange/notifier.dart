@@ -161,43 +161,40 @@ class ChallangeNotifier with ChangeNotifier {
   }
 
   Future getBannerLanding(BuildContext context, {bool ispopUp = false, bool isSearch = false, bool isLeaderBoard = false}) async {
-    bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
 
-    if(!(isGuest ?? true)){
-      checkInet(context);
-      isLoadingBanner = true;
-      notifyListeners();
+    checkInet(context);
+    isLoadingBanner = true;
+    notifyListeners();
 
-      Map data = {"page": 0};
+    Map data = {"page": 0};
+    if (ispopUp) {
+      data['target'] = "popup";
+    } else {
+      data['target'] = "search";
+      if (isLeaderBoard) {
+        data['jenischallenge'] = "647055de0435000059003462";
+      }
+    }
+
+    final bannerNotifier = ChallangeBloc();
+    await bannerNotifier.postChallange(context, data: data, url: UrlConstants.getBannerChalange);
+    final bannerFatch = bannerNotifier.userFetch;
+
+    if (bannerFatch.challengeState == ChallengeState.getPostSuccess) {
       if (ispopUp) {
-        data['target'] = "popup";
+        bannerData = [];
+        bannerFatch.data.forEach((v) => bannerData.add(BannerChalangeModel.fromJson(v)));
       } else {
-        data['target'] = "search";
-        if (isLeaderBoard) {
-          data['jenischallenge'] = "647055de0435000059003462";
-        }
-      }
-
-      final bannerNotifier = ChallangeBloc();
-      await bannerNotifier.postChallange(context, data: data, url: UrlConstants.getBannerChalange);
-      final bannerFatch = bannerNotifier.userFetch;
-
-      if (bannerFatch.challengeState == ChallengeState.getPostSuccess) {
-        if (ispopUp) {
-          bannerData = [];
-          bannerFatch.data.forEach((v) => bannerData.add(BannerChalangeModel.fromJson(v)));
+        if (isSearch) {
+          bannerSearchData = [];
+          bannerFatch.data.forEach((v) => bannerSearchData.add(BannerChalangeModel.fromJson(v)));
         } else {
-          if (isSearch) {
-            bannerSearchData = [];
-            bannerFatch.data.forEach((v) => bannerSearchData.add(BannerChalangeModel.fromJson(v)));
-          } else {
-            bannerLeaderboardData = [];
-            bannerFatch.data.forEach((v) => bannerLeaderboardData.add(BannerChalangeModel.fromJson(v)));
-          }
+          bannerLeaderboardData = [];
+          bannerFatch.data.forEach((v) => bannerLeaderboardData.add(BannerChalangeModel.fromJson(v)));
         }
-        isLoadingBanner = false;
-        notifyListeners();
       }
+      isLoadingBanner = false;
+      notifyListeners();
     }
 
   }

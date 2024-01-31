@@ -355,7 +355,7 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
                           backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                         ),
                         function: () {
-                          ShowBottomSheet.onLoginApp(context);
+                          ShowBottomSheet().onLoginApp(context);
                         },
                         child: CustomTextWidget(
                           textToDisplay: notifier.language.login ?? 'Login',

@@ -2,6 +2,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/decorated_icon_widget.dart';
@@ -164,14 +165,17 @@ class _PicDetailState extends State<PicDetail> {
                               context: context,
                               iconData: '${AssetPath.vectorPath}more.svg',
                               function: () async {
-                                await ShowBottomSheet().onShowOptionContent(
-                                  context,
-                                  contentData: widget.arguments ?? ContentData(),
-                                  captionTitle: hyppePic,
-                                  isShare: widget.arguments?.isShared ?? true,
-                                  // storyController: widget.storyController,
-                                  onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
-                                );
+                                await context.handleActionIsGuest(() async  {
+                                  await ShowBottomSheet().onShowOptionContent(
+                                    context,
+                                    contentData: widget.arguments ?? ContentData(),
+                                    captionTitle: hyppePic,
+                                    isShare: widget.arguments?.isShared ?? true,
+                                    // storyController: widget.storyController,
+                                    onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
+                                  );
+                                });
+
                               },
                             )
                           : SizedBox(),
@@ -255,7 +259,10 @@ class _PicDetailState extends State<PicDetail> {
                             iconData: '${AssetPath.vectorPath}cart.svg',
                             function: () async {
                               // notifier.preventMusic = true;
-                              ShowBottomSheet.onBuyContent(context, data: widget.arguments);
+                              await context.handleActionIsGuest(() async  {
+                                ShowBottomSheet.onBuyContent(context, data: widget.arguments);
+                              });
+
                               // notifier.preventMusic = true;
                             },
                           ),

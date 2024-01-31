@@ -70,6 +70,7 @@ class LocalizationModelV2 {
   String? privacyPolicy;
   String? and;
   String? termsOfService;
+  String? termsOfUse;
   String? welcome;
   String? letsMakeYouAnAccount;
   String? fullName;
@@ -1173,6 +1174,7 @@ class LocalizationModelV2 {
     this.privacyPolicy,
     this.and,
     this.termsOfService,
+    this.termsOfUse,
     this.welcome,
     this.letsMakeYouAnAccount,
     this.fullName,
@@ -2277,6 +2279,7 @@ class LocalizationModelV2 {
     privacyPolicy = json['privacyPolicy'];
     and = json['and'];
     termsOfService = json['termsOfService'];
+    termsOfUse = json['termsOfUse'];
     welcome = json['welcome'];
     letsMakeYouAnAccount = json['letsMakeYouAnAccount'];
     fullName = json['fullName'];

@@ -156,14 +156,6 @@ class UrlConstants {
   static const String userBearer = "$userRoute/bearer";
 
   ///---------------------------------------------------------------------------------------------------------///
-  /* APIs Playlist */
-  /// post => Create new playlist.
-  static const String createNewPlaylist = "$postRoute/createPlaylist";
-
-  /// get => Get all playlist.
-  static const String getAllPlaylist = "$postRoute/getAllPlaylist";
-
-  ///---------------------------------------------------------------------------------------------------------///
   /* APIs Posts */
 
   /// get => Get User Post.
@@ -307,7 +299,7 @@ class UrlConstants {
   static const String landingPageSearch = "$interestCount/default-page";
   static const String getDetailHashtag = "$contentRouteV3/searchdatanew/newdetailtag";
   static const String getDetailInterest = "$contentRouteV3/searchdatanew/newdetailinterest";
-  static const String getSearchContentV5 = "$contentRouteV3/searchdatanew";
+  static const String getSearchContentV5 = "$contentRouteV3/searchdatanew/v2";
   static const String getDetailHashtagV2 = "$contentRouteV3/searchdatanew/newdetailtag/v2";
   static const String getDetailInterestV2 = "$contentRouteV3/searchdatanew/newdetailinterest/v2";
   // v3 delete tag
@@ -413,7 +405,7 @@ class UrlConstants {
   static const String insertReport = "/api/reportuser/create/v2";
   static const String detailTypeAppeal = "/api/reportuser/detailreason";
 
-  static const String appealPost = "/api/reportuser/appeal";
+  static const String appealPost = "/api/reportuser/appeal/v2";
   static const String createTicket = "/api/usertickets/createticket/v2";
 
   /// ===music===

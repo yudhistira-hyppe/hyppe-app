@@ -47,7 +47,16 @@ class SettingNotifier extends ChangeNotifier with LoadingNotifier {
     setLoading(true);
     final notifier = UserBloc();
     context.read<SelfProfileNotifier>().user.profile = null;
+    context.read<TransactionNotifier>().accountBalance = null;
     context.read<HomeNotifier>().profileImage = '';
+    final vid = Provider.of<PreviewVidNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
+    final diary = Provider.of<PreviewDiaryNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
+    final pic = Provider.of<PreviewPicNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
+    final stories = Provider.of<PreviewStoriesNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
+    stories.storiesGroups = [];
+    vid.vidData = null;
+    diary.diaryData = null;
+    pic.pic = null;
     _resetData(context);
     await notifier.logOut(context, withAlertMessage: false);
     setLoading(false);

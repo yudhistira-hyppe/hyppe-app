@@ -20,6 +20,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -1443,30 +1444,33 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                               }
                                             },
                                             onTap: () {
-                                              if (widget.data?.email != email) {
-                                                context.read<PreviewPicNotifier>().reportContent(context, widget.data!, fAliplayer: widget.data!.fAliplayer, onCompleted: () async {
-                                                  imageCache.clear();
-                                                  imageCache.clearLiveImages();
-                                                  await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
-                                                });
-                                              } else {
-                                                // if (_curIdx != -1) {
-                                                //   "=============== pause 11".logger();
-                                                //   notifier.vidData?[_curIdx].fAliplayer?.pause();
-                                                // }
-                                                ShowBottomSheet().onShowOptionContent(
-                                                  context,
-                                                  contentData: widget.data!,
-                                                  captionTitle: hyppeVid,
-                                                  onDetail: false,
-                                                  orientation: widget.orientation,
-                                                  isShare: widget.data!.isShared,
-                                                  onUpdate: () {
-                                                    (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
-                                                  },
-                                                  fAliplayer: widget.data!.fAliplayer,
-                                                ).then((value) => print('disini datas popup'));
-                                              }
+                                              context.handleActionIsGuest(() async  {
+                                                if (widget.data?.email != email) {
+                                                  context.read<PreviewPicNotifier>().reportContent(context, widget.data!, fAliplayer: widget.data!.fAliplayer, onCompleted: () async {
+                                                    imageCache.clear();
+                                                    imageCache.clearLiveImages();
+                                                    await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
+                                                  });
+                                                } else {
+                                                  // if (_curIdx != -1) {
+                                                  //   "=============== pause 11".logger();
+                                                  //   notifier.vidData?[_curIdx].fAliplayer?.pause();
+                                                  // }
+                                                  ShowBottomSheet().onShowOptionContent(
+                                                    context,
+                                                    contentData: widget.data!,
+                                                    captionTitle: hyppeVid,
+                                                    onDetail: false,
+                                                    orientation: widget.orientation,
+                                                    isShare: widget.data!.isShared,
+                                                    onUpdate: () {
+                                                      (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
+                                                    },
+                                                    fAliplayer: widget.data!.fAliplayer,
+                                                  ).then((value) => print('disini datas popup'));
+                                                }
+                                              });
+
                                             }),
                                       ),
                                     ),

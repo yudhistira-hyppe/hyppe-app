@@ -1107,9 +1107,11 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
               Consumer<PreviewPicNotifier>(
                 builder: (context, picNot, child) => GestureDetector(
                   onTap: () {
-                    if (data.insight?.isloadingFollow != true) {
-                      picNot.followUser(context, data, isUnFollow: data.following, isloading: data.insight!.isloadingFollow ?? false);
-                    }
+                    context.handleActionIsGuest(()  {
+                      if (data.insight?.isloadingFollow != true) {
+                        picNot.followUser(context, data, isUnFollow: data.following, isloading: data.insight!.isloadingFollow ?? false);
+                      }
+                    });
                   },
                   child: data.insight?.isloadingFollow ?? false
                       ? const SizedBox(
@@ -1136,28 +1138,32 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
           ],
         ),
         actionWidget(
-            onTap: () {
-              if (data.email != email) {
-                context.read<PreviewPicNotifier>().reportContent(context, data, fAliplayer: fAliplayer, onCompleted: () async {
-                  imageCache.clear();
-                  imageCache.clearLiveImages();
-                  await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 0);
-                });
-              } else {
-                fAliplayer?.setMuted(true);
-                fAliplayer?.pause();
-                ShowBottomSheet().onShowOptionContent(
-                  context,
-                  contentData: data,
-                  captionTitle: hyppePic,
-                  onDetail: false,
-                  isShare: data.isShared,
-                  onUpdate: () {
-                    (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 0);
-                  },
-                  fAliplayer: fAliplayer,
-                );
-              }
+            onTap: () async {
+              fAliplayer?.setMuted(true);
+              fAliplayer?.pause();
+              await context.handleActionIsGuest(() async  {
+                if (data.email != email) {
+                  context.read<PreviewPicNotifier>().reportContent(context, data, fAliplayer: fAliplayer, onCompleted: () async {
+                    imageCache.clear();
+                    imageCache.clearLiveImages();
+                    await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 0);
+                  });
+                } else {
+
+                  ShowBottomSheet().onShowOptionContent(
+                    context,
+                    contentData: data,
+                    captionTitle: hyppePic,
+                    onDetail: false,
+                    isShare: data.isShared,
+                    onUpdate: () {
+                      (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 0);
+                    },
+                    fAliplayer: fAliplayer,
+                  );
+                }
+              });
+
             },
             data: data),
       ],

@@ -1079,9 +1079,12 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: GestureDetector(
                             onTap: () {
-                              if (data?.insight?.isloadingFollow != true) {
-                                picNot.followUser(context, data ?? ContentData(), isUnFollow: data?.following, isloading: data?.insight?.isloadingFollow ?? false);
-                              }
+                              context.handleActionIsGuest(()  {
+                                if (data?.insight?.isloadingFollow != true) {
+                                  picNot.followUser(context, data ?? ContentData(), isUnFollow: data?.following, isloading: data?.insight?.isloadingFollow ?? false);
+                                }
+                              });
+
                             },
                             child: data?.insight?.isloadingFollow ?? false
                                 ? Container(
@@ -1100,32 +1103,36 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                         ),
                       ),
                     GestureDetector(
-                      onTap: () {
-                        if (data?.email != email) {
-                          // FlutterAliplayer? fAliplayer
-                          context.read<PreviewPicNotifier>().reportContent(context, data ?? ContentData(), fAliplayer: fAliListPlayer, onCompleted: () async {
-                            imageCache.clear();
-                            imageCache.clearLiveImages();
-                            await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 1);
-                          });
-                        } else {
-                          fAliListPlayer?.setMuted(true);
-                          fAliListPlayer?.pause();
+                      onTap: () async {
+                        fAliListPlayer?.setMuted(true);
+                        fAliListPlayer?.pause();
+                        await context.handleActionIsGuest(() async  {
+                          if (data?.email != email) {
+                            // FlutterAliplayer? fAliplayer
+                            context.read<PreviewPicNotifier>().reportContent(context, data ?? ContentData(), fAliplayer: fAliListPlayer, onCompleted: () async {
+                              imageCache.clear();
+                              imageCache.clearLiveImages();
+                              await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 1);
+                            });
+                          } else {
 
-                          // fAliplayer?.setMuted(true);
-                          // fAliplayer?.pause();
-                          ShowBottomSheet().onShowOptionContent(
-                            context,
-                            contentData: data ?? ContentData(),
-                            captionTitle: hyppeDiary,
-                            onDetail: false,
-                            isShare: data?.isShared,
-                            onUpdate: () {
-                              (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 1);
-                            },
-                            fAliplayer: fAliListPlayer,
-                          );
-                        }
+
+                            // fAliplayer?.setMuted(true);
+                            // fAliplayer?.pause();
+                            ShowBottomSheet().onShowOptionContent(
+                              context,
+                              contentData: data ?? ContentData(),
+                              captionTitle: hyppeDiary,
+                              onDetail: false,
+                              isShare: data?.isShared,
+                              onUpdate: () {
+                                (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 1);
+                              },
+                              fAliplayer: fAliListPlayer,
+                            );
+                          }
+                        });
+
                       },
                       child: const Icon(
                         Icons.more_vert,
@@ -1460,8 +1467,11 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                             Expanded(
                               child: GestureDetector(
                                 onTap: () async {
-                                  fAliListPlayer?.pause();
-                                  await ShowBottomSheet.onBuyContent(context, data: data, fAliplayer: fAliListPlayer);
+                                  await context.handleActionIsGuest(() async  {
+                                    fAliListPlayer?.pause();
+                                    await ShowBottomSheet.onBuyContent(context, data: data, fAliplayer: fAliListPlayer);
+                                  });
+
                                   // fAliplayer?.play();
                                 },
                                 child: const Align(

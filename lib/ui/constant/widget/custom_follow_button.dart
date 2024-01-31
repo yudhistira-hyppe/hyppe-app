@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -38,7 +39,14 @@ class CustomFollowButton extends StatelessWidget {
       }
       // isFollowing == StatusFollowing.requested;
       return InkWell(
-        onTap: _isAbleToClick ? onPressed : null,
+        // onTap: _isAbleToClick ? onPressed : null,
+        onTap: () async {
+          await context.handleActionIsGuest(() async  {
+            if (_isAbleToClick) {
+              onPressed();
+            }
+          });
+        },
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: checkIsLoading

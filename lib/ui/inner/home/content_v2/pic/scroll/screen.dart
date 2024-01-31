@@ -144,7 +144,6 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
 
       fAliplayer?.setAutoPlay(true);
       fAliplayer?.setLoop(true);
-
       //Turn on mix mode
       if (Platform.isIOS) {
         FlutterAliplayer.enableMix(true);
@@ -647,10 +646,12 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                 child: GestureDetector(
                                   onTap: () {
-                                    if (widget.arguments?.picData?[pageIndex].insight?.isloadingFollow != true) {
-                                      picNot.followUser(context, pics?[pageIndex] ?? ContentData(),
-                                          isUnFollow: pics?[pageIndex].following, isloading: pics?[pageIndex].insight!.isloadingFollow ?? false);
-                                    }
+                                    context.handleActionIsGuest(() {
+                                      if (widget.arguments?.picData?[pageIndex].insight?.isloadingFollow != true) {
+                                        picNot.followUser(context, pics?[pageIndex] ?? ContentData(),
+                                            isUnFollow: pics?[pageIndex].following, isloading: pics?[pageIndex].insight!.isloadingFollow ?? false);
+                                      }
+                                    });
                                   },
                                   child: pics?[pageIndex].insight?.isloadingFollow ?? false
                                       ? const SizedBox(
@@ -866,57 +867,60 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                     ),
                   GestureDetector(
                     onTap: () {
-                      // fAliplayer?.pause();
-                      if (pics?[index].email != email) {
-                        context.read<PreviewPicNotifier>().reportContent(context, pics?[index] ?? ContentData(), fAliplayer: fAliplayer, onCompleted: () async {
-                          bool connect = await System().checkConnections();
-                          if (connect) {
-                            if (pics?.isEmpty ?? [].isEmpty) {
-                              Routing().moveBack();
-                              Routing().moveBack();
-                              return;
-                            }
-                            setState(() {
-                              isloading = true;
-                              if (index == (pics?.length ?? 0 - 1)) {
-                                pageIndex = index - 1;
+                      fAliplayer?.setMuted(true);
+                      fAliplayer?.pause();
+                      context.handleActionIsGuest(() async {
+                        if (pics?[index].email != email) {
+                          context.read<PreviewPicNotifier>().reportContent(context, pics?[index] ?? ContentData(), fAliplayer: fAliplayer, onCompleted: () async {
+                            bool connect = await System().checkConnections();
+                            if (connect) {
+                              if (pics?.isEmpty ?? [].isEmpty) {
+                                Routing().moveBack();
+                                Routing().moveBack();
+                                return;
                               }
-                            });
-
-                            await notifier.reload(Routing.navigatorKey.currentContext ?? context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
-                            setState(() {
-                              pics = notifier.pics;
-                            });
-                          } else {
-                            if (mounted) {
-                              ShowGeneralDialog.showToastAlert(
-                                context,
-                                lang?.internetConnectionLost ?? ' Error',
-                                () async {},
-                              );
-                            }
-                          }
-                        });
-                      } else {
-                        fAliplayer?.setMuted(true);
-                        fAliplayer?.pause();
-                        ShowBottomSheet().onShowOptionContent(
-                          context,
-                          contentData: pics?[index] ?? ContentData(),
-                          captionTitle: hyppePic,
-                          onDetail: false,
-                          isShare: pics?[index].isShared,
-                          onUpdate: () {
-                            if (index == (pics?.length ?? 0 - 1)) {
                               setState(() {
-                                pageIndex = index - 1;
+                                isloading = true;
+                                if (index == (pics?.length ?? 0 - 1)) {
+                                  pageIndex = index - 1;
+                                }
                               });
+                              await notifier.reload(Routing.navigatorKey.currentContext ?? context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                              setState(() {
+                                pics = notifier.pics;
+                              });
+                            } else {
+                              if (mounted) {
+                                ShowGeneralDialog.showToastAlert(
+                                  context,
+                                  lang?.internetConnectionLost ?? ' Error',
+                                  () async {},
+                                );
+                              }
                             }
-                            context.read<HomeNotifier>().onUpdate();
-                          },
-                          fAliplayer: fAliplayer,
-                        );
-                      }
+                          });
+                        } else {
+                          fAliplayer?.setMuted(true);
+                          fAliplayer?.pause();
+                          ShowBottomSheet().onShowOptionContent(
+                            context,
+                            contentData: pics?[index] ?? ContentData(),
+                            captionTitle: hyppePic,
+                            onDetail: false,
+                            isShare: pics?[index].isShared,
+                            onUpdate: () {
+                              if (index == (pics?.length ?? 0 - 1)) {
+                                setState(() {
+                                  pageIndex = index - 1;
+                                });
+                              }
+                              context.read<HomeNotifier>().onUpdate();
+                            },
+                            fAliplayer: fAliplayer,
+                          );
+                        }
+                      });
+                      // fAliplayer?.pause();
                     },
                     child: const Icon(
                       Icons.more_vert,
@@ -1360,8 +1364,10 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                           Expanded(
                             child: GestureDetector(
                               onTap: () async {
-                                fAliplayer?.pause();
-                                await ShowBottomSheet.onBuyContent(context, data: pics?[index], fAliplayer: fAliplayer);
+                                await context.handleActionIsGuest(() async {
+                                  fAliplayer?.pause();
+                                  await ShowBottomSheet.onBuyContent(context, data: pics?[index], fAliplayer: fAliplayer);
+                                });
                               },
                               child: const Align(
                                 alignment: Alignment.centerRight,

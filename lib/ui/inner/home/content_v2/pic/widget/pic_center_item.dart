@@ -9,6 +9,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -113,18 +114,21 @@ class PicCenterItem extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  if (data?.email != SharedPreference().readStorage(SpKeys.email)) {
-                    context.read<PreviewPicNotifier>().reportContent(context, data!, onCompleted: (){});
-                  } else {
-                    ShowBottomSheet().onShowOptionContent(
-                      context,
-                      contentData: data ?? ContentData(),
-                      captionTitle: hyppePic,
-                      onDetail: false,
-                      isShare: data?.isShared,
-                      onUpdate: () => context.read<HomeNotifier>().onUpdate(),
-                    );
-                  }
+                  context.handleActionIsGuest(() async  {
+                    if (data?.email != SharedPreference().readStorage(SpKeys.email)) {
+                      context.read<PreviewPicNotifier>().reportContent(context, data!, onCompleted: (){});
+                    } else {
+                      ShowBottomSheet().onShowOptionContent(
+                        context,
+                        contentData: data ?? ContentData(),
+                        captionTitle: hyppePic,
+                        onDetail: false,
+                        isShare: data?.isShared,
+                        onUpdate: () => context.read<HomeNotifier>().onUpdate(),
+                      );
+                    }
+                  });
+
                 },
                 child: const Icon(
                   Icons.more_vert,
@@ -258,7 +262,10 @@ class PicCenterItem extends StatelessWidget {
                 Expanded(
                   child: GestureDetector(
                     onTap: () async {
-                      await ShowBottomSheet.onBuyContent(context, data: data);
+                      await context.handleActionIsGuest(() async  {
+                        await ShowBottomSheet.onBuyContent(context, data: data);
+                      });
+
                     },
                     child: const Align(
                       alignment: Alignment.centerRight,
