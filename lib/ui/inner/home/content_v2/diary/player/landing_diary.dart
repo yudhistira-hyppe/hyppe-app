@@ -130,7 +130,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         indexKeySell = mn?.tutorialData.indexWhere((element) => element.key == 'sell') ?? 0;
         indexKeyProtection = mn?.tutorialData.indexWhere((element) => element.key == 'protection') ?? 0;
       }
-      if (fAliplayer == null) {
+      if (fAliplayer == null && fAliplayer?.getPlayerName().toString() != 'DiaryLandingpage') {
         fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'DiaryLandingpage');
         initAlipayer();
       }
@@ -667,7 +667,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   void dispose() {
     print("=======dispose diary page ==========");
     fAliplayer?.stop();
-    // fAliplayer?.destroy();
+    fAliplayer?.destroy();
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
       // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
@@ -1005,7 +1005,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                             padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                             child: GestureDetector(
                                               onTap: () {
-                                                context.handleActionIsGuest(()  {
+                                                context.handleActionIsGuest(() {
                                                   if (data?.insight?.isloadingFollow != true) {
                                                     picNot.followUser(context, data ?? ContentData(), isUnFollow: data?.following, isloading: data?.insight?.isloadingFollow ?? false);
                                                   }

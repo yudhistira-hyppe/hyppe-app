@@ -102,7 +102,7 @@ class System {
     if (url != null && email != null && token != null) {
       if (url.isNotEmpty) {
         if (url != 'null') {
-          print("show image not apsara: ${Env.data.baseUrl}${Env.data.versionApi}$url?x-auth-token=$token&x-auth-user=$email&rundom=");
+          // print("show image not apsara: ${Env.data.baseUrl}${Env.data.versionApi}$url?x-auth-token=$token&x-auth-user=$email&rundom=");
           return '${Env.data.baseUrl}${Env.data.versionApi}$url?x-auth-token=$token&x-auth-user=$email&rundom=';
         } else {
           return '';
@@ -2129,7 +2129,7 @@ class System {
     }
   }
 
-  bool isGuest(){
+  bool isGuest() {
     final bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
     return isGuest ?? false;
   }

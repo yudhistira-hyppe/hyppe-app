@@ -96,7 +96,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   void didPushNext() {
     isHomeScreen = widget.canShowAds;
     'didPushNext isOnHomeScreen $isHomeScreen'.logger();
-
   }
 
   @override
@@ -117,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   @override
   void didPush() {
     'didPush isOnHomeScreen $isHomeScreen'.logger();
-    if(fromGuest){
+    if (fromGuest) {
       final vid = Provider.of<PreviewVidNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
       final diary = Provider.of<PreviewDiaryNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
       final pic = Provider.of<PreviewPicNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
@@ -181,7 +180,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       globalKey.currentState?.innerController.addListener(() {
         setState(() {
           offset = globalKey.currentState?.innerController.position.pixels ?? 0;
-          print("======offset ${offset}");
+          // print("======offset ${offset}");
         });
       });
 
