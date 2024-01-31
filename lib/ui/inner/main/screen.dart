@@ -341,7 +341,7 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
     if (index != 2) {
       if (index == 3) {
         if (isGuest ?? false) {
-          ShowBottomSheet.onLoginApp(Routing.navigatorKey.currentContext ?? context);
+          ShowBottomSheet().onLoginApp(Routing.navigatorKey.currentContext ?? context);
         } else {
           setState(() {
             'pageIndex now: $index'.logger();
@@ -351,7 +351,7 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
       } else if (index == 4) {
         notifier.pageIndex = index;
         if (isGuest ?? false) {
-          ShowBottomSheet.onLoginApp(Routing.navigatorKey.currentContext ?? context);
+          ShowBottomSheet().onLoginApp(Routing.navigatorKey.currentContext ?? context);
         }
       } else {
         setState(() {
@@ -361,7 +361,7 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
       }
     } else {
       if (isGuest ?? false) {
-        ShowBottomSheet.onLoginApp(Routing.navigatorKey.currentContext ?? context);
+        ShowBottomSheet().onLoginApp(Routing.navigatorKey.currentContext ?? context);
       } else {
         PreUploadContentNotifier pn = (Routing.navigatorKey.currentContext ?? context).read<PreUploadContentNotifier>();
         pn.hastagChallange = '';

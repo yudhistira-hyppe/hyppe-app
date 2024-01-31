@@ -156,14 +156,6 @@ class UrlConstants {
   static const String userBearer = "$userRoute/bearer";
 
   ///---------------------------------------------------------------------------------------------------------///
-  /* APIs Playlist */
-  /// post => Create new playlist.
-  static const String createNewPlaylist = "$postRoute/createPlaylist";
-
-  /// get => Get all playlist.
-  static const String getAllPlaylist = "$postRoute/getAllPlaylist";
-
-  ///---------------------------------------------------------------------------------------------------------///
   /* APIs Posts */
 
   /// get => Get User Post.
@@ -413,7 +405,7 @@ class UrlConstants {
   static const String insertReport = "/api/reportuser/create/v2";
   static const String detailTypeAppeal = "/api/reportuser/detailreason";
 
-  static const String appealPost = "/api/reportuser/appeal";
+  static const String appealPost = "/api/reportuser/appeal/v2";
   static const String createTicket = "/api/usertickets/createticket/v2";
 
   /// ===music===

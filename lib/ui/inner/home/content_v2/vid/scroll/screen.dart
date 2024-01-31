@@ -271,9 +271,11 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                             padding: const EdgeInsets.symmetric(horizontal: 8.0),
                             child: GestureDetector(
                               onTap: () {
-                                if (vidData?[indexVid].insight?.isloadingFollow != true) {
-                                  picNot.followUser(context, vidData![indexVid], isUnFollow: vidData?[indexVid].following, isloading: vidData?[indexVid].insight!.isloadingFollow ?? false);
-                                }
+                                context.handleActionIsGuest(() {
+                                  if (vidData?[indexVid].insight?.isloadingFollow != true) {
+                                    picNot.followUser(context, vidData![indexVid], isUnFollow: vidData?[indexVid].following, isloading: vidData?[indexVid].insight!.isloadingFollow ?? false);
+                                  }
+                                });
                               },
                               child: vidData?[indexVid].insight?.isloadingFollow ?? false
                                   ? const SizedBox(
@@ -437,44 +439,47 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                   
                   GestureDetector(
                     onTap: () {
-                      if (vidData?[index].email != email) {
-                        // FlutterAliplayer? fAliplayer
-                        context.read<PreviewPicNotifier>().reportContent(context, vidData?[index] ?? ContentData(), fAliplayer: vidData?[index].fAliplayer, onCompleted: () async {
-                          bool connect = await System().checkConnections();
-                          if (connect) {
-                            setState(() {
-                              isloading = true;
-                            });
-                            await notifier.reload(Routing.navigatorKey.currentContext ?? context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
-                            setState(() {
-                              vidData = notifier.vidData;
-                            });
-                          } else {
-                            if (mounted) {
-                              ShowGeneralDialog.showToastAlert(
-                                context,
-                                lang?.internetConnectionLost ?? ' Error',
-                                () async {},
-                              );
+                      context.handleActionIsGuest(() async  {
+                        if (vidData?[index].email != email) {
+                          // FlutterAliplayer? fAliplayer
+                          context.read<PreviewPicNotifier>().reportContent(context, vidData?[index] ?? ContentData(), fAliplayer: vidData?[index].fAliplayer, onCompleted: () async {
+                            bool connect = await System().checkConnections();
+                            if (connect) {
+                              setState(() {
+                                isloading = true;
+                              });
+                              await notifier.reload(Routing.navigatorKey.currentContext ?? context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                              setState(() {
+                                vidData = notifier.vidData;
+                              });
+                            } else {
+                              if (mounted) {
+                                ShowGeneralDialog.showToastAlert(
+                                  context,
+                                  lang?.internetConnectionLost ?? ' Error',
+                                      () async {},
+                                );
+                              }
                             }
+                          });
+                        } else {
+                          if (_curIdx != -1) {
+                            print('Vid Landing Page: pause $_curIdx');
+                            vidData?[_curIdx].fAliplayer?.pause();
                           }
-                        });
-                      } else {
-                        if (_curIdx != -1) {
-                          print('Vid Landing Page: pause $_curIdx');
-                          vidData?[_curIdx].fAliplayer?.pause();
-                        }
 
-                        ShowBottomSheet().onShowOptionContent(
-                          context,
-                          contentData: vidData?[index] ?? ContentData(),
-                          captionTitle: hyppeVid,
-                          onDetail: false,
-                          isShare: vidData?[index].isShared,
-                          onUpdate: () => context.read<HomeNotifier>().onUpdate(),
-                          fAliplayer: vidData?[index].fAliplayer,
-                        );
-                      }
+                          ShowBottomSheet().onShowOptionContent(
+                            context,
+                            contentData: vidData?[index] ?? ContentData(),
+                            captionTitle: hyppeVid,
+                            onDetail: false,
+                            isShare: vidData?[index].isShared,
+                            onUpdate: () => context.read<HomeNotifier>().onUpdate(),
+                            fAliplayer: vidData?[index].fAliplayer,
+                          );
+                        }
+                      });
+
                     },
                     child: const Icon(
                       Icons.more_vert,
@@ -746,9 +751,10 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                           Expanded(
                             child: GestureDetector(
                               onTap: () async {
-                                vidData?[index].fAliplayer?.pause();
-                                await ShowBottomSheet.onBuyContent(context, data: vidData?[index] ?? ContentData(), fAliplayer: vidData?[index].fAliplayer);
-                                // fAliplayer?.play();
+                                await context.handleActionIsGuest(() async  {
+                                  vidData?[index].fAliplayer?.pause();
+                                  await ShowBottomSheet.onBuyContent(context, data: vidData?[index] ?? ContentData(), fAliplayer: vidData?[index].fAliplayer);
+                                });
                               },
                               child: const Align(
                                 alignment: Alignment.centerRight,

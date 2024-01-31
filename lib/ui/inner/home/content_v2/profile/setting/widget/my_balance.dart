@@ -76,7 +76,7 @@ class MyBalance extends StatelessWidget {
                                 Theme.of(context).colorScheme.primary),
                           ),
                           function: () {
-                            ShowBottomSheet.onLoginApp(context);
+                            ShowBottomSheet().onLoginApp(context);
                           },
                           child: CustomTextWidget(
                             textToDisplay: notifier.translate.login ?? 'Login',

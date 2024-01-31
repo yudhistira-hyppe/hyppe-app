@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
@@ -134,9 +135,12 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                     Consumer<PreviewPicNotifier>(
                       builder: (context, picNot, child) => GestureDetector(
                         onTap: () {
-                          if (widget.data?.insight?.isloadingFollow != true) {
-                            picNot.followUser(context, widget.data!, isUnFollow: widget.data?.following, isloading: widget.data?.insight!.isloadingFollow ?? false);
-                          }
+                          context.handleActionIsGuest(()  {
+                            if (widget.data?.insight?.isloadingFollow != true) {
+                              picNot.followUser(context, widget.data!, isUnFollow: widget.data?.following, isloading: widget.data?.insight!.isloadingFollow ?? false);
+                            }
+                          });
+
                         },
                         child: widget.data?.insight?.isloadingFollow ?? false
                             ? const SizedBox(
@@ -187,15 +191,18 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                                   if (globalAliPlayer != null) {
                                     globalAliPlayer?.pause();
                                   }
-                                  SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
-                                  await ShowBottomSheet().onShowOptionContent(
-                                    context,
-                                    contentData: data!,
-                                    captionTitle: hyppeDiary,
-                                    isShare: data.isShared,
-                                    onUpdate: () => context.read<DiariesPlaylistNotifier>().onUpdate(),
-                                  );
-                                  SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                                  await context.handleActionIsGuest(() async  {
+                                    SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                                    await ShowBottomSheet().onShowOptionContent(
+                                      context,
+                                      contentData: data!,
+                                      captionTitle: hyppeDiary,
+                                      isShare: data.isShared,
+                                      onUpdate: () => context.read<DiariesPlaylistNotifier>().onUpdate(),
+                                    );
+                                    SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                                  });
+
                                   if (globalAliPlayer != null) {
                                     globalAliPlayer?.play();
                                   }

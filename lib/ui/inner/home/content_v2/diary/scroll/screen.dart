@@ -646,10 +646,13 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                   child: GestureDetector(
                                     onTap: () {
-                                      if (diaryData?[indexDiary].insight?.isloadingFollow != true) {
-                                        picNot.followUser(context, diaryData?[indexDiary] ?? ContentData(),
-                                            isUnFollow: diaryData?[indexDiary].following, isloading: diaryData?[indexDiary].insight!.isloadingFollow ?? false);
-                                      }
+                                      context.handleActionIsGuest(()  {
+                                        if (diaryData?[indexDiary].insight?.isloadingFollow != true) {
+                                          picNot.followUser(context, diaryData?[indexDiary] ?? ContentData(),
+                                              isUnFollow: diaryData?[indexDiary].following, isloading: diaryData?[indexDiary].insight!.isloadingFollow ?? false);
+                                        }
+                                      });
+
                                     },
                                     child: diaryData?[indexDiary].insight?.isloadingFollow ?? false
                                         ? const SizedBox(
@@ -813,42 +816,46 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {
-                      if (diaryData?[index].email != email) {
-                        // FlutterAliplayer? fAliplayer
-                        context.read<PreviewPicNotifier>().reportContent(context, diaryData?[index] ?? ContentData(), fAliplayer: fAliplayer, onCompleted: () async {
-                          bool connect = await System().checkConnections();
-                          if (connect) {
-                            setState(() {
-                              isloading = true;
-                            });
-                            await notifier.reload(Routing.navigatorKey.currentContext ?? context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
-                            setState(() {
-                              diaryData = notifier.diaryData;
-                            });
-                          } else {
-                            if (mounted) {
-                              ShowGeneralDialog.showToastAlert(
-                                context,
-                                lang?.internetConnectionLost ?? ' Error',
-                                () async {},
-                              );
+                    onTap: () async {
+                      fAliplayer?.setMuted(true);
+                      fAliplayer?.pause();
+                      await context.handleActionIsGuest(() async  {
+                        if (diaryData?[index].email != email) {
+                          // FlutterAliplayer? fAliplayer
+                          context.read<PreviewPicNotifier>().reportContent(context, diaryData?[index] ?? ContentData(), fAliplayer: fAliplayer, onCompleted: () async {
+                            bool connect = await System().checkConnections();
+                            if (connect) {
+                              setState(() {
+                                isloading = true;
+                              });
+                              await notifier.reload(Routing.navigatorKey.currentContext ?? context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                              setState(() {
+                                diaryData = notifier.diaryData;
+                              });
+                            } else {
+                              if (mounted) {
+                                ShowGeneralDialog.showToastAlert(
+                                  context,
+                                  lang?.internetConnectionLost ?? ' Error',
+                                      () async {},
+                                );
+                              }
                             }
-                          }
-                        });
-                      } else {
-                        fAliplayer?.setMuted(true);
-                        fAliplayer?.pause();
-                        ShowBottomSheet().onShowOptionContent(
-                          context,
-                          contentData: diaryData?[index] ?? ContentData(),
-                          captionTitle: hyppeDiary,
-                          onDetail: false,
-                          isShare: diaryData?[index].isShared,
-                          onUpdate: () => context.read<HomeNotifier>().onUpdate(),
-                          fAliplayer: fAliplayer,
-                        );
-                      }
+                          });
+                        } else {
+
+                          ShowBottomSheet().onShowOptionContent(
+                            context,
+                            contentData: diaryData?[index] ?? ContentData(),
+                            captionTitle: hyppeDiary,
+                            onDetail: false,
+                            isShare: diaryData?[index].isShared,
+                            onUpdate: () => context.read<HomeNotifier>().onUpdate(),
+                            fAliplayer: fAliplayer,
+                          );
+                        }
+                      });
+
                     },
                     child: const Icon(
                       Icons.more_vert,
@@ -1251,8 +1258,11 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                           Expanded(
                             child: GestureDetector(
                               onTap: () async {
-                                fAliplayer?.pause();
-                                await ShowBottomSheet.onBuyContent(context, data: diaryData?[index], fAliplayer: fAliplayer);
+                                await context.handleActionIsGuest(() async  {
+                                  fAliplayer?.pause();
+                                  await ShowBottomSheet.onBuyContent(context, data: diaryData?[index], fAliplayer: fAliplayer);
+                                });
+
                                 // fAliplayer?.play();
                               },
                               child: const Align(

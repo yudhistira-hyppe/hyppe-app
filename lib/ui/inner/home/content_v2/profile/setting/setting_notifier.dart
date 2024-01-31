@@ -47,6 +47,7 @@ class SettingNotifier extends ChangeNotifier with LoadingNotifier {
     setLoading(true);
     final notifier = UserBloc();
     context.read<SelfProfileNotifier>().user.profile = null;
+    context.read<TransactionNotifier>().accountBalance = null;
     context.read<HomeNotifier>().profileImage = '';
     _resetData(context);
     await notifier.logOut(context, withAlertMessage: false);

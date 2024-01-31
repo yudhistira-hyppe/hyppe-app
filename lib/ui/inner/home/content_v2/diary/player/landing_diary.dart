@@ -1001,7 +1001,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                             padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                             child: GestureDetector(
                                               onTap: () {
-                                                context.handleActionIsGuest(() {
+                                                context.handleActionIsGuest(()  {
                                                   if (data?.insight?.isloadingFollow != true) {
                                                     picNot.followUser(context, data ?? ContentData(), isUnFollow: data?.following, isloading: data?.insight?.isloadingFollow ?? false);
                                                   }

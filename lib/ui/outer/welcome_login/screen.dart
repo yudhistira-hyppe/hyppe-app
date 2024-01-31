@@ -153,7 +153,7 @@ class _WelcomeLoginScreenState extends State<WelcomeLoginScreen> {
                   CustomGesture(
                     margin: const EdgeInsets.symmetric(horizontal: 16),
                     onTap: () {
-                      ShowBottomSheet.onLoginApp(context);
+                      ShowBottomSheet().onLoginApp(context);
                     },
                     child: Container(
                       width: double.infinity,

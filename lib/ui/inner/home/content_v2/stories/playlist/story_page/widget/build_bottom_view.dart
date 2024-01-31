@@ -39,6 +39,9 @@ class BuildBottomView extends StatefulWidget {
 }
 
 class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayoutMixin {
+
+  final node = FocusNode();
+
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'BuildBottomView');
@@ -136,6 +139,7 @@ class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayout
                               child: Material(
                                 color: Colors.transparent,
                                 child: TextFormField(
+                                  focusNode: node,
                                   maxLines: null,
                                   validator: (String? input) {
                                     if (input?.isEmpty ?? true) {
@@ -164,13 +168,19 @@ class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayout
                                       borderSide: BorderSide(color: Theme.of(context).colorScheme.surface),
                                     ),
                                   ),
-                                  onTap: () {
-                                    print("sentuh dong");
+                                  onTap: () async {
                                     widget.pause!();
-                                    widget.animationController!.reset();
-                                    widget.animationController!.stop();
+                                    await context.handleActionIsGuest(() async  {
+                                      print("sentuh dong");
+                                      widget.pause!();
+                                      widget.animationController!.reset();
+                                      widget.animationController!.stop();
 
-                                    notifier.forceStop = true;
+                                      notifier.forceStop = true;
+                                    }, addAction: (){
+                                      node.unfocus();
+                                    });
+                                    widget.play!();
                                   },
                                   onChanged: (value) => notifier.onChangeHandler(context, value),
                                   onFieldSubmitted: (value) => notifier.textEditingController.text = value,

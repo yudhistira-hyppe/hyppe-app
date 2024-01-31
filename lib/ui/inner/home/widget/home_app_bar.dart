@@ -1,8 +1,10 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -27,8 +29,9 @@ class HomeAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HomeAppBar');
-    String nameTitle = name == null || name == 'null' ? 'Hyppers' : (name ?? 'Hyppers');
+    String nameTitle = (isGuest ?? false) ? 'Hyppers' : (name ?? 'Hyppers');
     // String nameTitle = "AaaAAAAASKJLKJDiiiiaskdlaksjdlkajsd asdasdas asdasd";
     nameTitle = nameTitle.split(" ").elementAt(0);
 

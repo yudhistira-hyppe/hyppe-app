@@ -82,7 +82,7 @@ class ShowBottomSheet {
     return _instance;
   }
 
-  static onLoginApp(
+  Future onLoginApp(
     context,
   ) async {
     await showModalBottomSheet(

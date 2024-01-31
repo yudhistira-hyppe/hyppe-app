@@ -604,9 +604,11 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: GestureDetector(
                       onTap: () {
-                        if (diaryData[index].insight?.isloadingFollow != true) {
-                          picNot.followUser(context, diaryData[index], isUnFollow: diaryData[index].following, isloading: diaryData[index].insight!.isloadingFollow ?? false);
-                        }
+                        context.handleActionIsGuest(() {
+                          if (diaryData[index].insight?.isloadingFollow != true) {
+                            picNot.followUser(context, diaryData[index], isUnFollow: diaryData[index].following, isloading: diaryData[index].insight!.isloadingFollow ?? false);
+                          }
+                        });
                       },
                       child: diaryData[index].insight?.isloadingFollow ?? false
                           ? const SizedBox(
@@ -625,32 +627,37 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                   ),
                 ),
               GestureDetector(
-                onTap: () {
-                  if (diaryData[index].email != email) {
-                    // FlutterAliplayer? fAliplayer
-                    context.read<PreviewPicNotifier>()
-                        .reportContent(
-                        context,
-                        diaryData[index],
-                        fAliplayer: fAliplayer,
-                        key: widget.interestKey,
-                        onCompleted: (){
+                onTap: () async {
+                  fAliplayer?.setMuted(true);
+                  fAliplayer?.pause();
+                  await context.handleActionIsGuest(() async  {
+                    if (diaryData[index].email != email) {
+                      // FlutterAliplayer? fAliplayer
+                      context.read<PreviewPicNotifier>()
+                          .reportContent(
+                          context,
+                          diaryData[index],
+                          fAliplayer: fAliplayer,
+                          key: widget.interestKey,
+                          onCompleted: (){
 
-                        }
-                    );
-                  } else {
-                    fAliplayer?.setMuted(true);
-                    fAliplayer?.pause();
-                    ShowBottomSheet().onShowOptionContent(
-                      context,
-                      contentData: diaryData[index],
-                      captionTitle: hyppeDiary,
-                      onDetail: false,
-                      isShare: diaryData[index].isShared,
-                      onUpdate: () => context.read<HomeNotifier>().onUpdate(),
-                      fAliplayer: fAliplayer,
-                    );
-                  }
+                          }
+                      );
+                    } else {
+                      fAliplayer?.setMuted(true);
+                      fAliplayer?.pause();
+                      ShowBottomSheet().onShowOptionContent(
+                        context,
+                        contentData: diaryData[index],
+                        captionTitle: hyppeDiary,
+                        onDetail: false,
+                        isShare: diaryData[index].isShared,
+                        onUpdate: () => context.read<HomeNotifier>().onUpdate(),
+                        fAliplayer: fAliplayer,
+                      );
+                    }
+                  });
+
                 },
                 child: const Icon(
                   Icons.more_vert,
@@ -941,9 +948,12 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                       Expanded(
                         child: GestureDetector(
                           onTap: () async {
-                            fAliplayer?.pause();
-                            await ShowBottomSheet.onBuyContent(context, data: diaryData[index], fAliplayer: fAliplayer);
-                            // fAliplayer?.play();
+                            await context.handleActionIsGuest(() async  {
+                              fAliplayer?.pause();
+                              await ShowBottomSheet.onBuyContent(context, data: diaryData[index], fAliplayer: fAliplayer);
+                              // fAliplayer?.play();
+                            });
+
                           },
                           child: const Align(
                             alignment: Alignment.centerRight,

@@ -24,6 +24,7 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/loading/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/pin/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -34,6 +35,7 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:unique_identifier/unique_identifier.dart';
 
+import '../../../app.dart';
 import '../../../core/constants/themes/hyppe_colors.dart';
 
 class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
@@ -286,6 +288,9 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
 
   _validateUserData(BuildContext context, UserProfileModel signData, bool isSociaMediaLogin, {String? onlineVersion, String? onlineIosVersion, bool isGuest = false}) async {
     await CheckVersion().check(context, onlineVersion, onlineIosVersion);
+    if(System().isGuest()){
+      fromGuest = true;
+    }
     if(isGuest){
       clearTextController();
       SharedPreference().writeStorage(SpKeys.isGuest, isGuest);

@@ -67,7 +67,7 @@ class _BannerPopState extends State<BannerPop> {
                             aspectRatio: 1 / 1,
                             padEnds: true,
                             enableInfiniteScroll: false,
-                            autoPlayInterval: Duration(seconds: 3),
+                            autoPlayInterval: const Duration(seconds: 3),
                             disableCenter: true,
                             onPageChanged: (index, reason) {
                               setState(() {
@@ -75,41 +75,48 @@ class _BannerPopState extends State<BannerPop> {
                               });
                             }),
                         items: notifier.bannerData
-                            .map((item) => ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      globalChallengePopUp = false;
-                                      Routing().moveBack();
-                                      Routing().move(Routes.chalengeDetail, argument: GeneralArgument()..id = item.sId);
-                                    },
-                                    child: Center(
-                                        child: Image.network(
-                                      item.bannerLandingpage ?? '',
-                                      height: constraints.maxHeight,
-                                      fit: BoxFit.cover,
-                                      loadingBuilder: (context, child, loadingProgress) {
-                                        if (loadingProgress == null) return child;
-                                        return Center(
-                                          child: Container(
-                                            height: size.width - 20,
-                                            width: SizeConfig.screenWidth,
-                                            color: Colors.black,
-                                            child: const UnconstrainedBox(
-                                              child: SizedBox(
-                                                height: 50,
-                                                width: 50,
-                                                child: CircularProgressIndicator(
-                                                    // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
-                                                    ),
-                                              ),
+                            .map((item) => Container(
+                          margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                              child: GestureDetector(
+                                onTap: () {
+                                  globalChallengePopUp = false;
+                                  Routing().moveBack();
+                                  Routing().move(Routes.chalengeDetail, argument: GeneralArgument()..id = item.sId);
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.network(
+                                  item.bannerLandingpage ?? '',
+                                  height: constraints.maxHeight,
+                                  fit: BoxFit.cover,
+                                  loadingBuilder: (context, child, loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return Center(
+                                        child: Container(
+                                          height: size.width - 20,
+                                          width: SizeConfig.screenWidth,
+                                          color: Colors.black,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10)
+                                          ),
+                                          child: const UnconstrainedBox(
+                                            child: SizedBox(
+                                              height: 50,
+                                              width: 50,
+                                              child: CircularProgressIndicator(
+                                                  // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                                                  ),
                                             ),
                                           ),
-                                        );
-                                      },
+                                        ),
+                                      );
+                                  },
+                                ),
                                     )),
-                                  ),
-                                ))
+                              ),
+                            ))
                             .toList(),
                       ),
                     ),
@@ -118,49 +125,48 @@ class _BannerPopState extends State<BannerPop> {
               ),
             ],
           ),
-          Positioned.fill(
-            child: Align(
-              alignment: Alignment.topRight,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                  globalChallengePopUp = false;
-                },
-                child: ClipOval(
-                  child: Container(
-                    padding: EdgeInsets.only(
-                      right: 2,
-                    ),
-                    // color: kHyppeTextLightPrimary,
-                    child: const CustomIconWidget(
-                      width: 32,
-                      height: 32,
-                      iconData: "${AssetPath.vectorPath}close-solid.svg",
-                      defaultColor: false,
-                      // color: Colors.white,
-                    ),
+          Positioned(
+            top: 20,
+            right: 10,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+                globalChallengePopUp = false;
+              },
+              child: ClipOval(
+                child: Container(
+                  padding: EdgeInsets.only(
+                    right: 2,
+                  ),
+                  // color: kHyppeTextLightPrimary,
+                  child: const CustomIconWidget(
+                    width: 32,
+                    height: 32,
+                    iconData: "${AssetPath.vectorPath}close-solid.svg",
+                    defaultColor: false,
+                    // color: Colors.white,
                   ),
                 ),
               ),
             ),
           ),
-          Positioned.fill(
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: notifier.bannerData.asMap().entries.map((entry) {
-                  return GestureDetector(
-                    onTap: () => _controller.animateToPage(entry.key),
-                    child: Container(
-                      width: _current == entry.key ? 12 : 6.0,
-                      height: 6.0,
-                      margin: const EdgeInsets.only(top: 30, left: 4, right: 4),
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: (_current == entry.key ? Color(0xffAB23B0) : Color(0xffcecece))),
-                    ),
-                  );
-                }).toList(),
-              ),
+          Positioned(
+            bottom: 20,
+            left: 0,
+            right: 0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: notifier.bannerData.asMap().entries.map((entry) {
+                return GestureDetector(
+                  onTap: () => _controller.animateToPage(entry.key),
+                  child: Container(
+                    width: _current == entry.key ? 12 : 6.0,
+                    height: 6.0,
+                    margin: const EdgeInsets.only(top: 30, left: 4, right: 4),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: (_current == entry.key ? Color(0xffAB23B0) : Color(0xffcecece))),
+                  ),
+                );
+              }).toList(),
             ),
           ),
           // Positioned.fill(

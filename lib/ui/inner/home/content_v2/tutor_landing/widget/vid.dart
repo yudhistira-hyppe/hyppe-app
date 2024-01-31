@@ -7,6 +7,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -285,10 +286,13 @@ class _VidTutorState extends State<VidTutor> with WidgetsBindingObserver, Ticker
                         Expanded(
                           child: GestureDetector(
                             onTap: () async {
-                              await ShowBottomSheet.onBuyContent(
-                                context,
-                                data: picData,
-                              );
+                              await context.handleActionIsGuest(() async  {
+                                await ShowBottomSheet.onBuyContent(
+                                  context,
+                                  data: picData,
+                                );
+                              });
+
                             },
                             child: const Align(
                               alignment: Alignment.centerRight,

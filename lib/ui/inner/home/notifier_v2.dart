@@ -363,7 +363,7 @@ class HomeNotifier with ChangeNotifier {
     }
   }
 
-  Future initHome(BuildContext context, bool mounted) async {
+  Future initHome(BuildContext context, bool mounted, {bool isReload = false}) async {
     // db.initDb();
     // await db.insertFilterCamera('2', 'filter viking', 'viking', 'viking.ong', context);
     // db.checkFilterItemExists();
@@ -380,6 +380,11 @@ class HomeNotifier with ChangeNotifier {
       final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
       final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
       final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
+      if(isReload){
+        pic.pic = null;
+        diary.diaryData = null;
+        vid.vidData == null;
+      }
 
       if (vid.vidData == null) {
         _isLoadingVid = true;

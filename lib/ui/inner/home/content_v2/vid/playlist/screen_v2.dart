@@ -357,29 +357,32 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                       width: 50,
                       child: CustomTextButton(
                         onPressed: () async {
-                          if (globalAudioPlayer != null) {
-                            globalAudioPlayer!.pause();
-                          }
-                          if (globalAliPlayer != null) {
-                            globalAliPlayer?.pause();
-                          }
-                          await ShowBottomSheet().onShowOptionContent(
-                            context,
-                            onDetail: true,
-                            contentData: data,
-                            captionTitle: hyppeVid,
-                            onUpdate: () => context.read<VidDetailNotifier>().onUpdate(),
-                            isShare: data.isShared,
-                          );
-                          if (globalAudioPlayer != null) {
-                            globalAudioPlayer!.seek(Duration.zero);
-                            globalAudioPlayer!.resume();
-                          }
-                          if (globalAliPlayer != null) {
-                            if (isPlay) {
-                              globalAliPlayer?.play();
+                          context.handleActionIsGuest(() async  {
+                            if (globalAudioPlayer != null) {
+                              globalAudioPlayer!.pause();
                             }
-                          }
+                            if (globalAliPlayer != null) {
+                              globalAliPlayer?.pause();
+                            }
+                            await ShowBottomSheet().onShowOptionContent(
+                              context,
+                              onDetail: true,
+                              contentData: data,
+                              captionTitle: hyppeVid,
+                              onUpdate: () => context.read<VidDetailNotifier>().onUpdate(),
+                              isShare: data.isShared,
+                            );
+                            if (globalAudioPlayer != null) {
+                              globalAudioPlayer!.seek(Duration.zero);
+                              globalAudioPlayer!.resume();
+                            }
+                            if (globalAliPlayer != null) {
+                              if (isPlay) {
+                                globalAliPlayer?.play();
+                              }
+                            }
+                          });
+
                         },
                         child: const CustomIconWidget(
                           defaultColor: false,
@@ -501,8 +504,11 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                     Container(
                       margin: const EdgeInsets.only(left: 10),
                       child: InkWell(
-                        onTap: () {
-                          ShowBottomSheet.onBuyContent(context, data: data);
+                        onTap: () async {
+                          await context.handleActionIsGuest(() async  {
+                            await ShowBottomSheet.onBuyContent(context, data: data);
+                          });
+
                         },
                         child: const CustomIconWidget(
                           width: 25,

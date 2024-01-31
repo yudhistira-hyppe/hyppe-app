@@ -5,6 +5,7 @@ import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/button_boost.dart';
@@ -240,11 +241,14 @@ class PicDetailBottom extends StatelessWidget {
                 '${AssetPath.vectorPath}cart.svg',
                 value2.translate.buy ?? 'buy',
                 () async {
-                  // value.preventMusic = true;
-                  globalAudioPlayer?.pause();
-                  await ShowBottomSheet.onBuyContent(context, data: data);
-                  globalAudioPlayer?.resume();
-                  // value.preventMusic = false;
+                  await context.handleActionIsGuest(() async  {
+                    // value.preventMusic = true;
+                    globalAudioPlayer?.pause();
+                    await ShowBottomSheet.onBuyContent(context, data: data);
+                    globalAudioPlayer?.resume();
+                    // value.preventMusic = false;
+                  });
+
                 },
               ),
 

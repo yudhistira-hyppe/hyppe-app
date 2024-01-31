@@ -121,10 +121,12 @@ class CustomAppBar extends StatelessWidget {
                 builder: (context, picNot, child) => Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: GestureDetector(
-                    onTap: () {
-                      if (data!.insight?.isloadingFollow != true) {
-                        picNot.followUser(context, data??ContentData(), isUnFollow: data!.following, isloading: data!.insight!.isloadingFollow ?? false);
-                      }
+                    onTap: () async {
+                      await context.handleActionIsGuest(() async  {
+                        if (data!.insight?.isloadingFollow != true) {
+                          picNot.followUser(context, data??ContentData(), isUnFollow: data!.following, isloading: data!.insight!.isloadingFollow ?? false);
+                        }
+                      });
                     },
                     child: data?.insight?.isloadingFollow ?? false
                         ? Container(

@@ -634,10 +634,13 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                 child: GestureDetector(
                                   onTap: () {
-                                    if (widget.arguments?.picData?[pageIndex].insight?.isloadingFollow != true) {
-                                      picNot.followUser(context, pics?[pageIndex] ?? ContentData(),
-                                          isUnFollow: pics?[pageIndex].following, isloading: pics?[pageIndex].insight!.isloadingFollow ?? false);
-                                    }
+                                    context.handleActionIsGuest(() {
+                                      if (widget.arguments?.picData?[pageIndex].insight?.isloadingFollow != true) {
+                                        picNot.followUser(context, pics?[pageIndex] ?? ContentData(),
+                                            isUnFollow: pics?[pageIndex].following, isloading: pics?[pageIndex].insight!.isloadingFollow ?? false);
+                                      }
+                                    });
+
                                   },
                                   child: pics?[pageIndex].insight?.isloadingFollow ?? false
                                       ? const SizedBox(
@@ -825,41 +828,45 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                   ),
                   GestureDetector(
                     onTap: () {
-                      // fAliplayer?.pause();
-                      if (pics?[index].email != email) {
-                        context.read<PreviewPicNotifier>().reportContent(context, pics?[index] ?? ContentData(), fAliplayer: fAliplayer, onCompleted: () async {
-                          bool connect = await System().checkConnections();
-                          if (connect) {
-                            setState(() {
-                              isloading = true;
-                            });
-                            await notifier.reload(Routing.navigatorKey.currentContext ?? context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
-                            setState(() {
-                              pics = notifier.pics;
-                            });
-                          } else {
-                            if (mounted) {
-                              ShowGeneralDialog.showToastAlert(
-                                context,
-                                lang?.internetConnectionLost ?? ' Error',
-                                () async {},
-                              );
+                      fAliplayer?.setMuted(true);
+                      fAliplayer?.pause();
+                      context.handleActionIsGuest(() async  {
+                        if (pics?[index].email != email) {
+                          context.read<PreviewPicNotifier>().reportContent(context, pics?[index] ?? ContentData(), fAliplayer: fAliplayer, onCompleted: () async {
+                            bool connect = await System().checkConnections();
+                            if (connect) {
+                              setState(() {
+                                isloading = true;
+                              });
+                              await notifier.reload(Routing.navigatorKey.currentContext ?? context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                              setState(() {
+                                pics = notifier.pics;
+                              });
+                            } else {
+                              if (mounted) {
+                                ShowGeneralDialog.showToastAlert(
+                                  context,
+                                  lang?.internetConnectionLost ?? ' Error',
+                                      () async {},
+                                );
+                              }
                             }
-                          }
-                        });
-                      } else {
-                        fAliplayer?.setMuted(true);
-                        fAliplayer?.pause();
-                        ShowBottomSheet().onShowOptionContent(
-                          context,
-                          contentData: pics?[index] ?? ContentData(),
-                          captionTitle: hyppePic,
-                          onDetail: false,
-                          isShare: pics?[index].isShared,
-                          onUpdate: () => context.read<HomeNotifier>().onUpdate(),
-                          fAliplayer: fAliplayer,
-                        );
-                      }
+                          });
+                        } else {
+
+                          ShowBottomSheet().onShowOptionContent(
+                            context,
+                            contentData: pics?[index] ?? ContentData(),
+                            captionTitle: hyppePic,
+                            onDetail: false,
+                            isShare: pics?[index].isShared,
+                            onUpdate: () => context.read<HomeNotifier>().onUpdate(),
+                            fAliplayer: fAliplayer,
+                          );
+                        }
+                      });
+                      // fAliplayer?.pause();
+
                     },
                     child: const Icon(
                       Icons.more_vert,
@@ -1302,8 +1309,11 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                           Expanded(
                             child: GestureDetector(
                               onTap: () async {
-                                fAliplayer?.pause();
-                                await ShowBottomSheet.onBuyContent(context, data: pics?[index], fAliplayer: fAliplayer);
+                                await context.handleActionIsGuest(() async  {
+                                  fAliplayer?.pause();
+                                  await ShowBottomSheet.onBuyContent(context, data: pics?[index], fAliplayer: fAliplayer);
+                                });
+
                               },
                               child: const Align(
                                 alignment: Alignment.centerRight,
