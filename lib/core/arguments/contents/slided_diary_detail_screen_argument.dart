@@ -17,6 +17,7 @@ class SlidedDiaryDetailScreenArgument extends ContentScreenArgument {
   final double? heightBox;
   final double? heightTopProfile;
   final bool? isTrue;
+  final bool? isProfile;
 
   @override
   FeatureType get featureType => FeatureType.pic;
@@ -24,6 +25,7 @@ class SlidedDiaryDetailScreenArgument extends ContentScreenArgument {
   SlidedDiaryDetailScreenArgument({
     this.index = 0,
     this.diaryData,
+    this.isProfile = false,
     this.page,
     this.limit,
     required this.type,

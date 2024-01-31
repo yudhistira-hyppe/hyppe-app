@@ -603,7 +603,7 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
     // AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
 
     return Scaffold(
-      backgroundColor: kHyppeLightSurface,
+      backgroundColor: Colors.black,
       body: GestureDetector(
         onHorizontalDragEnd: (dragEndDetails) {
           if (dragEndDetails.primaryVelocity! < 0) {
@@ -996,6 +996,7 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
                   )
                 : TitlePlaylistDiaries(
                     data: data,
+                    inProfile: true,
                     // storyController: _storyController,
                   ),
 

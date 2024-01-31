@@ -161,6 +161,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
       print("00000000000000 ${widget.arguments?.page}");
       _initListener(notifier);
     });
+
     var index = 0;
     var lastIndex = 0;
     pageSrc = widget.arguments?.pageSrc ?? PageSrc.otherProfile;
@@ -515,12 +516,12 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
   }
 
   @override
-  void didPopNext() {
+  void didPopNext() async {
     ScrollPicNotifier notifier = context.read<ScrollPicNotifier>();
-    print("======= didPopNext ${notifier.pics?.length} -- $pageIndex ");
     if (pageIndex == (notifier.pics?.length ?? 0)) {
       setState(() {
-        pageIndex = pageIndex - 1;
+        pageIndex = _curIdx - 1;
+        print("=-=-=-=-=-  $pageIndex =-==-=-=-=-=-=");
       });
     }
     isInPage = true;
@@ -640,7 +641,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(margin: const EdgeInsets.symmetric(horizontal: 10), transform: Matrix4.translationValues(-18.0, 0.0, 0.0), child: widget.arguments?.titleAppbar ?? Container()),
-                          if (pics?[pageIndex].email != email && (pics?[pageIndex].isNewFollowing ?? false))
+                          if (pics?[pageIndex].email != email && (pics?[pageIndex].isNewFollowing ?? false) && (widget.arguments?.isProfile ?? false))
                             Consumer<PreviewPicNotifier>(
                               builder: (context, picNot, child) => Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -835,6 +836,34 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                       badge: pics?[index].urluserBadge,
                     ),
                   ),
+                  if (pics?[index].email != email && (pics?[index].isNewFollowing ?? false) && !(widget.arguments?.isProfile ?? false))
+                    Consumer<PreviewPicNotifier>(
+                      builder: (context, picNot, child) => Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            context.handleActionIsGuest(() {
+                              if (pics?[index].insight?.isloadingFollow != true) {
+                                picNot.followUser(context, pics?[index] ?? ContentData(), isUnFollow: pics?[index].following, isloading: pics?[index].insight!.isloadingFollow ?? false);
+                              }
+                            });
+                          },
+                          child: pics?[index].insight?.isloadingFollow ?? false
+                              ? Container(
+                                  height: 40,
+                                  width: 30,
+                                  child: const Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: CustomLoading(),
+                                  ),
+                                )
+                              : Text(
+                                  (pics?[index].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+                                  style: const TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                                ),
+                        ),
+                      ),
+                    ),
                   GestureDetector(
                     onTap: () {
                       // fAliplayer?.pause();
@@ -842,9 +871,18 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                         context.read<PreviewPicNotifier>().reportContent(context, pics?[index] ?? ContentData(), fAliplayer: fAliplayer, onCompleted: () async {
                           bool connect = await System().checkConnections();
                           if (connect) {
+                            if (pics?.isEmpty ?? [].isEmpty) {
+                              Routing().moveBack();
+                              Routing().moveBack();
+                              return;
+                            }
                             setState(() {
                               isloading = true;
+                              if (index == (pics?.length ?? 0 - 1)) {
+                                pageIndex = index - 1;
+                              }
                             });
+
                             await notifier.reload(Routing.navigatorKey.currentContext ?? context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
                             setState(() {
                               pics = notifier.pics;
@@ -1007,6 +1045,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                   if (pageSrc == PageSrc.selfProfile || pageSrc == PageSrc.otherProfile) {
                                     var res = await Routing().move(Routes.picScrollFullScreenDetail,
                                         argument: SlidedPicDetailScreenArgument(
+                                          isProfile: true,
                                           page: index,
                                           type: TypePlaylist.mine,
                                           titleAppbar: widget.arguments!.titleAppbar,

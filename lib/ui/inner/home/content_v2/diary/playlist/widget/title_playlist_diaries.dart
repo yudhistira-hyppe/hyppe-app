@@ -28,11 +28,13 @@ import '../../../../../../../app.dart';
 
 class TitlePlaylistDiaries extends StatefulWidget {
   final ContentData? data;
+  final bool? inProfile;
   // final StoryController? storyController;
 
   const TitlePlaylistDiaries({
     Key? key,
     this.data,
+    this.inProfile,
     // this.storyController,
   }) : super(key: key);
 
@@ -236,6 +238,11 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                                     type: hyppeDiary,
                                     adsData: null,
                                     onUpdate: () {
+                                      if (widget.inProfile == true) {
+                                        Routing().moveBack();
+                                        Routing().moveBack();
+                                        return;
+                                      }
                                       context.read<DiariesPlaylistNotifier>().onUpdate();
                                       // widget.storyController.pause();
                                     },

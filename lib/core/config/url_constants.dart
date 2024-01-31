@@ -326,13 +326,13 @@ class UrlConstants {
   static const String postBuyContent = "$transactionRoute/v2";
 
   /// post => Get History Transaction
-  static const String transactionHistorys = "$transactionRoute/historys/v2";
+  static const String transactionHistorys = "$transactionRoute/historys";
 
   /// post => Get History Transaction
-  static const String detailTransactionHistorys = "$transactionRoute/historys/details/v2";
+  static const String detailTransactionHistorys = "$transactionRoute/historys/details";
 
   /// post => Get Withdraw Detail
-  static const String detailWithdrawal = "$transactionRoute/withdraw/listdetail";
+  static const String detailWithdrawal = "$transactionRoute/withdraw/listdetail/v2";
 
   /// post => Get Withdraw Detail
   static const String withdraw = "$transactionRoute/withdraw/v2";

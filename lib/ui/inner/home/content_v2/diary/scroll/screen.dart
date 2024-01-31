@@ -560,6 +560,12 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
     isActivePage = true;
     fAliplayer?.play();
 
+    if (indexDiary == (diaryData?.length ?? 0)) {
+      setState(() {
+        indexDiary = indexDiary - 1;
+      });
+    }
+
     // System().disposeBlock();
     if (toComment) {
       ScrollDiaryNotifier notifier = context.read<ScrollDiaryNotifier>();
@@ -640,7 +646,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(transform: Matrix4.translationValues(-18.0, 0.0, 0.0), margin: const EdgeInsets.symmetric(horizontal: 10), child: widget.arguments?.titleAppbar ?? Container()),
-                            if (diaryData?[indexDiary].email != email && (diaryData?[indexDiary].isNewFollowing ?? false))
+                            if (diaryData?[indexDiary].email != email && (diaryData?[indexDiary].isNewFollowing ?? false) && (widget.arguments?.isProfile ?? false))
                               Consumer<PreviewPicNotifier>(
                                 builder: (context, picNot, child) => Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -812,6 +818,34 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                       badge: diaryData?[index].urluserBadge,
                     ),
                   ),
+                  if (diaryData?[index].email != email && (diaryData?[index].isNewFollowing ?? false) && !(widget.arguments?.isProfile ?? false))
+                    Consumer<PreviewPicNotifier>(
+                      builder: (context, picNot, child) => Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            context.handleActionIsGuest(() {
+                              if (diaryData?[index].insight?.isloadingFollow != true) {
+                                picNot.followUser(context, diaryData?[index] ?? ContentData(), isUnFollow: diaryData?[index].following, isloading: diaryData?[index].insight?.isloadingFollow ?? false);
+                              }
+                            });
+                          },
+                          child: diaryData?[index].insight?.isloadingFollow ?? false
+                              ? const SizedBox(
+                                  height: 40,
+                                  width: 30,
+                                  child: Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: CustomLoading(),
+                                  ),
+                                )
+                              : Text(
+                                  (diaryData?[index].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+                                  style: const TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                                ),
+                        ),
+                      ),
+                    ),
                   GestureDetector(
                     onTap: () {
                       if (diaryData?[index].email != email) {
@@ -821,6 +855,9 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                           if (connect) {
                             setState(() {
                               isloading = true;
+                              if (index == (diaryData?.length ?? 0 - 1)) {
+                                indexDiary = index - 1;
+                              }
                             });
                             await notifier.reload(Routing.navigatorKey.currentContext ?? context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
                             setState(() {

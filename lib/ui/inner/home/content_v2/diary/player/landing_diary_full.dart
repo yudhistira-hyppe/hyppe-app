@@ -139,8 +139,9 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
       _curPostId = notifier.diaryData?[_curIdx].postID ?? '';
 
       start(context, notifier.diaryData?[_curIdx] ?? ContentData());
-
-      initAlipayer();
+      if (fAliplayer == null) {
+        initAlipayer();
+      }
     });
 
     _initializeTimer();
@@ -669,7 +670,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
       // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
     }
     fAliplayer?.stop();
-    fAliplayer?.destroy();
+    // fAliplayer?.destroy();
     // _pauseScreen();
     // if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
     //   fAliplayer?.destroy();

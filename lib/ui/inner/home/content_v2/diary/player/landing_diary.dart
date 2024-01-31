@@ -109,7 +109,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
   @override
   void initState() {
-    "++++++++++++++ initState".logger();
+    "++++++++++++++ initState landing diary".logger();
     FirebaseCrashlytics.instance.setCustomKey('layout', 'LandingDiaryPage');
     final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
 
@@ -130,8 +130,10 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         indexKeySell = mn?.tutorialData.indexWhere((element) => element.key == 'sell') ?? 0;
         indexKeyProtection = mn?.tutorialData.indexWhere((element) => element.key == 'protection') ?? 0;
       }
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'DiaryLandingpage');
-      initAlipayer();
+      if (fAliplayer == null) {
+        fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'DiaryLandingpage');
+        initAlipayer();
+      }
 
       //scroll
       // if (mounted) {
@@ -470,7 +472,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     if (data.reportedStatus != 'BLURRED') {
       if (data.isApsara ?? false) {
         // _playMode = ModeTypeAliPLayer.auth;
-        await getAuth(context, data.apsaraId ?? '');
+        await getAuth(data.apsaraId ?? '');
       } else {
         // _playMode = ModeTypeAliPLayer.url;
         await getOldVideoUrl(data.postID ?? '');
@@ -501,7 +503,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     // fAliplayer?.play();
   }
 
-  Future getAuth(BuildContext context, String apsaraId) async {
+  Future getAuth(String apsaraId) async {
     try {
       final fixContext = Routing.navigatorKey.currentContext;
       isloading = true;
@@ -515,6 +517,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
         Map jsonMap = json.decode(fetch.data.toString());
         auth = jsonMap['PlayAuth'];
+
+        print("==auth == $auth");
 
         fAliplayer?.setVidAuth(
           vid: apsaraId,
@@ -663,7 +667,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   void dispose() {
     print("=======dispose diary page ==========");
     fAliplayer?.stop();
-    fAliplayer?.destroy();
+    // fAliplayer?.destroy();
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
       // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);

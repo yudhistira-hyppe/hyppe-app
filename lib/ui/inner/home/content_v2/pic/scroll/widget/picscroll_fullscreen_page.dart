@@ -749,7 +749,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                   ),
                 ),
                 SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                        (data.boosted.isEmpty) &&
+                        data.statusBoost != 'BERLANGSUNG' &&
                         (data.reportedStatus != 'OWNED' && data.reportedStatus != 'BLURRED' && data.reportedStatus2 != 'BLURRED') &&
                         data.email == email
                     ? Container(
@@ -770,7 +770,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                         ),
                       )
                     : Container(),
-                if (data.email == email && (data.boostCount ?? 0) >= 0 && (data.boosted.isNotEmpty))
+                if (data.email == email && (data.boostCount ?? 0) >= 0 && data.statusBoost == 'BERLANGSUNG' && (data.boosted.isNotEmpty))
                   Container(
                     padding: const EdgeInsets.all(10),
                     margin: const EdgeInsets.only(bottom: 10, left: 18.0),
@@ -1040,6 +1040,11 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                 context.read<PreviewPicNotifier>().reportContent(context, data, fAliplayer: fAliplayer, onCompleted: () async {
                   imageCache.clear();
                   imageCache.clearLiveImages();
+                  if (picData?.isEmpty ?? [].isEmpty) {
+                    Routing().moveBack();
+                    Routing().moveBack();
+                    return;
+                  }
                   await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 0);
                 });
               } else {
@@ -1053,6 +1058,11 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                   isShare: data.isShared,
                   onUpdate: () {
                     context.read<HomeNotifier>().onUpdate();
+                    if (picData?.isEmpty ?? [].isEmpty) {
+                      Routing().moveBack();
+                      Routing().moveBack();
+                      Routing().moveBack();
+                    }
                   },
                   fAliplayer: fAliplayer,
                 );

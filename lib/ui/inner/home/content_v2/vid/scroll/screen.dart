@@ -265,7 +265,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                           transform: Matrix4.translationValues(-18.0, 0.0, 0.0),
                           margin: const EdgeInsets.symmetric(horizontal: 10), 
                           child: widget.arguments?.titleAppbar ?? Container()),
-                        if (vidData?[indexVid].email != email && (vidData?[indexVid].isNewFollowing ?? false))
+                        if (vidData?[indexVid].email != email && (vidData?[indexVid].isNewFollowing ?? false) && (widget.arguments?.isProfile??false))
                         Consumer<PreviewPicNotifier>(
                           builder: (context, picNot, child) => Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -434,7 +434,34 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                       badge: vidData?[index].urluserBadge,
                     ),
                   ),
-                  
+                  if (vidData?[index].email != email && (vidData?[index].isNewFollowing ?? false) && !(widget.arguments?.isProfile ?? false))
+                    Consumer<PreviewPicNotifier>(
+                      builder: (context, picNot, child) => Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            context.handleActionIsGuest(() {
+                              if (vidData?[index].insight?.isloadingFollow != true) {
+                                picNot.followUser(context, vidData![index], isUnFollow: vidData?[index].following, isloading: vidData?[index].insight!.isloadingFollow ?? false);
+                              }
+                            });
+                          },
+                          child: vidData?[index].insight?.isloadingFollow ?? false
+                              ? Container(
+                                  height: 40,
+                                  width: 30,
+                                  child: const Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: CustomLoading(),
+                                  ),
+                                )
+                              : Text(
+                                  (vidData?[index].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+                                  style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                                ),
+                        ),
+                      ),
+                    ),
                   GestureDetector(
                     onTap: () {
                       if (vidData?[index].email != email) {
