@@ -192,9 +192,9 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
           _currentPosition = extraValue ?? 0;
         }
         if (!_inSeek) {
-          // setState(() {
-          _currentPositionText = extraValue ?? 0;
-          // });
+          setState(() {
+            _currentPositionText = extraValue ?? 0;
+          });
         }
       } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
         // _bufferPosition = extraValue ?? 0;
@@ -635,31 +635,33 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                             }
                                           },
                                           onTap: () {
-                                            if (widget.data.email != email) {
-                                              // FlutterAliplayer? fAliplayer
-                                              context.read<PreviewPicNotifier>().reportContent(context, widget.data, fAliplayer: widget.data.fAliplayer, onCompleted: () async {
-                                                imageCache.clear();
-                                                imageCache.clearLiveImages();
-                                                await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
-                                              });
-                                            } else {
-                                              // if (_curIdx != -1) {
-                                              //   "=============== pause 11".logger();
-                                              //   notifier.vidData?[_curIdx].fAliplayer?.pause();
-                                              // }
+                                            context.handleActionIsGuest(() async {
+                                              if (widget.data.email != email) {
+                                                // FlutterAliplayer? fAliplayer
+                                                context.read<PreviewPicNotifier>().reportContent(context, widget.data, fAliplayer: widget.data.fAliplayer, onCompleted: () async {
+                                                  imageCache.clear();
+                                                  imageCache.clearLiveImages();
+                                                  await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
+                                                });
+                                              } else {
+                                                // if (_curIdx != -1) {
+                                                //   "=============== pause 11".logger();
+                                                //   notifier.vidData?[_curIdx].fAliplayer?.pause();
+                                                // }
 
-                                              ShowBottomSheet().onShowOptionContent(
-                                                context,
-                                                contentData: widget.data,
-                                                captionTitle: hyppeVid,
-                                                onDetail: false,
-                                                isShare: widget.data.isShared,
-                                                onUpdate: () {
-                                                  (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
-                                                },
-                                                fAliplayer: widget.data.fAliplayer,
-                                              );
-                                            }
+                                                ShowBottomSheet().onShowOptionContent(
+                                                  context,
+                                                  contentData: widget.data,
+                                                  captionTitle: hyppeVid,
+                                                  onDetail: false,
+                                                  isShare: widget.data.isShared,
+                                                  onUpdate: () {
+                                                    (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
+                                                  },
+                                                  fAliplayer: widget.data.fAliplayer,
+                                                );
+                                              }
+                                            });
                                           }),
                                     ),
                                   ),

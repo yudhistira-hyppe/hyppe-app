@@ -307,78 +307,66 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                         }),
                   ),
                   Expanded(
-                              child: (vidData?.isEmpty ?? true)
-                                  ? const NoResultFound()
-                                  : RefreshIndicator(
-                                onRefresh: () async {
-                                  bool connect = await System().checkConnections();
-                                  if (connect) {
-                                    setState(() {
-                                      isloading = true;
-                                    });
-                                    await vidNotifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
-                                    setState(() {
-                                      vidData = vidNotifier.vidData;
-                                    });
-                                  } else {
-                                    if (mounted) {
-                                      ShowGeneralDialog.showToastAlert(
-                                        context,
-                                        lang?.internetConnectionLost ?? ' Error',
-                                        () async {},
-                                      );
-                                    }
-                                  }
-                                },
-                                child: NotificationListener<OverscrollIndicatorNotification>(
-                                  onNotification: (overscroll) {
-                                    overscroll.disallowIndicator();
-                                    return false;
-                                  },
-                                  child: ScrollablePositionedList.builder(
-                                    itemScrollController: itemScrollController,
-                                    itemPositionsListener: itemPositionsListener,
-                                    scrollOffsetController: scrollOffsetController,
-                                    // controller: vidNotifier.pageController,
-                                    // onPageChanged: (index) async {
-                                    //   print('ScrollVid index : $index');
-                                    //   if (index == (vidNotifier.itemCount - 1)) {
-                                    //     final values = await vidNotifier.contentsQuery.loadNext(context, isLandingPage: true);
-                                    //     if (values.isNotEmpty) {
-                                    //       vidData = [...(vidData ?? [] as List<ContentData>)] + values;
-                                    //     }
-                                    //   }
-                                    //   // context.read<ScrollVidNotifier>().nextVideo = false;
-                                    //   // context.read<ScrollVidNotifier>().initializeVideo = false;
-                                    // },
-                                    physics: const AlwaysScrollableScrollPhysics(),
-                                    shrinkWrap: false,
-                                    padding: const EdgeInsets.symmetric(horizontal: 11.5),
-                                    itemCount: vidData?.length ?? 0,
-                                    itemBuilder: (BuildContext context, int index) {
-                                      if (vidData == null || homeNotifier.isLoadingVid) {
-                                        vidData?[index].fAliplayer?.pause();
-                                        // _lastCurIndex = -1;
-                                        return CustomShimmer(
-                                          margin: const EdgeInsets.only(bottom: 100, right: 16, left: 16),
-                                          height: context.getHeight() / 8,
-                                          width: double.infinity,
-                                        );
-                                      } else if (index == vidData?.length) {
-                                        return const CustomLoading(size: 5);
-                                      }
-                                      // if (_curIdx == 0 && vidData?[0].reportedStatus == 'BLURRED') {
-                                      //   isPlay = false;
-                                      //   vidData?[index].fAliplayer?.stop();
-                                      // }
-                                      // final vidData = vidData?[index];
+                    child: (vidData?.isEmpty ?? true)
+                        ? const NoResultFound()
+                        : RefreshIndicator(
+                      onRefresh: () async {
+                        bool connect = await System().checkConnections();
+                        if (connect) {
+                          setState(() {
+                            isloading = true;
+                          });
+                          await vidNotifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                          setState(() {
+                            vidData = vidNotifier.vidData;
+                          });
+                        } else {
+                          if (mounted) {
+                            ShowGeneralDialog.showToastAlert(
+                              context,
+                              lang?.internetConnectionLost ?? ' Error',
+                              () async {},
+                            );
+                          }
+                        }
+                      },
+                      child: NotificationListener<OverscrollIndicatorNotification>(
+                        onNotification: (overscroll) {
+                          overscroll.disallowIndicator();
+                          return false;
+                        },
+                        child: ScrollablePositionedList.builder(
+                          itemScrollController: itemScrollController,
+                          itemPositionsListener: itemPositionsListener,
+                          scrollOffsetController: scrollOffsetController,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          shrinkWrap: false,
+                          padding: const EdgeInsets.symmetric(horizontal: 11.5),
+                          itemCount: vidData?.length ?? 0,
+                          itemBuilder: (BuildContext context, int index) {
+                            if (vidData == null || homeNotifier.isLoadingVid) {
+                              vidData?[index].fAliplayer?.pause();
+                              // _lastCurIndex = -1;
+                              return CustomShimmer(
+                                margin: const EdgeInsets.only(bottom: 100, right: 16, left: 16),
+                                height: context.getHeight() / 8,
+                                width: double.infinity,
+                              );
+                            } else if (index == vidData?.length) {
+                              return const CustomLoading(size: 5);
+                            }
+                            // if (_curIdx == 0 && vidData?[0].reportedStatus == 'BLURRED') {
+                            //   isPlay = false;
+                            //   vidData?[index].fAliplayer?.stop();
+                            // }
+                            // final vidData = vidData?[index];
 
-                                      return itemVid(vidNotifier, index);
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ),
+                            return itemVid(vidNotifier, index);
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -819,15 +807,14 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
               ),
               twelvePx,
               CustomNewDescContent(
-                // desc: "${data?.description}",
                 username: vidData?[index].username ?? '',
                 desc: "${vidData?[index].description}",
                 trimLines: 2,
                 textAlign: TextAlign.start,
-                seeLess: ' ${lang?.less}', // ${notifier2.translate.seeLess}',
-                seeMore: ' ${lang?.more}', //${notifier2.translate.seeMoreContent}',
+                seeLess: ' ${lang?.less}', 
+                seeMore: ' ${lang?.more}',
                 normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
+                hrefStyle: Theme.of(context).textTheme.titleSmall?.copyWith(color: kHyppePrimary),
                 expandStyle: const TextStyle(
                           fontSize: 14,
                           color: Colors.black,

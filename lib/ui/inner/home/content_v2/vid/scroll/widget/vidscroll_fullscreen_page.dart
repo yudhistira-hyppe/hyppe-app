@@ -27,10 +27,9 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/widget/fullscreen/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/fullscreen/video_fullscreen_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/vid_player_page.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
@@ -89,7 +88,6 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
   bool _inSeek = false;
   int _currentPosition = 0;
   int _currentPositionText = 0;
-  // int _bufferPosition = 0;
   int _videoDuration = 1;
   bool isPause = false;
   bool onTapCtrl = false;
@@ -99,8 +97,6 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
 
   LocalizationModelV2? lang;
   String email = '';
-
-  // bool isloading = true;
 
   bool isLoadingVid = false;
 
@@ -118,18 +114,13 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
   @override
   void afterFirstLayout(BuildContext context) {
     landscape();
-    _initializeTimer();
+    // _initializeTimer();
   }
 
   void landscape() async {
     widget.fAliplayer?.pause();
     Future.delayed(const Duration(seconds: 1), () {
-      final notifier = (Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
-      final isShowing = notifier.isShowingAds;
-      if (!isShowing) {
-        widget.fAliplayer?.play();
-      }
-      notifier.loadVideo = false;
+      widget.fAliplayer?.play();
     });
   }
 
@@ -172,24 +163,20 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
         });
       }
     });
-    // fAliplayer?.seekTo(changevalue, GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
     widget.fAliplayer?.seekTo(changevalue, FlutterAvpdef.ACCURATE);
 
     widget.fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
       if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
         if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
-          _currentPosition = extraValue ?? 0;
+          setState(() {
+            _currentPosition = extraValue ?? 0;
+          });
         }
         if (!_inSeek) {
-          // setState(() {
           _currentPositionText = extraValue ?? 0;
-          // });
+          
         }
       } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
-        // _bufferPosition = extraValue ?? 0;
-        // if (mounted) {
-        //   setState(() {});
-        // }
       } else if (infoCode == FlutterAvpdef.AUTOPLAYSTART) {
         // Fluttertoast.showToast(msg: "AutoPlay");
       } else if (infoCode == FlutterAvpdef.CACHESUCCESS) {
@@ -206,7 +193,6 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
 
     widget.fAliplayer?.setOnCompletion((playerId) {
       _showTipsWidget = true;
-      // isPause = true;
       try {
         if (mounted) {
           setState(() {
@@ -229,9 +215,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
             _loadingPercent = 0;
             isLoadingVid = true;
           });
-        } catch (e) {
-          print('error setOnLoadingStatusListener: $e');
-        }
+        } catch (_) {}
       }
     }, loadingProgress: (percent, netSpeed, playerId) {
       if (percent == 100) {
@@ -245,9 +229,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
         } else {
           _loadingPercent = percent;
         }
-      } catch (e) {
-        print('error loadingProgress: $e');
-      }
+      } catch (_) {}
     }, loadingEnd: (playerId) {
       try {
         if (mounted) {
@@ -257,9 +239,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
         } else {
           isLoadingVid = false;
         }
-      } catch (e) {
-        print('error loadingEnd: $e');
-      }
+      } catch (_) {}
     });
 
     controller = PageController(initialPage: widget.index ?? 0);
@@ -268,28 +248,27 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
       setState(() {
         isScrolled = true;
       });
-      final _notifier = context.read<PreviewVidNotifier>();
-      if (isOnPageTurning && controller.page == controller.page?.roundToDouble()) {
-        _notifier.pageIndex = controller.page?.toInt() ?? 0;
-        setState(() {
-          // current = _controller.page.toInt();
-          isOnPageTurning = false;
-        });
-      } else if (!isOnPageTurning) {
-        if (((_notifier.pageIndex.toDouble()) - (controller.page ?? 0)).abs() > 0.1) {
-          setState(() {
-            isOnPageTurning = true;
-          });
-        }
-      }
+      // final notifierVid = context.read<PreviewVidNotifier>();
+      // if (isOnPageTurning && controller.page == controller.page?.roundToDouble()) {
+      //   notifierVid.pageIndex = controller.page?.toInt() ?? 0;
+      //   setState(() {
+      //     isOnPageTurning = false;
+      //   });
+      // } else if (!isOnPageTurning) {
+      //   if (((notifierVid.pageIndex.toDouble()) - (controller.page ?? 0)).abs() > 0.1) {
+      //     setState(() {
+      //       isOnPageTurning = true;
+      //     });
+      //   }
+      // }
     });
 
     curentIndex = widget.index ?? 0;
-    if ((vidData?.length ?? 0) - 1 == curentIndex) {
-      getNewData();
-    }
+    // if ((vidData?.length ?? 0) - 1 == curentIndex) {
+    //   // getNewData();
+    // }
 
-    _initializeTimer();
+    // _initializeTimer();
     super.initState();
   }
 
@@ -300,26 +279,18 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
     } else {
       orientation = Orientation.portrait;
     }
-
-    print(
-        'start step -> height: $height width: $width orientation: $lastOrientation');
-
     if (lastOrientation != orientation) {
       setState(() {
         isloadingRotate = true;
       });
-      print('step 1');
       if (orientation == Orientation.landscape) {
         SystemChrome.setPreferredOrientations([
           DeviceOrientation.landscapeLeft,
           DeviceOrientation.landscapeRight,
         ]);
-        print('step 2');
       } else {
-        // await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
         await SystemChrome.setPreferredOrientations(
             [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-        print('step 3');
       }
       Future.delayed(const Duration(milliseconds: 1000), () {
         setState(() {
@@ -331,12 +302,6 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
 
   _pauseScreen() async {
     (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().removeWakelock();
-  }
-
-  _initializeTimer() async {
-    if (widget.enableWakelock) {
-      (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initWakelockTimer(onShowInactivityWarning: _handleInactivity);
-    }
   }
 
   _handleInactivity() {
@@ -359,10 +324,9 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
         widget.fAliplayer?.play();
         isPause = false;
         setState(() {});
-        _initializeTimer();
+        // _initializeTimer();
       },
     );
-    // this syntax below to prevent video play after changing
     Future.delayed(const Duration(seconds: 1), () {
       if (context.read<MainNotifier>().isInactiveState) {
         widget.fAliplayer?.pause();
@@ -372,25 +336,24 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
     });
   }
   
-  Future getNewData() async {
-    print("getnewdata1");
-    // widget.loadMoreFunc yestion?.call();
-    HomeNotifier hn = context.read<HomeNotifier>();
-    PreviewVidNotifier vn = context.read<PreviewVidNotifier>();
+  // Future getNewData() async {
+  //   // widget.loadMoreFunc yestion?.call();
+  //   HomeNotifier hn = context.read<HomeNotifier>();
+  //   ScrollVidNotifier vn = context.read<ScrollVidNotifier>();
 
-    await hn.initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {
-      setState(() {
-        vn.vidData?.forEach((e) {
-          print(e.description);
-        });
-        vidData = vn.vidData;
-        vidData?.forEach((e) {
-          print(e.description);
-        });
-        print("========== total ${vidData?.length}");
-      });
-    });
-  }
+  //   await hn.initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {
+  //     setState(() {
+  //       vn.vidData?.forEach((e) {
+  //         print(e.description);
+  //       });
+  //       vidData = vn.vidData;
+  //       vidData?.forEach((e) {
+  //         print(e.description);
+  //       });
+  //       print("========== total ${vidData?.length}");
+  //     });
+  //   });
+  // }
 
   @override
   void dispose() {
@@ -402,13 +365,10 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
   }
 
   whileDispose() async {
-    widget.fAliplayer?.pause();
-    final notifier = (Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
+    // widget.fAliplayer?.pause();
     await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-    if (!notifier.isShowingAds) {
-      widget.fAliplayer?.play();
-    }
+  //  widget.fAliplayer?.destroy();
   }
 
   void closePage() {
@@ -429,13 +389,13 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
             isMute: isMute));
   }
   void nextPage() {
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 500), () {
       controller.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.ease);
     });
   }
 
   void previousPage() {
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 500), () {
       controller.previousPage(duration: const Duration(milliseconds: 500), curve: Curves.ease);
     });
   }
@@ -448,51 +408,44 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
       DataSourceRelated.regionKey: DataSourceRelated.defaultRegion,
     };
 
-    return Consumer<VideoNotifier>(builder: (context, notifier, _) {
+    return Consumer<ScrollVidNotifier>(builder: (context, notifier, _) {
       return Scaffold(
         key: _scaffoldKeyPlayer,
         body: GestureDetector(
           onHorizontalDragEnd: (dragEndDetails) {
             if (dragEndDetails.primaryVelocity! < 0) {
             } else if (dragEndDetails.primaryVelocity! > 0) {
-              int changevalue;
-              changevalue = _currentPosition + 1000;
-              if (changevalue > _videoDuration) {
-                changevalue = _videoDuration;
+              print('datas index ${widget.index} ${curentIndex} ${widget.index == curentIndex}');
+              if (widget.index == curentIndex){
+                closePage();
+              }else{
+                Routing().moveBack();
               }
-          
-              widget.data.isLoading = true;
-              Navigator.pop(
-                  context,
-                  VideoIndicator(
-                      videoDuration: _videoDuration,
-                      seekValue: changevalue,
-                      positionText: _currentPositionText,
-                      showTipsWidget: _showTipsWidget,
-                      isMute: isMute));
+              
               
                   SystemChrome.setPreferredOrientations(
                       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
             }
           },
-          child: notifier.loadVideo
-              ? Container(
-                  color: Colors.black,
-                  child: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                )
-              : PageView.builder(
+          child: PageView.builder(
                   controller: controller,
                   scrollDirection: Axis.vertical,
-                  itemCount: vidData?.length ?? 0,
-                  onPageChanged: (value) {
+                  itemCount: notifier.vidData?.length ?? 0,
+                  onPageChanged: (value) async {
                     curentIndex = value;
                     
-                    notifier.currIndex = value;
-                    scrollPage(vidData?[value].metadata?.height, vidData?[value].metadata?.width);
-                    if ((vidData?.length ?? 0) - 1 == curentIndex) {
-                      getNewData();
+                    curentIndex = value;
+                    scrollPage(notifier.vidData?[value].metadata?.height, notifier.vidData?[value].metadata?.width);
+                    if ((notifier.vidData?.length ?? 0) - 1 ==  widget.index) {
+                      await notifier.loadMore(
+                          context, controller, PageSrc.selfProfile, '');
+                      if (mounted) {
+                        setState(() {
+                          notifier.vidData = notifier.vidData;
+                        });
+                      } else {
+                        notifier.vidData = notifier.vidData;
+                      }
                     }
                   },
                   itemBuilder: (context, index) {
@@ -515,9 +468,9 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                               final player = VidPlayerPage(
                                 fromFullScreen: true,
                                 orientation: orientation,
-                                playMode: (vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
+                                playMode: (notifier.vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
                                 dataSourceMap: map,
-                                data: vidData?[index],
+                                data: notifier.vidData?[index],
                                 height: MediaQuery.of(context).size.height,
                                 width: MediaQuery.of(context).size.width,
                                 inLanding: widget.isLanding,
@@ -563,15 +516,14 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                           ),
                           child: Stack(
                             children: [
-                              if (!notifier.isShowingAds)
-                                Positioned.fill(
-                                  child: Container(
-                                    width: context.getWidth(),
-                                    height: SizeConfig.screenHeight,
-                                    decoration: const BoxDecoration(color: Colors.black),
-                                    child: widget.aliPlayerView,
-                                  ),
+                              Positioned.fill(
+                                child: Container(
+                                  width: context.getWidth(),
+                                  height: SizeConfig.screenHeight,
+                                  decoration: const BoxDecoration(color: Colors.black),
+                                  child: widget.aliPlayerView,
                                 ),
+                              ),
                               GestureDetector(
                                 onTap: () {
                                   onTapCtrl = true;
@@ -587,7 +539,6 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                                 SizedBox(
                                   width: context.getWidth(),
                                   height: SizeConfig.screenHeight,
-                                  // padding: EdgeInsets.only(bottom: 25.0),
                                   child: Offstage(offstage: false, child: _buildContentWidget(context, orientation)),
                                 ),
                               Align(
@@ -624,16 +575,13 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                                         widget.fAliplayer?.pause();
                                         isPause = true;
                                         setState(() {});
-                                        print('data result $res');
                                         if (res != null && res == true){
                                             if ((widget.data.metadata?.height ?? 0) < (widget.data.metadata?.width ?? 0)) {
-                                              print('Landscape VidPlayerPage');
                                               SystemChrome.setPreferredOrientations([
                                                 DeviceOrientation.landscapeLeft,
                                                 DeviceOrientation.landscapeRight,
                                               ]);
                                             } else {
-                                              print('Portrait VidPlayerPage');
                                               SystemChrome.setPreferredOrientations([
                                                 DeviceOrientation.portraitUp,
                                                 DeviceOrientation.portraitDown,
@@ -642,25 +590,27 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                                           }
                                       },
                                       onTap: () {
-                                        if (widget.data.email != email) {
-                                          context.read<PreviewPicNotifier>().reportContent(context, widget.data, fAliplayer: widget.data.fAliplayer, onCompleted: () async {
-                                            imageCache.clear();
-                                            imageCache.clearLiveImages();
-                                            await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
-                                          });
-                                        } else {
-                                          ShowBottomSheet().onShowOptionContent(
-                                            context,
-                                            contentData: widget.data,
-                                            captionTitle: hyppeVid,
-                                            onDetail: false,
-                                            isShare: widget.data.isShared,
-                                            onUpdate: () {
-                                              (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
-                                            },
-                                            fAliplayer: widget.data.fAliplayer,
-                                          );
-                                        }
+                                        context.handleActionIsGuest(() async {
+                                          if (widget.data.email != email) {
+                                            context.read<PreviewPicNotifier>().reportContent(context, widget.data, fAliplayer: widget.data.fAliplayer, onCompleted: () async {
+                                              imageCache.clear();
+                                              imageCache.clearLiveImages();
+                                              await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
+                                            });
+                                          } else {
+                                            ShowBottomSheet().onShowOptionContent(
+                                              context,
+                                              contentData: widget.data,
+                                              captionTitle: hyppeVid,
+                                              onDetail: false,
+                                              isShare: widget.data.isShared,
+                                              onUpdate: () {
+                                                (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
+                                              },
+                                              fAliplayer: widget.data.fAliplayer,
+                                            );
+                                          }
+                                        });
                                       }),
                                 ),
                               ),
@@ -840,8 +790,8 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                             seeLess: ' ${lang?.less}',
                             seeMore: ' ${lang?.more}',
                             normStyle: const TextStyle(fontSize: 14, color: kHyppeTextPrimary),
-                            hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                            expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppeTextPrimary, fontWeight: FontWeight.bold),
+                            hrefStyle: Theme.of(context).textTheme.titleSmall?.copyWith(color: kHyppePrimary),
+                            expandStyle: Theme.of(context).textTheme.titleSmall?.copyWith(color: kHyppeTextPrimary, fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
@@ -1111,7 +1061,6 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
   void _onPlayerHide() {
     Future.delayed(const Duration(seconds: 4), () {
       onTapCtrl = false;
-      // setState(() {});
     });
   }
 
@@ -1172,7 +1121,6 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
     return GestureDetector(
       onTap: () {
         if (isPause) {
-          // if (_showTipsWidget) fAliplayer?.prepare();
           widget.fAliplayer?.play();
           isPause = false;
           setState(() {});
@@ -1190,11 +1138,6 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
         iconData: isPause ? "${AssetPath.vectorPath}play3.svg" : "${AssetPath.vectorPath}pause3.svg",
         defaultColor: false,
       ),
-      // Icon(
-      //   isPause ? Icons.pause : Icons.play_arrow_rounded,
-      //   color: iconColor,
-      //   size: 200,
-      // ),
     );
   }
 

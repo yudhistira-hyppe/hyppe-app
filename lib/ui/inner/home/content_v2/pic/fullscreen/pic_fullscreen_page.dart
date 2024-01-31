@@ -1107,9 +1107,11 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
               Consumer<PreviewPicNotifier>(
                 builder: (context, picNot, child) => GestureDetector(
                   onTap: () {
-                    if (data.insight?.isloadingFollow != true) {
-                      picNot.followUser(context, data, isUnFollow: data.following, isloading: data.insight!.isloadingFollow ?? false);
-                    }
+                    context.handleActionIsGuest(() {
+                      if (data.insight?.isloadingFollow != true) {
+                        picNot.followUser(context, data, isUnFollow: data.following, isloading: data.insight!.isloadingFollow ?? false);
+                      }
+                    });
                   },
                   child: data.insight?.isloadingFollow ?? false
                       ? const SizedBox(

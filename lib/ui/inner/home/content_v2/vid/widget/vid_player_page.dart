@@ -20,6 +20,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -495,7 +496,6 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             final detik = (_currentPosition / 1000).round();
             if (notifier.adsTime == detik) {
               if (notifier.tempAdsData != null) {
-                print('pause here 2');
                 fAliplayer?.pause();
                 final tempAds = notifier.tempAdsData;
                 if (tempAds != null) {
@@ -1056,7 +1056,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                 isPlay = true;
               });
             },
-            slider: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, widget.orientation, notifier),
+            slider: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, widget.orientation),
             videoIndicator: VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentAdsPositionText, isMute: isMute),
             vidData: widget.vidData,
             index: widget.index,
@@ -1087,7 +1087,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
               notifier.tempAdsData = null;
               notifier.isShowingAds = false;
             },
-            slider: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, widget.orientation, notifier),
+            slider: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, widget.orientation),
             videoIndicator: VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentAdsPositionText, isMute: isMute),
             vidData: widget.vidData,
             index: widget.index,
@@ -1294,14 +1294,12 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                   isPlay = !_showTipsWidget;
                                 });
                               } else {
-                                setState(() {
-                                  _videoDuration = value.videoDuration ?? 0;
-                                  _currentPosition = value.seekValue ?? 0;
-                                  _currentPositionText = value.positionText ?? 0;
-                                  _showTipsWidget = value.showTipsWidget ?? false;
-                                  isMute = value.isMute ?? false;
-                                  isPlay = !_showTipsWidget;
-                                });
+                                _videoDuration = value.videoDuration ?? 0;
+                                _currentPosition = value.seekValue ?? 0;
+                                _currentPositionText = value.positionText ?? 0;
+                                _showTipsWidget = value.showTipsWidget ?? false;
+                                isMute = value.isMute ?? false;
+                                isPlay = !_showTipsWidget;
                               }
                               fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
                                 if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
@@ -1388,7 +1386,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                               SizedBox(
                                   width: widget.width,
                                   height: widget.height,
-                                  child: Offstage(offstage: _isLock, child: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, widget.orientation, notifier))),
+                                  child: Offstage(offstage: _isLock, child: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, widget.orientation))),
 
                             if (widget.fromFullScreen)
                               AnimatedOpacity(
@@ -1435,30 +1433,33 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                                 }
                                             },
                                             onTap: () {
-                                              if (widget.data?.email != email) {
-                                                context.read<PreviewPicNotifier>().reportContent(context, widget.data!, fAliplayer: widget.data!.fAliplayer, onCompleted: () async {
-                                                  imageCache.clear();
-                                                  imageCache.clearLiveImages();
-                                                  await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
-                                                });
-                                              } else {
-                                                // if (_curIdx != -1) {
-                                                //   "=============== pause 11".logger();
-                                                //   notifier.vidData?[_curIdx].fAliplayer?.pause();
-                                                // }
-                                                ShowBottomSheet().onShowOptionContent(
-                                                  context,
-                                                  contentData: widget.data!,
-                                                  captionTitle: hyppeVid,
-                                                  onDetail: false,
-                                                  orientation: widget.orientation,
-                                                  isShare: widget.data!.isShared,
-                                                  onUpdate: () {
-                                                    (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
-                                                  },
-                                                  fAliplayer: widget.data!.fAliplayer,
-                                                ).then((value) => print('disini datas popup'));
-                                              }
+                                              context.handleActionIsGuest(() async {
+                                                if (widget.data?.email != email) {
+                                                  context.read<PreviewPicNotifier>().reportContent(context, widget.data!, fAliplayer: widget.data!.fAliplayer, onCompleted: () async {
+                                                    imageCache.clear();
+                                                    imageCache.clearLiveImages();
+                                                    await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
+                                                  });
+                                                } else {
+                                                  // if (_curIdx != -1) {
+                                                  //   "=============== pause 11".logger();
+                                                  //   notifier.vidData?[_curIdx].fAliplayer?.pause();
+                                                  // }
+                                                  ShowBottomSheet().onShowOptionContent(
+                                                    context,
+                                                    contentData: widget.data!,
+                                                    captionTitle: hyppeVid,
+                                                    onDetail: false,
+                                                    orientation: widget.orientation,
+                                                    isShare: widget.data!.isShared,
+                                                    onUpdate: () {
+                                                      (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
+                                                    },
+                                                    fAliplayer: widget.data!.fAliplayer,
+                                                  ).then((value) => print('disini datas popup'));
+                                                }
+                                              });
+                                              
                                             }),
                                       ),
                                     ),
@@ -2005,7 +2006,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
     }
   }
 
-  _buildContentWidget(BuildContext context, Orientation orientation, VideoNotifier notifier) {
+  _buildContentWidget(BuildContext context, Orientation orientation) {
     switch (widget.fromFullScreen) {
       case true:
         return AnimatedOpacity(
@@ -2086,7 +2087,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                               vertical: 6,
                                             ),
                                             child: Padding(
-                                              padding: EdgeInsets.symmetric(
+                                              padding: const EdgeInsets.symmetric(
                                                 horizontal: 8.0,
                                               ),
                                               child: location()
@@ -2323,12 +2324,33 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                         ? Container()
                         : Padding(
                             padding: const EdgeInsets.all(18.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            child: Stack(
+                              // mainAxisAlignment: MainAxisAlignment.end,
+                              // crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 sixPx,
                                 if (onTapCtrl || isPause)
+                                  if (widget.data?.tagPeople?.isNotEmpty ?? false)
+                                    Align(
+                                      alignment: Alignment.bottomLeft,
+                                      child: Container(
+                                        margin: const EdgeInsets.only(right: 12.0),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              fAliplayer?.pause();
+                                              context.read<PicDetailNotifier>().showUserTag(context, widget.data?.tagPeople, widget.data?.postID, title: lang!.inthisphoto, fAliplayer: fAliplayer);
+                                            },
+                                            child: const CustomIconWidget(
+                                              iconData: '${AssetPath.vectorPath}tag-people-light.svg',
+                                              defaultColor: false,
+                                              height: 18,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   Align(
                                     alignment: Alignment.bottomRight,
                                     child: Text(
@@ -2571,7 +2593,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                   notifier.isShowingAds = false;
                   // Routing().moveBack();
                 },
-                slider: _buildContentWidget(context, widget.orientation, notifier),
+                slider: _buildContentWidget(context, widget.orientation),
                 videoIndicator: VideoIndicator(videoDuration: _videoDuration, seekValue: changeValue, positionText: _currentAdsPositionText, isMute: isMute),
                 vidData: widget.vidData,
                 index: widget.index,
