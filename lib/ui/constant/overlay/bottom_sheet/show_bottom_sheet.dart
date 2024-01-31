@@ -66,6 +66,8 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:showcaseview/showcaseview.dart';
 // import 'package:story_view/story_view.dart';
+import '../../../../core/constants/shared_preference_keys.dart';
+import '../../../../core/services/shared_preference.dart';
 import 'bottom_sheet_content/live_streaming/on_react_streaming.dart';
 import 'bottom_sheet_content/live_streaming/on_streaming_options.dart';
 import 'bottom_sheet_content/on_show_success_ownership_content.dart';
@@ -272,10 +274,11 @@ class ShowBottomSheet {
     bool isVid = true,
     bool isLive = true,
   }) async {
+    final newUser = SharedPreference().readStorage(SpKeys.newUser) ?? 'FALSE';
     await showModalBottomSheet(
       context: context,
       enableDrag: true,
-      isDismissible: true,
+      isDismissible: newUser == "FALSE",
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (builder) {
@@ -922,7 +925,7 @@ class ShowBottomSheet {
             return false;
           },
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.28,
+            height: MediaQuery.of(context).size.height * 0.3,
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
               color: Theme.of(context).colorScheme.surface,

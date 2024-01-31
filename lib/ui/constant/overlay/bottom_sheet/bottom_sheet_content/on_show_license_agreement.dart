@@ -22,12 +22,15 @@ class OnShowLicenseAgreement extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+              CustomTextWidget(textToDisplay: notifier.language.termsOfUse ?? "Terms Of Use", textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),
               RichText(
                 text: TextSpan(
                   style: _textTheme.bodyText2,
-                  text: '${notifier.language.byTappingAgreeAndContinueYouAgreeToOur} \n',
+                  text: '${notifier.language.byTappingAgreeAndContinueYouAgreeToOur} ',
                   children: [
                     TextSpan(
                       text: '${notifier.language.termsOfService} ',
@@ -79,8 +82,6 @@ class OnShowLicenseAgreement extends StatelessWidget {
                 ),
               ),
             ],
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
           ),
         ),
       ),

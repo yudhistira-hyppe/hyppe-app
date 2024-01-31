@@ -143,7 +143,6 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
 
       fAliplayer?.setAutoPlay(true);
       fAliplayer?.setLoop(true);
-
       //Turn on mix mode
       if (Platform.isIOS) {
         FlutterAliplayer.enableMix(true);

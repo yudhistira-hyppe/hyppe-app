@@ -77,7 +77,7 @@ class _OnShowUserViewContentBottomSheetState extends State<OnShowUserViewContent
                         // physics: const NeverScrollableScrollPhysics(),
                         itemCount: (notifier.listLikeView?.user?.length ?? 0) + 1,
                         itemBuilder: (context, index) {
-                          final data = notifier.listLikeView?.user?[index];
+
                           // print(System().showUserPicture(value[index].avatar));
                           if((notifier.listLikeView?.user?.length ?? 0) == index){
                             if ((notifier.listLikeView?.guest ?? 0) > 0) {
@@ -111,7 +111,7 @@ class _OnShowUserViewContentBottomSheetState extends State<OnShowUserViewContent
                               return const SizedBox.shrink();
                             }
                           }
-
+                          final data = notifier.listLikeView?.user?[index];
                           if (data != null) {
                             return ListTile(
                               onTap: () => System().navigateToProfile(context, data.email ?? ''),
