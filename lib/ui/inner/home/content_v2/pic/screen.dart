@@ -126,10 +126,12 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   int indexKeyProtection = 0;
   int itemIndex = 0;
   bool isActivePage = true;
+  bool isPrepareMusic = false;
 
   @override
   void initState() {
     print('data screen pic');
+    isPrepareMusic = false;
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppePreviewPic');
     final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
     lang = context.read<TranslateNotifierV2>().translate;
@@ -576,6 +578,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
         setState(() {
           isloading = false;
+          isPrepareMusic = false;
         });
         // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
       }
@@ -1128,7 +1131,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                         }
 
                                         if (picData?.music != null) {
-                                          print("ada musiknya ${picData?.music}");
+                                          print("ada musiknya ${picData?.music?.toJson()}");
+                                          setState(() {
+                                            isPrepareMusic = true;
+                                          });
                                           Future.delayed(const Duration(milliseconds: 100), () {
                                             start(context, picData ?? ContentData(), notifier);
                                           });
@@ -1272,22 +1278,24 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                               // }
 
                                               // fAliplayer?.pause();
-                                              var res = await Routing().move(Routes.picFullScreenDetail, argument: PicFullscreenArgument(picData: notifier.pic!, index: index, scrollPic: false));
-                                              if (res != null || res == null) {
-                                                fAliplayer?.play();
-                                                fAliplayer?.setMuted(notifier.isMute);
-                                                var temp1 = notifier.pic![_curIdx];
-                                                var temp2 = notifier.pic![notifier.currentIndex];
-                                                if (index < notifier.currentIndex) {
-                                                  setState(() {
-                                                    index = notifier.currentIndex;
-                                                    notifier.pic!.removeRange(_curIdx, notifier.currentIndex);
-                                                  });
-                                                } else if (index > notifier.currentIndex) {
-                                                  setState(() {
-                                                    notifier.pic![_curIdx] = temp2;
-                                                    notifier.pic![notifier.currentIndex] = temp1;
-                                                  });
+                                              if (!isPrepareMusic){
+                                                var res = await Routing().move(Routes.picFullScreenDetail, argument: PicFullscreenArgument(picData: notifier.pic!, index: index, scrollPic: false));
+                                                if (res != null || res == null) {
+                                                  fAliplayer?.play();
+                                                  fAliplayer?.setMuted(notifier.isMute);
+                                                  var temp1 = notifier.pic![_curIdx];
+                                                  var temp2 = notifier.pic![notifier.currentIndex];
+                                                  if (index < notifier.currentIndex) {
+                                                    setState(() {
+                                                      index = notifier.currentIndex;
+                                                      notifier.pic!.removeRange(_curIdx, notifier.currentIndex);
+                                                    });
+                                                  } else if (index > notifier.currentIndex) {
+                                                    setState(() {
+                                                      notifier.pic![_curIdx] = temp2;
+                                                      notifier.pic![notifier.currentIndex] = temp1;
+                                                    });
+                                                  }
                                                 }
                                               }
                                             },

@@ -616,6 +616,10 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                                               },
                                               fAliplayer: widget.data.fAliplayer,
                                             );
+                                            widget.data.fAliplayer?.pause();
+                                            // widget.fAliplayer?.pause();
+                                            isPause = true;
+                                            setState(() {});
                                           }
                                         });
                                       }),
@@ -738,7 +742,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                                   child: GestureDetector(
                                     onTap: () {
                                       widget.fAliplayer?.pause();
-                                      context.read<PicDetailNotifier>().showUserTag(context, widget.data.tagPeople, widget.data.postID, title: lang!.inthisphoto, fAliplayer: widget.fAliplayer, orientation: orientation);
+                                      context.read<PicDetailNotifier>().showUserTag(context, widget.data.tagPeople, widget.data.postID, title: lang!.inThisVideo, fAliplayer: widget.fAliplayer, orientation: orientation);
                                     },
                                     child: Row(
                                       children: [

@@ -1489,7 +1489,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
               child: GestureDetector(
                 onTap: () {
                   fAliplayer?.pause();
-                  context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID, fAliplayer: fAliplayer);
+                  context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID, fAliplayer: fAliplayer, title: lang!.inthisphoto);
                 },
                 child: const CustomIconWidget(
                   iconData: '${AssetPath.vectorPath}tag_people.svg',

@@ -854,7 +854,7 @@ class ShowBottomSheet {
     ).whenComplete(() {
       // if (storyController != null) storyController.play();
       if (fAliplayer != null) {
-        fAliplayer.play();
+        // fAliplayer.play();
         fAliplayer.setMuted(false);
       }
 

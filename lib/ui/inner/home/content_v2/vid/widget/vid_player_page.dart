@@ -1457,6 +1457,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                                     },
                                                     fAliplayer: widget.data!.fAliplayer,
                                                   ).then((value) => print('disini datas popup'));
+                                                  widget.data!.fAliplayer?.pause();
                                                 }
                                               });
                                               
@@ -1565,7 +1566,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                 left: 12,
                                 child: GestureDetector(
                                   onTap: () {
-                                    context.read<PicDetailNotifier>().showUserTag(context, widget.data?.tagPeople, widget.data?.postID);
+                                    context.read<PicDetailNotifier>().showUserTag(context, widget.data?.tagPeople, widget.data?.postID, title: lang!.inThisVideo);
                                   },
                                   child: const CustomIconWidget(
                                     iconData: '${AssetPath.vectorPath}tag_people.svg',
@@ -2057,7 +2058,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                               child: GestureDetector(
                                                 onTap: () {
                                                   fAliplayer?.pause();
-                                                  context.read<PicDetailNotifier>().showUserTag(context, widget.data?.tagPeople, widget.data?.postID, title: lang!.inthisphoto, fAliplayer: fAliplayer, orientation: orientation);
+                                                  context.read<PicDetailNotifier>().showUserTag(context, widget.data?.tagPeople, widget.data?.postID, title: lang!.inThisVideo, fAliplayer: fAliplayer, orientation: orientation);
                                                 },
                                                 child: Row(
                                                   children: [
@@ -2340,7 +2341,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                           child: GestureDetector(
                                             onTap: () {
                                               fAliplayer?.pause();
-                                              context.read<PicDetailNotifier>().showUserTag(context, widget.data?.tagPeople, widget.data?.postID, title: lang!.inthisphoto, fAliplayer: fAliplayer);
+                                              context.read<PicDetailNotifier>().showUserTag(context, widget.data?.tagPeople, widget.data?.postID, title: lang!.inThisVideo, fAliplayer: fAliplayer);
                                             },
                                             child: const CustomIconWidget(
                                               iconData: '${AssetPath.vectorPath}tag-people-light.svg',
@@ -2510,6 +2511,22 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                             color: Colors.white,
                             fontSize: 13,
                           )),
+                      data.email == SharedPreference().readStorage(SpKeys.email)
+                          ? GestureDetector(
+                              onTap: () async {
+                                System().checkConnections().then((value) {
+                                  if (value) {
+                                    Routing().move(Routes.appeal, argument: data);
+                                  }
+                                });
+                              },
+                              child: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  margin: const EdgeInsets.all(18),
+                                  decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
+                                  child: Text(lang?.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+                            )
+                          : const SizedBox(),
                       const Spacer(),
                       GestureDetector(
                         onTap: () {

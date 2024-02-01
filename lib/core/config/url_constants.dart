@@ -413,7 +413,7 @@ class UrlConstants {
   static const String insertReport = "/api/reportuser/create/v2";
   static const String detailTypeAppeal = "/api/reportuser/detailreason";
 
-  static const String appealPost = "/api/reportuser/appeal";
+  static const String appealPost = "/api/reportuser/appeal/v2";
   static const String createTicket = "/api/usertickets/createticket/v2";
 
   /// ===music===

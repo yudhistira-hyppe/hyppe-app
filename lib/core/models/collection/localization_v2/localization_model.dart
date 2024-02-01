@@ -1100,6 +1100,7 @@ class LocalizationModelV2 {
   String? inthisphoto;
   String? addATitle;
   String? inThisDiary;
+  String? inThisVideo;
 
   LocalizationModelV2({
     this.login,
@@ -2203,6 +2204,7 @@ class LocalizationModelV2 {
     this.inthisphoto,
     this.addATitle,
     this.inThisDiary,
+    this.inThisVideo
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -3325,5 +3327,6 @@ class LocalizationModelV2 {
     inthisphoto = json['inthisphoto'];
     addATitle = json['addATitle'];
     inThisDiary = json['inThisDiary'];
+    inThisVideo = json['inThisVideo'];
   }
 }
