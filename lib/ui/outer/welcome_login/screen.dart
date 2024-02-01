@@ -188,7 +188,7 @@ class _WelcomeLoginScreenState extends State<WelcomeLoginScreen> {
                             ),
                     ),
                   ),
-                  // testLogin(),
+                  testLogin(),
                 ],
               ),
             ),

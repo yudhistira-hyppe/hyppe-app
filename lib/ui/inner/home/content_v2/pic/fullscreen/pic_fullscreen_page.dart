@@ -310,7 +310,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                       padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
                     );
                   }
-      
+
                   return notifier.pic![index].reportedStatus == 'BLURRED'
                       ? blurContentWidget(context, notifier.pic![index])
                       : imagePic(notifier.pic![index], index: index, notifier: notifier, homeNotifier: home);
@@ -791,7 +791,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                           : 42),
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                  padding: const EdgeInsets.only(left: 8.0),
+                  padding: const EdgeInsets.only(left: 8.0, top: 20),
                   child: SingleChildScrollView(
                     child: CustomDescContent(
                       desc: "${data.description}",
@@ -1107,7 +1107,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
               Consumer<PreviewPicNotifier>(
                 builder: (context, picNot, child) => GestureDetector(
                   onTap: () {
-                    context.handleActionIsGuest(()  {
+                    context.handleActionIsGuest(() {
                       if (data.insight?.isloadingFollow != true) {
                         picNot.followUser(context, data, isUnFollow: data.following, isloading: data.insight!.isloadingFollow ?? false);
                       }
@@ -1141,7 +1141,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
             onTap: () async {
               fAliplayer?.setMuted(true);
               fAliplayer?.pause();
-              await context.handleActionIsGuest(() async  {
+              await context.handleActionIsGuest(() async {
                 if (data.email != email) {
                   context.read<PreviewPicNotifier>().reportContent(context, data, fAliplayer: fAliplayer, onCompleted: () async {
                     imageCache.clear();
@@ -1149,7 +1149,6 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                     await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 0);
                   });
                 } else {
-
                   ShowBottomSheet().onShowOptionContent(
                     context,
                     contentData: data,
@@ -1163,7 +1162,6 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                   );
                 }
               });
-
             },
             data: data),
       ],
