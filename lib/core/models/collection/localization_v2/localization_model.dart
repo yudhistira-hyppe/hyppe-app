@@ -332,6 +332,7 @@ class LocalizationModelV2 {
   String? iHaveReadAndAgree;
   String? language;
   String? like;
+  String? cLike;
   String? markAllAsRead;
   String? mention;
   String? messages;
@@ -1436,6 +1437,7 @@ class LocalizationModelV2 {
     this.iHaveReadAndAgree,
     this.language,
     this.like,
+    this.cLike,
     this.markAllAsRead,
     this.mention,
     this.messages,
@@ -2542,6 +2544,7 @@ class LocalizationModelV2 {
     iHaveReadAndAgree = json['iHaveReadAndAgree'];
     language = json['language'];
     like = json['like'];
+    cLike = json['cLike'];
     markAllAsRead = json['markAllAsRead'];
     mention = json['mention'];
     messages = json['messages'];
