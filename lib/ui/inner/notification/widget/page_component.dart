@@ -102,6 +102,7 @@ class _PageComponentState extends State<PageComponent> {
       );
     } else {
       return ListView.builder(
+        physics: const AlwaysScrollableScrollPhysics(),
         itemCount: widget.itemCount,
         itemBuilder: widget.builder,
         controller: _scrollController,
