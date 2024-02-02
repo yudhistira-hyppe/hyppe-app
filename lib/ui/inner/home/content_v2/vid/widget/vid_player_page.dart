@@ -1071,31 +1071,36 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             settings: const RouteSettings()),
       );
     } else {
-      return await Navigator.of(context, rootNavigator: true).push(
-        CupertinoPageRoute(
-            builder: (_) => VidScrollFullScreenPage(
-                enableWakelock: widget.enableWakelock,
-                aliPlayerView: aliPlayerView!,
-                thumbnail: (widget.data?.isApsara ?? false) ? (widget.data?.mediaThumbEndPoint ?? '') : '${widget.data?.fullThumbPath}',
-                fAliplayer: fAliplayer,
-                data: widget.data ?? ContentData(),
-                onClose: () {
-                  setState(() {
-                    isPlay = true;
-                  });
-                },
-                slider: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, widget.orientation),
-                videoIndicator: VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentAdsPositionText, isMute: isMute),
-                vidData: widget.vidData,
-                index: widget.index,
-                clearPostId: widget.clearPostId,
-                loadMoreFunction: () {
-                  // widget.loadMoreFunction?.call();
-                },
-                isAutoPlay: widget.isAutoPlay,
-                isLanding: widget.inLanding),
-            settings: const RouteSettings()),
-      );
+      return await Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+          builder: (_) => VideoFullscreenPage(
+              enableWakelock: widget.enableWakelock,
+              aliPlayerView: aliPlayerView!,
+              thumbnail: (widget.data?.isApsara ?? false) ? (widget.data?.mediaThumbEndPoint ?? '') : '${widget.data?.fullThumbPath}',
+              fAliplayer: fAliplayer,
+              data: widget.data ?? ContentData(),
+              onClose: () {
+                notifier.setMapAdsContent(widget.data?.postID ?? '', null);
+                setState(() {
+                  isPlay = true;
+                  if (widget.onShowAds != null) {
+                    widget.onShowAds!(notifier.mapInContentAds[widget.data?.postID ?? '']);
+                  }
+                });
+                notifier.hasShowedAds = true;
+                notifier.tempAdsData = null;
+                notifier.isShowingAds = false;
+              },
+              slider: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, widget.orientation),
+              videoIndicator: VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentAdsPositionText, isMute: isMute),
+              vidData: widget.vidData,
+              index: widget.index,
+              clearPostId: widget.clearPostId,
+              loadMoreFunction: () {
+                widget.loadMoreFunction?.call();
+              },
+              isAutoPlay: widget.isAutoPlay,
+              isLanding: widget.inLanding),
+          settings: const RouteSettings()));
     }
   }
 
