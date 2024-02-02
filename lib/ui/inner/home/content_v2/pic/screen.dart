@@ -1132,6 +1132,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
                                         if (picData?.music != null) {
                                           print("ada musiknya ${picData?.music?.toJson()}");
+                                          print("ada musiknya ${picData?.music?.toJson()}");
                                           setState(() {
                                             isPrepareMusic = true;
                                           });
