@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -26,6 +27,10 @@ class AppealScreen extends StatefulWidget {
 class _AppealScreenState extends State<AppealScreen> {
   @override
   void initState() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     final noti = Provider.of<AppealNotifier>(context, listen: false);
     noti.initializeData(context, widget.data);
     noti.appealReason = '';

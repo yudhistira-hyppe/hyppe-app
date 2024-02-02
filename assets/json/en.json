@@ -70,7 +70,7 @@
   "privacyPolicy": "Privacy Policy",
   "and": "and",
   "termsOfService": "Terms of Service",
-  "termsOfUse" : "Terms of Use",
+  "termsOfUse": "Terms of Use",
   "welcome": "Welcome",
   "letsMakeYouAnAccount": "Let's make you an account",
   "fullName": "Full Name",
@@ -117,7 +117,7 @@
   "yourStory": "Your story",
   "justNow": "Just now",
   "seeAll": "See all",
-  "viewAll":"View all",
+  "viewAll": "View all",
   "seeSome": "See some",
   "replyTo": "Reply to",
   "posts": "Posts",
@@ -332,7 +332,7 @@
   "identityNumber": "Identity Number",
   "iHaveReadAndAgree": "I have read, and I agree",
   "language": "Language",
-  "like": "likes",
+  "like": "Likes",
   "cLike": "Likes",
   "notLikeyet": "Not like yet",
   "notViewsyet": "Not views yet",
@@ -1102,5 +1102,6 @@
   "viewers": "Viewers",
   "liveVideoHasStarted": "LIVE video has started!",
   "addATitle": "Add a title...",
-  "inThisDiary": "Dalam diary ini"
+  "inThisDiary": "Dalam diary ini",
+  "inThisVideo": "Dalam video ini"
 }

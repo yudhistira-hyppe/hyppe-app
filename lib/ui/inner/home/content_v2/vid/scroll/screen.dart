@@ -100,15 +100,15 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
   void initState() {
     isStopVideo = true;
     SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp,
-      ]);
+      DeviceOrientation.portraitUp,
+    ]);
     FirebaseCrashlytics.instance.setCustomKey('layout', 'ScrollVid');
     email = SharedPreference().readStorage(SpKeys.email);
     final notifier = Provider.of<ScrollVidNotifier>(context, listen: false);
     // notifier.initialVid(context, reload: true);
     lang = context.read<TranslateNotifierV2>().translate;
     vidData = widget.arguments?.vidData;
-    indexVid = widget.arguments!.page??0;
+    indexVid = widget.arguments!.page ?? 0;
     notifier.vidData = widget.arguments?.vidData;
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -255,132 +255,117 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
             child: SizedBox(
               child: Column(
                 children: [
-                  if(vidData?.isNotEmpty ?? false)
-                  ListTile(
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          transform: Matrix4.translationValues(-18.0, 0.0, 0.0),
-                          margin: const EdgeInsets.symmetric(horizontal: 10), 
-                          child: widget.arguments?.titleAppbar ?? Container()),
-                        if (vidData?[indexVid].email != email && (vidData?[indexVid].isNewFollowing ?? false) && (widget.arguments?.isProfile??false))
-                        Consumer<PreviewPicNotifier>(
-                          builder: (context, picNot, child) => Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: GestureDetector(
-                              onTap: () {
-                                context.handleActionIsGuest(() {
-                                  if (vidData?[indexVid].insight?.isloadingFollow != true) {
-                                    picNot.followUser(context, vidData![indexVid], isUnFollow: vidData?[indexVid].following, isloading: vidData?[indexVid].insight!.isloadingFollow ?? false);
-                                  }
-                                });
-                              },
-                              child: vidData?[indexVid].insight?.isloadingFollow ?? false
-                                  ? const SizedBox(
-                                      height: 30,
-                                      width: 30,
-                                      child: Center(
-                                        child: CustomLoading(),
-                                      ),
-                                    )
-                                  : SizedBox(
-                                    height: 40,
-                                    child: Center(
-                                      child: Text(
-                                          (vidData?[indexVid].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
-                                          style: const TextStyle(color: kHyppePrimary, fontWeight: FontWeight.w700, fontFamily: "Lato"),
-                                        ),
-                                    ),
-                                  ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    leading: IconButton(
-                        icon: const Icon(
-                          Icons.chevron_left,
-                          color: kHyppeTextLightPrimary,
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context, '$_cardIndex');
-                        }),
-                  ),
-                  Expanded(
-                              child: (vidData?.isEmpty ?? true)
-                                  ? const NoResultFound()
-                                  : RefreshIndicator(
-                                onRefresh: () async {
-                                  bool connect = await System().checkConnections();
-                                  if (connect) {
-                                    setState(() {
-                                      isloading = true;
-                                    });
-                                    await vidNotifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
-                                    setState(() {
-                                      vidData = vidNotifier.vidData;
-                                    });
-                                  } else {
-                                    if (mounted) {
-                                      ShowGeneralDialog.showToastAlert(
-                                        context,
-                                        lang?.internetConnectionLost ?? ' Error',
-                                        () async {},
-                                      );
-                                    }
-                                  }
-                                },
-                                child: NotificationListener<OverscrollIndicatorNotification>(
-                                  onNotification: (overscroll) {
-                                    overscroll.disallowIndicator();
-                                    return false;
-                                  },
-                                  child: ScrollablePositionedList.builder(
-                                    itemScrollController: itemScrollController,
-                                    itemPositionsListener: itemPositionsListener,
-                                    scrollOffsetController: scrollOffsetController,
-                                    // controller: vidNotifier.pageController,
-                                    // onPageChanged: (index) async {
-                                    //   print('ScrollVid index : $index');
-                                    //   if (index == (vidNotifier.itemCount - 1)) {
-                                    //     final values = await vidNotifier.contentsQuery.loadNext(context, isLandingPage: true);
-                                    //     if (values.isNotEmpty) {
-                                    //       vidData = [...(vidData ?? [] as List<ContentData>)] + values;
-                                    //     }
-                                    //   }
-                                    //   // context.read<ScrollVidNotifier>().nextVideo = false;
-                                    //   // context.read<ScrollVidNotifier>().initializeVideo = false;
-                                    // },
-                                    physics: const AlwaysScrollableScrollPhysics(),
-                                    shrinkWrap: false,
-                                    padding: const EdgeInsets.symmetric(horizontal: 11.5),
-                                    itemCount: vidData?.length ?? 0,
-                                    itemBuilder: (BuildContext context, int index) {
-                                      if (vidData == null || homeNotifier.isLoadingVid) {
-                                        vidData?[index].fAliplayer?.pause();
-                                        // _lastCurIndex = -1;
-                                        return CustomShimmer(
-                                          margin: const EdgeInsets.only(bottom: 100, right: 16, left: 16),
-                                          height: context.getHeight() / 8,
-                                          width: double.infinity,
-                                        );
-                                      } else if (index == vidData?.length) {
-                                        return const CustomLoading(size: 5);
+                  if (vidData?.isNotEmpty ?? false)
+                    ListTile(
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(transform: Matrix4.translationValues(-18.0, 0.0, 0.0), margin: const EdgeInsets.symmetric(horizontal: 10), child: widget.arguments?.titleAppbar ?? Container()),
+                          if (vidData?[indexVid].email != email && (vidData?[indexVid].isNewFollowing ?? false) && (widget.arguments?.isProfile ?? false))
+                            Consumer<PreviewPicNotifier>(
+                              builder: (context, picNot, child) => Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    context.handleActionIsGuest(() {
+                                      if (vidData?[indexVid].insight?.isloadingFollow != true) {
+                                        picNot.followUser(context, vidData![indexVid], isUnFollow: vidData?[indexVid].following, isloading: vidData?[indexVid].insight!.isloadingFollow ?? false);
                                       }
-                                      // if (_curIdx == 0 && vidData?[0].reportedStatus == 'BLURRED') {
-                                      //   isPlay = false;
-                                      //   vidData?[index].fAliplayer?.stop();
-                                      // }
-                                      // final vidData = vidData?[index];
-
-                                      return itemVid(vidNotifier, index);
-                                    },
-                                  ),
+                                    });
+                                  },
+                                  child: vidData?[indexVid].insight?.isloadingFollow ?? false
+                                      ? const SizedBox(
+                                          height: 30,
+                                          width: 30,
+                                          child: Center(
+                                            child: CustomLoading(),
+                                          ),
+                                        )
+                                      : SizedBox(
+                                          height: 40,
+                                          child: Center(
+                                            child: Text(
+                                              (vidData?[indexVid].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+                                              style: const TextStyle(color: kHyppePrimary, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                                            ),
+                                          ),
+                                        ),
                                 ),
                               ),
                             ),
+                        ],
+                      ),
+                      leading: IconButton(
+                          icon: const Icon(
+                            Icons.chevron_left,
+                            color: kHyppeTextLightPrimary,
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context, '$_cardIndex');
+                          }),
+                    ),
+                  Expanded(
+                    child: (vidData?.isEmpty ?? true)
+                        ? const NoResultFound()
+                        : RefreshIndicator(
+                            onRefresh: () async {
+                              bool connect = await System().checkConnections();
+                              if (connect) {
+                                setState(() {
+                                  isloading = true;
+                                });
+                                await vidNotifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                                setState(() {
+                                  vidData = vidNotifier.vidData;
+                                });
+                              } else {
+                                if (mounted) {
+                                  ShowGeneralDialog.showToastAlert(
+                                    context,
+                                    lang?.internetConnectionLost ?? ' Error',
+                                    () async {},
+                                  );
+                                }
+                              }
+                            },
+                            child: NotificationListener<OverscrollIndicatorNotification>(
+                              onNotification: (overscroll) {
+                                overscroll.disallowIndicator();
+                                return false;
+                              },
+                              child: ScrollablePositionedList.builder(
+                                itemScrollController: itemScrollController,
+                                itemPositionsListener: itemPositionsListener,
+                                scrollOffsetController: scrollOffsetController,
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                shrinkWrap: false,
+                                padding: const EdgeInsets.symmetric(horizontal: 11.5),
+                                itemCount: vidData?.length ?? 0,
+                                itemBuilder: (BuildContext context, int index) {
+                                  if (vidData == null || homeNotifier.isLoadingVid) {
+                                    vidData?[index].fAliplayer?.pause();
+                                    // _lastCurIndex = -1;
+                                    return CustomShimmer(
+                                      margin: const EdgeInsets.only(bottom: 100, right: 16, left: 16),
+                                      height: context.getHeight() / 8,
+                                      width: double.infinity,
+                                    );
+                                  } else if (index == vidData?.length) {
+                                    return const CustomLoading(size: 5);
+                                  }
+                                  // if (_curIdx == 0 && vidData?[0].reportedStatus == 'BLURRED') {
+                                  //   isPlay = false;
+                                  //   vidData?[index].fAliplayer?.stop();
+                                  // }
+                                  // final vidData = vidData?[index];
+
+                                  return itemVid(vidNotifier, index);
+                                },
+                              ),
+                            ),
+                          ),
+                  ),
                 ],
               ),
             ),
@@ -466,7 +451,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                     ),
                   GestureDetector(
                     onTap: () {
-                      context.handleActionIsGuest(() async  {
+                      context.handleActionIsGuest(() async {
                         if (vidData?[index].email != email) {
                           // FlutterAliplayer? fAliplayer
                           context.read<PreviewPicNotifier>().reportContent(context, vidData?[index] ?? ContentData(), fAliplayer: vidData?[index].fAliplayer, onCompleted: () async {
@@ -484,7 +469,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                 ShowGeneralDialog.showToastAlert(
                                   context,
                                   lang?.internetConnectionLost ?? ' Error',
-                                      () async {},
+                                  () async {},
                                 );
                               }
                             }
@@ -504,9 +489,9 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                             onUpdate: () => context.read<HomeNotifier>().onUpdate(),
                             fAliplayer: vidData?[index].fAliplayer,
                           );
+                          vidData?[index].fAliplayer?.pause();
                         }
                       });
-
                     },
                     child: const Icon(
                       Icons.more_vert,
@@ -571,11 +556,10 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                             index: index,
                             height: MediaQuery.of(context).size.width * 9.0 / 16.0,
                             width: MediaQuery.of(context).size.width,
-                            inLanding: false,
+                            inLanding: true,
                             fromDeeplink: false,
                             isAutoPlay: false,
-                            functionFullTriger: (value) {
-                            },
+                            functionFullTriger: (value) {},
                             onPlay: (exec) async {
                               await notifier.checkConnection();
                               try {
@@ -769,7 +753,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                           Expanded(
                             child: GestureDetector(
                               onTap: () async {
-                                await context.handleActionIsGuest(() async  {
+                                await context.handleActionIsGuest(() async {
                                   vidData?[index].fAliplayer?.pause();
                                   await ShowBottomSheet.onBuyContent(context, data: vidData?[index] ?? ContentData(), fAliplayer: vidData?[index].fAliplayer);
                                 });
@@ -825,19 +809,15 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
               ),
               twelvePx,
               CustomNewDescContent(
-                // desc: "${data?.description}",
                 username: vidData?[index].username ?? '',
                 desc: "${vidData?[index].description}",
                 trimLines: 2,
                 textAlign: TextAlign.start,
-                seeLess: ' ${lang?.less}', // ${notifier2.translate.seeLess}',
-                seeMore: ' ${lang?.more}', //${notifier2.translate.seeMoreContent}',
+                seeLess: ' ${lang?.less}',
+                seeMore: ' ${lang?.more}',
                 normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                expandStyle: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
+                hrefStyle: Theme.of(context).textTheme.titleSmall?.copyWith(color: kHyppePrimary),
+                expandStyle: const TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
               ),
               if (vidData?[index].allowComments ?? true)
                 GestureDetector(
@@ -1176,7 +1156,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
             left: 12,
             child: GestureDetector(
               onTap: () {
-                context.read<PicDetailNotifier>().showUserTag(context, data?.tagPeople, data?.postID);
+                context.read<PicDetailNotifier>().showUserTag(context, data?.tagPeople, data?.postID, title: lang!.inThisVideo);
               },
               child: const CustomIconWidget(
                 iconData: '${AssetPath.vectorPath}tag_people.svg',

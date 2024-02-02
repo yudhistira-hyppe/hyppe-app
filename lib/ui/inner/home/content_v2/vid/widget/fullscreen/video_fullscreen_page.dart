@@ -192,9 +192,9 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
           _currentPosition = extraValue ?? 0;
         }
         if (!_inSeek) {
-          // setState(() {
-          _currentPositionText = extraValue ?? 0;
-          // });
+          setState(() {
+            _currentPositionText = extraValue ?? 0;
+          });
         }
       } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
         // _bufferPosition = extraValue ?? 0;
@@ -618,7 +618,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                             isPause = true;
                                             setState(() {});
                                             print('data result $res');
-                                            if (res != null && res == true) {
+                                            // if (mounted){
                                               if ((widget.data.metadata?.height ?? 0) < (widget.data.metadata?.width ?? 0)) {
                                                 print('Landscape VidPlayerPage');
                                                 SystemChrome.setPreferredOrientations([
@@ -632,34 +632,36 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                                   DeviceOrientation.portraitDown,
                                                 ]);
                                               }
-                                            }
+                                            // }
                                           },
                                           onTap: () {
-                                            if (widget.data.email != email) {
-                                              // FlutterAliplayer? fAliplayer
-                                              context.read<PreviewPicNotifier>().reportContent(context, widget.data, fAliplayer: widget.data.fAliplayer, onCompleted: () async {
-                                                imageCache.clear();
-                                                imageCache.clearLiveImages();
-                                                await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
-                                              });
-                                            } else {
-                                              // if (_curIdx != -1) {
-                                              //   "=============== pause 11".logger();
-                                              //   notifier.vidData?[_curIdx].fAliplayer?.pause();
-                                              // }
+                                            context.handleActionIsGuest(() async {
+                                              if (widget.data.email != email) {
+                                                // FlutterAliplayer? fAliplayer
+                                                context.read<PreviewPicNotifier>().reportContent(context, widget.data, fAliplayer: widget.data.fAliplayer, onCompleted: () async {
+                                                  imageCache.clear();
+                                                  imageCache.clearLiveImages();
+                                                  await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
+                                                });
+                                              } else {
+                                                // if (_curIdx != -1) {
+                                                //   "=============== pause 11".logger();
+                                                //   notifier.vidData?[_curIdx].fAliplayer?.pause();
+                                                // }
 
-                                              ShowBottomSheet().onShowOptionContent(
-                                                context,
-                                                contentData: widget.data,
-                                                captionTitle: hyppeVid,
-                                                onDetail: false,
-                                                isShare: widget.data.isShared,
-                                                onUpdate: () {
-                                                  (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
-                                                },
-                                                fAliplayer: widget.data.fAliplayer,
-                                              );
-                                            }
+                                                ShowBottomSheet().onShowOptionContent(
+                                                  context,
+                                                  contentData: widget.data,
+                                                  captionTitle: hyppeVid,
+                                                  onDetail: false,
+                                                  isShare: widget.data.isShared,
+                                                  onUpdate: () {
+                                                    (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
+                                                  },
+                                                  fAliplayer: widget.data.fAliplayer,
+                                                );
+                                              }
+                                            });
                                           }),
                                     ),
                                   ),
@@ -1351,7 +1353,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                   child: GestureDetector(
                                     onTap: () {
                                       widget.fAliplayer?.pause();
-                                      context.read<PicDetailNotifier>().showUserTag(context, widget.data.tagPeople, widget.data.postID, title: lang!.inthisphoto, fAliplayer: widget.fAliplayer);
+                                      context.read<PicDetailNotifier>().showUserTag(context, widget.data.tagPeople, widget.data.postID, title: lang!.inthisphoto, fAliplayer: widget.fAliplayer, orientation: orientation);
                                     },
                                     child: Row(
                                       children: [

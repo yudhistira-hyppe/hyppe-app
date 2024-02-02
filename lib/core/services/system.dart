@@ -711,7 +711,7 @@ class System {
                   _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
 
                   // hapus file yang durasinya lebih dari 60 detik
-                  if (_duration.inSeconds < 15) {
+                  if (_duration.inSeconds < 14) {
                     // _failFile = '$_failFile, ${_pickerResult.files[element].name}\n';
                     if (onException != null) {
                       onException();
@@ -761,7 +761,7 @@ class System {
                   _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
 
                   // hapus file yang durasinya lebih dari 60 detik
-                  if (_duration.inSeconds < 15) {
+                  if (_duration.inSeconds < 14) {
                     if (onException != null) {
                       onException();
                     }
@@ -879,7 +879,7 @@ class System {
                   _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
 
                   // hapus file yang durasinya lebih dari 15 detik
-                  if (_duration.inSeconds < 4) {
+                  if (_duration.inSeconds < 0) {
                     if (onException != null) {
                       onException();
                     }

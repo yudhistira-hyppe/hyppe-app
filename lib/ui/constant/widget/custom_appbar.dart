@@ -67,23 +67,13 @@ class CustomAppBar extends StatelessWidget {
                   if (changevalue > videoDuration) {
                     changevalue = videoDuration;
                   }
-              
+
                   data!.isLoading = true;
-                  Navigator.pop(
-                      context,
-                      VideoIndicator(
-                          videoDuration: videoDuration,
-                          seekValue: changevalue,
-                          positionText: currentPositionText,
-                          showTipsWidget: showTipsWidget,
-                          isMute: isMute));
-                  
-                      SystemChrome.setPreferredOrientations(
-                          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+                  Navigator.pop(context, VideoIndicator(videoDuration: videoDuration, seekValue: changevalue, positionText: currentPositionText, showTipsWidget: showTipsWidget, isMute: isMute));
+
+                  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
                 },
-                padding: orientation == Orientation.portrait
-                    ? const EdgeInsets.symmetric(horizontal: 8.0, vertical: 40.0)
-                    : const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
+                padding: orientation == Orientation.portrait ? const EdgeInsets.symmetric(horizontal: 8.0, vertical: 40.0) : const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
                 icon: const Icon(
                   Icons.arrow_back_ios,
                   color: Colors.white,
@@ -96,7 +86,7 @@ class CustomAppBar extends StatelessWidget {
                   show: true,
                   following: true,
                   onFollow: () {},
-                  username: data!.username??'',
+                  username: data!.username ?? '',
                   widthText: data!.username!.length >= 10 ? 120 : 90,
                   textColor: kHyppeLightBackground,
                   spaceProfileAndId: eightPx,
@@ -105,62 +95,51 @@ class CustomAppBar extends StatelessWidget {
                   isUserVerified: data!.privacy?.isIdVerified ?? false,
                   onTapOnProfileImage: onTapOnProfileImage,
                   featureType: FeatureType.pic,
-                  imageUrl:
-                      '${System().showUserPicture(data!.avatar?.mediaEndpoint??'')}',
+                  imageUrl: '${System().showUserPicture(data!.avatar?.mediaEndpoint ?? '')}',
                   badge: data!.urluserBadge,
                   createdAt: '${System().readTimestamp(
-                    DateTime.parse(System().dateTimeRemoveT(data!.createdAt ?? ''))
-                        .millisecondsSinceEpoch,
+                    DateTime.parse(System().dateTimeRemoveT(data!.createdAt ?? '')).millisecondsSinceEpoch,
                     context,
                     fullCaption: true,
                   )}',
                 ),
               ),
               if (data!.email != email && (data!.isNewFollowing ?? false))
-              Consumer<PreviewPicNotifier>(
-                builder: (context, picNot, child) => Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: GestureDetector(
-                    onTap: () async {
-                      await context.handleActionIsGuest(() async  {
-                        if (data!.insight?.isloadingFollow != true) {
-                          picNot.followUser(context, data??ContentData(), isUnFollow: data!.following, isloading: data!.insight!.isloadingFollow ?? false);
-                        }
-                      });
-                    },
-                    child: data?.insight?.isloadingFollow ?? false
-                        ? Container(
-                          margin: orientation == Orientation.portrait ? const EdgeInsets.only(top: 32.0) : const EdgeInsets.only(top: 8.0),
-                            height: 40,
-                            width: 30,
-                            child: const Center(
-                              child: CustomLoading(),
+                Consumer<PreviewPicNotifier>(
+                  builder: (context, picNot, child) => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        context.handleActionIsGuest(() async {
+                          if (data!.insight?.isloadingFollow != true) {
+                            picNot.followUser(context, data ?? ContentData(), isUnFollow: data!.following, isloading: data!.insight!.isloadingFollow ?? false);
+                          }
+                        });
+                      },
+                      child: data?.insight?.isloadingFollow ?? false
+                          ? Container(
+                              margin: orientation == Orientation.portrait ? const EdgeInsets.only(top: 32.0) : const EdgeInsets.only(top: 8.0),
+                              height: 40,
+                              width: 30,
+                              child: const Center(
+                                child: CustomLoading(),
+                              ),
+                            )
+                          : Container(
+                              padding: const EdgeInsets.all(8),
+                              margin: orientation == Orientation.portrait ? const EdgeInsets.only(top: 32.0) : const EdgeInsets.only(top: 8.0),
+                              decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(8.0)),
+                              child: Text(
+                                (data!.following ?? false) ? (lang.following ?? '') : (lang.follow ?? ''),
+                                style: const TextStyle(color: kHyppeLightButtonText, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                              ),
                             ),
-                          )
-                        : Container(
-                            padding: const EdgeInsets.all(8),
-                            margin: orientation == Orientation.portrait ? const EdgeInsets.only(top: 32.0) : const EdgeInsets.only(top: 8.0),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.white),
-                              borderRadius: BorderRadius.circular(8.0)
-                            ),
-                          child: Text(
-                              (data!.following ?? false) ? (lang.following ?? '') : (lang.follow ?? ''),
-                              style: const TextStyle(
-                                    color: kHyppeLightButtonText,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w700,
-                                    fontFamily: "Lato"),
-                            ),
-                        ),
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: actionWidget(onTap: onTap)),
+          Align(alignment: Alignment.bottomCenter, child: actionWidget(onTap: onTap)),
         ],
       ),
     );
@@ -174,10 +153,7 @@ class CustomAppBar extends StatelessWidget {
         Visibility(
           visible: ((data!.saleAmount ?? 0) > 0),
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal:
-                data!.email == SharedPreference().readStorage(SpKeys.email)
-                    ? 2.0
-                    : 13, vertical: 12),
+            padding: EdgeInsets.symmetric(horizontal: data!.email == SharedPreference().readStorage(SpKeys.email) ? 2.0 : 13, vertical: 12),
             child: const CustomIconWidget(
               iconData: "${AssetPath.vectorPath}sale.svg",
               defaultColor: false,
@@ -185,17 +161,17 @@ class CustomAppBar extends StatelessWidget {
             ),
           ),
         ),
-          Visibility(
-            visible: ((data!.certified ?? false) && (data!.saleAmount ?? 0) == 0),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: const CustomIconWidget(
-                iconData: '${AssetPath.vectorPath}ownership.svg',
-                defaultColor: false,
-                height: 28,
-              ),
+        Visibility(
+          visible: ((data!.certified ?? false) && (data!.saleAmount ?? 0) == 0),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: const CustomIconWidget(
+              iconData: '${AssetPath.vectorPath}ownership.svg',
+              defaultColor: false,
+              height: 28,
             ),
           ),
+        ),
         IconButton(
           onPressed: onTap,
           icon: const Icon(
@@ -206,5 +182,4 @@ class CustomAppBar extends StatelessWidget {
       ],
     );
   }
-
 }

@@ -70,7 +70,7 @@
   "privacyPolicy": "Kebijakan Privasi",
   "and": "dan",
   "termsOfService": "Ketentuan Layanan",
-  "termsOfUse" : "Ketentuan Penggunaan",
+  "termsOfUse": "Ketentuan Penggunaan",
   "welcome": "Selamat Datang",
   "letsMakeYouAnAccount": "Mari membuat akun untuk Anda",
   "fullName": "Nama Lengkap",
@@ -333,7 +333,7 @@
   "emptyCategory": "Pilih salah satu kategori atau lewati",
   "iHaveReadAndAgree": "Saya telah membaca, dan Saya setuju",
   "language": "Bahasa",
-  "like": "suka",
+  "like": "Suka",
   "cLike": "Suka",
   "notLikeyet": "Belum ada suka",
   "notViewsyet": "Belum ada penayangan",
@@ -1103,5 +1103,6 @@
   "viewers": "Penonton",
   "liveVideoHasStarted": "Siaran LIVE telah dimulai!",
   "addATitle": "Tambah judul...",
-  "inThisDiary": "Dalam diary ini"
+  "inThisDiary": "Dalam diary ini",
+  "inThisVideo": "Dalam video ini"
 }
