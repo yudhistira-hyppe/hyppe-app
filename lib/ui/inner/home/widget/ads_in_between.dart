@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/ads_argument.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/ui/constant/widget/custom_desc_content_widget.dart';
@@ -212,32 +213,31 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CustomBaseCacheImage(
-                        memCacheWidth: 100,
-                        memCacheHeight: 100,
-                        widthPlaceHolder: 80,
-                        heightPlaceHolder: 80,
-                        imageUrl: widget.data.mediaUri,
-                        imageBuilder: (context, imageProvider) => ClipRRect(
-                          borderRadius: BorderRadius.circular(20), // Image border
-                          child: Image(
-                            image: imageProvider,
-                            fit: BoxFit.fitHeight,
-                            width: context.getWidth(),
+                      InkWell(
+                        onTap: () => Routing().move(
+                          Routes.adsBetweenFull,
+                          argument: AdsArgument(
+                            data: widget.data,
+                            adsUrl: widget.data.adsUrlLink ?? '',
+                            isSponsored: true,
+                            afterReport: widget.afterReport(),
                           ),
                         ),
-                        emptyWidget: Container(
-                            decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                            width: context.getWidth(),
-                            height: 250,
-                            padding: const EdgeInsets.all(20),
-                            alignment: Alignment.center,
-                            child: CustomTextWidget(
-                              textToDisplay: language.couldntLoadImage ?? 'Error',
-                              maxLines: 3,
-                            )),
-                        errorWidget: (context, url, error) {
-                          return Container(
+                        child: CustomBaseCacheImage(
+                          memCacheWidth: 100,
+                          memCacheHeight: 100,
+                          widthPlaceHolder: 80,
+                          heightPlaceHolder: 80,
+                          imageUrl: widget.data.mediaUri,
+                          imageBuilder: (context, imageProvider) => ClipRRect(
+                            borderRadius: BorderRadius.circular(20), // Image border
+                            child: Image(
+                              image: imageProvider,
+                              fit: BoxFit.fitHeight,
+                              width: context.getWidth(),
+                            ),
+                          ),
+                          emptyWidget: Container(
                               decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
                               width: context.getWidth(),
                               height: 250,
@@ -246,8 +246,20 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                               child: CustomTextWidget(
                                 textToDisplay: language.couldntLoadImage ?? 'Error',
                                 maxLines: 3,
-                              ));
-                        },
+                              )),
+                          errorWidget: (context, url, error) {
+                            return Container(
+                                decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                width: context.getWidth(),
+                                height: 250,
+                                padding: const EdgeInsets.all(20),
+                                alignment: Alignment.center,
+                                child: CustomTextWidget(
+                                  textToDisplay: language.couldntLoadImage ?? 'Error',
+                                  maxLines: 3,
+                                ));
+                          },
+                        ),
                       ),
                       twelvePx,
                       InkWell(

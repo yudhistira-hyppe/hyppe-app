@@ -360,7 +360,7 @@ class UrlConstants {
   static const String verificationIDSupportingDocs = "$postsRoute/supportfile";
 
   // new verification ID Upload
-  static const String verificationIDWithSupportDocs = "$postsRoute/upload";
+  static const String verificationIDWithSupportDocs = "$postsRoute/upload/v2";
 
   // get tag people in content
   static const String tagPeople = "$postsRoute/tagpeople/v2";
@@ -437,7 +437,7 @@ class UrlConstants {
   static const String joinChallange = "$challange/join/v2";
   static const String listAchievement = "$challange/listbadgebyuser/v2";
   static const String collectionBadge = "$challange/listbadgeuserdetail/v2";
-  static const String selectBadge = "$challange/badgechoice";
+  static const String selectBadge = "$challange/badgechoice/v2";
   static const String checkChallengeStatus = "$challange/join/currentstatus";
 
   // Get Effect

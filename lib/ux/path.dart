@@ -30,6 +30,10 @@ class Routes {
   static const String contentPreferences = '/content-preferences';
   static const String commentsDetail = '/comments-detail';
 
+//Ads Full
+  static const String adsBetweenFull = '/ads-between-full';
+
+
 // Sign up
   static const String signUpPin = '/sign-up-pin';
   static const String signUpWelcome = '/sign-up-welcome';

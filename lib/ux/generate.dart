@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:hyppe/core/arguments/account_preference_screen_argument.dart';
+import 'package:hyppe/core/arguments/ads_argument.dart';
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/slided_diary_detail_screen_argument.dart';
@@ -95,6 +96,7 @@ import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/feedback/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/screen.dart';
+import 'package:hyppe/ui/inner/home/widget/ads_in_between_full.dart';
 import 'package:hyppe/ui/inner/home/widget/aliplayer.dart';
 import 'package:hyppe/ui/inner/main/screen.dart';
 import 'package:hyppe/ui/inner/message_v2/message_detail/screen.dart' as message_detail_v2;
@@ -186,6 +188,10 @@ class Generate {
         return MaterialPageRoute(
             builder: (_) =>
                 HyppeAccountPreferences(argument: settings.arguments == null ? AccountPreferenceScreenArgument(fromSignUpFlow: false) : settings.arguments as AccountPreferenceScreenArgument));
+
+      case Routes.adsBetweenFull:
+        return MaterialPageRoute(builder: (_) => AdsInBetweenFull(arguments: settings.arguments as AdsArgument));
+
       case Routes.signUpPin:
         return MaterialPageRoute(builder: (_) => SignUpPin(arguments: settings.arguments as VerifyPageArgument));
       case Routes.signUpWelcome:

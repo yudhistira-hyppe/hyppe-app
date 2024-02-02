@@ -380,7 +380,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                 },
                 child: context.getAdsInBetween(picData.inBetweenAds, (info) {}, () {
                   context.read<PreviewPicNotifier>().setAdsData(index, null);
-                }, (player, id) {}),
+                }, (player, id) {}, isfull: true),
               )
             : Stack(
                 children: [
