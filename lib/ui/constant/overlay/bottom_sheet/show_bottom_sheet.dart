@@ -857,7 +857,7 @@ class ShowBottomSheet {
     ).whenComplete(() {
       // if (storyController != null) storyController.play();
       if (fAliplayer != null) {
-        fAliplayer.play();
+        // fAliplayer.play();
         fAliplayer.setMuted(false);
       }
 
@@ -1260,6 +1260,7 @@ class ShowBottomSheet {
     // StoryController? storyController,
     String? title,
     FlutterAliplayer? fAliplayer,
+    Orientation? orientation
   }) {
     showModalBottomSheet<dynamic>(
         isScrollControlled: true,
@@ -1292,7 +1293,13 @@ class ShowBottomSheet {
             )
           ]);
         }).whenComplete(() {
-      if (fAliplayer != null) fAliplayer.play();
+          // if (fAliplayer != null) fAliplayer.play();
+          if (orientation != null && orientation == Orientation.landscape){
+            SystemChrome.setPreferredOrientations([
+              DeviceOrientation.landscapeLeft,
+              DeviceOrientation.landscapeRight,
+            ]);
+          }
     });
   }
 

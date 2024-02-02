@@ -791,6 +791,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
               onPageChanged: (index) async {
                 _curIdx = index;
                 if (_lastCurIndex != _curIdx) {
+                  notifier.currIndex = _curIdx;
                   if (!isShowingDialog) {
                     globalAdsPopUp?.pause();
                   }

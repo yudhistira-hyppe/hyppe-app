@@ -1,8 +1,10 @@
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 
-class AdsArgument{
+class AdsArgument {
   final AdsData data;
   final String adsUrl;
   final bool isSponsored;
-  const AdsArgument({required this.data, required this.adsUrl, required this.isSponsored});
+  final Function()? afterReport;
+
+  const AdsArgument({required this.data, required this.adsUrl, required this.isSponsored, this.afterReport});
 }

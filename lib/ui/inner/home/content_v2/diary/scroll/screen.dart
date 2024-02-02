@@ -1481,7 +1481,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
               left: 12,
               child: GestureDetector(
                 onTap: () {
-                  context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID);
+                  context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID, title: lang?.inThisDiary);
                 },
                 child: const CustomIconWidget(
                   iconData: '${AssetPath.vectorPath}tag_people.svg',
