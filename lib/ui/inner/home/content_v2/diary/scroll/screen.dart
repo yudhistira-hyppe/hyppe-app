@@ -641,7 +641,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ListTile(
-                        title: Row(
+                        title: (diaryData?.isNotEmpty ?? false)? Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -680,7 +680,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                                 ),
                               ),
                           ],
-                        ),
+                        ): const SizedBox.shrink(),
                         leading: IconButton(
                             icon: const Icon(
                               Icons.chevron_left,
