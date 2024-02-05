@@ -124,7 +124,11 @@ class DynamicLinkService {
           if (deepLink.queryParameters['referral'] != '1') {
             try {
               print('masuk sini dynamic');
-              followSender(Routing.navigatorKey.currentContext!);
+              final bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
+              if(isGuest ?? false){
+              }else{
+                followSender(Routing.navigatorKey.currentContext!);
+              }
             } catch (e) {
               'Error in followSender $e'.logger();
             }

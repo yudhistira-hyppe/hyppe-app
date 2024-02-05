@@ -14,6 +14,7 @@ import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -33,6 +34,14 @@ public class FileUtils {
     private static final String TAG = "FilePickerUtils";
     private static final String PRIMARY_VOLUME_NAME = "primary";
 
+    // On Android, the CSV mime type from getMimeTypeFromExtension() returns
+    // "text/comma-separated-values" which is non-standard and doesn't filter
+    // CSV files in Google Drive.
+    // (see https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types)
+    // (see https://android.googlesource.com/platform/frameworks/base/+/61ae88e/core/java/android/webkit/MimeTypeMap.java#439)
+    private static final String CSV_EXTENSION = "csv";
+    private static final String CSV_MIME_TYPE = "text/csv";
+
     public static String[] getMimeTypes(final ArrayList<String> allowedExtensions) {
 
         if (allowedExtensions == null || allowedExtensions.isEmpty()) {
@@ -42,13 +51,18 @@ public class FileUtils {
         final ArrayList<String> mimes = new ArrayList<>();
 
         for (int i = 0; i < allowedExtensions.size(); i++) {
-            final String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(allowedExtensions.get(i));
+            final String extension = allowedExtensions.get(i);
+            final String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
             if (mime == null) {
                 Log.w(TAG, "Custom file type " + allowedExtensions.get(i) + " is unsupported and will be ignored.");
                 continue;
             }
 
             mimes.add(mime);
+            if(extension.equals(CSV_EXTENSION)) {
+                // Add the standard CSV mime type.
+                mimes.add(CSV_MIME_TYPE);
+            }
         }
         Log.d(TAG, "Allowed file extensions mimes: " + mimes);
         return mimes.toArray(new String[0]);
@@ -63,7 +77,7 @@ public class FileUtils {
                 Cursor cursor = context.getContentResolver().query(uri, new String[]{OpenableColumns.DISPLAY_NAME}, null, null, null);
                 try {
                     if (cursor != null && cursor.moveToFirst()) {
-                        result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                        result = cursor.getString(cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME));
                     }
                 } finally {
                     cursor.close();
@@ -127,7 +141,7 @@ public class FileUtils {
         FileOutputStream fos = null;
         final FileInfo.Builder fileInfo = new FileInfo.Builder();
         final String fileName = FileUtils.getFileName(uri, context);
-        final String path = context.getCacheDir().getAbsolutePath() + "/file_picker/" + (fileName != null ? fileName : new Random().nextInt(100000));
+        final String path = context.getCacheDir().getAbsolutePath() + "/file_picker/" + (fileName != null ? fileName : System.currentTimeMillis());
 
         final File file = new File(path);
 
@@ -171,11 +185,13 @@ public class FileUtils {
         fileInfo
                 .withPath(path)
                 .withName(fileName)
+                .withUri(uri)
                 .withSize(Long.parseLong(String.valueOf(file.length())));
 
         return fileInfo.build();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Nullable
     @SuppressWarnings("deprecation")
     public static String getFullPathFromTreeUri(@Nullable final Uri treeUri, Context con) {

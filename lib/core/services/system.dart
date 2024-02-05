@@ -786,7 +786,7 @@ class System {
       }
 
       if (featureType == FeatureType.story) {
-        final _pickerResult = await FilePicker.platform.pickFiles(allowMultiple: false, type: FileType.media, allowCompression: true);
+        final _pickerResult = await FilePicker.platform.pickFiles(allowMultiple: false, type: FileType.media, allowCompression: false);
         if (_pickerResult != null) {
           // untuk menampung file yang failed di validasi
           // String _failFile = '';

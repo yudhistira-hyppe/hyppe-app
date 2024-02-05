@@ -6,9 +6,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Parcelable;
 import android.os.Message;
 import android.provider.DocumentsContract;
 import android.util.Log;
@@ -79,9 +81,7 @@ public class FilePickerDelegate implements PluginRegistry.ActivityResultListener
 
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
 
-            if (eventSink != null) {
-                eventSink.success(true);
-            }
+            this.dispatchEventStatus(true);
 
             new Thread(new Runnable() {
                 @Override
@@ -134,6 +134,30 @@ public class FilePickerDelegate implements PluginRegistry.ActivityResultListener
                                 finishWithError("unknown_path", "Failed to retrieve path.");
                             }
 
+                        } else if (data.getExtras() != null){
+                            Bundle bundle = data.getExtras();
+                            if (bundle.keySet().contains("selectedItems")) {
+                                ArrayList<Parcelable> fileUris = getSelectedItems(bundle);
+
+                                int currentItem = 0;
+                                if (fileUris != null) {
+                                    for (Parcelable fileUri : fileUris) {
+                                        if (fileUri instanceof Uri) {
+                                            Uri currentUri = (Uri) fileUri;
+                                            final FileInfo file = FileUtils.openFileStream(FilePickerDelegate.this.activity, currentUri, loadDataToMemory);
+
+                                            if (file != null) {
+                                                files.add(file);
+                                                Log.d(FilePickerDelegate.TAG, "[MultiFilePick] File #" + currentItem + " - URI: " + currentUri.getPath());
+                                            }
+                                        }
+                                        currentItem++;
+                                    }
+                                }
+                                finishWithSuccess(files);
+                            } else {
+                                finishWithError("unknown_path", "Failed to retrieve path from bundle.");
+                            }
                         } else {
                             finishWithError("unknown_activity", "Unknown activity error, please fill an issue.");
                         }
@@ -167,7 +191,7 @@ public class FilePickerDelegate implements PluginRegistry.ActivityResultListener
         if (permissionGranted) {
             this.startFileExplorer();
         } else {
-            finishWithError("read_external_storage_denied", "User did not allowed reading external storage");
+            finishWithError("read_external_storage_denied", "User did not allow reading external storage");
         }
 
         return true;
@@ -183,6 +207,15 @@ public class FilePickerDelegate implements PluginRegistry.ActivityResultListener
 
     private static void finishWithAlreadyActiveError(final MethodChannel.Result result) {
         result.error("already_active", "File picker is already active", null);
+    }
+
+    @SuppressWarnings("deprecation")
+    private ArrayList<Parcelable> getSelectedItems(Bundle bundle){
+        if(Build.VERSION.SDK_INT >= 33){
+            return bundle.getParcelableArrayList("selectedItems", Parcelable.class);
+        }
+
+        return bundle.getParcelableArrayList("selectedItems");
     }
 
     @SuppressWarnings("deprecation")
@@ -208,6 +241,7 @@ public class FilePickerDelegate implements PluginRegistry.ActivityResultListener
             intent.setDataAndType(uri, this.type);
             intent.setType(this.type);
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, this.isMultipleSelection);
+            intent.putExtra("multi-pick", this.isMultipleSelection);
 
             if (type.contains(",")) {
                 allowedExtensions = type.split(",");
@@ -238,20 +272,22 @@ public class FilePickerDelegate implements PluginRegistry.ActivityResultListener
         this.isMultipleSelection = isMultipleSelection;
         this.loadDataToMemory = withData;
         this.allowedExtensions = allowedExtensions;
-
-        if (!this.permissionManager.isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            this.permissionManager.askForPermission(Manifest.permission.READ_EXTERNAL_STORAGE, REQUEST_CODE);
-            return;
+        // `READ_EXTERNAL_STORAGE` permission is not needed since SDK 33 (Android 13 or higher).
+        // `READ_EXTERNAL_STORAGE` & `WRITE_EXTERNAL_STORAGE` are no longer meant to be used, but classified into granular types.
+        // Reference: https://developer.android.com/about/versions/13/behavior-changes-13
+        if (Build.VERSION.SDK_INT < 33) {
+            if (!this.permissionManager.isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                this.permissionManager.askForPermission(Manifest.permission.READ_EXTERNAL_STORAGE, REQUEST_CODE);
+                return;
+            }
         }
-
         this.startFileExplorer();
     }
 
     @SuppressWarnings("unchecked")
     private void finishWithSuccess(Object data) {
-        if (eventSink != null) {
-            this.dispatchEventStatus(false);
-        }
+
+        this.dispatchEventStatus(false);
 
         // Temporary fix, remove this null-check after Flutter Engine 1.14 has landed on stable
         if (this.pendingResult != null) {
@@ -275,14 +311,17 @@ public class FilePickerDelegate implements PluginRegistry.ActivityResultListener
             return;
         }
 
-        if (eventSink != null) {
-            this.dispatchEventStatus(false);
-        }
+        this.dispatchEventStatus(false);
         this.pendingResult.error(errorCode, errorMessage, null);
         this.clearPendingResult();
     }
 
     private void dispatchEventStatus(final boolean status) {
+
+        if(eventSink == null || type.equals("dir")) {
+            return;
+        }
+
         new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(final Message message) {

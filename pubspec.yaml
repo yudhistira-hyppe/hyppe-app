@@ -128,7 +128,7 @@ dependencies:
   
 
   # matrix_gesture_detector: ^0.2.0-nullsafety.1
-  file_picker:
+  file_picker: 
     path: packages/flutter_file_picker
 
   qr_flutter: ^4.1.0
