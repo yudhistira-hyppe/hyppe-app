@@ -51,7 +51,6 @@ class _OnShowCommentBottomSheetV2State extends State<OnShowCommentBottomSheetV2>
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-
     return ChangeNotifierProvider<CommentNotifierV2>(
       create: (context) => _notifier,
       child: Consumer<CommentNotifierV2>(
@@ -77,10 +76,10 @@ class _OnShowCommentBottomSheetV2State extends State<OnShowCommentBottomSheetV2>
                         CommentSlider(
                           length: notifier.commentData?.length,
                         ),
-                      !notifier.isCommentEmpty
+                      notifier.commentData?.isNotEmpty??false
                           ? Expanded(
                               child: ListView.builder(
-                                itemCount: notifier.itemCount,
+                                itemCount: notifier.commentData?.length??0,
                                 physics: const AlwaysScrollableScrollPhysics(),
                                 controller: _scrollController,
                                 scrollDirection: Axis.vertical,

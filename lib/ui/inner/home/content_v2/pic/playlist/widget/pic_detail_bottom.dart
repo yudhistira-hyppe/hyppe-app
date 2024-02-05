@@ -10,6 +10,7 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/button_boost.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
+import 'package:hyppe/ui/constant/widget/custom_newdesc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/jangakauan_status.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
 import 'package:hyppe/ui/constant/widget/music_status_detail_widget.dart';
@@ -105,11 +106,11 @@ class PicDetailBottom extends StatelessWidget {
                             desc: "${data?.description}",
                             trimLines: 3,
                             textAlign: TextAlign.start,
-                            seeLess: ' ${notifier2.translate.seeLess}',
-                            seeMore: ' ${notifier2.translate.seeMoreContent}',
+                            seeLess: ' ${notifier2.translate.less}',
+                            seeMore: ' ${notifier2.translate.more}',
                             // normStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                            hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                            expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                            hrefStyle: Theme.of(context).textTheme.titleSmall?.copyWith(color: kHyppePrimary),
+                            expandStyle: Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.black, fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -285,7 +286,7 @@ class PicDetailBottom extends StatelessWidget {
           CustomTextWidget(
             textToDisplay: caption,
             textAlign: TextAlign.left,
-            textStyle: Theme.of(context).textTheme.caption,
+            textStyle: Theme.of(context).textTheme.bodySmall,
           ),
         ],
       ),
