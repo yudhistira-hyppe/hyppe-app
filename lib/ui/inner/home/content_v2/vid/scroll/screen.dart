@@ -486,7 +486,11 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                             captionTitle: hyppeVid,
                             onDetail: false,
                             isShare: vidData?[index].isShared,
-                            onUpdate: () => context.read<HomeNotifier>().onUpdate(),
+                            onUpdate: () {
+                              indexVid = index - 1;
+                              setState(() {});
+                              context.read<HomeNotifier>().onUpdate();
+                            },
                             fAliplayer: vidData?[index].fAliplayer,
                           );
                           vidData?[index].fAliplayer?.pause();

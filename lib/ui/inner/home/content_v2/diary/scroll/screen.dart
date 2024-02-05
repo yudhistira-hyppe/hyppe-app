@@ -557,6 +557,9 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
   @override
   void didPopNext() {
     print("======= didPopNext dari diary");
+    if (dataSelected?.reportedStatus2 == 'BLURRED' && dataSelected?.reportedStatus == '') {
+      start(dataSelected ?? ContentData());
+    }
     isActivePage = true;
     fAliplayer?.play();
 

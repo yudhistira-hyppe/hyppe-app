@@ -587,11 +587,12 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                                           onDetail: false,
                                           isShare: widget.data.isShared,
                                           onUpdate: () {
-                                            if (notifier.vidData?.isEmpty ?? [].isEmpty) {
-                                              Routing().moveBack();
-                                              Routing().moveBack();
-                                              return;
-                                            }
+                                            // if (notifier.vidData?.isEmpty ?? [].isEmpty) {
+                                            Routing().moveBack();
+                                            Routing().moveBack();
+                                            Routing().moveBack();
+                                            //   return;
+                                            // }
                                             (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
                                           },
                                           fAliplayer: widget.data.fAliplayer,

@@ -1073,7 +1073,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
     } else {
       return await Navigator.of(context, rootNavigator: true).push(
         CupertinoPageRoute(
-            builder: (_) => VidScrollFullScreenPage(
+            builder: (_) => VideoFullscreenPage(
                 enableWakelock: widget.enableWakelock,
                 aliPlayerView: aliPlayerView!,
                 thumbnail: (widget.data?.isApsara ?? false) ? (widget.data?.mediaThumbEndPoint ?? '') : '${widget.data?.fullThumbPath}',

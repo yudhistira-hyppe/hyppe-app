@@ -132,7 +132,14 @@ class SelfProfileNotifier with ChangeNotifier {
 
   void onUpdate() => notifyListeners();
 
-  String displayUserName() => user.profile != null ? "@" + (user.profile?.username ?? '') : "";
+  String displayUserName() {
+    bool isGuest = SharedPreference().readStorage(SpKeys.isGuest) ?? false;
+    if (!isGuest) {
+      return user.profile != null ? "@" + (user.profile?.username ?? '') : "";
+    } else {
+      return '';
+    }
+  }
 
   String? displayPhotoProfile(String image) {
     print('ini gambar profil ${_system.showUserPicture(user.profile?.avatar?.mediaEndpoint)}');
@@ -281,7 +288,7 @@ class SelfProfileNotifier with ChangeNotifier {
     diaryContentsQuery.searchText = SharedPreference().readStorage(SpKeys.email);
     vidContentsQuery.searchText = SharedPreference().readStorage(SpKeys.email);
     final bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
-    if(!(isGuest ?? true)){
+    if (!(isGuest ?? true)) {
       final usersNotifier = UserBloc();
 
       await usersNotifier.getUserProfilesBloc(context, withAlertMessage: true);
@@ -298,7 +305,6 @@ class SelfProfileNotifier with ChangeNotifier {
       // user.vids = await vidContentsQuery.reload(context, myContent: true);
       user.pics = await picContentsQuery.reload(context, myContent: true);
     }
-
 
     // context.read<ScrollPicNotifier>().pics = user.pics;
 
@@ -345,7 +351,7 @@ class SelfProfileNotifier with ChangeNotifier {
     if (isReload) {
       final bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
 
-      if(!(isGuest ?? true)){
+      if (!(isGuest ?? true)) {
         final usersNotifier = UserBloc();
         await usersNotifier.getUserProfilesBloc(context, withAlertMessage: true);
         final usersFetch = usersNotifier.userFetch;
@@ -362,7 +368,6 @@ class SelfProfileNotifier with ChangeNotifier {
 
       PreviewStoriesNotifier stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
       stories.initialStories(context);
-
     }
     switch (pageIndex) {
       case 0:

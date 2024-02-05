@@ -5,8 +5,6 @@
     -->
     <uses-permission android:name="android.permission.INTERNET"/> <!-- Used for internet connection. -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/> <!-- Used for setting local notification plugin. -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/> <!-- Used for read external storage. -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> <!-- Used for write external storage. -->
     <uses-permission android:name="android.permission.CAMERA"/> <!-- Used for operation camera. -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/> <!-- Used for access user location. -->
     <uses-permission android:name="android.permission.VIBRATE"/> <!-- Used for access Vibrate Phone. -->

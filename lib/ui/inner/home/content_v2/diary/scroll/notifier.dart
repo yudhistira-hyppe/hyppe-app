@@ -30,6 +30,8 @@ class ScrollDiaryNotifier with ChangeNotifier {
 
   List<ContentData>? diaryData = [];
 
+  void onUpdate() => notifyListeners();
+
   Future loadMoreFullScreen(BuildContext context, PageSrc pageSrc, String key) async {
     isLoadingLoadmore = true;
     bool connect = await System().checkConnections();

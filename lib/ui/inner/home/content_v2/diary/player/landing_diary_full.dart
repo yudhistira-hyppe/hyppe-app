@@ -888,8 +888,8 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                     ),
                   );
                 }
-                // if (_curIdx == 0 && notifier.diaryData?[0].reportedStatus == 'BLURRED') {
-                if (notifier.diaryData?[0].reportedStatus == 'BLURRED') {
+                if (_curIdx == 0 && notifier.diaryData?[0].reportedStatus == 'BLURRED') {
+                  // if (notifier.diaryData?[0].reportedStatus == 'BLURRED') {
                   isPlay = false;
                   fAliplayer?.stop();
                 }
