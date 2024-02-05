@@ -247,7 +247,12 @@ class TransactionNotifier extends ChangeNotifier {
 
         if (fetch.postsState == TransactionState.getHistorySuccess) {
           if (_skip == 0) dataTransaction = [];
-          fetch.data['data'].forEach((v) => dataTransaction?.add(TransactionHistoryModel.fromJSON(v)));
+          print("===hihihi ${fetch.data['data'].length}}");
+          try {
+            fetch.data['data'].forEach((v) => dataTransaction?.add(TransactionHistoryModel.fromJSON(v)));
+          } catch (e) {
+            print("===hihihi $e");
+          }
 
           if (dataAllTransaction?.isEmpty ?? false) {
             fetch.data['data'].forEach((v) => dataAllTransaction?.add(TransactionHistoryModel.fromJSON(v)));

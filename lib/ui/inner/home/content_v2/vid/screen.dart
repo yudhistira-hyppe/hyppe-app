@@ -112,15 +112,15 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       //scroll
-      if (mounted) {
-        Future.delayed(const Duration(milliseconds: 500), () {
-          print("=========== global key prirnt ${widget.scrollController} ");
-          widget.scrollController?.addListener(() {
-            double offset = widget.scrollController?.position.pixels ?? 0;
-            if (mounted) toPosition(offset);
-          });
-        });
-      }
+      // if (mounted) {
+      //   Future.delayed(const Duration(milliseconds: 500), () {
+      //     print("=========== global key prirnt ${widget.scrollController} ");
+      //     widget.scrollController?.addListener(() {
+      //       double offset = widget.scrollController?.position.pixels ?? 0;
+      //       if (mounted) toPosition(offset);
+      //     });
+      //   });
+      // }
     });
 
     _initializeTimer();
@@ -1093,24 +1093,36 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                         ),
                                         twelvePx,
                                         RichText(
-                                          text: TextSpan(
-                                            children: [
-                                              TextSpan(
-                                                text: "${vidData.insight?.likes} ${lang!.like}",
-                                                recognizer: TapGestureRecognizer()..onTap = () => Navigator.push(context, CupertinoPageRoute(builder: (context) => ViewLiked(postId: vidData.postID??'', eventType: 'LIKE',))),
-                                                style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
-                                              ),
-                                              const TextSpan(
-                                                text: " . ",
-                                                style: TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 22),
-                                              ),
-                                              TextSpan(
-                                                text: "${vidData.insight!.views?.getCountShort()} ${lang!.views}",
-                                                recognizer: TapGestureRecognizer()..onTap = () => Navigator.push(context, CupertinoPageRoute(builder: (context) => ViewLiked(postId: vidData.postID??'', eventType: 'VIEW',))),
-                                                style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
-                                              ),
-                                            ]
-                                          ),
+                                          text: TextSpan(children: [
+                                            TextSpan(
+                                              text: "${vidData.insight?.likes} ${lang!.like}",
+                                              recognizer: TapGestureRecognizer()
+                                                ..onTap = () => Navigator.push(
+                                                    context,
+                                                    CupertinoPageRoute(
+                                                        builder: (context) => ViewLiked(
+                                                              postId: vidData.postID ?? '',
+                                                              eventType: 'LIKE',
+                                                            ))),
+                                              style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                                            ),
+                                            const TextSpan(
+                                              text: " . ",
+                                              style: TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 22),
+                                            ),
+                                            TextSpan(
+                                              text: "${vidData.insight!.views?.getCountShort()} ${lang!.views}",
+                                              recognizer: TapGestureRecognizer()
+                                                ..onTap = () => Navigator.push(
+                                                    context,
+                                                    CupertinoPageRoute(
+                                                        builder: (context) => ViewLiked(
+                                                              postId: vidData.postID ?? '',
+                                                              eventType: 'VIEW',
+                                                            ))),
+                                              style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                                            ),
+                                          ]),
                                         ),
                                         // Text(
                                         //   "${vidData.insight?.likes}  ${lang?.like}",
@@ -1130,10 +1142,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                     seeMore: '  ${lang?.more}', //${notifier2.translate.seeMoreContent}',
                                     normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
                                     hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                                    expandStyle: const TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold),
+                                    expandStyle: const TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
                                   ),
                                   GestureDetector(
                                     onTap: () {

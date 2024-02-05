@@ -55,7 +55,7 @@ class _AdsInBetweenFullState extends State<AdsInBetweenFull> {
         Positioned.fill(
           child: Center(child: image(data)),
         ),
-        _buildBody(context, SizeConfig.screenWidth, data),
+        // _buildBody(context, SizeConfig.screenWidth, data),
         // _buttomBodyRight(picData: picData, notifier: notifier, index: index),
         Positioned(
           top: 0,
@@ -122,7 +122,7 @@ class _AdsInBetweenFullState extends State<AdsInBetweenFull> {
             memCacheHeight: 100,
             widthPlaceHolder: 80,
             heightPlaceHolder: 80,
-            imageUrl: picData.mediaUri,
+            imageUrl: picData.mediaPortraitUri,
             imageBuilder: (context, imageProvider) {
               return GestureDetector(
                 behavior: HitTestBehavior.translucent,

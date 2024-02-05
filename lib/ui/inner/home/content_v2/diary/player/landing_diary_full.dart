@@ -979,7 +979,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                           //
                           // }
                           notifier.setAdsData(index, null);
-                        }, (player, id) {}),
+                        }, (player, id) {}, isfull: true),
                       )
                     : Stack(
                         children: [

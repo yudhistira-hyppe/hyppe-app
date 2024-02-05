@@ -86,7 +86,7 @@ class TransactionHistoryModel {
     mediaBasePath = json['mediaBasePath'];
     mediaUri = json['mediaUri'];
     mediaType = json['mediaType'];
-    mediaEndpoint = json['mediaEndpoint'];
+    mediaEndpoint = json['mediaEndpoint'] ?? '';
     mediaThumbEndpoint = json['mediaThumbEndpoint'];
     partnerTrxid = json['partnerTrxid'] ?? '';
     fullThumbPath = concatThumbUri();

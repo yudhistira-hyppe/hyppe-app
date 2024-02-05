@@ -808,6 +808,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
                   postID: _listData?[_curIdx].postID,
                   // storyController: _storyController,
                   tagPeople: _listData?[_curIdx].tagPeople,
+                  animatedController: _animationController,
                   data: _listData?[_curIdx]),
           Align(
             alignment: Alignment.bottomCenter,

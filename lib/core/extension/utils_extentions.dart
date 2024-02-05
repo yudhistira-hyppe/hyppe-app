@@ -13,6 +13,7 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/fullscreen/pic_fullscreen_pag
 import 'package:hyppe/ui/inner/home/widget/ads_in_between.dart';
 import 'package:hyppe/ui/inner/home/widget/ads_in_between_full.dart';
 import 'package:hyppe/ui/inner/home/widget/ads_video_in_between.dart';
+import 'package:hyppe/ui/inner/home/widget/ads_video_in_between_full.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -158,7 +159,9 @@ extension ContextScreen on BuildContext {
     if (adsData != null) {
       if (adsData.mediaType?.toLowerCase() == 'video') {
         if (isfull) {
-          // return  AdsVideoInBetweenFul(data: adsData, afterReport: onComplete);
+          return AdsVideoInBetweenFull(
+            arguments: AdsArgument(data: adsData, adsUrl: '', isSponsored: true, onVisibility: onVisible, afterReport: onComplete, getPlayer: getPlayer),
+          );
         }
         return AdsVideoInBetween(onVisibility: onVisible, data: adsData, afterReport: onComplete, getPlayer: getPlayer);
       } else {

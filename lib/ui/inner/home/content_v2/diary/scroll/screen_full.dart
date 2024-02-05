@@ -997,6 +997,14 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
                 : TitlePlaylistDiaries(
                     data: data,
                     inProfile: true,
+                    callbackReport: () {
+                      if (diaryData?.isEmpty ?? [].isEmpty) {
+                        Routing().moveBack();
+                        Routing().moveBack();
+                        Routing().moveBack();
+                        return;
+                      }
+                    },
                     // storyController: _storyController,
                   ),
 

@@ -40,6 +40,52 @@ class _AdsInBetweenState extends State<AdsInBetween> {
     super.initState();
   }
 
+  void cta() async {
+    final data = widget.data;
+    if (data.adsUrlLink?.isEmail() ?? false) {
+      final email = data.adsUrlLink!.replaceAll('email:', '');
+      setState(() {
+        loadLaunch = true;
+      });
+      System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
+        widget.afterReport();
+        Future.delayed(const Duration(milliseconds: 800), () {
+          Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+        });
+      });
+    } else {
+      if ((data.adsUrlLink ?? '').withHttp()) {
+        print("=====mauk uooooyyy");
+        try {
+          final uri = Uri.parse(data.adsUrlLink ?? '');
+          print('bottomAdsLayout ${data.adsUrlLink}');
+          if (await canLaunchUrl(uri)) {
+            setState(() {
+              loadLaunch = true;
+            });
+            System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() async {
+              widget.afterReport();
+              await launchUrl(
+                uri,
+                mode: LaunchMode.externalApplication,
+              );
+            });
+          } else {
+            throw "Could not launch $uri";
+          }
+        } catch (e) {
+          setState(() {
+            loadLaunch = true;
+          });
+          System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
+            widget.afterReport();
+            System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+          });
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final language = context.read<TranslateNotifierV2>().translate;
@@ -214,15 +260,18 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       InkWell(
-                        onTap: () => Routing().move(
-                          Routes.adsBetweenFull,
-                          argument: AdsArgument(
-                            data: widget.data,
-                            adsUrl: widget.data.adsUrlLink ?? '',
-                            isSponsored: true,
-                            afterReport: widget.afterReport(),
-                          ),
-                        ),
+                        onTap: () {
+                          cta();
+                          // Routing().move(
+                          //   Routes.adsBetweenFull,
+                          //   argument: AdsArgument(
+                          //     data: widget.data,
+                          //     adsUrl: widget.data.adsUrlLink ?? '',
+                          //     isSponsored: true,
+                          //     afterReport: widget.afterReport(),
+                          //   ),
+                          // );
+                        },
                         child: CustomBaseCacheImage(
                           memCacheWidth: 100,
                           memCacheHeight: 100,
@@ -264,49 +313,7 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                       twelvePx,
                       InkWell(
                         onTap: () async {
-                          final data = widget.data;
-                          if (data.adsUrlLink?.isEmail() ?? false) {
-                            final email = data.adsUrlLink!.replaceAll('email:', '');
-                            setState(() {
-                              loadLaunch = true;
-                            });
-                            System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
-                              widget.afterReport();
-                              Future.delayed(const Duration(milliseconds: 800), () {
-                                Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
-                              });
-                            });
-                          } else {
-                            if ((data.adsUrlLink ?? '').withHttp()) {
-                              print("=====mauk uooooyyy");
-                              try {
-                                final uri = Uri.parse(data.adsUrlLink ?? '');
-                                print('bottomAdsLayout ${data.adsUrlLink}');
-                                if (await canLaunchUrl(uri)) {
-                                  setState(() {
-                                    loadLaunch = true;
-                                  });
-                                  System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() async {
-                                    widget.afterReport();
-                                    await launchUrl(
-                                      uri,
-                                      mode: LaunchMode.externalApplication,
-                                    );
-                                  });
-                                } else {
-                                  throw "Could not launch $uri";
-                                }
-                              } catch (e) {
-                                setState(() {
-                                  loadLaunch = true;
-                                });
-                                System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
-                                  widget.afterReport();
-                                  System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                                });
-                              }
-                            }
-                          }
+                          cta();
                         },
                         child: Builder(builder: (context) {
                           final learnMore = (widget.data.ctaButton ?? 'Learn More');
