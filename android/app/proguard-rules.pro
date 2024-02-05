@@ -51,3 +51,5 @@
 -keepclassmembers,allowobfuscation class * {
   @com.google.gson.annotations.SerializedName <fields>;
 }
+#File Pickers
+-keep class androidx.lifecycle.DefaultLifecycleObserver

@@ -746,6 +746,7 @@ class System {
       }
 
       if (featureType == FeatureType.diary) {
+        
         final _pickerResult = await FilePicker.platform.pickFiles(type: FileType.video, allowCompression: false);
 
         // validasi durasi
@@ -785,7 +786,7 @@ class System {
       }
 
       if (featureType == FeatureType.story) {
-        final _pickerResult = await FilePicker.platform.pickFiles(allowMultiple: false, type: FileType.media, allowCompression: false);
+        final _pickerResult = await FilePicker.platform.pickFiles(allowMultiple: false, type: FileType.media, allowCompression: true);
         if (_pickerResult != null) {
           // untuk menampung file yang failed di validasi
           // String _failFile = '';

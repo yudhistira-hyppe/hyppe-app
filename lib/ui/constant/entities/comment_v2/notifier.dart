@@ -127,6 +127,7 @@ class CommentNotifierV2 with ChangeNotifier {
         );
       }
     });
+    notifyListeners();
   }
 
   void onDispose() {
@@ -184,6 +185,11 @@ class CommentNotifierV2 with ChangeNotifier {
     }
   }
 
+  Future<void> newCommentLocal(CommentsLogs res) async {
+    _commentData!.insert(0, res);
+    notifyListeners();
+  }
+
   Future<void> addComment(BuildContext context, {bool? pageDetail}) async {
     inputNode.unfocus();
     if (commentController.value.text.isEmpty) {
@@ -210,6 +216,9 @@ class CommentNotifierV2 with ChangeNotifier {
       final _resFuture = commentQuery.addComment(context);
       final res = await _resFuture;
       if (res != null) {
+        
+        newCommentLocal(res);
+
         context.read<HomeNotifier>().addCountComment(
               context,
               postID ?? '',
@@ -220,7 +229,6 @@ class CommentNotifierV2 with ChangeNotifier {
               parentID: parentID,
               pageDetail: pageDetail ?? false,
             );
-
         // if (parentID == null) {
         //   _commentData?.insert(0, res);
         // } else {

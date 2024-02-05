@@ -1,6 +1,11 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/comment_v2/on_show_comment_v2.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/entities/comment_v2/notifier.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/comment_v2/widget/comment_list_tile.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_detail_top.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
@@ -23,6 +28,9 @@ class PicDetailScreen extends StatefulWidget {
 
 class _PicDetailScreenState extends State<PicDetailScreen> with AfterFirstLayoutMixin {
   final _notifier = PicDetailNotifier();
+  final _notifierComment = CommentNotifierV2();
+  final ScrollController _scrollController = ScrollController();
+
 
   @override
   void initState() {
@@ -30,6 +38,8 @@ class _PicDetailScreenState extends State<PicDetailScreen> with AfterFirstLayout
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       context.read<PicDetailNotifier>().setLoadPic(true);
       context.read<PicDetailNotifier>().setLoadMusic(true);
+      _scrollController.addListener(() => _notifierComment.scrollListener(context, _scrollController));
+      
     });
 
     super.initState();
@@ -86,15 +96,82 @@ class _PicDetailScreenState extends State<PicDetailScreen> with AfterFirstLayout
                       PicDetailBottom(data: notifier.data),
                       _notifier.data != null && (_notifier.data?.allowComments ?? false)
                           ? Expanded(
-                              child: OnShowCommentBottomSheetV2(
-                              fromFront: true,
-                              postID: _notifier.data?.postID,
-                            ))
+                              child: commentList(notifPic: notifier))
                           : const SizedBox.shrink()
                     ],
                   ),
                 ),
               ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget commentList({PicDetailNotifier? notifPic}) {
+    _notifierComment.initState(context, notifPic?.data?.postID, true, null);
+    return ChangeNotifierProvider<CommentNotifierV2>(
+      create: (context) => _notifierComment,
+      child: Consumer<CommentNotifierV2>(
+        builder: (_, notifier, __) {
+          print('notifier data ${notifPic?.data?.postID??''} ${notifier.commentData?.length??0}');
+          if (notifier.commentData == null) {
+            return const Center(child: CustomLoading());
+          }
+
+          return RefreshIndicator(
+            strokeWidth: 2.0,
+            color: Colors.purple,
+            onRefresh: () async {
+              notifier.initState(context, notifPic?.data?.postID, true, null);
+            },
+            child: Column(
+              children: [
+                Expanded(
+                  child: Column(
+                    children: [
+                      eightPx,
+                      notifier.commentData?.isNotEmpty??false
+                          ? Expanded(
+                              child: ListView.builder(
+                                itemCount: notifier.commentData?.length??0,
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                controller: _scrollController,
+                                scrollDirection: Axis.vertical,
+                                padding: const EdgeInsets.only(bottom: 10),
+                                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                                itemBuilder: (context, index) {
+                                  if (index == notifier.commentData?.length && notifier.hasNext) {
+                                    return const CustomLoading();
+                                  }
+
+                                  final comments = notifier.commentData?[index];
+
+                                  return Padding(
+                                    padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 8.0),
+                                    child: CommentListTile(
+                                      data: comments,
+                                      fromFront: true,
+                                    ),
+                                  );
+                                },
+                              ),
+                            )
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              itemCount: 1,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 100.0),
+                                  child: CustomTextWidget(textToDisplay: context.read<TranslateNotifierV2>().translate.beTheFirstToComment ?? ''),
+                                );
+                              }),
+                    ],
+                  ),
+                ),
+              ],
             ),
           );
         },

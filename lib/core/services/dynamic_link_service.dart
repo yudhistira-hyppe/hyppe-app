@@ -7,6 +7,7 @@ import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/arguments/main_argument.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/arguments/referral_argument.dart';
+import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/bloc/referral/bloc.dart';
 import 'package:hyppe/core/bloc/referral/state.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -185,7 +186,8 @@ class DynamicLinkService {
                 if (!isHomeScreen) {
                   // _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false, page: 0));
                 }
-                Future.delayed(const Duration(milliseconds: 500), () {
+                
+                Future.delayed(const Duration(milliseconds: 500), () async {
                   _routing.move(
                     path,
                     argument: DiaryDetailScreenArgument(type: TypePlaylist.none)

@@ -382,10 +382,10 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
       }
     });
     print("!=1=1=1==1=1=1");
-    print(widget.playMode);
-    print(widget.data!.isApsara);
-    print(widget.fromDeeplink);
-    if (widget.data!.isApsara ?? false) {
+    // print(widget.playMode);
+    // print(widget.data!.isApsara);
+    // print(widget.fromDeeplink);
+    if (widget.data?.isApsara ?? false) {
       getAuth();
     } else {
       getOldVideoUrl();
@@ -800,7 +800,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
                       height: widget.height,
                       child: const CustomIconWidget(
                         defaultColor: false,
-                        iconData: '${AssetPath.vectorPath}pause.svg',
+                        iconData: '${AssetPath.vectorPath}play3.svg',
                         color: kHyppeLightButtonText,
                       ),
                     ),
@@ -953,7 +953,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
         }
       },
       child: CustomIconWidget(
-        iconData: isPause ? "${AssetPath.vectorPath}pause.svg" : "${AssetPath.vectorPath}play.svg",
+        iconData: isPause ? "${AssetPath.vectorPath}play3.svg" : "${AssetPath.vectorPath}pause3.svg",
         defaultColor: false,
       ),
       // Icon(

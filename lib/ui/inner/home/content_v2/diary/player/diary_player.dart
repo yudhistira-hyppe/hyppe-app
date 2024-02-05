@@ -67,6 +67,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
   ModeTypeAliPLayer? _playMode;
   Map<String, dynamic>? _dataSourceMap;
   String auth = '';
+  double opacityLevel = 0.0;
 
   ContentData? dataSelected;
 
@@ -317,6 +318,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
             _showLoading = false;
             isPause = false;
           });
+          _animationController?.reset();
           _animationController?.forward();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusPaused:
@@ -693,6 +695,24 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
                       child: _buildFillDiary(),
                     ),
                     // _buildSingleScreen(index),
+                    Align(
+                      alignment: Alignment.center,
+                      child: AnimatedOpacity(
+                        opacity: opacityLevel,
+                        duration: const Duration(milliseconds: 500),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Opacity(
+                            opacity: 0.4,
+                            child: Icon(
+                              isPause ? Icons.play_arrow_rounded : Icons.pause_rounded,
+                              size: 100,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               );
@@ -733,6 +753,14 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
                       pause();
                       print('DiaryPlayer play');
                     }
+                    setState(() {
+                      opacityLevel = 1.0;
+                    });
+
+                    Future.delayed(const Duration(seconds: 1), () {
+                      opacityLevel = 0.0;
+                      setState(() {});
+                    });
                   },
                   onLongPressEnd: (value) => play(),
                   onLongPressStart: (value) => pause(),
@@ -808,6 +836,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
                   postID: _listData?[_curIdx].postID,
                   // storyController: _storyController,
                   tagPeople: _listData?[_curIdx].tagPeople,
+                  animatedController: _animationController,
                   data: _listData?[_curIdx]),
           Align(
             alignment: Alignment.bottomCenter,

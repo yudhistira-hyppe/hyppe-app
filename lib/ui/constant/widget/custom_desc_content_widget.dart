@@ -71,7 +71,6 @@ class _CustomDescContentState extends State<CustomDescContent> {
     (_readMore ? 'test click seeMore' : 'test click seeLess ').logger();
     setState(() {
       _readMore = !_readMore;
-      widget.callbackIsMore!(_readMore);
     });
   }
 
