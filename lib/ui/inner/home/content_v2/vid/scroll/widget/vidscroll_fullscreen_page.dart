@@ -1138,6 +1138,10 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
     return GestureDetector(
       onTap: () {
         if (isPause) {
+          if (_currentPosition == _videoDuration){
+            _currentPosition = 0;
+            widget.fAliplayer?.seekTo(_currentPosition.ceil(), FlutterAvpdef.ACCURATE);
+          }
           widget.fAliplayer?.play();
           isPause = false;
           setState(() {});

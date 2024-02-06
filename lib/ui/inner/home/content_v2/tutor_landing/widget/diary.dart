@@ -324,6 +324,7 @@ class _DiaryTutorState extends State<DiaryTutor> with WidgetsBindingObserver, Ti
               fourPx,
               CustomNewDescContent(
                 // desc: "${data?.description}",
+                email: picData?['email']??'',
                 username: picData?['user'] ?? '',
                 desc: "${picData?['desc']}",
                 trimLines: 3,

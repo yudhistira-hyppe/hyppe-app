@@ -925,6 +925,7 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
           ),
           fourPx,
           CustomNewDescContent(
+            email: pics[index].email??'',
             username: pics[index].username ?? '',
             desc: "${pics[index].description}",
             trimLines: 2,

@@ -1487,6 +1487,7 @@ class System {
         if (fetch.viewState == ViewState.viewUserPostSuccess) {
           data.insight?.isView = true;
           if (!System().isMy(data.email)) {
+            
             data.insight?.views = (data.insight?.views ?? 0) + 1;
           }
         }

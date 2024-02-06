@@ -1338,6 +1338,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
               twelvePx,
               CustomNewDescContent(
                 // desc: "${data?.description}",
+                email: diaryData?[index].email??'',
                 username: diaryData?[index].username ?? '',
                 desc: "${diaryData?[index].description}",
                 trimLines: 2,

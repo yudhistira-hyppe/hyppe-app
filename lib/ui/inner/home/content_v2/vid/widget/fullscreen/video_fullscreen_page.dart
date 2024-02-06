@@ -230,7 +230,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
         _currentPosition = _videoDuration;
       }
 
-      nextPage();
+      // nextPage();
     });
 
     widget.fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {

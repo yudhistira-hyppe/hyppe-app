@@ -1122,6 +1122,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                   twelvePx,
                                   CustomNewDescContent(
                                     // desc: "${data?.description}",
+                                    email: vidData.email??'',
                                     username: vidData.username ?? '',
                                     desc: "${vidData.description}",
                                     trimLines: 3,

@@ -1597,6 +1597,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                 fourPx,
                                 CustomNewDescContent(
                                   // desc: "${data?.description}",
+                                  email: picData?.email??'',
                                   username: picData?.username ?? '',
                                   desc: "${picData?.description}",
                                   trimLines: 3,

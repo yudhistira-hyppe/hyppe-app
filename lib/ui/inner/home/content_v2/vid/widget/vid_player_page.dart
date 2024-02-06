@@ -1753,6 +1753,19 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
       onTap: () {
         if (isPause) {
           // if (_showTipsWidget) fAliplayer?.prepare();
+          if ((widget.isVidFormProfile ?? false) && _currentPosition == _videoDuration){
+            _currentPosition = 0;
+            _inSeek = false;
+            setState(() {
+              if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
+                setState(() {
+                  _showTipsWidget = false;
+                });
+              }
+            });
+            fAliplayer?.seekTo(_currentPosition.ceil(), FlutterAvpdef.ACCURATE);
+            print('disini');
+          }
           fAliplayer?.play();
           isPause = false;
           setState(() {});

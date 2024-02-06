@@ -1016,7 +1016,6 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                 isUserVerified: data.privacy!.isIdVerified ?? false,
                 onTapOnProfileImage: () {
                   fAliplayer?.setMuted(true);
-                  // fAliplayer?.pause();
                   System().navigateToProfile(context, data.email ?? '');
                   setState(() {
                     notifier.isMute = true;
