@@ -37,13 +37,16 @@ class FilePickerWeb extends FilePicker {
   @override
   Future<FilePickerResult?> pickFiles({
     String? dialogTitle,
+    String? initialDirectory,
     FileType type = FileType.any,
     List<String>? allowedExtensions,
     bool allowMultiple = false,
     Function(FilePickerStatus)? onFileLoading,
-    bool? allowCompression,
-    bool? withData = true,
-    bool? withReadStream = false,
+    bool allowCompression = true,
+    bool withData = true,
+    bool withReadStream = false,
+    bool lockParentWindow = false,
+    bool readSequential = false,
   }) async {
     if (type != FileType.custom && (allowedExtensions?.isNotEmpty ?? false)) {
       throw Exception(
@@ -58,6 +61,7 @@ class FilePickerWeb extends FilePicker {
     uploadInput.draggable = true;
     uploadInput.multiple = allowMultiple;
     uploadInput.accept = accept;
+    uploadInput.style.display = 'none';
 
     bool changeEventTriggered = false;
 
@@ -65,7 +69,7 @@ class FilePickerWeb extends FilePicker {
       onFileLoading(FilePickerStatus.picking);
     }
 
-    void changeEventListener(e) {
+    void changeEventListener(e) async {
       if (changeEventTriggered) {
         return;
       }
@@ -97,25 +101,30 @@ class FilePickerWeb extends FilePicker {
       }
 
       for (File file in files) {
-        if (withReadStream!) {
+        if (withReadStream) {
           addPickedFile(file, null, null, _openFileReadStream(file));
-          return;
+          continue;
         }
 
-        if (!withData!) {
+        if (!withData) {
           final FileReader reader = FileReader();
           reader.onLoadEnd.listen((e) {
             addPickedFile(file, null, reader.result as String?, null);
           });
           reader.readAsDataUrl(file);
-          return;
+          continue;
         }
 
+        final syncCompleter = Completer<void>();
         final FileReader reader = FileReader();
         reader.onLoadEnd.listen((e) {
           addPickedFile(file, reader.result as Uint8List?, null, null);
+          syncCompleter.complete();
         });
         reader.readAsArrayBuffer(file);
+        if (readSequential) {
+          await syncCompleter.future;
+        }
       }
     }
 
@@ -125,7 +134,7 @@ class FilePickerWeb extends FilePicker {
       // This listener is called before the input changed event,
       // and the `uploadInput.files` value is still null
       // Wait for results from js to dart
-      Future.delayed(Duration(milliseconds: 500)).then((value) {
+      Future.delayed(Duration(seconds: 1)).then((value) {
         if (!changeEventTriggered) {
           changeEventTriggered = true;
           filesCompleter.complete(null);
@@ -135,6 +144,7 @@ class FilePickerWeb extends FilePicker {
 
     uploadInput.onChange.listen(changeEventListener);
     uploadInput.addEventListener('change', changeEventListener);
+    uploadInput.addEventListener('cancel', cancelledEventListener);
 
     // Listen focus event for cancelled
     window.addEventListener('focus', cancelledEventListener);

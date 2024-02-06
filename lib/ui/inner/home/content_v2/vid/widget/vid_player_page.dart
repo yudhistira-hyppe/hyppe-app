@@ -1443,6 +1443,8 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                                     imageCache.clearLiveImages();
                                                     await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
                                                   });
+                                                  isPause = true;
+                                                  setState(() {});
                                                 } else {
                                                   // if (_curIdx != -1) {
                                                   //   "=============== pause 11".logger();
@@ -1456,11 +1458,17 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                                     orientation: widget.orientation,
                                                     isShare: widget.data!.isShared,
                                                     onUpdate: () {
+                                                      Routing().moveBack();
+                                                      Routing().moveBack();
+                                                      Routing().moveBack();
+
                                                       (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
                                                     },
                                                     fAliplayer: widget.data!.fAliplayer,
                                                   ).then((value) => print('disini datas popup'));
                                                   widget.data!.fAliplayer?.pause();
+                                                  isPause = true;
+                                                  setState(() {});
                                                 }
                                               });
                                             }),
@@ -2103,7 +2111,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                   ),
                                   Container(
                                     constraints: BoxConstraints(
-                                        maxWidth: orientation == Orientation.landscape ? SizeConfig.screenWidth! * .29 : SizeConfig.screenWidth!,
+                                        maxWidth: orientation == Orientation.landscape ? SizeConfig.screenWidth! * .28 : SizeConfig.screenWidth!,
                                         maxHeight: isShowMore ? 52 : SizeConfig.screenHeight! * .2),
                                     padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
                                     child: SingleChildScrollView(

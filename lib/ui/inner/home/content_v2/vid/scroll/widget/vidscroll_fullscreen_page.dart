@@ -725,6 +725,9 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                                       context
                                           .read<PicDetailNotifier>()
                                           .showUserTag(context, widget.data.tagPeople, widget.data.postID, title: lang!.inThisVideo, fAliplayer: widget.fAliplayer, orientation: orientation);
+                                      setState(() {
+                                        isPause = true;
+                                      });
                                     },
                                     child: Row(
                                       children: [
@@ -766,7 +769,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                       ),
                       Container(
                         constraints: BoxConstraints(
-                            maxWidth: orientation == Orientation.landscape ? SizeConfig.screenWidth! * .35 : SizeConfig.screenWidth!, maxHeight: isShowMore ? 52 : SizeConfig.screenHeight! * .1),
+                            maxWidth: orientation == Orientation.landscape ? SizeConfig.screenWidth! * .28 : SizeConfig.screenWidth!, maxHeight: isShowMore ? 52 : SizeConfig.screenHeight! * .1),
                         margin: const EdgeInsets.symmetric(horizontal: 4.0),
                         padding: const EdgeInsets.only(left: 8.0, bottom: 12.0),
                         child: SingleChildScrollView(

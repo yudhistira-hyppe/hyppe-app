@@ -1051,6 +1051,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                                 onDetail: false,
                                                 isShare: data?.isShared,
                                                 onUpdate: () {
+                                                  if (notifier.diaryData?.isEmpty ?? [].isEmpty) {
+                                                    Routing().moveBack();
+                                                  }
                                                   (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 1);
                                                 },
                                                 fAliplayer: fAliplayer,

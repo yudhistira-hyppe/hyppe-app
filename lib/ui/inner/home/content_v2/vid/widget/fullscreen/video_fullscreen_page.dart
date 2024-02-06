@@ -643,6 +643,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                                   imageCache.clearLiveImages();
                                                   await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
                                                 });
+                                                isPause = true;
+                                                setState(() {});
                                               } else {
                                                 // if (_curIdx != -1) {
                                                 //   "=============== pause 11".logger();
@@ -660,6 +662,9 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                                   },
                                                   fAliplayer: widget.data.fAliplayer,
                                                 );
+                                                widget.fAliplayer?.pause();
+                                                isPause = true;
+                                                setState(() {});
                                               }
                                             });
                                           }),
@@ -1354,6 +1359,9 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                     onTap: () {
                                       widget.fAliplayer?.pause();
                                       context.read<PicDetailNotifier>().showUserTag(context, widget.data.tagPeople, widget.data.postID, title: lang!.inthisphoto, fAliplayer: widget.fAliplayer, orientation: orientation);
+                                      setState(() {
+                                        isPause = true;
+                                      });
                                     },
                                     child: Row(
                                       children: [

@@ -746,7 +746,6 @@ class System {
       }
 
       if (featureType == FeatureType.diary) {
-        
         final _pickerResult = await FilePicker.platform.pickFiles(type: FileType.video, allowCompression: false);
 
         // validasi durasi
@@ -786,7 +785,7 @@ class System {
       }
 
       if (featureType == FeatureType.story) {
-        final _pickerResult = await FilePicker.platform.pickFiles(allowMultiple: false, type: FileType.media, allowCompression: true);
+        final _pickerResult = await FilePicker.platform.pickFiles(allowMultiple: false, type: FileType.media, allowCompression: false);
         if (_pickerResult != null) {
           // untuk menampung file yang failed di validasi
           // String _failFile = '';
@@ -1487,7 +1486,10 @@ class System {
         if (fetch.viewState == ViewState.viewUserPostSuccess) {
           data.insight?.isView = true;
           if (!System().isMy(data.email)) {
-            data.insight?.views = (data.insight?.views ?? 0) + 1;
+            var email = SharedPreference().readStorage(SpKeys.email);
+            if (!(data.viewer?.contains(email) ?? false)) {
+              data.insight?.views = (data.insight?.views ?? 0) + 1;
+            }
           }
         }
       }

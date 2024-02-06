@@ -212,6 +212,7 @@ class ContentData {
   GlobalKey? keyGlobalOwn;
   GlobalKey? keyGlobalSell;
   bool? isContentLoading;
+  List<String>? viewer;
 
   ContentData({
     this.metadata,
@@ -285,6 +286,7 @@ class ContentData {
     this.keyGlobalSell,
     this.inBetweenAds,
     this.isContentLoading,
+    this.viewer,
   });
 
   ContentData.fromJson(Map<String, dynamic> json) {
@@ -406,6 +408,9 @@ class ContentData {
     keyGlobalOwn = GlobalKey();
     keyGlobalSell = GlobalKey();
     isContentLoading = false;
+    if (json['viewer'] != null) {
+      viewer = json['viewer'].cast<String>();
+    }
   }
 
   Map<String, dynamic> toJson() {
