@@ -134,6 +134,7 @@ class _PicTopItemState extends State<PicTopItem> {
               ),
             ),
           ),
+        // Center(child: Text("${mn?.tutorialData}")),
         if ((widget.data?.certified ?? false) && (widget.data?.saleAmount ?? 0) == 0)
           Showcase(
             key: widget.globalKey ?? GlobalKey(),

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
 import 'package:hyppe/core/arguments/get_follower_users_argument.dart';
@@ -73,6 +75,13 @@ class FollowBloc {
     required FollowUserArgument data,
   }) async {
     setFollowFetch(FollowFetch(FollowState.loading));
+
+    String challangedata = SharedPreference().readStorage(SpKeys.challangeData) ?? '';
+    if (challangedata != '') {
+      var dataListChallange = jsonDecode(challangedata);
+      data.listchallenge = dataListChallange;
+    }
+
     await Repos().reposPost(
       context,
       (onResult) {
@@ -96,8 +105,6 @@ class FollowBloc {
       withAlertMessage: withAlertConnection,
     );
   }
-
-
 
   Future getFollowersUsersBloc(
     BuildContext context, {

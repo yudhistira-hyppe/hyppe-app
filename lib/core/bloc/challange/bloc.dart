@@ -22,6 +22,7 @@ class ChallangeBloc {
     BuildContext context, {
     required Map data,
     required String url,
+    bool getJson = false,
   }) async {
     setChallangeFetch(ChallangeFetch(ChallengeState.loading));
 
@@ -31,7 +32,11 @@ class ChallangeBloc {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setChallangeFetch(ChallangeFetch(ChallengeState.getPostError, data: onResult.data));
         } else {
-          setChallangeFetch(ChallangeFetch(ChallengeState.getPostSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+          if (getJson) {
+            setChallangeFetch(ChallangeFetch(ChallengeState.getPostSuccess, data: onResult.data));
+          } else {
+            setChallangeFetch(ChallangeFetch(ChallengeState.getPostSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+          }
         }
       },
       (errorData) {

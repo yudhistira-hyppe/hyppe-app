@@ -59,6 +59,7 @@ class SharedPreference {
       await _preferences!.remove(SpKeys.uniqueKey);
       await _preferences!.remove(SpKeys.datetimeLastShowAds);
       await _preferences!.remove(SpKeys.datetimeLastShowChallange);
+      await _preferences!.remove(SpKeys.challangeData);
     }
   }
 }

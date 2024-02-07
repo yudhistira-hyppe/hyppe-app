@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/referral_argument.dart';
 import 'package:hyppe/core/arguments/register_referral_argument.dart';
@@ -51,6 +53,13 @@ class ReferralBloc {
   }) async {
     print('ini email sapa ${data.email} ${data.imei}');
     setReferralFetch(ReferralFetch(ReferralState.loading));
+
+    String challangedata = SharedPreference().readStorage(SpKeys.challangeData) ?? '';
+    if (challangedata != '') {
+      var dataListChallange = jsonDecode(challangedata);
+      data.listchallenge = dataListChallange;
+    }
+
     await Repos().reposPost(
       context,
       (onResult) {
@@ -81,6 +90,13 @@ class ReferralBloc {
     required RegisterReferralArgument data,
   }) async {
     setReferralFetch(ReferralFetch(ReferralState.loading));
+
+    String challangedata = SharedPreference().readStorage(SpKeys.challangeData) ?? '';
+    if (challangedata != '') {
+      var dataListChallange = jsonDecode(challangedata);
+      data.listchallenge = dataListChallange;
+    }
+
     await Repos().reposPost(
       context,
       (onResult) {

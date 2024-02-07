@@ -124,11 +124,8 @@ class DynamicLinkService {
           if (deepLink.queryParameters['referral'] != '1') {
             try {
               print('masuk sini dynamic');
-              final bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
-              if(isGuest ?? false){
-              }else{
-                followSender(Routing.navigatorKey.currentContext!);
-              }
+
+              followSender(Routing.navigatorKey.currentContext!);
             } catch (e) {
               'Error in followSender $e'.logger();
             }
@@ -190,7 +187,7 @@ class DynamicLinkService {
                 if (!isHomeScreen) {
                   // _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false, page: 0));
                 }
-                
+
                 Future.delayed(const Duration(milliseconds: 500), () async {
                   _routing.move(
                     path,
@@ -328,7 +325,8 @@ class DynamicLinkService {
 
   static Future followSender(BuildContext context) async {
     final receiverParty = _pendingDynamicLinkData?.link.queryParameters['sender_email'];
-    if (_sharedPrefs.readStorage(SpKeys.email) != receiverParty) {
+    final bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
+    if (_sharedPrefs.readStorage(SpKeys.email) != receiverParty && !(isGuest ?? false)) {
       try {
         // if (_pendingDynamicLinkData?.link.queryParameters['referral'] == '1') {
         //   return;

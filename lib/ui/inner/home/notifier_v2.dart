@@ -6,7 +6,10 @@ import 'dart:convert';
 import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/bloc/ads_video/bloc.dart';
 import 'package:hyppe/core/bloc/ads_video/state.dart';
+import 'package:hyppe/core/bloc/challange/bloc.dart';
+import 'package:hyppe/core/bloc/challange/state.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
+import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/utils.dart';
@@ -231,7 +234,7 @@ class HomeNotifier with ChangeNotifier {
     if (isLoadingLoadmore) return;
     if (isConnected) {
       if (!mounted) return;
-
+      getDataChallengeJoin(context);
       final profile = Provider.of<MainNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
       final vid = Provider.of<PreviewVidNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
       final diary = Provider.of<PreviewDiaryNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
@@ -380,7 +383,7 @@ class HomeNotifier with ChangeNotifier {
       final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
       final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
       final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
-      if(isReload){
+      if (isReload) {
         pic.pic = null;
         diary.diaryData = null;
         vid.vidData == null;
@@ -541,6 +544,24 @@ class HomeNotifier with ChangeNotifier {
       await CheckVersion().check(context, fetch.version, fetch.versionIos);
 
       return res;
+    } catch (e) {
+      'landing page error : $e'.logger();
+      return [];
+    }
+  }
+
+  Future getDataChallengeJoin(BuildContext context) async {
+    try {
+      String c = SharedPreference().readStorage(SpKeys.challangeData) ?? '';
+      if (c == '' || c == '[]') {
+        final notifier = ChallangeBloc();
+        var data = {"iduser": SharedPreference().readStorage(SpKeys.userID)};
+        await notifier.postChallange(context, data: data, url: UrlConstants.getDataMyChallenge);
+        final fetch = notifier.userFetch;
+        if (fetch.challengeState == ChallengeState.getPostSuccess) {
+          SharedPreference().writeStorage(SpKeys.challangeData, jsonEncode(fetch.data));
+        }
+      }
     } catch (e) {
       'landing page error : $e'.logger();
       return [];

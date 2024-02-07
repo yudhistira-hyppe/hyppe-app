@@ -613,6 +613,24 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
                             child: CircularProgressIndicator(),
                           ))
                         : Container(),
+                    Align(
+                      alignment: Alignment.center,
+                      child: AnimatedOpacity(
+                        opacity: opacityLevel,
+                        duration: const Duration(milliseconds: 500),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Opacity(
+                            opacity: 0.4,
+                            child: Icon(
+                              isPause ? Icons.play_arrow_rounded : Icons.pause_rounded,
+                              size: 100,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                     // Text('${dataSelected?.postID}'),
 
                     dataSelected?.postID == _listData?[index].postID
@@ -695,24 +713,6 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
                       child: _buildFillDiary(),
                     ),
                     // _buildSingleScreen(index),
-                    Align(
-                      alignment: Alignment.center,
-                      child: AnimatedOpacity(
-                        opacity: opacityLevel,
-                        duration: const Duration(milliseconds: 500),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Opacity(
-                            opacity: 0.4,
-                            child: Icon(
-                              isPause ? Icons.play_arrow_rounded : Icons.pause_rounded,
-                              size: 100,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               );

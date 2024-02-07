@@ -4,6 +4,7 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
@@ -65,7 +66,7 @@ class _OnShowUserTagBottomSheetState extends State<OnShowUserTagBottomSheet> wit
                 padding: const EdgeInsets.all(8.0),
                 child: Center(
                   child: CustomTextWidget(
-                    textToDisplay: widget.title??hyppeVid,
+                    textToDisplay: widget.title ?? hyppeVid,
                     textStyle: Theme.of(context).textTheme.titleMedium,
                     textAlign: TextAlign.start,
                   ),
@@ -127,21 +128,19 @@ class _OnShowUserTagBottomSheetState extends State<OnShowUserTagBottomSheet> wit
                                                   }
                                                 : notifierTag.listTagPeople[index].status == 'TOFOLLOW'
                                                     ? () {
-                                                        print("tofollow");
-                                                        notifier.followUser(context, email: notifierTag.listTagPeople[index].email, index: index).then((value) {
-                                                          if (value) {
-                                                            notifierTag.listTagPeople[index].status = 'FOLLOWING';
-                                                            setState(() {});
-                                                          }
+                                                        context.handleActionIsGuest(() {
+                                                          notifier.followUser(context, email: notifierTag.listTagPeople[index].email, index: index).then((value) {
+                                                            if (value) {
+                                                              notifierTag.listTagPeople[index].status = 'FOLLOWING';
+                                                              setState(() {});
+                                                            }
+                                                          });
                                                         });
                                                       }
                                                     : null;
                                             return CustomTextButton(
                                               child: notifier.isLoading
-                                                  ? SizedBox(
-                                                width: 15,
-                                                  height: 20,
-                                                  child: CustomLoading())
+                                                  ? SizedBox(width: 15, height: 20, child: CustomLoading())
                                                   : Text(
                                                       System().getValueStringFollow(notifier.statusFollow, context.read<TranslateNotifierV2>().translate),
                                                       style: TextStyle(color: notifierTag.listTagPeople[index].status == 'TOFOLLOW' ? kHyppeTextPrimary : kHyppeLightSecondary),

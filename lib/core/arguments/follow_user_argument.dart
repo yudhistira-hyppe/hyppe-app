@@ -6,12 +6,14 @@ class FollowUserArgument {
   InteractiveEventType eventType;
   InteractiveEvent? replyEvent;
   String? idMediaStreaming;
+  List<dynamic>? listchallenge;
 
   FollowUserArgument({
     this.replyEvent,
     required this.eventType,
     required this.receiverParty,
     this.idMediaStreaming,
+    this.listchallenge,
   });
 
   Map<String, dynamic> toJson() {
@@ -23,6 +25,9 @@ class FollowUserArgument {
     }
     if (idMediaStreaming != null) {
       data['idMediaStreaming'] = idMediaStreaming;
+    }
+    if (listchallenge != null) {
+      data['listchallenge'] = listchallenge;
     }
 
     return data;

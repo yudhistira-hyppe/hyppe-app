@@ -50,6 +50,7 @@ class _AdsInBetweenFullState extends State<AdsInBetweenFull> {
   @override
   Widget build(BuildContext context) {
     final data = widget.arguments.data;
+    print("response --- $data ${data.mediaPortraitUri ?? data.mediaUri}");
     return Stack(
       children: [
         Positioned.fill(
@@ -100,7 +101,7 @@ class _AdsInBetweenFullState extends State<AdsInBetweenFull> {
     );
   }
 
-  Widget image(AdsData picData, {int index = 0, PreviewPicNotifier? notifier}) {
+  Widget image(AdsData picData, {int index = 0}) {
     final lang = context.read<TranslateNotifierV2>().translate;
     return ValueListenableBuilder(
       valueListenable: networklHasErrorNotifier,
@@ -122,17 +123,10 @@ class _AdsInBetweenFullState extends State<AdsInBetweenFull> {
             memCacheHeight: 100,
             widthPlaceHolder: 80,
             heightPlaceHolder: 80,
-            imageUrl: picData.mediaPortraitUri,
+            imageUrl: picData.mediaPortraitUri ?? picData.mediaUri,
             imageBuilder: (context, imageProvider) {
               return GestureDetector(
                 behavior: HitTestBehavior.translucent,
-                onTapDown: (details) {
-                  var position = details.globalPosition;
-                  notifier!.positionDxDy = position;
-                },
-                onDoubleTap: () {
-                  context.read<LikeNotifier>().likePost(context, notifier!.pic![index]);
-                },
                 onTap: () {},
                 child: ImageSize(
                   onChange: (Size size) {},
@@ -152,46 +146,20 @@ class _AdsInBetweenFullState extends State<AdsInBetweenFull> {
                 padding: const EdgeInsets.all(20),
                 alignment: Alignment.center,
                 child: CustomTextWidget(
-                  textToDisplay: lang?.couldntLoadImage ?? 'Error',
+                  textToDisplay: lang.couldntLoadImage ?? 'Error',
                   maxLines: 3,
                 )),
             errorWidget: (context, url, error) {
-              if (!notifier!.isConnect) {
-                return OfflineMode(
-                  fullscreen: true,
-                  function: () async {
-                    var connect = await System().checkConnections();
-                    if (connect) {
-                      Random random = Random();
-                      int randomNumber = random.nextInt(100);
-                      networklHasErrorNotifier.value++;
-                      // picData.valueCache = randomNumber.toString();
-                      setState(() {});
-                    }
-                  },
-                );
-              } else {
-                return GestureDetector(
-                  onTap: () {
-                    Random random = Random();
-                    int randomNumber = random.nextInt(100);
-                    networklHasErrorNotifier.value++;
-                    // picData.valueCache = randomNumber.toString();
-                    setState(() {});
-                    // reloadImage(index);
-                  },
-                  child: Container(
-                      decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                      width: SizeConfig.screenWidth,
-                      height: 250,
-                      padding: const EdgeInsets.all(20),
-                      alignment: Alignment.center,
-                      child: CustomTextWidget(
-                        textToDisplay: lang?.couldntLoadImage ?? 'Error',
-                        maxLines: 3,
-                      )),
-                );
-              }
+              return Container(
+                  decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                  width: SizeConfig.screenWidth,
+                  height: 250,
+                  padding: const EdgeInsets.all(20),
+                  alignment: Alignment.center,
+                  child: CustomTextWidget(
+                    textToDisplay: lang.couldntLoadImage ?? 'Error',
+                    maxLines: 3,
+                  ));
             },
           ),
         );
@@ -239,7 +207,6 @@ class _AdsInBetweenFullState extends State<AdsInBetweenFull> {
                 isCelebrity: false,
                 isUserVerified: false,
                 onTapOnProfileImage: () {
-                  // fAliplayer?.pause();
                   System().navigateToProfile(context, data.email ?? '');
                 },
                 featureType: FeatureType.pic,

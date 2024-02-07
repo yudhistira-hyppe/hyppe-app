@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/bloc/challange/bloc.dart';
@@ -161,7 +162,6 @@ class ChallangeNotifier with ChangeNotifier {
   }
 
   Future getBannerLanding(BuildContext context, {bool ispopUp = false, bool isSearch = false, bool isLeaderBoard = false}) async {
-
     checkInet(context);
     isLoadingBanner = true;
     notifyListeners();
@@ -196,7 +196,6 @@ class ChallangeNotifier with ChangeNotifier {
       isLoadingBanner = false;
       notifyListeners();
     }
-
   }
 
   Future initLeaderboard(BuildContext context) async {
@@ -366,6 +365,8 @@ class ChallangeNotifier with ChangeNotifier {
     }
   }
 
+  var dataafter;
+
   Future<bool> joinChallange(BuildContext context, String idChallenge) async {
     Map param = {
       "idChallenge": idChallenge,
@@ -377,11 +378,18 @@ class ChallangeNotifier with ChangeNotifier {
 
     if (bannerFatch.challengeState == ChallengeState.getPostSuccess) {
       isLoading = false;
+      SharedPreference().writeStorage(SpKeys.challangeData, jsonEncode(bannerFatch.data));
       notifyListeners();
       return true;
     } else {
       return false;
     }
+  }
+
+  void testData() {
+    print("===============");
+    // var a = (jsonEncode(dataafter['data']));
+    // print(a.runtimeType);
   }
 
   Future achievementInit(BuildContext context) async {

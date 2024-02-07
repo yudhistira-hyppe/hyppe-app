@@ -319,6 +319,11 @@ class PostsBloc {
       formData.fields.add(MapEntry('position', positions));
     }
 
+    String challangedata = SharedPreference().readStorage(SpKeys.challangeData) ?? '';
+    if (challangedata != '') {
+      formData.fields.add(MapEntry('listchallenge', challangedata));
+    }
+
     debugPrint("FORM_POST => " + allowComment.toString());
     debugPrint(formData.fields.join(" - "));
 

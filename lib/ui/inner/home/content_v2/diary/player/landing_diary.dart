@@ -668,7 +668,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   void dispose() {
     print("=======dispose diary page ==========");
     fAliplayer?.stop();
-    // fAliplayer?.destroy();
+    fAliplayer?.destroy();
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
       // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
@@ -1506,7 +1506,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                   twelvePx,
                                   CustomNewDescContent(
                                     // desc: "${data?.description}",
-                                    email: data?.email??'',
+                                    email: data?.email ?? '',
                                     username: data?.username ?? '',
                                     desc: "${data?.description}",
                                     trimLines: 3,

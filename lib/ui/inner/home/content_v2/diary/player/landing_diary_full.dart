@@ -923,65 +923,65 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                 });
               }
             },
-            child: Stack(
-              children: [
-                /// ADS IN BETWEEN === Hariyanto Lukman ===
-                isAds
-                    ? VisibilityDetector(
-                        key: Key(data?.inBetweenAds?.adsId ?? index.toString()),
-                        onVisibilityChanged: (info) {
-                          if (info.visibleFraction >= 0.8) {
-                            if (!isShowingDialog) {
-                              globalAdsPopUp?.pause();
-                            }
-                            context.read<VideoNotifier>().currentPostID = data?.inBetweenAds?.adsId ?? '';
-                            _curIdx = index;
+            child: isAds
+                ? VisibilityDetector(
+                    key: Key(data?.inBetweenAds?.adsId ?? index.toString()),
+                    onVisibilityChanged: (info) {
+                      if (info.visibleFraction >= 0.8) {
+                        if (!isShowingDialog) {
+                          globalAdsPopUp?.pause();
+                        }
+                        context.read<VideoNotifier>().currentPostID = data?.inBetweenAds?.adsId ?? '';
+                        _curIdx = index;
 
-                            _curPostId = data?.inBetweenAds?.adsId ?? index.toString();
-                            // if (_lastCurIndex != _curIdx) {
-                            final indexList = notifier.diaryData?.indexWhere((element) => element.inBetweenAds?.adsId == _curPostId);
-                            // final latIndexList = notifier.diaryData?.indexWhere((element) => element.inBetweenAds?.adsId == _lastCurPostId);
-                            if (_lastCurPostId != _curPostId) {
-                              // fAliplayer?.destroy();
-                              fAliplayer?.stop();
-                              fAliplayer?.clearScreen();
-                              // Wakelock.disable();
-                              // initAlipayer();
+                        _curPostId = data?.inBetweenAds?.adsId ?? index.toString();
+                        // if (_lastCurIndex != _curIdx) {
+                        final indexList = notifier.diaryData?.indexWhere((element) => element.inBetweenAds?.adsId == _curPostId);
+                        // final latIndexList = notifier.diaryData?.indexWhere((element) => element.inBetweenAds?.adsId == _lastCurPostId);
+                        if (_lastCurPostId != _curPostId) {
+                          // fAliplayer?.destroy();
+                          fAliplayer?.stop();
+                          fAliplayer?.clearScreen();
+                          // Wakelock.disable();
+                          // initAlipayer();
 
-                              if (mounted) {
-                                setState(() {
-                                  Future.delayed(Duration(milliseconds: 400), () {
-                                    itemHeight = notifier.diaryData?[indexList ?? 0].height ?? 0;
-                                  });
-                                });
-                              }
-
-                              if (indexList == (notifier.diaryData?.length ?? 0) - 1) {
-                                Future.delayed(const Duration(milliseconds: 1000), () async {
-                                  await context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {
-                                    // notifier.getTemp(indexList, latIndexList, indexList);
-                                  });
-                                });
-                              } else {
-                                Future.delayed(const Duration(milliseconds: 2000), () {
-                                  // notifier.getTemp(indexList, latIndexList, indexList);
-                                });
-                              }
-                            }
-
-                            // _lastCurIndex = _curIdx;
-                            _lastCurPostId = _curPostId;
+                          if (mounted) {
+                            setState(() {
+                              Future.delayed(Duration(milliseconds: 400), () {
+                                itemHeight = notifier.diaryData?[indexList ?? 0].height ?? 0;
+                              });
+                            });
                           }
-                        },
-                        child: context.getAdsInBetween(notifier.diaryData?[index].inBetweenAds, (info) {}, () {
-                          // final hasNotAds = (notifier.diaryData?.where((element) => element.inBetweenAds != null).length ?? 0) == 0;
-                          // if(hasNotAds){
-                          //
-                          // }
-                          notifier.setAdsData(index, null);
-                        }, (player, id) {}, isfull: true),
-                      )
-                    : Stack(
+
+                          if (indexList == (notifier.diaryData?.length ?? 0) - 1) {
+                            Future.delayed(const Duration(milliseconds: 1000), () async {
+                              await context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {
+                                // notifier.getTemp(indexList, latIndexList, indexList);
+                              });
+                            });
+                          } else {
+                            Future.delayed(const Duration(milliseconds: 2000), () {
+                              // notifier.getTemp(indexList, latIndexList, indexList);
+                            });
+                          }
+                        }
+
+                        // _lastCurIndex = _curIdx;
+                        _lastCurPostId = _curPostId;
+                      }
+                    },
+                    child: context.getAdsInBetween(notifier.diaryData?[index].inBetweenAds, (info) {}, () {
+                      // final hasNotAds = (notifier.diaryData?.where((element) => element.inBetweenAds != null).length ?? 0) == 0;
+                      // if(hasNotAds){
+                      //
+                      // }
+                      notifier.setAdsData(index, null);
+                    }, (player, id) {}, isfull: true),
+                  )
+                : Stack(
+                    children: [
+                      /// ADS IN BETWEEN === Hariyanto Lukman ===
+                      Stack(
                         children: [
                           Stack(
                             children: [
@@ -1156,14 +1156,14 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                           ),
                         ],
                       ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  // padding: EdgeInsets.only(bottom: 25.0),
-                  child: _buildFillDiary(data),
-                ),
-              ],
-            ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                        // padding: EdgeInsets.only(bottom: 25.0),
+                        child: _buildFillDiary(data),
+                      ),
+                    ],
+                  ),
           );
   }
 

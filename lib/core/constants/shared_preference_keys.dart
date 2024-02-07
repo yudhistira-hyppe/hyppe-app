@@ -38,4 +38,6 @@ class SpKeys {
 
   // ======kebutuhan tutor=========
   static const String newUser = 'newUser';
+
+  static const String challangeData = 'challangeData';
 }

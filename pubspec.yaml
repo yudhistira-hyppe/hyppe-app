@@ -39,7 +39,7 @@ dependencies:
   path_provider: ^2.0.8 # Untuk kebutuhan get path directory di device
   permission_handler: ^10.0.0 # Untuk kebutuhan handling permission
   provider: ^6.0.2 # Untuk kebutuhan state management
-  share_plus: ^4.0.10 # Untuk kebutuhan sharing content to another apps
+  share_plus: ^7.2.2 # Untuk kebutuhan sharing content to another apps
   shared_preferences: ^2.0.12 # Untuk kebutuhan penyimpanan memory internal
   shimmer: ^2.0.0 # A package provides an easy way to add shimmer effect in Flutter project
   tuple: ^2.0.0 # Tuple data structure

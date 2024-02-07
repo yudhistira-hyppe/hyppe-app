@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/bloc/like/state.dart';
 import 'package:hyppe/core/bloc/repos/repos.dart';
@@ -18,7 +20,14 @@ class LikeBloc {
   Future likePostUserBloc(BuildContext context, {required String postId, required String emailOwner, required bool isLike}) async {
     final email = SharedPreference().readStorage(SpKeys.email);
 
-    final Map<String, String> _data = {"eventType": !isLike ? "LIKE" : "UNLIKE", "postID": postId, "receiverParty": emailOwner};
+    final Map<String, dynamic> _data = {"eventType": !isLike ? "LIKE" : "UNLIKE", "postID": postId, "receiverParty": emailOwner};
+
+    String challangedata = SharedPreference().readStorage(SpKeys.challangeData) ?? '';
+    print("====== $challangedata");
+    if (challangedata != '') {
+      var dataListChallange = jsonDecode(challangedata);
+      _data['listchallenge'] = dataListChallange;
+    }
 
     await _repos.reposPost(
       context,

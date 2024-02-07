@@ -194,6 +194,11 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      // GestureDetector(
+                      //     onTap: () {
+                      //       cn.testData();
+                      //     },
+                      //     child: Text("wkwkwkwkw")),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
                         child: Text(lang?.mainChallenge ?? '',

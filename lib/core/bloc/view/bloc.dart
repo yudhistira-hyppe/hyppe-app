@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/bloc/repos/repos.dart';
 import 'package:hyppe/core/bloc/view/state.dart';
@@ -17,12 +19,17 @@ class ViewBloc {
 
   Future viewPostUserBloc(BuildContext context, {required String postId, required String emailOwner, bool check = true}) async {
     final email = SharedPreference().readStorage(SpKeys.email);
-    final Map<String, String> _data = {
-      "eventType" : "VIEW",
+    final Map<String, dynamic> _data = {
+      "eventType": "VIEW",
       "postID": postId,
-      "receiverParty": emailOwner
+      "receiverParty": emailOwner,
     };
 
+    String challangedata = SharedPreference().readStorage(SpKeys.challangeData) ?? '';
+    if (challangedata != '') {
+      var dataListChallange = jsonDecode(challangedata);
+      _data['listchallenge'] = dataListChallange;
+    }
     await _repos.reposPost(
       context,
       (onResult) {

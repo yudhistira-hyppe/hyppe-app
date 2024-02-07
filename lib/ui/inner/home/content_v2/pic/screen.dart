@@ -1596,7 +1596,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                 fourPx,
                                 CustomNewDescContent(
                                   // desc: "${data?.description}",
-                                  email: picData?.email??'',
+                                  email: picData?.email ?? '',
                                   username: picData?.username ?? '',
                                   desc: "${picData?.description}",
                                   trimLines: 3,
@@ -1631,6 +1631,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                             return Padding(
                                               padding: const EdgeInsets.only(bottom: 6.0),
                                               child: CustomNewDescContent(
+                                                email: picData?.comment?[indexComment].sender,
                                                 // desc: "${picData??.description}",
                                                 username: picData?.comment?[indexComment].userComment?.username ?? '',
                                                 desc: picData?.comment?[indexComment].txtMessages ?? '',
