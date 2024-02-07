@@ -204,8 +204,10 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
       } catch (e) {
         _currentPosition = _videoDuration;
       }
-
-      nextPage();
+      setState(() {
+        isPause=true;
+      });
+      // nextPage();
     });
 
     widget.fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
@@ -494,7 +496,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                                   // notifier.vidData?[index].fAliplayerAds = ads;
                                 },
                                 autoScroll: () {
-                                  nextPage();
+                                  // nextPage();
                                 },
                                 prevScroll: () {
                                   previousPage();
@@ -1099,24 +1101,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
           decoration: BoxDecoration(
             color: backgroundColor,
           ),
-          child: _showTipsWidget
-              ? Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      widget.fAliplayer?.prepare();
-                      widget.fAliplayer?.play();
-                      setState(() {
-                        isPause = false;
-                        _showTipsWidget = false;
-                      });
-                    },
-                    child: const CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}pause3.svg",
-                      defaultColor: false,
-                    ),
-                  ),
-                )
-              : Row(
+          child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     _buildSkipPrev(iconColor, barHeight),
@@ -1139,9 +1124,14 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
       onTap: () {
         if (isPause) {
           if (_currentPosition == _videoDuration){
+            _inSeek = false;
             _currentPosition = 0;
+            setState(() {
+              _showTipsWidget = false;
+            });
             widget.fAliplayer?.seekTo(_currentPosition.ceil(), FlutterAvpdef.ACCURATE);
           }
+          
           widget.fAliplayer?.play();
           isPause = false;
           setState(() {});

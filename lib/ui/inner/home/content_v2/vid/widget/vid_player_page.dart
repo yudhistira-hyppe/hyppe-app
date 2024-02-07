@@ -1764,7 +1764,6 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
               }
             });
             fAliplayer?.seekTo(_currentPosition.ceil(), FlutterAvpdef.ACCURATE);
-            print('disini');
           }
           fAliplayer?.play();
           isPause = false;
