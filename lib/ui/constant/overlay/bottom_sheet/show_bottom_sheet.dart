@@ -277,8 +277,8 @@ class ShowBottomSheet {
     final newUser = SharedPreference().readStorage(SpKeys.newUser) ?? 'FALSE';
     await showModalBottomSheet(
       context: context,
-      enableDrag: true,
-      isDismissible: newUser == "FALSE",
+      enableDrag: newUser == "FALSE",
+      isDismissible: newUser != "FALSE",
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (builder) {

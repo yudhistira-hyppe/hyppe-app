@@ -1758,7 +1758,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
       onTap: () {
         if (isPause) {
           // if (_showTipsWidget) fAliplayer?.prepare();
-          if ((widget.isVidFormProfile ?? false) && _currentPosition == _videoDuration){
+          if ((widget.isVidFormProfile ?? false) && _currentPosition == _videoDuration) {
             _currentPosition = 0;
             _inSeek = false;
             setState(() {
