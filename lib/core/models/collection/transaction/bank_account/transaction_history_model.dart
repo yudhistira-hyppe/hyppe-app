@@ -86,7 +86,7 @@ class TransactionHistoryModel {
     mediaBasePath = json['mediaBasePath'];
     mediaUri = json['mediaUri'];
     mediaType = json['mediaType'];
-    mediaEndpoint = json['mediaEndpoint'];
+    mediaEndpoint = json['mediaEndpoint'] ?? '';
     mediaThumbEndpoint = json['mediaThumbEndpoint'];
     partnerTrxid = json['partnerTrxid'] ?? '';
     fullThumbPath = concatThumbUri();
@@ -135,8 +135,8 @@ class TransactionHistoryModel {
   }
 
   String? concatThumbUri() {
-    final fixMedia = mediaThumbEndpoint ?? '';
-    if (fixMedia.isNotEmpty) {
+    final fixMedia = mediaThumbEndpoint ?? mediaEndpoint;
+    if (fixMedia!.isNotEmpty) {
       return Env.data.baseUrl + fixMedia + '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
     } else {
       return fixMedia;

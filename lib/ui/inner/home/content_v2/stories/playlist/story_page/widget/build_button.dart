@@ -1,6 +1,7 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:provider/provider.dart';
 
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -58,19 +59,23 @@ class _BuildButtonState extends State<BuildButton> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               InkWell(
-                onTap: () {
-                  print('sdsdfsdf');
-                  if (widget.pause != null) {
-                    widget.pause!();
-                  }
-                  notifier.showMyReaction(
-                    context,
-                    mounted,
-                    widget.data,
-                    // widget.storyController,
-                    widget.animationController,
-                    widget.play!,
-                  );
+                onTap: () async {
+                  widget.pause!();
+                 await context.handleActionIsGuest(() async  {
+                    print('sdsdfsdf');
+                    if (widget.pause != null) {
+                      widget.pause!();
+                    }
+                    notifier.showMyReaction(
+                      context,
+                      mounted,
+                      widget.data,
+                      // widget.storyController,
+                      widget.animationController,
+                      widget.play!,
+                    );
+                  });
+                  widget.play!();
                 },
                 child: CustomIconWidget(
                   defaultColor: false,

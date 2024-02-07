@@ -2,6 +2,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
@@ -123,9 +124,12 @@ class RightItems extends StatelessWidget {
                         value2.translate.buy ?? 'buy',
                         colorIcon: kHyppeLightButtonText,
                         onTap: () async {
-                          SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
-                          await ShowBottomSheet.onBuyContent(context, data: data);
-                          SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                          await context.handleActionIsGuest(() async  {
+                            SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                            await ShowBottomSheet.onBuyContent(context, data: data);
+                            SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                          });
+
                         },
                       ),
                   ],

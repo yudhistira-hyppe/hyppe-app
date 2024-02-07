@@ -70,6 +70,7 @@ class LocalizationModelV2 {
   String? privacyPolicy;
   String? and;
   String? termsOfService;
+  String? termsOfUse;
   String? welcome;
   String? letsMakeYouAnAccount;
   String? fullName;
@@ -331,6 +332,7 @@ class LocalizationModelV2 {
   String? iHaveReadAndAgree;
   String? language;
   String? like;
+  String? cLike;
   String? markAllAsRead;
   String? mention;
   String? messages;
@@ -1174,6 +1176,7 @@ class LocalizationModelV2 {
     this.privacyPolicy,
     this.and,
     this.termsOfService,
+    this.termsOfUse,
     this.welcome,
     this.letsMakeYouAnAccount,
     this.fullName,
@@ -1435,6 +1438,7 @@ class LocalizationModelV2 {
     this.iHaveReadAndAgree,
     this.language,
     this.like,
+    this.cLike,
     this.markAllAsRead,
     this.mention,
     this.messages,
@@ -2279,6 +2283,7 @@ class LocalizationModelV2 {
     privacyPolicy = json['privacyPolicy'];
     and = json['and'];
     termsOfService = json['termsOfService'];
+    termsOfUse = json['termsOfUse'];
     welcome = json['welcome'];
     letsMakeYouAnAccount = json['letsMakeYouAnAccount'];
     fullName = json['fullName'];
@@ -2541,6 +2546,7 @@ class LocalizationModelV2 {
     iHaveReadAndAgree = json['iHaveReadAndAgree'];
     language = json['language'];
     like = json['like'];
+    cLike = json['cLike'];
     markAllAsRead = json['markAllAsRead'];
     mention = json['mention'];
     messages = json['messages'];

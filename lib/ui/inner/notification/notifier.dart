@@ -170,7 +170,7 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
   void onInitial() {
     _listScreen = {
       AllNotification(): language.all ?? '',
-      LikeNotification(): language.like ?? '',
+      LikeNotification(): language.cLike ?? '',
       CommentNotification(): language.comment ?? '',
       const FollowNotification(category: NotificationCategory.follower): language.follow ?? 'follow',
       const FollowNotification(category: NotificationCategory.following): language.following ?? 'following',

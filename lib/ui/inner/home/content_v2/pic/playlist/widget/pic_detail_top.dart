@@ -5,6 +5,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
@@ -98,13 +99,13 @@ class PicDetailTop extends StatelessWidget {
               ? SizedBox(
                   width: 50,
                   child: CustomTextButton(
-                    onPressed: () => ShowBottomSheet().onReportContent(
+                    onPressed: () => context.handleActionIsGuest(() => ShowBottomSheet().onReportContent(
                       context,
                       postData: data,
                       type: hyppePic,
                       adsData: null,
-                      onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
-                    ),
+                      onUpdate: () => context.read<PicDetailNotifier>().onUpdate()
+                    ),),
                     child: const CustomIconWidget(
                       defaultColor: false,
                       iconData: '${AssetPath.vectorPath}more.svg',
@@ -118,21 +119,24 @@ class PicDetailTop extends StatelessWidget {
                   width: 50,
                   child: CustomTextButton(
                     onPressed: () async {
-                      if (globalAudioPlayer != null) {
-                        globalAudioPlayer!.pause();
-                      }
-                      await ShowBottomSheet().onShowOptionContent(
-                        context,
-                        onDetail: onDetail,
-                        contentData: data ?? ContentData(),
-                        captionTitle: hyppePic,
-                        onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
-                        isShare: data?.isShared,
-                      );
-                      if (globalAudioPlayer != null) {
-                        globalAudioPlayer!.seek(Duration.zero);
-                        globalAudioPlayer!.resume();
-                      }
+                      await context.handleActionIsGuest(() async  {
+                        if (globalAudioPlayer != null) {
+                          globalAudioPlayer!.pause();
+                        }
+                        await ShowBottomSheet().onShowOptionContent(
+                          context,
+                          onDetail: onDetail,
+                          contentData: data ?? ContentData(),
+                          captionTitle: hyppePic,
+                          onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
+                          isShare: data?.isShared,
+                        );
+                        if (globalAudioPlayer != null) {
+                          globalAudioPlayer!.seek(Duration.zero);
+                          globalAudioPlayer!.resume();
+                        }
+                      });
+
                     },
                     child: const CustomIconWidget(
                       defaultColor: false,

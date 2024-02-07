@@ -5,7 +5,6 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
-import 'package:heif_converter/heif_converter.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/bloc/view/bloc.dart';
 import 'package:hyppe/core/bloc/view/state.dart';
@@ -103,6 +102,7 @@ class System {
     if (url != null && email != null && token != null) {
       if (url.isNotEmpty) {
         if (url != 'null') {
+          // print("show image not apsara: ${Env.data.baseUrl}${Env.data.versionApi}$url?x-auth-token=$token&x-auth-user=$email&rundom=");
           return '${Env.data.baseUrl}${Env.data.versionApi}$url?x-auth-token=$token&x-auth-user=$email&rundom=';
         } else {
           return '';
@@ -746,7 +746,6 @@ class System {
       }
 
       if (featureType == FeatureType.diary) {
-        
         final _pickerResult = await FilePicker.platform.pickFiles(type: FileType.video, allowCompression: false);
 
         // validasi durasi
@@ -1487,8 +1486,10 @@ class System {
         if (fetch.viewState == ViewState.viewUserPostSuccess) {
           data.insight?.isView = true;
           if (!System().isMy(data.email)) {
-            
-            data.insight?.views = (data.insight?.views ?? 0) + 1;
+            var email = SharedPreference().readStorage(SpKeys.email);
+            if (!(data.viewer?.contains(email) ?? false)) {
+              data.insight?.views = (data.insight?.views ?? 0) + 1;
+            }
           }
         }
       }
@@ -2129,5 +2130,10 @@ class System {
     } else {
       return false;
     }
+  }
+
+  bool isGuest() {
+    final bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
+    return isGuest ?? false;
   }
 }

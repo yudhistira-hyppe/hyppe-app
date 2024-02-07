@@ -75,10 +75,43 @@ class _OnShowUserViewContentBottomSheetState extends State<OnShowUserViewContent
                         controller: _scrollController,
                         // scrollDirection: Axis.vertical,
                         // physics: const NeverScrollableScrollPhysics(),
-                        itemCount: notifier.listLikeView?.user?.length,
+                        itemCount: (notifier.listLikeView?.user?.length ?? 0) + 1,
                         itemBuilder: (context, index) {
-                          final data = notifier.listLikeView?.user?[index];
+
                           // print(System().showUserPicture(value[index].avatar));
+                          if((notifier.listLikeView?.user?.length ?? 0) == index){
+                            if ((notifier.listLikeView?.guest ?? 0) > 0) {
+                              return ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                leading: StoryColorValidator(
+                                  haveStory: false,
+                                  featureType: FeatureType.pic,
+                                  child: CustomProfileImage(
+                                    width: 40,
+                                    height: 40,
+                                    onTap: null,
+                                    imageUrl: '',
+                                    badge: null,
+                                    following: true,
+                                    onFollow: () {},
+                                  ),
+                                ),
+                                title: CustomTextWidget(
+                                  textToDisplay: 'Guest',
+                                  textStyle: Theme.of(context).textTheme.titleSmall,
+                                  textAlign: TextAlign.start,
+                                ),
+                                trailing: CustomTextWidget(
+                                  textToDisplay: '${notifier.listLikeView?.guest}',
+                                  textStyle: Theme.of(context).textTheme.titleSmall,
+                                  textAlign: TextAlign.start,
+                                ),
+                              );
+                            }else{
+                              return const SizedBox.shrink();
+                            }
+                          }
+                          final data = notifier.listLikeView?.user?[index];
                           if (data != null) {
                             return ListTile(
                               onTap: () => System().navigateToProfile(context, data.email ?? ''),

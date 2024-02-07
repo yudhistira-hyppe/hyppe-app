@@ -156,14 +156,6 @@ class UrlConstants {
   static const String userBearer = "$userRoute/bearer";
 
   ///---------------------------------------------------------------------------------------------------------///
-  /* APIs Playlist */
-  /// post => Create new playlist.
-  static const String createNewPlaylist = "$postRoute/createPlaylist";
-
-  /// get => Get all playlist.
-  static const String getAllPlaylist = "$postRoute/getAllPlaylist";
-
-  ///---------------------------------------------------------------------------------------------------------///
   /* APIs Posts */
 
   /// get => Get User Post.
@@ -307,7 +299,7 @@ class UrlConstants {
   static const String landingPageSearch = "$interestCount/default-page";
   static const String getDetailHashtag = "$contentRouteV3/searchdatanew/newdetailtag";
   static const String getDetailInterest = "$contentRouteV3/searchdatanew/newdetailinterest";
-  static const String getSearchContentV5 = "$contentRouteV3/searchdatanew";
+  static const String getSearchContentV5 = "$contentRouteV3/searchdatanew/v2";
   static const String getDetailHashtagV2 = "$contentRouteV3/searchdatanew/newdetailtag/v2";
   static const String getDetailInterestV2 = "$contentRouteV3/searchdatanew/newdetailinterest/v2";
   // v3 delete tag
@@ -326,13 +318,13 @@ class UrlConstants {
   static const String postBuyContent = "$transactionRoute/v2";
 
   /// post => Get History Transaction
-  static const String transactionHistorys = "$transactionRoute/historys/v2";
+  static const String transactionHistorys = "$transactionRoute/historys";
 
   /// post => Get History Transaction
-  static const String detailTransactionHistorys = "$transactionRoute/historys/details/v2";
+  static const String detailTransactionHistorys = "$transactionRoute/historys/details";
 
   /// post => Get Withdraw Detail
-  static const String detailWithdrawal = "$transactionRoute/withdraw/listdetail";
+  static const String detailWithdrawal = "$transactionRoute/withdraw/listdetail/v2";
 
   /// post => Get Withdraw Detail
   static const String withdraw = "$transactionRoute/withdraw/v2";
@@ -368,7 +360,7 @@ class UrlConstants {
   static const String verificationIDSupportingDocs = "$postsRoute/supportfile";
 
   // new verification ID Upload
-  static const String verificationIDWithSupportDocs = "$postsRoute/upload";
+  static const String verificationIDWithSupportDocs = "$postsRoute/upload/v2";
 
   // get tag people in content
   static const String tagPeople = "$postsRoute/tagpeople/v2";
@@ -439,13 +431,13 @@ class UrlConstants {
 
   // Get Chalange
   static const String getBannerChalange = "$challange/listing/bannerlandingpage";
-  static const String getLeaderBoard = "$challange/listleaderboard/v2";
-  static const String getLeaderBoardSession = "$challange/listleaderboard2/v2";
+  static const String getLeaderBoard = "$challange/listleaderboard";
+  static const String getLeaderBoardSession = "$challange/listleaderboard2";
   static const String getOtherChallange = "$challange/allchallenge/v2";
   static const String joinChallange = "$challange/join/v2";
   static const String listAchievement = "$challange/listbadgebyuser/v2";
   static const String collectionBadge = "$challange/listbadgeuserdetail/v2";
-  static const String selectBadge = "$challange/badgechoice";
+  static const String selectBadge = "$challange/badgechoice/v2";
   static const String checkChallengeStatus = "$challange/join/currentstatus";
 
   // Get Effect

@@ -9,6 +9,9 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../constant/widget/custom_icon_widget.dart';
+import '../../../../../constant/widget/custom_profile_image.dart';
+
 class StoryTutor extends StatefulWidget {
   const StoryTutor({Key? key}) : super(key: key);
 
@@ -64,9 +67,15 @@ class _StoryTutorState extends State<StoryTutor> {
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.only(left: 4.5, right: 16.0),
+          padding: const EdgeInsets.only(left: 0, right: 0.0),
           itemCount: storyData.length,
           itemBuilder: (context, index) {
+            if(index == 0){
+              return MyFrameStoryTutor(
+                image: storyData[index]['image'],
+                user: storyData[index]['user'],
+              );
+            }
             return FrameStory(
               image: storyData[index]['image'],
               user: storyData[index]['user'],
@@ -77,6 +86,82 @@ class _StoryTutorState extends State<StoryTutor> {
     );
   }
 }
+
+class MyFrameStoryTutor extends StatelessWidget {
+  final String? image;
+  final String? user;
+  const MyFrameStoryTutor({super.key, this.image, this.user});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        sixteenPx,
+        // Text("${notifier.isloading}"),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Stack(
+              alignment: Alignment.bottomRight,
+              children: [
+                Container(
+                  // padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                        width: 2.0,
+                        color: kHyppeBorderTab),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: SizedBox(
+                      width: SizeWidget.circleDiameterOutside,
+                      height: SizeWidget.circleDiameterOutside,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(SizeWidget.circleDiameterOutside * 0.08),
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(SizeWidget.circleDiameterOutside * 0.25),
+                              child: Image.asset(
+                                image ?? '',
+                                width: SizeWidget.circleDiameterOutside,
+                                height: SizeWidget.circleDiameterOutside,
+                                errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                                  return Image.asset('${AssetPath.pngPath}profile-error.jpg', fit: BoxFit.fitWidth);
+                                },
+                                fit: BoxFit.cover,
+                              )),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const CustomIconWidget(
+                  defaultColor: false,
+                  iconData: '${AssetPath.vectorPath}add-story.svg',
+                )
+              ],
+            ),
+            fourPx,
+            SizedBox(
+              width: 43,
+              child: CustomTextWidget(
+                maxLines: 1,
+                textToDisplay: user == 'a' ? (context.read<TranslateNotifierV2>().translate.yourStory ?? '') : user ?? '',
+                textStyle: Theme.of(context).textTheme.overline?.copyWith(letterSpacing: 1.0),
+              ),
+            )
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 
 class FrameStory extends StatelessWidget {
   final String? image;
@@ -90,7 +175,7 @@ class FrameStory extends StatelessWidget {
 
     return Row(
       children: [
-        sixteenPx,
+        eightPx,
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -139,7 +224,6 @@ class FrameStory extends StatelessWidget {
             )
           ],
         ),
-        fourPointFivePx
       ],
     );
   }

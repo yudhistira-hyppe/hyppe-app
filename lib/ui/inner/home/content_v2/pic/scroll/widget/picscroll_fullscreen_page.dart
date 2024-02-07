@@ -19,6 +19,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/utils/zoom_pic/zoom_pic.dart';
@@ -456,7 +457,9 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                   notifier?.positionDxDy = position;
                 },
                 onDoubleTap: () {
-                  context.read<LikeNotifier>().likePost(context, notifier!.pics![index]);
+                  context.handleActionIsGuest(() {
+                    context.read<LikeNotifier>().likePost(context, notifier!.pics![index]);
+                  });
                 },
                 onTap: () {
                   if (picData.music != null) {
@@ -749,7 +752,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                   ),
                 ),
                 SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                        (data.boosted.isEmpty) &&
+                        data.statusBoost != 'BERLANGSUNG' &&
                         (data.reportedStatus != 'OWNED' && data.reportedStatus != 'BLURRED' && data.reportedStatus2 != 'BLURRED') &&
                         data.email == email
                     ? Container(
@@ -770,7 +773,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                         ),
                       )
                     : Container(),
-                if (data.email == email && (data.boostCount ?? 0) >= 0 && (data.boosted.isNotEmpty))
+                if (data.email == email && (data.boostCount ?? 0) >= 0 && data.statusBoost == 'BERLANGSUNG' && (data.boosted.isNotEmpty))
                   Container(
                     padding: const EdgeInsets.all(10),
                     margin: const EdgeInsets.only(bottom: 10, left: 18.0),
@@ -895,7 +898,9 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
             Consumer<LikeNotifier>(
               builder: (context, likeNotifier, child) => buttonRight(
                   onFunctionTap: () {
-                    likeNotifier.likePost(context, notifier!.pics![index]);
+                    context.handleActionIsGuest(() {
+                      likeNotifier.likePost(context, notifier!.pics![index]);
+                    });
                   },
                   iconData: '${AssetPath.vectorPath}${(picData?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'love-shadow.svg'}',
                   value: picData!.insight!.likes! > 0 ? '${picData.insight?.likes}' : '${lang!.like}',
@@ -1034,28 +1039,43 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
           ],
         ),
         actionWidget(
-            onTap: () {
-              if (data.email != email) {
-                context.read<PreviewPicNotifier>().reportContent(context, data, fAliplayer: fAliplayer, onCompleted: () async {
-                  imageCache.clear();
-                  imageCache.clearLiveImages();
-                  await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 0);
-                });
-              } else {
-                fAliplayer?.setMuted(true);
-                fAliplayer?.pause();
-                ShowBottomSheet().onShowOptionContent(
-                  context,
-                  contentData: data,
-                  captionTitle: hyppePic,
-                  onDetail: false,
-                  isShare: data.isShared,
-                  onUpdate: () {
-                    context.read<HomeNotifier>().onUpdate();
-                  },
-                  fAliplayer: fAliplayer,
-                );
-              }
+            onTap: () async {
+              fAliplayer?.setMuted(true);
+              fAliplayer?.pause();
+              await context.handleActionIsGuest(() async {
+                if (data.email != email) {
+                  context.read<PreviewPicNotifier>().reportContent(context, data, fAliplayer: fAliplayer, onCompleted: () async {
+                    imageCache.clear();
+                    imageCache.clearLiveImages();
+                    if (picData?.isEmpty ?? [].isEmpty) {
+                      Routing().moveBack();
+                      Routing().moveBack();
+                      return;
+                    }
+                    await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 0);
+                  });
+                } else {
+                  fAliplayer?.setMuted(true);
+                  fAliplayer?.pause();
+                  ShowBottomSheet().onShowOptionContent(
+                    context,
+                    contentData: data,
+                    captionTitle: hyppePic,
+                    onDetail: false,
+                    isShare: data.isShared,
+                    onUpdate: () {
+                      context.read<HomeNotifier>().onUpdate();
+                      if (picData?.isEmpty ?? [].isEmpty) {
+                        Routing().moveBack();
+                        Routing().moveBack();
+                        Routing().moveBack();
+                      }
+                    },
+                    fAliplayer: fAliplayer,
+                  );
+                }
+              });
+              
             },
             data: data),
       ],

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
@@ -96,14 +97,17 @@ class _BuildTopViewState extends State<BuildTopView> {
                 widget.data?.email == SharedPreference().readStorage(SpKeys.email)
                     ? GestureDetector(
                         onTap: () {
+                          context.handleActionIsGuest(() async  {
+                            ShowBottomSheet().onShowOptionContent(
+                              context,
+                              contentData: widget.data!,
+                              captionTitle: hyppeStory,
+                              onDetail: widget.onDetail,
+                              // storyController: widget.storyController,
+                            );
+                          });
                           // widget.storyController?.pause();
-                          ShowBottomSheet().onShowOptionContent(
-                            context,
-                            contentData: widget.data!,
-                            captionTitle: hyppeStory,
-                            onDetail: widget.onDetail,
-                            // storyController: widget.storyController,
-                          );
+
                         },
                         child: const CustomIconWidget(
                           defaultColor: false,

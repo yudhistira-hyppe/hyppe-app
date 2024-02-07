@@ -71,6 +71,9 @@ class _CustomDescContentState extends State<CustomDescContent> {
     (_readMore ? 'test click seeMore' : 'test click seeLess ').logger();
     setState(() {
       _readMore = !_readMore;
+      if (widget.callbackIsMore != null) {
+        widget.callbackIsMore!(_readMore);
+      }
     });
   }
 
@@ -340,7 +343,11 @@ class _CustomDescContentState extends State<CustomDescContent> {
             tempDesc = '';
           }
           // print('hit prepare username: ${splitDesc[i].substring(0, 1)} , ${splitDesc[i].substring(1, splitDesc[i].length)}');
-          descItems.add(ItemDesc(desc: '${splitDesc[i]} ', type: CaptionType.mention));
+          if (splitDesc[i].contains("@GuestHyppe")) {
+            descItems.add(ItemDesc(desc: '${splitDesc[i]} ', type: CaptionType.normal));
+          } else {
+            descItems.add(ItemDesc(desc: '${splitDesc[i]} ', type: CaptionType.mention));
+          }
         } else if (firstChar == '#' && splitDesc[i].length > 1) {
           final lenght = splitDesc[i].length;
           final content = splitDesc[i].substring(1, lenght);

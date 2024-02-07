@@ -7,6 +7,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/shimmer/search_shimmer.dart';
@@ -568,10 +569,13 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
                   builder: (context, picNot, child) => Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: GestureDetector(
-                      onTap: () {
-                        if (pics[index].insight?.isloadingFollow != true) {
-                          picNot.followUser(context, pics[index] , isUnFollow: pics[index].following, isloading: pics[index].insight!.isloadingFollow ?? false);
-                        }
+                      onTap: () async {
+                        await context.handleActionIsGuest(() async  {
+                          if (pics[index].insight?.isloadingFollow != true) {
+                            picNot.followUser(context, pics[index] , isUnFollow: pics[index].following, isloading: pics[index].insight!.isloadingFollow ?? false);
+                          }
+                        });
+
                       },
                       child: pics[index].insight?.isloadingFollow ?? false
                           ? Container(
@@ -592,27 +596,30 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
               GestureDetector(
                 onTap: () {
                   // fAliplayer?.pause();
-                  if (pics[index].email != email) {
-                    context.read<PreviewPicNotifier>()
-                        .reportContent(
+                  context.handleActionIsGuest(() async  {
+                    if (pics[index].email != email) {
+                      context.read<PreviewPicNotifier>()
+                          .reportContent(
+                          context,
+                          pics[index] ,
+                          fAliplayer: fAliplayer,
+                          onCompleted: (){},
+                          key: widget.interestKey);
+                    } else {
+                      fAliplayer?.setMuted(true);
+                      fAliplayer?.pause();
+                      ShowBottomSheet().onShowOptionContent(
                         context,
-                        pics[index] ,
+                        contentData: pics[index] ,
+                        captionTitle: hyppePic,
+                        onDetail: false,
+                        isShare: pics[index].isShared,
+                        onUpdate: () => context.read<HomeNotifier>().onUpdate(),
                         fAliplayer: fAliplayer,
-                        onCompleted: (){},
-                        key: widget.interestKey);
-                  } else {
-                    fAliplayer?.setMuted(true);
-                    fAliplayer?.pause();
-                    ShowBottomSheet().onShowOptionContent(
-                      context,
-                      contentData: pics[index] ,
-                      captionTitle: hyppePic,
-                      onDetail: false,
-                      isShare: pics[index].isShared,
-                      onUpdate: () => context.read<HomeNotifier>().onUpdate(),
-                      fAliplayer: fAliplayer,
-                    );
-                  }
+                      );
+                    }
+                  });
+
                 },
                 child: const Icon(
                   Icons.more_vert,
@@ -899,8 +906,11 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
                       Expanded(
                         child: GestureDetector(
                           onTap: () async {
-                            fAliplayer?.pause();
-                            await ShowBottomSheet.onBuyContent(context, data: pics[index], fAliplayer: fAliplayer);
+                            await context.handleActionIsGuest(() async  {
+                              fAliplayer?.pause();
+                              await ShowBottomSheet.onBuyContent(context, data: pics[index], fAliplayer: fAliplayer);
+                            });
+
                           },
                           child: const Align(
                             alignment: Alignment.centerRight,

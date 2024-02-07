@@ -43,6 +43,8 @@ class _ComponentState extends State<Component> {
     final isAnnouncement = widget.data?.actionButtons != null && widget.data?.eventType == 'GENERAL';
     return InkWell(
       onTap: () async {
+        
+        // print(isLoading);
         if (widget.data?.eventType != 'CONTENTMOD') {
           if (isAnnouncement) {
             final url = widget.data?.actionButtons;
@@ -87,7 +89,6 @@ class _ComponentState extends State<Component> {
               NotificationCategory.adsClick,
               NotificationCategory.adsView,
             ];
-
             if (listTransacation.contains(eventType)) {
               await Routing().move(Routes.transaction);
             } else if (NotificationCategory.challange == eventType) {
@@ -100,13 +101,18 @@ class _ComponentState extends State<Component> {
                     ..body = System().bodyMultiLang(bodyEn: widget.data?.body ?? widget.data?.bodyId, bodyId: widget.data?.bodyId) ?? ''
                     ..session = widget.data?.contentEventID == null ? null : int.parse(widget.data?.contentEventID ?? '0'));
             } else {
-              await context.read<NotificationNotifier>().navigateToContent(context, widget.data?.postType, widget.data?.postID);
+              if (widget.data?.eventType == 'FOLLOWER'){
+                System().navigateToProfile(context, widget.data?.mate ?? '');
+              }else{
+                await context.read<NotificationNotifier>().navigateToContent(context, widget.data?.postType, widget.data?.postID);
+              }
             }
           }
           setState(() {
             isLoading = false;
           });
         }
+        // if (widget.data?.eventType == '')
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
@@ -145,7 +151,10 @@ class _ComponentState extends State<Component> {
                           following: true,
                           width: 50 * SizeConfig.scaleDiagonal,
                           height: 50 * SizeConfig.scaleDiagonal,
-                          onTap: () => System().navigateToProfile(context, widget.data?.mate ?? ''),
+                          onTap: () {
+                            print('ini data widget data ${widget.data?.toJson()}');
+                            System().navigateToProfile(context, widget.data?.mate ?? '');
+                          },
                           imageUrl: '${System().showUserPicture(widget.data?.senderOrReceiverInfo?.avatar?.mediaEndpoint)}',
                           badge: widget.data?.urluserBadge,
                         ),

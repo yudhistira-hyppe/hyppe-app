@@ -933,7 +933,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                 context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {});
                               }
                               fAliplayer?.stop();
-
                               Future.delayed(const Duration(milliseconds: 500), () {
                                 System().increaseViewCount2(context, picData ?? ContentData(), check: false);
                                 if ((picData?.saleAmount ?? 0) > 0 || ((picData?.certified ?? false) && (picData?.saleAmount ?? 0) == 0)) {
@@ -1279,7 +1278,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                               // }
 
                                               // fAliplayer?.pause();
-                                              if (!isPrepareMusic){
+                                              if (!isPrepareMusic) {
                                                 var res = await Routing().move(Routes.picFullScreenDetail, argument: PicFullscreenArgument(picData: notifier.pic!, index: index, scrollPic: false));
                                                 if (res != null || res == null) {
                                                   fAliplayer?.play();

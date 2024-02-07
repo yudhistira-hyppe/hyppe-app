@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../../core/constants/asset_path.dart';
 import '../../../../../core/constants/themes/hyppe_colors.dart';
+import '../../../../../ux/path.dart';
 import '../../../widget/button_sosmed.dart';
 import '../../../widget/custom_loading.dart';
 
@@ -54,8 +55,9 @@ class _OnLoginAppState extends State<OnLoginApp> {
               sixteenPx,
               CustomGesture(
                 margin: EdgeInsets.zero,
-                onTap: () {
+                onTap: () async {
                   Routing().moveBack();
+                  Routing().move(Routes.help);
                 },
                 child: const CustomIconWidget(
                     height: 28,

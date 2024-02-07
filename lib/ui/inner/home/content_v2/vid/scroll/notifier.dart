@@ -36,6 +36,8 @@ class ScrollVidNotifier with ChangeNotifier {
     connectionError = !connect;
     if (connect) {
       if (pageSrc == PageSrc.selfProfile) {
+        print("=====]]]]]loadmore=======");
+
         final sp = context.read<SelfProfileNotifier>();
         sp.pageIndex = 2;
         await sp.onScrollListener(context, scrollController: scrollController, isLoad: true);

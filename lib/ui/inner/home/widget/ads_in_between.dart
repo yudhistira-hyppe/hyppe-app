@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/ads_argument.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/ui/constant/widget/custom_desc_content_widget.dart';
@@ -37,6 +38,52 @@ class _AdsInBetweenState extends State<AdsInBetween> {
   @override
   void initState() {
     super.initState();
+  }
+
+  void cta() async {
+    final data = widget.data;
+    if (data.adsUrlLink?.isEmail() ?? false) {
+      final email = data.adsUrlLink!.replaceAll('email:', '');
+      setState(() {
+        loadLaunch = true;
+      });
+      System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
+        widget.afterReport();
+        Future.delayed(const Duration(milliseconds: 800), () {
+          Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+        });
+      });
+    } else {
+      if ((data.adsUrlLink ?? '').withHttp()) {
+        print("=====mauk uooooyyy");
+        try {
+          final uri = Uri.parse(data.adsUrlLink ?? '');
+          print('bottomAdsLayout ${data.adsUrlLink}');
+          if (await canLaunchUrl(uri)) {
+            setState(() {
+              loadLaunch = true;
+            });
+            System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() async {
+              widget.afterReport();
+              await launchUrl(
+                uri,
+                mode: LaunchMode.externalApplication,
+              );
+            });
+          } else {
+            throw "Could not launch $uri";
+          }
+        } catch (e) {
+          setState(() {
+            loadLaunch = true;
+          });
+          System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
+            widget.afterReport();
+            System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+          });
+        }
+      }
+    }
   }
 
   @override
@@ -212,32 +259,34 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CustomBaseCacheImage(
-                        memCacheWidth: 100,
-                        memCacheHeight: 100,
-                        widthPlaceHolder: 80,
-                        heightPlaceHolder: 80,
-                        imageUrl: widget.data.mediaUri,
-                        imageBuilder: (context, imageProvider) => ClipRRect(
-                          borderRadius: BorderRadius.circular(20), // Image border
-                          child: Image(
-                            image: imageProvider,
-                            fit: BoxFit.fitHeight,
-                            width: context.getWidth(),
+                      InkWell(
+                        onTap: () {
+                          cta();
+                          // Routing().move(
+                          //   Routes.adsBetweenFull,
+                          //   argument: AdsArgument(
+                          //     data: widget.data,
+                          //     adsUrl: widget.data.adsUrlLink ?? '',
+                          //     isSponsored: true,
+                          //     afterReport: widget.afterReport(),
+                          //   ),
+                          // );
+                        },
+                        child: CustomBaseCacheImage(
+                          memCacheWidth: 100,
+                          memCacheHeight: 100,
+                          widthPlaceHolder: 80,
+                          heightPlaceHolder: 80,
+                          imageUrl: widget.data.mediaUri,
+                          imageBuilder: (context, imageProvider) => ClipRRect(
+                            borderRadius: BorderRadius.circular(20), // Image border
+                            child: Image(
+                              image: imageProvider,
+                              fit: BoxFit.fitHeight,
+                              width: context.getWidth(),
+                            ),
                           ),
-                        ),
-                        emptyWidget: Container(
-                            decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                            width: context.getWidth(),
-                            height: 250,
-                            padding: const EdgeInsets.all(20),
-                            alignment: Alignment.center,
-                            child: CustomTextWidget(
-                              textToDisplay: language.couldntLoadImage ?? 'Error',
-                              maxLines: 3,
-                            )),
-                        errorWidget: (context, url, error) {
-                          return Container(
+                          emptyWidget: Container(
                               decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
                               width: context.getWidth(),
                               height: 250,
@@ -246,55 +295,25 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                               child: CustomTextWidget(
                                 textToDisplay: language.couldntLoadImage ?? 'Error',
                                 maxLines: 3,
-                              ));
-                        },
+                              )),
+                          errorWidget: (context, url, error) {
+                            return Container(
+                                decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                width: context.getWidth(),
+                                height: 250,
+                                padding: const EdgeInsets.all(20),
+                                alignment: Alignment.center,
+                                child: CustomTextWidget(
+                                  textToDisplay: language.couldntLoadImage ?? 'Error',
+                                  maxLines: 3,
+                                ));
+                          },
+                        ),
                       ),
                       twelvePx,
                       InkWell(
                         onTap: () async {
-                          final data = widget.data;
-                          if (data.adsUrlLink?.isEmail() ?? false) {
-                            final email = data.adsUrlLink!.replaceAll('email:', '');
-                            setState(() {
-                              loadLaunch = true;
-                            });
-                            System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
-                              widget.afterReport();
-                              Future.delayed(const Duration(milliseconds: 800), () {
-                                Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
-                              });
-                            });
-                          } else {
-                            if ((data.adsUrlLink ?? '').withHttp()) {
-                              print("=====mauk uooooyyy");
-                              try {
-                                final uri = Uri.parse(data.adsUrlLink ?? '');
-                                print('bottomAdsLayout ${data.adsUrlLink}');
-                                if (await canLaunchUrl(uri)) {
-                                  setState(() {
-                                    loadLaunch = true;
-                                  });
-                                  System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() async {
-                                    widget.afterReport();
-                                    await launchUrl(
-                                      uri,
-                                      mode: LaunchMode.externalApplication,
-                                    );
-                                  });
-                                } else {
-                                  throw "Could not launch $uri";
-                                }
-                              } catch (e) {
-                                setState(() {
-                                  loadLaunch = true;
-                                });
-                                System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
-                                  widget.afterReport();
-                                  System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                                });
-                              }
-                            }
-                          }
+                          cta();
                         },
                         child: Builder(builder: (context) {
                           final learnMore = (widget.data.ctaButton ?? 'Learn More');

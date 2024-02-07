@@ -2,6 +2,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/pic_screen.dart';
@@ -224,18 +225,21 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                               context: context,
                               iconData: '${AssetPath.vectorPath}more.svg',
                               function: () async {
-                                notifier.preventMusic = true;
-                                SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
-                                await ShowBottomSheet().onShowOptionContent(
-                                  context,
-                                  contentData: data,
-                                  captionTitle: hyppePic,
-                                  isShare: data.isShared,
-                                  // storyController: widget.storyController,
-                                  onUpdate: () => context.read<SlidedPicDetailNotifier>().onUpdate(),
-                                );
-                                notifier.preventMusic = false;
-                                SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                                await context.handleActionIsGuest(() async  {
+                                  notifier.preventMusic = true;
+                                  SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                                  await ShowBottomSheet().onShowOptionContent(
+                                    context,
+                                    contentData: data,
+                                    captionTitle: hyppePic,
+                                    isShare: data.isShared,
+                                    // storyController: widget.storyController,
+                                    onUpdate: () => context.read<SlidedPicDetailNotifier>().onUpdate(),
+                                  );
+                                  notifier.preventMusic = false;
+                                  SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                                });
+
                               },
                             )
                           : const SizedBox(),
@@ -394,11 +398,14 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                             context: context,
                             iconData: '${AssetPath.vectorPath}cart.svg',
                             function: () async {
-                              notifier.preventMusic = true;
-                              // SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
-                              await ShowBottomSheet.onBuyContent(context, data: data);
-                              notifier.preventMusic = false;
-                              // SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                              await context.handleActionIsGuest(() async  {
+                                notifier.preventMusic = true;
+                                // SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                                await ShowBottomSheet.onBuyContent(context, data: data);
+                                notifier.preventMusic = false;
+                                // SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                              });
+
                             },
                           ),
                       ],

@@ -5,6 +5,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -146,7 +147,7 @@ class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin {
                       color: Colors.black.withOpacity(0.12),
                     ),
                     borderRadius: BorderRadius.circular(16),
-                    color: context.isDarkMode() ? Colors.black12 : kHyppeLightSurface,
+                    color: context.isDarkMode() ? Colors.black12 : const Color(0xffFBFBFB),
                   ),
                   child: Row(
                     children: [
@@ -162,7 +163,7 @@ class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin {
                             maxLines: 2,
                             textAlign: TextAlign.start,
                           ),
-                          notifier.onProgressTicket.length < 10
+                          (notifier.onProgressTicket.length < 10 && !System().isGuest())
                               ? CustomTextButton(
                                   onPressed: () {
                                     // notifier.navigateToBankAccount();
@@ -176,10 +177,10 @@ class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin {
                                 )
                               : CustomTextButton(
                                   onPressed: () {},
-                                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppeLightSecondary)),
+                                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppeLightInactive1)),
                                   child: CustomTextWidget(
                                     textToDisplay: notifier.translate.submitTicketIssue ?? '',
-                                    textStyle: Theme.of(context).textTheme.button?.copyWith(color: Colors.white),
+                                    textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeGrey),
                                   ),
                                 ),
                         ]),

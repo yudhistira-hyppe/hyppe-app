@@ -170,7 +170,7 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
               ),
 
               SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                      (widget.data?.boosted.isEmpty ?? [].isEmpty) &&
+                      widget.data?.statusBoost != 'BERLANGSUNG' &&
                       (widget.data?.reportedStatus != 'OWNED' && widget.data?.reportedStatus != 'BLURRED' && widget.data?.reportedStatus2 != 'BLURRED') &&
                       widget.data?.email == SharedPreference().readStorage(SpKeys.email)
                   ? Container(
@@ -190,7 +190,37 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                       ),
                     )
                   : Container(),
-
+              if (widget.data?.email == SharedPreference().readStorage(SpKeys.email) &&
+                  (widget.data?.boostCount ?? 0) >= 0 &&
+                  widget.data?.statusBoost == 'BERLANGSUNG' &&
+                  (widget.data?.boosted.isNotEmpty ?? [].isEmpty))
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  margin: const EdgeInsets.only(top: 10, bottom: 10, left: 0.0),
+                  width: MediaQuery.of(context).size.width * .75,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    color: kHyppeGreyLight.withOpacity(.9),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}reach.svg",
+                        defaultColor: false,
+                        height: 24,
+                        color: kHyppeTextLightPrimary,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 13),
+                        child: CustomTextWidget(
+                          textToDisplay: "${widget.data?.boostJangkauan ?? '0'} ${notifier.translate.reach}",
+                          textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
               // twelvePx,
               Container(),
               if (widget.data?.music != null)

@@ -77,12 +77,14 @@ class CommentTile extends StatelessWidget {
                     twoPx,
                     InkWell(
                       onTap: () {
-                        notifier.showTextInput = true;
-                        notifier.onReplayCommentV2(
-                          context,
-                          comment: comment,
-                          parentCommentID: comment?.lineID,
-                        );
+                        context.handleActionIsGuest(() async  {
+                          notifier.showTextInput = true;
+                          notifier.onReplayCommentV2(
+                            context,
+                            comment: comment,
+                            parentCommentID: comment?.lineID,
+                          );
+                        });
                       },
                       child: CustomTextWidget(
                         textToDisplay: notifier.language.reply ?? 'Reply',
@@ -112,14 +114,17 @@ class CommentTile extends StatelessWidget {
               if (comment?.sender == email)
                 InkWell(
                   onTap: () {
-                    ShowGeneralDialog.deleteContentDialog(context, '${_language.comment}', () async {
-                      notifier.deleteComment(
-                        context,
-                        comment?.lineID ?? '',
-                        comment?.detailDisquss?.length ?? 0,
-                        indexComment: index,
-                      );
+                    context.handleActionIsGuest(() async  {
+                      ShowGeneralDialog.deleteContentDialog(context, '${_language.comment}', () async {
+                        notifier.deleteComment(
+                          context,
+                          comment?.lineID ?? '',
+                          comment?.detailDisquss?.length ?? 0,
+                          indexComment: index,
+                        );
+                      });
                     });
+
                   },
                   child: CustomIconWidget(
                     width: 20,

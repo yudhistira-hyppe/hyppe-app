@@ -199,10 +199,13 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                               return Expanded(
                                   child: InkWell(
                                       onTap: () {
-                                        final currentText = notifier.commentController.text;
-                                        notifier.commentController.text = "$currentText${emoji[index]}";
-                                        notifier.commentController.selection = TextSelection.fromPosition(TextPosition(offset: notifier.commentController.text.length));
-                                        notifier.onUpdate();
+                                        context.handleActionIsGuest(() async  {
+                                          final currentText = notifier.commentController.text;
+                                          notifier.commentController.text = "$currentText${emoji[index]}";
+                                          notifier.commentController.selection = TextSelection.fromPosition(TextPosition(offset: notifier.commentController.text.length));
+                                          notifier.onUpdate();
+                                        });
+
                                       },
                                       child: CustomTextWidget(
                                         textToDisplay: emoji[index],

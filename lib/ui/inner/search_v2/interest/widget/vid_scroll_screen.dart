@@ -4,6 +4,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:provider/provider.dart';
@@ -245,9 +246,11 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: GestureDetector(
                       onTap: () {
-                        if (vidData[index].insight?.isloadingFollow != true) {
-                          picNot.followUser(context, vidData[index], isUnFollow: vidData[index].following, isloading: vidData[index].insight!.isloadingFollow ?? false);
-                        }
+                        context.handleActionIsGuest(() {
+                          if (vidData[index].insight?.isloadingFollow != true) {
+                            picNot.followUser(context, vidData[index], isUnFollow: vidData[index].following, isloading: vidData[index].insight!.isloadingFollow ?? false);
+                          }
+                        });
                       },
                       child: vidData[index].insight?.isloadingFollow ?? false
                           ? Container(
@@ -267,31 +270,34 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                 ),
               GestureDetector(
                 onTap: () {
-                  if (vidData[index].email != email) {
-                    // FlutterAliplayer? fAliplayer
-                    context.read<PreviewPicNotifier>()
-                        .reportContent(
-                        context,
-                        vidData[index] ,
-                        fAliplayer: vidData[index].fAliplayer,
-                        onCompleted: (){},
-                        key: widget.interestKey);
-                  } else {
-                    if (_curIdx != -1) {
-                      print('Vid Landing Page: pause $_curIdx');
-                      vidData[_curIdx].fAliplayer?.pause();
-                    }
+                  context.handleActionIsGuest(() async  {
+                    if (vidData[index].email != email) {
+                      // FlutterAliplayer? fAliplayer
+                      context.read<PreviewPicNotifier>()
+                          .reportContent(
+                          context,
+                          vidData[index] ,
+                          fAliplayer: vidData[index].fAliplayer,
+                          onCompleted: (){},
+                          key: widget.interestKey);
+                    } else {
+                      if (_curIdx != -1) {
+                        print('Vid Landing Page: pause $_curIdx');
+                        vidData[_curIdx].fAliplayer?.pause();
+                      }
 
-                    ShowBottomSheet().onShowOptionContent(
-                      context,
-                      contentData: vidData[index] ,
-                      captionTitle: hyppeVid,
-                      onDetail: false,
-                      isShare: vidData[index].isShared,
-                      onUpdate: () => context.read<HomeNotifier>().onUpdate(),
-                      fAliplayer: vidData[index].fAliplayer,
-                    );
-                  }
+                      ShowBottomSheet().onShowOptionContent(
+                        context,
+                        contentData: vidData[index] ,
+                        captionTitle: hyppeVid,
+                        onDetail: false,
+                        isShare: vidData[index].isShared,
+                        onUpdate: () => context.read<HomeNotifier>().onUpdate(),
+                        fAliplayer: vidData[index].fAliplayer,
+                      );
+                    }
+                  });
+
                 },
                 child: const Icon(
                   Icons.more_vert,
@@ -529,8 +535,11 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                       Expanded(
                         child: GestureDetector(
                           onTap: () async {
-                            vidData[index].fAliplayer?.pause();
-                            await ShowBottomSheet.onBuyContent(context, data: vidData[index], fAliplayer: vidData[index].fAliplayer);
+                            await context.handleActionIsGuest(() async  {
+                              vidData[index].fAliplayer?.pause();
+                              await ShowBottomSheet.onBuyContent(context, data: vidData[index], fAliplayer: vidData[index].fAliplayer);
+
+                            });
 
                           },
                           child: const Align(

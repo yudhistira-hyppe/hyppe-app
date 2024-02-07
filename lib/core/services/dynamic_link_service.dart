@@ -258,7 +258,11 @@ class DynamicLinkService {
               if (deepLink.queryParameters['referral'] == '1') {
                 print("-=-=-=-=-=-=-==-= masuk referral");
                 hitReferralBackend(Routing.navigatorKey.currentContext!, data: data);
-                followSender(Routing.navigatorKey.currentContext!);
+                final bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
+                if(isGuest ?? false){
+                }else{
+                  followSender(Routing.navigatorKey.currentContext!);
+                }
               }
               if (isFromSplash) {
                 _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));

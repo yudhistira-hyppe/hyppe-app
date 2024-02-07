@@ -43,6 +43,14 @@ class AdsData {
   bool? isReport;
   String? apsaraAuth;
   bool isLoading = false;
+  String? mediaPortraitUri;
+  String? mediaPortraitThumUri;
+  String? videoIdPortrait;
+  String? videoIdLandscape;
+  int? widthPortrait;
+  int? heightPortrait;
+  int? widthLandscape;
+  int? heightLandscape;
 
   AdsData({
     this.adsId,
@@ -69,7 +77,15 @@ class AdsData {
     this.height,
     this.isReport,
     this.apsaraAuth,
-    this.isLoading = false
+    this.isLoading = false,
+    this.mediaPortraitUri,
+    this.mediaPortraitThumUri,
+    this.widthPortrait,
+    this.heightPortrait,
+    this.videoIdPortrait,
+    this.videoIdLandscape,
+    this.widthLandscape,
+    this.heightLandscape,
   });
 
   AdsData.fromJson(Map<String, dynamic> json) {
@@ -96,6 +112,16 @@ class AdsData {
     ctaButton = json['ctaButton'];
     width = json['width'];
     height = json['height'];
+    mediaPortraitUri = json['mediaPortraitUri'];
+    mediaPortraitThumUri = json['mediaPortraitThumUri'];
+    widthPortrait = json['widthPortrait'];
+    heightPortrait = json['heightPortrait'];
+
+    videoIdPortrait = json['videoIdPortrait'];
+    videoIdLandscape = json['videoIdLandscape'];
+    widthLandscape = json['widthLandscape'];
+    heightLandscape = json['heightLandscape'];
+
     apsaraAuth = '';
     try {
       if (value is int) {

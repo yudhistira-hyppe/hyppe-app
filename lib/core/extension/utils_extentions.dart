@@ -6,10 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/app.dart';
+import 'package:hyppe/core/arguments/ads_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/fullscreen/pic_fullscreen_page.dart';
 import 'package:hyppe/ui/inner/home/widget/ads_in_between.dart';
+import 'package:hyppe/ui/inner/home/widget/ads_in_between_full.dart';
 import 'package:hyppe/ui/inner/home/widget/ads_video_in_between.dart';
+import 'package:hyppe/ui/inner/home/widget/ads_video_in_between_full.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -38,7 +42,7 @@ extension ContextScreen on BuildContext {
 
   double getScreenDiagonal() => sqrt((getHeight() * getHeight()) + (getWidth() * getWidth()));
 
-  double getScaleDiagonal() => getScreenDiagonal() /(sqrt((414 * 414) + (895 * 895)));
+  double getScaleDiagonal() => getScreenDiagonal() / (sqrt((414 * 414) + (895 * 895)));
 
   double getHeightStatusBar() => MediaQuery.of(this).viewPadding.top;
 
@@ -151,12 +155,20 @@ extension ContextScreen on BuildContext {
     }
   }
 
-  Widget getAdsInBetween(AdsData? adsData, Function(VisibilityInfo)? onVisible, Function() onComplete, Function(FlutterAliplayer, String) getPlayer){
-    if(adsData != null){
-      if(adsData.mediaType?.toLowerCase() == 'video'){
-        return AdsVideoInBetween( onVisibility: onVisible, data: adsData, afterReport: onComplete,getPlayer: getPlayer,);
-      }else{
-        return AdsInBetween(data: adsData, afterReport: onComplete,);
+  Widget getAdsInBetween(AdsData? adsData, Function(VisibilityInfo)? onVisible, Function() onComplete, Function(FlutterAliplayer, String) getPlayer, {bool isfull = false}) {
+    if (adsData != null) {
+      if (adsData.mediaType?.toLowerCase() == 'video') {
+        if (isfull) {
+          return AdsVideoInBetweenFull(
+            arguments: AdsArgument(data: adsData, adsUrl: '', isSponsored: true, onVisibility: onVisible, afterReport: onComplete, getPlayer: getPlayer),
+          );
+        }
+        return AdsVideoInBetween(onVisibility: onVisible, data: adsData, afterReport: onComplete, getPlayer: getPlayer);
+      } else {
+        if (isfull) {
+          return AdsInBetweenFull(arguments: AdsArgument(data: adsData, adsUrl: adsData.adsUrlLink ?? '', isSponsored: true));
+        }
+        return AdsInBetween(data: adsData, afterReport: onComplete);
       }
     }
     return const SizedBox.shrink();
@@ -182,22 +194,20 @@ extension ContextScreen on BuildContext {
     );
   }
 
-  handleActionIsGuest(Function() onSlipOut, {Function()? addAction}){
+  Future handleActionIsGuest(Function() onSlipOut, {Function()? addAction}) async {
     final bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
-    if(isGuest ?? false){
-      if(addAction != null){
+    if (isGuest ?? false) {
+      if (addAction != null) {
         addAction();
       }
-      ShowBottomSheet.onLoginApp(this);
-    }else{
+      await ShowBottomSheet().onLoginApp(this);
+    } else {
       onSlipOut();
     }
   }
-
 }
 
 extension StringDefine on String {
-
   String textToTitleCase() {
     if (length > 1) {
       return this[0].toUpperCase() + substring(1).toLowerCase();
@@ -208,24 +218,19 @@ extension StringDefine on String {
     return '';
   }
 
-  bool withHttp(){
-    if(length > 5){
+  bool withHttp() {
+    if (length > 5) {
       return substring(0, 4) == 'http';
-    }else{
+    } else {
       return false;
     }
-
   }
 
-  bool isSVG(){
+  bool isSVG() {
     return toLowerCase().contains('.svg');
   }
 
-  String get capitalizeFirstofEach =>
-      split(' ')
-      .map((element) => element.textToTitleCase())
-      .toList()
-      .join(' ');
+  String get capitalizeFirstofEach => split(' ').map((element) => element.textToTitleCase()).toList().join(' ');
 
   ContentType? translateType() {
     if (this == "video") {
@@ -292,76 +297,75 @@ extension StringDefine on String {
     return (substring(0, 1) == '#');
   }
 
-  Future<Uint8List?> getThumbBlob() async{
-    try{
-      final ByteData data =
-      await NetworkAssetBundle(Uri.parse(this)).load(this);
+  Future<Uint8List?> getThumbBlob() async {
+    try {
+      final ByteData data = await NetworkAssetBundle(Uri.parse(this)).load(this);
       final Uint8List bytes = data.buffer.asUint8List();
       return bytes;
-    }catch(e){
+    } catch (e) {
       'Error getThumbBlob: $e'.logger();
       return null;
     }
   }
 
-  String trimNewLines(){
+  String trimNewLines() {
     final values = split('\n');
     String result = '';
-    for(final value in values){
-      if(value.isNotEmpty){
+    for (final value in values) {
+      if (value.isNotEmpty) {
         result += '$value\n';
       }
     }
     return result;
   }
 
-  bool hasEmoji(){
+  bool hasEmoji() {
     return contains(RegExp(r'(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])'));
   }
 
-  bool isUrlLink(){
+  bool isUrlLink() {
     RegExp exp = new RegExp(r'(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-?=%.]+');
     return exp.hasMatch(this);
   }
 
-  int convertInteger(){
-    try{
+  int convertInteger() {
+    try {
       return int.parse(this);
-    }catch(e){
+    } catch (e) {
       return 0;
     }
   }
 
-  int getAdsTime(double seconds){
-    if(toLowerCase() == 'first'){
+  int getAdsTime(double seconds) {
+    if (toLowerCase() == 'first') {
       return 2;
-    }else if(toLowerCase() == 'mid'){
-      print('adsSkip seconds: ${seconds/2}');
-      return seconds~/2;
-    }else{
+    } else if (toLowerCase() == 'mid') {
+      print('adsSkip seconds: ${seconds / 2}');
+      return seconds ~/ 2;
+    } else {
       return (seconds - 2).toInt();
     }
   }
 
-  static String convertFormatterView(int currentView){
-    try{
+  static String convertFormatterView(int currentView) {
+    try {
       RegExp regex = RegExp(r'([.]*0)(?!.*\d)');
-      if(currentView < 1000){ 
+      if (currentView < 1000) {
         return currentView.toString();
-      }else if(currentView >= 1000 && currentView < (1000*100*10)){ 
-        double result = currentView/1000;
+      } else if (currentView >= 1000 && currentView < (1000 * 100 * 10)) {
+        double result = currentView / 1000;
         return "${double.parse(result.toString().replaceAll(regex, '')).toStringAsFixed(2)}k";
-      }else if(currentView >= 1000000 && currentView < (1000000*10*100)){ 
-        double result = currentView/1000000;
+      } else if (currentView >= 1000000 && currentView < (1000000 * 10 * 100)) {
+        double result = currentView / 1000000;
         return "${double.parse(result.toString().replaceAll(regex, '')).toStringAsFixed(2)}M";
-      }else if(currentView >= (1000000*10*100) && currentView < (1000000*10*100*100)){ 
-        double result = currentView/(1000000*10*100);
+      } else if (currentView >= (1000000 * 10 * 100) && currentView < (1000000 * 10 * 100 * 100)) {
+        double result = currentView / (1000000 * 10 * 100);
         return "${double.parse(result.toString().replaceAll(regex, '')).toStringAsFixed(2)}B";
-      }else if(currentView >= (1000000*10*100*100) && currentView < (1000000*10*100*100*100)){ 
-        double result = currentView/(1000000*10*100*100);
+      } else if (currentView >= (1000000 * 10 * 100 * 100) && currentView < (1000000 * 10 * 100 * 100 * 100)) {
+        double result = currentView / (1000000 * 10 * 100 * 100);
         return "${double.parse(result.toString().replaceAll(regex, '')).toStringAsFixed(2)}T";
       }
-    }catch(_){}
+    } catch (_) {}
     return currentView.toStringAsFixed(0);
   }
 }
@@ -381,16 +385,16 @@ extension IntegerExtension on int {
     }
   }
 
-  String getCountShort(){
-    if(this >= 1000000){
+  String getCountShort() {
+    if (this >= 1000000) {
       final million = (this / 1000000).ceil();
       final hundred = (this / 100000).ceil();
       return '$million.${hundred}M';
-    }else if(this >= 1000){
+    } else if (this >= 1000) {
       final thousand = (this / 1000).ceil();
       final hundred = (this / 100).ceil();
       return '$thousand.${hundred}K';
-    }else{
+    } else {
       return toString();
     }
   }
@@ -461,15 +465,8 @@ extension DateHelpers on DateTime {
   }
 }
 
-extension DurationExt on Duration{
-  String formatter() => [
-    inMinutes.remainder(60).toString().padLeft(2, '0'),
-    inSeconds.remainder(60).toString().padLeft(2, '0')
-  ].join(":");
+extension DurationExt on Duration {
+  String formatter() => [inMinutes.remainder(60).toString().padLeft(2, '0'), inSeconds.remainder(60).toString().padLeft(2, '0')].join(":");
 
-  String detail() => [
-    inHours.remainder(60).toString().padLeft(2, '0'),
-    inMinutes.remainder(60).toString().padLeft(2, '0'),
-    inSeconds.remainder(60).toString().padLeft(2, '0')
-  ].join(":");
+  String detail() => [inHours.remainder(60).toString().padLeft(2, '0'), inMinutes.remainder(60).toString().padLeft(2, '0'), inSeconds.remainder(60).toString().padLeft(2, '0')].join(":");
 }

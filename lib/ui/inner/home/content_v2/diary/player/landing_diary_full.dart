@@ -139,8 +139,9 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
       _curPostId = notifier.diaryData?[_curIdx].postID ?? '';
 
       start(context, notifier.diaryData?[_curIdx] ?? ContentData());
-
-      initAlipayer();
+      if (fAliplayer == null) {
+        initAlipayer();
+      }
     });
 
     _initializeTimer();
@@ -669,7 +670,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
       // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
     }
     fAliplayer?.stop();
-    fAliplayer?.destroy();
+    // fAliplayer?.destroy();
     // _pauseScreen();
     // if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
     //   fAliplayer?.destroy();
@@ -790,6 +791,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
               onPageChanged: (index) async {
                 _curIdx = index;
                 if (_lastCurIndex != _curIdx) {
+                  notifier.currIndex = _curIdx;
                   if (!isShowingDialog) {
                     globalAdsPopUp?.pause();
                   }
@@ -886,8 +888,8 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                     ),
                   );
                 }
-                // if (_curIdx == 0 && notifier.diaryData?[0].reportedStatus == 'BLURRED') {
-                if (notifier.diaryData?[0].reportedStatus == 'BLURRED') {
+                if (_curIdx == 0 && notifier.diaryData?[0].reportedStatus == 'BLURRED') {
+                  // if (notifier.diaryData?[0].reportedStatus == 'BLURRED') {
                   isPlay = false;
                   fAliplayer?.stop();
                 }
@@ -977,7 +979,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                           //
                           // }
                           notifier.setAdsData(index, null);
-                        }, (player, id) {}),
+                        }, (player, id) {}, isfull: true),
                       )
                     : Stack(
                         children: [

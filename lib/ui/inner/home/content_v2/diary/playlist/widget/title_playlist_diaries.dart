@@ -29,11 +29,15 @@ import '../../../../../../../app.dart';
 
 class TitlePlaylistDiaries extends StatefulWidget {
   final ContentData? data;
+  final bool? inProfile;
+  final Function()? callbackReport;
   // final StoryController? storyController;
 
   const TitlePlaylistDiaries({
     Key? key,
     this.data,
+    this.inProfile,
+    this.callbackReport,
     // this.storyController,
   }) : super(key: key);
 
@@ -124,7 +128,7 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                                 spaceProfileAndId: eightPx,
                                 haveStory: false,
                                 isCelebrity: false,
-                                isUserVerified: data?.privacy!.isIdVerified ?? false,
+                                isUserVerified: data?.privacy?.isIdVerified ?? false,
                                 onTapOnProfileImage: () {
                                   // fAliplayer?.setMuted(true);
                                   // fAliplayer?.pause();
@@ -143,40 +147,40 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                                 )}',
                               ),
                             ),
+                      if (widget.data?.email != SharedPreference().readStorage(SpKeys.email) && (widget.data?.isNewFollowing ?? false))
+                        Consumer<PreviewPicNotifier>(
+                          builder: (context, picNot, child) => GestureDetector(
+                            onTap: () {
+                              context.handleActionIsGuest(() async {
+                                if (widget.data?.insight?.isloadingFollow != true) {
+                                  picNot.followUser(context, widget.data!, isUnFollow: widget.data?.following, isloading: widget.data?.insight!.isloadingFollow ?? false);
+                                }
+                              });
+                            },
+                            child: widget.data?.insight?.isloadingFollow ?? false
+                                ? const SizedBox(
+                                    height: 40,
+                                    width: 30,
+                                    child: Align(
+                                      alignment: Alignment.bottomRight,
+                                      child: CustomLoading(),
+                                    ),
+                                  )
+                                : Center(
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                                      decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(8.0)),
+                                      // transform: Matrix4.translationValues(-40.0, 0.0, 0.0),
+                                      child: Text(
+                                        (widget.data?.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+                                        style: const TextStyle(color: kHyppeLightButtonText, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                                      ),
+                                    ),
+                                  ),
+                          ),
+                        ),
                     ],
                   ),
-                  if (widget.data?.email != SharedPreference().readStorage(SpKeys.email) && (widget.data?.isNewFollowing ?? false))
-                    Consumer<PreviewPicNotifier>(
-                      builder: (context, picNot, child) => GestureDetector(
-                        onTap: () {
-                          context.handleActionIsGuest(() async {
-                            if (widget.data?.insight?.isloadingFollow != true) {
-                              picNot.followUser(context, widget.data!, isUnFollow: widget.data?.following, isloading: widget.data?.insight!.isloadingFollow ?? false);
-                            }
-                          });
-                        },
-                        child: widget.data?.insight?.isloadingFollow ?? false
-                            ? const SizedBox(
-                                height: 40,
-                                width: 30,
-                                child: Align(
-                                  alignment: Alignment.bottomRight,
-                                  child: CustomLoading(),
-                                ),
-                              )
-                            : Center(
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-                                  decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(8.0)),
-                                  // transform: Matrix4.translationValues(-40.0, 0.0, 0.0),
-                                  child: Text(
-                                    (widget.data?.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
-                                    style: const TextStyle(color: kHyppeLightButtonText, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
-                                  ),
-                                ),
-                              ),
-                      ),
-                    ),
                   Row(
                     children: [
                       Visibility(
@@ -201,7 +205,7 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                               child: GestureDetector(
                                 onTap: () async {
                                   // widget.storyController.pause();
-                                  context.handleActionIsGuest(() async  {
+                                  context.handleActionIsGuest(() async {
                                     if (globalAliPlayer != null) {
                                       globalAliPlayer?.pause();
                                     }
@@ -218,7 +222,6 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                                       globalAliPlayer?.play();
                                     }
                                   });
-                                  
                                 },
                                 child: const CustomIconWidget(
                                   defaultColor: false,
@@ -232,26 +235,29 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                           ? CustomBalloonWidget(
                               child: GestureDetector(
                                 onTap: () async {
-                                  context.handleActionIsGuest(() async  {
-                                      // widget.storyController.pause();
-                                      if (globalAliPlayer != null) {
-                                        globalAliPlayer?.pause();
-                                      }
-                                      await ShowBottomSheet().onReportContent(
-                                        context,
-                                        postData: data,
-                                        type: hyppeDiary,
-                                        adsData: null,
-                                        onUpdate: () {
-                                          context.read<DiariesPlaylistNotifier>().onUpdate();
-                                          // widget.storyController.pause();
-                                        },
-                                      );
-                                      if (globalAliPlayer != null) {
-                                        globalAliPlayer?.play();
-                                      }
-                                      // widget.storyController.pause();
-                                  }); 
+                                  context.handleActionIsGuest(() async {
+                                    // widget.storyController.pause();
+                                    if (globalAliPlayer != null) {
+                                      globalAliPlayer?.pause();
+                                    }
+                                    await ShowBottomSheet().onReportContent(
+                                      context,
+                                      postData: data,
+                                      type: hyppeDiary,
+                                      adsData: null,
+                                      onUpdate: () {
+                                        context.read<DiariesPlaylistNotifier>().onUpdate();
+                                        // widget.storyController.pause();
+                                        if (widget.callbackReport != null) {
+                                          widget.callbackReport!.call();
+                                        }
+                                      },
+                                    );
+                                    if (globalAliPlayer != null) {
+                                      globalAliPlayer?.play();
+                                    }
+                                    // widget.storyController.pause();
+                                  });
                                 },
                                 child: const CustomIconWidget(
                                   defaultColor: false,

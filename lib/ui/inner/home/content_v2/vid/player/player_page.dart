@@ -811,14 +811,20 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
             _buildProgressBar(widget.width ?? 0, widget.height ?? 0),
             // _buildTipsWidget(widget.width ?? 0, widget.height ?? 0),
             if (isPlay && (adsData == null || (adsData != null && !widget.inLanding)))
-              Align(
-                alignment: Alignment.topCenter,
-                child: _buildController(
-                  Colors.transparent,
-                  Colors.white,
-                  100,
-                  widget.width ?? 0,
-                  widget.height ?? 0,
+              Positioned(
+                top: 0,
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Align(
+                  alignment: Alignment.center,
+                  child: _buildController(
+                    Colors.transparent,
+                    Colors.white,
+                    100,
+                    widget.width ?? 0,
+                    widget.height ?? 0,
+                  ),
                 ),
               ),
           ],

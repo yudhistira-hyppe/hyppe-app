@@ -109,7 +109,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
   @override
   void initState() {
-    "++++++++++++++ initState".logger();
+    "++++++++++++++ initState landing diary".logger();
     FirebaseCrashlytics.instance.setCustomKey('layout', 'LandingDiaryPage');
     final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
 
@@ -130,8 +130,10 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         indexKeySell = mn?.tutorialData.indexWhere((element) => element.key == 'sell') ?? 0;
         indexKeyProtection = mn?.tutorialData.indexWhere((element) => element.key == 'protection') ?? 0;
       }
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'DiaryLandingpage');
-      initAlipayer();
+      if (fAliplayer == null && fAliplayer?.getPlayerName().toString() != 'DiaryLandingpage') {
+        fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'DiaryLandingpage');
+        initAlipayer();
+      }
 
       //scroll
       // if (mounted) {
@@ -467,10 +469,11 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     //   playAuth:
     //       "eyJTZWN1cml0eVRva2VuIjoiQ0FJU2lBTjFxNkZ0NUIyeWZTaklyNURISnUvWnJvZFIrb1d2VlY2SmdHa0RPdFZjaDZMRG96ejJJSDFLZlhadEJPQWN0ZlF3bFdwVDdQNGJsckl1RjhJWkdoR2ZONU10dE1RUHJGL3dKb0hidk5ldTBic0hoWnY5bGNNTHJaaWpqcUhvZU96Y1lJNzMwWjdQQWdtMlEwWVJySkwrY1RLOUphYk1VL21nZ29KbWFkSTZSeFN4YVNFOGF2NWRPZ3BscnIwSVZ4elBNdnIvSFJQMnVtN1pIV3R1dEEwZTgzMTQ1ZmFRejlHaTZ4YlRpM2I5ek9FVXFPYVhKNFMvUGZGb05ZWnlTZjZvd093VUVxL2R5M3hvN3hGYjFhRjRpODRpL0N2YzdQMlFDRU5BK3dtbFB2dTJpOE5vSUYxV2E3UVdJWXRncmZQeGsrWjEySmJOa0lpbDVCdFJFZHR3ZUNuRldLR216c3krYjRIUEROc2ljcXZoTUhuZ3k4MkdNb0tQMHprcGVuVUdMZ2hIQ2JGRFF6MVNjVUZ3RjIyRmQvVDlvQTJRTWwvK0YvbS92ZnRvZ2NvbC9UTEI1c0dYSWxXRGViS2QzQnNETjRVMEIwRlNiRU5JaERPOEwvOWNLRndUSWdrOFhlN01WL2xhYUJGUHRLWFdtaUgrV3lOcDAzVkxoZnI2YXVOcGJnUHIxVVFwTlJxQUFaT3kybE5GdndoVlFObjZmbmhsWFpsWVA0V3paN24wTnVCbjlILzdWZHJMOGR5dHhEdCtZWEtKNWI4SVh2c0lGdGw1cmFCQkF3ZC9kakhYTjJqZkZNVFJTekc0T3pMS1dKWXVzTXQycXcwMSt4SmNHeE9iMGtKZjRTcnFpQ1RLWVR6UHhwakg0eDhvQTV6Z0cvZjVIQ3lFV3pISmdDYjhEeW9EM3NwRUh4RGciLCJBdXRoSW5mbyI6IntcIkNJXCI6XCJmOUc0eExxaHg2Tkk3YThaY1Q2N3hObmYrNlhsM05abmJXR1VjRmxTelljS0VKVTN1aVRjQ29Hd3BrcitqL2phVVRXclB2L2xxdCs3MEkrQTJkb3prd0IvKzc5ZlFyT2dLUzN4VmtFWUt6TT1cIixcIkNhbGxlclwiOlwiV2NKTEpvUWJHOXR5UmM2ZXg3LzNpQXlEcS9ya3NvSldhcXJvTnlhTWs0Yz1cIixcIkV4cGlyZVRpbWVcIjpcIjIwMjMtMDMtMTZUMDk6NDE6MzdaXCIsXCJNZWRpYUlkXCI6XCJjMWIyNGQzMGIyYzY3MWVkYmZjYjU0MjI4MGU5MDEwMlwiLFwiUGxheURvbWFpblwiOlwidm9kLmh5cHBlLmNsb3VkXCIsXCJTaWduYXR1cmVcIjpcIk9pbHhxelNyaVVhOGlRZFhaVEVZZEJpbUhJUT1cIn0iLCJWaWRlb01ldGEiOnsiU3RhdHVzIjoiTm9ybWFsIiwiVmlkZW9JZCI6ImMxYjI0ZDMwYjJjNjcxZWRiZmNiNTQyMjgwZTkwMTAyIiwiVGl0bGUiOiIyODg4MTdkYi1jNzdjLWM0ZTQtNjdmYi0zYjk1MTlmNTc0ZWIiLCJDb3ZlclVSTCI6Imh0dHBzOi8vdm9kLmh5cHBlLmNsb3VkL2MxYjI0ZDMwYjJjNjcxZWRiZmNiNTQyMjgwZTkwMTAyL3NuYXBzaG90cy9jYzM0MjVkNzJiYjM0YTE3OWU5NmMzZTA3NTViZjJjNi0wMDAwNC5qcGciLCJEdXJhdGlvbiI6NTkuMDQ5fSwiQWNjZXNzS2V5SWQiOiJTVFMuTlNybVVtQ1hwTUdEV3g4ZGlWNlpwaGdoQSIsIlBsYXlEb21haW4iOiJ2b2QuaHlwcGUuY2xvdWQiLCJBY2Nlc3NLZXlTZWNyZXQiOiIzU1NRUkdkOThGMU04TkZ0b00xa2NlU01IZlRLNkJvZm93VXlnS1Y5aEpQdyIsIlJlZ2lvbiI6ImFwLXNvdXRoZWFzdC01IiwiQ3VzdG9tZXJJZCI6NTQ1NDc1MzIwNTI4MDU0OX0=",
     // );
+    print("===== --- hit blur status ${data.reportedStatus}");
     if (data.reportedStatus != 'BLURRED') {
       if (data.isApsara ?? false) {
         // _playMode = ModeTypeAliPLayer.auth;
-        await getAuth(context, data.apsaraId ?? '');
+        await getAuth(data.apsaraId ?? '');
       } else {
         // _playMode = ModeTypeAliPLayer.url;
         await getOldVideoUrl(data.postID ?? '');
@@ -501,7 +504,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     // fAliplayer?.play();
   }
 
-  Future getAuth(BuildContext context, String apsaraId) async {
+  Future getAuth(String apsaraId) async {
     try {
       final fixContext = Routing.navigatorKey.currentContext;
       isloading = true;
@@ -515,6 +518,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
         Map jsonMap = json.decode(fetch.data.toString());
         auth = jsonMap['PlayAuth'];
+
+        print("==auth == $auth");
 
         fAliplayer?.setVidAuth(
           vid: apsaraId,
@@ -663,7 +668,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   void dispose() {
     print("=======dispose diary page ==========");
     fAliplayer?.stop();
-    fAliplayer?.destroy();
+    // fAliplayer?.destroy();
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
       // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
@@ -695,10 +700,11 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     print("=======didpop diary page $isPrepare ==========");
     isHomeScreen = true;
     isActivePage = true;
-    if (!isPrepare) {
-      fAliplayer?.prepare();
-    }
+
     if (dataSelected?.reportedStatus != 'BLURRED') {
+      if (!isPrepare) {
+        fAliplayer?.prepare();
+      }
       fAliplayer?.play();
     }
     _initializeTimer();
@@ -765,6 +771,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       isMute: isMute,
       seekPosition: _currentPosition,
     );
+
+    print("==== back page $res ");
 
     if (res != null || res == null) {
       fAliplayer?.play();
@@ -851,7 +859,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                 );
                               }
                               // if (_curIdx == 0 && notifier.diaryData?[0].reportedStatus == 'BLURRED') {
-                              if (notifier.diaryData?[0].reportedStatus == 'BLURRED') {
+                              if (notifier.diaryData?[_curIdx].reportedStatus == 'BLURRED') {
                                 isPlay = false;
                                 fAliplayer?.stop();
                               }
@@ -1043,6 +1051,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                                 onDetail: false,
                                                 isShare: data?.isShared,
                                                 onUpdate: () {
+                                                  if (notifier.diaryData?.isEmpty ?? [].isEmpty) {
+                                                    Routing().moveBack();
+                                                  }
                                                   (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 1);
                                                 },
                                                 fAliplayer: fAliplayer,
@@ -1303,7 +1314,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                                             )),
                                                       ),
                                                     ),
-                                              _showLoading && !homeNotifier.connectionError
+                                              _showLoading && !homeNotifier.connectionError && data?.reportedStatus != 'BLURRED'
                                                   ? const Positioned.fill(
                                                       child: Align(
                                                         alignment: Alignment.center,
