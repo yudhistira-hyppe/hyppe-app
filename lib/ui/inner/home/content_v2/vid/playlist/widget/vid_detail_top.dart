@@ -91,13 +91,13 @@ class VidDetailTop extends StatelessWidget {
               ? SizedBox(
                   width: 50,
                   child: CustomTextButton(
-                    onPressed: () => ShowBottomSheet().onReportContent(
+                    onPressed: () => context.handleActionIsGuest(() => ShowBottomSheet().onReportContent(
                       context,
                       postData: data,
                       type: hyppePic,
                       adsData: null,
                       onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
-                    ),
+                    ),),
                     child: const CustomIconWidget(
                       defaultColor: false,
                       iconData: '${AssetPath.vectorPath}more.svg',

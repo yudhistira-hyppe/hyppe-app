@@ -1067,7 +1067,9 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                 onDoubleTap: () {
                                   final _likeNotifier = context.read<LikeNotifier>();
                                   if (pics?[index] != null) {
-                                    _likeNotifier.likePost(context, pics![index]);
+                                    context.handleActionIsGuest(() {
+                                      _likeNotifier.likePost(context, pics![index]);
+                                    });
                                   }
                                 },
                                 child: Center(
@@ -1310,13 +1312,16 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                     ),
                                     onTap: () {
                                       if (pics?[index] != null) {
-                                        likeNotifier.likePost(context, pics![index]).then((value) {
-                                          List<ContentData>? pic = context.read<PreviewPicNotifier>().pic;
-                                          int idx = pic!.indexWhere((e) => e.postID == value['_id']);
-                                          pic[idx].insight?.isPostLiked = value['isPostLiked'];
-                                          pic[idx].insight?.likes = value['likes'];
-                                          pic[idx].isLiked = value['isLiked'];
+                                        context.handleActionIsGuest(() {
+                                          likeNotifier.likePost(context, pics![index]).then((value) {
+                                            List<ContentData>? pic = context.read<PreviewPicNotifier>().pic;
+                                            int idx = pic!.indexWhere((e) => e.postID == value['_id']);
+                                            pic[idx].insight?.isPostLiked = value['isPostLiked'];
+                                            pic[idx].insight?.likes = value['likes'];
+                                            pic[idx].isLiked = value['isLiked'];
+                                          });
                                         });
+                                        
                                       }
                                     },
                                   ),

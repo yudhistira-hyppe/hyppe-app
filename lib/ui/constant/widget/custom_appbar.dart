@@ -4,7 +4,6 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
-import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
@@ -29,6 +28,7 @@ class CustomAppBar extends StatelessWidget {
   final int currentPositionText;
   final bool showTipsWidget;
   final bool isMute;
+  final bool isVidFormProfile;
   final Function()? onTap;
   final Function onTapOnProfileImage;
   const CustomAppBar(
@@ -39,6 +39,7 @@ class CustomAppBar extends StatelessWidget {
       required this.email,
       required this.lang,
       this.currentPosition = 0,
+      this.isVidFormProfile = false,
       this.videoDuration = 1,
       this.currentPositionText = 0,
       this.showTipsWidget = false,
@@ -104,7 +105,7 @@ class CustomAppBar extends StatelessWidget {
                   )}',
                 ),
               ),
-              if (data!.email != email && (data!.isNewFollowing ?? false))
+              if (data!.email != email && (data!.isNewFollowing ?? false) && !isVidFormProfile)
                 Consumer<PreviewPicNotifier>(
                   builder: (context, picNot, child) => Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),

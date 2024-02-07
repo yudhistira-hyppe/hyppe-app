@@ -55,6 +55,7 @@ class VidScrollFullScreenPage extends StatefulWidget {
   final bool? isAutoPlay;
   final bool enableWakelock;
   final bool isLanding;
+  final bool isVidFormProfile;
   const VidScrollFullScreenPage({
     super.key,
     required this.aliPlayerView,
@@ -62,6 +63,7 @@ class VidScrollFullScreenPage extends StatefulWidget {
     required this.onClose,
     required this.isLanding,
     this.fAliplayer,
+    this.isVidFormProfile=false,
     this.slider,
     required this.videoIndicator,
     required this.thumbnail,
@@ -201,8 +203,10 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
       } catch (e) {
         _currentPosition = _videoDuration;
       }
-
-      nextPage();
+      setState(() {
+        isPause=true;
+      });
+      // nextPage();
     });
 
     widget.fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
@@ -452,6 +456,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                         )
                       : OrientationBuilder(builder: (context, orientation) {
                           final player = VidPlayerPage(
+                            isVidFormProfile: widget.isVidFormProfile,
                             fromFullScreen: true,
                             orientation: orientation,
                             playMode: (notifier.vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
@@ -539,6 +544,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 18.0),
                               child: CustomAppBar(
                                   orientation: orientation,
+                                  isVidFormProfile: widget.isVidFormProfile,
                                   data: widget.data,
                                   currentPosition: _currentPosition,
                                   currentPositionText: _currentPositionText,
@@ -666,7 +672,9 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                       Consumer<LikeNotifier>(
                           builder: (context, likeNotifier, child) => buttonVideoRight(
                               onFunctionTap: () {
-                                likeNotifier.likePost(context, widget.data);
+                                context.handleActionIsGuest(() {
+                                  likeNotifier.likePost(context, widget.data);
+                                });
                               },
                               iconData: '${AssetPath.vectorPath}${(widget.data.insight?.isPostLiked ?? false) ? 'liked.svg' : 'love-shadow.svg'}',
                               value: widget.data.insight!.likes! > 0 ? '${widget.data.insight?.likes}' : '${lang?.like}',
@@ -1073,24 +1081,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
           decoration: BoxDecoration(
             color: backgroundColor,
           ),
-          child: _showTipsWidget
-              ? Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      widget.fAliplayer?.prepare();
-                      widget.fAliplayer?.play();
-                      setState(() {
-                        isPause = false;
-                        _showTipsWidget = false;
-                      });
-                    },
-                    child: const CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}pause3.svg",
-                      defaultColor: false,
-                    ),
-                  ),
-                )
-              : Row(
+          child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     _buildSkipPrev(iconColor, barHeight),
@@ -1113,9 +1104,14 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
       onTap: () {
         if (isPause) {
           if (_currentPosition == _videoDuration){
+            _inSeek = false;
             _currentPosition = 0;
+            setState(() {
+              _showTipsWidget = false;
+            });
             widget.fAliplayer?.seekTo(_currentPosition.ceil(), FlutterAvpdef.ACCURATE);
           }
+          
           widget.fAliplayer?.play();
           isPause = false;
           setState(() {});

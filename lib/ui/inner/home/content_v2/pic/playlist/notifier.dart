@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 
@@ -364,16 +365,18 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
   void showUserTag(BuildContext context, data, postId, {FlutterAliplayer? fAliplayer, String? title, Orientation? orientation}) {
     print('title $title');
     fAliplayer?.pause();
-    ShowBottomSheet.onShowUserTag(
-      context,
-      value: data,
-      function: () {},
-      postId: postId,
-      title: title,
-      // storyController: storyController,
-      fAliplayer: fAliplayer,
-      orientation: orientation
-    );
+    context.handleActionIsGuest(() {
+      ShowBottomSheet.onShowUserTag(
+        context,
+        value: data,
+        function: () {},
+        postId: postId,
+        title: title,
+        // storyController: storyController,
+        fAliplayer: fAliplayer,
+        orientation: orientation
+      );
+    });
   }
 
   void showContentSensitive() {

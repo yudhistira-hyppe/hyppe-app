@@ -254,7 +254,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
           "===================== isPlaying ${widget.isPlaying}".logger();
           // Wakelock.enable();
           setState(() {
-            isloading = true;
+            isloading = false;
           });
         }
 
@@ -1045,11 +1045,13 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
   Future<VideoIndicator> navigateTo(VideoNotifier notifier, int changevalue) async {
     print('page fullscreen ${widget.isVidFormProfile ?? false}');
     if (widget.isVidFormProfile ?? false) {
+      // if (isPause)
       return await Navigator.of(context, rootNavigator: true).push(
         CupertinoPageRoute(
             builder: (_) => VidScrollFullScreenPage(
                 enableWakelock: widget.enableWakelock,
                 aliPlayerView: aliPlayerView!,
+                isVidFormProfile: widget.isVidFormProfile??false,
                 thumbnail: (widget.data?.isApsara ?? false) ? (widget.data?.mediaThumbEndPoint ?? '') : '${widget.data?.fullThumbPath}',
                 fAliplayer: fAliplayer,
                 data: widget.data ?? ContentData(),
@@ -1244,119 +1246,123 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                     ? blurContentWidget(context, widget.data!)
                     : GestureDetector(
                         onTap: () async {
-                          onTapCtrl = true;
-                          setState(() {});
-
-                          print('data Fullscreen ${widget.fromFullScreen}');
-
-                          if (!widget.fromFullScreen) {
-                            int changevalue;
-                            changevalue = _currentPosition + 1000;
-                            if (changevalue > _videoDuration) {
-                              changevalue = _videoDuration;
-                            }
-                            if (widget.orientation == Orientation.portrait) {
-                              "=============== pause 3".logger();
-                              // fAliplayer?.pause();
-                              // setState(() {
-                              //   isloading = true;
-                              // });
-                              await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-                              if ((widget.data?.metadata?.height ?? 0) < (widget.data?.metadata?.width ?? 0)) {
-                                print('Landscape VidPlayerPage');
-                                SystemChrome.setPreferredOrientations([
-                                  DeviceOrientation.landscapeLeft,
-                                  DeviceOrientation.landscapeRight,
-                                ]);
-                              } else {
-                                print('Portrait VidPlayerPage');
-                                SystemChrome.setPreferredOrientations([
-                                  DeviceOrientation.portraitUp,
-                                  DeviceOrientation.portraitDown,
-                                ]);
+                          print('page fullscreen $isPause $isPlay');
+                          
+                          setState(() {onTapCtrl = true;});
+                          if (!widget.fromFullScreen && (widget.isVidFormProfile??false) && !isPlay){
+                            fAliplayer?.play();
+                            setState(() {isPause = false;});
+                          }else{
+                            print('data Fullscreen ${widget.fromFullScreen}');
+                            if (!widget.fromFullScreen) {
+                              int changevalue;
+                              changevalue = _currentPosition + 1000;
+                              if (changevalue > _videoDuration) {
+                                changevalue = _videoDuration;
                               }
-                              notifier.firstIndex = widget.index ?? 0;
-                              VideoIndicator value = await navigateTo(notifier, changevalue);
+                              if (widget.orientation == Orientation.portrait) {
+                                "=============== pause 3".logger();
+                                // fAliplayer?.pause();
+                                // setState(() {
+                                //   isloading = true;
+                                // });
+                                await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+                                if ((widget.data?.metadata?.height ?? 0) < (widget.data?.metadata?.width ?? 0)) {
+                                  print('Landscape VidPlayerPage');
+                                  SystemChrome.setPreferredOrientations([
+                                    DeviceOrientation.landscapeLeft,
+                                    DeviceOrientation.landscapeRight,
+                                  ]);
+                                } else {
+                                  print('Portrait VidPlayerPage');
+                                  SystemChrome.setPreferredOrientations([
+                                    DeviceOrientation.portraitUp,
+                                    DeviceOrientation.portraitDown,
+                                  ]);
+                                }
+                                notifier.firstIndex = widget.index ?? 0;
+                                VideoIndicator value = await navigateTo(notifier, changevalue);
 
-                              // int changevalue;
-                              // changevalue = _currentPosition + 1000;
-                              // if (changevalue > _videoDuration) {
-                              //   changevalue = _videoDuration;
-                              // }
+                                // int changevalue;
+                                // changevalue = _currentPosition + 1000;
+                                // if (changevalue > _videoDuration) {
+                                //   changevalue = _videoDuration;
+                                // }
 
-                              notifier.isLoading = true;
-                              Future.delayed(const Duration(seconds: 6), () {
-                                notifier.isLoading = false;
-                              });
-                              if (mounted) {
-                                setState(() {
+                                notifier.isLoading = true;
+                                Future.delayed(const Duration(seconds: 6), () {
+                                  notifier.isLoading = false;
+                                });
+                                if (mounted) {
+                                  setState(() {
+                                    _videoDuration = value.videoDuration ?? 0;
+                                    _currentPosition = value.seekValue ?? 0;
+                                    _currentPositionText = value.positionText ?? 0;
+                                    _showTipsWidget = value.showTipsWidget ?? false;
+                                    isMute = value.isMute ?? false;
+                                    isPlay = !_showTipsWidget;
+                                  });
+                                } else {
                                   _videoDuration = value.videoDuration ?? 0;
                                   _currentPosition = value.seekValue ?? 0;
                                   _currentPositionText = value.positionText ?? 0;
                                   _showTipsWidget = value.showTipsWidget ?? false;
                                   isMute = value.isMute ?? false;
                                   isPlay = !_showTipsWidget;
+                                }
+                                fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
+                                  if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
+                                    if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
+                                      _currentPosition = extraValue ?? 0;
+                                    }
+                                    if (!_inSeek) {
+                                      try {
+                                        setState(() {
+                                          _currentPositionText = extraValue ?? 0;
+                                        });
+                                      } catch (e) {
+                                        print(e);
+                                      }
+                                    }
+                                  } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
+                                    // _bufferPosition = extraValue ?? 0;
+                                    if (mounted) {
+                                      setState(() {});
+                                    }
+                                  } else if (infoCode == FlutterAvpdef.AUTOPLAYSTART) {
+                                    // Fluttertoast.showToast(msg: "AutoPlay");
+                                  } else if (infoCode == FlutterAvpdef.CACHESUCCESS) {
+                                    // Fluttertoast.showToast(msg: "Cache Success");
+                                  } else if (infoCode == FlutterAvpdef.CACHEERROR) {
+                                    // Fluttertoast.showToast(msg: "Cache Error $extraMsg");
+                                  } else if (infoCode == FlutterAvpdef.LOOPINGSTART) {
+                                    // Fluttertoast.showToast(msg: "Looping Start");
+                                  } else if (infoCode == FlutterAvpdef.SWITCHTOSOFTWAREVIDEODECODER) {
+                                    // Fluttertoast.showToast(msg: "change to soft ware decoder");
+                                    // mOptionsFragment.switchHardwareDecoder();
+                                  }
+                                });
+                                fAliplayer?.setOnCompletion((playerId) {
+                                  _showTipsWidget = true;
+                                  _showLoading = false;
+                                  _tipsContent = "Play Again";
+                                  isPause = true;
+                                  setState(() {
+                                    _currentPosition = _videoDuration;
+                                  });
                                 });
                               } else {
-                                _videoDuration = value.videoDuration ?? 0;
-                                _currentPosition = value.seekValue ?? 0;
-                                _currentPositionText = value.positionText ?? 0;
-                                _showTipsWidget = value.showTipsWidget ?? false;
-                                isMute = value.isMute ?? false;
-                                isPlay = !_showTipsWidget;
+                                Navigator.pop(context, changevalue);
                               }
-                              fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
-                                if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
-                                  if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
-                                    _currentPosition = extraValue ?? 0;
-                                  }
-                                  if (!_inSeek) {
-                                    try {
-                                      setState(() {
-                                        _currentPositionText = extraValue ?? 0;
-                                      });
-                                    } catch (e) {
-                                      print(e);
-                                    }
-                                  }
-                                } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
-                                  // _bufferPosition = extraValue ?? 0;
-                                  if (mounted) {
-                                    setState(() {});
-                                  }
-                                } else if (infoCode == FlutterAvpdef.AUTOPLAYSTART) {
-                                  // Fluttertoast.showToast(msg: "AutoPlay");
-                                } else if (infoCode == FlutterAvpdef.CACHESUCCESS) {
-                                  // Fluttertoast.showToast(msg: "Cache Success");
-                                } else if (infoCode == FlutterAvpdef.CACHEERROR) {
-                                  // Fluttertoast.showToast(msg: "Cache Error $extraMsg");
-                                } else if (infoCode == FlutterAvpdef.LOOPINGSTART) {
-                                  // Fluttertoast.showToast(msg: "Looping Start");
-                                } else if (infoCode == FlutterAvpdef.SWITCHTOSOFTWAREVIDEODECODER) {
-                                  // Fluttertoast.showToast(msg: "change to soft ware decoder");
-                                  // mOptionsFragment.switchHardwareDecoder();
-                                }
-                              });
-                              fAliplayer?.setOnCompletion((playerId) {
-                                _showTipsWidget = true;
-                                _showLoading = false;
-                                _tipsContent = "Play Again";
-                                isPause = true;
-                                setState(() {
-                                  _currentPosition = _videoDuration;
-                                });
-                              });
-                            } else {
-                              Navigator.pop(context, changevalue);
                             }
                           }
+                          
                         },
                         onDoubleTap: () {
                           final likeNotifier = context.read<LikeNotifier>();
                           if (widget.data != null) {
                             likeNotifier.likePost(context, widget.data!);
                           }
-                          print('data Fullscreen ${widget.fromFullScreen}');
                         },
                         child: Stack(
                           children: [
@@ -1404,6 +1410,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                         height: widget.orientation == Orientation.portrait ? kToolbarHeight * 2 : kToolbarHeight * 1.4,
                                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 18.0),
                                         child: CustomAppBar(
+                                            isVidFormProfile: widget.isVidFormProfile??false,
                                             orientation: widget.orientation,
                                             data: widget.data ?? ContentData(),
                                             currentPosition: _currentPosition,
@@ -1769,7 +1776,6 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
               }
             });
             fAliplayer?.seekTo(_currentPosition.ceil(), FlutterAvpdef.ACCURATE);
-            print('disini');
           }
           fAliplayer?.play();
           isPause = false;

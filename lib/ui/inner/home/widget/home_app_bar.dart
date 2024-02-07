@@ -90,7 +90,7 @@ class HomeAppBar extends StatelessWidget {
       title: (offset ?? 0) <= 150
           ? Text(
               // "$offset",
-              "Halo, $helloName! ",
+              "Halo, $helloName ",
               style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w700,

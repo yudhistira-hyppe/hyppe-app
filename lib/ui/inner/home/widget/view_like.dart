@@ -149,30 +149,33 @@ class _ViewLikedState extends State<ViewLiked> {
                                         },
                                       ),
                                       if ((notifier.listLikeView?.guest ?? 0) > 0)
-                                        ListTile(
-                                          contentPadding: EdgeInsets.zero,
-                                          leading: StoryColorValidator(
-                                            haveStory: false,
-                                            featureType: FeatureType.pic,
-                                            child: CustomProfileImage(
-                                              width: 40,
-                                              height: 40,
-                                              onTap: null,
-                                              imageUrl: '',
-                                              badge: null,
-                                              following: true,
-                                              onFollow: () {},
+                                        Transform.translate(
+                                          offset: const Offset(0.0, -24),
+                                          child: ListTile(
+                                            contentPadding: EdgeInsets.zero,
+                                            leading: StoryColorValidator(
+                                              haveStory: false,
+                                              featureType: FeatureType.pic,
+                                              child: CustomProfileImage(
+                                                width: 40,
+                                                height: 40,
+                                                onTap: null,
+                                                imageUrl: '',
+                                                badge: null,
+                                                following: true,
+                                                onFollow: () {},
+                                              ),
                                             ),
-                                          ),
-                                          title: CustomTextWidget(
-                                            textToDisplay: 'Guest',
-                                            textStyle: Theme.of(context).textTheme.titleSmall,
-                                            textAlign: TextAlign.start,
-                                          ),
-                                          trailing: CustomTextWidget(
-                                            textToDisplay: '${notifier.listLikeView?.guest}',
-                                            textStyle: Theme.of(context).textTheme.titleSmall,
-                                            textAlign: TextAlign.start,
+                                            title: CustomTextWidget(
+                                              textToDisplay: 'Guest',
+                                              textStyle: Theme.of(context).textTheme.titleSmall,
+                                              textAlign: TextAlign.start,
+                                            ),
+                                            trailing: CustomTextWidget(
+                                              textToDisplay: '${notifier.listLikeView?.guest}',
+                                              textStyle: Theme.of(context).textTheme.titleSmall,
+                                              textAlign: TextAlign.start,
+                                            ),
                                           ),
                                         )
                                     ],

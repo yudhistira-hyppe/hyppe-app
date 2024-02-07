@@ -434,6 +434,7 @@ class SelfProfileNotifier with ChangeNotifier {
           argument: SlidedPicDetailScreenArgument(
             page: index,
             type: TypePlaylist.mine,
+            isProfile: true,
             titleAppbar: title,
             pageSrc: PageSrc.selfProfile,
             picData: user.pics,
@@ -449,6 +450,7 @@ class SelfProfileNotifier with ChangeNotifier {
             page: index,
             type: TypePlaylist.mine,
             titleAppbar: title,
+            isProfile: true,
             pageSrc: PageSrc.selfProfile,
             diaryData: user.diaries,
             scrollController: scrollController,
@@ -462,6 +464,7 @@ class SelfProfileNotifier with ChangeNotifier {
           argument: SlidedVidDetailScreenArgument(
             page: index,
             type: TypePlaylist.mine,
+            isProfile: true,
             titleAppbar: title,
             pageSrc: PageSrc.selfProfile,
             vidData: user.vids,

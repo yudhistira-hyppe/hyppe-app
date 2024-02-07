@@ -1358,7 +1358,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                   child: GestureDetector(
                                     onTap: () {
                                       widget.fAliplayer?.pause();
-                                      context.read<PicDetailNotifier>().showUserTag(context, widget.data.tagPeople, widget.data.postID, title: lang!.inthisphoto, fAliplayer: widget.fAliplayer, orientation: orientation);
+                                      context.read<PicDetailNotifier>().showUserTag(context, widget.data.tagPeople, widget.data.postID, title: lang!.inThisVideo, fAliplayer: widget.fAliplayer, orientation: orientation);
                                       setState(() {
                                         isPause = true;
                                       });

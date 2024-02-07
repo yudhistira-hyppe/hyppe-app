@@ -409,7 +409,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                       following: true,
                       haveStory: false,
                       textColor: kHyppeTextLightPrimary,
-                      username: vidData?[index].username,
+                      username: '${widget.arguments?.isProfile??false}',
                       featureType: FeatureType.other,
                       // isCelebrity: vidnotifier.diaryData?[index].privacy?.isCelebrity,
                       isCelebrity: false,
@@ -552,8 +552,9 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                     ? Container(
                         margin: const EdgeInsets.only(bottom: 20),
                         child: Builder(builder: (context) {
-                          return VidPlayerPage(
-                            isVidFormProfile: true,
+                          return 
+                          VidPlayerPage(
+                            isVidFormProfile: widget.arguments!.isProfile??false,
                             enableWakelock: false,
                             orientation: Orientation.portrait,
                             playMode: (vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
@@ -707,12 +708,14 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                     ),
                                     onTap: () {
                                       if (vidData != null) {
-                                        likeNotifier.likePost(context, vidData?[index] ?? ContentData()).then((value) {
-                                          List<ContentData>? vidData = context.read<PreviewVidNotifier>().vidData;
-                                          int idx = vidData!.indexWhere((e) => e.postID == value['_id']);
-                                          vidData[idx].insight?.isPostLiked = value['isPostLiked'];
-                                          vidData[idx].insight?.likes = value['likes'];
-                                          vidData[idx].isLiked = value['isLiked'];
+                                        context.handleActionIsGuest(() {
+                                          likeNotifier.likePost(context, vidData?[index] ?? ContentData()).then((value) {
+                                            List<ContentData>? vidData = context.read<PreviewVidNotifier>().vidData;
+                                            int idx = vidData!.indexWhere((e) => e.postID == value['_id']);
+                                            vidData[idx].insight?.isPostLiked = value['isPostLiked'];
+                                            vidData[idx].insight?.likes = value['likes'];
+                                            vidData[idx].isLiked = value['isLiked'];
+                                          });
                                         });
                                       }
                                     },
@@ -1229,103 +1232,106 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
 
   Widget blurContentWidget(BuildContext context, ContentData data) {
     final transnot = Provider.of<TranslateNotifierV2>(context, listen: false);
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(12),
-      child: AspectRatio(
-        aspectRatio: 19 / 10,
-        child: Stack(
-          children: [
-            Center(
-              child: ClipRRect(
-                // borderRadius: BorderRadius.circular(8.0),
-                child: CustomBackgroundLayer(
-                  sigmaX: 10,
-                  sigmaY: 10,
-                  thumbnail: (data.isApsara ?? false) ? (data.mediaThumbEndPoint ?? '') : '${data.fullThumbPath}',
-                ),
-              ),
-            ),
-            Positioned.fill(
-              child: Center(
-                  child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    twelvePx,
-                    const CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}eye-off.svg",
-                      defaultColor: false,
-                      height: 24,
-                      color: Colors.white,
-                    ),
-                    fourPx,
-                    Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600)),
-                    fourPx,
-                    Text("${transnot.translate.contentContainsSensitiveMaterial}",
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                        )),
-                    data.email == SharedPreference().readStorage(SpKeys.email)
-                        ? GestureDetector(
-                            onTap: () async {
-                              System().checkConnections().then((value) {
-                                if (value) {
-                                  Routing().move(Routes.appeal, argument: data);
-                                }
-                              });
-                            },
-                            child: Container(
-                                padding: const EdgeInsets.all(8),
-                                margin: const EdgeInsets.only(top: 6),
-                                decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
-                                child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
-                          )
-                        : const SizedBox(),
-                    thirtyTwoPx,
-                  ],
-                ),
-              )),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      data.reportedStatus = '';
-                    });
-
-                    // start(data);
-                    // context.read<ReportNotifier>().seeContent(context, data, hyppeVid);
-                    data.fAliplayer?.prepare();
-                    data.fAliplayer?.play();
-                    // context.read<ReportNotifier>().seeContent(context, videoData!, hyppeVid);
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.only(top: 8, bottom: 8),
-                    margin: const EdgeInsets.all(8),
-                    width: SizeConfig.screenWidth,
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        top: BorderSide(
-                          color: Colors.white,
-                          width: 1,
-                        ),
-                      ),
-                    ),
-                    child: Text(
-                      "${transnot.translate.see} Vid",
-                      style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
-                      textAlign: TextAlign.center,
-                    ),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12.0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: AspectRatio(
+          aspectRatio: 19 / 13,
+          child: Stack(
+            children: [
+              Center(
+                child: ClipRRect(
+                  // borderRadius: BorderRadius.circular(8.0),
+                  child: CustomBackgroundLayer(
+                    sigmaX: 10,
+                    sigmaY: 10,
+                    thumbnail: (data.isApsara ?? false) ? (data.mediaThumbEndPoint ?? '') : '${data.fullThumbPath}',
                   ),
                 ),
-              ],
-            )
-          ],
+              ),
+              Positioned.fill(
+                child: Center(
+                    child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      twelvePx,
+                      const CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}eye-off.svg",
+                        defaultColor: false,
+                        height: 24,
+                        color: Colors.white,
+                      ),
+                      fourPx,
+                      Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600)),
+                      fourPx,
+                      Text("${transnot.translate.contentContainsSensitiveMaterial}",
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          )),
+                      data.email == SharedPreference().readStorage(SpKeys.email)
+                          ? GestureDetector(
+                              onTap: () async {
+                                System().checkConnections().then((value) {
+                                  if (value) {
+                                    Routing().move(Routes.appeal, argument: data);
+                                  }
+                                });
+                              },
+                              child: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  margin: const EdgeInsets.only(top: 6),
+                                  decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
+                                  child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+                            )
+                          : const SizedBox(),
+                      thirtyTwoPx,
+                    ],
+                  ),
+                )),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        data.reportedStatus = '';
+                      });
+    
+                      // start(data);
+                      // context.read<ReportNotifier>().seeContent(context, data, hyppeVid);
+                      data.fAliplayer?.prepare();
+                      data.fAliplayer?.play();
+                      // context.read<ReportNotifier>().seeContent(context, videoData!, hyppeVid);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.only(top: 8, bottom: 8),
+                      margin: const EdgeInsets.all(8),
+                      width: SizeConfig.screenWidth,
+                      decoration: const BoxDecoration(
+                        border: Border(
+                          top: BorderSide(
+                            color: Colors.white,
+                            width: 1,
+                          ),
+                        ),
+                      ),
+                      child: Text(
+                        "${transnot.translate.see} Vid",
+                        style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
