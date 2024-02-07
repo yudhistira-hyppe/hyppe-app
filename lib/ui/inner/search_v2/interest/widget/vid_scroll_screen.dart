@@ -578,6 +578,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
           ),
           twelvePx,
           CustomNewDescContent(
+            email: vidData[index].email??'',
             username: vidData[index].username ?? '',
             desc: "${vidData[index].description}",
             trimLines: 2,

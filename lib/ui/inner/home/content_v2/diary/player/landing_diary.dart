@@ -1506,6 +1506,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                   twelvePx,
                                   CustomNewDescContent(
                                     // desc: "${data?.description}",
+                                    email: data?.email??'',
                                     username: data?.username ?? '',
                                     desc: "${data?.description}",
                                     trimLines: 3,

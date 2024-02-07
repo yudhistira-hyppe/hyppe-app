@@ -979,6 +979,7 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
           twelvePx,
           CustomNewDescContent(
             // desc: "${data?.description}",
+            email: diaryData[index].email??'',
             username: diaryData[index].username ?? '',
             desc: "${diaryData[index].description}",
             trimLines: 2,

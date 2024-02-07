@@ -15,6 +15,7 @@ import '../../../core/services/system.dart';
 import '../../inner/notification/notifier.dart';
 
 class CustomNewDescContent extends StatefulWidget {
+  final String? email;
   final String username;
   final String desc;
   final int trimLines;
@@ -32,6 +33,7 @@ class CustomNewDescContent extends StatefulWidget {
 
   CustomNewDescContent(
       {Key? key,
+      this.email,
       required this.username,
       required this.desc,
       this.trimLines = 2,
@@ -178,6 +180,7 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
         return Text.rich(
           TextSpan(
               text: "${widget.username} ",
+              recognizer: TapGestureRecognizer()..onTap = () => System().navigateToProfile(context, widget.email ?? ''),
               style: const TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
@@ -198,6 +201,7 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
         return Text.rich(
           TextSpan(
               text: "${widget.username} ",
+              recognizer: TapGestureRecognizer()..onTap = () => System().navigateToProfile(context, widget.email ?? ''),
               style: const TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
