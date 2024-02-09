@@ -70,61 +70,63 @@ class _AdsVideoInBetweenFullState extends State<AdsVideoInBetweenFull> with Widg
   Widget build(BuildContext context) {
     final language = context.read<TranslateNotifierV2>().translate;
     AdsData data = widget.arguments.data;
-    return Consumer<VideoNotifier>(builder: (context, notifier, _) {
-      return Stack(
-        children: [
-          Positioned.fill(
-            child: VisibilityDetector(
-              key: Key(data.videoId ?? 'ads'),
-              onVisibilityChanged: (info) {
-                if (widget.arguments.onVisibility != null) {
-                  widget.arguments.onVisibility!(info);
-                }
-                if (info.visibleFraction >= 0.9) {
-                  notifier.currentPostID = data.adsId ?? '';
-                  globalAdsInBetween?.play();
-                }
-              },
-              child: AspectRatio(
-                aspectRatio: ratio,
-                child: notifier.currentPostID == data.adsId
-                    ? InBetweenScreen(
-                        adsData: data,
-                        player: widget.arguments.player,
-                        ratio: ratio,
-                        onRatioChanged: (fix) {
-                          setState(
-                            () {
-                              ratio = fix;
-                            },
-                          );
-                        },
-                        getPlayer: widget.arguments.getPlayer!,
-                      )
-                    : Container(
-                        decoration: const BoxDecoration(color: Colors.black, borderRadius: BorderRadius.all(Radius.circular(16.0))),
-                        alignment: Alignment.center,
-                        child: const CustomLoading(),
-                      ),
+    return Scaffold(
+      body: Consumer<VideoNotifier>(builder: (context, notifier, _) {
+        return Stack(
+          children: [
+            Positioned.fill(
+              child: VisibilityDetector(
+                key: Key(data.videoId ?? 'ads'),
+                onVisibilityChanged: (info) {
+                  if (widget.arguments.onVisibility != null) {
+                    widget.arguments.onVisibility!(info);
+                  }
+                  if (info.visibleFraction >= 0.9) {
+                    notifier.currentPostID = data.adsId ?? '';
+                    globalAdsInBetween?.play();
+                  }
+                },
+                child: AspectRatio(
+                  aspectRatio: ratio,
+                  child: notifier.currentPostID == data.adsId
+                      ? InBetweenScreen(
+                          adsData: data,
+                          player: widget.arguments.player,
+                          ratio: ratio,
+                          onRatioChanged: (fix) {
+                            setState(
+                              () {
+                                ratio = fix;
+                              },
+                            );
+                          },
+                          getPlayer: widget.arguments.getPlayer!,
+                        )
+                      : Container(
+                          decoration: const BoxDecoration(color: Colors.black, borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                          alignment: Alignment.center,
+                          child: const CustomLoading(),
+                        ),
+                ),
               ),
             ),
-          ),
-          _buildBody(context, SizeConfig.screenWidth, data),
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              margin: const EdgeInsets.only(top: kTextTabBarHeight - 12, left: 12.0),
-              padding: const EdgeInsets.symmetric(vertical: 18.0),
-              width: double.infinity,
-              height: kToolbarHeight * 1.6,
-              child: appBar(data),
+            _buildBody(context, SizeConfig.screenWidth, data),
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                margin: const EdgeInsets.only(top: kTextTabBarHeight - 12, left: 12.0),
+                padding: const EdgeInsets.symmetric(vertical: 18.0),
+                width: double.infinity,
+                height: kToolbarHeight * 1.6,
+                child: appBar(data),
+              ),
             ),
-          ),
-        ],
-      );
-    });
+          ],
+        );
+      }),
+    );
   }
 
   Widget appBar(AdsData data) {

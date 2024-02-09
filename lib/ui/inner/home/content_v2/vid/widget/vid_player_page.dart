@@ -1051,7 +1051,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             builder: (_) => VidScrollFullScreenPage(
                 enableWakelock: widget.enableWakelock,
                 aliPlayerView: aliPlayerView!,
-                isVidFormProfile: widget.isVidFormProfile??false,
+                isVidFormProfile: widget.isVidFormProfile ?? false,
                 thumbnail: (widget.data?.isApsara ?? false) ? (widget.data?.mediaThumbEndPoint ?? '') : '${widget.data?.fullThumbPath}',
                 fAliplayer: fAliplayer,
                 data: widget.data ?? ContentData(),
@@ -1247,12 +1247,16 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                     : GestureDetector(
                         onTap: () async {
                           print('page fullscreen $isPause $isPlay');
-                          
-                          setState(() {onTapCtrl = true;});
-                          if (!widget.fromFullScreen && (widget.isVidFormProfile??false) && !isPlay){
+
+                          setState(() {
+                            onTapCtrl = true;
+                          });
+                          if (!widget.fromFullScreen && (widget.isVidFormProfile ?? false) && !isPlay) {
                             fAliplayer?.play();
-                            setState(() {isPause = false;});
-                          }else{
+                            setState(() {
+                              isPause = false;
+                            });
+                          } else {
                             print('data Fullscreen ${widget.fromFullScreen}');
                             if (!widget.fromFullScreen) {
                               int changevalue;
@@ -1356,7 +1360,6 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                               }
                             }
                           }
-                          
                         },
                         onDoubleTap: () {
                           final likeNotifier = context.read<LikeNotifier>();
@@ -1410,7 +1413,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                         height: widget.orientation == Orientation.portrait ? kToolbarHeight * 2 : kToolbarHeight * 1.4,
                                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 18.0),
                                         child: CustomAppBar(
-                                            isVidFormProfile: widget.isVidFormProfile??false,
+                                            isVidFormProfile: widget.isVidFormProfile ?? false,
                                             orientation: widget.orientation,
                                             data: widget.data ?? ContentData(),
                                             currentPosition: _currentPosition,
@@ -2860,7 +2863,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
           if (widget.data!.allowComments ?? false)
             buttonVideoRight(
               onFunctionTap: () {
-                Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: widget.data?.postID ?? '', fromFront: true, data: widget.data!));
+                Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: widget.data?.postID ?? '', fromFront: true, data: widget.data!, pageDetail: widget.fromFullScreen));
               },
               iconData: '${AssetPath.vectorPath}comment-shadow.svg',
               value: widget.data!.comments! > 0 ? widget.data!.comments.toString() : lang?.comments ?? '',

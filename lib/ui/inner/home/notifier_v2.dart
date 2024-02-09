@@ -1064,6 +1064,8 @@ class HomeNotifier with ChangeNotifier {
       print("===-=-=-=-=- parentID $parentID");
 
       if (parentID == null) {
+        print("===-=-=-=-=- pageDetail $pageDetail ${diaryScroll.diaryData?.length}");
+
         if (pageDetail) {
           picScroll.pics?.forEach((e) {
             if (e.postID == postID) {

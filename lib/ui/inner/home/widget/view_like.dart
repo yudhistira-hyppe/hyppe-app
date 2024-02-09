@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -72,85 +74,85 @@ class _ViewLikedState extends State<ViewLiked> {
                             : (notifier.listLikeView?.user != null && (notifier.listLikeView!.user!.isNotEmpty)) || ((notifier.listLikeView?.guest ?? 0) > 0)
                                 ? Column(
                                     children: [
-                                      if(notifier.listLikeView?.user != null && (notifier.listLikeView!.user!.isNotEmpty))
-                                      ListView.builder(
-                                        shrinkWrap: true,
-                                        controller: _scrollController,
-                                        itemCount: notifier.listLikeView?.user?.length,
-                                        itemBuilder: (context, index) {
-                                          final data = notifier.listLikeView?.user?[index];
-                                          if (data != null) {
-                                            return ListTile(
-                                                onTap: () => System().navigateToProfile(context, data.email ?? ''),
-                                                contentPadding: EdgeInsets.zero,
-                                                leading: StoryColorValidator(
-                                                  haveStory: false,
-                                                  featureType: FeatureType.pic,
-                                                  child: CustomProfileImage(
-                                                    width: 40,
-                                                    height: 40,
-                                                    onTap: () => System().navigateToProfile(context, data.email ?? ''),
-                                                    imageUrl: System().showUserPicture(data.avatar == null ? '' : data.avatar?.mediaEndpoint),
-                                                    badge: data.urluserBadge,
-                                                    following: true,
-                                                    onFollow: () {},
+                                      if (notifier.listLikeView?.user != null && (notifier.listLikeView!.user!.isNotEmpty))
+                                        ListView.builder(
+                                          shrinkWrap: true,
+                                          controller: _scrollController,
+                                          itemCount: notifier.listLikeView?.user?.length,
+                                          itemBuilder: (context, index) {
+                                            final data = notifier.listLikeView?.user?[index];
+                                            if (data != null) {
+                                              return ListTile(
+                                                  onTap: () => System().navigateToProfile(context, data.email ?? ''),
+                                                  contentPadding: EdgeInsets.zero,
+                                                  leading: StoryColorValidator(
+                                                    haveStory: false,
+                                                    featureType: FeatureType.pic,
+                                                    child: CustomProfileImage(
+                                                      width: 40,
+                                                      height: 40,
+                                                      onTap: () => System().navigateToProfile(context, data.email ?? ''),
+                                                      imageUrl: System().showUserPicture(data.avatar == null ? '' : data.avatar?.mediaEndpoint),
+                                                      badge: data.urluserBadge,
+                                                      following: true,
+                                                      onFollow: () {},
+                                                    ),
                                                   ),
-                                                ),
-                                                title: CustomTextWidget(
-                                                  textToDisplay: data.username ?? '',
-                                                  textStyle: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-                                                  textAlign: TextAlign.start,
-                                                ),
-                                                subtitle: CustomTextWidget(
-                                                  textToDisplay: data.fullName.capitalized,
-                                                  // textStyle: Theme.of(context).textTheme.titleSmall,
-                                                  textAlign: TextAlign.start,
-                                                ),
-                                                trailing: System().isMy(data.email)
-                                                    ? const SizedBox(
-                                                        height: 40,
-                                                        width: 30,
-                                                      )
-                                                    : CustomElevatedButton(
-                                                        width: 100,
-                                                        height: 24,
-                                                        buttonStyle: ButtonStyle(
-                                                          backgroundColor: (data.following ?? false) ? null : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                                                        ),
-                                                        function: () {
-                                                          context.handleActionIsGuest(() {
-                                                            if (!(data.isloadingFollow ?? false)) {
-                                                              if (data.following ?? false) {
-                                                                notifier.followUserLikeView(context, data, isUnFollow: true);
-                                                              } else {
-                                                                notifier.followUserLikeView(context, data);
+                                                  title: CustomTextWidget(
+                                                    textToDisplay: data.username ?? '',
+                                                    textStyle: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                                                    textAlign: TextAlign.start,
+                                                  ),
+                                                  subtitle: CustomTextWidget(
+                                                    textToDisplay: data.fullName.capitalized,
+                                                    // textStyle: Theme.of(context).textTheme.titleSmall,
+                                                    textAlign: TextAlign.start,
+                                                  ),
+                                                  trailing: System().isMy(data.email)
+                                                      ? const SizedBox(
+                                                          height: 40,
+                                                          width: 30,
+                                                        )
+                                                      : CustomElevatedButton(
+                                                          width: 100,
+                                                          height: 24,
+                                                          buttonStyle: ButtonStyle(
+                                                            backgroundColor: (data.following ?? false) ? null : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                                          ),
+                                                          function: () {
+                                                            context.handleActionIsGuest(() {
+                                                              if (!(data.isloadingFollow ?? false)) {
+                                                                if (data.following ?? false) {
+                                                                  notifier.followUserLikeView(context, data, isUnFollow: true);
+                                                                } else {
+                                                                  notifier.followUserLikeView(context, data);
+                                                                }
                                                               }
-                                                            }
-                                                          });
-                                                        },
-                                                        child: data.isloadingFollow ?? false
-                                                            ? const SizedBox(
-                                                                height: 40,
-                                                                width: 30,
-                                                                child: Align(
-                                                                  alignment: Alignment.bottomRight,
-                                                                  child: CustomLoading(),
-                                                                ),
-                                                              )
-                                                            : CustomTextWidget(
-                                                                textToDisplay: (data.following ?? false) ? lang.translate.following! : lang.translate.follow!,
-                                                                textStyle: Theme.of(context)
-                                                                    .textTheme
-                                                                    .labelLarge
-                                                                    ?.copyWith(color: (data.following ?? false) ? kHyppeTextLightPrimary : kHyppeLightButtonText))));
-                                          } else {
-                                            return Container();
-                                          }
-                                        },
-                                      ),
+                                                            });
+                                                          },
+                                                          child: data.isloadingFollow ?? false
+                                                              ? const SizedBox(
+                                                                  height: 40,
+                                                                  width: 30,
+                                                                  child: Align(
+                                                                    alignment: Alignment.bottomRight,
+                                                                    child: CustomLoading(),
+                                                                  ),
+                                                                )
+                                                              : CustomTextWidget(
+                                                                  textToDisplay: (data.following ?? false) ? lang.translate.following! : lang.translate.follow!,
+                                                                  textStyle: Theme.of(context)
+                                                                      .textTheme
+                                                                      .labelLarge
+                                                                      ?.copyWith(color: (data.following ?? false) ? kHyppeTextLightPrimary : kHyppeLightButtonText))));
+                                            } else {
+                                              return Container();
+                                            }
+                                          },
+                                        ),
                                       if ((notifier.listLikeView?.guest ?? 0) > 0)
                                         Transform.translate(
-                                          offset: const Offset(0.0, -24),
+                                          offset: Offset(0.0, Platform.isIOS ? -24 : 0),
                                           child: ListTile(
                                             contentPadding: EdgeInsets.zero,
                                             leading: StoryColorValidator(

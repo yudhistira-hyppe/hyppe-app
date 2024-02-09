@@ -20,7 +20,6 @@ import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 
-
 import 'package:hyppe/core/services/system.dart';
 
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -29,7 +28,8 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
 
 class RightItems extends StatelessWidget {
   final ContentData data;
-  const RightItems({required this.data});
+  final bool pageDetail;
+  const RightItems({required this.data, this.pageDetail = false});
 
   static final _system = System();
 
@@ -105,7 +105,7 @@ class RightItems extends StatelessWidget {
                               // }
                               context.read<DiariesPlaylistNotifier>().forcePause = true;
                               // ShowBottomSheet.onShowCommentV2(context, postID: data.postID);
-                              Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data));
+                              Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data, pageDetail: pageDetail));
                             },
                           )
                         : const SizedBox.shrink(),
@@ -124,12 +124,11 @@ class RightItems extends StatelessWidget {
                         value2.translate.buy ?? 'buy',
                         colorIcon: kHyppeLightButtonText,
                         onTap: () async {
-                          await context.handleActionIsGuest(() async  {
+                          await context.handleActionIsGuest(() async {
                             SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
                             await ShowBottomSheet.onBuyContent(context, data: data);
                             SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
                           });
-
                         },
                       ),
                   ],

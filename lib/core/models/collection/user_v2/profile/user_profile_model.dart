@@ -82,7 +82,7 @@ class UserProfileModel {
     gender = json['gender'];
     mobileNumber = json['mobileNumber'];
     roles = json['roles'] != null ? json['roles'].cast<String>() : [];
-    fullName = json['fullName'];
+    fullName = json['fullName'] ?? '';
     bio = json['bio'] ?? '';
     avatar = json['avatar'] != null ? UserProfileAvatarModel.fromJson(json['avatar']) : null;
     insight = json['insight'] != null ? UserProfileInsightModel.fromJson(json['insight']) : null;

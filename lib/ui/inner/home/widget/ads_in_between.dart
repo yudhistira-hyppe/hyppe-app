@@ -261,16 +261,16 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                     children: [
                       InkWell(
                         onTap: () {
-                          cta();
-                          // Routing().move(
-                          //   Routes.adsBetweenFull,
-                          //   argument: AdsArgument(
-                          //     data: widget.data,
-                          //     adsUrl: widget.data.adsUrlLink ?? '',
-                          //     isSponsored: true,
-                          //     afterReport: widget.afterReport(),
-                          //   ),
-                          // );
+                          // cta();
+                          Routing().move(
+                            Routes.adsBetweenFull,
+                            argument: AdsArgument(
+                              data: widget.data,
+                              adsUrl: widget.data.adsUrlLink ?? '',
+                              isSponsored: true,
+                              afterReport: widget.afterReport(),
+                            ),
+                          );
                         },
                         child: CustomBaseCacheImage(
                           memCacheWidth: 100,

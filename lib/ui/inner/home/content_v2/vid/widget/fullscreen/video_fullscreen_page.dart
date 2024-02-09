@@ -619,19 +619,19 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                             setState(() {});
                                             print('data result $res');
                                             // if (mounted){
-                                              if ((widget.data.metadata?.height ?? 0) < (widget.data.metadata?.width ?? 0)) {
-                                                print('Landscape VidPlayerPage');
-                                                SystemChrome.setPreferredOrientations([
-                                                  DeviceOrientation.landscapeLeft,
-                                                  DeviceOrientation.landscapeRight,
-                                                ]);
-                                              } else {
-                                                print('Portrait VidPlayerPage');
-                                                SystemChrome.setPreferredOrientations([
-                                                  DeviceOrientation.portraitUp,
-                                                  DeviceOrientation.portraitDown,
-                                                ]);
-                                              }
+                                            if ((widget.data.metadata?.height ?? 0) < (widget.data.metadata?.width ?? 0)) {
+                                              print('Landscape VidPlayerPage');
+                                              SystemChrome.setPreferredOrientations([
+                                                DeviceOrientation.landscapeLeft,
+                                                DeviceOrientation.landscapeRight,
+                                              ]);
+                                            } else {
+                                              print('Portrait VidPlayerPage');
+                                              SystemChrome.setPreferredOrientations([
+                                                DeviceOrientation.portraitUp,
+                                                DeviceOrientation.portraitDown,
+                                              ]);
+                                            }
                                             // }
                                           },
                                           onTap: () {
@@ -1310,7 +1310,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                       if (widget.data.allowComments ?? false)
                         buttonVideoRight(
                           onFunctionTap: () {
-                            Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: widget.data.postID ?? '', fromFront: true, data: widget.data));
+                            Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: widget.data.postID ?? '', fromFront: true, data: widget.data, pageDetail: true));
                           },
                           iconData: '${AssetPath.vectorPath}comment-shadow.svg',
                           value: widget.data.comments! > 0 ? widget.data.comments.toString() : lang?.comments ?? '',
@@ -1358,7 +1358,9 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                   child: GestureDetector(
                                     onTap: () {
                                       widget.fAliplayer?.pause();
-                                      context.read<PicDetailNotifier>().showUserTag(context, widget.data.tagPeople, widget.data.postID, title: lang!.inThisVideo, fAliplayer: widget.fAliplayer, orientation: orientation);
+                                      context
+                                          .read<PicDetailNotifier>()
+                                          .showUserTag(context, widget.data.tagPeople, widget.data.postID, title: lang!.inThisVideo, fAliplayer: widget.fAliplayer, orientation: orientation);
                                       setState(() {
                                         isPause = true;
                                       });

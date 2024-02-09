@@ -1015,6 +1015,7 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
                 ? Container()
                 : RightItems(
                     data: data ?? ContentData(),
+                    pageDetail: true,
                   ),
             data?.reportedStatus == "BLURRED"
                 ? Container()

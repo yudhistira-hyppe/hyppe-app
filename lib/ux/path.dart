@@ -32,6 +32,7 @@ class Routes {
 
 //Ads Full
   static const String adsBetweenFull = '/ads-between-full';
+  static const String adsBetweenVidFull = '/ads-between-vid-full';
 
 
 // Sign up

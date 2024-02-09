@@ -409,7 +409,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                       following: true,
                       haveStory: false,
                       textColor: kHyppeTextLightPrimary,
-                      username: '${widget.arguments?.isProfile??false}',
+                      username: '${widget.arguments?.isProfile ?? false}',
                       featureType: FeatureType.other,
                       // isCelebrity: vidnotifier.diaryData?[index].privacy?.isCelebrity,
                       isCelebrity: false,
@@ -547,83 +547,82 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                   }
                 },
                 child: (vidData?[index].reportedStatus == 'BLURRED')
-                        ? blurContentWidget(context, vidData![index]) 
-                        : !notifier.connectionError
-                    ? Container(
-                        margin: const EdgeInsets.only(bottom: 20),
-                        child: Builder(builder: (context) {
-                          return 
-                          VidPlayerPage(
-                            isVidFormProfile: widget.arguments!.isProfile??false,
-                            enableWakelock: false,
-                            orientation: Orientation.portrait,
-                            playMode: (vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
-                            dataSourceMap: map,
-                            data: vidData?[index] ?? ContentData(),
-                            vidData: vidData,
-                            index: index,
-                            height: MediaQuery.of(context).size.width * 9.0 / 16.0,
-                            width: MediaQuery.of(context).size.width,
-                            inLanding: true,
-                            fromDeeplink: false,
-                            isAutoPlay: false,
-                            functionFullTriger: (value) {},
-                            onPlay: (exec) async {
-                              await notifier.checkConnection();
-                              try {
-                                if (_curIdx != -1) {
-                                  if (_curIdx != index) {
-                                    if (vidData?[_curIdx].fAliplayer != null) {
-                                      vidData?[_curIdx].fAliplayer?.stop();
-                                    } else {
-                                      final player = dataAli[_curIdx];
-                                      if (player != null) {
-                                        // vidData?[_curIdx].fAliplayer = player;
-                                        player.stop();
+                    ? blurContentWidget(context, vidData![index])
+                    : !notifier.connectionError
+                        ? Container(
+                            margin: const EdgeInsets.only(bottom: 20),
+                            child: Builder(builder: (context) {
+                              return VidPlayerPage(
+                                isVidFormProfile: widget.arguments!.isProfile ?? false,
+                                enableWakelock: false,
+                                orientation: Orientation.portrait,
+                                playMode: (vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
+                                dataSourceMap: map,
+                                data: vidData?[index] ?? ContentData(),
+                                vidData: vidData,
+                                index: index,
+                                height: MediaQuery.of(context).size.width * 9.0 / 16.0,
+                                width: MediaQuery.of(context).size.width,
+                                inLanding: true,
+                                fromDeeplink: false,
+                                isAutoPlay: false,
+                                functionFullTriger: (value) {},
+                                onPlay: (exec) async {
+                                  await notifier.checkConnection();
+                                  try {
+                                    if (_curIdx != -1) {
+                                      if (_curIdx != index) {
+                                        if (vidData?[_curIdx].fAliplayer != null) {
+                                          vidData?[_curIdx].fAliplayer?.stop();
+                                        } else {
+                                          final player = dataAli[_curIdx];
+                                          if (player != null) {
+                                            // vidData?[_curIdx].fAliplayer = player;
+                                            player.stop();
+                                          }
+                                        }
+                                        // vidData?[_curIdx].fAliplayerAds?.stop();
                                       }
                                     }
-                                    // vidData?[_curIdx].fAliplayerAds?.stop();
+                                  } catch (e) {
+                                    e.logger();
+                                  } finally {
+                                    setState(() {
+                                      _curIdx = index;
+                                    });
                                   }
-                                }
-                              } catch (e) {
-                                e.logger();
-                              } finally {
-                                setState(() {
-                                  _curIdx = index;
-                                });
-                              }
-                              // _lastCurIndex = _curIdx;
+                                  // _lastCurIndex = _curIdx;
+                                },
+                                getPlayer: (main, id) {
+                                  print('Vid Player1: screen ${main}');
+                                  // notifier.setAliPlayer(index, main);
+                                  globalAliPlayer = main;
+                                  setState(() {
+                                    vidData?[index].fAliplayer = main;
+                                    dataAli[index] = main;
+                                  });
+                                  print('Vid Player1: after $index ${globalAliPlayer} : ${vidData?[index].fAliplayer}');
+                                },
+                                getAdsPlayer: (ads) {
+                                  // vidData?[index].fAliplayerAds = ads;
+                                },
+                                loadMoreFunction: () {},
+                                // fAliplayer: vidData?[index].fAliplayer,
+                                // fAliplayerAds: vidData?[index].fAliplayerAds,
+                              );
+                            }),
+                          )
+                        : GestureDetector(
+                            onTap: () {
+                              notifier.checkConnection();
                             },
-                            getPlayer: (main, id) {
-                              print('Vid Player1: screen ${main}');
-                              // notifier.setAliPlayer(index, main);
-                              globalAliPlayer = main;
-                              setState(() {
-                                vidData?[index].fAliplayer = main;
-                                dataAli[index] = main;
-                              });
-                              print('Vid Player1: after $index ${globalAliPlayer} : ${vidData?[index].fAliplayer}');
-                            },
-                            getAdsPlayer: (ads) {
-                              // vidData?[index].fAliplayerAds = ads;
-                            },
-                            loadMoreFunction: () {},
-                            // fAliplayer: vidData?[index].fAliplayer,
-                            // fAliplayerAds: vidData?[index].fAliplayerAds,
-                          );
-                        }),
-                      )
-                    : GestureDetector(
-                        onTap: () {
-                          notifier.checkConnection();
-                        },
-                        child: Container(
-                            decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                            width: SizeConfig.screenWidth,
-                            height: 250,
-                            alignment: Alignment.center,
-                            child: CustomTextWidget(textToDisplay: lang?.couldntLoadVideo ?? 'Error')),
-                      ),
+                            child: Container(
+                                decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                width: SizeConfig.screenWidth,
+                                height: 250,
+                                alignment: Alignment.center,
+                                child: CustomTextWidget(textToDisplay: lang?.couldntLoadVideo ?? 'Error')),
+                          ),
               ),
               SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
                       (vidData![index].boosted.isEmpty) &&
@@ -819,7 +818,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
               ),
               twelvePx,
               CustomNewDescContent(
-                email: vidData?[index].email??'',
+                email: vidData?[index].email ?? '',
                 username: vidData?[index].username ?? '',
                 desc: "${vidData?[index].description}",
                 trimLines: 2,
@@ -1302,7 +1301,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                       setState(() {
                         data.reportedStatus = '';
                       });
-    
+
                       // start(data);
                       // context.read<ReportNotifier>().seeContent(context, data, hyppeVid);
                       data.fAliplayer?.prepare();

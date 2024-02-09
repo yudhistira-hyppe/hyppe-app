@@ -63,7 +63,7 @@ class VidScrollFullScreenPage extends StatefulWidget {
     required this.onClose,
     required this.isLanding,
     this.fAliplayer,
-    this.isVidFormProfile=false,
+    this.isVidFormProfile = false,
     this.slider,
     required this.videoIndicator,
     required this.thumbnail,
@@ -204,7 +204,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
         _currentPosition = _videoDuration;
       }
       setState(() {
-        isPause=true;
+        isPause = true;
       });
       // nextPage();
     });
@@ -682,7 +682,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                       if (widget.data.allowComments ?? false)
                         buttonVideoRight(
                           onFunctionTap: () {
-                            Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: widget.data.postID ?? '', fromFront: true, data: widget.data));
+                            Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: widget.data.postID ?? '', fromFront: true, data: widget.data, pageDetail: true));
                           },
                           iconData: '${AssetPath.vectorPath}comment-shadow.svg',
                           value: widget.data.comments! > 0 ? widget.data.comments.toString() : lang?.comments ?? '',
@@ -1082,15 +1082,15 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
             color: backgroundColor,
           ),
           child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _buildSkipPrev(iconColor, barHeight),
-                    _buildSkipBack(iconColor, barHeight),
-                    _buildPlayPause(iconColor, barHeight),
-                    _buildSkipForward(iconColor, barHeight),
-                    _buildSkipNext(iconColor, barHeight),
-                  ],
-                ),
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildSkipPrev(iconColor, barHeight),
+              _buildSkipBack(iconColor, barHeight),
+              _buildPlayPause(iconColor, barHeight),
+              _buildSkipForward(iconColor, barHeight),
+              _buildSkipNext(iconColor, barHeight),
+            ],
+          ),
         ),
       ),
     );
@@ -1103,7 +1103,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
     return GestureDetector(
       onTap: () {
         if (isPause) {
-          if (_currentPosition == _videoDuration){
+          if (_currentPosition == _videoDuration) {
             _inSeek = false;
             _currentPosition = 0;
             setState(() {
@@ -1111,7 +1111,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
             });
             widget.fAliplayer?.seekTo(_currentPosition.ceil(), FlutterAvpdef.ACCURATE);
           }
-          
+
           widget.fAliplayer?.play();
           isPause = false;
           setState(() {});

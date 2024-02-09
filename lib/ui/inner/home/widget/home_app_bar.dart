@@ -31,7 +31,7 @@ class HomeAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HomeAppBar');
-    String nameTitle = (isGuest ?? false) ? 'Hyppers' : (name ?? 'Hyppers');
+    String nameTitle = (isGuest ?? false) ? 'Hyppers' : ((name != 'null' ? name : 'Hyppers') ?? 'Hyppers');
     // String nameTitle = "AaaAAAAASKJLKJDiiiiaskdlaksjdlkajsd asdasdas asdasd";
     nameTitle = nameTitle.split(" ").elementAt(0);
 
@@ -39,8 +39,7 @@ class HomeAppBar extends StatelessWidget {
       nameTitle = nameTitle.substring(0, 15);
     }
     String helloName = nameTitle;
-    helloName =
-        helloName == '' ? '' : System().capitalizeFirstLetter(helloName);
+    helloName = helloName == '' ? '' : System().capitalizeFirstLetter(helloName);
     SizeConfig().init(context);
     return AppBar(
       centerTitle: false,
@@ -50,15 +49,11 @@ class HomeAppBar extends StatelessWidget {
         // Doku(),
         GestureDetector(
             onTap: () {
-              context.handleActionIsGuest((){
+              context.handleActionIsGuest(() {
                 Routing().move(Routes.listStreamers);
               });
             },
-            child: CustomIconWidget(
-              width: 30,
-                height: 30,
-                defaultColor: false,
-                iconData: '${AssetPath.vectorPath}ic_live_streaming.svg')),
+            child: CustomIconWidget(width: 30, height: 30, defaultColor: false, iconData: '${AssetPath.vectorPath}ic_live_streaming.svg')),
         // CustomIconButtonWidget(iconData: '${AssetPath.vectorPath}ic_live_streaming.svg', onPressed: (){
         //   Routing().move(Routes.listStreamers);
         // }),
@@ -67,20 +62,14 @@ class HomeAppBar extends StatelessWidget {
           final isReceived = notifier.receivedMsg;
           return GestureDetector(
             onTap: () {
-              context.handleActionIsGuest((){
+              context.handleActionIsGuest(() {
                 Routing().move(Routes.message);
                 notifier.receivedMsg = false;
               });
-
             },
             child: isReceived
-                ? CustomIconWidget(
-                    defaultColor: false,
-                    iconData: '${AssetPath.vectorPath}message_with_dot.svg')
-                : CustomIconWidget(
-                    defaultColor: false,
-                    color: kHyppeTextLightPrimary,
-                    iconData: '${AssetPath.vectorPath}message.svg'),
+                ? CustomIconWidget(defaultColor: false, iconData: '${AssetPath.vectorPath}message_with_dot.svg')
+                : CustomIconWidget(defaultColor: false, color: kHyppeTextLightPrimary, iconData: '${AssetPath.vectorPath}message.svg'),
           );
         }),
         // Profile(),
@@ -91,10 +80,7 @@ class HomeAppBar extends StatelessWidget {
           ? Text(
               // "$offset",
               "Halo, $helloName ",
-              style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w700,
-                  color: kHyppeTextLightPrimary),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
             )
           : const CustomIconWidget(
               iconData: "${AssetPath.vectorPath}hyppe.svg",

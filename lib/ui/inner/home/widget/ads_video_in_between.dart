@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
 import 'package:hyppe/app.dart';
+import 'package:hyppe/core/arguments/ads_argument.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/ui/constant/widget/custom_desc_content_widget.dart';
@@ -253,30 +254,55 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                             globalAdsInBetween?.play();
                           }
                         },
-                        child: Container(
-                          color: Colors.white,
-                          margin: const EdgeInsets.only(top: 20, left: 0, right: 0),
-                          child: AspectRatio(
-                            aspectRatio: ratio,
-                            child: notifier.currentPostID == widget.data.adsId
-                                ? InBetweenScreen(
-                                    adsData: widget.data,
-                                    player: widget.player,
-                                    ratio: ratio,
-                                    onRatioChanged: (fix) {
-                                      setState(
-                                        () {
-                                          ratio = fix;
-                                        },
-                                      );
-                                    },
-                                    getPlayer: widget.getPlayer,
-                                  )
-                                : Container(
-                                    decoration: const BoxDecoration(color: Colors.black, borderRadius: BorderRadius.all(Radius.circular(16.0))),
-                                    alignment: Alignment.center,
-                                    child: const CustomLoading(),
-                                  ),
+                        child: GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            color: Colors.white,
+                            margin: const EdgeInsets.only(top: 20, left: 0, right: 0),
+                            child: AspectRatio(
+                              aspectRatio: ratio,
+                              child: notifier.currentPostID == widget.data.adsId
+                                  ? Stack(
+                                      children: [
+                                        InBetweenScreen(
+                                          adsData: widget.data,
+                                          player: widget.player,
+                                          ratio: ratio,
+                                          onRatioChanged: (fix) {
+                                            setState(
+                                              () {
+                                                ratio = fix;
+                                              },
+                                            );
+                                          },
+                                          getPlayer: widget.getPlayer,
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            Routing().move(
+                                              Routes.adsBetweenVidFull,
+                                              argument: AdsArgument(
+                                                data: widget.data,
+                                                adsUrl: '',
+                                                isSponsored: true,
+                                                onVisibility: widget.onVisibility,
+                                                afterReport: widget.afterReport,
+                                                getPlayer: widget.getPlayer,
+                                              ),
+                                            );
+                                          },
+                                          child: Container(
+                                            color: Colors.transparent,
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                  : Container(
+                                      decoration: const BoxDecoration(color: Colors.black, borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                                      alignment: Alignment.center,
+                                      child: const CustomLoading(),
+                                    ),
+                            ),
                           ),
                         ),
                       ),
@@ -675,75 +701,78 @@ class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingOb
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        ClipRRect(
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-          child: AliPlayerView(
-            onCreated: onViewPlayerCreated,
-            x: 0,
-            y: 0,
-            height: MediaQuery.of(context).size.width * widget.ratio,
-            width: MediaQuery.of(context).size.width,
-            aliPlayerViewType: AliPlayerViewTypeForAndroid.surfaceview,
-          ),
-        ),
-        if (_showLoading)
-          Align(
-            alignment: Alignment.center,
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const CircularProgressIndicator(
-                  backgroundColor: Colors.white,
-                  strokeWidth: 3.0,
-                ),
-                const SizedBox(
-                  height: 10.0,
-                ),
-                Text(
-                  "$_loadingPercent%",
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ],
+    return GestureDetector(
+      onTap: () {},
+      child: Stack(
+        children: [
+          ClipRRect(
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+            child: AliPlayerView(
+              onCreated: onViewPlayerCreated,
+              x: 0,
+              y: 0,
+              height: MediaQuery.of(context).size.width * widget.ratio,
+              width: MediaQuery.of(context).size.width,
+              aliPlayerViewType: AliPlayerViewTypeForAndroid.surfaceview,
             ),
           ),
-        Positioned(
-          top: 12,
-          right: 12,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 2),
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.black.withOpacity(0.5)),
-            child: Text(
-              System.getTimeformatByMs(_currentPositionText),
-              style: const TextStyle(color: Colors.white, fontSize: 11),
+          if (_showLoading)
+            Align(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const CircularProgressIndicator(
+                    backgroundColor: Colors.white,
+                    strokeWidth: 3.0,
+                  ),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  Text(
+                    "$_loadingPercent%",
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ),
-        Positioned(
-          bottom: 12,
-          right: 12,
-          child: GestureDetector(
-            onTap: () {
-              setState(() {
-                isMute = !isMute;
-              });
-              fAliplayer?.setMuted(isMute);
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(right: 2.0),
-              child: CustomIconWidget(
-                iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
-                defaultColor: false,
-                height: 24,
+          Positioned(
+            top: 12,
+            right: 12,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 2),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.black.withOpacity(0.5)),
+              child: Text(
+                System.getTimeformatByMs(_currentPositionText),
+                style: const TextStyle(color: Colors.white, fontSize: 11),
               ),
             ),
           ),
-        ),
-      ],
+          Positioned(
+            bottom: 12,
+            right: 12,
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  isMute = !isMute;
+                });
+                fAliplayer?.setMuted(isMute);
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(right: 2.0),
+                child: CustomIconWidget(
+                  iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
+                  defaultColor: false,
+                  height: 24,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

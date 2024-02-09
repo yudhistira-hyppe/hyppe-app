@@ -48,10 +48,9 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
     print("================onUploadReceiveProgress");
     _uploadNotifier.message = "${_language.translate.processUpload}";
     if (!_uploadNotifier.isUploading) {
-      if(!globalPreventAction){
+      if (!globalPreventAction) {
         _uploadNotifier.isUploading = true;
       }
-
     }
     _uploadNotifier.progress = count / total;
   }
@@ -60,7 +59,7 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
   void onUploadSendProgress(double count, double total, bool isCompressing) {
     print("================onUploadSendProgress");
     if (!_uploadNotifier.isUploading) {
-      if(!globalPreventAction){
+      if (!globalPreventAction) {
         _uploadNotifier.isUploading = true;
       }
     }
@@ -128,7 +127,7 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
   @override
   void dispose() {
     print("========dispose");
-    _uploadNotifier.reset(isNotify: false);
+    // _uploadNotifier.reset(isNotify: false);
     super.dispose();
   }
 

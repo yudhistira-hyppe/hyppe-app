@@ -97,6 +97,7 @@ import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_screen.da
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/feedback/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/screen.dart';
 import 'package:hyppe/ui/inner/home/widget/ads_in_between_full.dart';
+import 'package:hyppe/ui/inner/home/widget/ads_video_in_between_full.dart';
 import 'package:hyppe/ui/inner/home/widget/aliplayer.dart';
 import 'package:hyppe/ui/inner/main/screen.dart';
 import 'package:hyppe/ui/inner/message_v2/message_detail/screen.dart' as message_detail_v2;
@@ -191,6 +192,9 @@ class Generate {
 
       case Routes.adsBetweenFull:
         return MaterialPageRoute(builder: (_) => AdsInBetweenFull(arguments: settings.arguments as AdsArgument));
+
+      case Routes.adsBetweenVidFull:
+        return MaterialPageRoute(builder: (_) => AdsVideoInBetweenFull(arguments: settings.arguments as AdsArgument));
 
       case Routes.signUpPin:
         return MaterialPageRoute(builder: (_) => SignUpPin(arguments: settings.arguments as VerifyPageArgument));
