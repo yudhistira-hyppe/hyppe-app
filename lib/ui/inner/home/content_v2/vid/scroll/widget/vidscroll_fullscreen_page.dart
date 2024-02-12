@@ -592,6 +592,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                                           captionTitle: hyppeVid,
                                           onDetail: false,
                                           isShare: widget.data.isShared,
+                                          orientation: orientation,
                                           onUpdate: () {
                                             // if (notifier.vidData?.isEmpty ?? [].isEmpty) {
                                             Routing().moveBack();
@@ -604,7 +605,6 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                                           fAliplayer: widget.data.fAliplayer,
                                         );
                                         widget.data.fAliplayer?.pause();
-                                        // widget.fAliplayer?.pause();
                                         isPause = true;
                                         setState(() {});
                                       }
@@ -682,7 +682,9 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                       if (widget.data.allowComments ?? false)
                         buttonVideoRight(
                           onFunctionTap: () {
-                            Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: widget.data.postID ?? '', fromFront: true, data: widget.data, pageDetail: true));
+                            context.handleActionIsGuest(() {
+                              Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: widget.data.postID ?? '', fromFront: true, data: widget.data, pageDetail: true));
+                            });
                           },
                           iconData: '${AssetPath.vectorPath}comment-shadow.svg',
                           value: widget.data.comments! > 0 ? widget.data.comments.toString() : lang?.comments ?? '',
@@ -919,25 +921,30 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const CustomIconWidget(
-                                  iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
-                                  defaultColor: false,
-                                  color: kHyppeLightBackground,
-                                  height: 18,
-                                ),
-                                SizedBox(
-                                  width: SizeConfig.screenWidth! * .55,
-                                  child: _textSize(widget.data.music?.musicTitle ?? '', const TextStyle(fontWeight: FontWeight.bold)).width > SizeConfig.screenWidth! * .56
-                                      ? Marquee(
-                                          text: '  ${widget.data.music?.musicTitle ?? ''}',
-                                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),
-                                        )
-                                      : CustomTextWidget(
-                                          textToDisplay: " ${widget.data.music?.musicTitle ?? ''}",
-                                          maxLines: 1,
-                                          textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700),
-                                          textAlign: TextAlign.left,
-                                        ),
+                                Row(
+                                  children: [
+                                    const CustomIconWidget(
+                                      iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                      defaultColor: false,
+                                      color: kHyppeLightBackground,
+                                      height: 18,
+                                    ),
+                                    const SizedBox(width: 12.0,),
+                                    SizedBox(
+                                      width: SizeConfig.screenWidth! * .55,
+                                      child: _textSize(widget.data.music?.musicTitle ?? '', const TextStyle(fontWeight: FontWeight.bold)).width > SizeConfig.screenWidth! * .56
+                                          ? Marquee(
+                                              text: '  ${widget.data.music?.musicTitle ?? ''}',
+                                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),
+                                            )
+                                          : CustomTextWidget(
+                                              textToDisplay: " ${widget.data.music?.musicTitle ?? ''}",
+                                              maxLines: 1,
+                                              textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700),
+                                              textAlign: TextAlign.left,
+                                            ),
+                                    ),
+                                  ],
                                 ),
                                 CircleAvatar(
                                   radius: 18,

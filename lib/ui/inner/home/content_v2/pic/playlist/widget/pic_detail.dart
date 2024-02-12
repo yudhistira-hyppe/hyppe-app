@@ -183,13 +183,17 @@ class _PicDetailState extends State<PicDetail> {
                           ? _buildButtonV2(
                               context: context,
                               iconData: '${AssetPath.vectorPath}more.svg',
-                              function: () => ShowBottomSheet().onReportContent(
-                                context,
-                                postData: widget.arguments,
-                                type: hyppePic,
-                                adsData: null,
-                                onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
-                              ),
+                              function: () {
+                                context.handleActionIsGuest(() {
+                                  ShowBottomSheet().onReportContent(
+                                    context,
+                                    postData: widget.arguments,
+                                    type: hyppePic,
+                                    adsData: null,
+                                    onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
+                                  );
+                                });
+                              }
                             )
                           : SizedBox(),
                     ],
@@ -242,7 +246,9 @@ class _PicDetailState extends State<PicDetail> {
                             context: context,
                             iconData: '${AssetPath.vectorPath}comment.svg',
                             function: () {
-                              ShowBottomSheet.onShowCommentV2(context, postID: widget.arguments?.postID);
+                              context.handleActionIsGuest(() {
+                                ShowBottomSheet.onShowCommentV2(context, postID: widget.arguments?.postID);
+                              });
                             },
                           ),
                         eightPx,

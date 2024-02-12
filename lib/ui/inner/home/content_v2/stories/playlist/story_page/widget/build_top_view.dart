@@ -7,6 +7,7 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ux/path.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -103,11 +104,11 @@ class _BuildTopViewState extends State<BuildTopView> {
                               contentData: widget.data!,
                               captionTitle: hyppeStory,
                               onDetail: widget.onDetail,
+                              screen: Routes.showStories
                               // storyController: widget.storyController,
                             );
                           });
                           // widget.storyController?.pause();
-
                         },
                         child: const CustomIconWidget(
                           defaultColor: false,

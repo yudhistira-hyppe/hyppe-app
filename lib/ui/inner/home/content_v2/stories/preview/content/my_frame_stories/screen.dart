@@ -39,7 +39,7 @@ class MyFrameStory extends StatelessWidget {
                     listStory: notifier.myStoryGroup[email],
                     imageUrlKey: home.profileImageKey,
                     imageUrl: System().showUserPicture(home.profileImage),
-                    badge: notifier.myStoryGroup.isEmpty ? home.profileBadge : notifier.myStoryGroup[email]?[0].urluserBadge,
+                    badge: notifier.myStoryGroup.isEmpty ? home.profileBadge : notifier.myStoryGroup[email]!.isEmpty ? home.profileBadge : notifier.myStoryGroup[email]?[0].urluserBadge,
                   )
                 : const CustomShimmer(
                     radius: 50,
@@ -53,7 +53,7 @@ class MyFrameStory extends StatelessWidget {
                     child: CustomTextWidget(
                       maxLines: 1,
                       textToDisplay: context.read<TranslateNotifierV2>().translate.yourStory ?? '',
-                      textStyle: Theme.of(context).textTheme.overline?.copyWith(letterSpacing: notifier.myStoryGroup.isEmpty ? null : 1.0),
+                      textStyle: Theme.of(context).textTheme.labelSmall?.copyWith(letterSpacing: notifier.myStoryGroup.isEmpty ? null : 1.0),
                     ),
                   )
                 : const CustomShimmer(

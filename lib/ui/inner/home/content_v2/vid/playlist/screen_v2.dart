@@ -332,17 +332,19 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                       width: 50,
                       child: CustomTextButton(
                         onPressed: () async {
-                          globalAliPlayer?.pause();
-                          await ShowBottomSheet().onReportContent(
-                            context,
-                            postData: data,
-                            type: hyppePic,
-                            adsData: null,
-                            onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
-                          );
-                          if (isPlay) {
-                            globalAliPlayer?.play();
-                          }
+                          context.handleActionIsGuest(() async {
+                            globalAliPlayer?.pause();
+                            await ShowBottomSheet().onReportContent(
+                              context,
+                              postData: data,
+                              type: hyppePic,
+                              adsData: null,
+                              onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
+                            );
+                            if (isPlay) {
+                              globalAliPlayer?.play();
+                            }
+                          });
                         },
                         child: const CustomIconWidget(
                           defaultColor: false,
@@ -473,7 +475,9 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                         if (data.allowComments ?? false)
                           InkWell(
                             onTap: () {
-                              notifier.goToComments(CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data));
+                              context.handleActionIsGuest(() {
+                                notifier.goToComments(CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data));
+                              });
                             },
                             child: const CustomIconWidget(
                               width: 20,
@@ -590,7 +594,10 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
         ? notifier.firstComment != null
             ? InkWell(
                 onTap: () {
-                  notifier.goToComments(CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data));
+                  context.handleActionIsGuest(() {
+                    notifier.goToComments(CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data));
+                  });
+                  
                 },
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 16),

@@ -821,6 +821,7 @@ class ShowBottomSheet {
     required ContentData contentData,
     required String captionTitle,
     bool onDetail = true,
+    String? screen,
     // StoryController? storyController,
     Orientation? orientation,
     Function? onUpdate,
@@ -856,10 +857,12 @@ class ShowBottomSheet {
       },
     ).whenComplete(() {
       // if (storyController != null) storyController.play();
-      if (fAliplayer != null) {
+      // if (fAliplayer != null) {
         // fAliplayer.play();
-        fAliplayer.setMuted(false);
-      }
+      //   fAliplayer.setMuted(true);
+      // }
+
+      print('screen test $screen');
 
       if (orientation != null && orientation == Orientation.landscape){
         SystemChrome.setPreferredOrientations([
