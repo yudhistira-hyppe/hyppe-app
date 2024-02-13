@@ -493,7 +493,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                             if (!isShowingDialog) {
                               globalAdsPopUp?.pause();
                             }
-                            globalAdsInContent?.pause();
+                            globalAdsInContent?.setLoop(true);
+                            globalAdsInContent?.play();
                             _curIdx = index;
                             // _curPostId = vidData.inBetweenAds?.adsId ?? index.toString();
                             _curPostId = vidData.postID ?? index.toString();
