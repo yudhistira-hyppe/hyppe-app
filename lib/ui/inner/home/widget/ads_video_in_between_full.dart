@@ -131,55 +131,57 @@ class _AdsVideoInBetweenFullState extends State<AdsVideoInBetweenFull> with Widg
 
   Widget appBar(AdsData data) {
     final lang = context.read<TranslateNotifierV2>().translate;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              width: 30,
-              child: IconButton(
-                padding: const EdgeInsets.all(0.0),
-                onPressed: () {
-                  Routing().moveBack();
-                },
-                icon: const Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.white,
-                  shadows: <Shadow>[Shadow(color: Colors.black54, blurRadius: 8.0)],
+    return Center(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                width: 30,
+                child: IconButton(
+                  padding: const EdgeInsets.all(0.0),
+                  onPressed: () {
+                    Routing().moveBack();
+                  },
+                  icon: const Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
+                    shadows: <Shadow>[Shadow(color: Colors.black54, blurRadius: 8.0)],
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: ProfileComponent(
-                isFullscreen: true,
-                show: true,
-                following: true,
-                onFollow: () {},
-                username: data.username ?? 'No Name',
-                textColor: kHyppeLightBackground,
-                spaceProfileAndId: eightPx,
-                haveStory: false,
-                isCelebrity: false,
-                isUserVerified: false,
-                onTapOnProfileImage: () {
-                  // fAliplayer?.pause();
-                  System().navigateToProfile(context, data.email ?? '');
-                },
-                featureType: FeatureType.pic,
-                imageUrl: '${System().showUserPicture(data.avatar?.mediaEndpoint)}',
-                createdAt: lang.sponsored ?? 'Sponsored',
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: ProfileComponent(
+                  isFullscreen: true,
+                  show: true,
+                  following: true,
+                  onFollow: () {},
+                  username: data.username ?? 'No Name',
+                  textColor: kHyppeLightBackground,
+                  spaceProfileAndId: eightPx,
+                  haveStory: false,
+                  isCelebrity: false,
+                  isUserVerified: false,
+                  onTapOnProfileImage: () {
+                    // fAliplayer?.pause();
+                    System().navigateToProfile(context, data.email ?? '');
+                  },
+                  featureType: FeatureType.pic,
+                  imageUrl: '${System().showUserPicture(data.avatar?.mediaEndpoint)}',
+                  createdAt: lang.sponsored ?? 'Sponsored',
+                ),
               ),
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        ],
+      ),
     );
   }
 

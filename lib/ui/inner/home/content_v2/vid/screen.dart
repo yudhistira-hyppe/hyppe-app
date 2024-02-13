@@ -548,7 +548,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                           setState(() {
                             dataAli[id] = player;
                           });
-                        }),
+                        }, isVideo: true),
                       )
                     : Column(
                         children: [
@@ -571,7 +571,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                       } else {
                                         notifier.loadAds = false;
                                       }
-                                    });
+                                    }, );
                                   }
                                 }
                                 if (!isShowingDialog) {

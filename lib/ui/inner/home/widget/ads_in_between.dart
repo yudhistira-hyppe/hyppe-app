@@ -24,8 +24,9 @@ import '../../../constant/widget/custom_text_widget.dart';
 
 class AdsInBetween extends StatefulWidget {
   final AdsData data;
+  final bool isVideo;
   final Function() afterReport;
-  const AdsInBetween({Key? key, required this.data, required this.afterReport}) : super(key: key);
+  const AdsInBetween({Key? key, required this.data, required this.afterReport, required this.isVideo}) : super(key: key);
 
   @override
   State<AdsInBetween> createState() => _AdsInBetweenState();
@@ -269,6 +270,7 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                               adsUrl: widget.data.adsUrlLink ?? '',
                               isSponsored: true,
                               afterReport: widget.afterReport(),
+                              isVideo: widget.isVideo
                             ),
                           );
                         },

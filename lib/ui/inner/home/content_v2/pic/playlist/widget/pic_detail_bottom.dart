@@ -225,7 +225,9 @@ class PicDetailBottom extends StatelessWidget {
                   '${AssetPath.vectorPath}comment.svg',
                   value2.translate.comment ?? 'comment',
                   () {
-                    ShowBottomSheet.onShowCommentV2(context, postID: data?.postID);
+                   context.handleActionIsGuest(() {
+                     ShowBottomSheet.onShowCommentV2(context, postID: data?.postID);
+                   });
                   },
                 ),
 

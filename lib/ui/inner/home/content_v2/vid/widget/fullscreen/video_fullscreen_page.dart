@@ -439,6 +439,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
       DataSourceRelated.regionKey: DataSourceRelated.defaultRegion,
     };
     print('view ads: ${widget.isAutoPlay ?? false}');
+    
     return Consumer<VideoNotifier>(builder: (context, notifier, _) {
       return Scaffold(
         key: _scaffoldKeyPlayer,
@@ -495,6 +496,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                           //   child: Center(child: Text("data ${index}")),
                           // );
                           print('view ads: 1');
+                          final isAds = vidData?[index].inBetweenAds != null && vidData?[index].postID == null;
 
                           return isloadingRotate
                               ? Container(
@@ -505,7 +507,11 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                     child: CircularProgressIndicator(),
                                   ),
                                 )
-                              : OrientationBuilder(builder: (context, orientation) {
+                              : isAds 
+                                ?  context.getAdsInBetween(vidData?[index].inBetweenAds, (info) {}, () {
+                                      context.read<PreviewPicNotifier>().setAdsData(index, null);
+                                    }, (player, id) {}, isfull: true, isVideo: true)
+                                : OrientationBuilder(builder: (context, orientation) {
                                   final player = VidPlayerPage(
                                     // vidData: notifier.vidData,
                                     fromFullScreen: true,

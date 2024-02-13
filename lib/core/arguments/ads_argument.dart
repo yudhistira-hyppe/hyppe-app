@@ -6,11 +6,12 @@ class AdsArgument {
   final AdsData data;
   final String adsUrl;
   final bool isSponsored;
+  final bool? isVideo;
   final Function()? afterReport;
 
   final Function(VisibilityInfo)? onVisibility;
   final FlutterAliplayer? player;
   final Function(FlutterAliplayer, String)? getPlayer;
 
-  const AdsArgument({required this.data, required this.adsUrl, required this.isSponsored, this.afterReport, this.onVisibility, this.player, this.getPlayer});
+  const AdsArgument({required this.data, required this.adsUrl, required this.isSponsored, this.afterReport, this.onVisibility, this.player, this.getPlayer, this.isVideo});
 }

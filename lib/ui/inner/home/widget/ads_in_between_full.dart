@@ -51,53 +51,55 @@ class _AdsInBetweenFullState extends State<AdsInBetweenFull> {
   Widget build(BuildContext context) {
     final data = widget.arguments.data;
     print("response --- $data ${data.mediaPortraitUri ?? data.mediaUri}");
-    return Stack(
-      children: [
-        Positioned.fill(
-          child: Center(child: image(data)),
-        ),
-        _buildBody(context, SizeConfig.screenWidth, data),
-        // _buttomBodyRight(picData: picData, notifier: notifier, index: index),
-        Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          child: Container(
-            margin: const EdgeInsets.only(top: kTextTabBarHeight - 12, left: 12.0),
-            padding: const EdgeInsets.symmetric(vertical: 18.0),
-            width: double.infinity,
-            height: kToolbarHeight * 1.6,
-            child: VisibilityDetector(
-                key: Key(data.adsId.toString()),
-                onVisibilityChanged: (info) {
-                  if (info.visibleFraction >= 0.9) {
-                    setState(() {
-                      isSeeing = true;
-                    });
-                    // Future.delayed(const Duration(seconds: 1), (){
-                    //   if(isSeeing){
-                    //     System().adsView(widget.data, widget.data.duration?.round() ?? 10);
-                    //   }
-                    // });
-                  }
-                  if (info.visibleFraction < 0.3) {
-                    try {
-                      if (mounted) {
-                        setState(() {
+    return Scaffold(
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Center(child: image(data)),
+          ),
+          _buildBody(context, SizeConfig.screenWidth, data),
+          // _buttomBodyRight(picData: picData, notifier: notifier, index: index),
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              margin: const EdgeInsets.only(top: kTextTabBarHeight - 12, left: 12.0),
+              padding: const EdgeInsets.symmetric(vertical: 18.0),
+              width: double.infinity,
+              height: kToolbarHeight * 1.6,
+              child: VisibilityDetector(
+                  key: Key(data.adsId.toString()),
+                  onVisibilityChanged: (info) {
+                    if (info.visibleFraction >= 0.9) {
+                      setState(() {
+                        isSeeing = true;
+                      });
+                      // Future.delayed(const Duration(seconds: 1), (){
+                      //   if(isSeeing){
+                      //     System().adsView(widget.data, widget.data.duration?.round() ?? 10);
+                      //   }
+                      // });
+                    }
+                    if (info.visibleFraction < 0.3) {
+                      try {
+                        if (mounted) {
+                          setState(() {
+                            isSeeing = false;
+                          });
+                        } else {
                           isSeeing = false;
-                        });
-                      } else {
+                        }
+                      } catch (e) {
                         isSeeing = false;
                       }
-                    } catch (e) {
-                      isSeeing = false;
                     }
-                  }
-                },
-                child: appBar(data)),
+                  },
+                  child: appBar(data)),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -123,7 +125,7 @@ class _AdsInBetweenFullState extends State<AdsInBetweenFull> {
             memCacheHeight: 100,
             widthPlaceHolder: 80,
             heightPlaceHolder: 80,
-            imageUrl: picData.mediaPortraitUri ?? picData.mediaUri,
+            imageUrl: (widget.arguments.isVideo??false) ? picData.mediaLandscapeThumUri ?? picData.mediaUri : picData.mediaPortraitUri ?? picData.mediaUri ,
             imageBuilder: (context, imageProvider) {
               return GestureDetector(
                 behavior: HitTestBehavior.translucent,
@@ -234,7 +236,7 @@ class _AdsInBetweenFullState extends State<AdsInBetweenFull> {
             Container(
               constraints: BoxConstraints(
                   maxWidth: SizeConfig.screenWidth ?? 0,
-                  maxHeight: data.adsDescription!.length > 24
+                  maxHeight: (data.adsDescription?.length??0) > 24
                       ? isShowMore
                           ? 42
                           : SizeConfig.screenHeight! * .4
@@ -257,7 +259,7 @@ class _AdsInBetweenFullState extends State<AdsInBetweenFull> {
                   seeLess: ' ${lang.less}',
                   seeMore: ' ${lang.more}',
                   normStyle: const TextStyle(fontSize: 14, color: kHyppeTextPrimary),
-                  hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
+                  hrefStyle: Theme.of(context).textTheme.titleSmall?.copyWith(color: kHyppePrimary),
                   expandStyle: const TextStyle(fontSize: 14, color: kHyppeTextPrimary, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -275,6 +277,7 @@ class _AdsInBetweenFullState extends State<AdsInBetweenFull> {
                     }
 
                     Future.delayed(const Duration(milliseconds: 800), () {
+                      Routing().moveBack();
                       Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
                     });
                   });
@@ -296,6 +299,7 @@ class _AdsInBetweenFullState extends State<AdsInBetweenFull> {
                             uri,
                             mode: LaunchMode.externalApplication,
                           );
+                          Routing().moveBack();
                         });
                       } else {
                         throw "Could not launch $uri";

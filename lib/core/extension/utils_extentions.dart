@@ -155,20 +155,20 @@ extension ContextScreen on BuildContext {
     }
   }
 
-  Widget getAdsInBetween(AdsData? adsData, Function(VisibilityInfo)? onVisible, Function() onComplete, Function(FlutterAliplayer, String) getPlayer, {bool isfull = false}) {
+  Widget getAdsInBetween(AdsData? adsData, Function(VisibilityInfo)? onVisible, Function() onComplete, Function(FlutterAliplayer, String) getPlayer, {bool isfull = false, isVideo = false}) {
     if (adsData != null) {
       if (adsData.mediaType?.toLowerCase() == 'video') {
         if (isfull) {
           return AdsVideoInBetweenFull(
-            arguments: AdsArgument(data: adsData, adsUrl: '', isSponsored: true, onVisibility: onVisible, afterReport: onComplete, getPlayer: getPlayer),
+            arguments: AdsArgument(data: adsData, adsUrl: '', isSponsored: true, onVisibility: onVisible, afterReport: onComplete, getPlayer: getPlayer, isVideo: isVideo),
           );
         }
-        return AdsVideoInBetween(onVisibility: onVisible, data: adsData, afterReport: onComplete, getPlayer: getPlayer);
+        return AdsVideoInBetween(onVisibility: onVisible, data: adsData, afterReport: onComplete, getPlayer: getPlayer, isVideo: isVideo);
       } else {
         if (isfull) {
-          return AdsInBetweenFull(arguments: AdsArgument(data: adsData, adsUrl: adsData.adsUrlLink ?? '', isSponsored: true));
+          return AdsInBetweenFull(arguments: AdsArgument(data: adsData, adsUrl: adsData.adsUrlLink ?? '', isSponsored: true, isVideo: isVideo));
         }
-        return AdsInBetween(data: adsData, afterReport: onComplete);
+        return AdsInBetween(data: adsData, afterReport: onComplete, isVideo: isVideo);
       }
     }
     return const SizedBox.shrink();

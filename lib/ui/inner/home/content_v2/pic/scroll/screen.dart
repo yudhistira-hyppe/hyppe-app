@@ -688,7 +688,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                           }),
                     ),
                     Expanded(
-                      child: (pics?.isEmpty ?? true)
+                      child: (pics?.isEmpty ?? [].isEmpty)
                           ? const NoResultFound()
                           : RefreshIndicator(
                               onRefresh: () async {
@@ -874,14 +874,9 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                           context.read<PreviewPicNotifier>().reportContent(context, pics?[index] ?? ContentData(), fAliplayer: fAliplayer, onCompleted: () async {
                             bool connect = await System().checkConnections();
                             if (connect) {
-                              if (pics?.isEmpty ?? [].isEmpty) {
-                                Routing().moveBack();
-                                Routing().moveBack();
-                                return;
-                              }
                               setState(() {
                                 isloading = true;
-                                if (index == (pics?.length ?? 0 - 1)) {
+                                if (index == (pics?.length ?? 0) - 1) {
                                   pageIndex = index - 1;
                                 }
                               });
@@ -907,9 +902,9 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                             contentData: pics?[index] ?? ContentData(),
                             captionTitle: hyppePic,
                             onDetail: false,
-                            isShare: pics?[index].isShared,
+                            isShare: pics?[index].isShared??false,
                             onUpdate: () {
-                              if (index == (pics?.length ?? 0 - 1)) {
+                              if  (index == (pics?.length ?? 0 - 1)) {
                                 setState(() {
                                   pageIndex = index - 1;
                                 });
@@ -1067,7 +1062,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                 onDoubleTap: () {
                                   final _likeNotifier = context.read<LikeNotifier>();
                                   if (pics?[index] != null) {
-                                    _likeNotifier.likePost(context, pics![index]);
+                                    _likeNotifier.likePost(context, pics?[index]??ContentData());
                                   }
                                 },
                                 child: Center(
