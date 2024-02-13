@@ -132,149 +132,151 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
-              sixteenPx,
-              CustomTextWidget(
-                textToDisplay: widget.captionTitle,
-                // '$captionTitle ${contentData?.content.length == 1 ? contentData?.content.length : contentIndex} of ${contentData?.content.length}',
-                textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
-              ),
-            ],
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+                sixteenPx,
+                CustomTextWidget(
+                  textToDisplay: widget.captionTitle,
+                  // '$captionTitle ${contentData?.content.length == 1 ? contentData?.content.length : contentIndex} of ${contentData?.content.length}',
+                  textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
           ),
-        ),
-        ListView(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          children: [
-            if (widget.contentData.reportedStatus != 'OWNED' && widget.isShare && widget.contentData.visibility == 'PUBLIC')
-              _tileComponent(
-                moveBack: true,
-                caption: '${TranslateNotifierV2().translate.copyLink}',
-                icon: 'copy-link.svg',
-                onTap: () => _handleLink(context, copiedToClipboard: true, description: widget.captionTitle, data: widget.contentData),
-              ),
-            if (widget.contentData.reportedStatus != 'OWNED' && widget.isShare && widget.contentData.visibility == 'PUBLIC')
-              _tileComponent(
-                moveBack: false,
-                caption: '${TranslateNotifierV2().translate.share}',
-                icon: 'share.svg',
-                onTap: () => _handleLink(context, copiedToClipboard: false, description: widget.captionTitle, data: widget.contentData),
-              ),
-            if (_system.getFeatureTypeV2(widget.contentData.postType ?? '') != FeatureType.story) ...[
-              _tileComponent(
-                moveBack: false,
-                caption: '${TranslateNotifierV2().translate.edit}',
-                icon: 'edit-content.svg',
-                onTap: () {
-                  final notifier = Provider.of<PreUploadContentNotifier>(context, listen: false);
-                  notifier.hastagChallange = "";
-                  notifier.editData = widget.contentData;
-                  notifier.isEdit = true;
-                  notifier.isUpdate = true;
-                  notifier.captionController.text = widget.contentData.description ?? "";
-                  notifier.tagsController.text = widget.contentData.tags?.join(",") ?? '';
-                  notifier.featureType = _system.getFeatureTypeV2(widget.contentData.postType ?? '');
+          ListView(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            children: [
+              if (widget.contentData.reportedStatus != 'OWNED' && widget.isShare && widget.contentData.visibility == 'PUBLIC')
+                _tileComponent(
+                  moveBack: true,
+                  caption: '${TranslateNotifierV2().translate.copyLink}',
+                  icon: 'copy-link.svg',
+                  onTap: () => _handleLink(context, copiedToClipboard: true, description: widget.captionTitle, data: widget.contentData),
+                ),
+              if (widget.contentData.reportedStatus != 'OWNED' && widget.isShare && widget.contentData.visibility == 'PUBLIC')
+                _tileComponent(
+                  moveBack: false,
+                  caption: '${TranslateNotifierV2().translate.share}',
+                  icon: 'share.svg',
+                  onTap: () => _handleLink(context, copiedToClipboard: false, description: widget.captionTitle, data: widget.contentData),
+                ),
+              if (_system.getFeatureTypeV2(widget.contentData.postType ?? '') != FeatureType.story) ...[
+                _tileComponent(
+                  moveBack: false,
+                  caption: '${TranslateNotifierV2().translate.edit}',
+                  icon: 'edit-content.svg',
+                  onTap: () {
+                    final notifier = Provider.of<PreUploadContentNotifier>(context, listen: false);
+                    notifier.hastagChallange = "";
+                    notifier.editData = widget.contentData;
+                    notifier.isEdit = true;
+                    notifier.isUpdate = true;
+                    notifier.captionController.text = widget.contentData.description ?? "";
+                    notifier.tagsController.text = widget.contentData.tags?.join(",") ?? '';
+                    notifier.featureType = _system.getFeatureTypeV2(widget.contentData.postType ?? '');
 
-                  notifier.thumbNail = widget.contentData.fullThumbPath;
-                  notifier.allowComment = widget.contentData.allowComments ?? true;
-                  notifier.certified = widget.contentData.certified ?? false;
-                  notifier.ownershipEULA = widget.contentData.certified ?? false;
-                  notifier.isShared = widget.contentData.isShared ?? true;
+                    notifier.thumbNail = widget.contentData.fullThumbPath;
+                    notifier.allowComment = widget.contentData.allowComments ?? true;
+                    notifier.certified = widget.contentData.certified ?? false;
+                    notifier.ownershipEULA = widget.contentData.certified ?? false;
+                    notifier.isShared = widget.contentData.isShared ?? true;
 
-                  if (widget.contentData.location != '') {
-                    notifier.locationName = widget.contentData.location ?? '';
-                  } else {
-                    notifier.locationName = notifier.language.addLocation ?? '';
-                  }
-
-                  notifier.privacyTitle = widget.contentData.visibility ?? '';
-
-                  notifier.privacyValue = widget.contentData.visibility ?? '';
-                  final _isoCodeCache = SharedPreference().readStorage(SpKeys.isoCode);
-
-                  if (_isoCodeCache == 'id') {
-                    switch (widget.contentData.visibility ?? '') {
-                      case 'PUBLIC':
-                        notifier.privacyTitle = 'Umum';
-                        break;
-                      case 'FRIEND':
-                        notifier.privacyTitle = 'Teman';
-                        break;
-                      case 'PRIVATE':
-                        notifier.privacyTitle = 'Hanya saya';
-                        break;
-                      default:
+                    if (widget.contentData.location != '') {
+                      notifier.locationName = widget.contentData.location ?? '';
+                    } else {
+                      notifier.locationName = notifier.language.addLocation ?? '';
                     }
-                  } else {
+
+                    notifier.privacyTitle = widget.contentData.visibility ?? '';
+
                     notifier.privacyValue = widget.contentData.visibility ?? '';
-                  }
+                    final _isoCodeCache = SharedPreference().readStorage(SpKeys.isoCode);
 
-                  notifier.interestData = [];
-                  if (widget.contentData.cats != null) {
-                    widget.contentData.cats!.map((val) {
-                      notifier.interestData.add(val.id ?? '');
-                    }).toList();
-                  }
-                  notifier.userTagData = [];
-                  if (widget.contentData.tagPeople != null) {
-                    widget.contentData.tagPeople!.map((val) {
-                      notifier.userTagData.add(val.username ?? '');
-                    }).toList();
-                  }
-                  notifier.userTagDataReal = [];
-                  notifier.userTagDataReal.addAll(widget.contentData.tagPeople ?? []);
+                    if (_isoCodeCache == 'id') {
+                      switch (widget.contentData.visibility ?? '') {
+                        case 'PUBLIC':
+                          notifier.privacyTitle = 'Umum';
+                          break;
+                        case 'FRIEND':
+                          notifier.privacyTitle = 'Teman';
+                          break;
+                        case 'PRIVATE':
+                          notifier.privacyTitle = 'Hanya saya';
+                          break;
+                        default:
+                      }
+                    } else {
+                      notifier.privacyValue = widget.contentData.visibility ?? '';
+                    }
 
-                  notifier.toSell = widget.contentData.saleAmount != null && (widget.contentData.saleAmount ?? 0) > 0 ? true : false;
-                  notifier.includeTotalViews = widget.contentData.saleView ?? false;
-                  notifier.includeTotalLikes = widget.contentData.saleLike ?? false;
-                  notifier.certified = widget.contentData.certified ?? false;
-                  notifier.priceController.text = widget.contentData.saleAmount?.toInt().toString() ?? '';
+                    notifier.interestData = [];
+                    if (widget.contentData.cats != null) {
+                      widget.contentData.cats!.map((val) {
+                        notifier.interestData.add(val.id ?? '');
+                      }).toList();
+                    }
+                    notifier.userTagData = [];
+                    if (widget.contentData.tagPeople != null) {
+                      widget.contentData.tagPeople!.map((val) {
+                        notifier.userTagData.add(val.username ?? '');
+                      }).toList();
+                    }
+                    notifier.userTagDataReal = [];
+                    notifier.userTagDataReal.addAll(widget.contentData.tagPeople ?? []);
 
-                  _routing
-                      .move(Routes.preUploadContent,
-                          argument: UpdateContentsArgument(
-                            onEdit: true,
-                            contentData: widget.contentData,
-                            content: widget.captionTitle,
-                          ))
-                      .whenComplete(() => _routing.moveBack());
+                    notifier.toSell = widget.contentData.saleAmount != null && (widget.contentData.saleAmount ?? 0) > 0 ? true : false;
+                    notifier.includeTotalViews = widget.contentData.saleView ?? false;
+                    notifier.includeTotalLikes = widget.contentData.saleLike ?? false;
+                    notifier.certified = widget.contentData.certified ?? false;
+                    notifier.priceController.text = widget.contentData.saleAmount?.toInt().toString() ?? '';
+
+                    _routing
+                        .move(Routes.preUploadContent,
+                            argument: UpdateContentsArgument(
+                              onEdit: true,
+                              contentData: widget.contentData,
+                              content: widget.captionTitle,
+                            ))
+                        .whenComplete(() => _routing.moveBack());
+                  },
+                ),
+              ],
+              _tileComponent(
+                moveBack: false,
+                caption: '${TranslateNotifierV2().translate.delete}',
+                icon: 'delete.svg',
+                onTap: () async {
+                  ShowGeneralDialog.deleteContentDialog(context, widget.captionTitle.replaceAll('Hyppe', ''), () async {
+                    await deletePostByID(context, postID: widget.contentData.postID ?? '', postType: widget.contentData.postType ?? '').then((value) {
+                      if (value) _handleDelete(context);
+                    });
+                    widget.fAliplayer?.stop();
+                    if (widget.onUpdate != null) {
+                      widget.onUpdate!();
+                    }
+                  });
                 },
               ),
+              // _tileComponent(
+              //   moveBack: false,
+              //   caption: 'Turn off commenting',
+              //   icon: 'comment.svg',
+              //   onTap: () {},
+              // ),
             ],
-            _tileComponent(
-              moveBack: false,
-              caption: '${TranslateNotifierV2().translate.delete}',
-              icon: 'delete.svg',
-              onTap: () async {
-                ShowGeneralDialog.deleteContentDialog(context, widget.captionTitle.replaceAll('Hyppe', ''), () async {
-                  await deletePostByID(context, postID: widget.contentData.postID ?? '', postType: widget.contentData.postType ?? '').then((value) {
-                    if (value) _handleDelete(context);
-                  });
-                  widget.fAliplayer?.stop();
-                  if (widget.onUpdate != null) {
-                    widget.onUpdate!();
-                  }
-                });
-              },
-            ),
-            // _tileComponent(
-            //   moveBack: false,
-            //   caption: 'Turn off commenting',
-            //   icon: 'comment.svg',
-            //   onTap: () {},
-            // ),
-          ],
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 
