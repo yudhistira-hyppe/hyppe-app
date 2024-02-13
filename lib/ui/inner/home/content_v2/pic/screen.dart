@@ -919,7 +919,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                               // }
                               // context.read<MainNotifier>().globalKey.currentState?.innerController.jumpTo(position);
                             }
-
+                            
                             // if (_lastCurIndex != _curIdx) {
                             if (_lastCurPostId != _curPostId) {
                               if (mounted) {

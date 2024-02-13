@@ -413,6 +413,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                 } else {
                   widget.data.isLoading = true;
                   Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: 0, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
+                  
                 }
 
                 SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
@@ -424,8 +425,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
               itemCount: notifier.vidData?.length ?? 0,
               onPageChanged: (value) async {
                 curentIndex = value;
-
-                curentIndex = value;
+                notifier.lastScrollIdx = value;
                 scrollPage(notifier.vidData?[value].metadata?.height, notifier.vidData?[value].metadata?.width);
                 if ((notifier.vidData?.length ?? 0) - 1 == widget.index) {
                   await notifier.loadMore(context, controller, PageSrc.selfProfile, '');

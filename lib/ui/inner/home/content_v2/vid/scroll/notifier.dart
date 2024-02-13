@@ -5,10 +5,15 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:provider/provider.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../../../../../../core/services/system.dart';
 import '../../../../search_v2/notifier.dart';
 
 class ScrollVidNotifier with ChangeNotifier {
+  int lastScrollIdx = 0;
+  int get lastScrollIndex => lastScrollIdx;
+  final ItemScrollController itemScrollController = ItemScrollController();
+
   List<ContentData>? vidData = [];
   bool _isLoadingLoadmore = false;
   bool get isLoadingLoadmore => _isLoadingLoadmore;

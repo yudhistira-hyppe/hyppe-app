@@ -39,6 +39,7 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/widget/vidscroll_fullscreen_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
@@ -1129,12 +1130,12 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                 color: Colors.black,
                 borderRadius: BorderRadius.circular(widget.fromFullScreen ? 0 : 16),
               ),
-              // child: VideoThumbnail(
-              //   videoData: widget.data,
-              //   onDetail: false,
-              //   fn: () {},
-              //   withMargin: true,
-              // ),
+              child: VideoThumbnail(
+                videoData: widget.data,
+                onDetail: false,
+                fn: () {},
+                withMargin: true,
+              ),
             ),
             const Positioned.fill(
               child: Align(
@@ -1355,6 +1356,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                     _currentPosition = _videoDuration;
                                   });
                                 });
+                                
                               } else {
                                 Navigator.pop(context, changevalue);
                               }

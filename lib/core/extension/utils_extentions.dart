@@ -155,7 +155,7 @@ extension ContextScreen on BuildContext {
     }
   }
 
-  Widget getAdsInBetween(AdsData? adsData, Function(VisibilityInfo)? onVisible, Function() onComplete, Function(FlutterAliplayer, String) getPlayer, {bool isfull = false, isVideo = false}) {
+  Widget getAdsInBetween(AdsData? adsData, Function(VisibilityInfo)? onVisible, Function() onComplete, Function(FlutterAliplayer, String) getPlayer, {bool isfull = false, isVideo = false, Orientation orientation = Orientation.portrait, bool isScroll = false}) {
     if (adsData != null) {
       if (adsData.mediaType?.toLowerCase() == 'video') {
         if (isfull) {
@@ -166,7 +166,7 @@ extension ContextScreen on BuildContext {
         return AdsVideoInBetween(onVisibility: onVisible, data: adsData, afterReport: onComplete, getPlayer: getPlayer, isVideo: isVideo);
       } else {
         if (isfull) {
-          return AdsInBetweenFull(arguments: AdsArgument(data: adsData, adsUrl: adsData.adsUrlLink ?? '', isSponsored: true, isVideo: isVideo));
+          return AdsInBetweenFull(arguments: AdsArgument(data: adsData, adsUrl: adsData.adsUrlLink ?? '', isSponsored: true, isVideo: isVideo, orientation: orientation, isScroll: isScroll));
         }
         return AdsInBetween(data: adsData, afterReport: onComplete, isVideo: isVideo);
       }
