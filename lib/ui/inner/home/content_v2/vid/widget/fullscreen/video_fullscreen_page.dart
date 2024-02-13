@@ -518,7 +518,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                 )
                               : isAds 
                                 ? context.getAdsInBetween(vidData?[index].inBetweenAds, (info) {}, () {
-                                      context.read<PreviewPicNotifier>().setAdsData(index, null);
+                                      context.read<PreviewVidNotifier>().setInBetweenAds(index, null);
                                     }, (player, id) {}, isfull: true, isVideo: true, orientation: beforePosition, isScroll: true)
                                 : OrientationBuilder(builder: (context, orientation) {
                                   final player = VidPlayerPage(

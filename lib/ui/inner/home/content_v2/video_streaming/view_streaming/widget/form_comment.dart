@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/iconButton.dart';
@@ -56,7 +57,7 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                         setState(() {
                           comment = '';
                         });
-                        if(notifier.commentController.text.isNotEmpty){
+                        if(notifier.commentController.text.isNotOnlySpace()){
                           notifier.sendComment(context, notifier.streamerData!, notifier.commentController.text);
                         }
                       }
@@ -93,7 +94,7 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                                           setState(() {
                                             comment = '';
                                           });
-                                          if(notifier.commentController.text.isNotEmpty){
+                                          if(notifier.commentController.text.isNotOnlySpace()){
                                             notifier.sendComment(context, notifier.streamerData!, notifier.commentController.text);
                                           }
                                         }

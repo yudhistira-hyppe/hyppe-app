@@ -2,7 +2,6 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/common/user_badge_model.dart';
 import 'package:hyppe/ui/constant/widget/custom_stroke_text_widget.dart';
 

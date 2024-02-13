@@ -12,7 +12,6 @@ import '../../../../search_v2/notifier.dart';
 class ScrollVidNotifier with ChangeNotifier {
   int lastScrollIdx = 0;
   int get lastScrollIndex => lastScrollIdx;
-  final ItemScrollController itemScrollController = ItemScrollController();
 
   List<ContentData>? vidData = [];
   bool _isLoadingLoadmore = false;

@@ -172,7 +172,7 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                                       decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(8.0)),
                                       // transform: Matrix4.translationValues(-40.0, 0.0, 0.0),
                                       child: Text(
-                                        (widget.data?.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+                                        (widget.data?.following ?? false) ? (lang.following ?? '') : (lang.follow ?? ''),
                                         style: const TextStyle(color: kHyppeLightButtonText, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
                                       ),
                                     ),

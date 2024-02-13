@@ -179,7 +179,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
         if (index == pics!.length - 2) {
           if (connect) {
             if (!notifier.isLoadingLoadmore) {
-              await notifier.loadMore(context, _scrollController, pageSrc!, widget.arguments?.key ?? '');
+              await notifier.loadMore(context, _scrollController, pageSrc, widget.arguments?.key ?? '');
               if (mounted) {
                 setState(() {
                   pics = notifier.pics;
@@ -640,6 +640,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(margin: const EdgeInsets.symmetric(horizontal: 10), transform: Matrix4.translationValues(-18.0, 0.0, 0.0), child: widget.arguments?.titleAppbar ?? Container()),
+                          if(pics?.isNotEmpty ?? false)
                           if (pics?[pageIndex].email != email && (pics?[pageIndex].isNewFollowing ?? false) && (widget.arguments?.isProfile ?? false))
                             Consumer<PreviewPicNotifier>(
                               builder: (context, picNot, child) => Padding(
