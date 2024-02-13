@@ -1370,11 +1370,11 @@ class PreviewContentNotifier with ChangeNotifier {
       }
       final videoDuration = betterPlayerController?.value.duration ?? const Duration(seconds: 0);
       final limitDuration = featureType == FeatureType.diary
-          ? const Duration(minutes: 1)
+          ? const Duration(minutes: 1, milliseconds: 900)
           : featureType == FeatureType.vid
-              ? const Duration(minutes: 30)
+              ? const Duration(minutes: 30, milliseconds: 900)
               : featureType == FeatureType.story
-                  ? const Duration(seconds: 15)
+                  ? const Duration(seconds: 15, milliseconds: 900)
                   : const Duration(seconds: 0);
       print('State Preview Limit Checking: ${videoDuration.inMinutes} ${limitDuration.inMinutes} $featureType');
       if (videoDuration.inSeconds == 0) {

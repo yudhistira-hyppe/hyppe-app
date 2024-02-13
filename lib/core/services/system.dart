@@ -53,6 +53,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:screen_protector/screen_protector.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:unique_identifier/unique_identifier.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:video_thumbnail/video_thumbnail.dart';
@@ -308,7 +309,8 @@ class System {
 
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      deviceIdentifier = "${androidInfo.id}-${androidInfo.hardware}-${androidInfo.serialNumber}-${androidInfo.board}";
+      final serial = await UniqueIdentifier.serial;
+      deviceIdentifier = "${androidInfo.id}-${androidInfo.hardware}-$serial-${androidInfo.board}";
     } else if (Platform.isIOS) {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
       deviceIdentifier = iosInfo.identifierForVendor ?? deviceID;
