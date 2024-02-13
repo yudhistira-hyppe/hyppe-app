@@ -367,6 +367,11 @@ extension StringDefine on String {
     } catch (_) {}
     return currentView.toStringAsFixed(0);
   }
+
+  bool isNotOnlySpace(){
+    final values = replaceAll(" ", "");
+    return values.isNotEmpty;
+  }
 }
 
 extension IntegerExtension on int {

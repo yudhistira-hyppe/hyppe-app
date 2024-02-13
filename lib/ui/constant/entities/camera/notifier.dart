@@ -317,11 +317,12 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     if(notifier.featureType == FeatureType.pic){
       isFlash = !isFlash;
     }else if(notifier.featureType == FeatureType.story){
-      if(notifier.isVideo){
-        isFlash = await deepArController!.toggleFlash();
-      }else{
-        isFlash = !isFlash;
-      }
+      // if(notifier.isVideo){
+      //   isFlash = await deepArController!.toggleFlash();
+      // }else{
+      //   isFlash = !isFlash;
+      // }
+      isFlash = !isFlash;
     }else{
       isFlash = await deepArController!.toggleFlash();
     }
@@ -410,10 +411,14 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     return _result;
   }
 
-  Future<void> startVideoRecording() async {
+  Future<void> startVideoRecording(BuildContext context) async {
+    final notifier = Provider.of<MakeContentNotifier>(context, listen: false);
     print('play video');
     if (!isInitialized) {
       return;
+    }
+    if(notifier.featureType == FeatureType.story && isFlash){
+      await deepArController?.toggleFlash();
     }
 
     if (isRecordingVideo) {
@@ -430,12 +435,15 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     }
   }
 
-  Future<File?> stopVideoRecording() async {
+  Future<File?> stopVideoRecording(BuildContext context) async {
+    final notifier = Provider.of<MakeContentNotifier>(context, listen: false);
     if (!isRecordingVideo) {
       return null;
     }
 
-    if (isFlash) {
+    if(notifier.featureType == FeatureType.story && isFlash){
+      await deepArController?.toggleFlash();
+    }else if (isFlash) {
       isFlash = (await deepArController?.toggleFlash() ?? false);
     }
 
