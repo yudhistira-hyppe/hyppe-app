@@ -31,7 +31,6 @@ import 'package:provider/provider.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../../../../app.dart';
-import '../../../../../../ux/path.dart';
 
 class StoryPlayerPage extends StatefulWidget {
   final StoryDetailScreenArgument argument;

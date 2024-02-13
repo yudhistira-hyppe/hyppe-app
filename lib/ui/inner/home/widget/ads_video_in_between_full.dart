@@ -24,17 +24,13 @@ import '../../../../core/bloc/posts_v2/state.dart';
 import '../../../../core/config/ali_config.dart';
 import '../../../../core/constants/asset_path.dart';
 import '../../../../core/constants/themes/hyppe_colors.dart';
-import '../../../../core/constants/utils.dart';
 import '../../../../core/services/system.dart';
 import '../../../../initial/hyppe/translate_v2.dart';
 import '../../../../ux/path.dart';
 import '../../../../ux/routing.dart';
-import '../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import '../../../constant/widget/custom_base_cache_image.dart';
 import '../../../constant/widget/custom_icon_widget.dart';
 import '../../../constant/widget/custom_loading.dart';
 import '../../../constant/widget/custom_spacer.dart';
-import '../../../constant/widget/custom_text_widget.dart';
 
 class AdsVideoInBetweenFull extends StatefulWidget {
   final AdsArgument arguments;

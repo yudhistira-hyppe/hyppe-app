@@ -9,7 +9,6 @@ import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/ads_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
-import 'package:hyppe/ui/inner/home/content_v2/pic/fullscreen/pic_fullscreen_page.dart';
 import 'package:hyppe/ui/inner/home/widget/ads_in_between.dart';
 import 'package:hyppe/ui/inner/home/widget/ads_in_between_full.dart';
 import 'package:hyppe/ui/inner/home/widget/ads_video_in_between.dart';

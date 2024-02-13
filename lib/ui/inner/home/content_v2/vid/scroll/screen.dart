@@ -204,7 +204,13 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
 
   @override
   void didPopNext() {
-    print("======= didPopNext dari diary");
+    ScrollVidNotifier notifier = context.read<ScrollVidNotifier>();
+    if (indexVid == (notifier.vidData?.length ?? 0)) {
+      setState(() {
+        indexVid = _curIdx - 1;
+        print("=-=-=-=-=-  $indexVid =-==-=-=-=-=-=");
+      });
+    }
     // final notifier = context.read<ScrollVidNotifier>();
     if (_curIdx != -1) {
       vidData?[_curIdx].fAliplayer?.play();
@@ -256,13 +262,13 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
             child: SizedBox(
               child: Column(
                 children: [
-                  if (vidData?.isNotEmpty ?? false)
                     ListTile(
                       title: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(transform: Matrix4.translationValues(-18.0, 0.0, 0.0), margin: const EdgeInsets.symmetric(horizontal: 10), child: widget.arguments?.titleAppbar ?? Container()),
+                          if (vidData?.isNotEmpty ?? false)
                           if (vidData?[indexVid].email != email && (vidData?[indexVid].isNewFollowing ?? false) && (widget.arguments?.isProfile ?? false))
                             Consumer<PreviewPicNotifier>(
                               builder: (context, picNot, child) => Padding(
@@ -488,7 +494,11 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                             onDetail: false,
                             isShare: vidData?[index].isShared,
                             onUpdate: () {
-                              indexVid = index - 1;
+                              if  (index == (vidData?.length ?? 0 - 1)) {
+                                setState(() {
+                                  indexVid = index - 1;
+                                });
+                              }
                               setState(() {});
                               context.read<HomeNotifier>().onUpdate();
                             },

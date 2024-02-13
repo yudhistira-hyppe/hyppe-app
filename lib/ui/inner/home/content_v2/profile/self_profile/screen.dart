@@ -30,7 +30,6 @@ import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:measured_size/measured_size.dart';
 

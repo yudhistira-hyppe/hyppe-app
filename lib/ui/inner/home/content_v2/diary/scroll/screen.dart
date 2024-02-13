@@ -644,11 +644,12 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ListTile(
-                        title: (diaryData?.isNotEmpty ?? false)? Row(
+                        title: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(transform: Matrix4.translationValues(-18.0, 0.0, 0.0), margin: const EdgeInsets.symmetric(horizontal: 10), child: widget.arguments?.titleAppbar ?? Container()),
+                            if(diaryData?.isNotEmpty ?? false)
                             if (diaryData?[indexDiary].email != email && (diaryData?[indexDiary].isNewFollowing ?? false) && (widget.arguments?.isProfile ?? false))
                               Consumer<PreviewPicNotifier>(
                                 builder: (context, picNot, child) => Padding(
@@ -683,15 +684,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                                 ),
                               ),
                           ],
-                        ): const SizedBox.shrink(),
-                        leading: IconButton(
-                            icon: const Icon(
-                              Icons.chevron_left,
-                              color: kHyppeTextLightPrimary,
-                            ),
-                            onPressed: () {
-                              Navigator.pop(context, '$_curIdx');
-                            }),
+                        ),
                       ),
                       Expanded(
                         child: (diaryData?.isEmpty ?? true)

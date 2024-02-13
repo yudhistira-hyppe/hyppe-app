@@ -56,7 +56,6 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
   bool liveIsPause = false;
   int? bottomIndex;
   List<Widget>? mFramePage;
-  Map<String, dynamic>? _dataSourceMap;
   String auth = '';
 
   bool isPlay = false;
