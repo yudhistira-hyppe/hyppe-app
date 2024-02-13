@@ -278,7 +278,7 @@ class ShowBottomSheet {
     await showModalBottomSheet(
       context: context,
       enableDrag: newUser == "FALSE",
-      isDismissible: newUser != "FALSE",
+      isDismissible: newUser == "FALSE",
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (builder) {
