@@ -412,6 +412,7 @@ class LocalizationModelV2 {
   String? passwordVerifiedSuccessfully;
   String? checkCarefullyPasswordAndReTypePassword;
   String? completeLaterLoginAsGuest;
+  String? messageGuest;
   String? whatIsYourIdNumbers;
   String? chooseIdentityAndFillTheFormWithYoursIdNumbers;
   String? whatGenderAreYou;
@@ -1518,6 +1519,7 @@ class LocalizationModelV2 {
     this.passwordVerifiedSuccessfully,
     this.checkCarefullyPasswordAndReTypePassword,
     this.completeLaterLoginAsGuest,
+    this.messageGuest,
     this.whatIsYourIdNumbers,
     this.chooseIdentityAndFillTheFormWithYoursIdNumbers,
     this.whatGenderAreYou,
@@ -2626,6 +2628,7 @@ class LocalizationModelV2 {
     passwordVerifiedSuccessfully = json['passwordVerifiedSuccessfully'];
     checkCarefullyPasswordAndReTypePassword = json['checkCarefullyPasswordAndReTypePassword'];
     completeLaterLoginAsGuest = json['completeLaterLoginAsGuest'];
+    messageGuest = json['messageGuest'];
     whatIsYourIdNumbers = json['whatIsYourIdNumbers'];
     chooseIdentityAndFillTheFormWithYoursIdNumbers = json['chooseIdentityAndFillTheFormWithYoursIdNumbers'];
     whatGenderAreYou = json['whatGenderAreYou'];
