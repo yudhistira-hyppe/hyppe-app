@@ -918,7 +918,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                               // }
                               // context.read<MainNotifier>().globalKey.currentState?.innerController.jumpTo(position);
                             }
-                            
+
                             // if (_lastCurIndex != _curIdx) {
                             if (_lastCurPostId != _curPostId) {
                               if (mounted) {
@@ -1287,7 +1287,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                   if (index < notifier.currentIndex) {
                                                     setState(() {
                                                       index = notifier.currentIndex;
-                                                      notifier.pic!.removeRange(_curIdx, notifier.currentIndex);
+                                                      // notifier.pic!.removeRange(_curIdx, notifier.currentIndex);
+                                                      notifier.pic!.removeRange(0, notifier.currentIndex);
+                                                      widget.scrollController?.animateTo(0, duration: const Duration(milliseconds: 50), curve: Curves.ease);
                                                     });
                                                   } else if (index > notifier.currentIndex) {
                                                     setState(() {
