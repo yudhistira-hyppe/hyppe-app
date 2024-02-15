@@ -33,6 +33,8 @@ class CustomDescContent extends StatefulWidget {
 
   final Function(bool val)? callback;
   final Function(bool val)? callbackIsMore;
+  final GestureDragStartCallback? onLongPressStart;
+  final GestureDragEndCallback? onLongPressEnd;
 
   CustomDescContent({
     Key? key,
@@ -54,6 +56,8 @@ class CustomDescContent extends StatefulWidget {
     this.afterGone,
     this.isPlay,
     this.isloading,
+    this.onLongPressStart,
+    this.onLongPressEnd
   }) : super(key: key);
 
   @override
@@ -156,84 +160,88 @@ class _CustomDescContentState extends State<CustomDescContent> {
         recognizer: TapGestureRecognizer()..onTap = _onSeeMore);
 
     // print('desc ${widget.desc} ');
-    Widget result = LayoutBuilder(builder: (context, constraints) {
-      assert(constraints.hasBoundedWidth);
-      final maxWidth = constraints.maxWidth;
+    Widget result = GestureDetector(
+      onVerticalDragStart: widget.onLongPressStart,
+      onVerticalDragEnd: widget.onLongPressEnd,
+      child: LayoutBuilder(builder: (context, constraints) {
+        assert(constraints.hasBoundedWidth);
+        final maxWidth = constraints.maxWidth;
 
-      final text = TextSpan(
-        children: [TextSpan(text: desc, style: effectiveTextStyle)],
-      );
-
-      final textPainter = TextPainter(
-        text: link,
-        textAlign: textAlign,
-        textDirection: textDirection,
-        textScaleFactor: textScaleFactor,
-        maxLines: widget.trimLines,
-      );
-
-      textPainter.layout(minWidth: 0, maxWidth: maxWidth);
-      final linkSize = textPainter.size;
-
-      textPainter.text = _delimiter;
-      textPainter.layout(minWidth: 0, maxWidth: maxWidth);
-      final delimiterSize = textPainter.size;
-
-      textPainter.text = text;
-      textPainter.layout(minWidth: constraints.maxWidth, maxWidth: maxWidth);
-      final textSize = textPainter.size;
-
-      var linkLongerThanLine = false;
-      int endIndex;
-
-      if (linkSize.width < maxWidth) {
-        final readMoreSize = linkSize.width + delimiterSize.width;
-        final pos = textPainter.getPositionForOffset(Offset(
-          textDirection == TextDirection.rtl ? readMoreSize : textSize.width - readMoreSize,
-          textSize.height,
-        ));
-        endIndex = textPainter.getOffsetBefore(pos.offset) ?? 0;
-      } else {
-        var pos = textPainter.getPositionForOffset(
-          textSize.bottomLeft(Offset.zero),
+        final text = TextSpan(
+          children: [TextSpan(text: desc, style: effectiveTextStyle)],
         );
-        endIndex = pos.offset;
-        linkLongerThanLine = true;
-      }
 
-      if (textPainter.didExceedMaxLines) {
-        var textSpan = TextSpan(
-          style: effectiveTextStyle,
-          children: collectDescItems(
-            context,
-            lastIndex: endIndex,
-            getDescItems(lastIndex: endIndex, linkLongerThanLine: linkLongerThanLine),
-            spanTrim: link,
-          ),
-        );
-        return Text.rich(
-          textSpan,
+        final textPainter = TextPainter(
+          text: link,
           textAlign: textAlign,
           textDirection: textDirection,
-          softWrap: true,
-          overflow: widget.textOverflow ?? TextOverflow.clip,
           textScaleFactor: textScaleFactor,
+          maxLines: widget.trimLines,
         );
-      } else {
-        var textSpan = TextSpan(
-          style: effectiveTextStyle,
-          children: collectDescItems(context, lastIndex: null, getDescItems(lastIndex: null, linkLongerThanLine: linkLongerThanLine)),
-        );
-        return Text.rich(
-          textSpan,
-          textAlign: textAlign,
-          textDirection: textDirection,
-          softWrap: true,
-          overflow: widget.textOverflow ?? TextOverflow.clip,
-          textScaleFactor: textScaleFactor,
-        );
-      }
-    });
+
+        textPainter.layout(minWidth: 0, maxWidth: maxWidth);
+        final linkSize = textPainter.size;
+
+        textPainter.text = _delimiter;
+        textPainter.layout(minWidth: 0, maxWidth: maxWidth);
+        final delimiterSize = textPainter.size;
+
+        textPainter.text = text;
+        textPainter.layout(minWidth: constraints.maxWidth, maxWidth: maxWidth);
+        final textSize = textPainter.size;
+
+        var linkLongerThanLine = false;
+        int endIndex;
+
+        if (linkSize.width < maxWidth) {
+          final readMoreSize = linkSize.width + delimiterSize.width;
+          final pos = textPainter.getPositionForOffset(Offset(
+            textDirection == TextDirection.rtl ? readMoreSize : textSize.width - readMoreSize,
+            textSize.height,
+          ));
+          endIndex = textPainter.getOffsetBefore(pos.offset) ?? 0;
+        } else {
+          var pos = textPainter.getPositionForOffset(
+            textSize.bottomLeft(Offset.zero),
+          );
+          endIndex = pos.offset;
+          linkLongerThanLine = true;
+        }
+
+        if (textPainter.didExceedMaxLines) {
+          var textSpan = TextSpan(
+            style: effectiveTextStyle,
+            children: collectDescItems(
+              context,
+              lastIndex: endIndex,
+              getDescItems(lastIndex: endIndex, linkLongerThanLine: linkLongerThanLine),
+              spanTrim: link,
+            ),
+          );
+          return Text.rich(
+            textSpan,
+            textAlign: textAlign,
+            textDirection: textDirection,
+            softWrap: true,
+            overflow: widget.textOverflow ?? TextOverflow.clip,
+            textScaleFactor: textScaleFactor,
+          );
+        } else {
+          var textSpan = TextSpan(
+            style: effectiveTextStyle,
+            children: collectDescItems(context, lastIndex: null, getDescItems(lastIndex: null, linkLongerThanLine: linkLongerThanLine)),
+          );
+          return Text.rich(
+            textSpan,
+            textAlign: textAlign,
+            textDirection: textDirection,
+            softWrap: true,
+            overflow: widget.textOverflow ?? TextOverflow.clip,
+            textScaleFactor: textScaleFactor,
+          );
+        }
+      }),
+    );
 
     return result;
   }

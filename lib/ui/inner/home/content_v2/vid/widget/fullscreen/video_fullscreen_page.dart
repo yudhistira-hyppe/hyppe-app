@@ -143,10 +143,11 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
     });
   }
 
+  bool isScrolling = false;
+
   @override
   void initState() {
     // SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-
     if (widget.data.certified ?? false) {
       System().block(context);
     } else {
@@ -665,8 +666,10 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                                 //   "=============== pause 11".logger();
                                                 //   notifier.vidData?[_curIdx].fAliplayer?.pause();
                                                 // }
-
-                                                ShowBottomSheet().onShowOptionContent(
+                                                widget.data.fAliplayer?.pause();
+                                                isPause = true;
+                                                setState(() {});
+                                                await ShowBottomSheet().onShowOptionContent(
                                                   context,
                                                   contentData: widget.data,
                                                   captionTitle: hyppeVid,
@@ -677,9 +680,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                                   },
                                                   fAliplayer: widget.data.fAliplayer,
                                                 );
-                                                widget.fAliplayer?.pause();
-                                                isPause = true;
-                                                setState(() {});
+
                                               }
                                             });
                                           }),
@@ -1429,8 +1430,24 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                             trimLines: 2,
                             textAlign: TextAlign.start,
                             callbackIsMore: (val) {
+
                               setState(() {
+                                onTapCtrl = true;
                                 isShowMore = val;
+                              });
+                            },
+                            onLongPressEnd: (value){
+                              print('Longlong: onLongPressEnd fullscreen');
+                              setState(() {
+                                isScrolling = false;
+                                onTapCtrl = false;
+                              });
+                            },
+                            onLongPressStart: (value){
+                              print('Longlong: onLongPressStart fullscreen');
+                              setState(() {
+                                isScrolling = true;
+                                onTapCtrl = true;
                               });
                             },
                             seeLess: ' ${lang?.less}', // ${notifier2.translate.seeLess}',
@@ -1686,7 +1703,9 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
 
   void _onPlayerHide() {
     Future.delayed(const Duration(seconds: 4), () {
-      onTapCtrl = false;
+      if(!isScrolling){
+        onTapCtrl = false;
+      }
       // setState(() {});
     });
   }

@@ -341,10 +341,10 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
                       ),
                       Container(
                           margin: const EdgeInsets.symmetric(horizontal: 54),
-                          child: const CustomTextWidget(
+                          child: CustomTextWidget(
                             maxLines: 2,
-                            textToDisplay: 'Masuk untuk nikmati fitur seru Hyppe secara lengkap',
-                            textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                            textToDisplay: notifier.language.messageGuest ?? 'Masuk untuk nikmati fitur seru Hyppe secara lengkap',
+                            textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                           )),
                       twentyFourPx,
                       CustomElevatedButton(
