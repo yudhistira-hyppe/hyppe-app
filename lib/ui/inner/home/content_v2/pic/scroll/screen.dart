@@ -111,7 +111,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
   // bool _scroolEnabled = true;
   bool toComment = false;
 
-  final ItemScrollController itemScrollController = ItemScrollController();
+  
   final ScrollOffsetController scrollOffsetController = ScrollOffsetController();
   final ScrollOffsetListener scrollOffsetListener = ScrollOffsetListener.create();
 
@@ -155,7 +155,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
-      itemScrollController.jumpTo(index: widget.arguments?.page ?? 0);
+      notifier.itemScrollController.jumpTo(index: widget.arguments?.page ?? 0);
       // scrollIndex = widget.arguments?.page ?? 0;
       print("00000000000000 ${widget.arguments?.page}");
       _initListener(notifier);
@@ -730,7 +730,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                 },
                                 child: ScrollablePositionedList.builder(
                                   scrollDirection: Axis.vertical,
-                                  itemScrollController: itemScrollController,
+                                  itemScrollController: notifier.itemScrollController,
                                   itemPositionsListener: itemPositionsListener,
                                   scrollOffsetController: scrollOffsetController,
                                   scrollOffsetListener: scrollOffsetListener,
@@ -778,7 +778,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     );
   }
 
-  var initialControllerValue;
+  // var initialControllerValue;
 
   Widget itemPict(ScrollPicNotifier notifier, int index) {
     TranslateNotifierV2 tn = context.read<TranslateNotifierV2>();
@@ -1057,6 +1057,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                     if (res != null || res == null) {
                                       fAliplayer?.play();
                                       fAliplayer?.setMuted(notifier.isMute);
+                                      notifier.itemScrollController.jumpTo(index: notifier.currentIndex);
                                     }
                                   }
                                 },

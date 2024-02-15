@@ -1014,8 +1014,8 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
   @override
   void dispose() {
     print("-=-=-=-=-=-=disepose vid");
-    fAliplayer?.stop();
-    fAliplayer?.destroy();
+    // fAliplayer?.stop();
+    // fAliplayer?.destroy();
     // animatedController.dispose();
     // Wakelock.disable();
     globalAliPlayer = null;
@@ -1298,6 +1298,10 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                 Future.delayed(const Duration(seconds: 6), () {
                                   notifier.isLoading = false;
                                 });
+                                if (widget.isVidFormProfile ?? false) {
+                                  var notifScroll = context.read<ScrollVidNotifier>();
+                                  notifScroll.itemScrollController.jumpTo(index: notifScroll.lastScrollIndex);
+                                }
                                 if (mounted) {
                                   setState(() {
                                     _videoDuration = value.videoDuration ?? 0;

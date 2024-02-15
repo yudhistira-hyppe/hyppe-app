@@ -10,6 +10,7 @@ import '../../../../../../core/services/system.dart';
 import '../../../../search_v2/notifier.dart';
 
 class ScrollVidNotifier with ChangeNotifier {
+  final ItemScrollController itemScrollController = ItemScrollController();  
   int lastScrollIdx = 0;
   int get lastScrollIndex => lastScrollIdx;
 

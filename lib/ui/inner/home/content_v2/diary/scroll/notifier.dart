@@ -5,16 +5,21 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:provider/provider.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../../../../search_v2/notifier.dart';
 
 class ScrollDiaryNotifier with ChangeNotifier {
+  final ItemScrollController itemScrollController = ItemScrollController();
   bool _isLoadingLoadmore = false;
   bool get isLoadingLoadmore => _isLoadingLoadmore;
   set isLoadingLoadmore(bool state) {
     _isLoadingLoadmore = state;
     notifyListeners();
   }
+
+  int currIndex = 0;
+  int get currentIndex => currIndex;
 
   bool _connectionError = false;
   bool get connectionError => _connectionError;

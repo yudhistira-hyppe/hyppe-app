@@ -413,7 +413,6 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                 } else {
                   widget.data.isLoading = true;
                   Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: 0, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
-                  
                 }
 
                 SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);

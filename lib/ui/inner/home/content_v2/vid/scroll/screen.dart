@@ -90,7 +90,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
 
   Map<int, FlutterAliplayer> dataAli = {};
 
-  final ItemScrollController itemScrollController = ItemScrollController();  
+  
   final ScrollOffsetController scrollOffsetController = ScrollOffsetController();
 
   /// Listener that reports the position of items when the list is scrolled.
@@ -114,7 +114,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       print("============== widget argument ${widget.arguments!.vidData}");
-      itemScrollController.jumpTo(index: widget.arguments!.page!);
+      notifier.itemScrollController.jumpTo(index: widget.arguments!.page!);
       // notifier.checkConnection();
     });
     var index = 0;
@@ -342,7 +342,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                 return false;
                               },
                               child: ScrollablePositionedList.builder(
-                                itemScrollController: itemScrollController,
+                                itemScrollController: vidNotifier.itemScrollController,
                                 itemPositionsListener: itemPositionsListener,
                                 scrollOffsetController: scrollOffsetController,
                                 physics: const AlwaysScrollableScrollPhysics(),

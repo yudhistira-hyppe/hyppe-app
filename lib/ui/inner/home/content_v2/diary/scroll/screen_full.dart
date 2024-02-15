@@ -645,6 +645,8 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
                 onPageChanged: (index) {
                   print("===asdasdasd $index");
                   _curIdx = index;
+                  notifier.currIndex = index;
+                  // notifier.itemScrollController.jumpTo(index: index);
                   if (_lastCurIndex != _curIdx) {
                     try {
                       widget.arguments?.scrollController?.jumpTo(System().scrollAuto(_curIdx, widget.arguments?.heightTopProfile ?? 0, widget.arguments?.heightBox?.toInt() ?? 175));
