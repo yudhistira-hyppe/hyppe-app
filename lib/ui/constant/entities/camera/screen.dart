@@ -42,7 +42,13 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver, Af
   void afterFirstLayout(BuildContext context) async {
     isloading = true;
     notifier = Provider.of<CameraNotifier>(context, listen: false);
-    await notifier.initCamera(context, mounted, backCamera: widget.backCamera).then((value) => isloading = false);
+    await notifier.initCamera(context, mounted, backCamera: widget.backCamera).then((value){
+      Future.delayed(const Duration(milliseconds: 100), (){
+        setState(() {
+          isloading = false;
+        });
+      });
+    });
   }
 
   @override
@@ -85,33 +91,13 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver, Af
             child: const Center(
               child: CustomLoading(),
             ))
-        : AnimatedSwitcher(
-            duration: const Duration(milliseconds: 200),
-            transitionBuilder: (child, animation) => SlideTransition(
-                  position: Tween<Offset>(begin: const Offset(0.0, 1.0), end: const Offset(0.0, 0.0)).animate(animation),
-                  child: child,
-                ),
-            child: notifier.item2
-                ? Center(
-                    child: SizedBox(
-                      height: 198,
-                      child: CustomErrorWidget(
-                        errorType: null,
-                        function: () => context.read<CameraNotifier>().initCamera(context, mounted),
-                      ),
-                    ),
-                  )
-                // : notifier.item1 && !notifier.item3
-                // ?
-                : Stack(
-                    children: [
-                      GestureDetector(
-                        onDoubleTap: widget.onDoubleTap,
-                          child: const CameraView()),
-                      ...widget.additionalViews,
-                    ],
-                  )
-            // : const Center(child: CustomLoading()),
-            );
+        : Stack(
+      children: [
+        GestureDetector(
+            onDoubleTap: widget.onDoubleTap,
+            child: const CameraView()),
+        ...widget.additionalViews,
+      ],
+    );
   }
 }

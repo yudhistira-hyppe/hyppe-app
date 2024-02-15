@@ -450,7 +450,11 @@
 				CURRENT_PROJECT_VERSION = 113;
 				DEVELOPMENT_TEAM = Z4489DNPPA;
 				ENABLE_BITCODE = NO;
+<<<<<<< HEAD
 				FLUTTER_TARGET = "/Users/hyppedevelopment/Documents/Git/Flutter-Frontend/lib/main_dev.dart";
+=======
+				FLUTTER_TARGET = /Users/hyppedev/MyProject/Hyppe/lib/main_dev.dart;
+>>>>>>> 8beae464f4d70cc19260eb372344a3fbafdb6d3d
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
@@ -596,7 +600,11 @@
 				CURRENT_PROJECT_VERSION = 113;
 				DEVELOPMENT_TEAM = Z4489DNPPA;
 				ENABLE_BITCODE = NO;
+<<<<<<< HEAD
 				FLUTTER_TARGET = "/Users/hyppedevelopment/Documents/Git/Flutter-Frontend/lib/main_dev.dart";
+=======
+				FLUTTER_TARGET = /Users/hyppedev/MyProject/Hyppe/lib/main_dev.dart;
+>>>>>>> 8beae464f4d70cc19260eb372344a3fbafdb6d3d
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
@@ -634,7 +642,11 @@
 				CURRENT_PROJECT_VERSION = 113;
 				DEVELOPMENT_TEAM = Z4489DNPPA;
 				ENABLE_BITCODE = NO;
+<<<<<<< HEAD
 				FLUTTER_TARGET = "/Users/hyppedevelopment/Documents/Git/Flutter-Frontend/lib/main_dev.dart";
+=======
+				FLUTTER_TARGET = /Users/hyppedev/MyProject/Hyppe/lib/main_dev.dart;
+>>>>>>> 8beae464f4d70cc19260eb372344a3fbafdb6d3d
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",

@@ -10,6 +10,9 @@ import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../core/constants/size_config.dart';
+import '../../../widget/after_first_layout_mixin.dart';
+
 class CameraView extends StatefulWidget {
   const CameraView({Key? key}) : super(key: key);
 
@@ -17,7 +20,7 @@ class CameraView extends StatefulWidget {
   State<CameraView> createState() => _CameraViewState();
 }
 
-class _CameraViewState extends State<CameraView> {
+class _CameraViewState extends State<CameraView> with AfterFirstLayoutMixin{
   // late final DeepArController _controller;
   String version = '';
   bool _isFaceMask = false;
@@ -48,7 +51,13 @@ class _CameraViewState extends State<CameraView> {
     //     .then((value) => setState(() {}));
     final notifier = context.read<CameraNotifier>();
     notifier.deepArController ??= DeepArController();
+
     super.initState();
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+
   }
 
   @override
@@ -71,34 +80,36 @@ class _CameraViewState extends State<CameraView> {
   Widget build(BuildContext context) {
     final deviceRatio = context.getWidth() / context.getHeight();
     return Consumer<CameraNotifier>(
-      builder: (_, notifier, __) => Scaffold(
-          body: !notifier.isRestart ? Stack(
+      builder: (_, notifier, __) => Stack(
         children: [
-          notifier.deepArController == null
-              ? const CustomLoading()
-              : notifier.isInitialized
-                  ? Transform.scale(
-                      scale: (1 / notifier.deepArController!.aspectRatio) / deviceRatio,
-                      child: DeepArPreview(
-                        notifier.deepArController!,
-                        onViewCreated: () {
-                          // set any initial effect, filter etc
-                          // _controller.switchEffect(
-                          //     _assetEffectsPath + 'viking_helmet.deepar');
-                        },
-                      ),
-                    )
-                  : const Center(
-                      child: Text("Loading..."),
-                    ),
-          notifier.showEffected ? listEfect(notifier.deepArController!) : const SizedBox(),
+
+              (notifier.isInitialized && !notifier.isRestart && notifier.deepArController != null)
+              ? Transform.scale(
+            scale: (1 / notifier.deepArController!.aspectRatio) / deviceRatio,
+            child: Container(
+              color: Colors.black,
+              child: DeepArPreview(
+                notifier.deepArController!,
+                onViewCreated: () {
+                  // set any initial effect, filter etc
+                  // _controller.switchEffect(
+                  //     _assetEffectsPath + 'viking_helmet.deepar');
+                },
+              ),
+            ),
+          )
+              : Container(
+              color: Colors.black,
+              height: SizeConfig.screenHeight,
+              width: SizeConfig.screenWidth,
+              child: const Center(
+                child: CustomLoading(),
+              )),
+          notifier.showEffected ? listEfect(notifier.deepArController!) : const SizedBox.shrink(),
           // _topMediaOptions(notifier.deepArController),
           // _bottomMediaOptions(notifier.deepArController),
         ],
-      ): Container(
-            alignment: Alignment.center,
-              margin: const EdgeInsets.only(bottom: 200),
-              child: const CustomLoading())),
+      ),
     );
   }
 
@@ -332,4 +343,6 @@ class _CameraViewState extends State<CameraView> {
     _filterIndex > 0 ? _filterIndex-- : _filterIndex = _filterList.length;
     return _filterList[_filterIndex];
   }
+
+
 }
