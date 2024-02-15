@@ -165,7 +165,7 @@ extension ContextScreen on BuildContext {
         return AdsVideoInBetween(onVisibility: onVisible, data: adsData, afterReport: onComplete, getPlayer: getPlayer, isVideo: isVideo);
       } else {
         if (isfull) {
-          return AdsInBetweenFull(arguments: AdsArgument(data: adsData, adsUrl: adsData.adsUrlLink ?? '', isSponsored: true, isVideo: isVideo, orientation: orientation, isScroll: isScroll));
+          return AdsInBetweenFull(arguments: AdsArgument(data: adsData, afterReport: onComplete,  adsUrl: adsData.adsUrlLink ?? '', isSponsored: true, isVideo: isVideo, orientation: orientation, isScroll: isScroll));
         }
         return AdsInBetween(data: adsData, afterReport: onComplete, isVideo: isVideo);
       }

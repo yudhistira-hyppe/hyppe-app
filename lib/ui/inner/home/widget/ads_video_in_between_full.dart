@@ -247,6 +247,7 @@ class _AdsVideoInBetweenFullState extends State<AdsVideoInBetweenFull> with Widg
                         setState(() {
                           loadLaunch = true;
                         });
+                        Routing().moveBack();
                         System().adsView(data, data.duration?.round() ?? 10, isClick: true).whenComplete(() async {
                           if (widget.arguments.afterReport != null) {
                             widget.arguments.afterReport!();
@@ -255,7 +256,7 @@ class _AdsVideoInBetweenFullState extends State<AdsVideoInBetweenFull> with Widg
                             uri,
                             mode: LaunchMode.externalApplication,
                           );
-                          Routing().moveBack();
+                          
                         });
                       } else {
                         throw "Could not launch $uri";
@@ -264,6 +265,7 @@ class _AdsVideoInBetweenFullState extends State<AdsVideoInBetweenFull> with Widg
                       setState(() {
                         loadLaunch = true;
                       });
+                      Routing().moveBack();
                       System().adsView(data, data.duration?.round() ?? 10, isClick: true).whenComplete(() {
                         if (widget.arguments.afterReport != null) {
                           widget.arguments.afterReport!();

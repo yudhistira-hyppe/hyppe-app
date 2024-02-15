@@ -723,6 +723,7 @@ class System {
                 });
               } else {
                 _errorMsg = '${notifier.weCurrentlySupportOnlyMP4andMOVformat} ${result.names.single}';
+                Routing().moveBack();
               }
             }
 

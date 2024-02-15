@@ -309,7 +309,7 @@ class _AdsInBetweenFullState extends State<AdsInBetweenFull> {
                       }
       
                       Future.delayed(const Duration(milliseconds: 800), () {
-                        Routing().moveBack();
+                        Routing().moveBack(); 
                         Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
                       });
                     });
