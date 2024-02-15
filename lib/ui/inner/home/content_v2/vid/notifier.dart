@@ -49,6 +49,9 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
   List<ContentData>? _vidData;
   List<ContentData>? get vidData => _vidData;
 
+  int currIndex = 0;
+  int get currentIndex => currIndex;
+
   set vidData(List<ContentData>? val) {
     _vidData = val;
     notifyListeners();
@@ -162,11 +165,9 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
   //   notifyListeners();
   // }
 
-
-
   setAdsData(int index, AdsData? adsData, BuildContext context) {
     vidData?[index].adsData = adsData;
-    if(adsData == null){
+    if (adsData == null) {
       context.read<VideoNotifier>().isPlay = false;
     }
     notifyListeners();
