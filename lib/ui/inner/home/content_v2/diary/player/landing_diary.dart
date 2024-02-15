@@ -783,7 +783,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       if (index < pn.currentIndex) {
         setState(() {
           index = pn.currentIndex;
-          pn.diaryData!.removeRange(_curIdx, pn.currentIndex);
+          // pn.diaryData!.removeRange(_curIdx, pn.currentIndex);
+          pn.diaryData!.removeRange(0, pn.currentIndex);
+          widget.scrollController?.animateTo(0, duration: const Duration(milliseconds: 50), curve: Curves.ease);
         });
       } else if (index > pn.currentIndex) {
         setState(() {

@@ -314,7 +314,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                           sliver: SliverList(
                             delegate: SliverChildListDelegate([
                               // Text("${globalKey.currentState?.innerController}"),
-                              // Text("${globalKey}"),
+                              // Text("${Size.fromHeight(SizeWidget.appBarHome).height}"),
                               const ProcessUploadComponent(),
                               sixPx,
                               const HyppePreviewStories(),

@@ -1014,8 +1014,8 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
   @override
   void dispose() {
     print("-=-=-=-=-=-=disepose vid");
-    // fAliplayer?.stop();
-    // fAliplayer?.destroy();
+    fAliplayer?.stop();
+    fAliplayer?.destroy();
     // animatedController.dispose();
     // Wakelock.disable();
     globalAliPlayer = null;
@@ -1360,7 +1360,6 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                     _currentPosition = _videoDuration;
                                   });
                                 });
-                                
                               } else {
                                 Navigator.pop(context, changevalue);
                               }

@@ -4,6 +4,7 @@ import 'package:hyppe/core/arguments/hashtag_argument.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/search/search_content.dart';
+import 'package:hyppe/core/models/collection/support_ticket/appeal_model.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';

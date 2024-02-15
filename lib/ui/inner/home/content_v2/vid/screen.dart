@@ -231,7 +231,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     print("===========dari didpopnext");
     _initializeTimer();
     if (_curIdx != -1) {
-      notifier.vidData?[_curIdx].fAliplayer?.play();
+      // notifier.vidData?[_curIdx].fAliplayer?.play();
     }
     if (postIdVisibility == '') {
       setState(() {
@@ -241,6 +241,24 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
         setState(() {
           postIdVisibility = postIdVisibilityTemp;
         });
+      });
+    }
+
+    var temp1 = notifier.vidData?[_curIdx];
+    var temp2 = notifier.vidData![notifier.currentIndex];
+
+    if (_curIdx < notifier.currentIndex) {
+      setState(() {
+        notifier.vidData?[_curIdx].fAliplayer?.stop();
+        _curIdx = notifier.currentIndex;
+        // pn.diaryData!.removeRange(_curIdx, pn.currentIndex);
+        notifier.vidData!.removeRange(0, notifier.currentIndex);
+        widget.scrollController?.animateTo(0, duration: const Duration(milliseconds: 50), curve: Curves.ease);
+      });
+    } else if (_curIdx > notifier.currentIndex) {
+      setState(() {
+        notifier.vidData?[_curIdx] = temp2;
+        notifier.vidData?[notifier.currentIndex] = temp1!;
       });
     }
 
@@ -566,13 +584,15 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                 if (!notifier.loadAds) {
                                   if ((notifier.vidData?.length ?? 0) > notifier.nextAdsShowed) {
                                     notifier.loadAds = true;
-                                    context.getInBetweenAds().then((value) {
-                                      if (value != null) {
-                                        notifier.setInBetweenAds(index, value);
-                                      } else {
-                                        notifier.loadAds = false;
-                                      }
-                                    }, );
+                                    context.getInBetweenAds().then(
+                                      (value) {
+                                        if (value != null) {
+                                          notifier.setInBetweenAds(index, value);
+                                        } else {
+                                          notifier.loadAds = false;
+                                        }
+                                      },
+                                    );
                                   }
                                 }
                                 if (!isShowingDialog) {

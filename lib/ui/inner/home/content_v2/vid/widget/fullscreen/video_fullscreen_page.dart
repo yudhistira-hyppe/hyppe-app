@@ -443,7 +443,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
       DataSourceRelated.regionKey: DataSourceRelated.defaultRegion,
     };
     print('view ads: ${widget.isAutoPlay ?? false}');
-    
+
     return Consumer<VideoNotifier>(builder: (context, notifier, _) {
       return Scaffold(
         key: _scaffoldKeyPlayer,
@@ -479,14 +479,15 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                         curentIndex = value;
                         notifier.currIndex = value;
                         scrollPage(vidData?[value].metadata?.height, vidData?[value].metadata?.width);
-                        if (value > 1){
-                          if ((vidData?[value-1].metadata?.height ?? 0) < (vidData?[value-1].metadata?.width ?? 0)) {
+                        if (value > 1) {
+                          if ((vidData?[value - 1].metadata?.height ?? 0) < (vidData?[value - 1].metadata?.width ?? 0)) {
                             beforePosition = Orientation.landscape;
                           } else {
                             beforePosition = Orientation.portrait;
                           }
                         }
-                        
+                        context.read<PreviewVidNotifier>().currIndex = value;
+
                         if ((vidData?.length ?? 0) - 1 == curentIndex) {
                           //get new data;
                           getNewData();
@@ -507,7 +508,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                           // );
                           print('view ads: 1');
                           final isAds = vidData?[index].inBetweenAds != null && vidData?[index].postID == null;
-                          
+
                           return isloadingRotate
                               ? Container(
                                   color: Colors.black,
@@ -517,52 +518,52 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                     child: CircularProgressIndicator(),
                                   ),
                                 )
-                              : isAds 
-                                ? context.getAdsInBetween(vidData?[index].inBetweenAds, (info) {}, () {
+                              : isAds
+                                  ? context.getAdsInBetween(vidData?[index].inBetweenAds, (info) {}, () {
                                       context.read<PreviewVidNotifier>().setInBetweenAds(index, null);
                                     }, (player, id) {}, isfull: true, isVideo: true, orientation: beforePosition, isScroll: true)
-                                : OrientationBuilder(builder: (context, orientation) {
-                                  final player = VidPlayerPage(
-                                    // vidData: notifier.vidData,
-                                    fromFullScreen: true,
-                                    orientation: orientation,
-                                    playMode: (vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
-                                    dataSourceMap: map,
-                                    data: vidData?[index],
-                                    height: MediaQuery.of(context).size.height,
-                                    width: MediaQuery.of(context).size.width,
-                                    inLanding: widget.isLanding,
-                                    fromDeeplink: false,
-                                    clearPostId: widget.clearPostId,
-                                    clearing: true,
-                                    isAutoPlay: true,
-                                    functionFullTriger: (value) {
-                                      print('===========hahhahahahaa===========');
-                                    },
-                                    isPlaying: !isPause,
-                                    onPlay: (exec) {},
-                                    getPlayer: (main, id) {},
-                                    getAdsPlayer: (ads) {
-                                      // notifier.vidData?[index].fAliplayerAds = ads;
-                                    },
-                                    autoScroll: () {
-                                      nextPage();
-                                    },
-                                    prevScroll: () {
-                                      previousPage();
-                                    },
-                                    // fAliplayer: notifier.vidData?[index].fAliplayer,
-                                    // fAliplayerAds: notifier.vidData?[index].fAliplayerAds,
-                                  );
-                                  if (orientation == Orientation.landscape) {
-                                    return Container(
-                                      width: context.getWidth(),
-                                      height: context.getHeight(),
-                                      child: player,
-                                    );
-                                  }
-                                  return player;
-                                });
+                                  : OrientationBuilder(builder: (context, orientation) {
+                                      final player = VidPlayerPage(
+                                        // vidData: notifier.vidData,
+                                        fromFullScreen: true,
+                                        orientation: orientation,
+                                        playMode: (vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
+                                        dataSourceMap: map,
+                                        data: vidData?[index],
+                                        height: MediaQuery.of(context).size.height,
+                                        width: MediaQuery.of(context).size.width,
+                                        inLanding: widget.isLanding,
+                                        fromDeeplink: false,
+                                        clearPostId: widget.clearPostId,
+                                        clearing: true,
+                                        isAutoPlay: true,
+                                        functionFullTriger: (value) {
+                                          print('===========hahhahahahaa===========');
+                                        },
+                                        isPlaying: !isPause,
+                                        onPlay: (exec) {},
+                                        getPlayer: (main, id) {},
+                                        getAdsPlayer: (ads) {
+                                          // notifier.vidData?[index].fAliplayerAds = ads;
+                                        },
+                                        autoScroll: () {
+                                          nextPage();
+                                        },
+                                        prevScroll: () {
+                                          previousPage();
+                                        },
+                                        // fAliplayer: notifier.vidData?[index].fAliplayer,
+                                        // fAliplayerAds: notifier.vidData?[index].fAliplayerAds,
+                                      );
+                                      if (orientation == Orientation.landscape) {
+                                        return Container(
+                                          width: context.getWidth(),
+                                          height: context.getHeight(),
+                                          child: player,
+                                        );
+                                      }
+                                      return player;
+                                    });
                         } else {
                           print('view ads: 2 ${notifier.isShowingAds} ${notifier.hasShowedAds}');
                           return GestureDetector(
