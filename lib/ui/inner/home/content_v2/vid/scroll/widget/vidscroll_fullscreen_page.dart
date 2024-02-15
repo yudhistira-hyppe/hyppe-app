@@ -424,8 +424,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
               itemCount: notifier.vidData?.length ?? 0,
               onPageChanged: (value) async {
                 curentIndex = value;
-
-                curentIndex = value;
+                notifier.lastScrollIdx = value;
                 scrollPage(notifier.vidData?[value].metadata?.height, notifier.vidData?[value].metadata?.width);
                 if ((notifier.vidData?.length ?? 0) - 1 == widget.index) {
                   await notifier.loadMore(context, controller, PageSrc.selfProfile, '');

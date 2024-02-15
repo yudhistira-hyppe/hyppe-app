@@ -890,7 +890,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   Widget itemPict(BuildContext context, PreviewPicNotifier notifier, int index, HomeNotifier homeNotifier) {
     var picData = notifier.pic?[index];
     final isAds = picData?.inBetweenAds != null && picData?.postID == null;
-
     return picData?.isContentLoading ?? false
         ? Builder(builder: (context) {
             Future.delayed(const Duration(seconds: 1), () {
@@ -923,7 +922,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                               // }
                               // context.read<MainNotifier>().globalKey.currentState?.innerController.jumpTo(position);
                             }
-
+                            
                             // if (_lastCurIndex != _curIdx) {
                             if (_lastCurPostId != _curPostId) {
                               if (mounted) {
@@ -1287,8 +1286,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                 if (res != null || res == null) {
                                                   fAliplayer?.play();
                                                   fAliplayer?.setMuted(notifier.isMute);
-                                                  var temp1 = notifier.pic![_curIdx];
-                                                  var temp2 = notifier.pic![notifier.currentIndex];
+                                                  // var temp1 = notifier.pic![_curIdx];
+                                                  // var temp2 = notifier.pic![notifier.currentIndex];
                                                   if (index < notifier.currentIndex) {
                                                     setState(() {
                                                       index = notifier.currentIndex;
@@ -1296,8 +1295,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                     });
                                                   } else if (index > notifier.currentIndex) {
                                                     setState(() {
-                                                      notifier.pic![_curIdx] = temp2;
-                                                      notifier.pic![notifier.currentIndex] = temp1;
+                                                      index = notifier.currentIndex;
+                                                      notifier.pic!.removeRange(notifier.currentIndex, _curIdx);
+                                                      // notifier.pic![_curIdx] = temp2;
+                                                      // notifier.pic![notifier.currentIndex] = temp1;
                                                     });
                                                   }
                                                 }
