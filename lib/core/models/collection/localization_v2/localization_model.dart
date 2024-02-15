@@ -525,6 +525,7 @@ class LocalizationModelV2 {
   String? endUserLicenseAgreement;
   String? trends;
   String? contentCreatedSuccessfully;
+  String? contentCreatedProcess;
   String? contentCreatedFailedWithMessage;
   String? update;
   String? successfully;
@@ -1632,6 +1633,7 @@ class LocalizationModelV2 {
     this.endUserLicenseAgreement,
     this.trends,
     this.contentCreatedSuccessfully,
+    this.contentCreatedProcess,
     this.contentCreatedFailedWithMessage,
     this.update,
     this.successfully,
@@ -2741,6 +2743,7 @@ class LocalizationModelV2 {
     endUserLicenseAgreement = json["endUserLicenseAgreement"];
     trends = json["trends"];
     contentCreatedSuccessfully = json["contentCreatedSuccessfully"];
+    contentCreatedProcess = json["contentCreatedProcess"];
     contentCreatedFailedWithMessage = json["contentCreatedFailedWithMessage"];
     update = json["update"];
     successfully = json["successfully"];

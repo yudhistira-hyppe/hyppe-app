@@ -94,7 +94,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
         if (Platform.isIOS) {
           height = MediaQuery.of(context).size.height * 0.9;
         } else {
-          height = MediaQuery.of(context).size.height;
+          height = MediaQuery.of(context).size.height * 0.95;
         }
       } else {
         height = width * 9.0 / 16.0;
@@ -103,7 +103,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
       if (Platform.isIOS) {
         height = MediaQuery.of(context).size.height * 0.95;
       } else {
-        height = MediaQuery.of(context).size.height;
+        height = MediaQuery.of(context).size.height * 0.95;
       }
     }
     return Consumer2<VidDetailNotifier, LikeNotifier>(builder: (context, notifier, like, _) {

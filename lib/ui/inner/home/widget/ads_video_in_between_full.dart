@@ -353,7 +353,7 @@ class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingOb
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       // final ref = (Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: widget.adsData.adsId);
+      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'full_${widget.adsData.adsId}');
       WidgetsBinding.instance.addObserver(this);
       fAliplayer?.pause();
       fAliplayer?.setAutoPlay(true);
@@ -467,15 +467,14 @@ class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingOb
       // _inSeek = false;
     });
     fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
-      print("===detik $infoCode");
+      // print("===detik $infoCode");
       if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
         if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
           setState(() {
             _currentPosition = extraValue ?? 0;
           });
 
-          final detik = (_currentPosition / 1000).round();
-          print("===detik $detik");
+          // final detik = (_currentPosition / 1000).round();
         }
         try {
           if (mounted) {
@@ -649,6 +648,7 @@ class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingOb
 
   @override
   void dispose() {
+    print('disini dispose dfAliPlauer');
     fAliplayer?.stop();
     fAliplayer?.destroy();
     super.dispose();

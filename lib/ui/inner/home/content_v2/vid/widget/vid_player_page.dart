@@ -495,10 +495,10 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
           if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
             _currentPosition = extraValue ?? 0;
             final detik = (_currentPosition / 1000).round();
-            print("===detik $detik");
+            // print("===detik $detik");
             if (notifier.adsTime == detik) {
               if (notifier.tempAdsData != null) {
-                fAliplayer?.pause();
+                fAliplayer?.play();
                 final tempAds = notifier.tempAdsData;
                 if (tempAds != null) {
                   notifier.setMapAdsContent(widget.data?.postID ?? '', tempAds);

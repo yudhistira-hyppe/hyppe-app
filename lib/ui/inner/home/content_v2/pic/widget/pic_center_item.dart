@@ -290,6 +290,7 @@ class PicCenterItem extends StatelessWidget {
               children: [
                 CustomNewDescContent(
                   // desc: "${data?.description}",
+                  email: data?.email??'',
                   username: data?.username ?? '',
                   desc: "${data?.description}",
                   trimLines: 2,

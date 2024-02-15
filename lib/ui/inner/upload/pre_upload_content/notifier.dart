@@ -48,6 +48,7 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:light_compressor/light_compressor.dart';
@@ -731,11 +732,12 @@ class PreUploadContentNotifier with ChangeNotifier {
             eventService.notifyUploadFinishingUp(true);
           }
         },
-      ).then((value) {
+      ).then((value) async {
         _uploadSuccess = value;
         'Create post content with value $value'.logger();
         // _eventService.notifyUploadFinishingUp(_uploadSuccess);
         if (_uploadSuccess != null) {
+          SharedPreference().writeStorage(SpKeys.uploadContent, false);
           eventService.notifyUploadSuccess(_uploadSuccess);
         }
 
@@ -995,6 +997,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     final connection = await System().checkConnections();
     if (_validateDescription() && _validateCategory()) {
       if (connection) {
+        SharedPreference().writeStorage(SpKeys.uploadContent, true);
         checkKeyboardFocus(context);
         if (onEdit) {
           if (!mounted) return;

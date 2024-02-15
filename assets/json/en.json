@@ -529,6 +529,7 @@
   "endUserLicenseAgreement": "End User License Agreement",
   "trends": "Trends",
   "contentCreatedSuccessfully": "Content created successfully",
+  "contentCreatedProcess": "Please wait... Uploading proccess",
   "contentCreatedFailedWithMessage": "Content created failed with message",
   "update": "Update",
   "successfully": "Successfully",

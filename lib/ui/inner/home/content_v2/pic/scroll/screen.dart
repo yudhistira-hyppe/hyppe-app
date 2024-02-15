@@ -1417,6 +1417,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
               ),
               fourPx,
               CustomNewDescContent(
+                email: pics?[index].email??'',
                 username: pics?[index].username ?? '',
                 desc: "${pics?[index].description}",
                 trimLines: 2,

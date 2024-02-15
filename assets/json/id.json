@@ -531,6 +531,7 @@
   "endUserLicenseAgreement": "Perjanjian Lisensi Pengguna",
   "trends": "Tren",
   "contentCreatedSuccessfully": "Konten berhasil dibuat",
+  "contentCreatedProcess": "Mohon menunggu, sedang proses upload konten",
   "contentCreatedFailedWithMessage": "Konten yang dibuat gagal dengan pesan",
   "update": "Perbarui",
   "successfully": "Berhasil",

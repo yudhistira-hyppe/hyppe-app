@@ -119,11 +119,11 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                   child: Column(
                     children: [
                       // _bottomDetail(context, data, notifier),
-                      // !notifier.isCommentEmpty
-                      //     ? 
+                      !notifier.isCommentEmpty
+                          ? 
                           Expanded(
                               child: Container(
-                              // color: context.getColorScheme().background,
+                              color: context.getColorScheme().background,
                               child: ListView.builder(
                                 itemCount: notifier.itemCount+1,
                                 physics: const AlwaysScrollableScrollPhysics(),
@@ -149,12 +149,21 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                               ),
                             ),
                             )
-                          // : Expanded(
-                          //     child: Padding(
-                          //       padding: const EdgeInsets.symmetric(vertical: 100.0),
-                          //       child: CustomTextWidget(textToDisplay: context.read<TranslateNotifierV2>().translate.beTheFirstToComment ?? ''),
-                          //     ),
-                          // )
+                          : Expanded(
+                            child: ListView(
+                              children: [
+                                _bottomDetail(context, data, notifier),
+                                Expanded(
+                                  child: Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 100.0),
+                                      child: CustomTextWidget(textToDisplay: context.read<TranslateNotifierV2>().translate.beTheFirstToComment ?? ''),
+                                    ),
+                                  ),
+                              )
+                              ],
+                            ),
+                          )
                     ],
                   ),
                 ),
@@ -327,55 +336,58 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
 
   Widget _bottomDetail(BuildContext context, ContentData data, CommentNotifierV2 notifier) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-      decoration: BoxDecoration(
-          boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)], borderRadius: const BorderRadius.all(Radius.circular(16)), color: context.getColorScheme().background),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CustomProfileImage(
-            width: 36,
-            height: 36,
-            onTap: () => System().navigateToProfile(context, data.email ?? ''),
-            imageUrl: System().showUserPicture(data.avatar?.mediaEndpoint),
-            badge: data.urluserBadge,
-            following: true,
-            onFollow: () {},
-          ),
-          twelvePx,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                UserTemplate(username: '${data.username}', isVerified: data.isIdVerified ?? (data.privacy?.isIdVerified ?? false), date: data.createdAt ?? DateTime.now().toString()),
-                twoPx,
-                Row(
-                  children: [
-                    Expanded(
-                      child: CustomDescContent(
-                          desc: data.description ?? '',
-                          trimLines: 5,
-                          textAlign: TextAlign.start,
-                          seeLess: ' ${notifier.language.seeMore}',
-                          seeMore: ' ${notifier.language.seeMoreContent}',
-                          textOverflow: TextOverflow.visible,
-                          normStyle: Theme.of(context).textTheme.bodyText2,
-                          hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
-                          expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
-                          callbackIsMore: (val){
-                            setState(() {
-                              isLoad = val;
-                            });
-                          },
-                        ),
-                    ),
-                  ],
-                )
-              ],
+      color: Colors.grey.shade100,
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        decoration: BoxDecoration(
+            boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)], borderRadius: const BorderRadius.all(Radius.circular(16)), color: context.getColorScheme().background),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomProfileImage(
+              width: 36,
+              height: 36,
+              onTap: () => System().navigateToProfile(context, data.email ?? ''),
+              imageUrl: System().showUserPicture(data.avatar?.mediaEndpoint),
+              badge: data.urluserBadge,
+              following: true,
+              onFollow: () {},
             ),
-          ),
-        ],
+            twelvePx,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  UserTemplate(username: '${data.username}', isVerified: data.isIdVerified ?? (data.privacy?.isIdVerified ?? false), date: data.createdAt ?? DateTime.now().toString()),
+                  twoPx,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CustomDescContent(
+                            desc: data.description ?? '',
+                            trimLines: 5,
+                            textAlign: TextAlign.start,
+                            seeLess: ' ${notifier.language.seeMore}',
+                            seeMore: ' ${notifier.language.seeMoreContent}',
+                            textOverflow: TextOverflow.visible,
+                            normStyle: Theme.of(context).textTheme.bodyText2,
+                            hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                            expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                            callbackIsMore: (val){
+                              setState(() {
+                                isLoad = val;
+                              });
+                            },
+                          ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

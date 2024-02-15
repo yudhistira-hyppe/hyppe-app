@@ -322,6 +322,7 @@ class _PicTutorState extends State<PicTutor> with WidgetsBindingObserver, Ticker
               fourPx,
               CustomNewDescContent(
                 // desc: "${data?.description}",
+                email: picData?['email']??'',
                 username: picData?['user'] ?? '',
                 desc: "${picData?['desc']}",
                 trimLines: 3,

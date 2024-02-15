@@ -1,6 +1,9 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/arguments/contents/user_interest_screen_argument.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
@@ -268,12 +271,34 @@ class _SettingScreenState extends State<SettingScreen> {
                           ),
                         ),
                         SettingTile(
-                          onTap: () => ShowBottomSheet.onShowSignOut(
-                            context,
-                            onSignOut: () {
-                              context.read<SettingNotifier>().logOut(context);
-                            },
-                          ),
+                          onTap: () {
+                            var res = SharedPreference().readStorage(SpKeys.uploadContent) is bool;
+                            if (res){
+                              var message = "${notifier.translate.contentCreatedProcess}";
+                              ShowBottomSheet().onShowColouredSheet(
+                                Routing.navigatorKey.currentContext ?? context,
+                                message,
+                                color: kHyppeTextSuccess,
+                                maxLines: 2,
+                                onClose: () {
+                                  try {
+                                    if (mounted) context.read<MainNotifier>().scrollController.animateTo(0, duration: const Duration(milliseconds: 1000), curve: Curves.ease);
+                                  } catch (e) {
+                                    print("==-=-=-=-= home  $e");
+                                  }
+                                },
+                              );
+                            }else{
+                              ShowBottomSheet.onShowSignOut(
+                                context,
+                                onSignOut: () {
+                                  SharedPreference().removeValue(SpKeys.uploadContent);
+                                  context.read<SettingNotifier>().logOut(context);
+                                },
+                              );
+                            }
+                            
+                          },
                           icon: 'logout-icon.svg',
                           caption: '${notifier.translate.logOut}',
                         ),

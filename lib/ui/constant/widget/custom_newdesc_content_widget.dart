@@ -180,7 +180,7 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
         return Text.rich(
           TextSpan(
               text: "${widget.username} ",
-              recognizer: TapGestureRecognizer()..onTap = () => System().navigateToProfile(context, widget.email ?? ''),
+              recognizer: TapGestureRecognizer()..onTap = () => widget.email != null ? System().navigateToProfile(context, widget.email ?? '') :null,
               style: const TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w700,

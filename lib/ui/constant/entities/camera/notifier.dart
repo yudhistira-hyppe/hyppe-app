@@ -259,7 +259,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     deepArController!.flipCamera();
     print('myFlash: $isFlash');
     if(notifier.featureType == FeatureType.pic || (notifier.featureType == FeatureType.story && !notifier.isVideo)){
-
+      
     }else{
       if (isFlash) {
         Future.delayed(const Duration(seconds: 1), () async {
