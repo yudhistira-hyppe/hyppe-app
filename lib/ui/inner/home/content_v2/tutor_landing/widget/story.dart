@@ -10,7 +10,6 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../constant/widget/custom_icon_widget.dart';
-import '../../../../../constant/widget/custom_profile_image.dart';
 
 class StoryTutor extends StatefulWidget {
   const StoryTutor({Key? key}) : super(key: key);

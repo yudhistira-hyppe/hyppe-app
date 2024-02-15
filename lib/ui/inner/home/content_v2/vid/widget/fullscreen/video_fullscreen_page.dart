@@ -103,6 +103,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
   bool _showTipsWidget = false;
   int _currentPlayerState = 0;
   List<ContentData>? vidData;
+  Orientation beforePosition = Orientation.landscape;
 
   LocalizationModelV2? lang;
   String email = '';
@@ -162,8 +163,10 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
     super.initState();
     if ((widget.data.metadata?.height ?? 0) < (widget.data.metadata?.width ?? 0)) {
       orientation = Orientation.landscape;
+      // beforePosition = orientation;
     } else {
       orientation = Orientation.portrait;
+      // beforePosition = orientation;
     }
 
     int changevalue;
@@ -439,6 +442,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
       DataSourceRelated.regionKey: DataSourceRelated.defaultRegion,
     };
     print('view ads: ${widget.isAutoPlay ?? false}');
+    
     return Consumer<VideoNotifier>(builder: (context, notifier, _) {
       return Scaffold(
         key: _scaffoldKeyPlayer,
@@ -472,10 +476,16 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                       itemCount: vidData?.length ?? 0,
                       onPageChanged: (value) {
                         curentIndex = value;
-
                         notifier.currIndex = value;
-                        print('index change ${notifier.currentIndex}');
                         scrollPage(vidData?[value].metadata?.height, vidData?[value].metadata?.width);
+                        if (value > 1){
+                          if ((vidData?[value-1].metadata?.height ?? 0) < (vidData?[value-1].metadata?.width ?? 0)) {
+                            beforePosition = Orientation.landscape;
+                          } else {
+                            beforePosition = Orientation.portrait;
+                          }
+                        }
+                        
                         if ((vidData?.length ?? 0) - 1 == curentIndex) {
                           //get new data;
                           getNewData();
@@ -495,7 +505,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                           //   child: Center(child: Text("data ${index}")),
                           // );
                           print('view ads: 1');
-
+                          final isAds = vidData?[index].inBetweenAds != null && vidData?[index].postID == null;
+                          
                           return isloadingRotate
                               ? Container(
                                   color: Colors.black,
@@ -505,7 +516,11 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                     child: CircularProgressIndicator(),
                                   ),
                                 )
-                              : OrientationBuilder(builder: (context, orientation) {
+                              : isAds 
+                                ? context.getAdsInBetween(vidData?[index].inBetweenAds, (info) {}, () {
+                                      context.read<PreviewVidNotifier>().setInBetweenAds(index, null);
+                                    }, (player, id) {}, isfull: true, isVideo: true, orientation: beforePosition, isScroll: true)
+                                : OrientationBuilder(builder: (context, orientation) {
                                   final player = VidPlayerPage(
                                     // vidData: notifier.vidData,
                                     fromFullScreen: true,

@@ -127,6 +127,7 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
   @override
   void dispose() {
     print("========dispose");
+    _uploadNotifier.isUploading = false;
     // _uploadNotifier.reset(isNotify: false);
     super.dispose();
   }

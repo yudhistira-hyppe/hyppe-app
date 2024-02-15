@@ -104,7 +104,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
   String email = '';
   String statusKyc = '';
 
-  final ItemScrollController itemScrollController = ItemScrollController();
+  
   final ScrollOffsetController scrollOffsetController = ScrollOffsetController();
 
   /// Listener that reports the position of items when the list is scrolled.
@@ -143,7 +143,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
       vidConfig();
-      itemScrollController.jumpTo(index: widget.arguments!.page!);
+      notifier.itemScrollController.jumpTo(index: widget.arguments!.page!);
       _initListener();
     });
     var index = 0;
@@ -644,11 +644,12 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ListTile(
-                        title: (diaryData?.isNotEmpty ?? false)? Row(
+                        title: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(transform: Matrix4.translationValues(-18.0, 0.0, 0.0), margin: const EdgeInsets.symmetric(horizontal: 10), child: widget.arguments?.titleAppbar ?? Container()),
+                            if(diaryData?.isNotEmpty ?? false)
                             if (diaryData?[indexDiary].email != email && (diaryData?[indexDiary].isNewFollowing ?? false) && (widget.arguments?.isProfile ?? false))
                               Consumer<PreviewPicNotifier>(
                                 builder: (context, picNot, child) => Padding(
@@ -683,15 +684,18 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                                 ),
                               ),
                           ],
-                        ): const SizedBox.shrink(),
+                        ),
                         leading: IconButton(
-                            icon: const Icon(
-                              Icons.chevron_left,
-                              color: kHyppeTextLightPrimary,
-                            ),
-                            onPressed: () {
-                              Navigator.pop(context, '$_curIdx');
-                            }),
+                          icon: const Icon(
+                            Icons.chevron_left,
+                            color: kHyppeTextLightPrimary,
+                          ),
+                          onPressed: () {
+                            Future.delayed(Duration.zero, () {
+                              // Navigator.pop(context, '$_curIdx');
+                              Navigator.pop(context);
+                            });
+                          }),
                       ),
                       Expanded(
                         child: (diaryData?.isEmpty ?? true)
@@ -726,7 +730,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                                     onRefresh: () async {},
                                     child: ScrollablePositionedList.builder(
                                       scrollDirection: Axis.vertical,
-                                      itemScrollController: itemScrollController,
+                                      itemScrollController: notifier.itemScrollController,
                                       itemPositionsListener: itemPositionsListener,
                                       scrollOffsetController: scrollOffsetController,
                                       // controller: notifier.scrollController,
@@ -997,7 +1001,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                           !notifier.connectionError
                               ? Positioned.fill(
                                   child: GestureDetector(
-                                    onTap: () {
+                                    onTap: () async {
                                       if (widget.arguments?.pageSrc == PageSrc.selfProfile || widget.arguments?.pageSrc == PageSrc.otherProfile) {
                                         SlidedDiaryDetailScreenArgument param = SlidedDiaryDetailScreenArgument(
                                             type: widget.arguments!.type,
@@ -1012,7 +1016,8 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                                             pageSrc: widget.arguments?.pageSrc,
                                             isTrue: isMute,
                                             scrollController: widget.arguments?.scrollController);
-                                        Routing().move(Routes.scrollFullDiary, argument: param);
+                                        await Routing().move(Routes.scrollFullDiary, argument: param);
+                                        if (notifier.currentIndex != index) notifier.itemScrollController.jumpTo(index: notifier.currentIndex);
                                       }
 
                                       // fAliplayer?.play();

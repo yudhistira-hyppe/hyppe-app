@@ -45,6 +45,8 @@ class AdsData {
   bool isLoading = false;
   String? mediaPortraitUri;
   String? mediaPortraitThumUri;
+  String? mediaLandscapeUri;
+  String? mediaLandscapeThumUri;
   String? videoIdPortrait;
   String? videoIdLandscape;
   int? widthPortrait;
@@ -80,6 +82,8 @@ class AdsData {
     this.isLoading = false,
     this.mediaPortraitUri,
     this.mediaPortraitThumUri,
+    this.mediaLandscapeUri,
+    this.mediaLandscapeThumUri,
     this.widthPortrait,
     this.heightPortrait,
     this.videoIdPortrait,
@@ -114,6 +118,8 @@ class AdsData {
     height = json['height'];
     mediaPortraitUri = json['mediaPortraitUri'];
     mediaPortraitThumUri = json['mediaPortraitThumUri'];
+    mediaLandscapeUri = json['mediaLandscapeUri'];
+    mediaLandscapeThumUri = json['mediaLandscapeThumUri'];
     widthPortrait = json['widthPortrait'];
     heightPortrait = json['heightPortrait'];
 

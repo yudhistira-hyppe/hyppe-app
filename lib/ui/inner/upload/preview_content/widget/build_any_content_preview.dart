@@ -27,7 +27,9 @@ class BuildAnyContentPreviewer extends StatelessWidget {
             itemCount: notifier.fileContent?.length,
             itemBuilder: (context, index) {
               final _isImage = (notifier.fileContent?[index] ?? '').isImageFormat();
+              
               final validateUrl = System().validateUrl(notifier.fileContent?[index] ?? '');
+              print('Images datas ${notifier.fileContent?[index] ?? ''} ${Uri.tryParse(notifier.fileContent?[index]??'')?.isAbsolute}');
               if (_isImage) {
                 return PreviewImageContent(
                   validateUrl: validateUrl,

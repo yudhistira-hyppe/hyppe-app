@@ -262,7 +262,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
       if (_sheetResponse == null || _sheetResponse) {
         if (isRecordingVideo) {
-          await context.read<CameraNotifier>().stopVideoRecording();
+          await context.read<CameraNotifier>().stopVideoRecording(context);
           resetVariable(dispose: false);
         } else {
           resetVariable(dispose: true);
@@ -398,7 +398,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
       _progressDev = 0.0;
       _progressHuman = 0;
       _elapsedProgress = 0;
-      cameraNotifier.stopVideoRecording().then((file) async {
+      cameraNotifier.stopVideoRecording(context).then((file) async {
         final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
         if (file?.path != null) {
           notifier.fileContent = [file?.path ?? ''];
@@ -417,13 +417,13 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
         notifyListeners();
         messageToast = notifier.featureType == FeatureType.story ? (notifier.language.recordAtLeast4Seconds ?? 'Error') : (notifier.language.recordAtLeast15Seconds ?? 'Error');
         if (featureType == FeatureType.story) {
-          if (tempDuration.inSeconds >= 4) {
+          if (tempDuration.inMilliseconds >= 4900) {
             await _routing.move(Routes.previewContent);
           } else {
             showVideoToast(const Duration(seconds: 3));
           }
         } else {
-          if (tempDuration.inSeconds >= 15) {
+          if (tempDuration.inMilliseconds >= 15900) {
             await _routing.move(Routes.previewContent);
           } else {
             showVideoToast(const Duration(seconds: 3));
@@ -441,13 +441,14 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     dynamic cameraNotifier;
     final fixContext = Routing.navigatorKey.currentContext ?? context;
     final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
+
     if (canDeppAr == 'true') {
       cameraNotifier = Provider.of<CameraDevicesNotifier>(fixContext, listen: false);
     } else {
       cameraNotifier = Provider.of<CameraNotifier>(fixContext, listen: false);
     }
     _startTimer(fixContext);
-    cameraNotifier.startVideoRecording();
+    cameraNotifier.startVideoRecording(context);
     if (!(await WakelockPlus.enabled)) {
       WakelockPlus.enable();
     }

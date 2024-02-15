@@ -103,9 +103,11 @@ class RightItems extends StatelessWidget {
                               // } else {
                               //   ShowBottomSheet.onShowSomethingWhenWrong(context);
                               // }
-                              context.read<DiariesPlaylistNotifier>().forcePause = true;
-                              // ShowBottomSheet.onShowCommentV2(context, postID: data.postID);
-                              Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data, pageDetail: pageDetail));
+                              context.handleActionIsGuest(() {
+                                context.read<DiariesPlaylistNotifier>().forcePause = true;
+                                // ShowBottomSheet.onShowCommentV2(context, postID: data.postID);
+                                Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data, pageDetail: pageDetail));
+                              });
                             },
                           )
                         : const SizedBox.shrink(),

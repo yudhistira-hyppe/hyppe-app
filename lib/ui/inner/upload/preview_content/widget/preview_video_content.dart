@@ -130,7 +130,7 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
         return Stack(
           children: [
             notifier.isLoadingBetterPlayer
-                ? Center(child: Container())
+                ? const Center(child: CustomLoading())
                 : notifier.errorMessage != ''
                     ? Center(child: Text(notifier.errorMessage))
                     : notifier.betterPlayerController?.value.isInitialized ?? false

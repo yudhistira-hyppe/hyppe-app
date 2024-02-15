@@ -24,17 +24,13 @@ import '../../../../core/bloc/posts_v2/state.dart';
 import '../../../../core/config/ali_config.dart';
 import '../../../../core/constants/asset_path.dart';
 import '../../../../core/constants/themes/hyppe_colors.dart';
-import '../../../../core/constants/utils.dart';
 import '../../../../core/services/system.dart';
 import '../../../../initial/hyppe/translate_v2.dart';
 import '../../../../ux/path.dart';
 import '../../../../ux/routing.dart';
-import '../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import '../../../constant/widget/custom_base_cache_image.dart';
 import '../../../constant/widget/custom_icon_widget.dart';
 import '../../../constant/widget/custom_loading.dart';
 import '../../../constant/widget/custom_spacer.dart';
-import '../../../constant/widget/custom_text_widget.dart';
 
 class AdsVideoInBetweenFull extends StatefulWidget {
   final AdsArgument arguments;
@@ -116,7 +112,7 @@ class _AdsVideoInBetweenFullState extends State<AdsVideoInBetweenFull> with Widg
               left: 0,
               right: 0,
               child: Container(
-                margin: const EdgeInsets.only(top: kTextTabBarHeight - 12, left: 12.0),
+                margin: const EdgeInsets.only(top: kTextTabBarHeight - 12, left: 12),
                 padding: const EdgeInsets.symmetric(vertical: 18.0),
                 width: double.infinity,
                 height: kToolbarHeight * 1.6,
@@ -237,6 +233,7 @@ class _AdsVideoInBetweenFullState extends State<AdsVideoInBetweenFull> with Widg
                     }
 
                     Future.delayed(const Duration(milliseconds: 800), () {
+                      Routing().moveBack();
                       Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
                     });
                   });
@@ -258,6 +255,7 @@ class _AdsVideoInBetweenFullState extends State<AdsVideoInBetweenFull> with Widg
                             uri,
                             mode: LaunchMode.externalApplication,
                           );
+                          Routing().moveBack();
                         });
                       } else {
                         throw "Could not launch $uri";
@@ -658,129 +656,134 @@ class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingOb
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        ClipRRect(
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          // borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-          child: AliPlayerView(
-            onCreated: onViewPlayerCreated,
-            x: 0,
-            y: 0,
-            height: MediaQuery.of(context).size.width * widget.ratio,
-            width: MediaQuery.of(context).size.width,
-            aliPlayerViewType: AliPlayerViewTypeForAndroid.surfaceview,
-          ),
-        ),
-        if (_showLoading)
-          Align(
-            alignment: Alignment.center,
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const CircularProgressIndicator(
-                  backgroundColor: Colors.white,
-                  strokeWidth: 3.0,
-                ),
-                const SizedBox(
-                  height: 10.0,
-                ),
-                Text(
-                  "$_loadingPercent%",
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ],
+    return Container(
+      height: SizeConfig.screenHeight,
+      width: SizeConfig.screenWidth,
+      color: Colors.black,
+      child: Stack(
+        children: [
+          ClipRRect(
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            // borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+            child: AliPlayerView(
+              onCreated: onViewPlayerCreated,
+              x: 0,
+              y: 0,
+              height: MediaQuery.of(context).size.width * widget.ratio,
+              width: MediaQuery.of(context).size.width,
+              aliPlayerViewType: AliPlayerViewTypeForAndroid.surfaceview,
             ),
           ),
-        Positioned(
-          top: 12,
-          right: 12,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 2),
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.black.withOpacity(0.5)),
-            child: Text(
-              System.getTimeformatByMs(_currentPositionText),
-              style: const TextStyle(color: Colors.white, fontSize: 11),
+          if (_showLoading)
+            Align(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const CircularProgressIndicator(
+                    backgroundColor: Colors.white,
+                    strokeWidth: 3.0,
+                  ),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  Text(
+                    "$_loadingPercent%",
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
+            ),
+          Positioned(
+            top: kToolbarHeight + 12,
+            right: 12,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 2),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.black.withOpacity(0.5)),
+              child: Text(
+                System.getTimeformatByMs(_currentPositionText),
+                style: const TextStyle(color: Colors.white, fontSize: 11),
+              ),
             ),
           ),
-        ),
-        Positioned(
-          bottom: 12,
-          right: 12,
-          child: GestureDetector(
-            onTap: () {
-              setState(() {
-                isMute = !isMute;
-              });
-              fAliplayer?.setMuted(isMute);
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(right: 2.0),
-              child: SizedBox(
-                width: SizeConfig.screenWidth,
-                child: Row(
-                  children: [
-                    twentyFourPx,
-                    Text(
-                      "${System.getTimeformatByMs(_currentPositionText)}/${System.getTimeformatByMs(_videoDuration)}",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    Expanded(
-                      child: SliderTheme(
-                        data: SliderTheme.of(context).copyWith(
-                          overlayShape: SliderComponentShape.noThumb,
-                          activeTrackColor: const Color(0xAA7d7d7d),
-                          inactiveTrackColor: const Color.fromARGB(170, 156, 155, 155),
-                          trackHeight: 1.0,
-                          thumbColor: Colors.purple,
-                          thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8.0),
-                        ),
-                        child: AbsorbPointer(
-                          child: Slider(
-                              min: 0,
-                              max: _videoDuration == 0 ? 1 : _videoDuration.toDouble(),
-                              value: _currentPosition.toDouble(),
-                              activeColor: Colors.yellow,
-                              thumbColor: Colors.transparent,
-                              onChangeStart: (value) {
-                                _inSeek = true;
-                                setState(() {});
-                              },
-                              onChangeEnd: (value) {
-                                _inSeek = false;
-                                setState(() {
-                                  if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
-                                    setState(() {
-                                      _showTipsWidget = false;
-                                    });
-                                  }
-                                });
-                                fAliplayer?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE);
-                              },
-                              onChanged: (value) {
-                                fAliplayer?.requestBitmapAtPosition(value.ceil());
-
-                                setState(() {
-                                  _currentPosition = value.ceil();
-                                });
-                              }),
+          Positioned(
+            bottom: 12,
+            right: 12,
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  isMute = !isMute;
+                });
+                fAliplayer?.setMuted(isMute);
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(right: 2.0),
+                child: SizedBox(
+                  width: SizeConfig.screenWidth,
+                  child: Row(
+                    children: [
+                      twentyFourPx,
+                      Text(
+                        "${System.getTimeformatByMs(_currentPositionText)}/${System.getTimeformatByMs(_videoDuration)}",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Expanded(
+                        child: SliderTheme(
+                          data: SliderTheme.of(context).copyWith(
+                            overlayShape: SliderComponentShape.noThumb,
+                            activeTrackColor: const Color(0xAA7d7d7d),
+                            inactiveTrackColor: const Color.fromARGB(170, 156, 155, 155),
+                            trackHeight: 1.0,
+                            thumbColor: Colors.purple,
+                            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8.0),
+                          ),
+                          child: AbsorbPointer(
+                            child: Slider(
+                                min: 0,
+                                max: _videoDuration == 0 ? 1 : _videoDuration.toDouble(),
+                                value: _currentPosition.toDouble(),
+                                activeColor: Colors.yellow,
+                                thumbColor: Colors.transparent,
+                                onChangeStart: (value) {
+                                  _inSeek = true;
+                                  setState(() {});
+                                },
+                                onChangeEnd: (value) {
+                                  _inSeek = false;
+                                  setState(() {
+                                    if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
+                                      setState(() {
+                                        _showTipsWidget = false;
+                                      });
+                                    }
+                                  });
+                                  fAliplayer?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE);
+                                },
+                                onChanged: (value) {
+                                  fAliplayer?.requestBitmapAtPosition(value.ceil());
+    
+                                  setState(() {
+                                    _currentPosition = value.ceil();
+                                  });
+                                }),
+                          ),
                         ),
                       ),
-                    ),
-                    CustomIconWidget(
-                      iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
-                      defaultColor: false,
-                      height: 24,
-                    ),
-                  ],
+                      CustomIconWidget(
+                        iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
+                        defaultColor: false,
+                        height: 24,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

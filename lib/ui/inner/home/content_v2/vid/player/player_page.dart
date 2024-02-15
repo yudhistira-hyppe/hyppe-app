@@ -11,6 +11,7 @@ import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
@@ -824,6 +825,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
                     100,
                     widget.width ?? 0,
                     widget.height ?? 0,
+                    orientation
                   ),
                 ),
               ),
@@ -915,6 +917,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     double barHeight,
     double width,
     double height,
+    Orientation orientation,
   ) {
     return AnimatedOpacity(
       opacity: onTapCtrl || isPause ? 1.0 : 0.0,
@@ -922,6 +925,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
       onEnd: _onPlayerHide,
       child: Container(
         height: height * 0.8,
+        width: orientation == Orientation.landscape ? SizeConfig.screenWidth! * .5 : SizeConfig.screenWidth! * .8,
         decoration: BoxDecoration(
           color: backgroundColor,
         ),

@@ -246,6 +246,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                 itemCount: picData?.length ?? 0,
                 onPageChanged: (value) async {
                   indexPic = value;
+                  notifier.currIndex = value;
                   if ((notifier.pics?.length ?? 0) - 1 == indexPic) {
                     final pageSrc = widget.argument?.pageSrc ?? PageSrc.otherProfile;
                     //This loadmore data

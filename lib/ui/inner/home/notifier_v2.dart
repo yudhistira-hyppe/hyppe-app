@@ -622,7 +622,7 @@ class HomeNotifier with ChangeNotifier {
   //   }
   // }
 
-  void onDeleteSelfPostContent(BuildContext context, {required String postID, required String content}) {
+  void onDeleteSelfPostContent(BuildContext context, {required String postID, required String email, required String content}) {
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
     final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
     final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
@@ -638,7 +638,11 @@ class HomeNotifier with ChangeNotifier {
         pic.pic?.removeWhere((element) => element.postID == postID);
         break;
       case hyppeStory:
+        stories.isloading = true;
         stories.myStoriesData?.removeWhere((element) => element.postID == postID);
+        stories.myStoryGroup[email]!.removeWhere((element) => element.postID == postID);
+        // stories.initialStories(context);
+        stories.isloading = false;
         break;
       default:
         "$content It's Not a content of $postID".logger();

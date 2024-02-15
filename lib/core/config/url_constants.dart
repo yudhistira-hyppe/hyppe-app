@@ -420,7 +420,7 @@ class UrlConstants {
   /// Tiket Histories
   static const String ticketHistories = "/api/usertickets/filter/v2";
   static const String ticketComments = "/api/usertickets/comment/v2";
-  static const String replyComment = "/api/usertickets/reply";
+  static const String replyComment = "/api/usertickets/reply/v2";
   static const String reportHistories = "/api/reportuser/listreport/v2";
 
   // Get Old Video

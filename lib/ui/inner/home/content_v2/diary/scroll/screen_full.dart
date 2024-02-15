@@ -32,7 +32,6 @@ import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/decorated_icon_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/diary_sensitive.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/left_items.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/right_items.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/title_playlist_diaries.dart';
@@ -51,7 +50,6 @@ import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:hyppe/ui/constant/widget/sticker_overlay.dart';
-import 'dart:math' as math;
 
 class ScrollFullDiary extends StatefulWidget {
   final SlidedDiaryDetailScreenArgument? arguments;
@@ -647,6 +645,8 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
                 onPageChanged: (index) {
                   print("===asdasdasd $index");
                   _curIdx = index;
+                  notifier.currIndex = index;
+                  // notifier.itemScrollController.jumpTo(index: index);
                   if (_lastCurIndex != _curIdx) {
                     try {
                       widget.arguments?.scrollController?.jumpTo(System().scrollAuto(_curIdx, widget.arguments?.heightTopProfile ?? 0, widget.arguments?.heightBox?.toInt() ?? 175));

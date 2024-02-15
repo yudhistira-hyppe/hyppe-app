@@ -111,7 +111,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
   // bool _scroolEnabled = true;
   bool toComment = false;
 
-  final ItemScrollController itemScrollController = ItemScrollController();
+  
   final ScrollOffsetController scrollOffsetController = ScrollOffsetController();
   final ScrollOffsetListener scrollOffsetListener = ScrollOffsetListener.create();
 
@@ -155,7 +155,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
-      itemScrollController.jumpTo(index: widget.arguments?.page ?? 0);
+      notifier.itemScrollController.jumpTo(index: widget.arguments?.page ?? 0);
       // scrollIndex = widget.arguments?.page ?? 0;
       print("00000000000000 ${widget.arguments?.page}");
       _initListener(notifier);
@@ -179,7 +179,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
         if (index == pics!.length - 2) {
           if (connect) {
             if (!notifier.isLoadingLoadmore) {
-              await notifier.loadMore(context, _scrollController, pageSrc!, widget.arguments?.key ?? '');
+              await notifier.loadMore(context, _scrollController, pageSrc, widget.arguments?.key ?? '');
               if (mounted) {
                 setState(() {
                   pics = notifier.pics;
@@ -640,6 +640,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(margin: const EdgeInsets.symmetric(horizontal: 10), transform: Matrix4.translationValues(-18.0, 0.0, 0.0), child: widget.arguments?.titleAppbar ?? Container()),
+                          if(pics?.isNotEmpty ?? false)
                           if (pics?[pageIndex].email != email && (pics?[pageIndex].isNewFollowing ?? false) && (widget.arguments?.isProfile ?? false))
                             Consumer<PreviewPicNotifier>(
                               builder: (context, picNot, child) => Padding(
@@ -688,7 +689,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                           }),
                     ),
                     Expanded(
-                      child: (pics?.isEmpty ?? true)
+                      child: (pics?.isEmpty ?? [].isEmpty)
                           ? const NoResultFound()
                           : RefreshIndicator(
                               onRefresh: () async {
@@ -729,7 +730,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                 },
                                 child: ScrollablePositionedList.builder(
                                   scrollDirection: Axis.vertical,
-                                  itemScrollController: itemScrollController,
+                                  itemScrollController: notifier.itemScrollController,
                                   itemPositionsListener: itemPositionsListener,
                                   scrollOffsetController: scrollOffsetController,
                                   scrollOffsetListener: scrollOffsetListener,
@@ -777,7 +778,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     );
   }
 
-  var initialControllerValue;
+  // var initialControllerValue;
 
   Widget itemPict(ScrollPicNotifier notifier, int index) {
     TranslateNotifierV2 tn = context.read<TranslateNotifierV2>();
@@ -874,14 +875,9 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                           context.read<PreviewPicNotifier>().reportContent(context, pics?[index] ?? ContentData(), fAliplayer: fAliplayer, onCompleted: () async {
                             bool connect = await System().checkConnections();
                             if (connect) {
-                              if (pics?.isEmpty ?? [].isEmpty) {
-                                Routing().moveBack();
-                                Routing().moveBack();
-                                return;
-                              }
                               setState(() {
                                 isloading = true;
-                                if (index == (pics?.length ?? 0 - 1)) {
+                                if (index == (pics?.length ?? 0) - 1) {
                                   pageIndex = index - 1;
                                 }
                               });
@@ -907,9 +903,9 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                             contentData: pics?[index] ?? ContentData(),
                             captionTitle: hyppePic,
                             onDetail: false,
-                            isShare: pics?[index].isShared,
+                            isShare: pics?[index].isShared??false,
                             onUpdate: () {
-                              if (index == (pics?.length ?? 0 - 1)) {
+                              if  (index == (pics?.length ?? 0 - 1)) {
                                 setState(() {
                                   pageIndex = index - 1;
                                 });
@@ -1061,15 +1057,14 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                     if (res != null || res == null) {
                                       fAliplayer?.play();
                                       fAliplayer?.setMuted(notifier.isMute);
+                                      notifier.itemScrollController.jumpTo(index: notifier.currentIndex);
                                     }
                                   }
                                 },
                                 onDoubleTap: () {
                                   final _likeNotifier = context.read<LikeNotifier>();
                                   if (pics?[index] != null) {
-                                    context.handleActionIsGuest(() {
-                                      _likeNotifier.likePost(context, pics![index]);
-                                    });
+                                    _likeNotifier.likePost(context, pics?[index]??ContentData());
                                   }
                                 },
                                 child: Center(
@@ -1312,16 +1307,13 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                     ),
                                     onTap: () {
                                       if (pics?[index] != null) {
-                                        context.handleActionIsGuest(() {
-                                          likeNotifier.likePost(context, pics![index]).then((value) {
-                                            List<ContentData>? pic = context.read<PreviewPicNotifier>().pic;
-                                            int idx = pic!.indexWhere((e) => e.postID == value['_id']);
-                                            pic[idx].insight?.isPostLiked = value['isPostLiked'];
-                                            pic[idx].insight?.likes = value['likes'];
-                                            pic[idx].isLiked = value['isLiked'];
-                                          });
+                                        likeNotifier.likePost(context, pics![index]).then((value) {
+                                          List<ContentData>? pic = context.read<PreviewPicNotifier>().pic;
+                                          int idx = pic!.indexWhere((e) => e.postID == value['_id']);
+                                          pic[idx].insight?.isPostLiked = value['isPostLiked'];
+                                          pic[idx].insight?.likes = value['likes'];
+                                          pic[idx].isLiked = value['isLiked'];
                                         });
-                                        
                                       }
                                     },
                                   ),

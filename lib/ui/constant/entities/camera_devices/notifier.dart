@@ -6,7 +6,12 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/loading/notifier.dart';
 import 'package:camera/camera.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
+import 'package:provider/provider.dart';
+
+import '../../../../core/constants/enum.dart';
+import '../../../inner/upload/make_content/notifier.dart';
 
 class CameraDevicesNotifier extends LoadingNotifier with ChangeNotifier {
   static final _system = System();
@@ -153,7 +158,7 @@ class CameraDevicesNotifier extends LoadingNotifier with ChangeNotifier {
       'Disposing camera...'.logger();
       if (isRecordingVideo) {
         'Stop video recording...'.logger();
-        await stopVideoRecording();
+        await stopVideoRecording(Routing.navigatorKey.currentContext!);
         'Success stop video recording...'.logger();
       }
       await cameraController?.dispose();
@@ -234,9 +239,13 @@ class CameraDevicesNotifier extends LoadingNotifier with ChangeNotifier {
     return _result;
   }
 
-  Future<void> startVideoRecording() async {
+  Future<void> startVideoRecording(BuildContext context) async {
+    final notifier = Provider.of<MakeContentNotifier>(context, listen: false);
     if (!isInitialized) {
       return;
+    }
+    if(notifier.featureType == FeatureType.story){
+      await cameraController?.setFlashMode(FlashMode.always);
     }
 
     if (isRecordingVideo) {
@@ -252,11 +261,15 @@ class CameraDevicesNotifier extends LoadingNotifier with ChangeNotifier {
     }
   }
 
-  Future<XFile?> stopVideoRecording() async {
+  Future<XFile?> stopVideoRecording(BuildContext context) async {
+    final notifier = Provider.of<MakeContentNotifier>(context, listen: false);
     if (!isRecordingVideo) {
       return null;
     }
 
+    if(notifier.featureType == FeatureType.story){
+      await cameraController?.setFlashMode(FlashMode.off);
+    }
     try {
       final _xFile = await cameraController!.stopVideoRecording();
       notifyListeners();

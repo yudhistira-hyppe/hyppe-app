@@ -37,9 +37,10 @@ class AdsVideoInBetween extends StatefulWidget {
   final Function(VisibilityInfo)? onVisibility;
   final FlutterAliplayer? player;
   final AdsData data;
+  final bool isVideo;
   final Function() afterReport;
   final Function(FlutterAliplayer, String) getPlayer;
-  const AdsVideoInBetween({Key? key, this.onVisibility, this.player, required this.data, required this.afterReport, required this.getPlayer}) : super(key: key);
+  const AdsVideoInBetween({Key? key, this.onVisibility, this.player, required this.data, required this.afterReport, required this.getPlayer, required this.isVideo}) : super(key: key);
 
   @override
   State<AdsVideoInBetween> createState() => _AdsVideoInBetweenState();

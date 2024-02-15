@@ -10,7 +10,6 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/button_boost.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
-import 'package:hyppe/ui/constant/widget/custom_newdesc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/jangakauan_status.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
 import 'package:hyppe/ui/constant/widget/music_status_detail_widget.dart';
@@ -225,7 +224,9 @@ class PicDetailBottom extends StatelessWidget {
                   '${AssetPath.vectorPath}comment.svg',
                   value2.translate.comment ?? 'comment',
                   () {
-                    ShowBottomSheet.onShowCommentV2(context, postID: data?.postID);
+                   context.handleActionIsGuest(() {
+                     ShowBottomSheet.onShowCommentV2(context, postID: data?.postID);
+                   });
                   },
                 ),
 
