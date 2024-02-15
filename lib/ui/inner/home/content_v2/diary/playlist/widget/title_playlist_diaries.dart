@@ -29,14 +29,14 @@ import '../../../../../../../app.dart';
 
 class TitlePlaylistDiaries extends StatefulWidget {
   final ContentData? data;
-  final bool? inProfile;
+  final bool inProfile;
   final Function()? callbackReport;
   // final StoryController? storyController;
 
   const TitlePlaylistDiaries({
     Key? key,
     this.data,
-    this.inProfile,
+    this.inProfile = false,
     this.callbackReport,
     // this.storyController,
   }) : super(key: key);
@@ -147,6 +147,7 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                                 )}',
                               ),
                             ),
+                      if(!widget.inProfile)
                       if (widget.data?.email != SharedPreference().readStorage(SpKeys.email) && (widget.data?.isNewFollowing ?? false))
                         Consumer<PreviewPicNotifier>(
                           builder: (context, picNot, child) => GestureDetector(
