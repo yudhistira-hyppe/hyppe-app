@@ -229,9 +229,14 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
       fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
-        setState(() {
+        if(mounted){
+          setState(() {
+            isPrepare = true;
+          });
+        }else{
           isPrepare = true;
-        });
+        }
+
       });
       isPlay = true;
       dataSelected?.isDiaryPlay = true;

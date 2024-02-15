@@ -9,6 +9,7 @@ import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:showcaseview/showcaseview.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 import '../../../../../../core/constants/asset_path.dart';
 import '../../../../../../core/constants/size_config.dart';
 import '../../../../../../core/models/collection/posts/content_v2/content_data.dart';
@@ -81,110 +82,123 @@ class _PicTopItemState extends State<PicTopItem> {
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'PicTopItem');
     SizeConfig().init(context);
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        if ((widget.data?.saleAmount ?? 0) > 0)
-          Showcase(
-            key: widget.globalKey ?? GlobalKey(),
-            tooltipBackgroundColor: kHyppeTextLightPrimary,
-            overlayOpacity: 0,
-            targetPadding: const EdgeInsets.all(0),
-            tooltipPosition: TooltipPosition.top,
-            description: (mn?.tutorialData.isEmpty ?? [].isEmpty)
-                ? ''
-                : lang?.localeDatetime == 'id'
-                    ? mn?.tutorialData[indexKeySell].textID ?? ''
-                    : mn?.tutorialData[indexKeySell].textEn ?? '',
-            descTextStyle: const TextStyle(fontSize: 10, color: kHyppeNotConnect),
-            descriptionPadding: EdgeInsets.all(6),
-            textColor: Colors.white,
-            targetShapeBorder: const CircleBorder(),
-            positionYplus: 25,
-            onToolTipClick: () {
+    return VisibilityDetector(
+      key: Key(widget.postId ?? indexKeySell.toString()),
+      onVisibilityChanged: (VisibilityInfo info) {
+        if ((widget.data?.saleAmount ?? 0) > 0 || ((widget.data?.certified ?? false) && (widget.data?.saleAmount ?? 0) == 0)){
+          if (info.visibleFraction < 0.5) {
+            if(globalTultipShow){
               closeTooltip(indexKeySell);
-            },
-            closeWidget: GestureDetector(
-              onTap: () {
+            }
+          }
+        }
+
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          if ((widget.data?.saleAmount ?? 0) > 0)
+            Showcase(
+              key: widget.globalKey ?? GlobalKey(),
+              tooltipBackgroundColor: kHyppeTextLightPrimary,
+              overlayOpacity: 0,
+              targetPadding: const EdgeInsets.all(0),
+              tooltipPosition: TooltipPosition.top,
+              description: (mn?.tutorialData.isEmpty ?? [].isEmpty)
+                  ? ''
+                  : lang?.localeDatetime == 'id'
+                      ? mn?.tutorialData[indexKeySell].textID ?? ''
+                      : mn?.tutorialData[indexKeySell].textEn ?? '',
+              descTextStyle: const TextStyle(fontSize: 10, color: kHyppeNotConnect),
+              descriptionPadding: EdgeInsets.all(6),
+              textColor: Colors.white,
+              targetShapeBorder: const CircleBorder(),
+              positionYplus: 25,
+              onToolTipClick: () {
                 closeTooltip(indexKeySell);
               },
-              child: const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: CustomIconWidget(
-                  iconData: '${AssetPath.vectorPath}close.svg',
+              closeWidget: GestureDetector(
+                onTap: () {
+                  closeTooltip(indexKeySell);
+                },
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CustomIconWidget(
+                    iconData: '${AssetPath.vectorPath}close.svg',
+                    defaultColor: false,
+                    height: 16,
+                  ),
+                ),
+              ),
+              child: GestureDetector(
+                onTap: () {
+                  if (widget.globalKey != null) {
+                    if (widget.fAliplayer != null) {
+                      widget.fAliplayer?.pause();
+                    }
+                    globalTultipShow = true;
+                    show();
+                  }
+                },
+                child: const CustomIconWidget(
+                  iconData: '${AssetPath.vectorPath}sale.svg',
                   defaultColor: false,
-                  height: 16,
+                  height: 24,
                 ),
               ),
             ),
-            child: GestureDetector(
-              onTap: () {
-                if (widget.globalKey != null) {
-                  if (widget.fAliplayer != null) {
-                    widget.fAliplayer?.pause();
-                  }
-                  globalTultipShow = true;
-                  show();
-                }
-              },
-              child: const CustomIconWidget(
-                iconData: '${AssetPath.vectorPath}sale.svg',
-                defaultColor: false,
-                height: 24,
-              ),
-            ),
-          ),
-        // Center(child: Text("${mn?.tutorialData}")),
-        if ((widget.data?.certified ?? false) && (widget.data?.saleAmount ?? 0) == 0)
-          Showcase(
-            key: widget.globalKey ?? GlobalKey(),
-            tooltipBackgroundColor: kHyppeTextLightPrimary,
-            overlayOpacity: 0,
-            targetPadding: const EdgeInsets.all(0),
-            tooltipPosition: TooltipPosition.top,
-            description: (mn?.tutorialData.isEmpty ?? [].isEmpty)
-                ? ''
-                : lang?.localeDatetime == 'id'
-                    ? mn?.tutorialData[indexKeyProtection].textID ?? ''
-                    : mn?.tutorialData[indexKeyProtection].textEn ?? '',
-            descTextStyle: TextStyle(fontSize: 10, color: kHyppeNotConnect),
-            descriptionPadding: EdgeInsets.all(6),
-            textColor: Colors.white,
-            positionYplus: 25,
-            onToolTipClick: () {
-              closeTooltip(indexKeyProtection);
-            },
-            closeWidget: GestureDetector(
-              onTap: () {
+          // Center(child: Text("${mn?.tutorialData}")),
+          if ((widget.data?.certified ?? false) && (widget.data?.saleAmount ?? 0) == 0)
+            Showcase(
+              key: widget.globalKey ?? GlobalKey(),
+              tooltipBackgroundColor: kHyppeTextLightPrimary,
+              overlayOpacity: 0,
+              targetPadding: const EdgeInsets.all(0),
+              tooltipPosition: TooltipPosition.top,
+              description: (mn?.tutorialData.isEmpty ?? [].isEmpty)
+                  ? ''
+                  : lang?.localeDatetime == 'id'
+                      ? mn?.tutorialData[indexKeyProtection].textID ?? ''
+                      : mn?.tutorialData[indexKeyProtection].textEn ?? '',
+              descTextStyle: TextStyle(fontSize: 10, color: kHyppeNotConnect),
+              descriptionPadding: EdgeInsets.all(6),
+              textColor: Colors.white,
+              positionYplus: 25,
+              onToolTipClick: () {
                 closeTooltip(indexKeyProtection);
               },
-              child: const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: CustomIconWidget(
-                  iconData: '${AssetPath.vectorPath}close.svg',
-                  defaultColor: false,
-                  height: 16,
+              closeWidget: GestureDetector(
+                onTap: () {
+                  closeTooltip(indexKeyProtection);
+                },
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CustomIconWidget(
+                    iconData: '${AssetPath.vectorPath}close.svg',
+                    defaultColor: false,
+                    height: 16,
+                  ),
                 ),
               ),
-            ),
-            child: GestureDetector(
-              onTap: () {
-                if (widget.globalKey != null) {
-                  if (widget.fAliplayer != null) {
-                    widget.fAliplayer?.pause();
+              child: GestureDetector(
+                onTap: () {
+                  if (widget.globalKey != null) {
+                    if (widget.fAliplayer != null) {
+                      widget.fAliplayer?.pause();
+                    }
+                    globalTultipShow = true;
+                    show();
                   }
-                  globalTultipShow = true;
-                  show();
-                }
-              },
-              child: const CustomIconWidget(
-                iconData: '${AssetPath.vectorPath}ownership.svg',
-                defaultColor: false,
-                height: 24,
+                },
+                child: const CustomIconWidget(
+                  iconData: '${AssetPath.vectorPath}ownership.svg',
+                  defaultColor: false,
+                  height: 24,
+                ),
               ),
-            ),
-          )
-      ],
+            )
+        ],
+      ),
     );
   }
 
