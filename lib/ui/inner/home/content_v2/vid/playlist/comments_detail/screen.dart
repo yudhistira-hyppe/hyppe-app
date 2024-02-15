@@ -118,34 +118,43 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                   },
                   child: Column(
                     children: [
-                      _bottomDetail(context, data, notifier),
-                      !notifier.isCommentEmpty
-                          ? Expanded(
+                      // _bottomDetail(context, data, notifier),
+                      // !notifier.isCommentEmpty
+                      //     ? 
+                          Expanded(
                               child: Container(
-                              color: context.getColorScheme().background,
+                              // color: context.getColorScheme().background,
                               child: ListView.builder(
-                                itemCount: notifier.itemCount,
+                                itemCount: notifier.itemCount+1,
                                 physics: const AlwaysScrollableScrollPhysics(),
                                 controller: _scrollController,
                                 scrollDirection: Axis.vertical,
                                 keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                                 itemBuilder: (context, index) {
-                                  if (index == notifier.commentData?.length && notifier.hasNext) {
+                                  if (index + 1 == notifier.commentData?.length && notifier.hasNext) {
                                     return const CustomLoading();
                                   }
-                                  final comments = notifier.commentData?[index];
-                                  print('all comments: ${comments?.comment?.txtMessages}');
-                                  return CommentTile(logs: comments, fromFront: fromFront, notifier: notifier, index: index);
+
+                                  // final comments = notifier.commentData?[index-1];
+                                  return Wrap(
+                                    alignment: WrapAlignment.start,
+                                    children: generateComment(context, data, notifier, index, fromFront),
+                                  );
+                                  // final comments = notifier.commentData?[index-1];
+                                  // return Container(
+                                  //   color: context.getColorScheme().background,
+                                  //   child: CommentTile(logs: comments, fromFront: fromFront, notifier: notifier, index: index)) 
+                                 
                                 },
                               ),
                             ),
                             )
-                          : Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 100.0),
-                                child: CustomTextWidget(textToDisplay: context.read<TranslateNotifierV2>().translate.beTheFirstToComment ?? ''),
-                              ),
-                          )
+                          // : Expanded(
+                          //     child: Padding(
+                          //       padding: const EdgeInsets.symmetric(vertical: 100.0),
+                          //       child: CustomTextWidget(textToDisplay: context.read<TranslateNotifierV2>().translate.beTheFirstToComment ?? ''),
+                          //     ),
+                          // )
                     ],
                   ),
                 ),
@@ -287,6 +296,33 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
         ),
       );
     });
+  }
+
+  List<Widget> generateComment(BuildContext context, ContentData data, CommentNotifierV2 notifier, int index, bool fromFront) {
+    List<Widget> widget = [];
+    if (index == 0){
+     widget.add(_bottomDetail(context, data, notifier)); 
+    }
+
+    if (notifier.isCommentEmpty){
+      widget.add(Expanded(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 100.0),
+              child: CustomTextWidget(textToDisplay: context.read<TranslateNotifierV2>().translate.beTheFirstToComment ?? ''),
+            ),
+          ),
+      ));
+    }
+    // final comments = notifier.commentData?[index];
+    if (index > 0){
+      Widget item = Container(
+        color: context.getColorScheme().background,
+        child: CommentTile(logs: notifier.commentData?[index - 1], fromFront: fromFront, notifier: notifier, index: index-1));
+      widget.add(item);
+    }
+    
+    return widget;
   }
 
   Widget _bottomDetail(BuildContext context, ContentData data, CommentNotifierV2 notifier) {
@@ -503,11 +539,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
       ),
     );
   }
-
-  Size _textSize(String text, TextStyle style) {
-    final TextPainter textPainter = TextPainter(text: TextSpan(text: text, style: style), maxLines: 1, textDirection: TextDirection.ltr)..layout(minWidth: 0, maxWidth: double.infinity);
-    return textPainter.size;
-  }
+  
 }
 
 class CommentsArgument {
