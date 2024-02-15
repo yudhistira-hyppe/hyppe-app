@@ -212,6 +212,25 @@ class _CustomDescContentState extends State<CustomDescContent> {
             spanTrim: link,
           ),
         );
+        // if (textSize.width < constraints.maxHeight && !_readMore){
+        //   return Container(
+        //     constraints: BoxConstraints(
+        //       maxHeight: MediaQuery.of(context).size.height - (kToolbarHeight * 5),
+        //     ),
+        //     child: ListView(
+        //       children: [
+        //         Text.rich(
+        //           textSpan,
+        //           textAlign: textAlign,
+        //           textDirection: textDirection,
+        //           softWrap: true,
+        //           overflow: widget.textOverflow ?? TextOverflow.clip,
+        //           textScaleFactor: textScaleFactor,
+        //         )
+        //       ],
+        //     ),
+        //   );
+        // }
         return Text.rich(
           textSpan,
           textAlign: textAlign,

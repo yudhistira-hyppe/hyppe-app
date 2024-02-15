@@ -152,7 +152,7 @@ class _ViewLikedState extends State<ViewLiked> {
                                         ),
                                       if ((notifier.listLikeView?.guest ?? 0) > 0)
                                         Transform.translate(
-                                          offset: Offset(0.0, Platform.isIOS ? -24 : 0),
+                                          offset: notifier.listLikeView?.user?.isNotEmpty??false ? Offset(0.0, Platform.isIOS ? -24 : 0): Offset(0.0, 0.0),
                                           child: ListTile(
                                             contentPadding: EdgeInsets.zero,
                                             leading: StoryColorValidator(
