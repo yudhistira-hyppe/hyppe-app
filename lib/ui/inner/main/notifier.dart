@@ -392,58 +392,58 @@ class MainNotifier with ChangeNotifier {
     );
   }
 
-  void _connectAndListenToSocketAds() async {
-    String? token = SharedPreference().readStorage(SpKeys.userToken);
-    String? email = SharedPreference().readStorage(SpKeys.email);
-
-    if (_socketService.isRunning) {
-      _socketService.closeSocket();
-    }
-
-    _socketService.connectToSocket(
-      () {
-        _socketService.events(
-          SocketService.eventAds,
-          // '2b595aa7-f3d2-0a76-dd91-9bcec1d10098',
-          (message) {
-            print('ini message dari socket');
-            message.logger();
-            try {
-              final msgData = MessageDataV2.fromJson(json.decode('$message'));
-              print('ini message dari socket ${msgData.disqusID}');
-              if (msgData.disqusLogs[0].receiver == email) {
-                NotificationService().showNotification(
-                    RemoteMessage(
-                      notification: RemoteNotification(
-                        // title: "@${msgData.disqusLogs[0].senderInfo?.fullName}",
-                        title: "${msgData.username}",
-                        body: msgData.fcmMessage ?? msgData.disqusLogs.firstOrNull?.txtMessages ?? '',
-                      ),
-                      data: msgData.toJson(),
-                    ),
-                    data: msgData);
-                _eventService.notifyMessageReceived(msgData);
-              }
-            } catch (e) {
-              e.toString().logger();
-            }
-          },
-        );
-      },
-      host: Env.data.baseUrlSocket,
-      options: OptionBuilder()
-          .setAuth({
-            "x-auth-user": "$email",
-            "x-auth-token": "$token",
-          })
-          .setTransports(
-            ['websocket'],
-          )
-          .setPath('${Env.data.versionApi}socket.io')
-          .disableAutoConnect()
-          .build(),
-    );
-  }
+  // void _connectAndListenToSocketAds() async {
+  //   String? token = SharedPreference().readStorage(SpKeys.userToken);
+  //   String? email = SharedPreference().readStorage(SpKeys.email);
+  //
+  //   if (_socketService.isRunning) {
+  //     _socketService.closeSocket();
+  //   }
+  //
+  //   _socketService.connectToSocket(
+  //     () {
+  //       _socketService.events(
+  //         SocketService.eventAds,
+  //         // '2b595aa7-f3d2-0a76-dd91-9bcec1d10098',
+  //         (message) {
+  //           print('ini message dari socket');
+  //           message.logger();
+  //           try {
+  //             final msgData = MessageDataV2.fromJson(json.decode('$message'));
+  //             print('ini message dari socket ${msgData.disqusID}');
+  //             if (msgData.disqusLogs[0].receiver == email) {
+  //               NotificationService().showNotification(
+  //                   RemoteMessage(
+  //                     notification: RemoteNotification(
+  //                       // title: "@${msgData.disqusLogs[0].senderInfo?.fullName}",
+  //                       title: "${msgData.username}",
+  //                       body: msgData.fcmMessage ?? msgData.disqusLogs.firstOrNull?.txtMessages ?? '',
+  //                     ),
+  //                     data: msgData.toJson(),
+  //                   ),
+  //                   data: msgData);
+  //               _eventService.notifyMessageReceived(msgData);
+  //             }
+  //           } catch (e) {
+  //             e.toString().logger();
+  //           }
+  //         },
+  //       );
+  //     },
+  //     host: Env.data.baseUrlSocket,
+  //     options: OptionBuilder()
+  //         .setAuth({
+  //           "x-auth-user": "$email",
+  //           "x-auth-token": "$token",
+  //         })
+  //         .setTransports(
+  //           ['websocket'],
+  //         )
+  //         .setPath('${Env.data.versionApi}socket.io')
+  //         .disableAutoConnect()
+  //         .build(),
+  //   );
+  // }
 
   Future takeSelfie(BuildContext context) async {
     _openValidationIDCamera = false;
