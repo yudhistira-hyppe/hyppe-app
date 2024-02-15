@@ -136,6 +136,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
     });
     controller = PageController(initialPage: widget.argument?.page ?? 0);
+    notifier.currIndex = widget.argument?.page??0;
   }
 
   @override

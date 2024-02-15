@@ -34,6 +34,7 @@ class CommentsDetailScreen extends StatefulWidget {
 
 class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
   final ScrollController _scrollController = ScrollController();
+  bool isLoad = true;
 
   @override
   void initState() {
@@ -107,7 +108,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                 ),
               ),
               sixteenPx,
-              Expanded(
+              Flexible(
                 child: RefreshIndicator(
                   strokeWidth: 2.0,
                   color: Colors.purple,
@@ -320,22 +321,18 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                           desc: data.description ?? '',
                           trimLines: 5,
                           textAlign: TextAlign.start,
-                          seeLess: ' ${notifier.language.seeLess}',
+                          seeLess: ' ${notifier.language.seeMore}',
                           seeMore: ' ${notifier.language.seeMoreContent}',
                           textOverflow: TextOverflow.visible,
-                          normStyle: Theme.of(context).textTheme.caption?.copyWith(color: context.getColorScheme().onBackground),
-                          hrefStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.primary),
-                          expandStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.primary)),
-                      // child: CustomTextWidget(
-                      //   textAlign: TextAlign.start,
-                      //   textToDisplay:
-                      //   '${data.description}',
-                      //   maxLines: 2,
-                      //   textStyle: context
-                      //       .getTextTheme()
-                      //       .caption
-
-                      // ),
+                          normStyle: Theme.of(context).textTheme.bodyText2,
+                          hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                          expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                          callbackIsMore: (val){
+                            setState(() {
+                              isLoad = val;
+                            });
+                          },
+                        ),
                     ),
                   ],
                 )
@@ -505,6 +502,11 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
         ),
       ),
     );
+  }
+
+  Size _textSize(String text, TextStyle style) {
+    final TextPainter textPainter = TextPainter(text: TextSpan(text: text, style: style), maxLines: 1, textDirection: TextDirection.ltr)..layout(minWidth: 0, maxWidth: double.infinity);
+    return textPainter.size;
   }
 }
 
