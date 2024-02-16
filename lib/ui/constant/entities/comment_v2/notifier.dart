@@ -127,7 +127,7 @@ class CommentNotifierV2 with ChangeNotifier {
         );
       }
     });
-    notifyListeners();
+    // notifyListeners();
   }
 
   void onDispose() {
@@ -155,6 +155,7 @@ class CommentNotifierV2 with ChangeNotifier {
 
       final res = await _resFuture;
 
+      // if (res.isNotEmpty) {
       if (reload) {
         commentData = res.firstOrNull()?.disqusLogs ?? [];
       } else {
@@ -162,7 +163,8 @@ class CommentNotifierV2 with ChangeNotifier {
       }
 
       final comments = _commentData;
-      if (comments != null) {
+      print("=====isi res $comments");
+      if (comments != null && comments.isNotEmpty) {
         print('comments lenght ${comments[0].comment?.detailDisquss?.length}');
         for (final comment in comments) {
           repliesComments[comment.comment?.lineID] = [
@@ -180,6 +182,7 @@ class CommentNotifierV2 with ChangeNotifier {
           // }
         }
       }
+      // }
     } catch (e) {
       'load comments list: ERROR: $e'.logger();
     }
@@ -216,7 +219,6 @@ class CommentNotifierV2 with ChangeNotifier {
       final _resFuture = commentQuery.addComment(context);
       final res = await _resFuture;
       if (res != null) {
-        
         newCommentLocal(res);
 
         context.read<HomeNotifier>().addCountComment(

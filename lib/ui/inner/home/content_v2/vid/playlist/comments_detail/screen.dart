@@ -43,7 +43,9 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
     final postID = widget.argument.postID;
     final fromFront = widget.argument.fromFront;
     final parentComment = widget.argument.parentComment;
-    notifier.initState(context, postID, fromFront, parentComment);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      notifier.initState(context, postID, fromFront, parentComment);
+    });
     _scrollController.addListener(() => notifier.scrollListener(context, _scrollController));
     super.initState();
   }
@@ -212,35 +214,31 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                       child: Column(
                         children: [
                           notifier.isShowAutoComplete
-                          ? const AutoCompleteUserTagComment()
-                          : Row(
-                            children: List.generate(emoji.length, (index) {
-                              return Expanded(
-                                  child: InkWell(
-                                      onTap: () {
-                                        context.handleActionIsGuest(() async  {
-                                          final currentText = notifier.commentController.text;
-                                          notifier.commentController.text = "$currentText${emoji[index]}";
-                                          notifier.commentController.selection = TextSelection.fromPosition(TextPosition(offset: notifier.commentController.text.length));
-                                          notifier.onUpdate();
-                                        });
-
-                                      },
-                                      child: CustomTextWidget(
-                                        textToDisplay: emoji[index],
-                                        textStyle: const TextStyle(fontSize: 24),
-                                      )));
-                            }),
-                          ),
+                              ? const AutoCompleteUserTagComment()
+                              : Row(
+                                  children: List.generate(emoji.length, (index) {
+                                    return Expanded(
+                                        child: InkWell(
+                                            onTap: () {
+                                              context.handleActionIsGuest(() async {
+                                                final currentText = notifier.commentController.text;
+                                                notifier.commentController.text = "$currentText${emoji[index]}";
+                                                notifier.commentController.selection = TextSelection.fromPosition(TextPosition(offset: notifier.commentController.text.length));
+                                                notifier.onUpdate();
+                                              });
+                                            },
+                                            child: CustomTextWidget(
+                                              textToDisplay: emoji[index],
+                                              textStyle: const TextStyle(fontSize: 24),
+                                            )));
+                                  }),
+                                ),
                           tenPx,
                           TextField(
-                            onTap: (){
-                              context.handleActionIsGuest(() async  {
-
-                              }, addAction: (){
+                            onTap: () {
+                              context.handleActionIsGuest(() async {}, addAction: () {
                                 notifier.inputNode.unfocus();
                               });
-
                             },
                             controller: notifier.commentController,
                             focusNode: notifier.inputNode,
@@ -309,28 +307,26 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
 
   List<Widget> generateComment(BuildContext context, ContentData data, CommentNotifierV2 notifier, int index, bool fromFront) {
     List<Widget> widget = [];
-    if (index == 0){
-     widget.add(_bottomDetail(context, data, notifier)); 
+    if (index == 0) {
+      widget.add(_bottomDetail(context, data, notifier));
     }
 
-    if (notifier.isCommentEmpty){
+    if (notifier.isCommentEmpty) {
       widget.add(Expanded(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 100.0),
-              child: CustomTextWidget(textToDisplay: context.read<TranslateNotifierV2>().translate.beTheFirstToComment ?? ''),
-            ),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 100.0),
+            child: CustomTextWidget(textToDisplay: context.read<TranslateNotifierV2>().translate.beTheFirstToComment ?? ''),
           ),
+        ),
       ));
     }
     // final comments = notifier.commentData?[index];
-    if (index > 0){
-      Widget item = Container(
-        color: context.getColorScheme().background,
-        child: CommentTile(logs: notifier.commentData?[index - 1], fromFront: fromFront, notifier: notifier, index: index-1));
+    if (index > 0) {
+      Widget item = Container(color: context.getColorScheme().background, child: CommentTile(logs: notifier.commentData?[index - 1], fromFront: fromFront, notifier: notifier, index: index - 1));
       widget.add(item);
     }
-    
+
     return widget;
   }
 
@@ -551,7 +547,6 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
       ),
     );
   }
-  
 }
 
 class CommentsArgument {

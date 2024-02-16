@@ -857,7 +857,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
     final bottom = isPortrait ? 80.0 : 50.0;
     return Positioned(
       bottom: bottom,
-      left: 0,
+      left: 8,
       child: Container(
         width: width,
         color: Colors.transparent,
@@ -865,6 +865,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
+                padding: isPortrait ? const EdgeInsets.only(left: 0) : const EdgeInsets.only(left: 24),
                 margin: const EdgeInsets.only(left: 16),
                 child: CustomTextWidget(
                   textToDisplay: data.adsDescription ?? '',
@@ -1105,7 +1106,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                   children: [
                     const Expanded(flex: 16, child: SizedBox.shrink()),
                     Expanded(
-                      flex: 14,
+                      flex: 8,
                       child: InkWell(
                         onTap: () async {
                           if (notifier.secondsSkip <= 0) {
@@ -1135,7 +1136,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                         child: Row(
                           children: [
                             Expanded(
-                              flex: 96,
+                              flex: 20,
                               child: MeasuredSize(
                                 onChange: (size) {
                                   setState(() {
@@ -1155,7 +1156,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                               Expanded(
                                                   child: CustomTextWidget(
                                                 textToDisplay: language.skipAds ?? 'Skip Ads',
-                                                textStyle: context.getTextTheme().caption?.copyWith(color: Colors.white),
+                                                textStyle: context.getTextTheme().bodySmall?.copyWith(color: Colors.white),
                                                 maxLines: 2,
                                               )),
                                               const Icon(
@@ -1166,47 +1167,47 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                           )
                                         : CustomTextWidget(
                                             textToDisplay: isIndo ? '${language.skipMessage} ${notifier.secondsSkip} ${language.second}' : "${language.skipMessage} ${notifier.secondsSkip}",
-                                            textStyle: context.getTextTheme().overline?.copyWith(color: Colors.white),
+                                            textStyle: context.getTextTheme().bodySmall?.copyWith(color: Colors.white),
                                             maxLines: 2,
                                           );
                                   }),
                                 ),
                               ),
                             ),
-                            Expanded(
-                                flex: 40,
-                                child: CustomCacheImage(
-                                  // imageUrl: picData.content[arguments].contentUrl,
-                                  imageUrl: widget.thumbnail,
-                                  imageBuilder: (_, imageProvider) {
-                                    return Container(
-                                      height: heightSkip,
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
-                                      ),
-                                    );
-                                  },
-                                  errorWidget: (_, __, ___) {
-                                    return Container(
-                                      height: heightSkip,
-                                      decoration: const BoxDecoration(
-                                        image: DecorationImage(
-                                          fit: BoxFit.contain,
-                                          image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  emptyWidget: Container(
-                                    height: heightSkip,
-                                    decoration: const BoxDecoration(
-                                      image: DecorationImage(
-                                        fit: BoxFit.contain,
-                                        image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                      ),
-                                    ),
-                                  ),
-                                ))
+                            // Expanded(
+                            //     flex: 40,
+                            //     child: CustomCacheImage(
+                            //       // imageUrl: picData.content[arguments].contentUrl,
+                            //       imageUrl: widget.thumbnail,
+                            //       imageBuilder: (_, imageProvider) {
+                            //         return Container(
+                            //           height: heightSkip,
+                            //           decoration: BoxDecoration(
+                            //             image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
+                            //           ),
+                            //         );
+                            //       },
+                            //       errorWidget: (_, __, ___) {
+                            //         return Container(
+                            //           height: heightSkip,
+                            //           decoration: const BoxDecoration(
+                            //             image: DecorationImage(
+                            //               fit: BoxFit.contain,
+                            //               image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                            //             ),
+                            //           ),
+                            //         );
+                            //       },
+                            //       emptyWidget: Container(
+                            //         height: heightSkip,
+                            //         decoration: const BoxDecoration(
+                            //           image: DecorationImage(
+                            //             fit: BoxFit.contain,
+                            //             image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     ))
                           ],
                         ),
                       ),
