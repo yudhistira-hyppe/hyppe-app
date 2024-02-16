@@ -113,6 +113,30 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    switch (state) {
+      case AppLifecycleState.inactive:
+        debugPrint("========= inactive");
+        break;
+      case AppLifecycleState.resumed:
+        debugPrint("========= resumed");
+        fAliplayer?.play();
+        break;
+      case AppLifecycleState.paused:
+        debugPrint("========= paused");
+        fAliplayer?.pause();
+        break;
+      case AppLifecycleState.detached:
+        debugPrint("========= detached");
+        break;
+      default:
+        break;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final language = context.read<TranslateNotifierV2>().translate;
     return Consumer<VideoNotifier>(builder: (context, notifier, _) {

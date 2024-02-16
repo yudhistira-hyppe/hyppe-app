@@ -647,8 +647,31 @@ class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingOb
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    switch (state) {
+      case AppLifecycleState.inactive:
+        debugPrint("========= inactive");
+        break;
+      case AppLifecycleState.resumed:
+        debugPrint("========= resumed");
+        fAliplayer?.play();
+        break;
+      case AppLifecycleState.paused:
+        debugPrint("========= paused");
+        fAliplayer?.pause();
+        break;
+      case AppLifecycleState.detached:
+        debugPrint("========= detached");
+        break;
+      default:
+        break;
+    }
+  }
+  
+  @override
   void dispose() {
-    print('disini dispose dfAliPlauer');
     fAliplayer?.stop();
     fAliplayer?.destroy();
     super.dispose();
