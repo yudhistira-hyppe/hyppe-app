@@ -47,9 +47,11 @@ import '../../../../app.dart';
 import '../../../../core/arguments/progress_upload_argument.dart';
 import '../../../../core/bloc/posts_v2/bloc.dart';
 import '../../../../core/config/url_constants.dart';
+import '../../../../core/constants/shared_preference_keys.dart';
 import '../../../../core/models/collection/music/music.dart';
 import '../../../../core/models/collection/music/music_type.dart';
 import '../../../../core/services/event_service.dart';
+import '../../../../core/services/shared_preference.dart';
 import '../video_editor/video_editor.dart';
 
 class PreviewContentNotifier with ChangeNotifier {
@@ -1623,6 +1625,7 @@ class PreviewContentNotifier with ChangeNotifier {
     final homeNotifier = context.read<HomeNotifier>();
     try {
       // _connectAndListenToSocket(context);
+      SharedPreference().writeStorage(SpKeys.uploadContent, true);
       final notifier = PostsBloc();
       print('featureType : $featureType');
       notifier.postContentsBlocV2(
@@ -1655,6 +1658,7 @@ class PreviewContentNotifier with ChangeNotifier {
       ).then((value) {
         _uploadSuccess = value;
         'Create post content with value $value'.logger();
+        SharedPreference().writeStorage(SpKeys.uploadContent, false);
         eventService.notifyUploadSuccess(_uploadSuccess);
         // _eventService.notifyUploadFinishingUp(_uploadSuccess);
         if (value is dio.Response) {
