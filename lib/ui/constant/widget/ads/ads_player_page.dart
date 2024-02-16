@@ -65,7 +65,7 @@ class AdsPlayerPage extends StatefulWidget {
     this.getPlayer,
     required this.orientation,
     required this.thumbnail,
-    required this.fromFullScreen,
+    required this.fromFullScreen
   }) : super(key: key);
 
   @override
@@ -157,7 +157,6 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
     notifier.initAdsContent();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       try {
-
         notifier.secondsSkip = widget.data?.adsSkip ?? 0;
         notifier.adsAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: widget.data?.adsId ?? 'video_player_landing');
 
@@ -1027,38 +1026,39 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
                           ),
                         ),
                       ),
-                      Expanded(flex: 40, child: CustomCacheImage(
-                        // imageUrl: picData.content[arguments].contentUrl,
-                        imageUrl: widget.thumbnail,
-                        imageBuilder: (_, imageProvider) {
-                          return Container(
-                            height: heightSkip,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
-                            ),
-                          );
-                        },
-                        errorWidget: (_, __, ___) {
-                          return Container(
-                            height: heightSkip,
-                            decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                fit: BoxFit.contain,
-                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                              ),
-                            ),
-                          );
-                        },
-                        emptyWidget: Container(
-                          height: heightSkip,
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.contain,
-                              image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                            ),
-                          ),
-                        ),
-                      ))
+
+                      // Expanded(flex: 40, child: CustomCacheImage(
+                      //   // imageUrl: picData.content[arguments].contentUrl,
+                      //   imageUrl: widget.thumbnail,
+                      //   imageBuilder: (_, imageProvider) {
+                      //     return Container(
+                      //       height: heightSkip,
+                      //       decoration: BoxDecoration(
+                      //         image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
+                      //       ),
+                      //     );
+                      //   },
+                      //   errorWidget: (_, __, ___) {
+                      //     return Container(
+                      //       height: heightSkip,
+                      //       decoration: const BoxDecoration(
+                      //         image: DecorationImage(
+                      //           fit: BoxFit.contain,
+                      //           image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                      //         ),
+                      //       ),
+                      //     );
+                      //   },
+                      //   emptyWidget: Container(
+                      //     height: heightSkip,
+                      //     decoration: const BoxDecoration(
+                      //       image: DecorationImage(
+                      //         fit: BoxFit.contain,
+                      //         image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ))
                     ],
                   ),
                 ),

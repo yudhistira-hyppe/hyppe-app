@@ -1190,6 +1190,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                                 padding: const EdgeInsets.only(bottom: 6.0),
                                                 child: CustomNewDescContent(
                                                   // desc: "${vidData?.description}",
+                                                  email: vidData.comment?[indexComment].sender ?? '',
                                                   username: vidData.comment?[indexComment].userComment?.username ?? '',
                                                   desc: vidData.comment?[indexComment].txtMessages ?? '',
                                                   trimLines: 3,

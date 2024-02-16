@@ -509,20 +509,23 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             _currentPosition = extraValue ?? 0;
             final detik = (_currentPosition / 1000).round();
             // print("===detik $detik");
-            if (notifier.adsTime == detik) {
-              if (notifier.tempAdsData != null) {
-                fAliplayer?.play();
-                final tempAds = notifier.tempAdsData;
-                if (tempAds != null) {
-                  notifier.setMapAdsContent(widget.data?.postID ?? '', tempAds);
-                  final fixAds = notifier.mapInContentAds[widget.data?.postID ?? ''];
+            if (!(widget.isVidFormProfile??false)){
+              if (notifier.adsTime == detik) {
+                if (notifier.tempAdsData != null) {
+                  fAliplayer?.pause();
+                  final tempAds = notifier.tempAdsData;
+                  if (tempAds != null) {
+                    notifier.setMapAdsContent(widget.data?.postID ?? '', tempAds);
+                    final fixAds = notifier.mapInContentAds[widget.data?.postID ?? ''];
 
-                  if (widget.onShowAds != null && fixAds != null) {
-                    widget.onShowAds!(fixAds);
+                    if (widget.onShowAds != null && fixAds != null) {
+                      widget.onShowAds!(fixAds);
+                    }
                   }
                 }
               }
-            }
+            } 
+            
           }
           if (!_inSeek) {
             try {
@@ -1628,7 +1631,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                   child: _buildController(Colors.transparent, Colors.white, 120, widget.width!, widget.height! * 0.8, widget.orientation),
                                 ),
                               ),
-                            if (notifier.mapInContentAds[widget.data?.postID ?? ''] != null && isPlay)
+                            if (notifier.mapInContentAds[widget.data?.postID ?? ''] != null && isPlay && !(widget.isVidFormProfile??false))
                               Positioned.fill(
                                   child: ClipRRect(
                                       borderRadius: BorderRadius.all(

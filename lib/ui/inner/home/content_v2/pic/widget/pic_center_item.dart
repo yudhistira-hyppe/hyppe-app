@@ -325,6 +325,7 @@ class PicCenterItem extends StatelessWidget {
                           itemBuilder: (context, index) {
                             return CustomNewDescContent(
                               // desc: "${data?.description}",
+                              email: data?.comment?[index].sender??'',
                               username: data?.comment?[index].userComment?.username ?? '',
                               desc: data?.comment?[index].txtMessages ?? '',
                               trimLines: 2,

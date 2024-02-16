@@ -1411,6 +1411,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                             padding: const EdgeInsets.only(bottom: 6.0),
                             child: CustomNewDescContent(
                               // desc: "${diaryData?[index]?.description}",
+                              email: diaryData?[index].comment?[indexComment].sender??'',
                               username: diaryData?[index].comment?[indexComment].userComment?.username ?? '',
                               desc: diaryData?[index].comment?[indexComment].txtMessages ?? '',
                               trimLines: 2,

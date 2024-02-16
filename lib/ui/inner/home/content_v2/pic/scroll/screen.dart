@@ -1460,6 +1460,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                             padding: const EdgeInsets.only(bottom: 6.0),
                             child: CustomNewDescContent(
                               // desc: "${pics?[index]?.description}",
+                              email: pics?[index].comment?[indexComment].sender ?? '',
                               username: pics?[index].comment?[indexComment].userComment?.username ?? '',
                               desc: pics?[index].comment?[indexComment].txtMessages ?? '',
                               trimLines: 2,

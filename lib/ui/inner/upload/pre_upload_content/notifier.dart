@@ -734,10 +734,10 @@ class PreUploadContentNotifier with ChangeNotifier {
         },
       ).then((value) async {
         _uploadSuccess = value;
+        SharedPreference().removeValue(SpKeys.uploadContent);
         'Create post content with value $value'.logger();
         // _eventService.notifyUploadFinishingUp(_uploadSuccess);
         if (_uploadSuccess != null) {
-          SharedPreference().writeStorage(SpKeys.uploadContent, false);
           eventService.notifyUploadSuccess(_uploadSuccess);
         }
 
@@ -756,6 +756,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       });
     } catch (e) {
       print('Error create post : $e');
+      SharedPreference().removeValue(SpKeys.uploadContent);
       eventService.notifyUploadFailed(
         dio.DioError(
           requestOptions: dio.RequestOptions(
