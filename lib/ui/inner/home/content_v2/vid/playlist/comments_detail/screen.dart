@@ -122,8 +122,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                     children: [
                       _bottomDetail(context, data, notifier),
                       !notifier.isCommentEmpty
-                          ? 
-                          Expanded(
+                          ? Expanded(
                               child: Container(
                               color: context.getColorScheme().background,
                               child: ListView.builder(
@@ -133,37 +132,21 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                                 scrollDirection: Axis.vertical,
                                 keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                                 itemBuilder: (context, index) {
-                                  if (index + 1 == notifier.commentData?.length && notifier.hasNext) {
+                                  if (index == notifier.commentData?.length && notifier.hasNext) {
                                     return const CustomLoading();
                                   }
-
-                                  // final comments = notifier.commentData?[index-1];
-                                  // return Wrap(
-                                  //   alignment: WrapAlignment.start,
-                                  //   children: generateComment(context, data, notifier, index, fromFront),
-                                  // );
                                   final comments = notifier.commentData?[index];
-                                  return Container(
-                                    color: context.getColorScheme().background,
-                                    child: CommentTile(logs: comments, fromFront: fromFront, notifier: notifier, index: index));
+                                  print('all comments: ${comments?.comment?.txtMessages}');
+                                  return CommentTile(logs: comments, fromFront: fromFront, notifier: notifier, index: index);
                                 },
                               ),
                             ),
                             )
                           : Expanded(
-                            child: ListView(
-                              children: [
-                                _bottomDetail(context, data, notifier),
-                                Expanded(
-                                  child: Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 100.0),
-                                      child: CustomTextWidget(textToDisplay: context.read<TranslateNotifierV2>().translate.beTheFirstToComment ?? ''),
-                                    ),
-                                  ),
-                              )
-                              ],
-                            ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 100.0),
+                                child: CustomTextWidget(textToDisplay: context.read<TranslateNotifierV2>().translate.beTheFirstToComment ?? ''),
+                              ),
                           )
                     ],
                   ),
