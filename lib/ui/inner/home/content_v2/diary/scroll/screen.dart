@@ -1016,10 +1016,12 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                                             pageSrc: widget.arguments?.pageSrc,
                                             isTrue: isMute,
                                             scrollController: widget.arguments?.scrollController);
+                                        notifier.currIndex = index;
                                         await Routing().move(Routes.scrollFullDiary, argument: param);
+                                        print('===asdasdasd back ${notifier.currentIndex}');
                                         if (notifier.currentIndex != index) notifier.itemScrollController.jumpTo(index: notifier.currentIndex);
                                       }
-
+                                      
                                       // fAliplayer?.play();
                                       // setState(() {
                                       //   isMute = !isMute;
@@ -1074,7 +1076,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                               ? Container()
                               : !notifier.connectionError
                                   ? GestureDetector(
-                                      onTap: () {
+                                      onTap: () async {
                                         if (widget.arguments?.pageSrc == PageSrc.selfProfile || widget.arguments?.pageSrc == PageSrc.otherProfile) {
                                           SlidedDiaryDetailScreenArgument param = SlidedDiaryDetailScreenArgument(
                                               type: widget.arguments!.type,
@@ -1088,7 +1090,9 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                                               page: index,
                                               pageSrc: widget.arguments?.pageSrc,
                                               scrollController: widget.arguments?.scrollController);
-                                          Routing().move(Routes.scrollFullDiary, argument: param);
+                                          await Routing().move(Routes.scrollFullDiary, argument: param);
+                                          print('===asdasdasd back ${notifier.currentIndex}');
+                                          if (notifier.currentIndex != index) notifier.itemScrollController.jumpTo(index: notifier.currentIndex);
                                         }
                                       },
                                       child: CustomBaseCacheImage(
@@ -1346,8 +1350,8 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                           style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
                         ),
                         const TextSpan(
-                          text: " . ",
-                          style: TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 22),
+                          text: " • ",
+                          style: TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 16),
                         ),
                         TextSpan(
                           text: "${diaryData?[index].insight!.views?.getCountShort()} ${lang!.views}",

@@ -645,7 +645,7 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
                 onPageChanged: (index) {
                   print("===asdasdasd $index");
                   _curIdx = index;
-                  notifier.currIndex = index;
+                  notifier.currIndex = _curIdx;
                   // notifier.itemScrollController.jumpTo(index: index);
                   if (_lastCurIndex != _curIdx) {
                     try {
@@ -1033,7 +1033,6 @@ class _ScrollFullDiaryState extends State<ScrollFullDiary> with WidgetsBindingOb
                     data: data,
                     animatedController: animatedController,
                   ),
-
             Align(
               alignment: Alignment.bottomCenter,
               child: data?.email == SharedPreference().readStorage(SpKeys.email) && (data?.reportedStatus == 'OWNED')

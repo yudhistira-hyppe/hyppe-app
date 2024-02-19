@@ -1128,8 +1128,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                               style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
                                             ),
                                             const TextSpan(
-                                              text: " . ",
-                                              style: TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 22),
+                                              text: " • ",
+                                              style: TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 16),
                                             ),
                                             TextSpan(
                                               text: "${vidData.insight!.views?.getCountShort()} ${lang!.views}",
