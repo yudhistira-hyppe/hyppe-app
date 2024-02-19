@@ -2,10 +2,12 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/arguments/account_preference_screen_argument.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/combination_v2/get_user_profile.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_tab_page_selector.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/welcome/content/slide_template.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/welcome/notifier.dart';
 import 'package:hyppe/ux/path.dart';
@@ -67,7 +69,9 @@ class _SignUpWelcomeState extends State<SignUpWelcome> with SingleTickerProvider
                   ? Align(
                       alignment: const Alignment(0, 0.75),
                       child: CustomTextButton(
-                        onPressed: () => Routing().moveAndRemoveUntil(Routes.homeTutor, Routes.root),
+                        onPressed: () {
+                          Routing().moveAndRemoveUntil(Routes.homeTutor, Routes.root);
+                        },
                         child: CustomTextWidget(
                           textToDisplay: notifier.language.completeLater ?? '',
                           textStyle: Theme.of(context).textTheme.button?.copyWith(color: Theme.of(context).colorScheme.primary),
