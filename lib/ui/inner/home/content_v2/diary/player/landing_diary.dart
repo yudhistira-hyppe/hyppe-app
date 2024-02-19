@@ -778,19 +778,17 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       fAliplayer?.play();
       var temp1 = pn.diaryData![_curIdx];
       var temp2 = pn.diaryData![pn.currentIndex];
-      print('======== $index');
-      print('======== ${pn.currentIndex}');
       if (index < pn.currentIndex) {
         setState(() {
           index = pn.currentIndex;
           // pn.diaryData!.removeRange(_curIdx, pn.currentIndex);
-          pn.diaryData!.removeRange(0, pn.currentIndex);
+          pn.diaryData?.removeRange(0, pn.currentIndex);
           widget.scrollController?.animateTo(0, duration: const Duration(milliseconds: 50), curve: Curves.ease);
         });
       } else if (index > pn.currentIndex) {
         setState(() {
-          pn.diaryData![_curIdx] = temp2;
-          pn.diaryData![pn.currentIndex] = temp1;
+          pn.diaryData?[_curIdx] = temp2;
+          pn.diaryData?[pn.currentIndex] = temp1;
         });
       }
     }
@@ -1543,7 +1541,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                                 padding: const EdgeInsets.only(bottom: 6.0),
                                                 child: CustomNewDescContent(
                                                   // desc: "${data??.description}",
-                                                  email: data?.comment?[indexComment].sender??'',
+                                                  email: data?.comment?[indexComment].sender ?? '',
                                                   username: data?.comment?[indexComment].userComment?.username ?? '',
                                                   desc: data?.comment?[indexComment].txtMessages ?? '',
                                                   trimLines: 3,

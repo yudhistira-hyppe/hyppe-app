@@ -1042,6 +1042,9 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
             )}',
             const TextStyle(fontSize: 12))
         .width;
+    if (data.privacy?.isIdVerified ?? false) {
+      widthUsername += 50;
+    }
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1075,7 +1078,9 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                 following: true,
                 onFollow: () {},
                 widthText: (data.username?.length ?? 0) >= 10
-                    ? 100
+                    ? data.privacy?.isIdVerified ?? false
+                        ? 112
+                        : 100
                     : widthUsername > widthDate
                         ? widthUsername
                         : widthDate,

@@ -48,6 +48,18 @@ class CustomAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double widthUsername = _textSize(data?.username ?? '', const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)).width;
+    double widthDate = _textSize(
+            '${System().readTimestamp(
+              DateTime.parse(System().dateTimeRemoveT(data?.createdAt ?? '')).millisecondsSinceEpoch,
+              context,
+              fullCaption: true,
+            )}',
+            const TextStyle(fontSize: 12))
+        .width;
+    if (data?.privacy?.isIdVerified ?? false) {
+      widthUsername += 50;
+    }
     return Container(
       width: SizeConfig.screenWidth,
       height: kToolbarHeight,
@@ -88,7 +100,13 @@ class CustomAppBar extends StatelessWidget {
                   following: true,
                   onFollow: () {},
                   username: data!.username ?? '',
-                  widthText: data!.username!.length >= 10 ? 120 : 90,
+                  widthText: (data?.username?.length ?? 0) >= 10
+                      ? data?.privacy?.isIdVerified ?? false
+                          ? 112
+                          : 100
+                      : widthUsername > widthDate
+                          ? widthUsername
+                          : widthDate,
                   textColor: kHyppeLightBackground,
                   spaceProfileAndId: eightPx,
                   haveStory: false,
@@ -182,5 +200,10 @@ class CustomAppBar extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Size _textSize(String text, TextStyle style) {
+    final TextPainter textPainter = TextPainter(text: TextSpan(text: text, style: style), maxLines: 1, textDirection: TextDirection.ltr)..layout(minWidth: 0, maxWidth: double.infinity);
+    return textPainter.size;
   }
 }

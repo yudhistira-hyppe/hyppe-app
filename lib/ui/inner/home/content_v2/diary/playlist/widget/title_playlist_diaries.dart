@@ -73,6 +73,9 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
               )}',
               const TextStyle(fontSize: 12))
           .width;
+      if (ref.data?.privacy?.isIdVerified ?? false) {
+        widthUsername += 50;
+      }
 
       return Column(
         mainAxisSize: MainAxisSize.min,
@@ -119,7 +122,9 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                                 following: true,
                                 onFollow: () {},
                                 widthText: (data?.username?.length ?? 0) >= 10
-                                    ? 100
+                                    ? data?.privacy?.isIdVerified ?? false
+                                        ? 112
+                                        : 100
                                     : widthUsername > widthDate
                                         ? widthUsername
                                         : widthDate,
@@ -147,39 +152,39 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                                 )}',
                               ),
                             ),
-                      if(!widget.inProfile)
-                      if (widget.data?.email != SharedPreference().readStorage(SpKeys.email) && (widget.data?.isNewFollowing ?? false))
-                        Consumer<PreviewPicNotifier>(
-                          builder: (context, picNot, child) => GestureDetector(
-                            onTap: () {
-                              context.handleActionIsGuest(() async {
-                                if (widget.data?.insight?.isloadingFollow != true) {
-                                  picNot.followUser(context, widget.data!, isUnFollow: widget.data?.following, isloading: widget.data?.insight!.isloadingFollow ?? false);
-                                }
-                              });
-                            },
-                            child: widget.data?.insight?.isloadingFollow ?? false
-                                ? const SizedBox(
-                                    height: 40,
-                                    width: 30,
-                                    child: Align(
-                                      alignment: Alignment.bottomRight,
-                                      child: CustomLoading(),
-                                    ),
-                                  )
-                                : Center(
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-                                      decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(8.0)),
-                                      // transform: Matrix4.translationValues(-40.0, 0.0, 0.0),
-                                      child: Text(
-                                        (widget.data?.following ?? false) ? (lang.following ?? '') : (lang.follow ?? ''),
-                                        style: const TextStyle(color: kHyppeLightButtonText, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                      if (!widget.inProfile)
+                        if (widget.data?.email != SharedPreference().readStorage(SpKeys.email) && (widget.data?.isNewFollowing ?? false))
+                          Consumer<PreviewPicNotifier>(
+                            builder: (context, picNot, child) => GestureDetector(
+                              onTap: () {
+                                context.handleActionIsGuest(() async {
+                                  if (widget.data?.insight?.isloadingFollow != true) {
+                                    picNot.followUser(context, widget.data!, isUnFollow: widget.data?.following, isloading: widget.data?.insight!.isloadingFollow ?? false);
+                                  }
+                                });
+                              },
+                              child: widget.data?.insight?.isloadingFollow ?? false
+                                  ? const SizedBox(
+                                      height: 40,
+                                      width: 30,
+                                      child: Align(
+                                        alignment: Alignment.bottomRight,
+                                        child: CustomLoading(),
+                                      ),
+                                    )
+                                  : Center(
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                                        decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(8.0)),
+                                        // transform: Matrix4.translationValues(-40.0, 0.0, 0.0),
+                                        child: Text(
+                                          (widget.data?.following ?? false) ? (lang.following ?? '') : (lang.follow ?? ''),
+                                          style: const TextStyle(color: kHyppeLightButtonText, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                                        ),
                                       ),
                                     ),
-                                  ),
+                            ),
                           ),
-                        ),
                     ],
                   ),
                   Row(
