@@ -279,7 +279,11 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
       final res = await _resFuture;
       _listData = res;
       notifyListeners();
-      _followUser(context);
+
+      final bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
+      if (!(isGuest ?? false)) {
+        _followUser(context);
+      }
     } catch (e) {
       'load diary: ERROR: $e'.logger();
     }
