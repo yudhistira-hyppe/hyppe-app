@@ -731,10 +731,16 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                   ),
                 ),
                 Container(
-                  constraints: BoxConstraints(maxWidth: SizeConfig.screenWidth! * .7, maxHeight: isShowMore ? 52 : SizeConfig.screenHeight! * .05),
+                  constraints: BoxConstraints(
+                    maxWidth: SizeConfig.screenWidth! * .7,
+                    maxHeight: data.description!.length > 24
+                        ? isShowMore
+                            ? 54
+                            : SizeConfig.screenHeight! * .1
+                        : 54),
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                  padding: const EdgeInsets.only(left: 8.0, top: 8.0),
+                  padding: const EdgeInsets.only(left: 8.0, top: 20),
                   child: SingleChildScrollView(
                     child: CustomDescContent(
                       desc: "${data.description}",

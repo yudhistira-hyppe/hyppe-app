@@ -85,6 +85,7 @@ class VidPlayerPage extends StatefulWidget {
   final Function()? autoScroll; //netral player
   final bool enableWakelock;
   final Function()? prevScroll;
+  final int currentPosition;
 
   // FlutterAliplayer? fAliplayer;
   // FlutterAliplayer? fAliplayerAds;
@@ -116,6 +117,7 @@ class VidPlayerPage extends StatefulWidget {
     this.autoScroll,
     this.enableWakelock = true,
     this.prevScroll,
+    this.currentPosition = 0,
 
     // this.fAliplayer,
     // this.fAliplayerAds
@@ -302,6 +304,11 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
 
         configAliplayer();
         vidConfig();
+
+        if (widget.currentPosition != 0){
+          fAliplayer?.seekTo(widget.currentPosition, FlutterAvpdef.ACCURATE);
+        }
+
       } catch (e) {
         'Error Initialize Ali Player: $e'.logger();
       } finally {}
@@ -1429,7 +1436,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                             if (widget.fromFullScreen)
                               AnimatedOpacity(
                                 opacity: onTapCtrl || isPause ? 1.0 : 0.0,
-                                duration: const Duration(milliseconds: 500),
+                                duration: const Duration(milliseconds: 300),
                                 onEnd: _onPlayerHide,
                                 child: Stack(
                                   children: [
@@ -1739,7 +1746,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
   ) {
     return AnimatedOpacity(
       opacity: onTapCtrl || isPause ? 1.0 : 0.0,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 300),
       onEnd: _onPlayerHide,
       child: Container(
         width: orientation == Orientation.landscape ? width * .35 : width * .8,
@@ -2070,7 +2077,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
       case true:
         return AnimatedOpacity(
           opacity: onTapCtrl || isPause ? 1.0 : 0.0,
-          duration: const Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 300),
           onEnd: _onPlayerHide,
           child: SafeArea(
               child: _currentPosition <= 0
@@ -2377,7 +2384,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         return isPause
             ? AnimatedOpacity(
                 opacity: onTapCtrl || isPause ? 1.0 : 0.0,
-                duration: const Duration(milliseconds: 500),
+                duration: const Duration(milliseconds: 300),
                 onEnd: _onPlayerHide,
                 child: SafeArea(
                     child: _currentPosition <= 0
@@ -2423,7 +2430,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                           )))
             : AnimatedOpacity(
                 opacity: onTapCtrl || isPause ? 0.0 : 1.0,
-                duration: const Duration(milliseconds: 500),
+                duration: const Duration(milliseconds: 300),
                 child: SafeArea(
                   child: _currentPosition <= 0
                       ? Container()
