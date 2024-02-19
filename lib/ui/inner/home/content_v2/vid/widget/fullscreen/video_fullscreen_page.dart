@@ -479,6 +479,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                       onPageChanged: (value) {
                         curentIndex = value;
                         notifier.currIndex = value;
+
                         scrollPage(vidData?[value].metadata?.height, vidData?[value].metadata?.width);
                         if (value > 1) {
                           if ((vidData?[value - 1].metadata?.height ?? 0) < (vidData?[value - 1].metadata?.width ?? 0)) {
@@ -615,7 +616,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                   // if (Platform.isIOS)
                                   AnimatedOpacity(
                                     opacity: onTapCtrl || isPause ? 1.0 : 0.0,
-                                    duration: const Duration(milliseconds: 500),
+                                    duration: const Duration(milliseconds: 200),
                                     onEnd: _onPlayerHide,
                                     child: Container(
                                       height: orientation == Orientation.portrait ? kToolbarHeight * 2 : kToolbarHeight * 1.4,
@@ -1294,7 +1295,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
     // print('ORIENTATION: CHANGING ORIENTATION');
     return AnimatedOpacity(
       opacity: onTapCtrl || isPause ? 1.0 : 0.0,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 200),
       onEnd: _onPlayerHide,
       child: SafeArea(
         child: Container(
@@ -1721,7 +1722,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
   ) {
     return AnimatedOpacity(
       opacity: onTapCtrl || isPause ? 1.0 : 0.0,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 200),
       onEnd: _onPlayerHide,
       child: Center(
         child: Container(
