@@ -79,7 +79,7 @@ class _AdsCTALayoutState extends State<AdsCTALayout> {
                           );
                         },
                             errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                              return Image.asset('${AssetPath.pngPath}profile-error.jpg', fit: BoxFit.fitWidth);
+                              return Image.asset('${AssetPath.pngPath}profile-error.jpg', fit: BoxFit.fitWidth, scale: 8,);
                             }));
                   }
                   return Container(

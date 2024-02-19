@@ -570,7 +570,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                           ),
                           AnimatedOpacity(
                             opacity: onTapCtrl || isPause ? 1.0 : 0.0,
-                            duration: const Duration(milliseconds: 500),
+                            duration: const Duration(milliseconds: 200),
                             onEnd: _onPlayerHide,
                             child: Container(
                               height: orientation == Orientation.portrait ? kToolbarHeight * 2 : kToolbarHeight * 1.4,
@@ -679,7 +679,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
   _buildContentWidget(BuildContext context, Orientation orientation) {
     return AnimatedOpacity(
       opacity: onTapCtrl || isPause ? 1.0 : 0.0,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 200),
       onEnd: _onPlayerHide,
       child: SafeArea(
         child: Container(
@@ -1113,7 +1113,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
   ) {
     return AnimatedOpacity(
       opacity: onTapCtrl || isPause ? 1.0 : 0.0,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 200),
       onEnd: _onPlayerHide,
       child: Center(
         child: Container(

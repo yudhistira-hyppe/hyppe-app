@@ -306,7 +306,8 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         vidConfig();
 
         if (widget.currentPosition != 0){
-          fAliplayer?.seekTo(widget.currentPosition, FlutterAvpdef.ACCURATE);
+            fAliplayer?.seekTo(widget.currentPosition, FlutterAvpdef.ACCURATE);
+            fAliplayer?.play();
         }
 
       } catch (e) {
@@ -337,7 +338,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
-
+      
       if (Platform.isAndroid) {
         getExternalStorageDirectories().then((value) {
           if ((value?.length ?? 0) > 0) {

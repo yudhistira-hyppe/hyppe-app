@@ -196,7 +196,7 @@ class _AdsVideoInBetweenFullState extends State<AdsVideoInBetweenFull> with Widg
                   maxHeight: data.adsDescription!.length > 24
                       ? isShowMore
                           ? 58
-                          : SizeConfig.screenHeight! * .4
+                          : SizeConfig.screenHeight! * .1
                       : 58),
               alignment: Alignment.centerLeft,
               margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
@@ -721,18 +721,18 @@ class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingOb
                 ],
               ),
             ),
-          Positioned(
-            top: kToolbarHeight + 12,
-            right: 12,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 2),
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.black.withOpacity(0.5)),
-              child: Text(
-                System.getTimeformatByMs(_currentPositionText),
-                style: const TextStyle(color: Colors.white, fontSize: 11),
-              ),
-            ),
-          ),
+          // Positioned(
+          //   top: kToolbarHeight + 12,
+          //   right: 12,
+          //   child: Container(
+          //     padding: const EdgeInsets.symmetric(horizontal: 2),
+          //     decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.black.withOpacity(0.5)),
+          //     child: Text(
+          //       System.getTimeformatByMs(_currentPositionText),
+          //       style: const TextStyle(color: Colors.white, fontSize: 11),
+          //     ),
+          //   ),
+          // ),
           Positioned(
             bottom: 12,
             right: 12,
