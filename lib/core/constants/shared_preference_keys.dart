@@ -40,4 +40,7 @@ class SpKeys {
   static const String newUser = 'newUser';
 
   static const String challangeData = 'challangeData';
+
+  //Upload Content
+  static const String uploadContent = 'uploadContent';
 }

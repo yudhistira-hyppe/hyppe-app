@@ -1395,8 +1395,8 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                           style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
                         ),
                         const TextSpan(
-                          text: " . ",
-                          style: TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 22),
+                          text: " • ",
+                          style: TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 16),
                         ),
                         TextSpan(
                           text: "${pics?[index].insight!.views?.getCountShort()} ${tn.translate.views}",
@@ -1417,6 +1417,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
               ),
               fourPx,
               CustomNewDescContent(
+                email: pics?[index].email??'',
                 username: pics?[index].username ?? '',
                 desc: "${pics?[index].description}",
                 trimLines: 2,
@@ -1459,6 +1460,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                             padding: const EdgeInsets.only(bottom: 6.0),
                             child: CustomNewDescContent(
                               // desc: "${pics?[index]?.description}",
+                              email: pics?[index].comment?[indexComment].sender ?? '',
                               username: pics?[index].comment?[indexComment].userComment?.username ?? '',
                               desc: pics?[index].comment?[indexComment].txtMessages ?? '',
                               trimLines: 2,

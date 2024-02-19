@@ -5,6 +5,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/ads_argument.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
@@ -47,7 +48,7 @@ class AdsVideoInBetween extends StatefulWidget {
 }
 
 class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindingObserver {
-  // FlutterAliplayer? fAliplayer;
+  FlutterAliplayer? fAliplayer;
 
   bool loadLaunch = false;
 
@@ -59,7 +60,9 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
 
     ratio = (widget.data.height != null && widget.data.width != null) ? widget.data.width! / widget.data.height! : 16 / 9;
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: widget.data.adsId);
+    });
 
     globalAdsInContent?.pause();
   }
@@ -106,6 +109,30 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
           });
         }
       }
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    switch (state) {
+      case AppLifecycleState.inactive:
+        debugPrint("========= inactive");
+        break;
+      case AppLifecycleState.resumed:
+        debugPrint("========= resumed");
+        fAliplayer?.play();
+        break;
+      case AppLifecycleState.paused:
+        debugPrint("========= paused");
+        fAliplayer?.pause();
+        break;
+      case AppLifecycleState.detached:
+        debugPrint("========= detached");
+        break;
+      default:
+        break;
     }
   }
 
@@ -264,40 +291,58 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                               aspectRatio: ratio,
                               child: notifier.currentPostID == widget.data.adsId
                                   ? Stack(
-                                      children: [
-                                        InBetweenScreen(
-                                          adsData: widget.data,
-                                          player: widget.player,
-                                          ratio: ratio,
-                                          onRatioChanged: (fix) {
-                                            setState(
-                                              () {
-                                                ratio = fix;
-                                              },
-                                            );
-                                          },
-                                          getPlayer: widget.getPlayer,
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            Routing().move(
-                                              Routes.adsBetweenVidFull,
-                                              argument: AdsArgument(
-                                                data: widget.data,
-                                                adsUrl: '',
-                                                isSponsored: true,
-                                                onVisibility: widget.onVisibility,
-                                                afterReport: widget.afterReport,
-                                                getPlayer: widget.getPlayer,
-                                              ),
-                                            );
-                                          },
-                                          child: Container(
-                                            color: Colors.transparent,
-                                          ),
-                                        )
-                                      ],
-                                    )
+                                    children: [
+                                      InBetweenScreen(
+                                        adsData: widget.data,
+                                        player: fAliplayer,
+                                        ratio: ratio,
+                                        onRatioChanged: (fix) {
+                                          setState(
+                                            () {
+                                              ratio = fix;
+                                            },
+                                          );
+                                        },
+                                        getPlayer: widget.getPlayer,
+                                        onTapFunction: ()async {
+                                              fAliplayer?.pause();
+                                              await Routing().move(
+                                                Routes.adsBetweenVidFull,
+                                                argument: AdsArgument(
+                                                  data: widget.data,
+                                                  adsUrl: '',
+                                                  isSponsored: true,
+                                                  onVisibility: widget.onVisibility,
+                                                  afterReport: widget.afterReport,
+                                                  getPlayer: widget.getPlayer,
+                                                ),
+                                              );
+
+                                              if (mounted) {
+                                                Future.delayed(const Duration(milliseconds: 300),(){
+                                                  fAliplayer?.play();
+                                                });
+                                              }
+                                        },
+                                      ),
+                                      // GestureDetector(
+                                      //   onTap: () {
+                                      //     Routing().move(
+                                      //       Routes.adsBetweenVidFull,
+                                      //       argument: AdsArgument(
+                                      //         data: widget.data,
+                                      //         adsUrl: '',
+                                      //         isSponsored: true,
+                                      //         onVisibility: widget.onVisibility,
+                                      //         afterReport: widget.afterReport,
+                                      //         getPlayer: widget.getPlayer,
+                                      //       ),
+                                      //     );
+                                      //   },
+                                      //   child: ,
+                                      // )
+                                    ],
+                                  )
                                   : Container(
                                       decoration: const BoxDecoration(color: Colors.black, borderRadius: BorderRadius.all(Radius.circular(16.0))),
                                       alignment: Alignment.center,
@@ -364,7 +409,8 @@ class InBetweenScreen extends StatefulWidget {
   final double ratio;
   final Function(double) onRatioChanged;
   final Function(FlutterAliplayer, String) getPlayer;
-  const InBetweenScreen({Key? key, required this.adsData, this.player, required this.ratio, required this.onRatioChanged, required this.getPlayer}) : super(key: key);
+  final Function() onTapFunction;
+  const InBetweenScreen({Key? key, required this.adsData, this.player, required this.ratio, required this.onRatioChanged, required this.getPlayer, required this.onTapFunction}) : super(key: key);
 
   @override
   State<InBetweenScreen> createState() => _InBetweenScreenState();
@@ -407,11 +453,11 @@ class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingOb
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       // final ref = (Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: widget.adsData.adsId);
+      fAliplayer = widget.player;
       WidgetsBinding.instance.addObserver(this);
       fAliplayer?.pause();
       fAliplayer?.setAutoPlay(true);
-      fAliplayer?.setLoop(false);
+      fAliplayer?.setLoop(true);
       // System().adsView(widget.adsData, widget.adsData.duration?.round() ?? 10);
 
       //Turn on mix mode
@@ -451,7 +497,7 @@ class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingOb
     fAliplayer?.setOnVideoSizeChanged((width, height, rotation, playerId) {});
     fAliplayer?.setOnStateChanged((newState, playerId) {
       // _currentPlayerState = newState;
-      print("aliyun : onStateChanged $newState");
+      print("aliyun : onStateChanged ads $newState");
       switch (newState) {
         case FlutterAvpdef.AVPStatus_AVPStatusStarted:
           if (mounted) {
@@ -522,6 +568,7 @@ class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingOb
     fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
       if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
         try {
+          print('====Run again');
           if (mounted) {
             setState(() {
               _currentPositionText = extraValue ?? 0;
@@ -551,7 +598,7 @@ class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingOb
     fAliplayer?.setOnCompletion((playerId) {
       _showLoading = false;
 
-      isPause = true;
+      isPause = false;
 
       setState(() {
         // _currentPosition = _videoDuration;
@@ -702,78 +749,79 @@ class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingOb
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {},
-      child: Stack(
-        children: [
-          ClipRRect(
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-            child: AliPlayerView(
-              onCreated: onViewPlayerCreated,
-              x: 0,
-              y: 0,
-              height: MediaQuery.of(context).size.width * widget.ratio,
-              width: MediaQuery.of(context).size.width,
-              aliPlayerViewType: AliPlayerViewTypeForAndroid.surfaceview,
-            ),
+    return Stack(
+      children: [
+        ClipRRect(
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+          child: AliPlayerView(
+            onCreated: onViewPlayerCreated,
+            x: 0,
+            y: 0,
+            height: MediaQuery.of(context).size.width * widget.ratio,
+            width: MediaQuery.of(context).size.width,
+            aliPlayerViewType: AliPlayerViewTypeForAndroid.surfaceview,
           ),
-          if (_showLoading)
-            Align(
-              alignment: Alignment.center,
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const CircularProgressIndicator(
-                    backgroundColor: Colors.white,
-                    strokeWidth: 3.0,
-                  ),
-                  const SizedBox(
-                    height: 10.0,
-                  ),
-                  Text(
-                    "$_loadingPercent%",
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ],
-              ),
-            ),
-          Positioned(
-            top: 12,
-            right: 12,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 2),
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.black.withOpacity(0.5)),
-              child: Text(
-                System.getTimeformatByMs(_currentPositionText),
-                style: const TextStyle(color: Colors.white, fontSize: 11),
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 12,
-            right: 12,
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  isMute = !isMute;
-                });
-                fAliplayer?.setMuted(isMute);
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(right: 2.0),
-                child: CustomIconWidget(
-                  iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
-                  defaultColor: false,
-                  height: 24,
+        ),
+        GestureDetector(
+          onTap: () => widget.onTapFunction(),
+          child: Container(color: Colors.transparent),
+        ),
+        if (_showLoading)
+          Align(
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const CircularProgressIndicator(
+                  backgroundColor: Colors.white,
+                  strokeWidth: 3.0,
                 ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                Text(
+                  "$_loadingPercent%",
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        Positioned(
+          top: 12,
+          right: 12,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 2),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.black.withOpacity(0.5)),
+            child: Text(
+              System.getTimeformatByMs(_currentPositionText),
+              style: const TextStyle(color: Colors.white, fontSize: 11),
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: 12,
+          right: 12,
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                isMute = !isMute;
+              });
+              fAliplayer?.setMuted(isMute);
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(right: 2.0),
+              child: CustomIconWidget(
+                iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
+                defaultColor: false,
+                height: 24,
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

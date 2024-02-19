@@ -1576,8 +1576,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                             style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
                                           ),
                                           const TextSpan(
-                                            text: " . ",
-                                            style: TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 22),
+                                            text: " • ",
+                                            style: TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 16),
                                           ),
                                           TextSpan(
                                             text: "${picData?.insight!.views?.getCountShort()} ${notifier.language.views}",
@@ -1638,14 +1638,14 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                             return Padding(
                                               padding: const EdgeInsets.only(bottom: 6.0),
                                               child: CustomNewDescContent(
-                                                email: picData?.comment?[indexComment].sender,
+                                                email: picData?.comment?[indexComment].sender??'',
                                                 // desc: "${picData??.description}",
                                                 username: picData?.comment?[indexComment].userComment?.username ?? '',
                                                 desc: picData?.comment?[indexComment].txtMessages ?? '',
                                                 trimLines: 2,
                                                 textAlign: TextAlign.start,
-                                                seeLess: ' seeLess', // ${notifier2.translate.seeLess}',
-                                                seeMore: '  Selengkapnya ', //${notifier2.translate.seeMoreContent}',
+                                                seeLess: ' ${notifier.language.less}', // ${notifier2.translate.seeLess}',
+                                                seeMore: ' ${notifier.language.more} ', //${notifier2.translate.seeMoreContent}',
                                                 normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
                                                 hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
                                                 expandStyle: const TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),

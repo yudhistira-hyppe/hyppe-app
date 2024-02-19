@@ -124,7 +124,6 @@ class DynamicLinkService {
           if (deepLink.queryParameters['referral'] != '1') {
             try {
               print('masuk sini dynamic');
-
               followSender(Routing.navigatorKey.currentContext!);
             } catch (e) {
               'Error in followSender $e'.logger();

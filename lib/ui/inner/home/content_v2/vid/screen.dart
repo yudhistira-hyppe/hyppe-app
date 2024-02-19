@@ -1128,8 +1128,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                               style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
                                             ),
                                             const TextSpan(
-                                              text: " . ",
-                                              style: TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 22),
+                                              text: " • ",
+                                              style: TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 16),
                                             ),
                                             TextSpan(
                                               text: "${vidData.insight!.views?.getCountShort()} ${lang!.views}",
@@ -1190,6 +1190,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                                 padding: const EdgeInsets.only(bottom: 6.0),
                                                 child: CustomNewDescContent(
                                                   // desc: "${vidData?.description}",
+                                                  email: vidData.comment?[indexComment].sender ?? '',
                                                   username: vidData.comment?[indexComment].userComment?.username ?? '',
                                                   desc: vidData.comment?[indexComment].txtMessages ?? '',
                                                   trimLines: 3,

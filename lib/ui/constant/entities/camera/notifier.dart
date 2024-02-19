@@ -259,7 +259,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     deepArController!.flipCamera();
     print('myFlash: $isFlash');
     if(notifier.featureType == FeatureType.pic || (notifier.featureType == FeatureType.story && !notifier.isVideo)){
-
+      
     }else{
       if (isFlash) {
         Future.delayed(const Duration(seconds: 1), () async {
@@ -427,8 +427,15 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
 
     try {
       _showEffected = false;
-      deepArController!.startVideoRecording();
+      await deepArController!.startVideoRecording();
       notifyListeners();
+      if(Platform.isIOS){
+        Future.delayed(const Duration(seconds: 1), () async {
+          if(isFlash){
+            await deepArController?.toggleFlash();
+          }
+        });
+      }
     } on CameraException catch (e) {
       e.logger();
       return;
@@ -440,7 +447,6 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     if (!isRecordingVideo) {
       return null;
     }
-
     if(notifier.featureType == FeatureType.story && isFlash){
       await deepArController?.toggleFlash();
     }else if (isFlash) {

@@ -23,6 +23,7 @@ import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/widget/build_capture_icon.dart';
 import 'package:hyppe/ui/inner/upload/make_content/widget/build_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../constant/entities/camera_devices/notifier.dart';
@@ -194,9 +195,11 @@ class UploadContent extends StatelessWidget {
           )
         : CameraPage(
             onDoubleTap: () {
-              final camera = context.read<CameraDevicesNotifier>();
-              camera.setLoading(true, loadingObject: CameraDevicesNotifier.loadingForSwitching);
-              Future.delayed(const Duration(milliseconds: 1000), () => camera.onNewCameraSelected());
+              print('data camera doubletap');
+              final camera = context.read<CameraNotifier>();
+              // camera.setLoading(true, loadingObject: CameraDevicesNotifier.loadingForSwitching);
+              Future.delayed(const Duration(milliseconds: 1000), () => camera.onNewCameraSelected(Routing.navigatorKey.currentContext ?? context));
+              // Future.delayed(const Duration(milliseconds: 250), () => camera.onNewCameraSelected());
             },
             onCameraNotifierUpdate: (cameraNotifier) => notifier.cameraNotifier = cameraNotifier,
             onChangeAppLifecycleState: () => notifier.cancelVideoRecordingWhenAppIsPausedOrInactive(),

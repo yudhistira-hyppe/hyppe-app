@@ -977,6 +977,7 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 6.0),
                   child: CustomNewDescContent(
+                    email: pics[index].comment?[indexComment].sender ?? '',
                     username: pics[index].comment?[indexComment].userComment?.username ?? '',
                     desc: pics[index].comment?[indexComment].txtMessages ?? '',
                     trimLines: 2,

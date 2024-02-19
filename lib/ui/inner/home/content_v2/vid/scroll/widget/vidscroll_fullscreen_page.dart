@@ -244,6 +244,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
     });
 
     controller = PageController(initialPage: widget.index ?? 0);
+    context.read<ScrollVidNotifier>().lastScrollIdx = widget.index??0;
     controller.addListener(() {
       widget.fAliplayer?.pause();
       setState(() {

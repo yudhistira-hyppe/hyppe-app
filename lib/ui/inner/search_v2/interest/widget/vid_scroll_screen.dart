@@ -621,6 +621,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                   padding: const EdgeInsets.only(bottom: 6.0),
                   child: CustomNewDescContent(
                     // desc: "${vidData?.description}",
+                    // email: vidData[index].comment?[indexComment].userComment?.email ?? '',
                     username: vidData[index].comment?[indexComment].userComment?.username ?? '',
                     desc: vidData[index].comment?[indexComment].txtMessages ?? '',
                     trimLines: 2,

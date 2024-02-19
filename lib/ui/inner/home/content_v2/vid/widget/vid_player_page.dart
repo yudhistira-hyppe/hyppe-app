@@ -222,6 +222,18 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
   String vidAuth = "";
   String email = '';
 
+  String playerNameId() {
+    switch (widget.isVidFormProfile??false) {
+      case true:
+        if (widget.fromFullScreen){
+          return 'full_profile_${widget.data?.postID}';
+        }else{
+          return 'profile_${widget.data?.postID}';
+        }
+      default:
+        return widget.data?.postID ?? 'video_player_landing';
+    }
+  }
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationIDSuccess');
@@ -247,7 +259,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
     // _playMode = widget.playMode;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       try {
-        fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: widget.data?.postID ?? 'video_player_landing');
+        fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: playerNameId());
         // globalAliPlayer = fAliplayer;
         fAliplayer?.setAutoPlay(autoPlay);
         if (autoPlay) {
@@ -370,6 +382,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
       fAliplayer?.setOnRenderingStart((playerId) {});
       fAliplayer?.setOnVideoSizeChanged((width, height, rotation, playerId) {
         print('video size changed');
+        // configAliplayer();
       });
       fAliplayer?.setOnStateChanged((newState, playerId) {
         _currentPlayerState = newState;
@@ -495,21 +508,24 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
           if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
             _currentPosition = extraValue ?? 0;
             final detik = (_currentPosition / 1000).round();
-            print("===detik $detik");
-            if (notifier.adsTime == detik) {
-              if (notifier.tempAdsData != null) {
-                fAliplayer?.pause();
-                final tempAds = notifier.tempAdsData;
-                if (tempAds != null) {
-                  notifier.setMapAdsContent(widget.data?.postID ?? '', tempAds);
-                  final fixAds = notifier.mapInContentAds[widget.data?.postID ?? ''];
+            // print("===detik $detik");
+            if (!(widget.isVidFormProfile??false)){
+              if (notifier.adsTime == detik) {
+                if (notifier.tempAdsData != null) {
+                  fAliplayer?.pause();
+                  final tempAds = notifier.tempAdsData;
+                  if (tempAds != null) {
+                    notifier.setMapAdsContent(widget.data?.postID ?? '', tempAds);
+                    final fixAds = notifier.mapInContentAds[widget.data?.postID ?? ''];
 
-                  if (widget.onShowAds != null && fixAds != null) {
-                    widget.onShowAds!(fixAds);
+                    if (widget.onShowAds != null && fixAds != null) {
+                      widget.onShowAds!(fixAds);
+                    }
                   }
                 }
               }
-            }
+            } 
+            
           }
           if (!_inSeek) {
             try {
@@ -1298,10 +1314,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                 Future.delayed(const Duration(seconds: 6), () {
                                   notifier.isLoading = false;
                                 });
-                                if (widget.isVidFormProfile ?? false) {
-                                  var notifScroll = context.read<ScrollVidNotifier>();
-                                  notifScroll.itemScrollController.jumpTo(index: notifScroll.lastScrollIndex);
-                                }
+                                
                                 if (mounted) {
                                   setState(() {
                                     _videoDuration = value.videoDuration ?? 0;
@@ -1318,6 +1331,14 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                   _showTipsWidget = value.showTipsWidget ?? false;
                                   isMute = value.isMute ?? false;
                                   isPlay = !_showTipsWidget;
+                                }
+                                if (widget.isVidFormProfile ?? false) {
+                                  var notifScroll = context.read<ScrollVidNotifier>();
+                                  notifScroll.itemScrollController.jumpTo(index: notifScroll.lastScrollIndex);
+                                  // if (widget.index != notifScroll.lastScrollIndex){
+                                   
+                                  //   fAliplayer?.prepare();
+                                  // }
                                 }
                                 fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
                                   if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
@@ -1610,7 +1631,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                   child: _buildController(Colors.transparent, Colors.white, 120, widget.width!, widget.height! * 0.8, widget.orientation),
                                 ),
                               ),
-                            if (notifier.mapInContentAds[widget.data?.postID ?? ''] != null && isPlay)
+                            if (notifier.mapInContentAds[widget.data?.postID ?? ''] != null && isPlay && !(widget.isVidFormProfile??false))
                               Positioned.fill(
                                   child: ClipRRect(
                                       borderRadius: BorderRadius.all(

@@ -14,7 +14,13 @@ class CameraSwitchButton extends ProviderWidget<CameraNotifier> {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       excludeFromSemantics: true,
+      onDoubleTap: (){
+        print('data camera doubleTap');
+        // notifier.setLoading(true, loadingObject: CameraNotifier.loadingForSwitching);
+        Future.delayed(const Duration(milliseconds: 250), () => notifier.onNewCameraSelected(Routing.navigatorKey.currentContext ?? context));
+      },
       onTap: () {
+        print('data camera ontap');
         // notifier.setLoading(true, loadingObject: CameraNotifier.loadingForSwitching);
         Future.delayed(const Duration(milliseconds: 250), () => notifier.onNewCameraSelected(Routing.navigatorKey.currentContext ?? context));
       },

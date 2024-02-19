@@ -43,8 +43,7 @@ class _ComponentState extends State<Component> {
     final isAnnouncement = widget.data?.actionButtons != null && widget.data?.eventType == 'GENERAL';
     return InkWell(
       onTap: () async {
-        
-        // print(isLoading);
+        print(isLoading);
         if (widget.data?.eventType != 'CONTENTMOD') {
           if (isAnnouncement) {
             final url = widget.data?.actionButtons;

@@ -379,8 +379,6 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                   }
                 },
                 child: context.getAdsInBetween(picData.inBetweenAds, (info) {}, () {
-                  notifier?.currIndex = index+1;
-                  print('isAds index $index');
                   notifier?.setAdsData(index, null);
                 }, (player, id) {}, isfull: true),
               )

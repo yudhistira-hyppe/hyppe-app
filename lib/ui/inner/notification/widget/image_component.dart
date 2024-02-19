@@ -67,67 +67,69 @@ class _ImageComponentState extends State<ImageComponent> {
     SizeConfig().init(context);
     print('notifikasi data ${widget.data}');
     if (widget.data != null) {
-      return isLoading ? const CircularProgressIndicator() : InkWell(
-        onTap: () async {
-          print('klklklklkl');
-          final language = context.read<TranslateNotifierV2>().translate;
-          final featureType = System().getFeatureTypeV2(widget.postType ?? '');
-          print(featureType);
-          if(!isLoading){
-            setState(() => isLoading = true);
-            switch (featureType) {
-              case FeatureType.vid:
-                onGetContentData(context, featureType, (v) async{
-                  if (v != null) {
-                    await Routing().move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: v));
-                  } else {
-                    ShowBottomSheet().onShowColouredSheet(context, language.contentNotAvailable ?? '', color: kHyppeLightDanger, iconSvg: "${AssetPath.vectorPath}remove.svg");
-                  }
-                  setState(() => isLoading = false);
-                });
+      return isLoading ? const CircularProgressIndicator() : Container(
+        // onTap: () {
+          // print('klklklklkl');
+          // final language = context.read<TranslateNotifierV2>().translate;
+          // final featureType = System().getFeatureTypeV2(widget.postType ?? '');
 
-                break;
-              case FeatureType.diary:
-                onGetContentData(context, featureType, (v) async{
-                  if (v != null) {
-                    await Routing().move(Routes.diaryDetail, argument: DiaryDetailScreenArgument(diaryData: v, type: TypePlaylist.none));
-                  } else {
-                    ShowBottomSheet().onShowColouredSheet(context, language.contentNotAvailable ?? '', color: kHyppeLightDanger, iconSvg: "${AssetPath.vectorPath}remove.svg");
-                  }
-                  setState(() => isLoading = false);
-                });
+          // print(widget.postType);
+          // if(!isLoading){
+          //   setState(() => isLoading = true);
+          //   switch (featureType) {
+          //     case FeatureType.vid:
+          //       onGetContentData(context, featureType, (v) async{
+          //         if (v != null) {
+          //           await Routing().move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: v));
+          //         } else {
+          //           ShowBottomSheet().onShowColouredSheet(context, language.contentNotAvailable ?? '', color: kHyppeLightDanger, iconSvg: "${AssetPath.vectorPath}remove.svg");
+          //         }
+          //         setState(() => isLoading = false);
+          //       });
 
-                break;
-              case FeatureType.pic:
-                onGetContentData(context, featureType, (v) async{
-                  if (v != null) {
-                    Routing().move(Routes.picDetail, argument: PicDetailScreenArgument(picData: v));
-                  } else {
-                    ShowBottomSheet().onShowColouredSheet(context, language.contentNotAvailable ?? '', color: kHyppeLightDanger, iconSvg: "${AssetPath.vectorPath}remove.svg");
-                  }
-                  setState(() => isLoading = false);
-                });
-                // context.read<PreviewPicNotifier>().navigateToSlidedDetailPic(context, 0);
-                break;
-              case FeatureType.story:
-                onGetContentData(context, featureType, (v) async {
-                  if (v != null) {
-                    Routing().move(Routes.vidDetail, argument: StoryDetailScreenArgument(storyData: v));
-                  } else {
-                    ShowBottomSheet().onShowColouredSheet(context, language.contentNotAvailable ?? '', color: kHyppeLightDanger, iconSvg: "${AssetPath.vectorPath}remove.svg");
-                  }
-                  setState(() => isLoading = false);
-                });
-                break;
-              case FeatureType.txtMsg:
-                // return;
-              case FeatureType.other:
-                return;
-            }
-          }
+          //       break;
+          //     case FeatureType.diary:
+          //       onGetContentData(context, featureType, (v) async{
+          //         if (v != null) {
+          //           await Routing().move(Routes.diaryDetail, argument: DiaryDetailScreenArgument(diaryData: v, type: TypePlaylist.none));
+          //         } else {
+          //           ShowBottomSheet().onShowColouredSheet(context, language.contentNotAvailable ?? '', color: kHyppeLightDanger, iconSvg: "${AssetPath.vectorPath}remove.svg");
+          //         }
+          //         setState(() => isLoading = false);
+          //       });
+
+          //       break;
+          //     case FeatureType.pic:
+          //       onGetContentData(context, featureType, (v) async{
+          //         if (v != null) {
+          //           Routing().move(Routes.picDetail, argument: PicDetailScreenArgument(picData: v));
+          //         } else {
+          //           ShowBottomSheet().onShowColouredSheet(context, language.contentNotAvailable ?? '', color: kHyppeLightDanger, iconSvg: "${AssetPath.vectorPath}remove.svg");
+          //         }
+          //         setState(() => isLoading = false);
+          //       });
+          //       // context.read<PreviewPicNotifier>().navigateToSlidedDetailPic(context, 0);
+          //       break;
+          //     case FeatureType.story:
+          //       onGetContentData(context, featureType, (v) async {
+          //         if (v != null) {
+          //           Routing().move(Routes.vidDetail, argument: StoryDetailScreenArgument(storyData: v));
+          //         } else {
+          //           ShowBottomSheet().onShowColouredSheet(context, language.contentNotAvailable ?? '', color: kHyppeLightDanger, iconSvg: "${AssetPath.vectorPath}remove.svg");
+          //         }
+          //         setState(() => isLoading = false);
+          //       });
+          //       break;
+
+          //     case FeatureType.txtMsg:
+          //     case FeatureType.other:
+          //       setState(() => isLoading = false);
+          //       return;
+          //   }
+          // }
 
 
-        },
+        // },
         child: CustomBaseCacheImage(
           imageUrl: (widget.data?.isApsara ?? false) ? '${widget.data?.mediaThumbEndpoint ?? ''}' : '${widget.data?.fullThumbPath ?? ''}',
           errorWidget: (_, __, ___) {
