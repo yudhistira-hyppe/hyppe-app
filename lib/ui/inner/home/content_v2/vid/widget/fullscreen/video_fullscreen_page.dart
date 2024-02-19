@@ -473,9 +473,6 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
               : widget.isAutoPlay ?? false
                   ? PageView.builder(
                       controller: controller,
-                      physics: (notifier.isShowingAds && !notifier.hasShowedAds) 
-                             ? const NeverScrollableScrollPhysics() 
-                             : const AlwaysScrollableScrollPhysics(),
                       scrollDirection: Axis.vertical,
                       itemCount: vidData?.length ?? 0,
                       onPageChanged: (value) {
