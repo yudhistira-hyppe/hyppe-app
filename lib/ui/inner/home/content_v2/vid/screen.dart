@@ -228,7 +228,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     isHomeScreen = true;
     print("============= didPopNext dari vid");
     final notifier = context.read<PreviewVidNotifier>();
-    print("===========dari didpopnext");
+
     _initializeTimer();
     if (_curIdx != -1) {
       // notifier.vidData?[_curIdx].fAliplayer?.play();
@@ -246,6 +246,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
 
     var temp1 = notifier.vidData?[_curIdx];
     var temp2 = notifier.vidData![notifier.currentIndex];
+
+    print("===========dari didpopnext ${_curIdx} ${notifier.currentIndex}");
 
     if (_curIdx < notifier.currentIndex) {
       setState(() {

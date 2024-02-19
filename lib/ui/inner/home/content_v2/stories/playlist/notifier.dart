@@ -537,7 +537,10 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
       final res = await _resFuture;
       _dataUserStories = res;
       notifyListeners();
-      _followUser(context);
+      final bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
+      if (!(isGuest ?? false)) {
+        _followUser(context);
+      }
     } catch (e) {
       'load story: ERROR: $e'.logger();
     }
@@ -851,9 +854,9 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     if (mounted) {
       if (_ableClose) {
         _textEditingController.clear();
-        if(isOther){
+        if (isOther) {
           _routing.moveBack();
-        }else if (_routeArgument?.postID != null) {
+        } else if (_routeArgument?.postID != null) {
           print('onCloseStory moveAndPop ');
           await _routing.moveAndPop(Routes.lobby, argument: MainArgument(canShowAds: false, page: isFromProfile ? 4 : 0));
         } else {
@@ -897,5 +900,3 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     ShowBottomSheet().onReportContent(context, postData: data, type: hyppeStory);
   }
 }
-
-

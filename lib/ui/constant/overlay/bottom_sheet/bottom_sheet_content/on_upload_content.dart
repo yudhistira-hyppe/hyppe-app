@@ -13,7 +13,10 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/preview/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
@@ -88,8 +91,6 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
     // _alivcLivePusher.createConfig();
   }
 
-
-  
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -163,6 +164,14 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                           // );
                           // await Future.delayed(const Duration(seconds: 1));
                           // context.read<HomeNotifier>().tabIndex = 0;
+                          final vid = Provider.of<PreviewVidNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
+                          final diary = Provider.of<PreviewDiaryNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
+                          final pic = Provider.of<PreviewPicNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
+                          final stories = Provider.of<PreviewStoriesNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
+                          stories.storiesGroups = [];
+                          vid.vidData = null;
+                          diary.diaryData = null;
+                          pic.pic = null;
                           Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
                         },
                         child: Text(

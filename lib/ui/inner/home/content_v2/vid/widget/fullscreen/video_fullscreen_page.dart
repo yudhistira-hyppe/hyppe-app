@@ -137,6 +137,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
         widget.fAliplayer?.play();
       }
       notifier.loadVideo = false;
+      context.read<PreviewVidNotifier>().currIndex = widget.index ?? 0;
       // setState(() {
       //   isloading = false;
       // });
@@ -682,7 +683,6 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                                   },
                                                   fAliplayer: widget.data.fAliplayer,
                                                 );
-
                                               }
                                             });
                                           }),
@@ -1433,20 +1433,19 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                             trimLines: 2,
                             textAlign: TextAlign.start,
                             callbackIsMore: (val) {
-
                               setState(() {
                                 onTapCtrl = true;
                                 isShowMore = val;
                               });
                             },
-                            onLongPressEnd: (value){
+                            onLongPressEnd: (value) {
                               print('Longlong: onLongPressEnd fullscreen');
                               setState(() {
                                 isScrolling = false;
                                 onTapCtrl = false;
                               });
                             },
-                            onLongPressStart: (value){
+                            onLongPressStart: (value) {
                               print('Longlong: onLongPressStart fullscreen');
                               setState(() {
                                 isScrolling = true;
@@ -1706,7 +1705,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
 
   void _onPlayerHide() {
     Future.delayed(const Duration(seconds: 4), () {
-      if(!isScrolling){
+      if (!isScrolling) {
         onTapCtrl = false;
       }
       // setState(() {});

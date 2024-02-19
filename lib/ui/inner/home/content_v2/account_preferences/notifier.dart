@@ -10,6 +10,7 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/core/models/combination_v2/get_user_profile.dart';
 import 'package:hyppe/core/services/event_service.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/constant/widget/show_overlay_loading.dart';
@@ -403,6 +404,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
             try {
               SelfProfileNotifier userNotifier = context.read<SelfProfileNotifier>();
               userNotifier.isLoadingBio = true;
+              userNotifier.user = UserInfoModel();
 
               // userNotifier.user.profile?.bio = bio;
 
