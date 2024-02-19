@@ -674,6 +674,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       if (_isCompress) {
         await compressVideo();
       }
+      
       if (!mounted) return false;
 
       notifier.postContentsBlocV2(
@@ -748,6 +749,7 @@ class PreUploadContentNotifier with ChangeNotifier {
           dio.Response res = value;
           "return data ${jsonEncode(res.data['data'])}".loggerV2();
           ContentData uploadedData = ContentData.fromJson(res.data['data']);
+          SharedPreference().removeValue(SpKeys.uploadContent);
           if (mounted) (Routing.navigatorKey.currentContext ?? context).read<SelfProfileNotifier>().updateProfilePost(featureType ?? FeatureType.pic, uploadedData);
           if (mounted) (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().onUploadedSelfUserContent(context: context, contentData: uploadedData);
         }

@@ -507,12 +507,45 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                       child: Stack(
                         children: [
                           Positioned.fill(
-                            child: Container(
-                              width: context.getWidth(),
-                              height: SizeConfig.screenHeight,
-                              decoration: const BoxDecoration(color: Colors.black),
-                              child: widget.aliPlayerView,
-                            ),
+                            child: OrientationBuilder(builder: (context, orientation) {
+                              final player = VidPlayerPage(
+                                currentPosition: widget.videoIndicator.seekValue??0,
+                                isVidFormProfile: widget.isVidFormProfile,
+                                fromFullScreen: true,
+                                orientation: orientation,
+                                playMode: (notifier.vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
+                                dataSourceMap: map,
+                                data: notifier.vidData?[index],
+                                height: MediaQuery.of(context).size.height,
+                                width: MediaQuery.of(context).size.width,
+                                inLanding: widget.isLanding,
+                                fromDeeplink: false,
+                                clearPostId: widget.clearPostId,
+                                clearing: true,
+                                isAutoPlay: true,
+                                functionFullTriger: (value) {},
+                                isPlaying: !isPause,
+                                onPlay: (exec) {},
+                                getPlayer: (main, id) {},
+                                getAdsPlayer: (ads) {
+                                  // notifier.vidData?[index].fAliplayerAds = ads;
+                                },
+                                autoScroll: () {
+                                  nextPage();
+                                },
+                                prevScroll: () {
+                                  previousPage();
+                                },
+                              );
+                              if (orientation == Orientation.landscape) {
+                                return SizedBox(
+                                  width: context.getWidth(),
+                                  height: context.getHeight(),
+                                  child: player,
+                                );
+                              }
+                              return player;
+                            })
                           ),
                           GestureDetector(
                             onTap: () {

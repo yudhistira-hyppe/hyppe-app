@@ -786,9 +786,9 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                       maxWidth: SizeConfig.screenWidth! * .7,
                       maxHeight: data.description!.length > 24
                           ? isShowMore
-                              ? 42
+                              ? 54
                               : SizeConfig.screenHeight! * .1
-                          : 42),
+                          : 54),
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.symmetric(horizontal: 16.0),
                   padding: const EdgeInsets.only(left: 8.0, top: 20),
