@@ -104,12 +104,12 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
   String email = '';
   String statusKyc = '';
 
-  
   final ScrollOffsetController scrollOffsetController = ScrollOffsetController();
 
   /// Listener that reports the position of items when the list is scrolled.
   final ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
   final ScrollController _scrollController = ScrollController();
+  final ScrollOffsetListener scrollOffsetListener = ScrollOffsetListener.create();
 
   @override
   void initState() {
@@ -125,31 +125,43 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
     indexDiary = widget.arguments?.page ?? 0;
     notifier.diaryData = widget.arguments?.diaryData;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer();
-      WidgetsBinding.instance.addObserver(this);
-      fAliplayer?.pause();
-      fAliplayer?.setAutoPlay(false);
-      fAliplayer?.setLoop(true);
+      if (fAliplayer == null && fAliplayer?.getPlayerName().toString() != 'scrolldiaryprofile1') {
+        fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'scrolldiaryprofile1');
+        fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: "scrolldiaryprofile1");
+        WidgetsBinding.instance.addObserver(this);
+        fAliplayer?.pause();
+        fAliplayer?.setAutoPlay(false);
+        fAliplayer?.setLoop(true);
 
-      //Turn on mix mode
-      if (Platform.isIOS) {
-        FlutterAliplayer.enableMix(true);
-        // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
+        //Turn on mix mode
+        if (Platform.isIOS) {
+          FlutterAliplayer.enableMix(true);
+          // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
+        }
+
+        notifier.checkConnection();
+
+        //set player
+        fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
+        fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+        vidConfig();
+        notifier.itemScrollController.jumpTo(index: widget.arguments!.page!);
+        _initListener();
       }
-
-      notifier.checkConnection();
-
-      //set player
-      fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
-      fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
-      vidConfig();
-      notifier.itemScrollController.jumpTo(index: widget.arguments!.page!);
-      _initListener();
     });
+
+    // start(diaryData![indexDiary]);
+
     var index = 0;
     var lastIndex = 0;
+
+    scrollOffsetListener.changes.listen((event) {
+      print("+++++++++ index inset ${event}");
+    });
+
     itemPositionsListener.itemPositions.addListener(() async {
       index = itemPositionsListener.itemPositions.value.first.index;
+
       if (lastIndex != index) {
         if (index == diaryData!.length - 2) {
           bool connect = await System().checkConnections();
@@ -334,8 +346,8 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
 
   void start(ContentData data) async {
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
-
     fAliplayer?.stop();
+    fAliplayer?.clearScreen();
     dataSelected = data;
 
     isPlay = false;
@@ -416,6 +428,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
       _showLoading = true;
     });
     try {
+      fAliplayer?.setVidAuth();
       final notifier = PostsBloc();
       await notifier.getAuthApsara(context, apsaraId: apsaraId, check: false);
       final fetch = notifier.postsFetch;
@@ -435,7 +448,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
             isloading = false;
           });
         });
-        vidPrepare(data);
+        // vidPrepare(data);
         // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
       } else {
         fAliplayer?.setVidAuth(
@@ -473,7 +486,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
         setState(() {
           isloading = false;
         });
-        vidPrepare(data);
+        // vidPrepare(data);
         // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
       } else {
         fAliplayer?.setUrl('');
@@ -526,7 +539,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
   @override
   void dispose() {
     fAliplayer?.stop();
-    fAliplayer?.destroy();
+    // fAliplayer?.destroy();
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
       // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
@@ -649,53 +662,53 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(transform: Matrix4.translationValues(-18.0, 0.0, 0.0), margin: const EdgeInsets.symmetric(horizontal: 10), child: widget.arguments?.titleAppbar ?? Container()),
-                            if(diaryData?.isNotEmpty ?? false)
-                            if (diaryData?[indexDiary].email != email && (diaryData?[indexDiary].isNewFollowing ?? false) && (widget.arguments?.isProfile ?? false))
-                              Consumer<PreviewPicNotifier>(
-                                builder: (context, picNot, child) => Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      context.handleActionIsGuest(() {
-                                        if (diaryData?[indexDiary].insight?.isloadingFollow != true) {
-                                          picNot.followUser(context, diaryData?[indexDiary] ?? ContentData(),
-                                              isUnFollow: diaryData?[indexDiary].following, isloading: diaryData?[indexDiary].insight!.isloadingFollow ?? false);
-                                        }
-                                      });
-                                    },
-                                    child: diaryData?[indexDiary].insight?.isloadingFollow ?? false
-                                        ? const SizedBox(
-                                            height: 30,
-                                            width: 30,
-                                            child: Center(
-                                              child: CustomLoading(),
-                                            ),
-                                          )
-                                        : SizedBox(
-                                            height: 40,
-                                            child: Center(
-                                              child: Text(
-                                                (diaryData?[indexDiary].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
-                                                style: const TextStyle(color: kHyppePrimary, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                            if (diaryData?.isNotEmpty ?? false)
+                              if (diaryData?[indexDiary].email != email && (diaryData?[indexDiary].isNewFollowing ?? false) && (widget.arguments?.isProfile ?? false))
+                                Consumer<PreviewPicNotifier>(
+                                  builder: (context, picNot, child) => Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        context.handleActionIsGuest(() {
+                                          if (diaryData?[indexDiary].insight?.isloadingFollow != true) {
+                                            picNot.followUser(context, diaryData?[indexDiary] ?? ContentData(),
+                                                isUnFollow: diaryData?[indexDiary].following, isloading: diaryData?[indexDiary].insight!.isloadingFollow ?? false);
+                                          }
+                                        });
+                                      },
+                                      child: diaryData?[indexDiary].insight?.isloadingFollow ?? false
+                                          ? const SizedBox(
+                                              height: 30,
+                                              width: 30,
+                                              child: Center(
+                                                child: CustomLoading(),
+                                              ),
+                                            )
+                                          : SizedBox(
+                                              height: 40,
+                                              child: Center(
+                                                child: Text(
+                                                  (diaryData?[indexDiary].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+                                                  style: const TextStyle(color: kHyppePrimary, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                                                ),
                                               ),
                                             ),
-                                          ),
+                                    ),
                                   ),
                                 ),
-                              ),
                           ],
                         ),
                         leading: IconButton(
-                          icon: const Icon(
-                            Icons.chevron_left,
-                            color: kHyppeTextLightPrimary,
-                          ),
-                          onPressed: () {
-                            Future.delayed(Duration.zero, () {
-                              // Navigator.pop(context, '$_curIdx');
-                              Navigator.pop(context);
-                            });
-                          }),
+                            icon: const Icon(
+                              Icons.chevron_left,
+                              color: kHyppeTextLightPrimary,
+                            ),
+                            onPressed: () {
+                              Future.delayed(Duration.zero, () {
+                                // Navigator.pop(context, '$_curIdx');
+                                Navigator.pop(context);
+                              });
+                            }),
                       ),
                       Expanded(
                         child: (diaryData?.isEmpty ?? true)
@@ -733,6 +746,8 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                                       itemScrollController: notifier.itemScrollController,
                                       itemPositionsListener: itemPositionsListener,
                                       scrollOffsetController: scrollOffsetController,
+                                      scrollOffsetListener: scrollOffsetListener,
+
                                       // controller: notifier.scrollController,
                                       // scrollDirection: Axis.horizontal,
                                       physics: const AlwaysScrollableScrollPhysics(),
@@ -760,10 +775,11 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                                             ),
                                           );
                                         }
-                                        if (_curIdx == 0 && diaryData?[0].reportedStatus == 'BLURRED') {
-                                          isPlay = false;
-                                          fAliplayer?.stop();
-                                        }
+                                        // print("===========pwpwpwpwpwpwpw ${_curIdx} -- ${diaryData?[0].reportedStatus}=========");
+                                        // if (_curIdx == 0 && diaryData?[0].reportedStatus == 'BLURRED') {
+                                        //   isPlay = false;
+                                        //   fAliplayer?.stop();
+                                        // }
 
                                         return itemDiary(notifier, index);
                                       },
@@ -914,19 +930,21 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
               ),
               tenPx,
               GestureDetector(
-                onTap: () {},
                 child: VisibilityDetector(
-                  key: Key(index.toString()),
+                  key: Key(diaryData?[index].postID ?? index.toString()),
                   onVisibilityChanged: (info) {
                     if (info.visibleFraction >= 0.6) {
                       _curIdx = index;
+                      // print("====curidx $_curIdx -- $_lastCurIndex");
                       if (_lastCurIndex != _curIdx) {
+                        _showLoading = false;
                         try {
                           widget.arguments?.scrollController?.jumpTo(System().scrollAuto(_curIdx, widget.arguments?.heightTopProfile ?? 0, widget.arguments?.heightBox?.toInt() ?? 175));
                         } catch (e) {
                           print("ini error $e");
                         }
                         Future.delayed(const Duration(milliseconds: 400), () {
+                          // fAliplayer?.stop();
                           start(diaryData?[index] ?? ContentData());
                           System().increaseViewCount2(context, diaryData?[index] ?? ContentData(), check: false);
                         });
@@ -940,7 +958,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                     }
                   },
                   child: Container(
-                    margin: EdgeInsets.only(bottom: 20),
+                    margin: const EdgeInsets.only(bottom: 20),
                     // width: MediaQuery.of(context).size.width,
                     // height: 500,
                     decoration: BoxDecoration(
@@ -1018,10 +1036,10 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                                             scrollController: widget.arguments?.scrollController);
                                         notifier.currIndex = index;
                                         await Routing().move(Routes.scrollFullDiary, argument: param);
-                                        print('===asdasdasd back ${notifier.currentIndex}');
+                                        // print('===asdasdasd back ${notifier.currentIndex}');
                                         if (notifier.currentIndex != index) notifier.itemScrollController.jumpTo(index: notifier.currentIndex);
                                       }
-                                      
+
                                       // fAliplayer?.play();
                                       // setState(() {
                                       //   isMute = !isMute;
@@ -1091,7 +1109,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                                               pageSrc: widget.arguments?.pageSrc,
                                               scrollController: widget.arguments?.scrollController);
                                           await Routing().move(Routes.scrollFullDiary, argument: param);
-                                          print('===asdasdasd back ${notifier.currentIndex}');
+                                          // print('===asdasdasd back ${notifier.currentIndex}');
                                           if (notifier.currentIndex != index) notifier.itemScrollController.jumpTo(index: notifier.currentIndex);
                                         }
                                       },
@@ -1373,7 +1391,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
               twelvePx,
               CustomNewDescContent(
                 // desc: "${data?.description}",
-                email: diaryData?[index].email??'',
+                email: diaryData?[index].email ?? '',
                 username: diaryData?[index].username ?? '',
                 desc: "${diaryData?[index].description}",
                 trimLines: 2,
@@ -1415,7 +1433,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                             padding: const EdgeInsets.only(bottom: 6.0),
                             child: CustomNewDescContent(
                               // desc: "${diaryData?[index]?.description}",
-                              email: diaryData?[index].comment?[indexComment].sender??'',
+                              email: diaryData?[index].comment?[indexComment].sender ?? '',
                               username: diaryData?[index].comment?[indexComment].userComment?.username ?? '',
                               desc: diaryData?[index].comment?[indexComment].txtMessages ?? '',
                               trimLines: 2,

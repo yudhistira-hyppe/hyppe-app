@@ -784,6 +784,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
           // pn.diaryData!.removeRange(_curIdx, pn.currentIndex);
           pn.diaryData?.removeRange(0, pn.currentIndex);
           widget.scrollController?.animateTo(0, duration: const Duration(milliseconds: 50), curve: Curves.ease);
+          _curIdx = 0;
         });
       } else if (index > pn.currentIndex) {
         setState(() {
@@ -859,10 +860,10 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                 );
                               }
                               // if (_curIdx == 0 && notifier.diaryData?[0].reportedStatus == 'BLURRED') {
-                              if (notifier.diaryData?[_curIdx].reportedStatus == 'BLURRED') {
-                                isPlay = false;
-                                fAliplayer?.stop();
-                              }
+                              // if (notifier.diaryData?[_curIdx].reportedStatus == 'BLURRED') {
+                              //   isPlay = false;
+                              //   fAliplayer?.stop();
+                              // }
                               return itemDiary(context, notifier, index, home);
                             },
                           ),
