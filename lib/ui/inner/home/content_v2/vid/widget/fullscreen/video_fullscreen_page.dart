@@ -452,7 +452,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
           onHorizontalDragEnd: (dragEndDetails) {
             if (dragEndDetails.primaryVelocity! < 0) {
             } else if (dragEndDetails.primaryVelocity! > 0) {
-              if (!notifier.isShowingAds && notifier.hasShowedAds){
+              if (!notifier.isShowingAds){
                 int changevalue;
                 changevalue = _currentPosition + 1000;
                 if (changevalue > _videoDuration) {
@@ -477,7 +477,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
               : widget.isAutoPlay ?? false
                   ? PageView.builder(
                       controller: controller,
-                      physics: !notifier.isShowingAds && notifier.hasShowedAds ? AlwaysScrollableScrollPhysics() : NeverScrollableScrollPhysics(),
+                      physics: !notifier.isShowingAds ? AlwaysScrollableScrollPhysics() : NeverScrollableScrollPhysics(),
                       scrollDirection: Axis.vertical,
                       itemCount: vidData?.length ?? 0,
                       onPageChanged: (value) {
