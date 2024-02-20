@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/ads_argument.dart';
+import 'package:hyppe/core/arguments/pic_fullscreen_argument.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/constant/widget/custom_desc_content_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,10 +25,12 @@ import '../../../constant/widget/custom_spacer.dart';
 import '../../../constant/widget/custom_text_widget.dart';
 
 class AdsInBetween extends StatefulWidget {
+  final List<ContentData>? contentData;
+  final int index;
   final AdsData data;
   final bool isVideo;
   final Function() afterReport;
-  const AdsInBetween({Key? key, required this.data, required this.afterReport, required this.isVideo}) : super(key: key);
+  const AdsInBetween({Key? key, required this.data, required this.contentData, required this.index, required this.afterReport, required this.isVideo}) : super(key: key);
 
   @override
   State<AdsInBetween> createState() => _AdsInBetweenState();
@@ -263,16 +267,17 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                       InkWell(
                         onTap: () {
                           // cta();
-                          Routing().move(
-                            Routes.adsBetweenFull,
-                            argument: AdsArgument(
-                              data: widget.data,
-                              adsUrl: widget.data.adsUrlLink ?? '',
-                              isSponsored: true,
-                              afterReport: widget.afterReport(),
-                              isVideo: widget.isVideo
-                            ),
-                          );
+                          Routing().move(Routes.picFullScreenDetail, argument: PicFullscreenArgument(picData: widget.contentData!, index: widget.index, scrollPic: false));
+                          // Routing().move(
+                          //   Routes.adsBetweenFull,
+                          //   argument: AdsArgument(
+                          //     data: widget.data,
+                          //     adsUrl: widget.data.adsUrlLink ?? '',
+                          //     isSponsored: true,
+                          //     afterReport: widget.afterReport(),
+                          //     isVideo: widget.isVideo
+                          //   ),
+                          // );
                         },
                         child: CustomBaseCacheImage(
                           memCacheWidth: 100,

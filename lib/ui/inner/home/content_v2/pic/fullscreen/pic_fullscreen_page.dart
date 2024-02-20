@@ -313,7 +313,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
 
                   return notifier.pic![index].reportedStatus == 'BLURRED'
                       ? blurContentWidget(context, notifier.pic![index])
-                      : imagePic(notifier.pic![index], index: index, notifier: notifier, homeNotifier: home);
+                      : imagePic(notifier.pic??[], index: index, notifier: notifier, homeNotifier: home);
                 });
           }),
         ),
@@ -321,13 +321,13 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
     );
   }
 
-  Widget imagePic(ContentData picData, {int index = 0, PreviewPicNotifier? notifier, HomeNotifier? homeNotifier}) {
-    final isAds = picData.inBetweenAds != null && picData.postID == null;
-    return picData.isContentLoading ?? false
+  Widget imagePic(List<ContentData> picData, {int index = 0, PreviewPicNotifier? notifier, HomeNotifier? homeNotifier}) {
+    final isAds = picData[index].inBetweenAds != null && picData[index].postID == null;
+    return picData[index].isContentLoading ?? false
         ? Builder(builder: (context) {
             Future.delayed(const Duration(seconds: 1), () {
               setState(() {
-                picData.isContentLoading = false;
+                picData[index].isContentLoading = false;
               });
             });
             return Container();
@@ -338,7 +338,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                 onVisibilityChanged: (info) async {
                   if (info.visibleFraction >= 0.8) {
                     _curIdx = index;
-                    _curPostId = picData.inBetweenAds?.adsId ?? index.toString();
+                    _curPostId = picData[index].inBetweenAds?.adsId ?? index.toString();
 
                     if (_lastCurPostId != _curPostId) {
                       if (mounted) {
@@ -353,8 +353,8 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                       }
                       fAliplayer?.stop();
                       Future.delayed(const Duration(milliseconds: 500), () {
-                        System().increaseViewCount2(context, picData, check: false);
-                        if ((picData.saleAmount ?? 0) > 0 || ((picData.certified ?? false) && (picData.saleAmount ?? 0) == 0)) {
+                        System().increaseViewCount2(context, picData[index], check: false);
+                        if ((picData[index].saleAmount ?? 0) > 0 || ((picData[index].certified ?? false) && (picData[index].saleAmount ?? 0) == 0)) {
                           if (mounted) {
                             setState(() {
                               isShowShowcase = true;
@@ -363,7 +363,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                         }
                       });
 
-                      if (picData.certified ?? false) {
+                      if (picData[index].certified ?? false) {
                         System().block(context);
                       } else {
                         System().disposeBlock();
@@ -378,7 +378,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                     _lastCurPostId = _curPostId;
                   }
                 },
-                child: context.getAdsInBetween(picData.inBetweenAds, (info) {}, () {
+                child: context.getAdsInBetween(picData, index, (info) {}, () {
                   notifier?.setAdsData(index, null);
                 }, (player, id) {}, isfull: true),
               )
@@ -395,7 +395,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                         }
                         if (info.visibleFraction == 1 || info.visibleFraction >= 0.6) {
                           _curIdx = index;
-                          _curPostId = picData.postID ?? index.toString();
+                          _curPostId = picData[index].postID ?? index.toString();
                           if (_lastCurIndex > _curIdx) {}
 
                           if (_lastCurPostId != _curPostId) {
@@ -409,10 +409,10 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                             if (indexList == (notifier.pic?.length ?? 0) - 1) {
                               context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {});
                             }
-                            if (picData.music != null) {
-                              print("ada musiknya ${picData.music}");
+                            if (picData[index].music != null) {
+                              print("ada musiknya ${picData[index].music}");
                               Future.delayed(const Duration(milliseconds: 100), () {
-                                startMusic(context, picData, notifier);
+                                startMusic(context, picData[index], notifier);
                               });
                             } else {
                               fAliplayer?.stop();
@@ -422,24 +422,24 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                               if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
                                 indexKeySell = mn?.tutorialData.indexWhere((element) => element.key == 'sell') ?? 0;
                                 indexKeyProtection = mn?.tutorialData.indexWhere((element) => element.key == 'protection') ?? 0;
-                                if ((picData.saleAmount ?? 0) > 0) {
+                                if ((picData[index].saleAmount ?? 0) > 0) {
                                   if (mn?.tutorialData[indexKeySell].status == false && !globalChallengePopUp) {
-                                    ShowCaseWidget.of(context).startShowCase([picData.keyGlobalSell ?? GlobalKey()]);
+                                    ShowCaseWidget.of(context).startShowCase([picData[index].keyGlobalSell ?? GlobalKey()]);
                                   }
                                 }
-                                if (((picData.certified ?? false) && (picData.saleAmount ?? 0) == 0)) {
+                                if (((picData[index].certified ?? false) && (picData[index].saleAmount ?? 0) == 0)) {
                                   if (mn?.tutorialData[indexKeyProtection].status == false && !globalChallengePopUp) {
-                                    ShowCaseWidget.of(context).startShowCase([picData.keyGlobalOwn ?? GlobalKey()]);
+                                    ShowCaseWidget.of(context).startShowCase([picData[index].keyGlobalOwn ?? GlobalKey()]);
                                   }
                                 }
                               }
                             });
 
                             Future.delayed(const Duration(milliseconds: 500), () {
-                              System().increaseViewCount2(context, picData, check: false);
+                              System().increaseViewCount2(context, picData[index], check: false);
                             });
 
-                            if (picData.certified ?? false) {
+                            if (picData[index].certified ?? false) {
                               System().block(context);
                             } else {
                               System().disposeBlock();
@@ -469,11 +469,11 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                           _lastCurPostId = _curPostId;
                         }
                       },
-                      child: Center(child: image(picData, index: index, notifier: notifier)),
+                      child: Center(child: image(picData[index], index: index, notifier: notifier)),
                     ),
                   ),
-                  _buildBody(context, SizeConfig.screenWidth, picData),
-                  _buttomBodyRight(picData: picData, notifier: notifier, index: index),
+                  _buildBody(context, SizeConfig.screenWidth, picData[index]),
+                  _buttomBodyRight(picData: picData[index], notifier: notifier, index: index),
                   Positioned(
                     top: 0,
                     left: 0,
@@ -483,9 +483,9 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                         padding: const EdgeInsets.symmetric(vertical: 18.0),
                         width: double.infinity,
                         height: kToolbarHeight * 1.6,
-                        child: appBar(picData, notifier!)),
+                        child: appBar(picData[index], notifier!)),
                   ),
-                  if (picData.music != null)
+                  if (picData[index].music != null)
                     Positioned(
                       top: 0,
                       bottom: 0,

@@ -452,16 +452,19 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
           onHorizontalDragEnd: (dragEndDetails) {
             if (dragEndDetails.primaryVelocity! < 0) {
             } else if (dragEndDetails.primaryVelocity! > 0) {
-              int changevalue;
-              changevalue = _currentPosition + 1000;
-              if (changevalue > _videoDuration) {
-                changevalue = _videoDuration;
+              if (!notifier.isShowingAds && notifier.hasShowedAds){
+                int changevalue;
+                changevalue = _currentPosition + 1000;
+                if (changevalue > _videoDuration) {
+                  changevalue = _videoDuration;
+                }
+
+                widget.data.isLoading = true;
+                Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
+
+                SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
               }
-
-              widget.data.isLoading = true;
-              Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
-
-              SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+              
             }
           },
           child: notifier.loadVideo
@@ -474,6 +477,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
               : widget.isAutoPlay ?? false
                   ? PageView.builder(
                       controller: controller,
+                      physics: !notifier.isShowingAds && notifier.hasShowedAds ? AlwaysScrollableScrollPhysics() : NeverScrollableScrollPhysics(),
                       scrollDirection: Axis.vertical,
                       itemCount: vidData?.length ?? 0,
                       onPageChanged: (value) {
@@ -521,7 +525,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                   ),
                                 )
                               : isAds
-                                  ? context.getAdsInBetween(vidData?[index].inBetweenAds, (info) {}, () {
+                                  ? context.getAdsInBetween(vidData, index, (info) {}, () {
                                       context.read<PreviewVidNotifier>().setInBetweenAds(index, null);
                                     }, (player, id) {}, isfull: true, isVideo: true, orientation: beforePosition, isScroll: true)
                                   : OrientationBuilder(builder: (context, orientation) {

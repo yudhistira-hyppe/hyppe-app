@@ -311,7 +311,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
           );
         }
         if (mounted) {
-          setState(() {});
+          // setState(() {});
         }
       } catch (e) {
         e.logger();
@@ -781,13 +781,16 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       print('======== $index');
       print('======== ${pn.currentIndex}');
       if (index < pn.currentIndex) {
+        if (!mounted) return;
         setState(() {
           index = pn.currentIndex;
           // pn.diaryData!.removeRange(_curIdx, pn.currentIndex);
           pn.diaryData!.removeRange(0, pn.currentIndex);
-          widget.scrollController?.animateTo(0, duration: const Duration(milliseconds: 50), curve: Curves.ease);
+          _curIdx = 0;
         });
+        widget.scrollController?.animateTo(0, duration: const Duration(milliseconds: 50), curve: Curves.ease);
       } else if (index > pn.currentIndex) {
+        if (!mounted) return;
         setState(() {
           pn.diaryData![_curIdx] = temp2;
           pn.diaryData![pn.currentIndex] = temp1;
@@ -953,7 +956,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                               _lastCurPostId = _curPostId;
                             }
                           },
-                          child: context.getAdsInBetween(notifier.diaryData?[index].inBetweenAds, (info) {}, () {
+                          child: context.getAdsInBetween(notifier.diaryData, index, (info) {}, () {
                             // final hasNotAds = (notifier.diaryData?.where((element) => element.inBetweenAds != null).length ?? 0) == 0;
                             // if(hasNotAds){
                             //

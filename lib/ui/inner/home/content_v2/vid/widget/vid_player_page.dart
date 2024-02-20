@@ -307,7 +307,6 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
 
         if (widget.currentPosition != 0){
             fAliplayer?.seekTo(widget.currentPosition, FlutterAvpdef.ACCURATE);
-            fAliplayer?.play();
         }
 
       } catch (e) {

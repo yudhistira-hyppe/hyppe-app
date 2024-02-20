@@ -970,7 +970,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                         _lastCurPostId = _curPostId;
                       }
                     },
-                    child: context.getAdsInBetween(notifier.diaryData?[index].inBetweenAds, (info) {}, () {
+                    child: context.getAdsInBetween(notifier.diaryData, index, (info) {}, () {
                       // final hasNotAds = (notifier.diaryData?.where((element) => element.inBetweenAds != null).length ?? 0) == 0;
                       // if(hasNotAds){
                       //

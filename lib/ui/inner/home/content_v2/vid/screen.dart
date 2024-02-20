@@ -563,7 +563,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                             _lastCurPostId = _curPostId;
                           }
                         },
-                        child: context.getAdsInBetween(vidData.inBetweenAds, (info) {}, () {
+                        child: context.getAdsInBetween(notifier.vidData, index, (info) {}, () {
                           notifier.setInBetweenAds(index, null);
                         }, (player, id) {
                           setState(() {
