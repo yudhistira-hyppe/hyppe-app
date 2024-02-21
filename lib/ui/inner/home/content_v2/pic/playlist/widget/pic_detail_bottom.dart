@@ -13,7 +13,9 @@ import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/jangakauan_status.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
 import 'package:hyppe/ui/constant/widget/music_status_detail_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/loading_detail_music_screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/tag_label.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
@@ -121,9 +123,9 @@ class PicDetailBottom extends StatelessWidget {
               notifier.isLoadMusic
                   ? LoadingDetailMusicScreen(apsaraMusic: data!.music!.apsaraMusic ?? '')
                   : MusicStatusDetail(
-                music: data!.music!,
-                urlMusic: notifier.urlMusic,
-              ),
+                      music: data!.music!,
+                      urlMusic: notifier.urlMusic,
+                    ),
             if (data?.music?.musicTitle != null) eightPx,
             data != null
                 ? Container(
@@ -151,7 +153,7 @@ class PicDetailBottom extends StatelessWidget {
                         (data?.tagPeople?.isNotEmpty ?? false)
                             ? TagLabel(
                                 icon: 'tag_people',
-                                label: (data?.tagPeople?.length ?? 0) < 2 ? '${data?.tagPeople?.first.username}' : '${data?.tagPeople?.length} people' ,
+                                label: (data?.tagPeople?.length ?? 0) < 2 ? '${data?.tagPeople?.first.username}' : '${data?.tagPeople?.length} people',
                                 function: () {
                                   notifier.showUserTag(context, data?.tagPeople, data?.postID);
                                   // vidNotifier.showUserTag(context, index, data.postID);
@@ -195,7 +197,25 @@ class PicDetailBottom extends StatelessWidget {
                             ),
                           )
                         : _buildButton(context, '${AssetPath.vectorPath}${(value.data?.isLiked ?? false) ? 'liked.svg' : 'none-like.svg'}', "${value.data?.insight?.likes ?? 0}", () {
-                            notifier.likePost(context, data ?? ContentData());
+                            notifier
+                                .likePost(
+                              context,
+                              data ?? ContentData(),
+                            )
+                                .then((value) {
+                              List<ContentData>? pic = context.read<PreviewPicNotifier>().pic;
+                              int idx = pic!.indexWhere((e) => e.postID == value['_id']);
+                              pic[idx].insight?.isPostLiked = value['isPostLiked'];
+                              pic[idx].insight?.likes = value['likes'];
+                              pic[idx].isLiked = value['isLiked'];
+
+                              List<ContentData>? pic2 = context.read<ScrollPicNotifier>().pics;
+                              int idx2 = pic2!.indexWhere((e) => e.postID == value['_id']);
+                              print("==== $idx2");
+                              pic2[idx2].insight?.isPostLiked = value['isPostLiked'];
+                              pic2[idx2].insight?.likes = value['likes'];
+                              pic2[idx2].isLiked = value['isLiked'];
+                            });
                           }, colorIcon: (value.data?.isLiked ?? false) ? kHyppeRed : Theme.of(context).iconTheme.color)),
 
             //   builder: (context, notifier, child) => data != null
@@ -224,9 +244,9 @@ class PicDetailBottom extends StatelessWidget {
                   '${AssetPath.vectorPath}comment.svg',
                   value2.translate.comment ?? 'comment',
                   () {
-                   context.handleActionIsGuest(() {
-                     ShowBottomSheet.onShowCommentV2(context, postID: data?.postID);
-                   });
+                    context.handleActionIsGuest(() {
+                      ShowBottomSheet.onShowCommentV2(context, postID: data?.postID);
+                    });
                   },
                 ),
 
@@ -243,14 +263,13 @@ class PicDetailBottom extends StatelessWidget {
                 '${AssetPath.vectorPath}cart.svg',
                 value2.translate.buy ?? 'buy',
                 () async {
-                  await context.handleActionIsGuest(() async  {
+                  await context.handleActionIsGuest(() async {
                     // value.preventMusic = true;
                     globalAudioPlayer?.pause();
                     await ShowBottomSheet.onBuyContent(context, data: data);
                     globalAudioPlayer?.resume();
                     // value.preventMusic = false;
                   });
-
                 },
               ),
 

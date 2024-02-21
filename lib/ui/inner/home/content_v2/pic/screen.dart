@@ -40,6 +40,7 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/constant/widget/profile_landingpage.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
@@ -229,14 +230,13 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
       fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
-        if(mounted){
+        if (mounted) {
           setState(() {
             isPrepare = true;
           });
-        }else{
+        } else {
           isPrepare = true;
         }
-
       });
       isPlay = true;
       dataSelected?.isDiaryPlay = true;
@@ -916,7 +916,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                             });
                             _curIdx = index;
                             _curPostId = picData?.inBetweenAds?.adsId ?? index.toString();
-                            
+
                             if (_lastCurIndex > _curIdx) {
                               // fAliplayer?.destroy();
                               // double position = 0.0;
@@ -960,7 +960,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                             }
                             _lastCurIndex = _curIdx;
                             _lastCurPostId = _curPostId;
-                          }else{
+                          } else {
                             setState(() {
                               isPlayAds = true;
                             });
@@ -976,18 +976,17 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                               left: kToolbarHeight * .6,
                               right: kToolbarHeight * .6,
                               bottom: kToolbarHeight * 2.5,
-                               child: GestureDetector(
-                                onTap: (){
+                              child: GestureDetector(
+                                onTap: () {
                                   Routing().move(Routes.picFullScreenDetail, argument: PicFullscreenArgument(picData: notifier.pic!, index: index, scrollPic: false));
                                 },
                                 child: Container(
                                   color: Colors.transparent,
-                                  ),
                                 ),
-                             ),
+                              ),
+                            ),
                           ],
-                        )
-                      )
+                        ))
                     : Column(
                         children: [
                           Container(
@@ -1329,15 +1328,19 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                       // notifier.pic![notifier.currentIndex] = temp1;
                                                     });
                                                   }
-
-                                                  
                                                 }
                                               }
                                             },
                                             onDoubleTap: () {
                                               final _likeNotifier = context.read<LikeNotifier>();
                                               if (picData != null) {
-                                                _likeNotifier.likePost(context, notifier.pic![index]);
+                                                _likeNotifier.likePost(context, notifier.pic![index]).then((value) {
+                                                  List<ContentData>? pic2 = context.read<ScrollPicNotifier>().pics;
+                                                  int idx2 = pic2!.indexWhere((e) => e.postID == value['_id']);
+                                                  pic2[idx2].insight?.isPostLiked = value['isPostLiked'];
+                                                  pic2[idx2].insight?.likes = value['likes'];
+                                                  pic2[idx2].isLiked = value['isLiked'];
+                                                });
                                               }
                                             },
                                             child: Center(
@@ -1529,7 +1532,13 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                       ),
                                                       onTap: () async {
                                                         if (picData != null) {
-                                                          likeNotifier.likePost(context, notifier.pic![index]).then((value) => print('result data liked ${value['_id']}'));
+                                                          likeNotifier.likePost(context, notifier.pic![index]).then((value) {
+                                                            List<ContentData>? pic2 = context.read<ScrollPicNotifier>().pics;
+                                                            int idx2 = pic2!.indexWhere((e) => e.postID == value['_id']);
+                                                            pic2[idx2].insight?.isPostLiked = value['isPostLiked'];
+                                                            pic2[idx2].insight?.likes = value['likes'];
+                                                            pic2[idx2].isLiked = value['isLiked'];
+                                                          });
                                                         }
                                                       },
                                                     ),
@@ -1666,7 +1675,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                             return Padding(
                                               padding: const EdgeInsets.only(bottom: 6.0),
                                               child: CustomNewDescContent(
-                                                email: picData?.comment?[indexComment].sender??'',
+                                                email: picData?.comment?[indexComment].sender ?? '',
                                                 // desc: "${picData??.description}",
                                                 username: picData?.comment?[indexComment].userComment?.username ?? '',
                                                 desc: picData?.comment?[indexComment].txtMessages ?? '',
