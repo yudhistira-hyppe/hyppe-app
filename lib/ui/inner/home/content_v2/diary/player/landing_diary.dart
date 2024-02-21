@@ -916,7 +916,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                           onVisibilityChanged: (info) {
                             if (info.visibleFraction >= 0.8) {
                               setState(() {
-                                isPlayAds = true;
+                                isPlayAds = false;
                               });
                               if (!isShowingDialog) {
                                 globalAdsPopUp?.pause();
@@ -960,7 +960,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                               _lastCurPostId = _curPostId;
                             }else{
                               setState(() {
-                                isPlayAds = false;
+                                isPlayAds = true;
                               });
                             }
                           },

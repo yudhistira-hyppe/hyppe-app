@@ -1309,7 +1309,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                   ]);
                                 }
                                 notifier.firstIndex = widget.index ?? 0;
-                                if (notifier.tempAdsData == null) {
+                                if (notifier.mapInContentAds[widget.data?.postID ?? ''] == null) {
                                   VideoIndicator value = await navigateTo(notifier, changevalue);
                                     if (mounted) {
                                     setState(() {
@@ -1805,33 +1805,36 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
   ) {
     return GestureDetector(
       onTap: () {
-        if (isPause) {
-          // if (_showTipsWidget) fAliplayer?.prepare();
-          if ((widget.isVidFormProfile ?? false) && _currentPosition == _videoDuration) {
-            _currentPosition = 0;
-            _inSeek = false;
-            setState(() {
-              if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
-                setState(() {
-                  _showTipsWidget = false;
-                });
-              }
-            });
-            fAliplayer?.seekTo(_currentPosition.ceil(), FlutterAvpdef.ACCURATE);
+        if (context.read<VideoNotifier>().mapInContentAds[widget.data?.postID ?? ''] == null){
+          if (isPause) {
+            // if (_showTipsWidget) fAliplayer?.prepare();
+            if ((widget.isVidFormProfile ?? false) && _currentPosition == _videoDuration) {
+              _currentPosition = 0;
+              _inSeek = false;
+              setState(() {
+                if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
+                  setState(() {
+                    _showTipsWidget = false;
+                  });
+                }
+              });
+              fAliplayer?.seekTo(_currentPosition.ceil(), FlutterAvpdef.ACCURATE);
+            }
+            fAliplayer?.play();
+            isPause = false;
+            setState(() {});
+          } else {
+            "=============== pause 2".logger();
+            fAliplayer?.pause();
+            isPause = true;
+            setState(() {});
           }
-          fAliplayer?.play();
-          isPause = false;
-          setState(() {});
-        } else {
-          "=============== pause 2".logger();
-          fAliplayer?.pause();
-          isPause = true;
-          setState(() {});
+          if (_showTipsWidget) {
+            fAliplayer?.prepare();
+            fAliplayer?.play();
+          }
         }
-        if (_showTipsWidget) {
-          fAliplayer?.prepare();
-          fAliplayer?.play();
-        }
+        
       },
       child: CustomIconWidget(
         iconData: isPause

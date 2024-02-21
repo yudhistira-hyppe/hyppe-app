@@ -1533,6 +1533,7 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                               padding: const EdgeInsets.only(bottom: 6.0),
                               child: CustomNewDescContent(
                                 // desc: "${data??.description}",
+                                email: data?.comment?[indexComment].sender,
                                 username: data?.comment?[indexComment].userComment?.username ?? '',
                                 desc: data?.comment?[indexComment].txtMessages ?? '',
                                 trimLines: 3,
