@@ -75,6 +75,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   bool isPlay = false;
   bool isPause = false;
   bool _showLoading = false;
+  bool isPlayAds = false;
   // bool _inSeek = false;
   bool isloading = false;
   bool isMute = false;
@@ -912,6 +913,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                           key: Key(data?.inBetweenAds?.adsId ?? index.toString()),
                           onVisibilityChanged: (info) {
                             if (info.visibleFraction >= 0.8) {
+                              setState(() {
+                                isPlayAds = true;
+                              });
                               if (!isShowingDialog) {
                                 globalAdsPopUp?.pause();
                               }
@@ -952,15 +956,33 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
                               // _lastCurIndex = _curIdx;
                               _lastCurPostId = _curPostId;
+                            }else{
+                              setState(() {
+                                isPlayAds = false;
+                              });
                             }
                           },
-                          child: context.getAdsInBetween(notifier.diaryData, index, (info) {}, () {
-                            // final hasNotAds = (notifier.diaryData?.where((element) => element.inBetweenAds != null).length ?? 0) == 0;
-                            // if(hasNotAds){
-                            //
-                            // }
-                            notifier.setAdsData(index, null);
-                          }, (player, id) {}),
+                          child: Stack(
+                            children: [
+                              context.getAdsInBetween(notifier.diaryData, index, (info) {}, () {
+                                notifier.setAdsData(index, null);
+                              }, (player, id) {}, isStopPlay: isPlayAds),
+                              Positioned.fill(
+                              top: kToolbarHeight * 1.5,
+                              left: kToolbarHeight * .6,
+                              right: kToolbarHeight * .6,
+                              bottom: kToolbarHeight * 2.5,
+                               child: GestureDetector(
+                                onTap: (){
+                                  toFullScreen(index);
+                                },
+                                child: Container(
+                                  color: Colors.transparent,
+                                  ),
+                                ),
+                             ),
+                            ],
+                          ),
                         )
                       : Column(
                           children: [

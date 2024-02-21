@@ -1308,7 +1308,26 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                   ]);
                                 }
                                 notifier.firstIndex = widget.index ?? 0;
-                                VideoIndicator value = await navigateTo(notifier, changevalue);
+                                if (notifier.tempAdsData == null) {
+                                  VideoIndicator value = await navigateTo(notifier, changevalue);
+                                  if (mounted) {
+                                    setState(() {
+                                      _videoDuration = value.videoDuration ?? 0;
+                                      _currentPosition = value.seekValue ?? 0;
+                                      _currentPositionText = value.positionText ?? 0;
+                                      _showTipsWidget = value.showTipsWidget ?? false;
+                                      isMute = value.isMute ?? false;
+                                      isPlay = !_showTipsWidget;
+                                    });
+                                  } else {
+                                    _videoDuration = value.videoDuration ?? 0;
+                                    _currentPosition = value.seekValue ?? 0;
+                                    _currentPositionText = value.positionText ?? 0;
+                                    _showTipsWidget = value.showTipsWidget ?? false;
+                                    isMute = value.isMute ?? false;
+                                    isPlay = !_showTipsWidget;
+                                  }
+                                }
 
                                 // int changevalue;
                                 // changevalue = _currentPosition + 1000;
@@ -1321,23 +1340,6 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                   notifier.isLoading = false;
                                 });
 
-                                if (mounted) {
-                                  setState(() {
-                                    _videoDuration = value.videoDuration ?? 0;
-                                    _currentPosition = value.seekValue ?? 0;
-                                    _currentPositionText = value.positionText ?? 0;
-                                    _showTipsWidget = value.showTipsWidget ?? false;
-                                    isMute = value.isMute ?? false;
-                                    isPlay = !_showTipsWidget;
-                                  });
-                                } else {
-                                  _videoDuration = value.videoDuration ?? 0;
-                                  _currentPosition = value.seekValue ?? 0;
-                                  _currentPositionText = value.positionText ?? 0;
-                                  _showTipsWidget = value.showTipsWidget ?? false;
-                                  isMute = value.isMute ?? false;
-                                  isPlay = !_showTipsWidget;
-                                }
                                 if (widget.isVidFormProfile ?? false) {
                                   var notifScroll = context.read<ScrollVidNotifier>();
                                   notifScroll.itemScrollController.jumpTo(index: notifScroll.lastScrollIndex);
@@ -1394,9 +1396,11 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                           }
                         },
                         onDoubleTap: () {
-                          final likeNotifier = context.read<LikeNotifier>();
-                          if (widget.data != null) {
-                            likeNotifier.likePost(context, widget.data!);
+                          if (notifier.tempAdsData == null) {
+                            final likeNotifier = context.read<LikeNotifier>();
+                            if (widget.data != null) {
+                              likeNotifier.likePost(context, widget.data!);
+                            }
                           }
                         },
                         child: Stack(
