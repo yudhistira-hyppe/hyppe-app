@@ -460,6 +460,7 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
   Widget build(BuildContext context) {
     final language = context.read<TranslateNotifierV2>().translate;
     final notifier = Provider.of<VideoNotifier>(context, listen: false);
+    print(isStopPlay);
     if (widget.isStopPlay || isStopPlay !='screenAds'){
        fAliplayer?.pause();
     }else{

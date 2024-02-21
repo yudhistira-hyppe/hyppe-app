@@ -1308,11 +1308,26 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                   ]);
                                 }
                                 notifier.firstIndex = widget.index ?? 0;
+<<<<<<< HEAD
                                 print("========= aaaa ${notifier.mapInContentAds[widget.data?.postID ?? ''] != null}");
 
                                 VideoIndicator value = await navigateTo(notifier, changevalue);
                                 if (mounted) {
                                   setState(() {
+=======
+                                if (notifier.mapInContentAds[widget.data?.postID ?? ''] == null) {
+                                  VideoIndicator value = await navigateTo(notifier, changevalue);
+                                    if (mounted) {
+                                    setState(() {
+                                      _videoDuration = value.videoDuration ?? 0;
+                                      _currentPosition = value.seekValue ?? 0;
+                                      _currentPositionText = value.positionText ?? 0;
+                                      _showTipsWidget = value.showTipsWidget ?? false;
+                                      isMute = value.isMute ?? false;
+                                      isPlay = !_showTipsWidget;
+                                    });
+                                  } else {
+>>>>>>> 65c9d81ae9daceb115c228b247cdc6ffdad26bed
                                     _videoDuration = value.videoDuration ?? 0;
                                     _currentPosition = value.seekValue ?? 0;
                                     _currentPositionText = value.positionText ?? 0;
@@ -1802,7 +1817,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
   ) {
     return GestureDetector(
       onTap: () {
-        if (context.read<VideoNotifier>().mapInContentAds[widget.data?.postID] == null) {
+        if (context.read<VideoNotifier>().mapInContentAds[widget.data?.postID ?? ''] == null){
           if (isPause) {
             // if (_showTipsWidget) fAliplayer?.prepare();
             if ((widget.isVidFormProfile ?? false) && _currentPosition == _videoDuration) {
@@ -1831,6 +1846,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             fAliplayer?.play();
           }
         }
+        
       },
       child: CustomIconWidget(
         iconData: isPause

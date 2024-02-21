@@ -514,7 +514,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                         onVisibilityChanged: (info) async {
                           if (info.visibleFraction >= 0.8) {
                             setState(() {
-                              isPlayAds = false;
+                              isPlayAds = true;
                             });
                             if (!isShowingDialog) {
                               globalAdsPopUp?.pause();
@@ -569,7 +569,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                             _lastCurPostId = _curPostId;
                           } else {
                             setState(() {
-                              isPlayAds = true;
+                              isPlayAds = false;
                             });
                           }
                         },
