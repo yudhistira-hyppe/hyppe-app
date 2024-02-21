@@ -112,7 +112,7 @@ class VideoNotifier with ChangeNotifier{
   }
 
   initVideo(){
-    _hasShowedAds = true;
+    _hasShowedAds = false;
     _isFullScreen = false;
   }
 

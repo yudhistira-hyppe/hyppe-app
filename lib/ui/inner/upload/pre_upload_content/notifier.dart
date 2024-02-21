@@ -816,6 +816,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     print('update dong ${fetch.postsState}');
 
     if (fetch.postsState == PostsState.updateContentsSuccess) {
+      SharedPreference().removeValue(SpKeys.uploadContent);
       await context.read<SelfProfileNotifier>().onUpdateSelfPostContent(
             context,
             postID: postID,
@@ -876,6 +877,7 @@ class PreUploadContentNotifier with ChangeNotifier {
 
       _onExit();
     } else {
+      SharedPreference().removeValue(SpKeys.uploadContent);
       updateContent = false;
       notifyListeners();
       final message = json.decode(fetch.data.toString());

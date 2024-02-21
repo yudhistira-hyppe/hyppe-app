@@ -30,6 +30,7 @@ import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/scre
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/ads_cta_layout.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/fullscreen/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/widget/fullscreen/video_fullscreen_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/vid_player_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail_report.dart';
@@ -55,6 +56,7 @@ import '../../../../../ux/routing.dart';
 import '../../../../constant/entities/like/notifier.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../../../../constant/widget/custom_background_layer.dart';
+import 'scroll/widget/vidscroll_fullscreen_page.dart';
 
 class HyppePreviewVid extends StatefulWidget {
   final ScrollController? scrollController;
@@ -76,6 +78,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   bool isloading = false;
   int _curIdx = -1;
   // int _lastCurIndex = -1;
+  bool isPlayAds = false;
 
   String auth = '';
   String email = '';
@@ -510,6 +513,9 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                         key: Key(vidData.postID ?? index.toString()),
                         onVisibilityChanged: (info) async {
                           if (info.visibleFraction >= 0.8) {
+                            setState(() {
+                              isPlayAds = false;
+                            });
                             if (!isShowingDialog) {
                               globalAdsPopUp?.pause();
                             }
@@ -561,17 +567,53 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                             }
                             // _lastCurIndex = _curIdx;
                             _lastCurPostId = _curPostId;
+                          }else{
+                            setState(() {
+                              isPlayAds = true;
+                            });
                           }
                         },
-                        child: context.getAdsInBetween(notifier.vidData, index, (info) {}, () {
-                          notifier.setInBetweenAds(index, null);
-                        }, (player, id) {
-                          setState(() {
-                            dataAli[id] = player;
-                          });
-                        }, isVideo: true),
+                        child: Stack(
+                          children: [
+                            context.getAdsInBetween(notifier.vidData, index, (info) {}, () {
+                              notifier.setInBetweenAds(index, null);
+                            }, (player, id) {
+                              setState(() {
+                                dataAli[id] = player;
+                              });
+                            }, isVideo: true, isStopPlay: isPlayAds),
+                            Positioned.fill(
+                              top: kToolbarHeight * 1.5,
+                              left: kToolbarHeight * .6,
+                              right: kToolbarHeight * .6,
+                              bottom: kToolbarHeight * 2.5,
+                               child: GestureDetector(
+                                onTap: (){
+                                  Navigator.of(context, rootNavigator: true).push(
+                                    CupertinoPageRoute(
+                                        builder: (_) => VideoFullscreenPage(
+                                          data: notifier.vidData![index],
+                                          vidData: notifier.vidData,
+                                          index: index,
+                                          onClose: (){},
+                                          isAutoPlay: true,
+                                          isLanding: true,
+                                          videoIndicator: VideoIndicator(videoDuration: 0, seekValue: 0, positionText: 0, isMute: false),
+                                          thumbnail: '',
+                                        )
+                                    )
+                                  );
+                                },
+                                child: Container(
+                                  color: Colors.transparent,
+                                  ),
+                                ),
+                             ),
+                          ],
+                        ),
                       )
-                    : Column(
+                    : 
+                    Column(
                         children: [
                           // Text("vidData.isContentLoading ${vidData.isContentLoading}"),
                           VisibilityDetector(

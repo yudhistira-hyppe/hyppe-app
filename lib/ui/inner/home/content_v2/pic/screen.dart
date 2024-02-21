@@ -966,9 +966,27 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                             });
                           }
                         },
-                        child: context.getAdsInBetween(notifier.pic, index, (info) {}, () {
-                          notifier.setAdsData(index, null);
-                        }, (player, id) {}, isStopPlay: isPlayAds),
+                        child: Stack(
+                          children: [
+                            context.getAdsInBetween(notifier.pic, index, (info) {}, () {
+                              notifier.setAdsData(index, null);
+                            }, (player, id) {}, isStopPlay: isPlayAds),
+                            Positioned.fill(
+                              top: kToolbarHeight * 1.5,
+                              left: kToolbarHeight * .6,
+                              right: kToolbarHeight * .6,
+                              bottom: kToolbarHeight * 2.5,
+                               child: GestureDetector(
+                                onTap: (){
+                                  Routing().move(Routes.picFullScreenDetail, argument: PicFullscreenArgument(picData: notifier.pic!, index: index, scrollPic: false));
+                                },
+                                child: Container(
+                                  color: Colors.transparent,
+                                  ),
+                                ),
+                             ),
+                          ],
+                        )
                       )
                     : Column(
                         children: [

@@ -997,9 +997,10 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
                     }
                   },
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Expanded(
-                        flex: 96,
+                      SizedBox(
+                        width:  MediaQuery.of(context).size.width * .3,
                         child: MeasuredSize(
                           onChange: (size){
                             setState(() {

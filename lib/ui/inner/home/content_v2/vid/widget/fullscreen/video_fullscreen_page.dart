@@ -49,7 +49,7 @@ import '../../../../../../constant/widget/custom_text_widget.dart';
 import 'notifier.dart';
 
 class VideoFullscreenPage extends StatefulWidget {
-  final AliPlayerView aliPlayerView;
+  final AliPlayerView? aliPlayerView;
   final ContentData data;
   final Function onClose;
   final FlutterAliplayer? fAliplayer;
@@ -65,7 +65,7 @@ class VideoFullscreenPage extends StatefulWidget {
   final bool isLanding;
   const VideoFullscreenPage({
     Key? key,
-    required this.aliPlayerView,
+    this.aliPlayerView,
     required this.data,
     required this.onClose,
     required this.isLanding,
@@ -103,7 +103,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
   bool _showTipsWidget = false;
   int _currentPlayerState = 0;
   List<ContentData>? vidData;
-  Orientation beforePosition = Orientation.landscape;
+  Orientation beforePosition = Orientation.portrait;
 
   LocalizationModelV2? lang;
   String email = '';
@@ -444,7 +444,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
       DataSourceRelated.regionKey: DataSourceRelated.defaultRegion,
     };
     print('view ads: ${widget.isAutoPlay ?? false}');
-
+    print('view ads: 2 ${vidData?[widget.index??0].inBetweenAds}');
     return Consumer<VideoNotifier>(builder: (context, notifier, _) {
       return Scaffold(
         key: _scaffoldKeyPlayer,
@@ -572,7 +572,12 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                     });
                         } else {
                           print('view ads: 2 ${notifier.isShowingAds} ${notifier.hasShowedAds}');
-                          return GestureDetector(
+                          final isAds = vidData?[index].inBetweenAds != null && vidData?[index].postID == null;
+                          return isAds 
+                            ? context.getAdsInBetween(vidData, index, (info) {}, () {
+                                      context.read<PreviewVidNotifier>().setInBetweenAds(index, null);
+                                    }, (player, id) {}, isfull: true, isVideo: true, orientation: beforePosition, isScroll: true)
+                            : GestureDetector(
                             onTap: () {
                               onTapCtrl = true;
                               setState(() {});
@@ -1139,9 +1144,10 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                           }
                         },
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Expanded(
-                              flex: 20,
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * .3,
                               child: MeasuredSize(
                                 onChange: (size) {
                                   setState(() {
