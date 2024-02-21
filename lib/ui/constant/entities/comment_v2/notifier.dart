@@ -3,11 +3,13 @@ import 'package:hyppe/core/bloc/delete_comment/bloc.dart';
 import 'package:hyppe/core/bloc/delete_comment/state.dart';
 import 'package:hyppe/core/bloc/utils_v2/bloc.dart';
 import 'package:hyppe/core/bloc/utils_v2/state.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
 import 'package:hyppe/core/models/collection/utils/search_people/search_people.dart';
 import 'package:hyppe/core/query_request/comment_data_query.dart';
 import 'package:hyppe/core/extension/custom_extension.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/widget/sub_comment_tile.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -230,6 +232,7 @@ class CommentNotifierV2 with ChangeNotifier {
               username: res.comment?.senderInfo?.username,
               parentID: parentID,
               pageDetail: pageDetail ?? false,
+              email: SharedPreference().readStorage(SpKeys.email),
             );
         // if (parentID == null) {
         //   _commentData?.insert(0, res);

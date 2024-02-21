@@ -26,6 +26,7 @@ class _OpeningLogoState extends State<OpeningLogo> with AfterFirstLayoutMixin {
 
   @override
   void afterFirstLayout(BuildContext context) async {
+    SharedPreference().removeValue(SpKeys.uploadContent);
     if (widget.isLaunch) {
       context.read<MainNotifier>().pageIndex = 3;
       final notifier = Provider.of<HyppeNotifier>(context, listen: false);

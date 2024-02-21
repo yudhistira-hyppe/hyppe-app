@@ -1046,6 +1046,7 @@ class HomeNotifier with ChangeNotifier {
     String? parentID,
     int? indexComment,
     bool pageDetail = false,
+    String? email,
   }) async {
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
     final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
@@ -1065,7 +1066,7 @@ class HomeNotifier with ChangeNotifier {
     // _updatedData ??= picScroll.pics?.firstWhereOrNull((element) => element.postID == postID);
 
     if (add) {
-      Comment comment = Comment(txtMessages: txtMsg, userComment: UserComment(username: username));
+      Comment comment = Comment(txtMessages: txtMsg, userComment: UserComment(username: username), sender: email);
       print("===-=-=-=-=- parentID $parentID");
 
       if (parentID == null) {

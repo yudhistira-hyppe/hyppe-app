@@ -567,7 +567,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                             }
                             // _lastCurIndex = _curIdx;
                             _lastCurPostId = _curPostId;
-                          }else{
+                          } else {
                             setState(() {
                               isPlayAds = true;
                             });
@@ -587,33 +587,29 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                               left: kToolbarHeight * .6,
                               right: kToolbarHeight * .6,
                               bottom: kToolbarHeight * 2.5,
-                               child: GestureDetector(
-                                onTap: (){
-                                  Navigator.of(context, rootNavigator: true).push(
-                                    CupertinoPageRoute(
-                                        builder: (_) => VideoFullscreenPage(
-                                          data: notifier.vidData![index],
-                                          vidData: notifier.vidData,
-                                          index: index,
-                                          onClose: (){},
-                                          isAutoPlay: true,
-                                          isLanding: true,
-                                          videoIndicator: VideoIndicator(videoDuration: 0, seekValue: 0, positionText: 0, isMute: false),
-                                          thumbnail: '',
-                                        )
-                                    )
-                                  );
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+                                      builder: (_) => VideoFullscreenPage(
+                                            data: notifier.vidData![index],
+                                            vidData: notifier.vidData,
+                                            index: index,
+                                            onClose: () {},
+                                            isAutoPlay: true,
+                                            isLanding: true,
+                                            videoIndicator: VideoIndicator(videoDuration: 0, seekValue: 0, positionText: 0, isMute: false),
+                                            thumbnail: '',
+                                          )));
                                 },
                                 child: Container(
                                   color: Colors.transparent,
-                                  ),
                                 ),
-                             ),
+                              ),
+                            ),
                           ],
                         ),
                       )
-                    : 
-                    Column(
+                    : Column(
                         children: [
                           // Text("vidData.isContentLoading ${vidData.isContentLoading}"),
                           VisibilityDetector(
@@ -753,6 +749,10 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  // Text("${videoNot.tempAdsData}"),
+                                  // Text("${videoNot.tempAdsData?.adsId}"),
+                                  // Text("${videoNot.mapInContentAds[vidData.postID ?? ''] != null}"),
+
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment: CrossAxisAlignment.center,

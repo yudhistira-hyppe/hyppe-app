@@ -5,9 +5,11 @@ import 'package:hyppe/core/models/collection/utils/welcome/welcome.dart';
 import 'package:hyppe/core/models/collection/utils/welcome/welcome_data.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:dynamic_widget/dynamic_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 // import 'package:provider/provider.dart';
 
 class SignUpWelcomeNotifier with ChangeNotifier {
@@ -27,6 +29,9 @@ class SignUpWelcomeNotifier with ChangeNotifier {
   initWelcome(BuildContext context) async {
     bool connection = await System().checkConnections();
     if (connection) {
+      final _mainNotifier = Provider.of<MainNotifier>(context, listen: false);
+      await _mainNotifier.initMain(context, onUpdateProfile: true);
+
       final notifier = UtilsBlocV2();
       await notifier.getWelcomeNotesBloc(context);
       final fetch = notifier.utilsFetch;
