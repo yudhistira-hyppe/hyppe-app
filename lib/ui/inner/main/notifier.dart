@@ -157,8 +157,9 @@ class MainNotifier with ChangeNotifier {
       if (context.read<SelfProfileNotifier>().user.profile?.creator ?? false) {
         _initPush();
       }
+      tutorialData = context.read<SelfProfileNotifier>().user.profile?.tutorial ?? [];
 
-      print("profile?.badge ${context.read<HomeNotifier>().profileBadge?.badgeProfile}");
+      // print("profile?.badge ${context.read<SelfProfileNotifier>().user.profile?.tutorial}");
 
       // Provider.of<SelfProfileNotifier>(context, listen: false).user.profile = usersFetch.data;
 

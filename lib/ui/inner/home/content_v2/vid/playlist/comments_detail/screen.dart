@@ -1,6 +1,7 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/widget/comment_tile.dart';
@@ -124,30 +125,30 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                       !notifier.isCommentEmpty
                           ? Expanded(
                               child: Container(
-                              color: context.getColorScheme().background,
-                              child: ListView.builder(
-                                itemCount: notifier.itemCount,
-                                physics: const AlwaysScrollableScrollPhysics(),
-                                controller: _scrollController,
-                                scrollDirection: Axis.vertical,
-                                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                                itemBuilder: (context, index) {
-                                  if (index == notifier.commentData?.length && notifier.hasNext) {
-                                    return const CustomLoading();
-                                  }
-                                  final comments = notifier.commentData?[index];
-                                  print('all comments: ${comments?.comment?.txtMessages}');
-                                  return CommentTile(logs: comments, fromFront: fromFront, notifier: notifier, index: index);
-                                },
+                                color: context.getColorScheme().background,
+                                child: ListView.builder(
+                                  itemCount: notifier.itemCount,
+                                  physics: const AlwaysScrollableScrollPhysics(),
+                                  controller: _scrollController,
+                                  scrollDirection: Axis.vertical,
+                                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                                  itemBuilder: (context, index) {
+                                    if (index == notifier.commentData?.length && notifier.hasNext) {
+                                      return const CustomLoading();
+                                    }
+                                    final comments = notifier.commentData?[index];
+                                    print('all comments: ${comments?.comment?.txtMessages}');
+                                    return CommentTile(logs: comments, fromFront: fromFront, notifier: notifier, index: index);
+                                  },
+                                ),
                               ),
-                            ),
                             )
                           : Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 100.0),
                                 child: CustomTextWidget(textToDisplay: context.read<TranslateNotifierV2>().translate.beTheFirstToComment ?? ''),
                               ),
-                          )
+                            )
                     ],
                   ),
                 ),
@@ -342,22 +343,33 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                   Row(
                     children: [
                       Expanded(
-                        child: CustomDescContent(
-                            desc: data.description ?? '',
-                            trimLines: 5,
-                            textAlign: TextAlign.start,
-                            seeLess: ' ${notifier.language.seeMore}',
-                            seeMore: ' ${notifier.language.seeMoreContent}',
-                            textOverflow: TextOverflow.visible,
-                            normStyle: Theme.of(context).textTheme.bodyText2,
-                            hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
-                            expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
-                            callbackIsMore: (val){
-                              setState(() {
-                                isLoad = val;
-                              });
-                            },
+                        child: Container(
+                          constraints: BoxConstraints(
+                              maxWidth: SizeConfig.screenWidth! * .7,
+                              maxHeight: data.description!.length > 24
+                                  ? isLoad
+                                      ? 84
+                                      : 150
+                                  : 54),
+                          child: SingleChildScrollView(
+                            child: CustomDescContent(
+                              desc: data.description ?? '',
+                              trimLines: 5,
+                              textAlign: TextAlign.start,
+                              seeLess: ' ${notifier.language.seeMore}',
+                              seeMore: ' ${notifier.language.seeMoreContent}',
+                              textOverflow: TextOverflow.visible,
+                              normStyle: Theme.of(context).textTheme.bodyText2,
+                              hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                              expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                              callbackIsMore: (val) {
+                                setState(() {
+                                  isLoad = val;
+                                });
+                              },
+                            ),
                           ),
+                        ),
                       ),
                     ],
                   )

@@ -225,17 +225,18 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
   String email = '';
 
   String playerNameId() {
-    switch (widget.isVidFormProfile??false) {
+    switch (widget.isVidFormProfile ?? false) {
       case true:
-        if (widget.fromFullScreen){
+        if (widget.fromFullScreen) {
           return 'full_profile_${widget.data?.postID}';
-        }else{
+        } else {
           return 'profile_${widget.data?.postID}';
         }
       default:
         return widget.data?.postID ?? 'video_player_landing';
     }
   }
+
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationIDSuccess');
@@ -305,11 +306,9 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         configAliplayer();
         vidConfig();
 
-        if (widget.currentPosition != 0){
-            fAliplayer?.seekTo(widget.currentPosition, FlutterAvpdef.ACCURATE);
-            fAliplayer?.play();
+        if (widget.currentPosition != 0) {
+          fAliplayer?.seekTo(widget.currentPosition, FlutterAvpdef.ACCURATE);
         }
-
       } catch (e) {
         'Error Initialize Ali Player: $e'.logger();
       } finally {}
@@ -338,7 +337,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
-      
+
       if (Platform.isAndroid) {
         getExternalStorageDirectories().then((value) {
           if ((value?.length ?? 0) > 0) {
@@ -517,7 +516,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             _currentPosition = extraValue ?? 0;
             final detik = (_currentPosition / 1000).round();
             // print("===detik $detik");
-            if (!(widget.isVidFormProfile??false)){
+            if (!(widget.isVidFormProfile ?? false)) {
               if (notifier.adsTime == detik) {
                 if (notifier.tempAdsData != null) {
                   fAliplayer?.pause();
@@ -532,8 +531,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                   }
                 }
               }
-            } 
-            
+            }
           }
           if (!_inSeek) {
             try {
@@ -1322,7 +1320,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                 Future.delayed(const Duration(seconds: 6), () {
                                   notifier.isLoading = false;
                                 });
-                                
+
                                 if (mounted) {
                                   setState(() {
                                     _videoDuration = value.videoDuration ?? 0;
@@ -1344,7 +1342,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                   var notifScroll = context.read<ScrollVidNotifier>();
                                   notifScroll.itemScrollController.jumpTo(index: notifScroll.lastScrollIndex);
                                   // if (widget.index != notifScroll.lastScrollIndex){
-                                   
+
                                   //   fAliplayer?.prepare();
                                   // }
                                 }
@@ -1639,7 +1637,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                   child: _buildController(Colors.transparent, Colors.white, 120, widget.width!, widget.height! * 0.8, widget.orientation),
                                 ),
                               ),
-                            if (notifier.mapInContentAds[widget.data?.postID ?? ''] != null && isPlay && !(widget.isVidFormProfile??false))
+                            if (notifier.mapInContentAds[widget.data?.postID ?? ''] != null && isPlay && !(widget.isVidFormProfile ?? false))
                               Positioned.fill(
                                   child: ClipRRect(
                                       borderRadius: BorderRadius.all(

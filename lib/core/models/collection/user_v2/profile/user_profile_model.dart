@@ -1,4 +1,5 @@
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_avatar_model.dart';
 import 'package:hyppe/core/models/collection/common/user_badge_model.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_insight_model.dart';
@@ -38,6 +39,7 @@ class UserProfileModel {
   UserBadgeModel? urluserBadge;
   bool? creator;
   bool? following;
+  List<Tutorial>? tutorial;
 
   UserProfileModel({
     this.country,
@@ -72,6 +74,7 @@ class UserProfileModel {
     this.urluserBadge,
     this.creator,
     this.following,
+    this.tutorial,
   });
 
   UserProfileModel.fromJson(Map<String, dynamic> json) {
@@ -127,6 +130,12 @@ class UserProfileModel {
       } else {
         urluserBadge = UserBadgeModel.fromJson(json['urluserBadge']);
       }
+    }
+    if (json['tutor'] != null) {
+      tutorial = <Tutorial>[];
+      json['tutor'].forEach((v) {
+        tutorial!.add(Tutorial.fromJson(v));
+      });
     }
   }
 

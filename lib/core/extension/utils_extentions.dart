@@ -9,6 +9,7 @@ import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/ads_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/inner/home/widget/ads_in_between.dart';
 import 'package:hyppe/ui/inner/home/widget/ads_in_between_full.dart';
 import 'package:hyppe/ui/inner/home/widget/ads_video_in_between.dart';
@@ -154,20 +155,20 @@ extension ContextScreen on BuildContext {
     }
   }
 
-  Widget getAdsInBetween(AdsData? adsData, Function(VisibilityInfo)? onVisible, Function() onComplete, Function(FlutterAliplayer, String) getPlayer, {bool isfull = false, isVideo = false, Orientation orientation = Orientation.portrait, bool isScroll = false}) {
-    if (adsData != null) {
-      if (adsData.mediaType?.toLowerCase() == 'video') {
+  Widget getAdsInBetween(List<ContentData>? picData, int index, Function(VisibilityInfo)? onVisible, Function() onComplete, Function(FlutterAliplayer, String) getPlayer, {bool isfull = false, isVideo = false, Orientation orientation = Orientation.portrait, bool isScroll = false, bool isStopPlay = false}) {
+    if (picData![index].inBetweenAds != null) {
+      if (picData[index].inBetweenAds?.mediaType?.toLowerCase() == 'video') {
         if (isfull) {
           return AdsVideoInBetweenFull(
-            arguments: AdsArgument(data: adsData, adsUrl: '', isSponsored: true, onVisibility: onVisible, afterReport: onComplete, getPlayer: getPlayer, isVideo: isVideo),
+            arguments: AdsArgument(data: picData[index].inBetweenAds!, adsUrl: '', isSponsored: true, onVisibility: onVisible, afterReport: onComplete, getPlayer: getPlayer, isVideo: isVideo),
           );
         }
-        return AdsVideoInBetween(onVisibility: onVisible, data: adsData, afterReport: onComplete, getPlayer: getPlayer, isVideo: isVideo);
+        return AdsVideoInBetween(onVisibility: onVisible, contentData: picData, index: index, data: picData[index].inBetweenAds!, afterReport: onComplete, getPlayer: getPlayer, isVideo: isVideo, isStopPlay: isStopPlay,);
       } else {
         if (isfull) {
-          return AdsInBetweenFull(arguments: AdsArgument(data: adsData, afterReport: onComplete,  adsUrl: adsData.adsUrlLink ?? '', isSponsored: true, isVideo: isVideo, orientation: orientation, isScroll: isScroll));
+          return AdsInBetweenFull(arguments: AdsArgument(data: picData[index].inBetweenAds!, afterReport: onComplete,  adsUrl: picData[index].adsData?.adsUrlLink ?? '', isSponsored: true, isVideo: isVideo, orientation: orientation, isScroll: isScroll));
         }
-        return AdsInBetween(data: adsData, afterReport: onComplete, isVideo: isVideo);
+        return AdsInBetween(data: picData[index].inBetweenAds!, contentData: picData, index: index, afterReport: onComplete, isVideo: isVideo);
       }
     }
     return const SizedBox.shrink();

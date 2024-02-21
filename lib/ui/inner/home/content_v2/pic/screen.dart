@@ -83,7 +83,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   FlutterAliplayer? fAliplayer;
   // TransformationController _transformationController = TransformationController();
   ScrollController innerScrollController = ScrollController();
-
+  bool isPlayAds = false;
   bool isPrepare = false;
   bool isPlay = false;
   bool isPause = false;
@@ -911,8 +911,12 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                         key: Key(index.toString()),
                         onVisibilityChanged: (info) async {
                           if (info.visibleFraction >= 0.8) {
+                            setState(() {
+                              isPlayAds = false;
+                            });
                             _curIdx = index;
                             _curPostId = picData?.inBetweenAds?.adsId ?? index.toString();
+                            
                             if (_lastCurIndex > _curIdx) {
                               // fAliplayer?.destroy();
                               // double position = 0.0;
@@ -956,11 +960,15 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                             }
                             _lastCurIndex = _curIdx;
                             _lastCurPostId = _curPostId;
+                          }else{
+                            setState(() {
+                              isPlayAds = true;
+                            });
                           }
                         },
-                        child: context.getAdsInBetween(notifier.pic?[index].inBetweenAds, (info) {}, () {
+                        child: context.getAdsInBetween(notifier.pic, index, (info) {}, () {
                           notifier.setAdsData(index, null);
-                        }, (player, id) {}),
+                        }, (player, id) {}, isStopPlay: isPlayAds),
                       )
                     : Column(
                         children: [
@@ -1100,7 +1108,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                   key: Key(index.toString()),
                                   // key: Key(picData?.postID ?? index.toString()),
                                   onVisibilityChanged: (info) {
-                                    if (info.visibleFraction == 1) {
+                                    if (info.visibleFraction == 0.8) {
                                       if (!isShowingDialog) {
                                         globalAdsPopUp?.pause();
                                       }
@@ -1303,6 +1311,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                       // notifier.pic![notifier.currentIndex] = temp1;
                                                     });
                                                   }
+
+                                                  
                                                 }
                                               }
                                             },

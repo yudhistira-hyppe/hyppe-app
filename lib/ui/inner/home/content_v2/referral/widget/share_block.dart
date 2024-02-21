@@ -124,7 +124,7 @@ class _ShareBlockState extends State<ShareBlock> {
                               : notifier.language.localeDatetime == 'id'
                                   ? mn?.tutorialData[widget.indexTutor ?? 0].textID ?? ''
                                   : mn?.tutorialData[widget.indexTutor ?? 0].textEn ?? '',
-                          descTextStyle: TextStyle(fontSize: 10, color: kHyppeNotConnect),
+                          descTextStyle: const TextStyle(fontSize: 10, color: kHyppeNotConnect),
                           descriptionPadding: EdgeInsets.all(6),
                           textColor: Colors.white,
                           targetShapeBorder: const CircleBorder(),

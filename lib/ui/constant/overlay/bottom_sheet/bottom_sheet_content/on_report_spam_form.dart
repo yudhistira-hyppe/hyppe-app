@@ -41,8 +41,6 @@ class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomShee
 
   @override
   void initState() {
-
-
     super.initState();
   }
 
@@ -138,13 +136,14 @@ class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomShee
                                   width: SizeConfig.screenWidth,
                                   height: 50,
                                   buttonStyle: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all<Color>(kHyppePrimary),
+                                      backgroundColor: MaterialStateProperty.all<Color>(notifier.currentReport == '' ? kHyppeDisabled : kHyppePrimary),
                                       overlayColor: MaterialStateProperty.all<Color>(kHyppePrimary),
                                       foregroundColor: MaterialStateProperty.all<Color>(kHyppePrimary),
                                       shadowColor: MaterialStateProperty.all<Color>(kHyppePrimary)),
-                                  function: notifier.isLoading
+                                  function: notifier.isLoading || notifier.currentReport == ''
                                       ? null
                                       : () {
+                                          // print("notifier.currentReport ${notifier.currentReport}");
                                           notifier.reportPost(context, inDetail: widget.inDetail, onComplete: widget.onUpdate).whenComplete(() {
                                             globalAfterReport = true;
                                           });
@@ -166,6 +165,4 @@ class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomShee
       ),
     );
   }
-
-
 }

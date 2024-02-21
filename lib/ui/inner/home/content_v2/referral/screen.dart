@@ -48,7 +48,7 @@ class _ReferralState extends State<Referral> {
       indexKeyShare = mn?.tutorialData.indexWhere((element) => element.key == 'shareRefferal') ?? 0;
       indexCode = mn?.tutorialData.indexWhere((element) => element.key == 'codeRefferal') ?? 0;
 
-      if (mn?.tutorialData[indexKeyShare].status == false || mn?.tutorialData[indexCode].status == false) {
+      if (mn?.tutorialData[indexKeyShare].status == false && mn?.tutorialData[indexCode].status == false) {
         WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(myContext).startShowCase([keyShare, keyCode]));
       }
     }

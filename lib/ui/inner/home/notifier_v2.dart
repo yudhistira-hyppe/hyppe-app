@@ -313,6 +313,7 @@ class HomeNotifier with ChangeNotifier {
       // if (profileImage == '') {
       //   try {
       await profile.initMain(Routing.navigatorKey.currentContext ?? context, onUpdateProfile: true);
+
       //   } catch (e) {
       //     'profile.initMain error $e'.logger();
       //   }
@@ -331,7 +332,7 @@ class HomeNotifier with ChangeNotifier {
               limit = pic.pic?.first.limitLandingpage ?? 2;
               if (mounted) {
                 if ((Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().tutorialData.isEmpty) {
-                  (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().tutorialData = pic.pic?.first.tutorial ?? [];
+                  // (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().tutorialData = pic.pic?.first.tutorial ?? [];
                 }
               }
             }
@@ -350,7 +351,7 @@ class HomeNotifier with ChangeNotifier {
           if (!isreload && isNew && diary.diaryData != null) return;
           await diary.initialDiary(Routing.navigatorKey.currentContext ?? context, reload: isreload || isNew, list: allContents);
           if (diary.diaryData != null && (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().tutorialData.isEmpty) {
-            (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().tutorialData = diary.diaryData?.first.tutorial ?? [];
+            // (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().tutorialData = diary.diaryData?.first.tutorial ?? [];
           }
           break;
         case 2:
@@ -358,7 +359,7 @@ class HomeNotifier with ChangeNotifier {
           if (!isreload && isNew && vid.vidData != null) return;
           await vid.initialVid(Routing.navigatorKey.currentContext ?? context, reload: isreload || isNew, list: allContents);
           if (vid.vidData != null && (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().tutorialData.isEmpty) {
-            (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().tutorialData = vid.vidData?.first.tutorial ?? [];
+            // (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().tutorialData = vid.vidData?.first.tutorial ?? [];
           }
           break;
       }

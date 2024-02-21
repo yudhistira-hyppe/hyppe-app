@@ -404,7 +404,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
             try {
               SelfProfileNotifier userNotifier = context.read<SelfProfileNotifier>();
               userNotifier.isLoadingBio = true;
-              userNotifier.user = UserInfoModel();
+              // userNotifier.user = UserInfoModel();
 
               // userNotifier.user.profile?.bio = bio;
 
@@ -416,6 +416,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
             if (_argument.fromSignUpFlow) {
               hold = false;
               ShowBottomSheet().onShowColouredSheet(context, language.successUpdatePersonalInformation ?? '');
+              final _mainNotifier = Provider.of<MainNotifier>(context, listen: false);
+              await _mainNotifier.initMain(context, onUpdateProfile: true);
               notifyListeners();
               Routing().moveAndRemoveUntil(Routes.homeTutor, Routes.root);
             } else {

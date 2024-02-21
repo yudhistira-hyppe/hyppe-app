@@ -8,10 +8,9 @@ import '../../../../../../../core/bloc/ads_video/state.dart';
 import '../../../../../../../core/constants/enum.dart';
 import '../../../../../../../core/models/collection/advertising/ads_video_data.dart';
 
-class VideoNotifier with ChangeNotifier{
-
+class VideoNotifier with ChangeNotifier {
   Map<String, AdsData?> mapInContentAds = {};
-  setMapAdsContent(String id, AdsData? value){
+  setMapAdsContent(String id, AdsData? value) {
     mapInContentAds[id] = value;
     notifyListeners();
   }
@@ -21,98 +20,97 @@ class VideoNotifier with ChangeNotifier{
 
   int firstIndex = 0;
   int get firstcurrentIndex => firstIndex;
-    
+
   int currIndex = 0;
   int get currentIndex => currIndex;
 
-
-  set isShowingAds(bool state){
+  set isShowingAds(bool state) {
     _isShowingAds = state;
     notifyListeners();
   }
 
   AdsData? _tempAdsData = null;
   AdsData? get tempAdsData => _tempAdsData;
-  set tempAdsData(AdsData? data){
+  set tempAdsData(AdsData? data) {
     _tempAdsData = data;
     notifyListeners();
   }
 
-  setTempAdsData(AdsData? data){
+  setTempAdsData(AdsData? data) {
     _tempAdsData = data;
   }
 
   int _adsTime = 0;
   int get adsTime => _adsTime;
-  set adsTime(int value){
+  set adsTime(int value) {
     _adsTime = value;
     notifyListeners();
   }
 
   int _adsCurrentPosition = 0;
   int get adsCurrentPosition => _adsCurrentPosition;
-  set adsCurrentPosition(int value){
+  set adsCurrentPosition(int value) {
     _adsCurrentPosition = value;
     notifyListeners();
   }
 
   int _adsCurrentPositionText = 0;
   int get adsCurrentPositionText => _adsCurrentPositionText;
-  set adsCurrentPositionText(int value){
+  set adsCurrentPositionText(int value) {
     _adsCurrentPositionText = value;
     notifyListeners();
   }
 
-  initAdsContent(){
+  initAdsContent() {
     _adsCurrentPosition = 0;
     _adsCurrentPositionText = 0;
   }
 
   int _secondsSkip = 0;
   int get secondsSkip => _secondsSkip;
-  set secondsSkip (int value){
+  set secondsSkip(int value) {
     _secondsSkip = value;
     notifyListeners();
   }
 
-  bool _hasShowedAds = false;
+  bool _hasShowedAds = true;
   bool get hasShowedAds => _hasShowedAds;
-  set hasShowedAds(bool state){
+  set hasShowedAds(bool state) {
     _hasShowedAds = state;
     notifyListeners();
   }
 
-  setHasShowedAds(bool state){
+  setHasShowedAds(bool state) {
     _hasShowedAds = state;
   }
 
   bool _isFullScreen = false;
   bool get isFullScreen => _isFullScreen;
-  set isFullScreen(bool state){
+  set isFullScreen(bool state) {
     _isFullScreen = state;
     notifyListeners();
   }
 
-  setIsFullScreen(bool state){
+  setIsFullScreen(bool state) {
     _isFullScreen = state;
   }
 
   int _adsVideoDuration = 0;
   int get adsVideoDuration => _adsVideoDuration;
-  set adsVideoDuration(int value){
+  set adsVideoDuration(int value) {
     _adsVideoDuration = value;
     notifyListeners();
   }
 
   String _currentPostID = '';
   String get currentPostID => _currentPostID;
-  set currentPostID(String value){
+  set currentPostID(String value) {
     _currentPostID = value;
     notifyListeners();
   }
 
-  initVideo(){
-    _hasShowedAds = false;
+  initVideo() {
+    _hasShowedAds = true;
     _isFullScreen = false;
   }
 
@@ -122,14 +120,14 @@ class VideoNotifier with ChangeNotifier{
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
-  set isLoading(bool state){
+  set isLoading(bool state) {
     _isLoading = state;
     notifyListeners();
   }
 
   bool _loadVideo = false;
   bool get loadVideo => _loadVideo;
-  set loadVideo(bool state){
+  set loadVideo(bool state) {
     _loadVideo = state;
     notifyListeners();
   }
@@ -185,14 +183,14 @@ class VideoNotifier with ChangeNotifier{
         tempAdsData = data.data;
         secondsSkip = tempAdsData?.adsSkip ?? 0;
         final place = tempAdsData?.adsPlace;
-        if(place != null){
-          double duration = videoDuration/ 1000;
+        isShowingAds = true;
+        if (place != null) {
+          double duration = videoDuration / 1000;
           adsTime = place.getAdsTime(duration);
-        }else{
+        } else {
           adsTime = 2;
         }
         'videoId : ${tempAdsData?.videoId}'.logger();
-
       }
     } catch (e) {
       'Failed to fetch ads data $e'.logger();
@@ -201,7 +199,7 @@ class VideoNotifier with ChangeNotifier{
 
   bool _isPlay = false;
   bool get isPlay => _isPlay;
-  set isPlay(bool state){
+  set isPlay(bool state) {
     _isPlay = state;
     notifyListeners();
   }

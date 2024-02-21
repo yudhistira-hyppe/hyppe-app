@@ -46,6 +46,8 @@ class _OnReportContentFormBottomSheetState extends State<OnReportContentFormBott
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
                 mainAxisSize: MainAxisSize.max,
@@ -131,8 +133,6 @@ class _OnReportContentFormBottomSheetState extends State<OnReportContentFormBott
                 ),
               ),
             ],
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
           ),
         ),
       ),
