@@ -374,7 +374,11 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
         title: title,
         // storyController: storyController,
         fAliplayer: fAliplayer,
-        orientation: orientation
+        whenComplete: () {
+          fAliplayer?.play();
+          print("====hahahahah====");
+        },
+        orientation: orientation,
       );
     });
   }

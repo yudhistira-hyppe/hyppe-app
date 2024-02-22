@@ -573,7 +573,10 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                         } else {
                           print('view ads: 2 ${notifier.isShowingAds} ${notifier.hasShowedAds}');
                           final isAds = vidData?[index].inBetweenAds != null && vidData?[index].postID == null;
-                          notifier.isShowingAds = false;
+                          if (!notifier.adsvideoIsPlay) {
+                            notifier.isShowingAds = false;
+                          }
+
                           return isAds
                               ? context.getAdsInBetween(vidData, index, (info) {}, () {
                                   context.read<PreviewVidNotifier>().setInBetweenAds(index, null);
@@ -718,21 +721,21 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                               ],
                                             ),
                                           ),
-                                        // if (notifier.isShowingAds && !notifier.hasShowedAds)
-                                        //   Container(
-                                        //     width: context.getWidth(),
-                                        //     height: SizeConfig.screenHeight,
-                                        //     decoration: const BoxDecoration(color: Colors.black),
-                                        //     child: notifier.adsAliPlayerView,
-                                        //   ),
-                                        // if (notifier.isShowingAds && !notifier.hasShowedAds)
-                                        //   SizedBox(
-                                        //     width: context.getWidth(),
-                                        //     height: SizeConfig.screenHeight,
-                                        //     // padding: EdgeInsets.only(bottom: 25.0),
-                                        //     child: Offstage(offstage: false, child: _adsBuildContentWidget(context, Orientation.portrait, notifier)),
-                                        //   ),
-                                        // checkDetail(context, notifier),
+                                        if (notifier.isShowingAds && !notifier.hasShowedAds && notifier.adsvideoIsPlay)
+                                          Container(
+                                            width: context.getWidth(),
+                                            height: SizeConfig.screenHeight,
+                                            decoration: const BoxDecoration(color: Colors.black),
+                                            child: notifier.adsAliPlayerView,
+                                          ),
+                                        if (notifier.isShowingAds && !notifier.hasShowedAds && notifier.adsvideoIsPlay)
+                                          SizedBox(
+                                            width: context.getWidth(),
+                                            height: SizeConfig.screenHeight,
+                                            // padding: EdgeInsets.only(bottom: 25.0),
+                                            child: Offstage(offstage: false, child: _adsBuildContentWidget(context, Orientation.portrait, notifier)),
+                                          ),
+                                        checkDetail(context, notifier),
                                       ],
                                     ),
                                   ),
@@ -1435,12 +1438,12 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                       ),
                       Container(
                         constraints: BoxConstraints(
-                          maxWidth: SizeConfig.screenWidth! * .7,
-                          maxHeight: widget.data.description!.length > 24
-                              ? isShowMore
-                                  ? 54
-                                  : SizeConfig.screenHeight! * .1
-                              : 54),
+                            maxWidth: SizeConfig.screenWidth! * .7,
+                            maxHeight: widget.data.description!.length > 24
+                                ? isShowMore
+                                    ? 54
+                                    : SizeConfig.screenHeight! * .1
+                                : 54),
                         alignment: Alignment.centerLeft,
                         margin: const EdgeInsets.symmetric(horizontal: 16.0),
                         padding: const EdgeInsets.only(left: 8.0, top: 20),

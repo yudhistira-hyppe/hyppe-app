@@ -858,13 +858,13 @@ class ShowBottomSheet {
     ).whenComplete(() {
       // if (storyController != null) storyController.play();
       // if (fAliplayer != null) {
-        // fAliplayer.play();
+      // fAliplayer.play();
       //   fAliplayer.setMuted(true);
       // }
 
       print('screen test $screen');
 
-      if (orientation != null && orientation == Orientation.landscape){
+      if (orientation != null && orientation == Orientation.landscape) {
         SystemChrome.setPreferredOrientations([
           DeviceOrientation.landscapeLeft,
           DeviceOrientation.landscapeRight,
@@ -1255,16 +1255,15 @@ class ShowBottomSheet {
     );
   }
 
-  static onShowUserTag(
-    BuildContext _, {
-    required List<TagPeople> value,
-    required Function() function,
-    required postId,
-    // StoryController? storyController,
-    String? title,
-    FlutterAliplayer? fAliplayer,
-    Orientation? orientation
-  }) {
+  static onShowUserTag(BuildContext _,
+      {required List<TagPeople> value,
+      required Function() function,
+      required postId,
+      // StoryController? storyController,
+      String? title,
+      FlutterAliplayer? fAliplayer,
+      Orientation? orientation,
+      Function()? whenComplete}) {
     showModalBottomSheet<dynamic>(
         isScrollControlled: true,
         context: _,
@@ -1296,13 +1295,14 @@ class ShowBottomSheet {
             )
           ]);
         }).whenComplete(() {
-          // if (fAliplayer != null) fAliplayer.play();
-          if (orientation != null && orientation == Orientation.landscape){
-            SystemChrome.setPreferredOrientations([
-              DeviceOrientation.landscapeLeft,
-              DeviceOrientation.landscapeRight,
-            ]);
-          }
+      // if (fAliplayer != null) fAliplayer.play();
+      whenComplete?.call();
+      if (orientation != null && orientation == Orientation.landscape) {
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.landscapeLeft,
+          DeviceOrientation.landscapeRight,
+        ]);
+      }
     });
   }
 

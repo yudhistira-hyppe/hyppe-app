@@ -29,6 +29,13 @@ class VideoNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _adsvideoIsPlay = false;
+  bool get adsvideoIsPlay => _adsvideoIsPlay;
+  set adsvideoIsPlay(bool data) {
+    _adsvideoIsPlay = data;
+    notifyListeners();
+  }
+
   AdsData? _tempAdsData = null;
   AdsData? get tempAdsData => _tempAdsData;
   set tempAdsData(AdsData? data) {
