@@ -762,6 +762,10 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
     setState(() {
       data?.reportedStatus = "";
     });
+    start(context, data!);
+    context.read<ReportNotifier>().seeContent(context, data, hyppeDiary);
+    fAliplayer?.prepare();
+    fAliplayer?.play();
   }
 
   @override
@@ -1357,7 +1361,7 @@ class _LandingDiaryFullPageState extends State<LandingDiaryFullPage> with Widget
                       //     : const SizedBox(),
                       const Spacer(),
                       GestureDetector(
-                        onTap: () {
+                        onTap: () async {
                           data.reportedStatus = '';
                           start(context, data);
                           context.read<ReportNotifier>().seeContent(context, data, hyppeDiary);

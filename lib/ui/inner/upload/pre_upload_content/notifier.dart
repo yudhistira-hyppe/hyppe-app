@@ -674,7 +674,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       if (_isCompress) {
         await compressVideo();
       }
-      
+
       if (!mounted) return false;
 
       notifier.postContentsBlocV2(

@@ -174,15 +174,9 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
           });
         }
         if (!_inSeek) {
-          if (mounted) {
-            setState(() {
-              _currentPositionText = extraValue ?? 0;
-            });
-          } else {
-            setState(() {
-              _currentPositionText = extraValue ?? 0;
-            });
-          }
+          setState(() {
+            _currentPositionText = extraValue ?? 0;
+          });
         }
       } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
       } else if (infoCode == FlutterAvpdef.AUTOPLAYSTART) {
@@ -253,7 +247,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
     });
 
     controller = PageController(initialPage: widget.index ?? 0);
-    context.read<ScrollVidNotifier>().lastScrollIdx = widget.index??0;
+    context.read<ScrollVidNotifier>().lastScrollIdx = widget.index ?? 0;
     controller.addListener(() {
       widget.fAliplayer?.pause();
       setState(() {
@@ -938,7 +932,9 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                                       color: kHyppeLightBackground,
                                       height: 18,
                                     ),
-                                    const SizedBox(width: 12.0,),
+                                    const SizedBox(
+                                      width: 12.0,
+                                    ),
                                     SizedBox(
                                       width: SizeConfig.screenWidth! * .55,
                                       child: _textSize(widget.data.music?.musicTitle ?? '', const TextStyle(fontWeight: FontWeight.bold)).width > SizeConfig.screenWidth! * .56
