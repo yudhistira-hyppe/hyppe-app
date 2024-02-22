@@ -183,9 +183,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
     _inSeek = false;
     setState(() {
       if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
-        setState(() {
-          _showTipsWidget = false;
-        });
+        _showTipsWidget = false;
       }
     });
     // fAliplayer?.seekTo(changevalue, GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
@@ -203,9 +201,9 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
         }
       } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
         // _bufferPosition = extraValue ?? 0;
-        // if (mounted) {
-        //   setState(() {});
-        // }
+        if (mounted) {
+          setState(() {});
+        }
       } else if (infoCode == FlutterAvpdef.AUTOPLAYSTART) {
         // Fluttertoast.showToast(msg: "AutoPlay");
       } else if (infoCode == FlutterAvpdef.CACHESUCCESS) {
@@ -280,7 +278,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
 
     controller = PageController(initialPage: widget.index ?? 0);
     controller.addListener(() {
-      widget.fAliplayer?.pause();
+      widget.fAliplayer?.play();
       setState(() {
         isScrolled = true;
       });

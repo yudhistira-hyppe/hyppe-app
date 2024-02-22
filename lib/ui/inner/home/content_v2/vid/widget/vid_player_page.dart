@@ -549,7 +549,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
           // _bufferPosition = extraValue ?? 0;
           if (mounted) {
-            // setState(() {});
+            setState(() {});
           }
         } else if (infoCode == FlutterAvpdef.AUTOPLAYSTART) {
           // Fluttertoast.showToast(msg: "AutoPlay");
