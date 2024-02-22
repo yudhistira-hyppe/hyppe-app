@@ -816,7 +816,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                         data.email == email
                     ? Container(
                         width: SizeConfig.screenWidth,
-                        margin: const EdgeInsets.only(bottom: 16),
+                        margin: const EdgeInsets.only(bottom: 16, top: 18),
                         padding: const EdgeInsets.only(left: 18.0, right: 74),
                         child: ButtonBoost(
                           onDetail: false,

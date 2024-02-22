@@ -166,7 +166,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
     widget.fAliplayer?.seekTo(changevalue, FlutterAvpdef.ACCURATE);
 
     widget.fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
-      print("== detik $infoCode");
+      print(playerId);
       if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
         if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
           setState(() {

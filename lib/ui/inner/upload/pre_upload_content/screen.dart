@@ -563,7 +563,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
         context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKey].key ?? '');
         controller
             .animateTo(
-              controller.position.maxScrollExtent + kToolbarHeight,
+              controller.position.maxScrollExtent,
               curve: Curves.easeOut,
               duration: const Duration(milliseconds: 200),
             )
@@ -576,7 +576,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
           context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKey].key ?? '');
           controller
               .animateTo(
-                controller.position.maxScrollExtent + kToolbarHeight,
+                controller.position.maxScrollExtent,
                 curve: Curves.easeOut,
                 duration: const Duration(milliseconds: 200),
               )

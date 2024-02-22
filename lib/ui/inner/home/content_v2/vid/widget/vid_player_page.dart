@@ -1094,7 +1094,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                 loadMoreFunction: () {
                   widget.loadMoreFunction?.call();
                 },
-                isAutoPlay: widget.isAutoPlay,
+                isAutoPlay: false,
                 isLanding: widget.inLanding),
             settings: const RouteSettings()),
       );
@@ -2179,9 +2179,15 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                   ),
                                   Container(
                                     constraints: BoxConstraints(
-                                        maxWidth: orientation == Orientation.landscape ? SizeConfig.screenWidth! * .28 : SizeConfig.screenWidth!,
-                                        maxHeight: isShowMore ? 52 : SizeConfig.screenHeight! * .2),
-                                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                                      maxWidth: SizeConfig.screenWidth! * .7,
+                                      maxHeight: widget.data!.description!.length > 24
+                                          ? isShowMore
+                                              ? 54
+                                              : SizeConfig.screenHeight! * .1
+                                          : 54),
+                                    alignment: Alignment.centerLeft,
+                                    margin: const EdgeInsets.symmetric(horizontal: 16.0),
+                                    padding: const EdgeInsets.only(left: 8.0, top: 20),
                                     child: SingleChildScrollView(
                                       child: CustomDescContent(
                                         desc: widget.data?.description ?? '',
@@ -2314,31 +2320,35 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          const Padding(
-                                            padding: EdgeInsets.only(right: 8.0),
-                                            child: CustomIconWidget(
-                                              iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
-                                              defaultColor: false,
-                                              color: kHyppeLightBackground,
-                                              height: 18,
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: _textSize(widget.data?.music?.musicTitle ?? '', const TextStyle(fontWeight: FontWeight.bold)).width > SizeConfig.screenWidth! * .56
-                                                ? SizedBox(
-                                                    width: SizeConfig.screenWidth! * .56,
-                                                    height: kTextTabBarHeight,
-                                                    child: Marquee(
-                                                      text: '  ${widget.data?.music?.musicTitle ?? ''}',
-                                                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),
-                                                    ),
-                                                  )
-                                                : CustomTextWidget(
-                                                    textToDisplay: " ${widget.data!.music?.musicTitle ?? ''}",
-                                                    maxLines: 1,
-                                                    textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700),
-                                                    textAlign: TextAlign.left,
-                                                  ),
+                                          Row(
+                                            children: [
+                                              const Padding(
+                                                padding: EdgeInsets.only(right: 8.0),
+                                                child: CustomIconWidget(
+                                                  iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                                  defaultColor: false,
+                                                  color: kHyppeLightBackground,
+                                                  height: 18,
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: _textSize(widget.data?.music?.musicTitle ?? '', const TextStyle(fontWeight: FontWeight.bold)).width > SizeConfig.screenWidth! * .56
+                                                    ? SizedBox(
+                                                        width: SizeConfig.screenWidth! * .56,
+                                                        height: kTextTabBarHeight,
+                                                        child: Marquee(
+                                                          text: '  ${widget.data?.music?.musicTitle ?? ''}',
+                                                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),
+                                                        ),
+                                                      )
+                                                    : CustomTextWidget(
+                                                        textToDisplay: " ${widget.data!.music?.musicTitle ?? ''}",
+                                                        maxLines: 1,
+                                                        textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700),
+                                                        textAlign: TextAlign.left,
+                                                      ),
+                                              ),
+                                            ],
                                           ),
                                           CircleAvatar(
                                             radius: 18,

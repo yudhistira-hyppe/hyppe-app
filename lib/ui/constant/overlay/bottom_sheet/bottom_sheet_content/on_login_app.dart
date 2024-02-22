@@ -28,8 +28,8 @@ class _OnLoginAppState extends State<OnLoginApp> {
   @override
   Widget build(BuildContext context) {
     return Consumer<WelcomeLoginNotifier>(builder: (context, notifier, _) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      return ListView(
+        // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           twentyPx,
           System().showWidgetForGuest(
@@ -272,24 +272,28 @@ class _OnLoginAppState extends State<OnLoginApp> {
             textAlign: TextAlign.center,
             textStyle: const TextStyle(fontSize: 14),
           ),
-          RichText(text: TextSpan(
-            children: [
-              TextSpan(
-                text: "${notifier.language.termsOfService} ",
-                style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold, color: kHyppePrimary),
-                recognizer: TapGestureRecognizer()..onTap = () => notifier.goToEula(),
-              ),
-              TextSpan(
-                text: "${notifier.language.and} ",
-                style: Theme.of(context).textTheme.bodyText2,
-              ),
-              TextSpan(
-                text: notifier.language.privacyPolicy,
-                style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold, color: kHyppePrimary),
-                recognizer: TapGestureRecognizer()..onTap = () => notifier.goToEula(),
-              ),
-            ]
-          ))
+          Align(
+            alignment: Alignment.center,
+            child: RichText(text: TextSpan(
+              children: [
+                TextSpan(
+                  text: "${notifier.language.termsOfService} ",
+                  style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold, color: kHyppePrimary),
+                  recognizer: TapGestureRecognizer()..onTap = () => notifier.goToEula(),
+                ),
+                TextSpan(
+                  text: "${notifier.language.and} ",
+                  style: Theme.of(context).textTheme.bodyText2,
+                ),
+                TextSpan(
+                  text: notifier.language.privacyPolicy,
+                  style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold, color: kHyppePrimary),
+                  recognizer: TapGestureRecognizer()..onTap = () => notifier.goToEula(),
+                ),
+              ]
+            )),
+          ),
+          twentyPx
         ],
       );
     });
