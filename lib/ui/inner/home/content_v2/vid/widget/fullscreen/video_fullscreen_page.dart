@@ -1435,9 +1435,15 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                       ),
                       Container(
                         constraints: BoxConstraints(
-                            maxWidth: orientation == Orientation.landscape ? SizeConfig.screenWidth! * .29 : SizeConfig.screenWidth!, maxHeight: isShowMore ? 52 : SizeConfig.screenHeight! * .2),
-                        margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                        padding: const EdgeInsets.only(left: 8.0, bottom: 12.0),
+                          maxWidth: SizeConfig.screenWidth! * .7,
+                          maxHeight: widget.data.description!.length > 24
+                              ? isShowMore
+                                  ? 54
+                                  : SizeConfig.screenHeight! * .1
+                              : 54),
+                        alignment: Alignment.centerLeft,
+                        margin: const EdgeInsets.symmetric(horizontal: 16.0),
+                        padding: const EdgeInsets.only(left: 8.0, top: 20),
                         child: SingleChildScrollView(
                           child: CustomDescContent(
                             desc: "${widget.data.description}",
@@ -1450,14 +1456,12 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                               });
                             },
                             onLongPressEnd: (value) {
-                              print('Longlong: onLongPressEnd fullscreen');
                               setState(() {
                                 isScrolling = false;
                                 onTapCtrl = false;
                               });
                             },
                             onLongPressStart: (value) {
-                              print('Longlong: onLongPressStart fullscreen');
                               setState(() {
                                 isScrolling = true;
                                 onTapCtrl = true;
@@ -1635,25 +1639,32 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const CustomIconWidget(
-                                  iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
-                                  defaultColor: false,
-                                  color: kHyppeLightBackground,
-                                  height: 18,
-                                ),
-                                SizedBox(
-                                  width: SizeConfig.screenWidth! * .55,
-                                  child: _textSize(widget.data.music?.musicTitle ?? '', const TextStyle(fontWeight: FontWeight.bold)).width > SizeConfig.screenWidth! * .56
-                                      ? Marquee(
-                                          text: '  ${widget.data.music?.musicTitle ?? ''}',
-                                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),
-                                        )
-                                      : CustomTextWidget(
-                                          textToDisplay: " ${widget.data.music?.musicTitle ?? ''}",
-                                          maxLines: 1,
-                                          textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700),
-                                          textAlign: TextAlign.left,
-                                        ),
+                                Row(
+                                  children: [
+                                    const Padding(
+                                      padding: EdgeInsets.only(right: 8.0),
+                                      child: CustomIconWidget(
+                                        iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                        defaultColor: false,
+                                        color: kHyppeLightBackground,
+                                        height: 18,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: SizeConfig.screenWidth! * .55,
+                                      child: _textSize(widget.data.music?.musicTitle ?? '', const TextStyle(fontWeight: FontWeight.bold)).width > SizeConfig.screenWidth! * .56
+                                          ? Marquee(
+                                              text: '  ${widget.data.music?.musicTitle ?? ''}',
+                                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),
+                                            )
+                                          : CustomTextWidget(
+                                              textToDisplay: " ${widget.data.music?.musicTitle ?? ''}",
+                                              maxLines: 1,
+                                              textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700),
+                                              textAlign: TextAlign.left,
+                                            ),
+                                    ),
+                                  ],
                                 ),
                                 CircleAvatar(
                                   radius: 18,

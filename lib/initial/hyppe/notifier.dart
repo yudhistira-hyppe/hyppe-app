@@ -39,6 +39,7 @@ class HyppeNotifier with ChangeNotifier {
   }
 
   Future handleStartUp(bool mounted) async {
+    SharedPreference().removeValue(SpKeys.uploadContent);
     final fixContext = materialAppKey.currentContext!;
     SharedPreference().writeStorage(SpKeys.datetimeLastShowAds, '');
     // try{

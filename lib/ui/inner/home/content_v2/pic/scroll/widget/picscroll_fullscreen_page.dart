@@ -766,7 +766,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                     ? Container(
                         width: MediaQuery.of(context).size.width,
                         height: 42,
-                        margin: const EdgeInsets.only(top: 8),
+                        margin: const EdgeInsets.only(top: 18),
                         padding: const EdgeInsets.only(left: 18.0, right: 74),
                         child: ButtonBoost(
                           onDetail: false,

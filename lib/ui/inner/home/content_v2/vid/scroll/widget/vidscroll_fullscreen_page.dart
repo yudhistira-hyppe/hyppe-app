@@ -166,6 +166,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
     widget.fAliplayer?.seekTo(changevalue, FlutterAvpdef.ACCURATE);
 
     widget.fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
+      print(playerId);
       if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
         if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
           setState(() {
@@ -173,7 +174,15 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
           });
         }
         if (!_inSeek) {
-          _currentPositionText = extraValue ?? 0;
+          if (mounted) {
+            setState(() {
+              _currentPositionText = extraValue ?? 0;
+            });
+          } else {
+            setState(() {
+              _currentPositionText = extraValue ?? 0;
+            });
+          }
         }
       } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
       } else if (infoCode == FlutterAvpdef.AUTOPLAYSTART) {
@@ -507,45 +516,12 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                       child: Stack(
                         children: [
                           Positioned.fill(
-                            child: OrientationBuilder(builder: (context, orientation) {
-                              final player = VidPlayerPage(
-                                currentPosition: widget.videoIndicator.seekValue??0,
-                                isVidFormProfile: widget.isVidFormProfile,
-                                fromFullScreen: true,
-                                orientation: orientation,
-                                playMode: (notifier.vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
-                                dataSourceMap: map,
-                                data: notifier.vidData?[index],
-                                height: MediaQuery.of(context).size.height,
-                                width: MediaQuery.of(context).size.width,
-                                inLanding: widget.isLanding,
-                                fromDeeplink: false,
-                                clearPostId: widget.clearPostId,
-                                clearing: true,
-                                isAutoPlay: true,
-                                functionFullTriger: (value) {},
-                                isPlaying: !isPause,
-                                onPlay: (exec) {},
-                                getPlayer: (main, id) {},
-                                getAdsPlayer: (ads) {
-                                  // notifier.vidData?[index].fAliplayerAds = ads;
-                                },
-                                autoScroll: () {
-                                  nextPage();
-                                },
-                                prevScroll: () {
-                                  previousPage();
-                                },
-                              );
-                              if (orientation == Orientation.landscape) {
-                                return SizedBox(
-                                  width: context.getWidth(),
-                                  height: context.getHeight(),
-                                  child: player,
-                                );
-                              }
-                              return player;
-                            })
+                            child: Container(
+                              width: context.getWidth(),
+                              height: SizeConfig.screenHeight,
+                              decoration: const BoxDecoration(color: Colors.black),
+                              child: widget.aliPlayerView,
+                            ),
                           ),
                           GestureDetector(
                             onTap: () {

@@ -1,4 +1,5 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/services.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,23 @@ import 'package:hyppe/ui/outer/login/widget/sign_in_text.dart';
 import 'package:hyppe/ui/outer/login/widget/sign_up_or_google.dart';
 import 'package:provider/provider.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  @override
+  void initState() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'LoginScreen');

@@ -65,7 +65,7 @@ class _ImageComponentState extends State<ImageComponent> {
 
     FirebaseCrashlytics.instance.setCustomKey('layout', 'ComponentShimmer');
     SizeConfig().init(context);
-    print('notifikasi data ${widget.data}');
+    print('notifikasi data ${widget.data?.toJson()}');
     if (widget.data != null) {
       return isLoading ? const CircularProgressIndicator() : Container(
         // onTap: () {
