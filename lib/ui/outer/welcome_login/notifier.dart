@@ -77,7 +77,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
   GoogleSignInAccount? get userGoogleSignIn => _userGoogleSignIn;
   int _currIndex = 0;
   int get currIndex => _currIndex;
-  set currIndex(int val){
+  set currIndex(int val) {
     _currIndex = val;
     notifyListeners();
   }
@@ -196,14 +196,14 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
 
   bool _goToGuest = false;
   bool get goToGuest => _goToGuest;
-  set goToGuest(bool state){
+  set goToGuest(bool state) {
     _goToGuest = state;
     notifyListeners();
   }
 
   Future onClickGuest(BuildContext context) async {
     bool connection = await System().checkConnections();
-    if(!goToGuest){
+    if (!goToGuest) {
       goToGuest = true;
       await System().getLocation(context).then((value) async {
         if (value) {
@@ -243,7 +243,6 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
         goToGuest = false;
       });
     }
-
   }
 
   void onClickSignUpHere() {
@@ -287,10 +286,10 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
 
   _validateUserData(BuildContext context, UserProfileModel signData, bool isSociaMediaLogin, {String? onlineVersion, String? onlineIosVersion, bool isGuest = false}) async {
     await CheckVersion().check(context, onlineVersion, onlineIosVersion);
-    if(System().isGuest()){
+    if (System().isGuest()) {
       fromGuest = true;
     }
-    if(isGuest){
+    if (isGuest) {
       clearTextController();
       SharedPreference().writeStorage(SpKeys.isGuest, isGuest);
       SharedPreference().writeStorage(SpKeys.userToken, signData.token);
@@ -301,7 +300,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
       await context.read<TranslateNotifierV2>().initTranslate(context);
       DeviceBloc().activityAwake(context);
       Routing().moveAndRemoveUntil(Routes.lobby, Routes.lobby);
-    }else if (isSociaMediaLogin) {
+    } else if (isSociaMediaLogin) {
       clearTextController();
       SharedPreference().writeStorage(SpKeys.isGuest, isGuest);
       SharedPreference().writeStorage(SpKeys.userToken, signData.token);
@@ -451,6 +450,8 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
             final fetch = notifier.userFetch;
             print('ini respone google ${fetch.data}');
             if (fetch.userState == UserState.LoginSuccess) {
+              globalAliPlayer?.stop();
+              globalAliPlayer?.destroy();
               hide = true;
               final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
               print("===== version ${fetch.versionIos}");
@@ -723,13 +724,13 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
   //     // _currentUser = fbUser;
   //   }
   // }
-  
+
   List<WelcomeData> get welcomeList => [
-    WelcomeData(image: 'welcome_image_1.svg', title: 'Welcome Hyppers', desc: (language.welcomeDescOne ?? '')),
-    WelcomeData(image: 'welcome_image_2.svg', title: (language.welcomeTitleTwo ?? ''), desc: (language.welcomeDescTwo ?? '')),
-    WelcomeData(image: 'welcome_image_3.svg', title: (language.welcomeTitleThree ?? ''), desc: (language.welcomeDescThree ?? '')),
-    WelcomeData(image: 'welcome_image_4.svg', title: (language.welcomeTitleFour ?? ''), desc: (language.welcomeDescFour ?? '')),
-  ];
+        WelcomeData(image: 'welcome_image_1.svg', title: 'Welcome Hyppers', desc: (language.welcomeDescOne ?? '')),
+        WelcomeData(image: 'welcome_image_2.svg', title: (language.welcomeTitleTwo ?? ''), desc: (language.welcomeDescTwo ?? '')),
+        WelcomeData(image: 'welcome_image_3.svg', title: (language.welcomeTitleThree ?? ''), desc: (language.welcomeDescThree ?? '')),
+        WelcomeData(image: 'welcome_image_4.svg', title: (language.welcomeTitleFour ?? ''), desc: (language.welcomeDescFour ?? '')),
+      ];
 
   Future testLogin(BuildContext context) async {
     bool connection = await System().checkConnections();
@@ -778,7 +779,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
   }
 }
 
-class WelcomeData{
+class WelcomeData {
   final String image;
   final String title;
   final String desc;
