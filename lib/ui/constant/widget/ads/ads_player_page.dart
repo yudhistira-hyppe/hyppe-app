@@ -251,6 +251,7 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
         print("aliyun : onStateChanged $newState");
         switch (newState) {
           case FlutterAvpdef.AVPStatus_AVPStatusStarted:
+            notifier.adsvideoIsPlay = true;
             WakelockPlus.enable();
             try {
               setState(() {
@@ -269,6 +270,7 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusStopped:
             isPlay = false;
+            notifier.adsvideoIsPlay = false;
             _showLoading = false;
             //
             try {
@@ -636,33 +638,44 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
       final notifier = context.read<VideoNotifier>();
       notifier.adsAliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height);
 
-      return Consumer<VideoNotifier>(builder: (context, notifier, _) {
-        return GestureDetector(
-          onTap: () {
-            onTapCtrl = true;
-            setState(() {});
-          },
-          child: Stack(
-            children: [
-              (widget.data?.isLoading ?? false)
-                  ? Container(color: Colors.black, width: widget.width, height: widget.height)
-                  : ClipRRect(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(16),
+      return WillPopScope(
+        onWillPop: () async {
+          return false;
+        },
+        child: Consumer<VideoNotifier>(builder: (context, notifier, _) {
+          return GestureDetector(
+            onTap: () {
+              onTapCtrl = true;
+              setState(() {});
+            },
+            child: Stack(
+              children: [
+                (widget.data?.isLoading ?? false)
+                    ? Container(color: Colors.black, width: widget.width, height: widget.height)
+                    : ClipRRect(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(16),
+                        ),
+                        child: Container(
+                          color: Colors.black,
+                          width: widget.width,
+                          height: widget.height,
+                          child: !notifier.isLoading && isPlay ? notifier.adsAliPlayerView : const SizedBox.shrink(),
+                        ),
                       ),
-                      child: Container(color: Colors.black, width: widget.width, height: widget.height, child: !notifier.isLoading && isPlay ? notifier.adsAliPlayerView : const SizedBox.shrink())),
-              if (isPlay)
-                SizedBox(
-                  width: widget.width,
-                  height: widget.height,
-                  // padding: EdgeInsets.only(bottom: 25.0),
-                  child: Offstage(offstage: _isLock, child: _buildContentWidget(context, widget.orientation, notifier)),
-                ),
-              if (widget.fromFullScreen) detailAdsWidget(context, notifier.tempAdsData ?? AdsData(), notifier)
-            ],
-          ),
-        );
-      });
+                if (isPlay)
+                  SizedBox(
+                    width: widget.width,
+                    height: widget.height,
+                    // padding: EdgeInsets.only(bottom: 25.0),
+                    child: Offstage(offstage: _isLock, child: _buildContentWidget(context, widget.orientation, notifier)),
+                  ),
+                if (widget.fromFullScreen) detailAdsWidget(context, notifier.tempAdsData ?? AdsData(), notifier)
+              ],
+            ),
+          );
+        }),
+      );
     }
   }
 
@@ -992,6 +1005,8 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
                               notifier.hasShowedAds = true;
                               notifier.tempAdsData = null;
                               notifier.isShowingAds = false;
+                              notifier.adsvideoIsPlay = false;
+
                               widget.onClose();
                             }
                           }
