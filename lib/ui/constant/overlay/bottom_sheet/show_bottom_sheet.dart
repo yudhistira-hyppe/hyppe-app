@@ -1262,6 +1262,7 @@ class ShowBottomSheet {
       // StoryController? storyController,
       String? title,
       FlutterAliplayer? fAliplayer,
+      bool? isPause,
       Orientation? orientation,
       Function()? whenComplete}) {
     showModalBottomSheet<dynamic>(
@@ -1295,8 +1296,10 @@ class ShowBottomSheet {
             )
           ]);
         }).whenComplete(() {
-      // if (fAliplayer != null) fAliplayer.play();
       whenComplete?.call();
+      if (fAliplayer != null) {
+        fAliplayer.play();
+      }
       if (orientation != null && orientation == Orientation.landscape) {
         SystemChrome.setPreferredOrientations([
           DeviceOrientation.landscapeLeft,

@@ -8,6 +8,7 @@ import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_tab_page_selector.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
+import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/welcome/content/slide_template.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/welcome/notifier.dart';
 import 'package:hyppe/ux/path.dart';
@@ -30,6 +31,12 @@ class _SignUpWelcomeState extends State<SignUpWelcome> with SingleTickerProvider
     _tabController = TabController(length: 5, vsync: this);
     super.initState();
     _tabController?.addListener(() => setState(() {}));
+    getProfile();
+  }
+
+  getProfile() async {
+    final _mainNotifier = Provider.of<MainNotifier>(context, listen: false);
+    await _mainNotifier.initMain(context, onUpdateProfile: true);
   }
 
   @override

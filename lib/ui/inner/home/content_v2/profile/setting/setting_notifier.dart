@@ -107,6 +107,7 @@ class SettingNotifier extends ChangeNotifier with LoadingNotifier {
       context.read<ChallangeNotifier>().badgeUser = null;
 
       context.read<MainNotifier>().tutorialData = [];
+      context.read<MainNotifier>().receivedMsg = false;
 
       _eventService.cleanUp();
       _streamService.reset();

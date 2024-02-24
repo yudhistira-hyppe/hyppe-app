@@ -9,6 +9,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -39,6 +40,8 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
 import 'dart:math' as math;
+
+import 'package:visibility_detector/visibility_detector.dart';
 
 class VidScrollFullScreenPage extends StatefulWidget {
   final AliPlayerView aliPlayerView;
@@ -111,6 +114,10 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
 
   bool isOnPageTurning = false;
   bool isShowMore = false;
+  int _curIdx = -1;
+  // int _lastCurIndex = -1;
+  int _cardIndex = 0;
+  Map<int, FlutterAliplayer> dataAli = {};
 
   @override
   void afterFirstLayout(BuildContext context) {
@@ -429,6 +436,34 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
               onPageChanged: (value) async {
                 curentIndex = value;
                 notifier.lastScrollIdx = value;
+                _cardIndex = value;
+                if (_curIdx != value) {
+                  Future.delayed(const Duration(milliseconds: 400), () {
+                    try {
+                      if (_curIdx != -1) {
+                        print('Vid Landing Page: pause $_curIdx ${vidData?[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
+                        if (vidData?[_curIdx].fAliplayer != null) {
+                          vidData?[_curIdx].fAliplayer?.pause();
+                        } else {
+                          dataAli[_curIdx]?.pause();
+                        }
+
+                        // vidData?[_curIdx].fAliplayerAds?.pause();
+                        // setState(() {
+                        //   _curIdx = -1;
+                        // });
+                      }
+                    } catch (e) {
+                      e.logger();
+                    }
+                    // System().increaseViewCount2(context, vidData);
+                  });
+                  if (vidData?[value].certified ?? false) {
+                    System().block(context);
+                  } else {
+                    System().disposeBlock();
+                  }
+                }
                 scrollPage(notifier.vidData?[value].metadata?.height, notifier.vidData?[value].metadata?.width);
                 if ((notifier.vidData?.length ?? 0) - 1 == widget.index) {
                   await notifier.loadMore(context, controller, PageSrc.selfProfile, '');
@@ -448,53 +483,88 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                   );
                 }
                 if (isScrolled) {
-                  return isloadingRotate
-                      ? Container(
-                          color: Colors.black,
-                          height: MediaQuery.of(context).size.height,
-                          width: MediaQuery.of(context).size.width,
-                          child: const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        )
-                      : OrientationBuilder(builder: (context, orientation) {
-                          final player = VidPlayerPage(
-                            isVidFormProfile: widget.isVidFormProfile,
-                            fromFullScreen: true,
-                            orientation: orientation,
-                            playMode: (notifier.vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
-                            dataSourceMap: map,
-                            data: notifier.vidData?[index],
+                  return VisibilityDetector(
+                    key: Key(widget.data.postID??index.toString()),
+                    onVisibilityChanged: (info) {
+                      if (info.visibleFraction >= 0.6) {
+                        _cardIndex = index;
+                        if (_curIdx != index) {
+                          Future.delayed(const Duration(milliseconds: 400), () {
+                            try {
+                              if (_curIdx != -1) {
+                                print('Vid Landing Page: pause $_curIdx ${vidData?[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
+                                if (vidData?[_curIdx].fAliplayer != null) {
+                                  vidData?[_curIdx].fAliplayer?.pause();
+                                } else {
+                                  dataAli[_curIdx]?.pause();
+                                }
+
+                                // vidData?[_curIdx].fAliplayerAds?.pause();
+                                // setState(() {
+                                //   _curIdx = -1;
+                                // });
+                              }
+                            } catch (e) {
+                              e.logger();
+                            }
+                            // System().increaseViewCount2(context, vidData);
+                          });
+                          if (vidData?[index].certified ?? false) {
+                            System().block(context);
+                          } else {
+                            System().disposeBlock();
+                          }
+                        }
+                      }
+                    },
+                    child: isloadingRotate
+                        ? Container(
+                            color: Colors.black,
                             height: MediaQuery.of(context).size.height,
                             width: MediaQuery.of(context).size.width,
-                            inLanding: widget.isLanding,
-                            fromDeeplink: false,
-                            clearPostId: widget.clearPostId,
-                            clearing: true,
-                            isAutoPlay: true,
-                            functionFullTriger: (value) {},
-                            isPlaying: !isPause,
-                            onPlay: (exec) {},
-                            getPlayer: (main, id) {},
-                            getAdsPlayer: (ads) {
-                              // notifier.vidData?[index].fAliplayerAds = ads;
-                            },
-                            autoScroll: () {
-                              nextPage();
-                            },
-                            prevScroll: () {
-                              previousPage();
-                            },
-                          );
-                          if (orientation == Orientation.landscape) {
-                            return SizedBox(
-                              width: context.getWidth(),
-                              height: context.getHeight(),
-                              child: player,
+                            child: const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          )
+                        : OrientationBuilder(builder: (context, orientation) {
+                            final player = VidPlayerPage(
+                              isVidFormProfile: widget.isVidFormProfile,
+                              fromFullScreen: true,
+                              orientation: orientation,
+                              playMode: (notifier.vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
+                              dataSourceMap: map,
+                              data: notifier.vidData?[index],
+                              height: MediaQuery.of(context).size.height,
+                              width: MediaQuery.of(context).size.width,
+                              inLanding: widget.isLanding,
+                              fromDeeplink: false,
+                              clearPostId: widget.clearPostId,
+                              clearing: true,
+                              isAutoPlay: true,
+                              functionFullTriger: (value) {},
+                              isPlaying: !isPause,
+                              onPlay: (exec) {},
+                              getPlayer: (main, id) {},
+                              getAdsPlayer: (ads) {
+                                // notifier.vidData?[index].fAliplayerAds = ads;
+                              },
+                              autoScroll: () {
+                                nextPage();
+                              },
+                              prevScroll: () {
+                                previousPage();
+                              },
                             );
-                          }
-                          return player;
-                        });
+                            if (orientation == Orientation.landscape) {
+                              return SizedBox(
+                                width: context.getWidth(),
+                                height: context.getHeight(),
+                                child: player,
+                              );
+                            }
+                            return player;
+                          }),
+                  );
                 } else {
                   return GestureDetector(
                     onTap: () {

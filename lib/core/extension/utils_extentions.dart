@@ -155,7 +155,8 @@ extension ContextScreen on BuildContext {
     }
   }
 
-  Widget getAdsInBetween(List<ContentData>? picData, int index, Function(VisibilityInfo)? onVisible, Function() onComplete, Function(FlutterAliplayer, String) getPlayer, {bool isfull = false, isVideo = false, Orientation orientation = Orientation.portrait, bool isScroll = false, bool isStopPlay = false}) {
+  Widget getAdsInBetween(List<ContentData>? picData, int index, Function(VisibilityInfo)? onVisible, Function() onComplete, Function(FlutterAliplayer, String) getPlayer,
+      {bool isfull = false, isVideo = false, Orientation orientation = Orientation.portrait, bool isScroll = false, bool isStopPlay = false}) {
     if (picData![index].inBetweenAds != null) {
       if (picData[index].inBetweenAds?.mediaType?.toLowerCase() == 'video') {
         if (isfull) {
@@ -163,10 +164,27 @@ extension ContextScreen on BuildContext {
             arguments: AdsArgument(data: picData[index].inBetweenAds!, adsUrl: '', isSponsored: true, onVisibility: onVisible, afterReport: onComplete, getPlayer: getPlayer, isVideo: isVideo),
           );
         }
-        return AdsVideoInBetween(onVisibility: onVisible, contentData: picData, index: index, data: picData[index].inBetweenAds!, afterReport: onComplete, getPlayer: getPlayer, isVideo: isVideo, isStopPlay: isStopPlay,);
+        return AdsVideoInBetween(
+          onVisibility: onVisible,
+          contentData: picData,
+          index: index,
+          data: picData[index].inBetweenAds!,
+          afterReport: onComplete,
+          getPlayer: getPlayer,
+          isVideo: isVideo,
+          isStopPlay: isStopPlay,
+        );
       } else {
         if (isfull) {
-          return AdsInBetweenFull(arguments: AdsArgument(data: picData[index].inBetweenAds!, afterReport: onComplete,  adsUrl: picData[index].adsData?.adsUrlLink ?? '', isSponsored: true, isVideo: isVideo, orientation: orientation, isScroll: isScroll));
+          return AdsInBetweenFull(
+              arguments: AdsArgument(
+                  data: picData[index].inBetweenAds!,
+                  afterReport: onComplete,
+                  adsUrl: picData[index].adsData?.adsUrlLink ?? '',
+                  isSponsored: true,
+                  isVideo: isVideo,
+                  orientation: orientation,
+                  isScroll: isScroll));
         }
         return AdsInBetween(data: picData[index].inBetweenAds!, contentData: picData, index: index, afterReport: onComplete, isVideo: isVideo);
       }
@@ -200,7 +218,10 @@ extension ContextScreen on BuildContext {
       if (addAction != null) {
         addAction();
       }
-      await ShowBottomSheet().onLoginApp(this);
+      globalAliPlayer?.pause();
+      await ShowBottomSheet().onLoginApp(this).then((value) {
+        globalAliPlayer?.play();
+      });
     } else {
       onSlipOut();
     }
@@ -369,7 +390,7 @@ extension StringDefine on String {
     return currentView.toStringAsFixed(0);
   }
 
-  bool isNotOnlySpace(){
+  bool isNotOnlySpace() {
     final values = replaceAll(" ", "");
     return values.isNotEmpty;
   }
