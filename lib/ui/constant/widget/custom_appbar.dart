@@ -31,6 +31,7 @@ class CustomAppBar extends StatelessWidget {
   final bool isVidFormProfile;
   final Function()? onTap;
   final Function onTapOnProfileImage;
+  final Function()? backFunction;
   const CustomAppBar(
       {super.key,
       required this.orientation,
@@ -44,6 +45,7 @@ class CustomAppBar extends StatelessWidget {
       this.currentPositionText = 0,
       this.showTipsWidget = false,
       required this.onTapOnProfileImage,
+      this.backFunction,
       this.isMute = false});
 
   @override
@@ -82,7 +84,9 @@ class CustomAppBar extends StatelessWidget {
                   }
 
                   data!.isLoading = true;
-                  Navigator.pop(context, VideoIndicator(videoDuration: videoDuration, seekValue: changevalue, positionText: currentPositionText, showTipsWidget: showTipsWidget, isMute: isMute));
+                  backFunction?.call();
+
+                  // Navigator.pop(context, VideoIndicator(videoDuration: videoDuration, seekValue: changevalue, positionText: currentPositionText, showTipsWidget: showTipsWidget, isMute: isMute));
 
                   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
                 },

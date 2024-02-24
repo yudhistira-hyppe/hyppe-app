@@ -150,11 +150,13 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
     }
     landscape();
     var notifier = (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>();
+    var scrolNot = (Routing.navigatorKey.currentContext ?? context).read<ScrollVidNotifier>();
     if (notifier.vidData?[widget.index ?? 0].certified ?? false) {
       System().block(context);
     } else {
       System().disposeBlock();
     }
+    scrolNot.lastScrollIdx = widget.index ?? 0;
     start(context, vidData?[widget.index ?? 0] ?? ContentData());
     _initializeTimer();
   }
@@ -954,18 +956,16 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
               print("=======hasil ${notifier.isShowingAds}  -- ${notifier.hasShowedAds}");
               if (dragEndDetails.primaryVelocity! < 0) {
               } else if (dragEndDetails.primaryVelocity! > 0) {
-                if (!notifier.isShowingAds) {
-                  int changevalue;
-                  changevalue = _currentPosition + 1000;
-                  if (changevalue > _videoDuration) {
-                    changevalue = _videoDuration;
-                  }
-
-                  vidData?[widget.index ?? 0].isLoading = true;
-                  Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
-
-                  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+                int changevalue;
+                changevalue = _currentPosition + 1000;
+                if (changevalue > _videoDuration) {
+                  changevalue = _videoDuration;
                 }
+
+                vidData?[widget.index ?? 0].isLoading = true;
+                Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
+
+                SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
               }
             },
             child: notifier.loadVideo
@@ -1174,6 +1174,16 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
                   email: email,
                   lang: lang!,
                   isMute: isMute,
+                  backFunction: () {
+                    int changevalue;
+                    changevalue = _currentPosition + 1000;
+                    if (changevalue > _videoDuration) {
+                      changevalue = _videoDuration;
+                    }
+
+                    vidData?[widget.index ?? 0].isLoading = true;
+                    Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
+                  },
                   onTapOnProfileImage: () async {
                     var res = await System().navigateToProfile(context, data.email ?? '');
                     fAliplayer?.pause();

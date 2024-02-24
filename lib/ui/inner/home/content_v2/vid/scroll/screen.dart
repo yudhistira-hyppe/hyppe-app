@@ -734,24 +734,25 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
   Future<VideoIndicator> navigateTo(List<ContentData>? vidData, int changevalue, int index) async {
     return await Navigator.of(context, rootNavigator: true).push(
       CupertinoPageRoute(
-          builder: (_) => VideoFullProfilescreenPage(
-              vidData: vidData,
-              enableWakelock: true,
-              thumbnail: (dataSelected?.isApsara ?? false) ? (dataSelected?.mediaThumbEndPoint ?? '') : '${dataSelected?.fullThumbPath}',
-              onClose: () {
-                setState(() {
-                  isPlay = true;
-                });
-              },
-              slider: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, dataSelected ?? ContentData()),
-              videoIndicator: VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentAdsPositionText, isMute: isMute),
-              index: index,
-              loadMoreFunction: () {
-                // widget.loadMoreFunction?.call();
-              },
-              isAutoPlay: true,
-              isLanding: true),
-          settings: const RouteSettings()),
+        builder: (_) => VideoFullProfilescreenPage(
+            vidData: vidData,
+            enableWakelock: true,
+            thumbnail: (dataSelected?.isApsara ?? false) ? (dataSelected?.mediaThumbEndPoint ?? '') : '${dataSelected?.fullThumbPath}',
+            onClose: () {
+              setState(() {
+                isPlay = true;
+              });
+            },
+            slider: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, dataSelected ?? ContentData()),
+            videoIndicator: VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentAdsPositionText, isMute: isMute),
+            index: index,
+            loadMoreFunction: () {
+              // widget.loadMoreFunction?.call();
+            },
+            isAutoPlay: true,
+            isLanding: true),
+        settings: const RouteSettings(),
+      ),
     );
   }
 
@@ -1039,7 +1040,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                     _cardIndex = index;
                     if (_curIdx != index) {
                       Future.delayed(const Duration(milliseconds: 400), () {
-                        fAliplayer?.stop();
+                        fAliplayer?.pause();
                         try {
                           widget.arguments?.scrollController?.jumpTo(System().scrollAuto(_cardIndex, widget.arguments?.heightTopProfile ?? 0, widget.arguments?.heightBox?.toInt() ?? 100));
                         } catch (e) {
@@ -1462,11 +1463,10 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
           fAliplayer?.pause();
           VideoIndicator value = await navigateTo(vidNotifier.vidData, changevalue, index);
 
-          vidNotifier.itemScrollController.jumpTo(index: vidNotifier.lastScrollIndex);
-
           if (mounted) {
             if (_curIdx != vidNotifier.lastScrollIndex) {
-              fAliplayer?.stop();
+              vidNotifier.itemScrollController.jumpTo(index: vidNotifier.lastScrollIndex);
+              // fAliplayer?.stop();
               postIdVisibility = vidNotifier.vidData?[vidNotifier.lastScrollIndex].postID ?? '';
               await start(context, vidNotifier.vidData?[vidNotifier.lastScrollIndex] ?? ContentData());
             }
