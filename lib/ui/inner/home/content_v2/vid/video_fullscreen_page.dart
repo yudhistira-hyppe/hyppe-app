@@ -1019,7 +1019,7 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
         },
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        thumbnail: (data.isApsara ?? false) ? (data.mediaThumbEndPoint ?? '') : '${data?.fullThumbPath}',
+        thumbnail: (data.isApsara ?? false) ? (data.mediaThumbEndPoint ?? '') : '${data.fullThumbPath}',
         data: notifier.mapInContentAds[data.postID ?? ''],
         functionFullTriger: () {},
         getPlayer: (player) {},
@@ -1028,12 +1028,13 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
           vidNotifier.setAdsData(index, notifier.mapInContentAds[data.postID ?? ''], context);
         },
         fromFullScreen: true,
-        onFullscreen: () {
+        onFullscreen: () async {
           // if (widget.fromFullScreen) {
-          //   Routing().moveBack();
+            // Routing().moveBack();
           // } else {
           // onFullscreen(notifier);
           // }
+
         },
         onClose: () {
           if (mounted) {
@@ -1192,6 +1193,20 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                   email: email,
                   lang: lang!,
                   isMute: isMute,
+                  backFunction: () {
+                    // if (!notifier.isShowingAds) {
+                      int changevalue;
+                      changevalue = _currentPosition + 1000;
+                      if (changevalue > _videoDuration) {
+                        changevalue = _videoDuration;
+                      }
+
+                      vidData?[widget.index ?? 0].isLoading = true;
+                      Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
+
+                      SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+                    // }
+                  },
                   onTapOnProfileImage: () async {
                     var res = await System().navigateToProfile(context, data.email ?? '');
                     fAliplayer?.pause();
@@ -1485,8 +1500,8 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                                         : SizeConfig.screenHeight! * .1
                                     : 54),
                             alignment: Alignment.centerLeft,
-                            margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                            padding: const EdgeInsets.only(left: 8.0, top: 20),
+                            margin: const EdgeInsets.symmetric(vertical: 12.0),
+                            padding: const EdgeInsets.only(left: 8.0, top: 12),
                             child: SingleChildScrollView(
                               child: CustomDescContent(
                                 desc: data.description ?? '',
@@ -1614,12 +1629,13 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                             ],
                           ),
                           if (data.music?.musicTitle != '' && data.music?.musicTitle != null)
-                            Padding(
-                              padding: const EdgeInsets.only(top: 0.0, left: 8.0, right: 12.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Row(
+                            Container(
+                            margin: const EdgeInsets.only(top: 0.0, left: 8.0, right: 8.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Flexible(
+                                  child: Row(
                                     children: [
                                       const Padding(
                                         padding: EdgeInsets.only(right: 8.0),
@@ -1647,55 +1663,56 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                                                 textAlign: TextAlign.left,
                                               ),
                                       ),
-                                    ],
-                                  ),
-                                  CircleAvatar(
-                                    radius: 18,
-                                    backgroundColor: kHyppeSurface.withOpacity(.9),
-                                    child: CustomBaseCacheImage(
-                                      imageUrl: data.music?.apsaraThumnailUrl ?? '',
-                                      imageBuilder: (_, imageProvider) {
-                                        return Container(
-                                          width: 48,
-                                          height: 48,
-                                          decoration: BoxDecoration(
-                                            color: kDefaultIconDarkColor,
-                                            borderRadius: const BorderRadius.all(Radius.circular(24)),
-                                            image: DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: imageProvider,
+                                      CircleAvatar(
+                                        radius: 18,
+                                        backgroundColor: kHyppeSurface.withOpacity(.9),
+                                        child: CustomBaseCacheImage(
+                                          imageUrl: data.music?.apsaraThumnailUrl ?? '',
+                                          imageBuilder: (_, imageProvider) {
+                                            return Container(
+                                              width: 48,
+                                              height: 48,
+                                              decoration: BoxDecoration(
+                                                color: kDefaultIconDarkColor,
+                                                borderRadius: const BorderRadius.all(Radius.circular(24)),
+                                                image: DecorationImage(
+                                                  fit: BoxFit.cover,
+                                                  image: imageProvider,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          errorWidget: (_, __, ___) {
+                                            return const CustomIconWidget(
+                                              iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                              defaultColor: false,
+                                              color: kHyppeLightBackground,
+                                              height: 18,
+                                            );
+                                          },
+                                          emptyWidget: AnimatedBuilder(
+                                            animation: animatedController,
+                                            builder: (_, child) {
+                                              return Transform.rotate(
+                                                angle: animatedController.value * 2 * -math.pi,
+                                                child: child,
+                                              );
+                                            },
+                                            child: const CustomIconWidget(
+                                              iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                              defaultColor: false,
+                                              color: kHyppeLightBackground,
+                                              height: 18,
                                             ),
                                           ),
-                                        );
-                                      },
-                                      errorWidget: (_, __, ___) {
-                                        return const CustomIconWidget(
-                                          iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
-                                          defaultColor: false,
-                                          color: kHyppeLightBackground,
-                                          height: 18,
-                                        );
-                                      },
-                                      emptyWidget: AnimatedBuilder(
-                                        animation: animatedController,
-                                        builder: (_, child) {
-                                          return Transform.rotate(
-                                            angle: animatedController.value * 2 * -math.pi,
-                                            child: child,
-                                          );
-                                        },
-                                        child: const CustomIconWidget(
-                                          iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
-                                          defaultColor: false,
-                                          color: kHyppeLightBackground,
-                                          height: 18,
                                         ),
                                       ),
-                                    ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                )
+                              ],
                             ),
+                          )
                         ],
                       ),
                     ),

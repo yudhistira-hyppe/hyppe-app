@@ -1844,7 +1844,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
               DeviceOrientation.portraitDown,
             ]);
           }
-          notifier.firstIndex = index;
+          // notifier.firstIndex = index;
           int changevalue;
           changevalue = _currentPosition + 1000;
           if (changevalue > _videoDuration) {
