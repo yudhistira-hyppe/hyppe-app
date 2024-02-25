@@ -1241,10 +1241,10 @@ class PreviewContentNotifier with ChangeNotifier {
         Future.delayed(const Duration(seconds: 1), () {
           if (featureType == FeatureType.story) {
             final videoDuration = betterPlayerController?.value.duration ?? const Duration(seconds: 0);
-            const limitDuration = Duration(seconds: 15, milliseconds: 800);
+            // const limitDuration = Duration(seconds: 15, milliseconds: 800);
             messageLimit = (language.messageLimitStory ?? 'Error');
-            print("=====video duration $videoDuration --- $limitDuration");
-            if (videoDuration > limitDuration) {
+            //Change Limit max jadi 15 Detik
+            if (videoDuration >= const Duration(seconds: 16)) {
               showToast(const Duration(seconds: 3));
             }
             // else if (videoDuration < Duration(seconds: storyMin)) {
