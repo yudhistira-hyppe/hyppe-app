@@ -2,6 +2,7 @@ import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/combination_v2/get_user_profile.dart';
+import 'package:hyppe/core/services/fcm_service.dart';
 import 'package:hyppe/core/services/stream_service.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
@@ -108,6 +109,8 @@ class SettingNotifier extends ChangeNotifier with LoadingNotifier {
 
       context.read<MainNotifier>().tutorialData = [];
       context.read<MainNotifier>().receivedMsg = false;
+      context.read<MainNotifier>().receivedReaction = false;
+      FcmService().haveNotification = ValueNotifier(false);
 
       _eventService.cleanUp();
       _streamService.reset();

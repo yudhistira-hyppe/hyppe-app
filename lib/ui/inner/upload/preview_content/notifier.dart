@@ -806,7 +806,7 @@ class PreviewContentNotifier with ChangeNotifier {
         String outputPath = await System().getSystemPath(params: 'postVideo');
         outputPath = '${outputPath + materialAppKey.currentContext!.getNameByDate()}.mp4';
 
-        String command = '-stream_loop -1 -i $urlAudio -i ${_fileContent?[_indexView]} ${durationVideo.isNotEmpty ? "-t $durationVideo" :"-shortest"} -c copy $outputPath';
+        String command = '-stream_loop -1 -i $urlAudio -i ${_fileContent?[_indexView]} ${durationVideo.isNotEmpty ? "-t $durationVideo" : "-shortest"} -c copy $outputPath';
         await FFmpegKit.executeAsync(
           command,
           (session) async {
@@ -1241,11 +1241,12 @@ class PreviewContentNotifier with ChangeNotifier {
         Future.delayed(const Duration(seconds: 1), () {
           if (featureType == FeatureType.story) {
             final videoDuration = betterPlayerController?.value.duration ?? const Duration(seconds: 0);
-            const limitDuration = Duration(seconds: 1);
+            const limitDuration = Duration(seconds: 15, milliseconds: 800);
             messageLimit = (language.messageLimitStory ?? 'Error');
-            if (videoDuration >= limitDuration) {
+            print("=====video duration $videoDuration --- $limitDuration");
+            if (videoDuration > limitDuration) {
               showToast(const Duration(seconds: 3));
-            } 
+            }
             // else if (videoDuration < Duration(seconds: storyMin)) {
             //   messageLimit = language.messageLessLimitStory ?? 'Error';
             //   showToast(const Duration(seconds: 3));
@@ -1383,7 +1384,7 @@ class PreviewContentNotifier with ChangeNotifier {
       if (videoDuration.inSeconds == 0) {
         return false;
       }
-      if (videoDuration >= limitDuration){
+      if (videoDuration >= limitDuration) {
         return false;
       }
       if (featureType == FeatureType.diary || featureType == FeatureType.vid) {
