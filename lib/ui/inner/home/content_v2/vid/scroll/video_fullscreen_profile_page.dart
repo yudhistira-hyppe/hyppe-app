@@ -10,6 +10,7 @@ import 'package:hyppe/app.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -31,7 +32,6 @@ import 'package:hyppe/ui/constant/widget/custom_desc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/diary_sensitive.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
@@ -58,6 +58,7 @@ class VideoFullProfilescreenPage extends StatefulWidget {
   final Widget? slider;
   final VideoIndicator videoIndicator;
   final String? thumbnail;
+  final PageSrc pageSrc;
   final List<ContentData>? vidData;
   final int? index;
   final Function()? loadMoreFunction;
@@ -72,6 +73,7 @@ class VideoFullProfilescreenPage extends StatefulWidget {
     this.slider,
     required this.videoIndicator,
     required this.thumbnail,
+    required this.pageSrc,
     this.vidData,
     this.index,
     this.loadMoreFunction,
@@ -208,9 +210,11 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
     });
 
     curentIndex = widget.index ?? 0;
-    if ((vidData?.length ?? 0) - 1 == curentIndex) {
-      getNewData();
-    }
+    
+    //====Comment=====
+    // if ((vidData?.length ?? 0) - 1 == curentIndex) {
+    //   getNewData();
+    // }
 
     _initializeTimer();
   }
@@ -980,7 +984,7 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
                     physics: const AlwaysScrollableScrollPhysics(),
                     scrollDirection: Axis.vertical,
                     itemCount: vidData?.length ?? 0,
-                    onPageChanged: (value) {
+                    onPageChanged: (value) async {
                       curentIndex = value;
                       vidNotifier.lastScrollIdx = value;
                       if (_lastCurIndex != curentIndex) {
@@ -1007,7 +1011,16 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
 
                         if ((vidData?.length ?? 0) - 1 == curentIndex) {
                           //get new data;
-                          getNewData();
+                          // getNewData();
+                          // ===Change Load More Irfan =====
+                          await vidNotifier.loadMore(context, controller, widget.pageSrc, '');
+                          if (mounted) {
+                            setState(() {
+                              vidNotifier.vidData = vidNotifier.vidData;
+                            });
+                          } else {
+                            vidNotifier.vidData = vidNotifier.vidData;
+                          }
                         }
                         _lastCurIndex = curentIndex;
                       }
@@ -1403,7 +1416,8 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
               child: Container(
                   width: MediaQuery.of(context).size.width * .7,
                   padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Stack(children: [
+                  child: Stack(
+                    children: [
                     Positioned(
                       bottom: orientation == Orientation.portrait ? 28 : 0,
                       left: 0,
@@ -1476,7 +1490,7 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
                                         : SizeConfig.screenHeight! * .1
                                     : 54),
                             alignment: Alignment.centerLeft,
-                            margin: const EdgeInsets.symmetric(horizontal: 16.0),
+                            // margin: const EdgeInsets.symmetric(horizontal: 16.0),
                             padding: const EdgeInsets.only(left: 8.0, top: 20),
                             child: SingleChildScrollView(
                               child: CustomDescContent(
@@ -1605,12 +1619,13 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
                             ],
                           ),
                           if (data.music?.musicTitle != '' && data.music?.musicTitle != null)
-                            Padding(
-                              padding: const EdgeInsets.only(top: 0.0, left: 8.0, right: 12.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Row(
+                          Container(
+                            margin: const EdgeInsets.only(top: 0.0, left: 8.0, right: 8.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Flexible(
+                                  child: Row(
                                     children: [
                                       const Padding(
                                         padding: EdgeInsets.only(right: 8.0),
@@ -1638,55 +1653,56 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
                                                 textAlign: TextAlign.left,
                                               ),
                                       ),
-                                    ],
-                                  ),
-                                  CircleAvatar(
-                                    radius: 18,
-                                    backgroundColor: kHyppeSurface.withOpacity(.9),
-                                    child: CustomBaseCacheImage(
-                                      imageUrl: data.music?.apsaraThumnailUrl ?? '',
-                                      imageBuilder: (_, imageProvider) {
-                                        return Container(
-                                          width: 48,
-                                          height: 48,
-                                          decoration: BoxDecoration(
-                                            color: kDefaultIconDarkColor,
-                                            borderRadius: const BorderRadius.all(Radius.circular(24)),
-                                            image: DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: imageProvider,
+                                      CircleAvatar(
+                                        radius: 18,
+                                        backgroundColor: kHyppeSurface.withOpacity(.9),
+                                        child: CustomBaseCacheImage(
+                                          imageUrl: data.music?.apsaraThumnailUrl ?? '',
+                                          imageBuilder: (_, imageProvider) {
+                                            return Container(
+                                              width: 48,
+                                              height: 48,
+                                              decoration: BoxDecoration(
+                                                color: kDefaultIconDarkColor,
+                                                borderRadius: const BorderRadius.all(Radius.circular(24)),
+                                                image: DecorationImage(
+                                                  fit: BoxFit.cover,
+                                                  image: imageProvider,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          errorWidget: (_, __, ___) {
+                                            return const CustomIconWidget(
+                                              iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                              defaultColor: false,
+                                              color: kHyppeLightBackground,
+                                              height: 18,
+                                            );
+                                          },
+                                          emptyWidget: AnimatedBuilder(
+                                            animation: animatedController,
+                                            builder: (_, child) {
+                                              return Transform.rotate(
+                                                angle: animatedController.value * 2 * -math.pi,
+                                                child: child,
+                                              );
+                                            },
+                                            child: const CustomIconWidget(
+                                              iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                              defaultColor: false,
+                                              color: kHyppeLightBackground,
+                                              height: 18,
                                             ),
                                           ),
-                                        );
-                                      },
-                                      errorWidget: (_, __, ___) {
-                                        return const CustomIconWidget(
-                                          iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
-                                          defaultColor: false,
-                                          color: kHyppeLightBackground,
-                                          height: 18,
-                                        );
-                                      },
-                                      emptyWidget: AnimatedBuilder(
-                                        animation: animatedController,
-                                        builder: (_, child) {
-                                          return Transform.rotate(
-                                            angle: animatedController.value * 2 * -math.pi,
-                                            child: child,
-                                          );
-                                        },
-                                        child: const CustomIconWidget(
-                                          iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
-                                          defaultColor: false,
-                                          color: kHyppeLightBackground,
-                                          height: 18,
                                         ),
                                       ),
-                                    ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                )
+                              ],
                             ),
+                          )
                         ],
                       ),
                     ),

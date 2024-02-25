@@ -737,6 +737,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
         builder: (_) => VideoFullProfilescreenPage(
             vidData: vidData,
             enableWakelock: true,
+            pageSrc: widget.arguments?.pageSrc??PageSrc.selfProfile,
             thumbnail: (dataSelected?.isApsara ?? false) ? (dataSelected?.mediaThumbEndPoint ?? '') : '${dataSelected?.fullThumbPath}',
             onClose: () {
               setState(() {
@@ -1113,21 +1114,22 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                         withMargin: true,
                                       ),
                                     ),
-                                    // postIdVisibility == ''
-                                    //     ? Center(
-                                    //         child: Align(
-                                    //         alignment: Alignment.center,
-                                    //         child: SizedBox(
-                                    //           height: MediaQuery.of(context).size.width * 9.0 / 16.0,
-                                    //           width: MediaQuery.of(context).size.width,
-                                    //           child: const CustomIconWidget(
-                                    //             defaultColor: false,
-                                    //             width: 40,
-                                    //             iconData: '${AssetPath.vectorPath}pause2.svg',
-                                    //             // color: kHyppeLightButtonText,
-                                    //           ),
-                                    //         ),
-                                    //       ))
+                                    //Show Button Play
+                                    if (dataSelected != vidData?[index])
+                                    Center(
+                                        child: Align(
+                                        alignment: Alignment.center,
+                                        child: SizedBox(
+                                          height: MediaQuery.of(context).size.width * 9.0 / 16.0,
+                                          width: MediaQuery.of(context).size.width,
+                                          child: const CustomIconWidget(
+                                            defaultColor: false,
+                                            width: 40,
+                                            iconData: '${AssetPath.vectorPath}pause2.svg',
+                                            // color: kHyppeLightButtonText,
+                                          ),
+                                        ),
+                                      ))
                                     //     : Container(),
                                   ],
                                 ),

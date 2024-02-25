@@ -670,7 +670,8 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
                     // padding: EdgeInsets.only(bottom: 25.0),
                     child: Offstage(offstage: _isLock, child: _buildContentWidget(context, widget.orientation, notifier)),
                   ),
-                if (widget.fromFullScreen) detailAdsWidget(context, notifier.tempAdsData ?? AdsData(), notifier)
+                //Change Data from notifier.tempAdsData to widget.data ===Irfan====
+                if (widget.fromFullScreen) detailAdsWidget(context, widget.data ?? AdsData(), notifier)
               ],
             ),
           );
@@ -724,32 +725,40 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
                     },
                     errorWidget: (_, url, ___) {
                       if (url.isNotEmpty && url.withHttp()) {
+                        // return ClipRRect(
+                        //     borderRadius: BorderRadius.circular(18),
+                        //     child: Image.network(url, width: 36, height: 36, fit: BoxFit.cover, loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                        //       if (loadingProgress == null) return child;
+                        //       return Center(
+                        //         child: SizedBox(
+                        //           width: 20,
+                        //           height: 20,
+                        //           child: CircularProgressIndicator(
+                        //             value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                        //           ),
+                        //         ),
+                        //       );
+                        //     }, errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                        //       return Container(
+                        //         width: 36,
+                        //         height: 36,
+                        //         decoration: const BoxDecoration(
+                        //           borderRadius: BorderRadius.all(Radius.circular(18)),
+                        //           image: DecorationImage(
+                        //             fit: BoxFit.cover,
+                        //             image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
+                        //           ),
+                        //         ),
+                        //       );
+                        //     }));
                         return ClipRRect(
                             borderRadius: BorderRadius.circular(18),
-                            child: Image.network(url, width: 36, height: 36, fit: BoxFit.cover, loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return Center(
-                                child: SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(
-                                    value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
-                                  ),
-                                ),
-                              );
-                            }, errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                              return Container(
-                                width: 36,
-                                height: 36,
-                                decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(18)),
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
-                                  ),
-                                ),
-                              );
-                            }));
+                            child: Image.asset(
+                              '${AssetPath.pngPath}profile-error.jpg',
+                              fit: BoxFit.fitWidth,
+                              scale: 8,
+                            ),
+                          );
                       }
                       return Container(
                         width: 24,
