@@ -138,7 +138,7 @@ class _OnLoginAppState extends State<OnLoginApp> {
           ),
           Platform.isIOS
               ? Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   child: ButtomSosmed(
                     function: () => notifier.loginAppleSign(context),
                     child: notifier.isLoading

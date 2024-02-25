@@ -175,14 +175,16 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
   }
 
   bool isScrolling = false;
+  //Ads Condition == Irfan ==
+  bool isScrollAds = false;
 
   @override
   void initState() {
     super.initState();
     // SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-
     controller = PageController(initialPage: widget.index ?? 0);
     controller.addListener(() {
+      
       fAliplayer?.pause();
       setState(() {
         isScrolled = true;
@@ -204,11 +206,14 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
     });
 
     curentIndex = widget.index ?? 0;
+
     if ((vidData?.length ?? 0) - 1 == curentIndex) {
       getNewData();
     }
-
-    _initializeTimer();
+    if (vidData?[widget.index??0].inBetweenAds == null && vidData?[widget.index??0].postID != null){
+      _initializeTimer();
+    }
+    
   }
 
   initAlipayer() {
@@ -945,6 +950,7 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                     onPageChanged: (value) {
                       curentIndex = value;
                       notifier.currIndex = value;
+                      isScrollAds = true;
                       if (_lastCurIndex != curentIndex) {
                         fAliplayer?.stop();
                         fAliplayer?.clearScreen();
@@ -1001,7 +1007,7 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                           : isAds
                               ? context.getAdsInBetween(vidData, index, (info) {}, () {
                                   context.read<PreviewVidNotifier>().setInBetweenAds(index, null);
-                                }, (player, id) {}, isfull: true, isVideo: true, orientation: beforePosition, isScroll: true)
+                                }, (player, id) {}, isfull: true, isVideo: true, orientation: beforePosition, isScroll: isScrollAds)
                               : videoPlayerWidget(vidNotifier, vidData![index], index);
                     })),
       );

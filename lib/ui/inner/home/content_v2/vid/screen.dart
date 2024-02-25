@@ -600,44 +600,44 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
 
   @override
   void didPopNext() {
-    isHomeScreen = true;
-    print("============= didPopNext dari vid");
-    final notifier = context.read<PreviewVidNotifier>();
+    // isHomeScreen = true;
+    // print("============= didPopNext dari vid");
+    // final notifier = context.read<PreviewVidNotifier>();
 
-    _initializeTimer();
-    if (_curIdx != -1) {
-      // notifier.vidData?[_curIdx].fAliplayer?.play();
-    }
-    if (postIdVisibility == '') {
-      setState(() {
-        postIdVisibility == '';
-      });
-      Future.delayed(Duration(milliseconds: 400), () {
-        setState(() {
-          postIdVisibility = postIdVisibilityTemp;
-        });
-      });
-    }
+    // _initializeTimer();
+    // if (_curIdx != -1) {
+    //   // notifier.vidData?[_curIdx].fAliplayer?.play();
+    // }
+    // if (postIdVisibility == '') {
+    //   setState(() {
+    //     postIdVisibility == '';
+    //   });
+    //   Future.delayed(Duration(milliseconds: 400), () {
+    //     setState(() {
+    //       postIdVisibility = postIdVisibilityTemp;
+    //     });
+    //   });
+    // }
 
-    var temp1 = notifier.vidData?[_curIdx];
-    var temp2 = notifier.vidData![notifier.currentIndex];
+    // var temp1 = notifier.vidData?[_curIdx];
+    // var temp2 = notifier.vidData![notifier.currentIndex];
 
-    print("===========dari didpopnext ${_curIdx} ${notifier.currentIndex}");
+    // print("===========dari didpopnext ${_curIdx} ${notifier.currentIndex}");
 
-    if (_curIdx < notifier.currentIndex) {
-      setState(() {
-        notifier.vidData?[_curIdx].fAliplayer?.stop();
-        _curIdx = notifier.currentIndex;
-        // pn.diaryData!.removeRange(_curIdx, pn.currentIndex);
-        notifier.vidData!.removeRange(0, notifier.currentIndex);
-        widget.scrollController?.animateTo(0, duration: const Duration(milliseconds: 50), curve: Curves.ease);
-      });
-    } else if (_curIdx > notifier.currentIndex) {
-      setState(() {
-        notifier.vidData?[_curIdx] = temp2;
-        notifier.vidData?[notifier.currentIndex] = temp1!;
-      });
-    }
+    // if (_curIdx < notifier.currentIndex) {
+    //   setState(() {
+    //     notifier.vidData?[_curIdx].fAliplayer?.stop();
+    //     _curIdx = notifier.currentIndex;
+    //     // pn.diaryData!.removeRange(_curIdx, pn.currentIndex);
+    //     notifier.vidData!.removeRange(0, notifier.currentIndex);
+    //     widget.scrollController?.animateTo(0, duration: const Duration(milliseconds: 50), curve: Curves.ease);
+    //   });
+    // } else if (_curIdx > notifier.currentIndex) {
+    //   setState(() {
+    //     notifier.vidData?[_curIdx] = temp2;
+    //     notifier.vidData?[notifier.currentIndex] = temp1!;
+    //   });
+    // }
 
     // System().disposeBlock();
 
@@ -1059,6 +1059,12 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                     ? VisibilityDetector(
                         key: Key(vidData.postID ?? index.toString()),
                         onVisibilityChanged: (info) async {
+                          //fAliplayer stoped === Irfan ====
+                          fAliplayer?.pause();
+                          setState(() {
+                            isPlay = false;
+                            _showLoading = false;
+                          });
                           if (info.visibleFraction >= 0.8) {
                             setState(() {
                               isPlayAds = false;
@@ -1136,17 +1142,16 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                               bottom: kToolbarHeight * 2.5,
                               child: GestureDetector(
                                 onTap: () {
-                                  // Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-                                  //     builder: (_) => VideoFullscreenPage(
-                                  //           data: notifier.vidData![index],
-                                  //           vidData: notifier.vidData,
-                                  //           index: index,
-                                  //           onClose: () {},
-                                  //           isAutoPlay: true,
-                                  //           isLanding: true,
-                                  //           videoIndicator: VideoIndicator(videoDuration: 0, seekValue: 0, positionText: 0, isMute: false),
-                                  //           thumbnail: '',
-                                  //         )));
+                                  //Click Ads === Irfan ===
+                                  Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+                                      builder: (_) => VideoFullLandingscreenPage(
+                                            enableWakelock: true,
+                                            onClose: (){},
+                                            isLanding: true,
+                                            videoIndicator: VideoIndicator(videoDuration: 0, seekValue: 0, positionText: 0, isMute: isMute),
+                                            thumbnail: '',
+                                            index: index,
+                                          )));
                                 },
                                 child: Container(
                                   color: Colors.transparent,
