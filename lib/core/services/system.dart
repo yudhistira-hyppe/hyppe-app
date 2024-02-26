@@ -711,7 +711,6 @@ class System {
               if (result.files[element].extension?.toLowerCase() == MP4 || result.files[element].extension?.toLowerCase() == MOV) {
                 await getVideoMetadata(result.files[element].path ?? '').then((value) {
                   _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
-
                   // hapus file yang durasinya lebih dari 60 detik
                   if (_duration.inSeconds < 14) {
                     // _failFile = '$_failFile, ${_pickerResult.files[element].name}\n';

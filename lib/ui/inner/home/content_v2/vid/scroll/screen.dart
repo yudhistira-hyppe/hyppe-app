@@ -1489,6 +1489,10 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
             isPlay = !_showTipsWidget;
           }
 
+          if (_currentPosition > 0){
+            fAliplayer?.seekTo(_currentPosition.ceil(), FlutterAvpdef.ACCURATE);
+            // fAliplayer?.play();
+          }
           fAliplayer?.play();
 
           // int changevalue;

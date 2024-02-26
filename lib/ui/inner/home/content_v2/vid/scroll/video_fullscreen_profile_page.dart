@@ -326,18 +326,19 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusPaused:
           isPause = true;
+          setState(() {});
           // Wakelock.disable();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusStopped:
-          // isPlay = false;
-          _showLoading = false;
-          try {
-            // Wakelock.disable();
-            if (mounted) {
-              setState(() {});
+          if (mounted) {
+            if (_currentPosition > 0) {
+              isPause = true;
+              isPlay = true;
+            } else {
+              isPlay = false;
+              _showLoading = false;
             }
-          } catch (e) {
-            e.logger();
+            setState(() {});
           }
 
           break;
@@ -798,10 +799,17 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
     return GestureDetector(
       onTap: () {
         if (isPause) {
-          // if (_showTipsWidget) fAliplayer?.prepare();
-          fAliplayer?.play();
-          isPause = false;
-          setState(() {});
+          if (_currentPosition > 0 && _currentPlayerState == FlutterAvpdef.AVPStatus_AVPStatusStopped) {
+            fAliplayer?.prepare();
+            fAliplayer?.seekTo(_currentPosition, FlutterAvpdef.ACCURATE);
+            fAliplayer?.play();
+            isPause = false;
+            setState(() {});
+          } else {
+            fAliplayer?.play();
+            isPause = false;
+            setState(() {});
+          }
         } else {
           fAliplayer?.pause();
           isPause = true;
@@ -1098,7 +1106,17 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
                     width: SizeConfig.screenWidth,
                   ),
                 ),
-
+                if (isPause && _currentPlayerState == FlutterAvpdef.AVPStatus_AVPStatusStopped)
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    child: VideoThumbnail(
+                      videoData: data,
+                      onDetail: false,
+                      fn: () {},
+                      withMargin: true,
+                    ),
+                  ),
                 // if (isloading)
                 //   Container(
                 //     decoration: BoxDecoration(
