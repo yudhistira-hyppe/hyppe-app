@@ -1259,7 +1259,7 @@ class PreviewContentNotifier with ChangeNotifier {
                     ? const Duration(minutes: 30, milliseconds: 900)
                     : const Duration(seconds: 0);
             print('State Preview Limit: ${videoDuration.inSeconds} ${limitDuration.inSeconds} $featureType');
-
+            print('duration  video $videoDuration');
             if (videoDuration >= limitDuration) {
               messageLimit = featureType == FeatureType.vid
                   ? (language.messageLimitVideo ?? 'Error')
@@ -1267,7 +1267,7 @@ class PreviewContentNotifier with ChangeNotifier {
                       ? (language.messageLimitDiary ?? 'Error')
                       : 'Error';
               showToast(const Duration(seconds: 3));
-            } else if (videoDuration < Duration(seconds: vidMin)) {
+            } else if (videoDuration < Duration(seconds: 14)) {
               messageLimit = language.messageLessLimitVideo ?? 'Error';
               showToast(const Duration(seconds: 3));
             }

@@ -323,14 +323,21 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusPaused:
           isPause = true;
+          setState(() { });
           // Wakelock.disable();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusStopped:
           // isPlay = false;
-          _showLoading = false;
           try {
             // Wakelock.disable();
             if (mounted) {
+              print('aliyun : onStateChanged $_currentPosition');
+              if (_currentPosition > 0){
+                isPause = true;
+                isPlay = true;
+              }else{
+                _showLoading = false;
+              }
               setState(() {});
             }
           } catch (e) {
@@ -750,9 +757,17 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
       onTap: () {
         if (isPause) {
           // if (_showTipsWidget) fAliplayer?.prepare();
-          fAliplayer?.play();
-          isPause = false;
-          setState(() {});
+          if (_currentPosition > 0 && _currentPlayerState == FlutterAvpdef.AVPStatus_AVPStatusStopped){
+            fAliplayer?.prepare();
+            fAliplayer?.seekTo(_currentPosition, FlutterAvpdef.ACCURATE);
+            fAliplayer?.play();
+            isPause = false;
+            setState(() {});
+          }else{
+            fAliplayer?.play();
+            isPause = false;
+            setState(() {});
+          }
         } else {
           fAliplayer?.pause();
           isPause = true;
@@ -1112,6 +1127,17 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                     aliPlayerViewType: AliPlayerViewTypeForAndroid.textureview,
                   ),
                 ),
+                if (isPause && _currentPlayerState == FlutterAvpdef.AVPStatus_AVPStatusStopped)
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    child: VideoThumbnail(
+                      videoData: data,
+                      onDetail: false,
+                      fn: () {},
+                      withMargin: true,
+                    ),
+                  ),
                 // Positioned.fill(child: Center(child: Text("notifier.adsvideoIsPlay ${notifier.adsvideoIsPlay}"))),
                 GestureDetector(
                   onTap: () {
@@ -1125,22 +1151,7 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                     width: SizeConfig.screenWidth,
                   ),
                 ),
-
-                // if (isloading)
-                //   Container(
-                //     decoration: BoxDecoration(
-                //       color: Colors.black,
-                //       borderRadius: BorderRadius.circular(16),
-                //     ),
-                //     height: MediaQuery.of(context).size.width * 9.0 / 16.0,
-                //     width: MediaQuery.of(context).size.width,
-                //     child: VideoThumbnail(
-                //       videoData: data,
-                //       onDetail: false,
-                //       fn: () {},
-                //       withMargin: true,
-                //     ),
-                //   ),
+                
                 if (isloading)
                   const Positioned.fill(
                     child: Align(
