@@ -632,7 +632,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void dispose() {
     fAliplayer?.stop();
-    fAliplayer?.destroy();
+    // fAliplayer?.destroy();
     print("---=-=-=-=--===-=-=-=-DiSPOSE--=-=-=-=-=-=-=-=-=-=-=----==-=");
     // fAliplayer?.destroy();
 
