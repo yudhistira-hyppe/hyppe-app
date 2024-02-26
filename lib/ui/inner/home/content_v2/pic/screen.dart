@@ -1336,11 +1336,14 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                               if (picData != null) {
                                                 _likeNotifier.likePost(context, notifier.pic![index]).then((value) {
                                                   List<ContentData>? pic2 = context.read<ScrollPicNotifier>().pics;
-                                                  int idx2 = pic2!.indexWhere((e) => e.postID == value['_id']);
-                                                  print("-=-=-haha indec $idx2");
-                                                  pic2[idx2].insight?.isPostLiked = value['isPostLiked'];
-                                                  pic2[idx2].insight?.likes = value['likes'];
-                                                  pic2[idx2].isLiked = value['isLiked'];
+                                                  if (pic2?.isNotEmpty ?? false) {
+                                                    int idx2 = pic2!.indexWhere((e) => e.postID == value['_id']);
+                                                    if (idx2 != -1) {
+                                                      pic2[idx2].insight?.isPostLiked = value['isPostLiked'];
+                                                      pic2[idx2].insight?.likes = value['likes'];
+                                                      pic2[idx2].isLiked = value['isLiked'];
+                                                    }
+                                                  }
                                                 });
                                               }
                                             },
@@ -1535,10 +1538,12 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                         if (picData != null) {
                                                           likeNotifier.likePost(context, notifier.pic![index]).then((value) {
                                                             List<ContentData>? pic2 = context.read<ScrollPicNotifier>().pics;
-                                                            int idx2 = pic2!.indexWhere((e) => e.postID == value['_id']);
-                                                            pic2[idx2].insight?.isPostLiked = value['isPostLiked'];
-                                                            pic2[idx2].insight?.likes = value['likes'];
-                                                            pic2[idx2].isLiked = value['isLiked'];
+                                                            if (pic2?.isNotEmpty ?? false) {
+                                                              int idx2 = pic2!.indexWhere((e) => e.postID == value['_id']);
+                                                              pic2[idx2].insight?.isPostLiked = value['isPostLiked'];
+                                                              pic2[idx2].insight?.likes = value['likes'];
+                                                              pic2[idx2].isLiked = value['isLiked'];
+                                                            }
                                                           });
                                                         }
                                                       },

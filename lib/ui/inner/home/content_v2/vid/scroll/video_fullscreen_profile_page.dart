@@ -409,7 +409,7 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
         _currentPosition = _videoDuration;
       }
 
-      nextPage();
+      // nextPage();
     });
 
     fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
@@ -1342,6 +1342,9 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
             buttonVideoRight(
                 onFunctionTap: () {
                   fAliplayer?.pause();
+                  setState(() {
+                    isPause = true;
+                  });
                   context.read<VidDetailNotifier>().createdDynamicLink(context, data: data);
                 },
                 iconData: '${AssetPath.vectorPath}share-shadow.svg',
