@@ -341,6 +341,7 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
     if (index != 2) {
       if (index == 3) {
         if (isGuest ?? false) {
+          isactivealiplayer = true;
           ShowBottomSheet().onLoginApp(Routing.navigatorKey.currentContext ?? context);
         } else {
           setState(() {
@@ -351,6 +352,7 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
       } else if (index == 4) {
         notifier.pageIndex = index;
         if (isGuest ?? false) {
+          isactivealiplayer = true;
           ShowBottomSheet().onLoginApp(Routing.navigatorKey.currentContext ?? context);
         }
       } else {
@@ -361,8 +363,10 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
       }
     } else {
       if (isGuest ?? false) {
+        isactivealiplayer = true;
         ShowBottomSheet().onLoginApp(Routing.navigatorKey.currentContext ?? context);
       } else {
+        isactivealiplayer = true;
         PreUploadContentNotifier pn = (Routing.navigatorKey.currentContext ?? context).read<PreUploadContentNotifier>();
         pn.hastagChallange = '';
         notifier.onShowPostContent(consumerContext);

@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -102,7 +103,7 @@ class ShowBottomSheet {
               child: const OnLoginApp(),
             ),
           );
-        });
+        }).whenComplete(() => isactivealiplayer = false);
   }
 
   static onStreamWatchersStatus(
@@ -321,7 +322,7 @@ class ShowBottomSheet {
           ),
         );
       },
-    );
+    ).whenComplete(() => isactivealiplayer = false);
   }
 
   static onLongPressDeleteMessage(BuildContext _, {messageData.MessageDataV2? data, required Function() function}) {

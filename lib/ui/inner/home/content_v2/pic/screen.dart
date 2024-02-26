@@ -93,7 +93,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   bool isloading = false;
 
   // int _loadingPercent = 0;
-  // int _currentPlayerState = 0;
+  int _currentPlayerState = 0;
   int _videoDuration = 1;
   // int _currentPosition = 0;
   // int _bufferPosition = 0;
@@ -246,7 +246,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     });
     fAliplayer?.setOnVideoSizeChanged((width, height, rotation, playerId) {});
     fAliplayer?.setOnStateChanged((newState, playerId) {
-      // _currentPlayerState = newState;
+      _currentPlayerState = newState;
       print("aliyun : onStateChanged $newState");
       switch (newState) {
         case FlutterAvpdef.AVPStatus_AVPStatusStarted:
@@ -632,7 +632,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void dispose() {
     fAliplayer?.stop();
-    fAliplayer?.destroy();
+    // fAliplayer?.destroy();
     print("---=-=-=-=--===-=-=-=-DiSPOSE--=-=-=-=-=-=-=-=-=-=-=----==-=");
     // fAliplayer?.destroy();
 
@@ -664,6 +664,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void didPopNext() {
     print("======= didPopNext");
+    isactivealiplayer = false;
     isInPage = true;
     fAliplayer?.play();
     isActivePage = true;
@@ -734,8 +735,17 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     SizeConfig().init(context);
     context.select((ErrorService value) => value.getError(ErrorType.pic));
     // AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
+    
+    
     return Consumer2<PreviewPicNotifier, HomeNotifier>(
-      builder: (_, notifier, home, __) => Container(
+      
+      builder: (_, notifier, home, __) {
+        if (isactivealiplayer){
+          fAliplayer?.pause();
+        }else{
+          fAliplayer?.play();
+        }
+        return Container(
         width: SizeConfig.screenWidth,
         height: SizeWidget.barHyppePic,
         // margin: const EdgeInsets.only(top: 16.0, bottom: 12),
@@ -879,7 +889,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
             ),
           ],
         ),
-      ),
+      );
+      }
     );
   }
 
@@ -1779,6 +1790,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                   setState(() {
                     notifier.isMute = !notifier.isMute;
                   });
+                  if (_currentPlayerState == FlutterAvpdef.AVPStatus_AVPStatusStarted){
+                    fAliplayer?.play();
+                  }
                   print("muteeee----------------- ${notifier.isMute}");
                   fAliplayer?.setMuted(notifier.isMute);
                 },
