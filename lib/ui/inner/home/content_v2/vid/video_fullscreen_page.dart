@@ -917,7 +917,7 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
 
     return Consumer2<VideoNotifier, PreviewVidNotifier>(builder: (context, notifier, vidNotifier, _) {
       vidData = vidNotifier.vidData;
-      print('view ads: 2 ${vidData}');
+      // print('view ads: 2 ${vidData}');
       return Scaffold(
         key: _scaffoldKeyPlayer,
         body: GestureDetector(
@@ -998,6 +998,12 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                       // );
                       print('view ads: 1');
                       final isAds = vidData?[index].inBetweenAds != null && vidData?[index].postID == null;
+                      if (isAds){
+                        //fAliplayer stoped === Irfan ====
+                          fAliplayer?.pause();
+                          isPlay = false;
+                          _showLoading = false;
+                      }
 
                       return isloadingRotate
                           ? Container(
