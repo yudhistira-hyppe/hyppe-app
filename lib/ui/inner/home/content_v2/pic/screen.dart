@@ -1320,9 +1320,11 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
                                               // fAliplayer?.pause();
                                               if (!isPrepareMusic) {
+                                                isactivealiplayer = true;
                                                 var res = await Routing().move(Routes.picFullScreenDetail, argument: PicFullscreenArgument(picData: notifier.pic!, index: index, scrollPic: false));
                                                 if (res != null || res == null) {
-                                                  fAliplayer?.play();
+                                                  // fAliplayer?.play();
+                                                  isactivealiplayer = false;
                                                   fAliplayer?.setMuted(notifier.isMute);
                                                   // var temp1 = notifier.pic![_curIdx];
                                                   // var temp2 = notifier.pic![notifier.currentIndex];
