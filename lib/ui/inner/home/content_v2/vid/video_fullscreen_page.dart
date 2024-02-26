@@ -326,7 +326,7 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
           // Wakelock.disable();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusStopped:
-          isPlay = false;
+          // isPlay = false;
           _showLoading = false;
           try {
             // Wakelock.disable();
@@ -1046,7 +1046,16 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
           // } else {
           // onFullscreen(notifier);
           // }
+          // int changevalue;
+          // changevalue = _currentPosition + 1000;
+          // if (changevalue > _videoDuration) {
+          //   changevalue = _videoDuration;
+          // }
 
+          // vidData?[widget.index ?? 0].isLoading = true;
+          // Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
+
+          // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
         },
         onClose: () {
           if (mounted) {
