@@ -210,7 +210,7 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
     });
 
     curentIndex = widget.index ?? 0;
-    
+
     //====Comment=====
     // if ((vidData?.length ?? 0) - 1 == curentIndex) {
     //   getNewData();
@@ -329,7 +329,7 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
           // Wakelock.disable();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusStopped:
-          isPlay = false;
+          // isPlay = false;
           _showLoading = false;
           try {
             // Wakelock.disable();
@@ -1416,8 +1416,7 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
               child: Container(
                   width: MediaQuery.of(context).size.width * .7,
                   padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Stack(
-                    children: [
+                  child: Stack(children: [
                     Positioned(
                       bottom: orientation == Orientation.portrait ? 28 : 0,
                       left: 0,
@@ -1619,90 +1618,90 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
                             ],
                           ),
                           if (data.music?.musicTitle != '' && data.music?.musicTitle != null)
-                          Container(
-                            margin: const EdgeInsets.only(top: 0.0, left: 8.0, right: 8.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Flexible(
-                                  child: Row(
-                                    children: [
-                                      const Padding(
-                                        padding: EdgeInsets.only(right: 8.0),
-                                        child: CustomIconWidget(
-                                          iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
-                                          defaultColor: false,
-                                          color: kHyppeLightBackground,
-                                          height: 18,
+                            Container(
+                              margin: const EdgeInsets.only(top: 0.0, left: 8.0, right: 8.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Flexible(
+                                    child: Row(
+                                      children: [
+                                        const Padding(
+                                          padding: EdgeInsets.only(right: 8.0),
+                                          child: CustomIconWidget(
+                                            iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                            defaultColor: false,
+                                            color: kHyppeLightBackground,
+                                            height: 18,
+                                          ),
                                         ),
-                                      ),
-                                      Expanded(
-                                        child: _textSize(data.music?.musicTitle ?? '', const TextStyle(fontWeight: FontWeight.bold)).width > SizeConfig.screenWidth! * .56
-                                            ? SizedBox(
-                                                width: SizeConfig.screenWidth! * .56,
-                                                height: kTextTabBarHeight,
-                                                child: Marquee(
-                                                  text: '  ${data.music?.musicTitle ?? ''}',
-                                                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),
+                                        Expanded(
+                                          child: _textSize(data.music?.musicTitle ?? '', const TextStyle(fontWeight: FontWeight.bold)).width > SizeConfig.screenWidth! * .56
+                                              ? SizedBox(
+                                                  width: SizeConfig.screenWidth! * .56,
+                                                  height: kTextTabBarHeight,
+                                                  child: Marquee(
+                                                    text: '  ${data.music?.musicTitle ?? ''}',
+                                                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),
+                                                  ),
+                                                )
+                                              : CustomTextWidget(
+                                                  textToDisplay: " ${data.music?.musicTitle ?? ''}",
+                                                  maxLines: 1,
+                                                  textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700),
+                                                  textAlign: TextAlign.left,
                                                 ),
-                                              )
-                                            : CustomTextWidget(
-                                                textToDisplay: " ${data.music?.musicTitle ?? ''}",
-                                                maxLines: 1,
-                                                textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700),
-                                                textAlign: TextAlign.left,
-                                              ),
-                                      ),
-                                      CircleAvatar(
-                                        radius: 18,
-                                        backgroundColor: kHyppeSurface.withOpacity(.9),
-                                        child: CustomBaseCacheImage(
-                                          imageUrl: data.music?.apsaraThumnailUrl ?? '',
-                                          imageBuilder: (_, imageProvider) {
-                                            return Container(
-                                              width: 48,
-                                              height: 48,
-                                              decoration: BoxDecoration(
-                                                color: kDefaultIconDarkColor,
-                                                borderRadius: const BorderRadius.all(Radius.circular(24)),
-                                                image: DecorationImage(
-                                                  fit: BoxFit.cover,
-                                                  image: imageProvider,
+                                        ),
+                                        CircleAvatar(
+                                          radius: 18,
+                                          backgroundColor: kHyppeSurface.withOpacity(.9),
+                                          child: CustomBaseCacheImage(
+                                            imageUrl: data.music?.apsaraThumnailUrl ?? '',
+                                            imageBuilder: (_, imageProvider) {
+                                              return Container(
+                                                width: 48,
+                                                height: 48,
+                                                decoration: BoxDecoration(
+                                                  color: kDefaultIconDarkColor,
+                                                  borderRadius: const BorderRadius.all(Radius.circular(24)),
+                                                  image: DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image: imageProvider,
+                                                  ),
                                                 ),
-                                              ),
-                                            );
-                                          },
-                                          errorWidget: (_, __, ___) {
-                                            return const CustomIconWidget(
-                                              iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
-                                              defaultColor: false,
-                                              color: kHyppeLightBackground,
-                                              height: 18,
-                                            );
-                                          },
-                                          emptyWidget: AnimatedBuilder(
-                                            animation: animatedController,
-                                            builder: (_, child) {
-                                              return Transform.rotate(
-                                                angle: animatedController.value * 2 * -math.pi,
-                                                child: child,
                                               );
                                             },
-                                            child: const CustomIconWidget(
-                                              iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
-                                              defaultColor: false,
-                                              color: kHyppeLightBackground,
-                                              height: 18,
+                                            errorWidget: (_, __, ___) {
+                                              return const CustomIconWidget(
+                                                iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                                defaultColor: false,
+                                                color: kHyppeLightBackground,
+                                                height: 18,
+                                              );
+                                            },
+                                            emptyWidget: AnimatedBuilder(
+                                              animation: animatedController,
+                                              builder: (_, child) {
+                                                return Transform.rotate(
+                                                  angle: animatedController.value * 2 * -math.pi,
+                                                  child: child,
+                                                );
+                                              },
+                                              child: const CustomIconWidget(
+                                                iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                                defaultColor: false,
+                                                color: kHyppeLightBackground,
+                                                height: 18,
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          )
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
                         ],
                       ),
                     ),

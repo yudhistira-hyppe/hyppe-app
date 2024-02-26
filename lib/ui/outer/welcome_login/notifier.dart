@@ -330,7 +330,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
       ShowBottomSheet.onShowSomethingWhenWrong(context);
     } else if (signData.userType == UserType.verified) {
       clearTextController();
-      SharedPreference().writeStorage(SpKeys.isGuest, isGuest);
+
       SharedPreference().writeStorage(SpKeys.userToken, signData.token);
       SharedPreference().writeStorage(SpKeys.email, signData.email);
       SharedPreference().writeStorage(SpKeys.isLoginSosmed, 'manual');
@@ -340,6 +340,9 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
       // SharedPreference().writeStorage(SpKeys.onlineVersion, onlineVersion);
 
       DeviceBloc().activityAwake(context);
+      final _mainNotifier = Provider.of<MainNotifier>(context, listen: false);
+      await _mainNotifier.initMain(context, onUpdateProfile: true);
+      SharedPreference().writeStorage(SpKeys.isGuest, isGuest);
       // if (signData.interest?.isEmpty ?? false) {
       //   //new user
       //   SharedPreference().writeStorage(SpKeys.newUser, "TRUE");

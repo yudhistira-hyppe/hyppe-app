@@ -117,6 +117,7 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
   bool _thumbnailSuccess = false;
   bool isActivePage = true;
   bool isActiveAds = false;
+  bool isShared = false;
 
   int seekValue = 0;
   int _currentPosition = 0;
@@ -324,7 +325,10 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
           // Wakelock.disable();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusStopped:
-          isPlay = false;
+          // if (!isShared) {
+          //   isPlay = false;
+          // } else {}
+
           _showLoading = false;
           try {
             // Wakelock.disable();
@@ -925,7 +929,7 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
               print("=======hasil ${notifier.isShowingAds}  -- ${notifier.hasShowedAds}");
               if (dragEndDetails.primaryVelocity! < 0) {
               } else if (dragEndDetails.primaryVelocity! > 0) {
-                if (!notifier.isShowingAds) {
+                if (!notifier.isShowingAds && !notifier.adsvideoIsPlay) {
                   int changevalue;
                   changevalue = _currentPosition + 1000;
                   if (changevalue > _videoDuration) {
@@ -998,11 +1002,11 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                       // );
                       print('view ads: 1');
                       final isAds = vidData?[index].inBetweenAds != null && vidData?[index].postID == null;
-                      if (isAds){
+                      if (isAds) {
                         //fAliplayer stoped === Irfan ====
-                          fAliplayer?.pause();
-                          isPlay = false;
-                          _showLoading = false;
+                        fAliplayer?.pause();
+                        isPlay = false;
+                        _showLoading = false;
                       }
 
                       return isloadingRotate
@@ -1367,8 +1371,16 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
           if (data.isShared ?? false)
             buttonVideoRight(
                 onFunctionTap: () {
+                  // setState(() {
+                  //   isShared = true;
+                  // });
                   fAliplayer?.pause();
-                  context.read<VidDetailNotifier>().createdDynamicLink(context, data: data);
+
+                  context.read<VidDetailNotifier>().createdDynamicLink(context, data: data).then((val) {
+                    // setState(() {
+                    //   isShared = false;
+                    // });
+                  });
                 },
                 iconData: '${AssetPath.vectorPath}share-shadow.svg',
                 value: lang!.share ?? 'Share'),

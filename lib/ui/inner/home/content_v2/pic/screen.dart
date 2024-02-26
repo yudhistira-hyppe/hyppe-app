@@ -641,7 +641,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void deactivate() {
     print("====== deactivate ");
-    fAliplayer?.stop();
+    // fAliplayer?.stop();
     System().disposeBlock();
     if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
       // fAliplayer?.destroy();
@@ -1337,6 +1337,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                 _likeNotifier.likePost(context, notifier.pic![index]).then((value) {
                                                   List<ContentData>? pic2 = context.read<ScrollPicNotifier>().pics;
                                                   int idx2 = pic2!.indexWhere((e) => e.postID == value['_id']);
+                                                  print("-=-=-haha indec $idx2");
                                                   pic2[idx2].insight?.isPostLiked = value['isPostLiked'];
                                                   pic2[idx2].insight?.likes = value['likes'];
                                                   pic2[idx2].isLiked = value['isLiked'];

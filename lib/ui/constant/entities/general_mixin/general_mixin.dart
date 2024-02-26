@@ -92,10 +92,6 @@ mixin GeneralMixin {
     required DynamicLinkData data,
     required bool copiedToClipboard,
   }) async {
-    print('data kirim link 2');
-    print(data.postID);
-    print(data.fullName);
-    print(data.fullName);
     var _popupDialog = System().createPopupDialog(
       Container(
         alignment: Alignment.center,

@@ -1264,10 +1264,12 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
                         },
                         child: Padding(
                           padding: const EdgeInsets.only(right: 12.0),
-                          child: Icon(
-                            orientation == Orientation.portrait ? Icons.fullscreen : Icons.fullscreen_exit,
-                            color: Colors.white,
-                          ),
+                          child: !widget.fromFullScreen
+                              ? Icon(
+                                  orientation == Orientation.portrait ? Icons.fullscreen : Icons.fullscreen_exit,
+                                  color: Colors.white,
+                                )
+                              : const SizedBox.shrink(),
                         ),
                       ),
                     ],

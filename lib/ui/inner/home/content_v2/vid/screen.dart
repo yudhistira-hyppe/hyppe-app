@@ -588,6 +588,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   void deactivate() {
     print("============= deactivate dari vid");
     isStopVideo = false;
+    fAliplayer?.pause();
     _pauseScreen();
     super.deactivate();
   }
@@ -600,6 +601,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
 
   @override
   void didPopNext() {
+    isActivePage = true;
     // isHomeScreen = true;
     // print("============= didPopNext dari vid");
     // final notifier = context.read<PreviewVidNotifier>();
@@ -647,6 +649,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   @override
   void didPushNext() {
     isHomeScreen = false;
+    fAliplayer?.pause();
+    isActivePage = false;
     print("=============== didPushNext dari vid");
     final notifier = context.read<PreviewVidNotifier>();
     _pauseScreen();
@@ -794,7 +798,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
         // _isFirstRenderShow = false;
       });
     }
-
+    print("============== is acive $isActivePage");
     if (data.reportedStatus == 'BLURRED') {
     } else {
       if (isActivePage) {
@@ -1954,7 +1958,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
             print("======index22222222}");
             if (!mounted) return;
             setState(() {
-              index = vidNotifier.currentIndex;
+              index = 0;
               // pn.diaryData!.removeRange(_curIdx, pn.currentIndex);
               vidNotifier.vidData?.removeRange(0, vidNotifier.currentIndex);
               _curIdx = 0;
@@ -1966,7 +1970,6 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
             setState(() {
               vidNotifier.vidData?[_curIdx] = temp2 ?? ContentData();
               vidNotifier.vidData?[vidNotifier.currentIndex] = temp1 ?? ContentData();
-              ;
             });
           }
 
