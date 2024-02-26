@@ -1,3 +1,4 @@
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -28,6 +29,7 @@ class _MakeContentScreenState extends State<MakeContentScreen> with AfterFirstLa
 
   @override
   void initState() {
+    isactivealiplayer = true;
     print('initState make content');
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     super.initState();

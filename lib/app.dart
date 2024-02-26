@@ -53,6 +53,8 @@ int vidMin = 15;
 bool globalPreventAction = false;
 bool fromGuest = false;
 
+bool isactivealiplayer = false;
+
 const platform = MethodChannel('app.channel.shared.data');
 
 void disposeGlobalAudio() async {

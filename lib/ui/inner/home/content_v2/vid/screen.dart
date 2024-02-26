@@ -568,7 +568,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   @override
   void dispose() {
     fAliplayer?.stop();
-    fAliplayer?.destroy();
+    // fAliplayer?.destroy();
 
     isStopVideo = false;
     "================ ondispose vid".logger();

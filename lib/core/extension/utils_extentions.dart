@@ -218,6 +218,7 @@ extension ContextScreen on BuildContext {
       if (addAction != null) {
         addAction();
       }
+      isactivealiplayer = true;
       globalAliPlayer?.pause();
       await ShowBottomSheet().onLoginApp(this).then((value) {
         globalAliPlayer?.play();
