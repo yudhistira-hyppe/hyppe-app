@@ -631,6 +631,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
   @override
   void dispose() {
+    fAliplayer?.stop();
+    fAliplayer?.destroy();
     print("---=-=-=-=--===-=-=-=-DiSPOSE--=-=-=-=-=-=-=-=-=-=-=----==-=");
     // fAliplayer?.destroy();
 
@@ -1588,6 +1590,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                   context.handleActionIsGuest(() async {
                                                     fAliplayer?.pause();
                                                     await ShowBottomSheet.onBuyContent(context, data: picData, fAliplayer: fAliplayer);
+                                                  }).then((value) {
+                                                    fAliplayer?.pause();
                                                   });
                                                 },
                                                 child: const Align(

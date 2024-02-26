@@ -325,14 +325,10 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
           // Wakelock.disable();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusStopped:
-<<<<<<< HEAD
           // if (!isShared) {
           //   isPlay = false;
           // } else {}
 
-=======
-          // isPlay = false;
->>>>>>> 2a64fcd65addc796f57b2ba4b01e765b67939be9
           _showLoading = false;
           try {
             // Wakelock.disable();
@@ -1011,6 +1007,10 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                         fAliplayer?.pause();
                         isPlay = false;
                         _showLoading = false;
+                        if (notifier.adsvideoIsPlay && notifier.mapInContentAds[dataSelected?.postID ?? ''] == null) {
+                          notifier.isShowingAds = false;
+                          notifier.adsvideoIsPlay = false;
+                        }
                       }
 
                       return isloadingRotate

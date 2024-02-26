@@ -212,7 +212,7 @@ extension ContextScreen on BuildContext {
     );
   }
 
-  Future handleActionIsGuest(Function() onSlipOut, {Function()? addAction}) async {
+  Future<bool> handleActionIsGuest(Function() onSlipOut, {Function()? addAction}) async {
     final bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
     if (isGuest ?? false) {
       if (addAction != null) {
@@ -225,6 +225,7 @@ extension ContextScreen on BuildContext {
     } else {
       onSlipOut();
     }
+    return true;
   }
 }
 

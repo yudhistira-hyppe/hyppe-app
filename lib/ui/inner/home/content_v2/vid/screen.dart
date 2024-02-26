@@ -602,6 +602,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   @override
   void didPopNext() {
     isActivePage = true;
+    final vidNot = context.read<VideoNotifier>();
+    vidNot.adsAliplayer?.play();
     // isHomeScreen = true;
     // print("============= didPopNext dari vid");
     // final notifier = context.read<PreviewVidNotifier>();
@@ -653,6 +655,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     isActivePage = false;
     print("=============== didPushNext dari vid");
     final notifier = context.read<PreviewVidNotifier>();
+    final vidNot = context.read<VideoNotifier>();
+    vidNot.adsAliplayer?.pause();
     _pauseScreen();
     if (_curIdx != -1) {
       "=============== pause 6".logger();
