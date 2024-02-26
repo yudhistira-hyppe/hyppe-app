@@ -184,7 +184,6 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
     // SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     controller = PageController(initialPage: widget.index ?? 0);
     controller.addListener(() {
-      
       fAliplayer?.pause();
       setState(() {
         isScrolled = true;
@@ -210,10 +209,9 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
     if ((vidData?.length ?? 0) - 1 == curentIndex) {
       getNewData();
     }
-    if (vidData?[widget.index??0].inBetweenAds == null && vidData?[widget.index??0].postID != null){
+    if (vidData?[widget.index ?? 0].inBetweenAds == null && vidData?[widget.index ?? 0].postID != null) {
       _initializeTimer();
     }
-    
   }
 
   initAlipayer() {
@@ -369,8 +367,9 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
           _currentPosition = extraValue ?? 0;
 
           final detik = (_currentPosition / 1000).round();
-          if (notifier.adsTime == detik) {
-            if (notifier.tempAdsData != null) {
+          print("====detik $detik -- ${notifier.adsTime} -- ${notifier.tempAdsData}");
+          if (notifier.tempAdsData != null) {
+            if (notifier.adsTime == detik) {
               fAliplayer?.pause();
               final tempAds = notifier.tempAdsData;
               if (tempAds != null) {
@@ -380,6 +379,11 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                 if (fixAds != null) {
                   context.read<PreviewVidNotifier>().setAdsData(curentIndex, fixAds, context);
                 }
+              }
+            } else if (detik > notifier.adsTime) {
+              if (notifier.adsvideoIsPlay && notifier.mapInContentAds[dataSelected?.postID ?? ''] == null) {
+                notifier.isShowingAds = false;
+                notifier.adsvideoIsPlay = false;
               }
             }
           }
@@ -1036,11 +1040,10 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
         fromFullScreen: true,
         onFullscreen: () async {
           // if (widget.fromFullScreen) {
-            // Routing().moveBack();
+          // Routing().moveBack();
           // } else {
           // onFullscreen(notifier);
           // }
-
         },
         onClose: () {
           if (mounted) {
@@ -1201,16 +1204,16 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                   isMute: isMute,
                   backFunction: () {
                     // if (!notifier.isShowingAds) {
-                      int changevalue;
-                      changevalue = _currentPosition + 1000;
-                      if (changevalue > _videoDuration) {
-                        changevalue = _videoDuration;
-                      }
+                    int changevalue;
+                    changevalue = _currentPosition + 1000;
+                    if (changevalue > _videoDuration) {
+                      changevalue = _videoDuration;
+                    }
 
-                      vidData?[widget.index ?? 0].isLoading = true;
-                      Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
+                    vidData?[widget.index ?? 0].isLoading = true;
+                    Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
 
-                      SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+                    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
                     // }
                   },
                   onTapOnProfileImage: () async {
@@ -1636,89 +1639,89 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                           ),
                           if (data.music?.musicTitle != '' && data.music?.musicTitle != null)
                             Container(
-                            margin: const EdgeInsets.only(top: 0.0, left: 8.0, right: 8.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Flexible(
-                                  child: Row(
-                                    children: [
-                                      const Padding(
-                                        padding: EdgeInsets.only(right: 8.0),
-                                        child: CustomIconWidget(
-                                          iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
-                                          defaultColor: false,
-                                          color: kHyppeLightBackground,
-                                          height: 18,
+                              margin: const EdgeInsets.only(top: 0.0, left: 8.0, right: 8.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Flexible(
+                                    child: Row(
+                                      children: [
+                                        const Padding(
+                                          padding: EdgeInsets.only(right: 8.0),
+                                          child: CustomIconWidget(
+                                            iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                            defaultColor: false,
+                                            color: kHyppeLightBackground,
+                                            height: 18,
+                                          ),
                                         ),
-                                      ),
-                                      Expanded(
-                                        child: _textSize(data.music?.musicTitle ?? '', const TextStyle(fontWeight: FontWeight.bold)).width > SizeConfig.screenWidth! * .56
-                                            ? SizedBox(
-                                                width: SizeConfig.screenWidth! * .56,
-                                                height: kTextTabBarHeight,
-                                                child: Marquee(
-                                                  text: '  ${data.music?.musicTitle ?? ''}',
-                                                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),
+                                        Expanded(
+                                          child: _textSize(data.music?.musicTitle ?? '', const TextStyle(fontWeight: FontWeight.bold)).width > SizeConfig.screenWidth! * .56
+                                              ? SizedBox(
+                                                  width: SizeConfig.screenWidth! * .56,
+                                                  height: kTextTabBarHeight,
+                                                  child: Marquee(
+                                                    text: '  ${data.music?.musicTitle ?? ''}',
+                                                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),
+                                                  ),
+                                                )
+                                              : CustomTextWidget(
+                                                  textToDisplay: " ${data.music?.musicTitle ?? ''}",
+                                                  maxLines: 1,
+                                                  textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700),
+                                                  textAlign: TextAlign.left,
                                                 ),
-                                              )
-                                            : CustomTextWidget(
-                                                textToDisplay: " ${data.music?.musicTitle ?? ''}",
-                                                maxLines: 1,
-                                                textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700),
-                                                textAlign: TextAlign.left,
-                                              ),
-                                      ),
-                                      CircleAvatar(
-                                        radius: 18,
-                                        backgroundColor: kHyppeSurface.withOpacity(.9),
-                                        child: CustomBaseCacheImage(
-                                          imageUrl: data.music?.apsaraThumnailUrl ?? '',
-                                          imageBuilder: (_, imageProvider) {
-                                            return Container(
-                                              width: 48,
-                                              height: 48,
-                                              decoration: BoxDecoration(
-                                                color: kDefaultIconDarkColor,
-                                                borderRadius: const BorderRadius.all(Radius.circular(24)),
-                                                image: DecorationImage(
-                                                  fit: BoxFit.cover,
-                                                  image: imageProvider,
+                                        ),
+                                        CircleAvatar(
+                                          radius: 18,
+                                          backgroundColor: kHyppeSurface.withOpacity(.9),
+                                          child: CustomBaseCacheImage(
+                                            imageUrl: data.music?.apsaraThumnailUrl ?? '',
+                                            imageBuilder: (_, imageProvider) {
+                                              return Container(
+                                                width: 48,
+                                                height: 48,
+                                                decoration: BoxDecoration(
+                                                  color: kDefaultIconDarkColor,
+                                                  borderRadius: const BorderRadius.all(Radius.circular(24)),
+                                                  image: DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image: imageProvider,
+                                                  ),
                                                 ),
-                                              ),
-                                            );
-                                          },
-                                          errorWidget: (_, __, ___) {
-                                            return const CustomIconWidget(
-                                              iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
-                                              defaultColor: false,
-                                              color: kHyppeLightBackground,
-                                              height: 18,
-                                            );
-                                          },
-                                          emptyWidget: AnimatedBuilder(
-                                            animation: animatedController,
-                                            builder: (_, child) {
-                                              return Transform.rotate(
-                                                angle: animatedController.value * 2 * -math.pi,
-                                                child: child,
                                               );
                                             },
-                                            child: const CustomIconWidget(
-                                              iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
-                                              defaultColor: false,
-                                              color: kHyppeLightBackground,
-                                              height: 18,
+                                            errorWidget: (_, __, ___) {
+                                              return const CustomIconWidget(
+                                                iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                                defaultColor: false,
+                                                color: kHyppeLightBackground,
+                                                height: 18,
+                                              );
+                                            },
+                                            emptyWidget: AnimatedBuilder(
+                                              animation: animatedController,
+                                              builder: (_, child) {
+                                                return Transform.rotate(
+                                                  angle: animatedController.value * 2 * -math.pi,
+                                                  child: child,
+                                                );
+                                              },
+                                              child: const CustomIconWidget(
+                                                iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                                defaultColor: false,
+                                                color: kHyppeLightBackground,
+                                                height: 18,
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          )
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
                         ],
                       ),
                     ),

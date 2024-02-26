@@ -1146,7 +1146,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                   Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
                                       builder: (_) => VideoFullLandingscreenPage(
                                             enableWakelock: true,
-                                            onClose: (){},
+                                            onClose: () {},
                                             isLanding: true,
                                             videoIndicator: VideoIndicator(videoDuration: 0, seekValue: 0, positionText: 0, isMute: isMute),
                                             thumbnail: '',
@@ -1945,6 +1945,31 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
           notifier.firstIndex = index;
           fAliplayer?.pause();
           VideoIndicator value = await navigateTo(notifier, changevalue, index);
+
+          fAliplayer?.play();
+          var temp1 = vidNotifier.vidData?[_curIdx];
+          var temp2 = vidNotifier.vidData?[vidNotifier.currentIndex];
+          print("======index back $index -- ${vidNotifier.currentIndex}");
+          if (index < vidNotifier.currentIndex) {
+            print("======index22222222}");
+            if (!mounted) return;
+            setState(() {
+              index = vidNotifier.currentIndex;
+              // pn.diaryData!.removeRange(_curIdx, pn.currentIndex);
+              vidNotifier.vidData?.removeRange(0, vidNotifier.currentIndex);
+              _curIdx = 0;
+            });
+            widget.scrollController?.animateTo(0, duration: const Duration(milliseconds: 50), curve: Curves.ease);
+          } else if (index > vidNotifier.currentIndex) {
+            print("======index44444444}");
+            if (!mounted) return;
+            setState(() {
+              vidNotifier.vidData?[_curIdx] = temp2 ?? ContentData();
+              vidNotifier.vidData?[vidNotifier.currentIndex] = temp1 ?? ContentData();
+              ;
+            });
+          }
+
           if (mounted) {
             setState(() {
               _videoDuration = value.videoDuration ?? 0;

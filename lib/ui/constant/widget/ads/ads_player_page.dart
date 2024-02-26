@@ -752,13 +752,13 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
                         //       );
                         //     }));
                         return ClipRRect(
-                            borderRadius: BorderRadius.circular(18),
-                            child: Image.asset(
-                              '${AssetPath.pngPath}profile-error.jpg',
-                              fit: BoxFit.fitWidth,
-                              scale: 8,
-                            ),
-                          );
+                          borderRadius: BorderRadius.circular(18),
+                          child: Image.asset(
+                            '${AssetPath.pngPath}profile-error.jpg',
+                            fit: BoxFit.fitWidth,
+                            scale: 8,
+                          ),
+                        );
                       }
                       return Container(
                         width: 24,
