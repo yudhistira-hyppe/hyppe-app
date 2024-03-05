@@ -735,15 +735,13 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     SizeConfig().init(context);
     context.select((ErrorService value) => value.getError(ErrorType.pic));
     // AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
-    
-    
     return Consumer2<PreviewPicNotifier, HomeNotifier>(
       
       builder: (_, notifier, home, __) {
         if (isactivealiplayer){
           fAliplayer?.pause();
         }else{
-          fAliplayer?.play();
+          if (isActivePage) fAliplayer?.play();
         }
         return Container(
         width: SizeConfig.screenWidth,

@@ -604,44 +604,44 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     isActivePage = true;
     final vidNot = context.read<VideoNotifier>();
     vidNot.adsAliplayer?.play();
-    // isHomeScreen = true;
+    isHomeScreen = true;
     // print("============= didPopNext dari vid");
-    // final notifier = context.read<PreviewVidNotifier>();
+    final notifier = context.read<PreviewVidNotifier>();
 
-    // _initializeTimer();
-    // if (_curIdx != -1) {
-    //   // notifier.vidData?[_curIdx].fAliplayer?.play();
-    // }
-    // if (postIdVisibility == '') {
-    //   setState(() {
-    //     postIdVisibility == '';
-    //   });
-    //   Future.delayed(Duration(milliseconds: 400), () {
-    //     setState(() {
-    //       postIdVisibility = postIdVisibilityTemp;
-    //     });
-    //   });
-    // }
+    _initializeTimer();
+    if (_curIdx != -1) {
+      // notifier.vidData?[_curIdx].fAliplayer?.play();
+    }
+    if (postIdVisibility == '') {
+      setState(() {
+        postIdVisibility == '';
+      });
+      Future.delayed(Duration(milliseconds: 400), () {
+        setState(() {
+          postIdVisibility = postIdVisibilityTemp;
+        });
+      });
+    }
 
-    // var temp1 = notifier.vidData?[_curIdx];
-    // var temp2 = notifier.vidData![notifier.currentIndex];
+    var temp1 = notifier.vidData?[_curIdx];
+    var temp2 = notifier.vidData![notifier.currentIndex];
 
-    // print("===========dari didpopnext ${_curIdx} ${notifier.currentIndex}");
+    print("===========dari didpopnext ${_curIdx} ${notifier.currentIndex}");
 
-    // if (_curIdx < notifier.currentIndex) {
-    //   setState(() {
-    //     notifier.vidData?[_curIdx].fAliplayer?.stop();
-    //     _curIdx = notifier.currentIndex;
-    //     // pn.diaryData!.removeRange(_curIdx, pn.currentIndex);
-    //     notifier.vidData!.removeRange(0, notifier.currentIndex);
-    //     widget.scrollController?.animateTo(0, duration: const Duration(milliseconds: 50), curve: Curves.ease);
-    //   });
-    // } else if (_curIdx > notifier.currentIndex) {
-    //   setState(() {
-    //     notifier.vidData?[_curIdx] = temp2;
-    //     notifier.vidData?[notifier.currentIndex] = temp1!;
-    //   });
-    // }
+    if (_curIdx < notifier.currentIndex) {
+      setState(() {
+        notifier.vidData?[_curIdx].fAliplayer?.stop();
+        _curIdx = notifier.currentIndex;
+        // pn.diaryData!.removeRange(_curIdx, pn.currentIndex);
+        notifier.vidData!.removeRange(0, notifier.currentIndex);
+        widget.scrollController?.animateTo(0, duration: const Duration(milliseconds: 50), curve: Curves.ease);
+      });
+    } else if (_curIdx > notifier.currentIndex) {
+      setState(() {
+        notifier.vidData?[_curIdx] = temp2;
+        notifier.vidData?[notifier.currentIndex] = temp1!;
+      });
+    }
 
     // System().disposeBlock();
 
@@ -1487,6 +1487,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                     AdsCTALayout(
                                       adsData: vidData.adsData!,
                                       onClose: () {
+                                        fAliplayer?.pause();
                                         notifier.setAdsData(index, null, context);
                                       },
                                       postId: notifier.vidData?[index].postID ?? '',
