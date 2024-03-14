@@ -548,9 +548,11 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
     try {
       print("===============init ali player ${fAliplayer?.playerId} ===========");
-      fAliplayer?.prepare().then((value) {
-        print("===============init ali player 22 ${fAliplayer?.playerId} ===========");
-      });
+      if (isActivePage) {
+        fAliplayer?.prepare().then((value) {
+          print("===============init ali player 22 ${fAliplayer?.playerId} ===========");
+        });
+      }
     } catch (e) {
       print(e);
     }
@@ -631,6 +633,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
   @override
   void dispose() {
+    isActivePage = true;
     fAliplayer?.stop();
     // fAliplayer?.destroy();
     print("---=-=-=-=--===-=-=-=-DiSPOSE--=-=-=-=-=-=-=-=-=-=-=----==-=");
@@ -668,6 +671,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     isInPage = true;
     fAliplayer?.play();
     isActivePage = true;
+
+    // fAliplayer?.prepare();
     // System().disposeBlock();
     super.didPopNext();
   }
@@ -675,6 +680,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void didPush() {
     print("========= didPush");
+    isActivePage = true;
     super.didPush();
   }
 
@@ -735,17 +741,17 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     SizeConfig().init(context);
     context.select((ErrorService value) => value.getError(ErrorType.pic));
     // AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
-    
-    
-    return Consumer2<PreviewPicNotifier, HomeNotifier>(
-      
-      builder: (_, notifier, home, __) {
-        if (isactivealiplayer){
-          fAliplayer?.pause();
-        }else{
+
+    return Consumer2<PreviewPicNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
+      if (isactivealiplayer) {
+        fAliplayer?.pause();
+      } else {
+        if (isActivePage) {
           fAliplayer?.play();
         }
-        return Container(
+        //
+      }
+      return Container(
         width: SizeConfig.screenWidth,
         height: SizeWidget.barHyppePic,
         // margin: const EdgeInsets.only(top: 16.0, bottom: 12),
@@ -890,8 +896,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
           ],
         ),
       );
-      }
-    );
+    });
   }
 
   var initialControllerValue;
@@ -1175,6 +1180,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                           print("ada musiknya ${picData?.music?.toJson()}");
                                           setState(() {
                                             isPrepareMusic = true;
+                                            isactivealiplayer = false;
                                           });
                                           Future.delayed(const Duration(milliseconds: 100), () {
                                             start(context, picData ?? ContentData(), notifier);
@@ -1790,7 +1796,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                   setState(() {
                     notifier.isMute = !notifier.isMute;
                   });
-                  if (_currentPlayerState == FlutterAvpdef.AVPStatus_AVPStatusStarted){
+                  if (_currentPlayerState == FlutterAvpdef.AVPStatus_AVPStatusStarted) {
                     fAliplayer?.play();
                   }
                   print("muteeee----------------- ${notifier.isMute}");

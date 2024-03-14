@@ -137,6 +137,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   @override
   void initState() {
     isStopVideo = true;
+    isactivealiplayer = true;
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppePreviewVid');
     email = SharedPreference().readStorage(SpKeys.email);
     final notifier = Provider.of<PreviewVidNotifier>(context, listen: false);
@@ -606,42 +607,42 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     vidNot.adsAliplayer?.play();
     // isHomeScreen = true;
     // print("============= didPopNext dari vid");
-    // final notifier = context.read<PreviewVidNotifier>();
+    final notifier = context.read<PreviewVidNotifier>();
 
-    // _initializeTimer();
-    // if (_curIdx != -1) {
-    //   // notifier.vidData?[_curIdx].fAliplayer?.play();
-    // }
-    // if (postIdVisibility == '') {
-    //   setState(() {
-    //     postIdVisibility == '';
-    //   });
-    //   Future.delayed(Duration(milliseconds: 400), () {
-    //     setState(() {
-    //       postIdVisibility = postIdVisibilityTemp;
-    //     });
-    //   });
-    // }
+    _initializeTimer();
+    if (_curIdx != -1) {
+      // notifier.vidData?[_curIdx].fAliplayer?.play();
+    }
+    if (postIdVisibility == '') {
+      setState(() {
+        postIdVisibility == '';
+      });
+      Future.delayed(Duration(milliseconds: 400), () {
+        setState(() {
+          postIdVisibility = postIdVisibilityTemp;
+        });
+      });
+    }
 
-    // var temp1 = notifier.vidData?[_curIdx];
-    // var temp2 = notifier.vidData![notifier.currentIndex];
+    var temp1 = notifier.vidData?[_curIdx];
+    var temp2 = notifier.vidData![notifier.currentIndex];
 
-    // print("===========dari didpopnext ${_curIdx} ${notifier.currentIndex}");
+    print("===========dari didpopnext ${_curIdx} ${notifier.currentIndex}");
 
-    // if (_curIdx < notifier.currentIndex) {
-    //   setState(() {
-    //     notifier.vidData?[_curIdx].fAliplayer?.stop();
-    //     _curIdx = notifier.currentIndex;
-    //     // pn.diaryData!.removeRange(_curIdx, pn.currentIndex);
-    //     notifier.vidData!.removeRange(0, notifier.currentIndex);
-    //     widget.scrollController?.animateTo(0, duration: const Duration(milliseconds: 50), curve: Curves.ease);
-    //   });
-    // } else if (_curIdx > notifier.currentIndex) {
-    //   setState(() {
-    //     notifier.vidData?[_curIdx] = temp2;
-    //     notifier.vidData?[notifier.currentIndex] = temp1!;
-    //   });
-    // }
+    if (_curIdx < notifier.currentIndex) {
+      setState(() {
+        notifier.vidData?[_curIdx].fAliplayer?.stop();
+        _curIdx = notifier.currentIndex;
+        // pn.diaryData!.removeRange(_curIdx, pn.currentIndex);
+        notifier.vidData!.removeRange(0, notifier.currentIndex);
+        widget.scrollController?.animateTo(0, duration: const Duration(milliseconds: 50), curve: Curves.ease);
+      });
+    } else if (_curIdx > notifier.currentIndex) {
+      setState(() {
+        notifier.vidData?[_curIdx] = temp2;
+        notifier.vidData?[notifier.currentIndex] = temp1!;
+      });
+    }
 
     // System().disposeBlock();
 
@@ -681,21 +682,24 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     final notifier = context.read<PreviewVidNotifier>();
     switch (state) {
       case AppLifecycleState.inactive:
+        fAliplayer?.pause();
         _pauseScreen();
         break;
       case AppLifecycleState.resumed:
         print("============= canPlayOpenApps ${context.read<PreviewVidNotifier>().canPlayOpenApps}-- isInactiveState: ${context.read<MainNotifier>().isInactiveState}");
         if (isHomeScreen) _initializeTimer();
-        if (context.read<PreviewVidNotifier>().canPlayOpenApps && !context.read<MainNotifier>().isInactiveState) {
+        if (context.read<PreviewVidNotifier>().canPlayOpenApps && !context.read<MainNotifier>().isInactiveState && isActivePage) {
           try {
             // notifier.vidData?[_curIdx].fAliplayer?.prepare();
-            notifier.vidData?[_curIdx].fAliplayer?.play();
+            // notifier.vidData?[_curIdx].fAliplayer?.play();
+            fAliplayer?.play();
           } catch (e) {
             print(e);
           }
         }
         break;
       case AppLifecycleState.paused:
+        fAliplayer?.pause();
         _pauseScreen();
         break;
       case AppLifecycleState.detached:
@@ -1487,6 +1491,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                     AdsCTALayout(
                                       adsData: vidData.adsData!,
                                       onClose: () {
+                                        fAliplayer?.pause();
                                         notifier.setAdsData(index, null, context);
                                       },
                                       postId: notifier.vidData?[index].postID ?? '',

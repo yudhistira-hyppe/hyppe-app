@@ -65,8 +65,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
   @override
   void initState() {
     // final _notifier = context.read<PreUploadContentNotifier>();
-    SystemChrome.setPreferredOrientations(
-          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     mn = Provider.of<MainNotifier>(context, listen: false);
     super.initState();
     statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
@@ -76,7 +75,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
       notifier.captionController.selection = TextSelection.collapsed(offset: 0);
     }
     // notifier.initThumbnail();
-    
+
     notifier.getInitialInterest(context);
 
     // Future.microtask(() => context.read<PreUploadContentNotifier>().checkLandingpage(context));
@@ -201,8 +200,8 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                             tagPeopleWidget(textTheme, notifier),
                             _buildDivider(context),
                             musicTitle(context, notifier),
-                            tagLocationWidget(textTheme, notifier),
-                            _buildDivider(context),
+                            // tagLocationWidget(textTheme, notifier),
+                            // _buildDivider(context),
                             eightPx,
                             privacyWidget(textTheme, notifier),
                             _buildDivider(context),

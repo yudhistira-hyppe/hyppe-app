@@ -851,6 +851,7 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
                               } else {
                                 if ((data.adsUrlLink ?? '').withHttp()) {
                                   try {
+                                    isactivealiplayer = true;
                                     final uri = Uri.parse(data.adsUrlLink ?? '');
                                     print('bottomAdsLayout ${data.adsUrlLink}');
                                     if (await canLaunchUrl(uri)) {

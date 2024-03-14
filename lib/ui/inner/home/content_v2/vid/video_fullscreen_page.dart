@@ -658,12 +658,14 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
+    print("=====state $state =====");
     switch (state) {
       case AppLifecycleState.inactive:
         fAliplayer?.pause();
         _pauseScreen();
         break;
       case AppLifecycleState.resumed:
+        // isactivealiplayer = false;
         fAliplayer?.play();
         break;
       case AppLifecycleState.paused:
@@ -1097,6 +1099,7 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
           // }
         },
         onClose: () {
+          fAliplayer?.pause();
           if (mounted) {
             notifier.setMapAdsContent(data.postID ?? '', null);
             print("====ini iklan ${notifier.mapInContentAds} =====");
@@ -1112,16 +1115,6 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
             // vidNotifier.setAdsData(index, notifier.mapInContentAds[data.postID ?? ''], context);
             isloading = false;
             data.adsData = null;
-          }
-
-          if (!notifier.isFullScreen) {
-            Future.delayed(const Duration(milliseconds: 500), () {
-              fAliplayer?.play();
-              setState(() {
-                isPause = false;
-                _showTipsWidget = false;
-              });
-            });
           }
         },
         orientation: Orientation.portrait,

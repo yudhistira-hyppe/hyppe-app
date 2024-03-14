@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_livepush_plugin/live_pusher_preview.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -54,6 +55,7 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
   @override
   void initState() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+    isactivealiplayer = true;
     // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
     super.initState();
