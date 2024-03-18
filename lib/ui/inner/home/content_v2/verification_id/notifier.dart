@@ -81,6 +81,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   List<File>? _pickedSupportingDocs = [];
   bool _isLoading = false;
   bool get isLoading => _isLoading;
+  bool proses1 = true;
 
   CameraNotifier cameraNotifier = CameraNotifier();
   CameraDevicesNotifier cameraDevicesNotifier = CameraDevicesNotifier();
@@ -329,6 +330,8 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
     }
 
     if (idCardName == "" || idCardNumber == "") {
+      proses1 = false;
+      notifyListeners();
       final bloc = VerificationIDBloc();
       await bloc.postKtp(context, nama: realName, idCardFile: imagePath);
       final fetch = bloc.postsFetch;
@@ -355,14 +358,19 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
     // } else {
     //   cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
     // }
-    ShowGeneralDialog.loadingDialog(context);
+    proses1 = true;
+    ShowGeneralDialog.loadingKycDialog(context);
+
     cameraNotifier.takePicture(context).then((filePath) async {
       if (filePath != null) {
         imagePath = filePath.path;
         aspectRatio = cameraNotifier.cameraAspectRatio;
         await validateIDCard(context);
-        Routing().moveAndPop(Routes.verificationIDStep5);
+        // Routing().moveAndPop(Routes.verificationIDStep5);
         context.read<CameraNotifier>().flashOff(Routing.navigatorKey.currentContext ?? context);
+        if (idCardName == "" || idCardNumber == "") {
+          // ShowGeneralDialog
+        }
       }
     });
   }
@@ -388,11 +396,10 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
           print("Camera Path => " + imagePath);
         }
 
-
         if (selfieOnSupportDocs) {
           // onPickSupportedDocument(context, true);
           // pickedSupportingDocs!.add(filePath);
-          Routing().moveAndPop(Routes.verificationIDStep7, argument:(cameraDirection == CameraLensDirection.back));
+          Routing().moveAndPop(Routes.verificationIDStep7, argument: (cameraDirection == CameraLensDirection.back));
         } else {
           await postVerificationData(context);
         }
@@ -777,7 +784,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   void onStopRecordedVideo(BuildContext context) {
     // TODO: implement onStopRecordedVideo
     WakelockPlus.disable();
-"================ disable wakelock 7".logger();
+    "================ disable wakelock 7".logger();
   }
 
   @override

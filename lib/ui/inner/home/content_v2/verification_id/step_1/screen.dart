@@ -41,14 +41,10 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
       readFile();
       try {
         _controller.addListener(() {
-          print("=======hahahaha");
-          print(_controller.offset);
-          print(_controller.position.maxScrollExtent);
           if (_controller.offset >= _controller.position.maxScrollExtent && !_controller.position.outOfRange) {
             setState(() {
               finishScroll = true;
             });
-            print("finishScroll == $finishScroll");
           }
         });
       } catch (e) {
@@ -60,7 +56,7 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
 
   readFile() async {
     String? isoCode = SharedPreference().readStorage(SpKeys.isoCode) ?? 'en';
-    print('${AssetPath.dummyMdPath}eula_kyc_$isoCode.md');
+
     var request = await rootBundle.loadString('${AssetPath.dummyMdPath}eula_kyc_$isoCode.md');
     setState(() {
       dataText = request;
@@ -97,24 +93,21 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
             // Container(
             //   color: Colors.red,
             //   height: SizeConfig.screenHeight! - 50,
-            //   child: Markdown(
-            //     data: dataText,
-            //     padding: EdgeInsets.only(left: 16, right: 16, bottom: 220, top: 16),
-            //     onTapLink: (text, href, title) async {
-            //       try {
-            //         await launchUrl(Uri.parse(text), mode: LaunchMode.externalApplication);
-            //       } catch (e) {
-            //         // 'error href : $e'.logger();
-            //       }
-            //     },
-            //   ),
+            //   child:
+            Markdown(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              data: dataText,
+              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 220, top: 16),
+              onTapLink: (text, href, title) async {
+                try {
+                  await launchUrl(Uri.parse(text), mode: LaunchMode.externalApplication);
+                } catch (e) {
+                  // 'error href : $e'.logger();
+                }
+              },
+            ),
             // ),
-            ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return Text("$index");
-                })
 
             // Expanded(
             //   child: InAppWebView(
@@ -136,7 +129,7 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               sixteenPx,
-              Text("$finishScroll"),
+
               Container(
                 padding: const EdgeInsets.only(left: 6, right: 16, bottom: 16),
                 child: Row(

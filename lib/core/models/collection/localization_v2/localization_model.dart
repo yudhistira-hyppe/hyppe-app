@@ -699,6 +699,7 @@ class LocalizationModelV2 {
   String? reaNameNotice;
   String? continueStep;
   String? uploadIdCardNotice1;
+  String? ektpPhoto;
   String? uploadIdCardNotice2;
   String? uploadIdCardNotice3;
   String? uploadIdCardNotice4;
@@ -1106,6 +1107,8 @@ class LocalizationModelV2 {
   String? inThisDiary;
   String? inThisVideo;
   String? userAgreementCheck;
+  String? process;
+  String? openCamera;
   String? userAgreement;
 
   LocalizationModelV2(
@@ -1809,6 +1812,7 @@ class LocalizationModelV2 {
       this.reaNameNotice,
       this.continueStep,
       this.uploadIdCardNotice1,
+      this.ektpPhoto,
       this.uploadIdCardNotice2,
       this.uploadIdCardNotice3,
       this.uploadIdCardNotice4,
@@ -2216,6 +2220,8 @@ class LocalizationModelV2 {
       this.inThisDiary,
       this.inThisVideo,
       this.userAgreementCheck,
+      this.process,
+      this.openCamera,
       this.userAgreement});
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2935,6 +2941,7 @@ class LocalizationModelV2 {
     reaNameNotice = json["reaNameNotice"];
     continueStep = json["continueStep"];
     uploadIdCardNotice1 = json["uploadIdCardNotice1"];
+    ektpPhoto = json["ektpPhoto"];
     uploadIdCardNotice2 = json["uploadIdCardNotice2"];
     uploadIdCardNotice3 = json["uploadIdCardNotice3"];
     uploadIdCardNotice4 = json["uploadIdCardNotice4"];
@@ -3344,6 +3351,8 @@ class LocalizationModelV2 {
     inThisDiary = json['inThisDiary'];
     inThisVideo = json['inThisVideo'];
     userAgreementCheck = json['userAgreementCheck'];
+    process = json['process'];
+    openCamera = json['openCamera'];
     userAgreement = json['userAgreement'];
   }
 }

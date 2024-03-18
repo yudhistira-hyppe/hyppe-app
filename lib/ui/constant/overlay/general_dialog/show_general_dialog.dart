@@ -31,6 +31,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/win_challange.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_4/loading_kyc.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
@@ -438,7 +439,31 @@ class ShowGeneralDialog {
       ),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
-        return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
+        return ScaleTransition(scale: animation, alignment: Alignment.center, child: child);
+      },
+    );
+  }
+
+  static Future loadingKycDialog(BuildContext context, {bool? uploadProses}) async {
+    await showGeneralDialog(
+      //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
+      context: Routing.navigatorKey.currentState!.overlay!.context,
+      barrierLabel: 'Barrier',
+      barrierDismissible: false,
+      barrierColor: Colors.transparent,
+
+      transitionDuration: const Duration(milliseconds: 500),
+      pageBuilder: (context, animation, secondAnimation) => WillPopScope(
+        onWillPop: () async => false,
+        child: AlertDialog(
+          backgroundColor: Colors.transparent,
+          content: LoadingKycDialog(uploadProses: uploadProses ?? false),
+          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+        ),
+      ),
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
+        return ScaleTransition(scale: animation, alignment: Alignment.center, child: child);
       },
     );
   }
