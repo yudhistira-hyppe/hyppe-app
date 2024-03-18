@@ -1105,5 +1105,7 @@
   "liveVideoHasStarted": "LIVE video has started!",
   "addATitle": "Add a title...",
   "inThisDiary": "In this diary",
-  "inThisVideo": "In this video"
+  "inThisVideo": "In this video",
+  "userAgreement": "User Agreement",
+  "userAgreementCheck": "I have read, understood, and agree to the contents of these terms and conditions."
 }

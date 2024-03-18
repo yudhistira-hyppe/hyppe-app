@@ -1106,5 +1106,7 @@
   "liveVideoHasStarted": "Siaran LIVE telah dimulai!",
   "addATitle": "Tambah judul...",
   "inThisDiary": "Dalam diary ini",
-  "inThisVideo": "Dalam video ini"
+  "inThisVideo": "Dalam video ini",
+  "userAgreement": "Perjanjian Pengguna",
+  "userAgreementCheck": "Saya telah membaca, memahami, dan menyetujui isi dari syarat dan ketentuan ini."
 }
