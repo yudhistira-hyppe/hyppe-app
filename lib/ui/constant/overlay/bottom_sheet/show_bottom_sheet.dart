@@ -61,6 +61,7 @@ import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/filter/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_5/widget/date_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 
 import 'package:hyppe/ux/routing.dart';
@@ -1761,8 +1762,37 @@ class ShowBottomSheet {
               ),
             ),
             padding: const EdgeInsets.all(0),
-            child: OnQRCode(),
+            child: const OnQRCode(),
           ),
+        );
+      },
+    );
+  }
+
+  static onVerificationDate(
+    BuildContext context, {
+    String? value,
+    Function()? onSave,
+    Function()? onCancel,
+    Future<dynamic>? initFuture,
+    Function(String value)? onChange,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      enableDrag: true,
+      isDismissible: false,
+      isScrollControlled: true,
+      builder: (builder) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          // constraints: const BoxConstraints(maxHeight: 270),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+          ),
+          child: VerificationDate(),
         );
       },
     );

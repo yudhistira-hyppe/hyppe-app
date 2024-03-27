@@ -369,7 +369,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
         // Routing().moveAndPop(Routes.verificationIDStep5);
         context.read<CameraNotifier>().flashOff(Routing.navigatorKey.currentContext ?? context);
         if (idCardName == "" || idCardNumber == "") {
-          // ShowGeneralDialog
+          ShowGeneralDialog.failedGetKTP(context, functionPrimary: () {});
         }
       }
     });
@@ -539,6 +539,27 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
       isLoading = false;
       ShowGeneralDialog.pickFileErrorAlert(context, language.sorryUnexpectedErrorHasOccurred ?? '');
     }
+  }
+
+  void takePictSupport(BuildContext context) {
+    CameraDevicesNotifier cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+
+    cameraNotifier.takePicture(context).then((value) async {
+      print("hasil $value");
+      if (value != null) {
+        if (pickedSupportingDocs != null) {
+          if (pickedSupportingDocs!.length < 3) {
+            pickedSupportingDocs!.add(File(value.path));
+            Routing().moveAndPop(Routes.verificationIDStepSupportingDocsPreview);
+          } else {
+            ShowGeneralDialog.pickFileErrorAlert(context, language.max3Images ?? 'Max 3 images');
+            isLoading = false;
+          }
+        }
+      }
+
+      ///////
+    });
   }
 
   void onSaveSupportedDocument(BuildContext context) async {

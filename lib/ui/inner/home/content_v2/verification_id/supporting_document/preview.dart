@@ -2,6 +2,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -22,7 +23,6 @@ class VerificationIDStepSupportingDocsPreview extends StatefulWidget {
 }
 
 class _VerificationIDStepSupportingDocsPreviewState extends State<VerificationIDStepSupportingDocsPreview> {
-
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationIDStepSupportingDocsPreview');
@@ -53,40 +53,46 @@ class _VerificationIDStepSupportingDocsPreviewState extends State<VerificationID
               textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
             ),
             centerTitle: false,
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: GestureDetector(
-                  onTap: () => ShowBottomSheet.onShowHelpSupportDocs(context),
-                  child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}info-icon.svg"),
-                ),
-              )
-            ],
+            // actions: [
+            //   Padding(
+            //     padding: const EdgeInsets.only(right: 20),
+            //     child: GestureDetector(
+            //       onTap: () => ShowBottomSheet.onShowHelpSupportDocs(context),
+            //       child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}info-icon.svg"),
+            //     ),
+            //   )
+            // ],
           ),
           body: Column(
             children: [
               ListView.separated(
                 shrinkWrap: true,
                 itemCount: notifier.pickedSupportingDocs?.length ?? 0,
-                itemBuilder: (context, index) => ListTile(
-                  title: Text(basename(notifier.pickedSupportingDocs?[index].path ?? '')),
-                  subtitle: Text(notifier.pickedSupportingDocs?[index].lengthSync().toString() ?? ''),
-                  leading: notifier.pickedSupportingDocs?[index] != null ? Image.file(notifier.pickedSupportingDocs![index]) : null,
-                  trailing: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        notifier.pickedSupportingDocs?.removeAt(index);
-                      });
-                    },
-                    child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                        decoration: BoxDecoration(border: Border.all(color: kHyppePrimary), borderRadius: BorderRadius.circular(8)),
-                        child: Text(
-                          notifier.language.delete ?? '',
-                          style: const TextStyle(color: kHyppePrimary),
-                        )),
-                  ),
-                ),
+                itemBuilder: (context, index) {
+                  var subtitle = '';
+                  var lenght = System.getFileSizeDescription(notifier.pickedSupportingDocs?[index].lengthSync() ?? 0);
+                  DateTime date = await notifier.pickedSupportingDocs?[index].lastAccessed();
+                  subtitle = "${lenght}/${date.ye}";
+                  return ListTile(
+                    title: Text(`basename(notifier.pickedSupportingDocs?[index].path ?? '')),
+                    subtitle: Text(subtitle),
+                    leading: notifier.pickedSupportingDocs?[index] != null ? Image.file(notifier.pickedSupportingDocs![index]) : null,
+                    trailing: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          notifier.pickedSupportingDocs?.removeAt(index);
+                        });
+                      },
+                      child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(border: Border.all(color: kHyppePrimary), borderRadius: BorderRadius.circular(8)),
+                          child: Text(
+                            notifier.language.delete ?? '',
+                            style: const TextStyle(color: kHyppePrimary),
+                          )),
+                    ),
+                  );
+                },
                 separatorBuilder: (BuildContext context, int index) {
                   return const Divider(
                     color: Colors.black12,
@@ -141,7 +147,7 @@ class _VerificationIDStepSupportingDocsPreviewState extends State<VerificationID
                     ),
                   const SizedBox(width: 10),
                   CustomTextWidget(
-                    textToDisplay: notifier.language.save ?? '',
+                    textToDisplay: notifier.language.upload ?? '',
                     textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                   ),
                 ],

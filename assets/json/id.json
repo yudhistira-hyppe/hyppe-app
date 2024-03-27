@@ -713,7 +713,7 @@
   "uploadIdCardNotice7": "Pastikan selfie yang Anda ambil menghadap ke depan dengan pencahayaan yang cukup, tanpa flash, dan tidak terpotong",
   "uploadIdCardNotice8": "Jika cara di atas sudah kamu ikuti namun tidak berhasil, kamu bisa mengadukan masalah ini ke Pusat Bantuan Hype di (813) 998-5108",
   "cameraTakeIdCardInfo": "Pastikan E-KTP kamu di dalam bingkai",
-  "eKtpNumber": "Nomor Induk Kependudukan (Sesuai E-KTP)",
+  "eKtpNumber": "Nomor E - KTP",
   "pleaseMakeSuretheResidenceNumberMatchestheEKTP": "Harap pastikan nomor induk kependudukan sesuai dengan E-KTP. Jika foto KTP tidak sesuai, kamu dapat mengambilnya kembali atau mengajukan banding",
   "placeBirth": "Tempat Lahir",
   "placeBirthNote": "Silakan masukkan tempat lahir kamu sesuai dengan yang tertera di E-KTP",
@@ -1111,5 +1111,10 @@
   "userAgreement": "Perjanjian Pengguna",
   "userAgreementCheck": "Saya telah membaca, memahami, dan menyetujui isi dari syarat dan ketentuan ini.",
   "openCamera": "Buka Kamera",
-  "process": "Memproses"
+  "process": "Memproses",
+  "uploadeKTPFailed": "Upload e-KTP gagal",
+  "descFailedktp1": "Kami mengalami kesulitan dalam membaca e-KTPmu. ",
+  "descFailedktp2": "Coba lagi atau gunakan dokumen lain seperti SIM, Kartu Keluarga, atau Paspor untuk melengkapi data.",
+  "reTake": "Foto Ulang",
+  "uploadSupportingDocuments": "Upload Dokumen Pendukung"
 }

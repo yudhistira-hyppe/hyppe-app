@@ -1107,6 +1107,11 @@ class LocalizationModelV2 {
   String? inThisDiary;
   String? inThisVideo;
   String? userAgreementCheck;
+  String? reTake;
+  String? uploadSupportingDocuments;
+  String? descFailedktp2;
+  String? descFailedktp1;
+  String? uploadeKTPFailed;
   String? process;
   String? openCamera;
   String? userAgreement;
@@ -2220,6 +2225,11 @@ class LocalizationModelV2 {
       this.inThisDiary,
       this.inThisVideo,
       this.userAgreementCheck,
+      this.reTake,
+      this.uploadSupportingDocuments,
+      this.descFailedktp2,
+      this.descFailedktp1,
+      this.uploadeKTPFailed,
       this.process,
       this.openCamera,
       this.userAgreement});
@@ -3351,6 +3361,11 @@ class LocalizationModelV2 {
     inThisDiary = json['inThisDiary'];
     inThisVideo = json['inThisVideo'];
     userAgreementCheck = json['userAgreementCheck'];
+    reTake = json['reTake'];
+    uploadSupportingDocuments = json['uploadSupportingDocuments'];
+    descFailedktp2 = json['descFailedktp2'];
+    descFailedktp1 = json['descFailedktp1'];
+    uploadeKTPFailed = json['uploadeKTPFailed'];
     process = json['process'];
     openCamera = json['openCamera'];
     userAgreement = json['userAgreement'];
