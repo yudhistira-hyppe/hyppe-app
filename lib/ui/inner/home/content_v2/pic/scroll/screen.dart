@@ -18,6 +18,7 @@ import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/services/audio_service.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -96,6 +97,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
   // int _currentPositionText = 0;
   int _curIdx = 0;
   int _lastCurIndex = -1;
+  int playIndex = -1;
   int scrollIndex = 0;
 
   String auth = '';
@@ -156,8 +158,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
       notifier.itemScrollController.jumpTo(index: widget.arguments?.page ?? 0);
       // scrollIndex = widget.arguments?.page ?? 0;
-      print("00000000000000 ${widget.arguments?.page}");
-      _initListener(notifier);
+      // _initListener(notifier);
     });
 
     var index = 0;
@@ -165,10 +166,6 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     pageSrc = widget.arguments?.pageSrc ?? PageSrc.otherProfile;
 
     itemPositionsListener.itemPositions.addListener(() async {
-      print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-
-      print(itemPositionsListener.itemPositions.value.first);
-      print(itemPositionsListener.itemPositions.value.last);
 
       index = itemPositionsListener.itemPositions.value.first.index;
 
@@ -378,7 +375,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     // await getAuth(data.music?.apsaraMusic ?? '');
 
     // _playMode = ModeTypeAliPLayer.auth;
-    await getAuth(data.music?.apsaraMusic ?? '');
+    // await getAuth(data.music?.apsaraMusic ?? '');
 
     setState(() {
       isPause = false;
@@ -413,10 +410,50 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     // };
     // fAliplayer?.setCacheConfig(map);
     if (data.reportedStatus != 'BLURRED') {
-      fAliplayer?.prepare();
+      // fAliplayer?.prepare();
+      if (!mounted) return;
+      await getMusicUrl(context, data.music?.apsaraMusic ?? '');
     }
     fAliplayer?.setMuted(notifier.isMute);
     // fAliplayer?.play();
+    MyAudioService.instance.play(
+      path: url,
+      startedPlaying: () {
+        playIndex = _curIdx;
+        setState(() {});
+      },
+      stoppedPlaying: () {
+        playIndex = -1;
+        setState(() {});
+      },
+      mute: notifier.isMute,
+    );
+  }
+
+  Future getMusicUrl(BuildContext context, String apsaraId) async {
+    setState(() {
+      isloading = true;
+    });
+    try {
+      final fixContext = Routing.navigatorKey.currentContext;
+      final notifier = PostsBloc();
+      await notifier.getMusic(fixContext ?? context, apsaraId: apsaraId);
+      final fetch = notifier.postsFetch;
+      if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        Map jsonMap = json.decode(fetch.data.toString());
+
+        setState(() {
+          url = jsonMap['data']['PlayURL'];
+          isloading = false;
+        });
+        // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+      }
+    } catch (e) {
+      setState(() {
+        isloading = false;
+      });
+      // 'Failed to fetch ads data $e'.logger();
+    }
   }
 
   Future getAuth(String apsaraId) async {
@@ -496,6 +533,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
   void deactivate() {
     print("====== deactivate ");
     fAliplayer?.stop();
+    MyAudioService.instance.stop();
     System().disposeBlock();
     if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
       fAliplayer?.destroy();
@@ -524,6 +562,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     }
     isInPage = true;
     fAliplayer?.play();
+    MyAudioService.instance.playagain(notifier.isMute);
     isActivePage = true;
     // System().disposeBlock();
 
@@ -548,6 +587,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
   @override
   void didPushNext() {
     fAliplayer?.pause();
+    MyAudioService.instance.pause();
     isInPage = false;
     print("========= didPushNext scroll $isInPage");
     System().disposeBlock();
@@ -567,12 +607,14 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
         if ((Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds) && isInPage) {
           print("==== hahaha aha ah ah ah ah ah ah  resume $isInPage");
           fAliplayer?.play();
+          MyAudioService.instance.playagain(false);
         }
         break;
       case AppLifecycleState.paused:
         print(
             "========= paused scroll ${(Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds) && isInPage}");
         fAliplayer?.pause();
+        MyAudioService.instance.pause();
         break;
       case AppLifecycleState.detached:
         print("========= detached");
@@ -742,6 +784,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                   itemBuilder: (context, index) {
                                     if (pics == null || home.isLoadingPict) {
                                       fAliplayer?.pause();
+                                      MyAudioService.instance.pause();
                                       _lastCurIndex = -1;
                                       return CustomShimmer(
                                         width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
@@ -955,6 +998,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                         });
                       } else {
                         fAliplayer?.stop();
+                        MyAudioService.instance.stop();
                       }
                       Future.delayed(const Duration(milliseconds: 100), () {
                         System().increaseViewCount2(context, pics?[index] ?? ContentData(), check: false);
@@ -1541,6 +1585,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                   setState(() {
                     notifier.isMute = !notifier.isMute;
                   });
+                  MyAudioService.instance.playagain(notifier.isMute);
                   fAliplayer?.setMuted(notifier.isMute);
                 },
                 child: Padding(

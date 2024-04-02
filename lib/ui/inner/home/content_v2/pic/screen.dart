@@ -89,6 +89,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   bool isPrepare = false;
   bool isPlay = false;
   bool isPause = false;
+  int playIndex = -1;
   // bool _showLoading = false;
   // bool _inSeek = false;
   bool isloading = false;
@@ -550,8 +551,14 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
     MyAudioService.instance.play(
       path: url,
-      startedPlaying: () {},
-      stoppedPlaying: () {},
+      startedPlaying: () {
+        playIndex = _curIdx;
+        setState(() {});
+      },
+      stoppedPlaying: () {
+        playIndex = -1;
+        setState(() {});
+      },
       mute: notifier.isMute,
     );
     // try {
@@ -726,7 +733,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void didPushNext() {
     print("========= didPushNext");
-    MyAudioService.instance.pause();
+    // MyAudioService.instance.pause();
     fAliplayer?.pause();
     isActivePage = false;
     System().disposeBlock();
@@ -783,26 +790,16 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     SizeConfig().init(context);
     context.select((ErrorService value) => value.getError(ErrorType.pic));
     // AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
-<<<<<<< HEAD
-    return Consumer2<PreviewPicNotifier, HomeNotifier>(
-      
-      builder: (_, notifier, home, __) {
-        if (isactivealiplayer){
-          fAliplayer?.pause();
-        }else{
-          if (isActivePage) fAliplayer?.play();
-=======
 
     return Consumer2<PreviewPicNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
-      if (isactivealiplayer) {
-        fAliplayer?.pause();
-      } else {
-        if (isActivePage) {
-          fAliplayer?.play();
->>>>>>> 63eee7ee604bc4feb9e1ad37e0d2997a024efd25
-        }
-        //
-      }
+      // if (isactivealiplayer) {
+      //   fAliplayer?.pause();
+      // } else {
+      //   if (isActivePage) {
+      //     fAliplayer?.play();
+      //   }
+      //   //
+      // }
       return Container(
         width: SizeConfig.screenWidth,
         height: SizeWidget.barHyppePic,

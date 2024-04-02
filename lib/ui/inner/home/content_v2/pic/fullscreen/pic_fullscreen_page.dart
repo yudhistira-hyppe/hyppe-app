@@ -131,9 +131,14 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (widget.argument?.picData[widget.argument?.index ?? 0].music != null) {
-        MyAudioService.instance.playagain(notifier.isMute);
+        if (MyAudioService.instance.player.playing){
+          MyAudioService.instance.playagain(notifier.isMute);
+        }
+        
       }
+
       pagePictLandingFull = true;
+      isMuteAudioPic = notifier.isMute;
       _lastCurPostId = widget.argument?.picData[widget.argument?.index ?? 0].postID ?? '';
       fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPicFullScreen');
       WidgetsBinding.instance.addObserver(this);
@@ -582,7 +587,9 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                   setState(() {
                     notifier!.isMute = !notifier.isMute;
                     opacityLevel = 1.0;
+                    isMuteAudioPic = notifier.isMute;
                   });
+                  MyAudioService.instance.playagain(notifier?.isMute??false);
                   fAliplayer?.setMuted(notifier!.isMute);
                   if (notifier!.isMute) {
                     animatedController.stop();

@@ -190,7 +190,6 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
             elevation: 0.0,
             titleSpacing: 0,
             automaticallyImplyLeading: true,
-            titleSpacing: 0,
             title: CustomTextWidget(
               textToDisplay: notifier.displayUserName(),
               textAlign: TextAlign.start,

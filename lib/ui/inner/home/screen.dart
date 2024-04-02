@@ -9,6 +9,7 @@ import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/core/services/audio_service.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
@@ -290,6 +291,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
               onRefresh: () async {
                 print(isZoom);
                 if (!isZoom) {
+                  await MyAudioService.instance.stop();
                   Future.delayed(Duration(milliseconds: 400), () async {
                     imageCache.clear();
                     imageCache.clearLiveImages();

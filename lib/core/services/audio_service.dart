@@ -48,14 +48,16 @@ class MyAudioService {
   }
 
   Future<void> playagain(bool muted) async {
-    if (player.playing){
+    // if (player.){
       await player.play();
       if (muted) {
         await player.setVolume(0);
       }else{
         await player.setVolume(1);
       }
-    }else{}
+    // }else{
+      
+    // }
     
     return Future<void>.value();
   }
