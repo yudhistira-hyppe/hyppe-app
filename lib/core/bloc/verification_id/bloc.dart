@@ -196,6 +196,7 @@ class VerificationIDBloc {
       }
     }
 
+    print(formData.files.map((e) => e).join(','));
     print(formData.fields.map((e) => e).join(','));
 
     setVerificationIDFetch(VerificationIDFetch(VerificationIDState.loading));

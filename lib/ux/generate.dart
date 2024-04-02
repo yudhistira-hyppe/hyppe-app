@@ -87,6 +87,7 @@ import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_5/screen.dar
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_6/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_7/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/success_screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/camera_verification.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/eula.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/preview.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/screen.dart';
@@ -325,6 +326,9 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const VerificationIDFailed());
       case Routes.verificationIDSuccess:
         return MaterialPageRoute(builder: (_) => const VerificationIDSuccess());
+
+      case Routes.verificationCameraSupport:
+        return MaterialPageRoute(builder: (_) => const CameraVerification());
       case Routes.deleteAccount:
         return MaterialPageRoute(builder: (_) => const HyppeDeleteAccoount());
       case Routes.confirmDeleteAccount:

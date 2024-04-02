@@ -5,7 +5,7 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
@@ -91,7 +91,7 @@ class _FailedGetKTPDialogState extends State<FailedGetKTPDialog> {
             width: SizeConfig.screenWidth,
             child: TextButton(
               onPressed: () {
-                Routing().move(Routes.verificationIDStep5);
+                context.read<VerificationIDNotifier>().toSupportDoc();
               },
               style: ButtonStyle(side: MaterialStateProperty.all<BorderSide>(const BorderSide(color: kHyppePrimary))),
               child: Text(_language.uploadSupportingDocuments ?? 'Upload Dokumen Pendukung'),

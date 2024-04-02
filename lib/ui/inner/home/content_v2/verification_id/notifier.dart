@@ -82,6 +82,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
   bool proses1 = true;
+  bool activeButtonForm = false;
 
   CameraNotifier cameraNotifier = CameraNotifier();
   CameraDevicesNotifier cameraDevicesNotifier = CameraDevicesNotifier();
@@ -89,6 +90,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   TextEditingController _birtDateController = TextEditingController();
   TextEditingController _birtPlaceController = TextEditingController();
   TextEditingController _genderController = TextEditingController();
+  TextEditingController nikCtrl = TextEditingController();
 
   TextEditingController get realNameController => _realNameController;
   set realNameController(TextEditingController val) {
@@ -111,6 +113,13 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   TextEditingController get genderController => _genderController;
   set genderController(TextEditingController val) {
     _genderController = val;
+    notifyListeners();
+  }
+
+  bool _isSupportDoc = false;
+  bool get isSupportDoc => _isSupportDoc;
+  set isSupportDoc(bool val) {
+    _isSupportDoc = val;
     notifyListeners();
   }
 
@@ -375,6 +384,14 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
     });
   }
 
+  void toSupportDoc() {
+    idCardName = realNameController.text;
+    isSupportDoc = true;
+    notifyListeners();
+    Routing().moveBack();
+    Routing().moveAndPop(Routes.verificationIDStep5);
+  }
+
   void onTakeSelfie(BuildContext context) {
     dynamic cameraNotifier;
     // final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
@@ -566,7 +583,8 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
     isLoading = true;
     try {
       debugPrint('idCardFile => ' + imagePath);
-      debugPrint('selfieFile => ' + selfiePath);
+      debugPrint('selfieFile => ' + "${pickedSupportingDocs}");
+
       final bloc = VerificationIDBloc();
       await bloc
           .postVerificationIDWithSupportDocsBloc(
@@ -687,6 +705,15 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
     Routing().moveAndPop(Routes.verificationIDStep6);
   }
 
+  void retryCameraSupport(BuildContext context) {
+    selfiePath = "";
+    pickedSupportingDocs = [];
+    pickedSupportingDocs?.clear();
+    notifyListeners();
+
+    Routing().moveAndPop(Routes.verificationCameraSupport);
+  }
+
   void clearAndMoveToLobby() {
     clearAllTempData();
 
@@ -775,6 +802,18 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
       value: genderController.text,
       initFuture: UtilsBlocV2().getGenderBloc(context),
     );
+  }
+
+  void checkActiveButton() {
+    if (isSupportDoc) {
+      if (nikCtrl.text != '' && genderController.text != '' && birtDateController.text != '' && birtPlaceController.text != '') {
+        activeButtonForm = true;
+        notifyListeners();
+      } else {
+        activeButtonForm = false;
+        notifyListeners();
+      }
+    }
   }
 
   @override

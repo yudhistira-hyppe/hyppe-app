@@ -6,7 +6,6 @@ import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -15,8 +14,6 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/camera_verification.dart';
-import 'package:hyppe/ux/path.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class VerificationIDStep5 extends StatefulWidget {
@@ -27,6 +24,8 @@ class VerificationIDStep5 extends StatefulWidget {
 }
 
 class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFirstLayoutMixin {
+  final _formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationIDStep5');
@@ -75,208 +74,247 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                 ))
               : SingleChildScrollView(
                   padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: kHyppeRank4,
-                          border: Border.all(color: kHyppeRank2),
-                          borderRadius: BorderRadius.circular(8),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: kHyppeRank4,
+                            border: Border.all(color: kHyppeRank2),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Row(
+                            children: [
+                              CustomIconWidget(
+                                iconData: "${AssetPath.vectorPath}info-icon.svg",
+                                color: kHyppeTextLightPrimary,
+                                defaultColor: false,
+                              ),
+                              twelvePx,
+                              Expanded(
+                                  child: Text(
+                                'Proses verifikasi ini hanya dapat dilakukan satu kali, pastikan data sudah sesuai dengan E-KTP Kamu.',
+                                style: TextStyle(fontSize: 10, fontFamily: 'Lato', color: kHyppeTextLightPrimary),
+                              )),
+                            ],
+                          ),
                         ),
-                        child: Row(
+                        twentyFourPx,
+                        _disabledInputText(title: notifier.language.fullName ?? '', value: notifier.idCardName.toUpperCase()),
+                        if (notifier.errorName != '')
+                          CustomTextWidget(
+                            textToDisplay: notifier.errorName,
+                            textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.red),
+                          ),
+                        const SizedBox(height: 16),
+                        if (!notifier.isSupportDoc) _disabledInputText(title: notifier.language.eKtpNumber ?? '', value: notifier.idCardNumber),
+                        if (notifier.errorKtp != '')
+                          CustomTextWidget(
+                            textToDisplay: notifier.errorKtp,
+                            textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.red),
+                          ),
+                        if (!notifier.isSupportDoc) const SizedBox(height: 16),
+                        if (notifier.isSupportDoc)
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CustomTextWidget(
+                                textToDisplay: notifier.language.eKtpNumber ?? '',
+                                textStyle: textTheme.bodySmall?.copyWith(color: kHyppeTextLightPrimary),
+                              ),
+                              tenPx,
+                              TextFormField(
+                                readOnly: false,
+                                maxLines: 1,
+                                keyboardAppearance: Brightness.dark,
+                                cursorColor: const Color(0xff8A3181),
+                                textInputAction: TextInputAction.done,
+                                style: textTheme.bodyLarge,
+                                controller: notifier.nikCtrl,
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  errorBorder: InputBorder.none,
+                                  hintStyle: textTheme.bodyText2,
+                                  enabledBorder: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                  disabledBorder: InputBorder.none,
+                                  focusedErrorBorder: InputBorder.none,
+                                  counterText: "",
+                                  contentPadding: const EdgeInsets.symmetric(vertical: 5),
+                                  isDense: true,
+                                  border: InputBorder.none,
+                                ),
+                                onChanged: (value) {
+                                  notifier.checkActiveButton();
+                                },
+                              ),
+                              _buildDivider(context),
+                              const SizedBox(height: 16),
+                            ],
+                          ),
+                        CustomTextWidget(
+                          textToDisplay: notifier.language.gender ?? 'gender',
+                          textStyle: textTheme.bodySmall?.copyWith(color: kHyppeTextLightPrimary),
+                        ),
+                        tenPx,
+                        GestureDetector(
+                          onTap: () {
+                            notifier.genderOnTap(context);
+                          },
+                          child: Stack(
+                            children: [
+                              const Align(
+                                alignment: Alignment(0.975, 1),
+                                heightFactor: 1,
+                                child: RotatedBox(
+                                  quarterTurns: -45,
+                                  child: CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
+                                ),
+                              ),
+                              TextFormField(
+                                maxLines: 1,
+                                validator: (String? input) {
+                                  if (input?.isEmpty ?? true) {
+                                    return notifier.language.selectGenderInfo ?? '';
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                                enabled: false,
+                                keyboardAppearance: Brightness.dark,
+                                cursorColor: const Color(0xff8A3181),
+                                textInputAction: TextInputAction.newline,
+                                style: textTheme.bodyLarge,
+                                controller: notifier.genderController,
+                                decoration: InputDecoration(
+                                  errorBorder: InputBorder.none,
+                                  hintStyle: textTheme.bodyText2,
+                                  enabledBorder: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                  disabledBorder: InputBorder.none,
+                                  focusedErrorBorder: InputBorder.none,
+                                  counterText: "",
+                                  contentPadding: const EdgeInsets.symmetric(vertical: 5),
+                                  isDense: true,
+                                  border: InputBorder.none,
+                                ),
+                                onChanged: (value) {
+                                  notifier.checkActiveButton();
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        _buildDivider(context),
+                        if (notifier.errorGender != '')
+                          CustomTextWidget(
+                            textToDisplay: notifier.errorGender,
+                            textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.red),
+                          ),
+                        const SizedBox(height: 16),
+                        CustomTextWidget(
+                          textToDisplay: notifier.language.dateOfBirth ?? '',
+                          textStyle: textTheme.bodySmall?.copyWith(color: kHyppeTextLightPrimary),
+                        ),
+                        tenPx,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            CustomIconWidget(
-                              iconData: "${AssetPath.vectorPath}info-icon.svg",
-                              color: kHyppeTextLightPrimary,
-                              defaultColor: false,
-                            ),
-                            twelvePx,
                             Expanded(
-                                child: Text(
-                              'Proses verifikasi ini hanya dapat dilakukan satu kali, pastikan data sudah sesuai dengan E-KTP Kamu.',
-                              style: TextStyle(fontSize: 10, fontFamily: 'Lato', color: kHyppeTextLightPrimary),
-                            )),
-                          ],
-                        ),
-                      ),
-                      twentyFourPx,
-                      _disabledInputText(title: notifier.language.fullName ?? '', value: notifier.idCardName.toUpperCase()),
-                      if (notifier.errorName != '')
-                        CustomTextWidget(
-                          textToDisplay: notifier.errorName,
-                          textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.red),
-                        ),
-                      const SizedBox(height: 16),
-                      _disabledInputText(title: notifier.language.eKtpNumber ?? '', value: notifier.idCardNumber),
-                      if (notifier.errorKtp != '')
-                        CustomTextWidget(
-                          textToDisplay: notifier.errorKtp,
-                          textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.red),
-                        ),
-                      const SizedBox(height: 16),
-                      CustomTextWidget(
-                        textToDisplay: notifier.language.gender ?? 'gender',
-                        textStyle: textTheme.bodySmall?.copyWith(color: kHyppeTextLightPrimary),
-                      ),
-                      tenPx,
-                      GestureDetector(
-                        onTap: () {
-                          notifier.genderOnTap(context);
-                        },
-                        child: Stack(
-                          children: [
-                            const Align(
-                              alignment: Alignment(0.975, 1),
-                              heightFactor: 1,
-                              child: RotatedBox(
-                                quarterTurns: -45,
-                                child: CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
+                              child: TextFormField(
+                                onTap: () async {
+                                  ShowBottomSheet.onVerificationDate(context);
+                                },
+                                readOnly: true,
+                                maxLines: 1,
+                                keyboardAppearance: Brightness.dark,
+                                cursorColor: const Color(0xff8A3181),
+                                textInputAction: TextInputAction.newline,
+                                style: textTheme.bodyLarge,
+                                controller: notifier.birtDateController,
+                                decoration: InputDecoration(
+                                  errorBorder: InputBorder.none,
+                                  hintStyle: textTheme.bodyText2,
+                                  enabledBorder: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                  disabledBorder: InputBorder.none,
+                                  focusedErrorBorder: InputBorder.none,
+                                  counterText: "",
+                                  contentPadding: const EdgeInsets.symmetric(vertical: 5),
+                                  isDense: true,
+                                  border: InputBorder.none,
+                                ),
+                                onChanged: (value) {
+                                  notifier.checkActiveButton();
+                                },
                               ),
                             ),
-                            TextFormField(
-                              maxLines: 1,
-                              validator: (String? input) {
-                                if (input?.isEmpty ?? true) {
-                                  return notifier.language.selectGenderInfo ?? '';
-                                } else {
-                                  return null;
-                                }
+                            GestureDetector(
+                              onTap: () {
+                                ShowBottomSheet.onVerificationDate(context);
                               },
-                              enabled: false,
-                              keyboardAppearance: Brightness.dark,
-                              cursorColor: const Color(0xff8A3181),
-                              textInputAction: TextInputAction.newline,
-                              style: textTheme.bodyLarge,
-                              controller: notifier.genderController,
-                              decoration: InputDecoration(
-                                errorBorder: InputBorder.none,
-                                hintStyle: textTheme.bodyText2,
-                                enabledBorder: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                disabledBorder: InputBorder.none,
-                                focusedErrorBorder: InputBorder.none,
-                                counterText: "",
-                                contentPadding: const EdgeInsets.symmetric(vertical: 5),
-                                isDense: true,
-                                border: InputBorder.none,
+                              child: const CustomIconWidget(
+                                iconData: "${AssetPath.vectorPath}calendar.svg",
+                                defaultColor: false,
+                                color: kHyppeTextLightPrimary,
                               ),
-                            ),
+                            )
                           ],
                         ),
-                      ),
-                      _buildDivider(context),
-                      if (notifier.errorGender != '')
+                        _buildDivider(context),
+                        if (notifier.errorDateBirth != '')
+                          CustomTextWidget(
+                            textToDisplay: notifier.errorDateBirth,
+                            textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.red),
+                          ),
+                        const SizedBox(height: 16),
                         CustomTextWidget(
-                          textToDisplay: notifier.errorGender,
-                          textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.red),
+                          textToDisplay: notifier.language.placeBirth ?? '',
+                          textStyle: textTheme.bodySmall?.copyWith(color: kHyppeTextLightPrimary),
                         ),
-                      const SizedBox(height: 16),
-                      CustomTextWidget(
-                        textToDisplay: notifier.language.dateOfBirth ?? '',
-                        textStyle: textTheme.bodySmall?.copyWith(color: kHyppeTextLightPrimary),
-                      ),
-                      tenPx,
-                      TextFormField(
-                        onTap: () async {
-                          ShowBottomSheet.onVerificationDate(context);
-
-                          // final DateTime? pickedDate = await showDatePicker(
-                          //     context: context,
-                          //     initialDate: notifier.selectedBirthDate,
-                          //     firstDate: DateTime(1900),
-                          //     lastDate: DateTime.now().add(const Duration(days: 1)),
-                          //     builder: (context, child) {
-                          //       return Theme(
-                          //         data: Theme.of(context).copyWith(
-                          //           colorScheme: const ColorScheme.light(
-                          //             primary: kHyppePrimary, // header background color
-                          //             onPrimary: Colors.white, // header text color
-                          //             onSurface: kHyppeTextLightPrimary, // body text color
-                          //           ),
-                          //           textButtonTheme: TextButtonThemeData(
-                          //             style: TextButton.styleFrom(
-                          //               primary: kHyppePrimary, // button text color
-                          //             ),
-                          //           ),
-                          //         ),
-                          //         child: child ?? Container(),
-                          //       );
-                          //     });
-
-                          // if (pickedDate != null && pickedDate != notifier.selectedBirthDate) {
-                          //   notifier.selectedBirthDate = pickedDate;
-                          //   FocusScope.of(context).unfocus();
-                          // }
-                        },
-                        readOnly: true,
-                        maxLines: 1,
-                        keyboardAppearance: Brightness.dark,
-                        cursorColor: const Color(0xff8A3181),
-                        textInputAction: TextInputAction.newline,
-                        style: textTheme.bodyLarge,
-                        controller: notifier.birtDateController,
-                        decoration: InputDecoration(
-                          errorBorder: InputBorder.none,
-                          hintStyle: textTheme.bodyText2,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          disabledBorder: InputBorder.none,
-                          focusedErrorBorder: InputBorder.none,
-                          counterText: "",
-                          contentPadding: const EdgeInsets.symmetric(vertical: 5),
-                          isDense: true,
-                          border: InputBorder.none,
+                        tenPx,
+                        TextFormField(
+                          maxLines: 1,
+                          validator: (String? input) {
+                            if (input?.isEmpty ?? true) {
+                              return notifier.language.placeBirthNote;
+                            } else {
+                              return null;
+                            }
+                          },
+                          keyboardAppearance: Brightness.dark,
+                          cursorColor: const Color(0xff8A3181),
+                          textInputAction: TextInputAction.done,
+                          style: textTheme.bodyLarge,
+                          controller: notifier.birtPlaceController,
+                          decoration: InputDecoration(
+                            errorBorder: InputBorder.none,
+                            hintStyle: textTheme.bodyText2,
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            focusedErrorBorder: InputBorder.none,
+                            counterText: "",
+                            contentPadding: const EdgeInsets.symmetric(vertical: 5),
+                            isDense: true,
+                            border: InputBorder.none,
+                          ),
+                          onChanged: (value) {
+                            notifier.checkActiveButton();
+                          },
                         ),
-                      ),
-                      _buildDivider(context),
-                      if (notifier.errorDateBirth != '')
-                        CustomTextWidget(
-                          textToDisplay: notifier.errorDateBirth,
-                          textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.red),
-                        ),
-                      const SizedBox(height: 16),
-                      CustomTextWidget(
-                        textToDisplay: notifier.language.placeBirth ?? '',
-                        textStyle: textTheme.bodySmall?.copyWith(color: kHyppeTextLightPrimary),
-                      ),
-                      tenPx,
-                      TextFormField(
-                        maxLines: 1,
-                        validator: (String? input) {
-                          if (input?.isEmpty ?? true) {
-                            return notifier.language.placeBirthNote;
-                          } else {
-                            return null;
-                          }
-                        },
-                        keyboardAppearance: Brightness.dark,
-                        cursorColor: const Color(0xff8A3181),
-                        textInputAction: TextInputAction.newline,
-                        style: textTheme.bodyLarge,
-                        controller: notifier.birtPlaceController,
-                        decoration: InputDecoration(
-                          errorBorder: InputBorder.none,
-                          hintStyle: textTheme.bodyText2,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          disabledBorder: InputBorder.none,
-                          focusedErrorBorder: InputBorder.none,
-                          counterText: "",
-                          contentPadding: const EdgeInsets.symmetric(vertical: 5),
-                          isDense: true,
-                          border: InputBorder.none,
-                        ),
-                      ),
-                      _buildDivider(context),
-                      if (notifier.errorPlaceBirth != '')
-                        CustomTextWidget(
-                          textToDisplay: notifier.errorPlaceBirth,
-                          textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.red),
-                        ),
-                    ],
+                        _buildDivider(context),
+                        if (notifier.errorPlaceBirth != '')
+                          CustomTextWidget(
+                            textToDisplay: notifier.errorPlaceBirth,
+                            textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.red),
+                          ),
+                      ],
+                    ),
                   ),
                 ),
           bottomSheet: Container(
@@ -321,7 +359,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                             builder: (context) => CameraVerification(),
                           ));
                     },
-                    buttonStyle: notifier.step5CanNext
+                    buttonStyle: notifier.step5CanNext && notifier.activeButtonForm
                         ? ButtonStyle(
                             foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                             shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
@@ -368,6 +406,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
           textToDisplay: title,
           textStyle: textTheme.bodySmall,
         ),
+        tenPx,
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -382,7 +421,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
               )
           ],
         ),
-        const SizedBox(height: 10),
+        // const SizedBox(height: 10),
         _buildDivider(context),
       ],
     );

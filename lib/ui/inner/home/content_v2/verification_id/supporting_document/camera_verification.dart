@@ -8,7 +8,6 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/ui/constant/entities/camera_devices/screen.dart';
-import 'package:hyppe/ui/constant/entities/camera_devices/widgets/camera_flash_button.dart';
 import 'package:hyppe/ui/constant/entities/camera_devices/widgets/camera_switch_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
@@ -28,7 +27,7 @@ class _CameraVerificationState extends State<CameraVerification> with RouteAware
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'CameraVerification');
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     super.initState();
   }
 
@@ -60,64 +59,67 @@ class _CameraVerificationState extends State<CameraVerification> with RouteAware
             onCameraNotifierUpdate: (cameraNotifier) => notifier.cameraDevicesNotifier = cameraNotifier,
             additionalViews: <Widget>[
               SafeArea(
-                top: Platform.isIOS,
                 child: Align(
                   alignment: Alignment.topLeft,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      CustomTextButton(onPressed: () => notifier.backFromSelfie(context), child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg", defaultColor: false)),
+                      CustomTextButton(onPressed: () => notifier.backFromSelfie(context), child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg", defaultColor: false)),
                     ],
                   ),
                 ),
               ),
               Align(
-                alignment: const Alignment(0.0, 0.75),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 40),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                          flex: 4,
+                          child: GestureDetector(
+                            onTap: () {
+                              notifier.onPickSupportedDocument(context, true);
+                            },
+                            child: const CustomIconWidget(
+                              defaultColor: false,
+                              iconData: "${AssetPath.vectorPath}ic_galery.svg",
+                            ),
+                          )),
+                      Expanded(
                         flex: 4,
-                        child: GestureDetector(
-                          onTap: () {
-                            notifier.onPickSupportedDocument(context, true);
-                          },
-                          child: const CustomIconWidget(
-                            defaultColor: false,
-                            iconData: "${AssetPath.vectorPath}ic_galery.svg",
+                        child: SizedBox(
+                          height: 105 * SizeConfig.scaleDiagonal,
+                          child: CustomIconButtonWidget(
+                            iconData: "${AssetPath.vectorPath}photo.svg",
+                            onPressed: () => notifier.takePictSupport(context),
                           ),
-                        )),
-                    Expanded(
-                      flex: 4,
-                      child: SizedBox(
-                        height: 105 * SizeConfig.scaleDiagonal,
-                        child: CustomIconButtonWidget(
-                          iconData: "${AssetPath.vectorPath}photo.svg",
-                          onPressed: () => notifier.takePictSupport(context),
                         ),
                       ),
-                    ),
-                    Expanded(flex: 4, child: const CameraDevicesSwitchButton())
-                  ],
-                ),
-              ),
-              if (notifier.isLoading)
-                Container(
-                  width: SizeConfig.screenWidth,
-                  height: SizeConfig.screenHeight,
-                  color: Colors.white,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
-                      CircularProgressIndicator(
-                        color: kHyppePrimary,
-                      ),
-                      SizedBox(height: 10),
-                      ProcessUploadComponent(),
+                      Expanded(flex: 4, child: CameraDevicesSwitchButton())
                     ],
                   ),
-                )
+                ),
+              ),
+
+              // if (notifier.isLoading)
+              //   Container(
+              //     width: SizeConfig.screenWidth,
+              //     height: SizeConfig.screenHeight,
+              //     color: Colors.white,
+              //     child: Column(
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       crossAxisAlignment: CrossAxisAlignment.center,
+              //       children: const [
+              //         CircularProgressIndicator(
+              //           color: kHyppePrimary,
+              //         ),
+              //         SizedBox(height: 10),
+              //         ProcessUploadComponent(),
+              //       ],
+              //     ),
+              //   )
             ],
           ),
         ),

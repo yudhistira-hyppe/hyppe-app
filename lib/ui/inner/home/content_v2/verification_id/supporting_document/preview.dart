@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -36,7 +38,7 @@ class _VerificationIDStepSupportingDocsPreviewState extends State<VerificationID
     return Consumer<VerificationIDNotifier>(
       builder: (_, notifier, __) => WillPopScope(
         onWillPop: () async {
-          notifier.retrySelfie(context);
+          notifier.retryCameraSupport(context);
           return false;
         },
         child: Scaffold(
@@ -45,7 +47,7 @@ class _VerificationIDStepSupportingDocsPreviewState extends State<VerificationID
             leading: CustomIconButtonWidget(
               defaultColor: true,
               iconData: "${AssetPath.vectorPath}back-arrow.svg",
-              onPressed: () => notifier.retrySelfie(context),
+              onPressed: () => notifier.retryCameraSupport(context),
             ),
             titleSpacing: 0,
             title: CustomTextWidget(
@@ -71,27 +73,37 @@ class _VerificationIDStepSupportingDocsPreviewState extends State<VerificationID
                 itemBuilder: (context, index) {
                   var subtitle = '';
                   var lenght = System.getFileSizeDescription(notifier.pickedSupportingDocs?[index].lengthSync() ?? 0);
-                  DateTime date = await notifier.pickedSupportingDocs?[index].lastAccessed();
-                  subtitle = "${lenght}/${date.ye}";
-                  return ListTile(
-                    title: Text(`basename(notifier.pickedSupportingDocs?[index].path ?? '')),
-                    subtitle: Text(subtitle),
-                    leading: notifier.pickedSupportingDocs?[index] != null ? Image.file(notifier.pickedSupportingDocs![index]) : null,
-                    trailing: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          notifier.pickedSupportingDocs?.removeAt(index);
-                        });
-                      },
-                      child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                          decoration: BoxDecoration(border: Border.all(color: kHyppePrimary), borderRadius: BorderRadius.circular(8)),
-                          child: Text(
-                            notifier.language.delete ?? '',
-                            style: const TextStyle(color: kHyppePrimary),
-                          )),
-                    ),
-                  );
+                  subtitle = lenght;
+
+                  return FutureBuilder(
+                      future: getDate(notifier.pickedSupportingDocs?[index] ?? File('')),
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        return ListTile(
+                          title: Text(basename(notifier.pickedSupportingDocs?[index].path ?? '')),
+                          subtitle: Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Text("$subtitle / ${snapshot.data}"),
+                          ),
+                          leading: notifier.pickedSupportingDocs?[index] != null ? Image.file(notifier.pickedSupportingDocs![index]) : null,
+                          trailing: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                notifier.pickedSupportingDocs?.removeAt(index);
+                              });
+                              if (notifier.pickedSupportingDocs?.isEmpty ?? [].isEmpty) {
+                                notifier.retryCameraSupport(context);
+                              }
+                            },
+                            child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                decoration: BoxDecoration(border: Border.all(color: kHyppePrimary), borderRadius: BorderRadius.circular(8)),
+                                child: Text(
+                                  notifier.language.delete ?? '',
+                                  style: const TextStyle(color: kHyppePrimary),
+                                )),
+                          ),
+                        );
+                      });
                 },
                 separatorBuilder: (BuildContext context, int index) {
                   return const Divider(
@@ -130,10 +142,16 @@ class _VerificationIDStepSupportingDocsPreviewState extends State<VerificationID
               width: SizeConfig.screenWidth,
               height: 44.0 * SizeConfig.scaleDiagonal,
               function: () {
-                if (!notifier.isLoading) {
-                  notifier.onSaveSupportedDocument(context);
-                }
+                // if (!notifier.isLoading) {
+                notifier.onSaveSupportedDocument(context);
+                // }
               },
+              buttonStyle: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -152,16 +170,17 @@ class _VerificationIDStepSupportingDocsPreviewState extends State<VerificationID
                   ),
                 ],
               ),
-              buttonStyle: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-              ),
             ),
           ),
         ),
       ),
     );
+  }
+
+  Future<String> getDate(File item) async {
+    DateTime date = await item.lastAccessed();
+    var val = "${date.day}/${date.month}/${date.year}";
+
+    return val;
   }
 }

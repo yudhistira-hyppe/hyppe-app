@@ -59,6 +59,14 @@ class _VerificationIDStep6State extends State<VerificationIDStep6> with RouteAwa
           body: CameraDevicesPage(
             onCameraNotifierUpdate: (cameraNotifier) => notifier.cameraDevicesNotifier = cameraNotifier,
             additionalViews: <Widget>[
+              SizedBox(
+                width: SizeConfig.screenWidth,
+                height: MediaQuery.of(context).size.height,
+                child: Image.asset(
+                  "${AssetPath.pngPath}head-overlay.png",
+                  fit: BoxFit.fill,
+                ),
+              ),
               SafeArea(
                 top: Platform.isIOS,
                 child: Align(
@@ -87,7 +95,7 @@ class _VerificationIDStep6State extends State<VerificationIDStep6> with RouteAwa
                         ),
                       ),
                     ),
-                    Expanded(flex: 4, child: const CameraDevicesSwitchButton())
+                    const Expanded(flex: 4, child: CameraDevicesSwitchButton())
                   ],
                 ),
               ),
@@ -96,10 +104,10 @@ class _VerificationIDStep6State extends State<VerificationIDStep6> with RouteAwa
                   width: SizeConfig.screenWidth,
                   height: SizeConfig.screenHeight,
                   color: Colors.white,
-                  child: Column(
+                  child: const Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
+                    children: [
                       CircularProgressIndicator(
                         color: kHyppePrimary,
                       ),
