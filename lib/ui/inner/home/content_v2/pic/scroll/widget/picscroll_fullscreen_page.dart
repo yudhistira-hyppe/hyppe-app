@@ -149,6 +149,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
 
   //Start Music
   void startMusic(BuildContext context, ContentData data, ScrollPicNotifier notifier) async {
+    debugPrint('data start music ${data.music?.apsaraMusic??''}');
     fAliplayer?.stop();
     selectedData = data;
 

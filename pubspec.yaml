@@ -103,6 +103,8 @@ dependencies:
   unique_identifier: ^0.3.0
   flutter_livepush_plugin: ^2.1.0+1
 
+  just_audio: ^0.9.36
+
   dynamic_widget: # Dynamic widget builder
     git:
       url: https://github.com/dengyin2000/dynamic_widget.git
@@ -131,6 +133,9 @@ dependencies:
   file_picker: 
     path: packages/flutter_file_picker
 
+  # PIN Code
+  flutter_verification_code: 
+    path: packages/flutter_verification_code
   qr_flutter: ^4.1.0
   pattern_formatter: ^2.0.0
   flutter_countdown_timer: ^4.1.0

@@ -633,7 +633,6 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     if (isHomeScreen) {
       if (mounted) {
         (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps = false;
-
         (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().isInactiveState = true;
         (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps = false;
         fAliplayer?.pause();

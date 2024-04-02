@@ -59,6 +59,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/repo
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_challange_periode.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/v2/user_overview_gender_content.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/filter/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
@@ -1545,6 +1546,72 @@ class ShowBottomSheet {
           ),
         );
       },
+    );
+  }
+
+  static onShowStatementCoins(
+    BuildContext context, {
+    Function()? onSave,
+    Function()? onCancel,
+    title = '',
+    Widget? child,
+    double? initialChildSize,
+  }) {
+    showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return DraggableScrollableSheet(
+          expand: false,
+          maxChildSize: .9,
+          initialChildSize: initialChildSize ?? 0.5,
+          builder: (_, controller) {
+            return Container(
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(16.0),
+                  topRight: Radius.circular(16.0),
+                ),
+              ),
+              child: Column(
+                children: [
+                  FractionallySizedBox(
+                    widthFactor: 0.15,
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(
+                        vertical: 12.0,
+                      ),
+                      child: Container(
+                        height: 5.0,
+                        decoration: const BoxDecoration(
+                          color: kHyppeBurem,
+                          borderRadius: BorderRadius.all(Radius.circular(2.5)),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Center(
+                    child: Text(
+                      title,
+                      style: Theme.of(context)
+                            .textTheme
+                            .titleLarge
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  fivePx,
+                  const Divider(color: kHyppeBurem,),
+                  fivePx,
+                  child ?? SizedBox.fromSize()
+                ],
+              ),
+            );
+          }
+        );
+      }
     );
   }
 

@@ -38,17 +38,22 @@ import 'package:hyppe/ui/inner/home/content_v2/chalange/collection/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/detail/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/shimmer_slider.dart';
+import 'package:hyppe/ui/inner/home/content_v2/coins/coin_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/content_preferences/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/player/diary_player.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/player/landing_diary_full.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/screen_full.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/see_all/diary_see_all_screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/exchangecoins/exchange_coin_page.dart';
+import 'package:hyppe/ui/inner/home/content_v2/exchangecoins/pages/finish_page.dart';
+import 'package:hyppe/ui/inner/home/content_v2/exchangecoins/pages/verification_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/FAQ/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/support_ticket/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/paymentcoin/payment_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/fullscreen/pic_fullscreen_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/widget/picscroll_fullscreen_page.dart';
@@ -66,6 +71,7 @@ import 'package:hyppe/ui/inner/home/content_v2/referral/screen.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/review_buy/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/player/story_player.dart';
+import 'package:hyppe/ui/inner/home/content_v2/topupcoin/topupcoin_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/add_bank_account/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/bank_account/screen.dart';
@@ -460,6 +466,21 @@ class Generate {
         return CupertinoPageRoute(builder: (_) => PicFullscreenPage(argument: settings.arguments as PicFullscreenArgument));
       case Routes.picScrollFullScreenDetail:
         return CupertinoPageRoute(builder: (_) => PicScrollFullscreenPage(argument: settings.arguments as SlidedPicDetailScreenArgument));
+
+      // Coins 
+      case Routes.saldoCoins:
+        return MaterialPageRoute(builder: (_) => const CoinPage());
+      case Routes.topUpCoins:
+        return MaterialPageRoute(builder: (_) => const TopUpCoinPage());
+      case Routes.paymentCoins:
+        return MaterialPageRoute(builder: (_) => const PaymentCoinPage(), settings: settings);
+      case Routes.exchangeCoins:
+        return MaterialPageRoute(builder: (_) => const ExchangeCoinPage(), settings: settings);
+      
+      case Routes.verificationPinPage:
+        return MaterialPageRoute(builder: (_) => const VerificationPinPage(), settings: settings);
+      case Routes.finishTrxPage:
+        return MaterialPageRoute(builder: (_) => const FinishTrxPage(), settings: settings);
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

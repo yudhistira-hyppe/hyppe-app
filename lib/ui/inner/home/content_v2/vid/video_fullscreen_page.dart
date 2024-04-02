@@ -82,7 +82,7 @@ class VideoFullLandingscreenPage extends StatefulWidget {
   State<VideoFullLandingscreenPage> createState() => _VideoFullLandingscreenPageState();
 }
 
-class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage> with AfterFirstLayoutMixin, SingleTickerProviderStateMixin {
+class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage> with WidgetsBindingObserver, AfterFirstLayoutMixin, SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKeyPlayer = GlobalKey<ScaffoldState>();
 
   PageController controller = PageController();
@@ -182,6 +182,8 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
     // SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     controller = PageController(initialPage: widget.index ?? 0);
     controller.addListener(() {
@@ -651,6 +653,29 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
       }
       // setState(() {});
     });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+      case AppLifecycleState.inactive:
+        fAliplayer?.pause();
+        _pauseScreen();
+        break;
+      case AppLifecycleState.resumed:
+        fAliplayer?.play();
+        break;
+      case AppLifecycleState.paused:
+        fAliplayer?.pause();
+        _pauseScreen();
+        break;
+      case AppLifecycleState.detached:
+        _pauseScreen();
+        break;
+      default:
+        break;
+    }
   }
 
   GestureDetector _buildSkipPrev(Color iconColor, double barHeight) {

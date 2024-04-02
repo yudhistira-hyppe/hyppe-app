@@ -92,7 +92,6 @@ class _PicTopItemState extends State<PicTopItem> {
             }
           }
         }
-
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -110,7 +109,7 @@ class _PicTopItemState extends State<PicTopItem> {
                       ? mn?.tutorialData[indexKeySell].textID ?? ''
                       : mn?.tutorialData[indexKeySell].textEn ?? '',
               descTextStyle: const TextStyle(fontSize: 10, color: kHyppeNotConnect),
-              descriptionPadding: EdgeInsets.all(6),
+              descriptionPadding: const EdgeInsets.all(6),
               textColor: Colors.white,
               targetShapeBorder: const CircleBorder(),
               positionYplus: 25,

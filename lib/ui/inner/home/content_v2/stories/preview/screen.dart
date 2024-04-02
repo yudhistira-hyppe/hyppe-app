@@ -60,7 +60,6 @@ class _HyppePreviewStoriesState extends State<HyppePreviewStories> {
           itemBuilder: (context, index) {
             print('ini story orang ${notifier.storiesGroups?.length}');
             int itemIndex = index - 1;
-
             if (notifier.storiesGroups != null) {
               if (index == 0) {
                 return MyFrameStory();

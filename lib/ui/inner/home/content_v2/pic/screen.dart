@@ -130,7 +130,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
   @override
   void initState() {
-    print('data screen pic');
     isPrepareMusic = false;
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppePreviewPic');
     final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
@@ -755,6 +754,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
               child: (notifier.pic == null || home.isLoadingPict)
                   ? ListView.builder(
                       itemBuilder: (context, index) {
+                        fAliplayer?.stop();
                         return CustomShimmer(
                           width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
                           height: 168,

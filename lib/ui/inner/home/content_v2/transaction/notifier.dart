@@ -22,6 +22,8 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
+import 'bank_account/widget/bank_account.dart';
+
 class TransactionNotifier extends ChangeNotifier {
   int _skip = 0;
   int get skip => _skip;
@@ -219,12 +221,27 @@ class TransactionNotifier extends ChangeNotifier {
     ShowBottomSheet().onShowAllBank(context);
   }
 
-  void bankInsert(BankData data) {
+  void showButtomSheetAllBankList(BuildContext context, lang, bool position) {
+    Provider.of<PaymentMethodNotifier>(context, listen: false).initState(context);
+    showModalBottomSheet<int>(
+        backgroundColor: Colors.transparent,
+        context: context,
+        isScrollControlled: true,
+        builder: (context) {
+          return ListBankAccountWidget(lang: lang, position: position,);
+        }
+    );
+  }
+
+  void bankInsert(BankData data, {bool? position}) {
     bankDataSelected = data;
     nameAccount.text = data.bankname ?? '';
     bankcode = data.bankcode;
-    Routing().moveBack();
-    navigateToAddBankAccount();
+    if (!(position??false)){
+      Routing().moveBack();
+      navigateToAddBankAccount();
+    }
+    
   }
 
   Future initTransactionHistory(BuildContext context) async {
@@ -509,7 +526,8 @@ class TransactionNotifier extends ChangeNotifier {
     ShowGeneralDialog.generalDialog(
       context,
       titleText: language.keepThisAccount,
-      bodyText: "${language.youWillAdd} ${nameAccount.text} ${language.accountWithAccountNumber} ${noBankAccount.text} ${language.ownedBy} ${accountOwnerName.text}",
+      // bodyText: "${language.youWillAdd} ${nameAccount.text} ${language.accountWithAccountNumber} ${noBankAccount.text} ${language.ownedBy} ${accountOwnerName.text}",
+      bodyText: "${language.addingtoYourAccount} ${nameAccount.text} ${noBankAccount.text} ${language.atasNama} ${accountOwnerName.text}",
       maxLineTitle: 1,
       maxLineBody: 10,
       functionPrimary: () async {
