@@ -362,7 +362,7 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
     return true;
   }
 
-  void showUserTag(BuildContext context, data, postId, {FlutterAliplayer? fAliplayer, String? title, Orientation? orientation}) {
+  Future showUserTag(BuildContext context, data, postId, {FlutterAliplayer? fAliplayer, String? title, Orientation? orientation}) async {
     print('title $title');
     fAliplayer?.pause();
     context.handleActionIsGuest(() {

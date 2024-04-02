@@ -103,6 +103,8 @@ dependencies:
   unique_identifier: ^0.3.0
   flutter_livepush_plugin: ^2.1.0+1
 
+  just_audio: ^0.9.37
+  
   dynamic_widget: # Dynamic widget builder
     git:
       url: https://github.com/dengyin2000/dynamic_widget.git
