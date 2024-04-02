@@ -8,6 +8,7 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/combination_v2/get_user_profile.dart';
+import 'package:hyppe/core/services/audio_service.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
@@ -62,6 +63,7 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
     // notifier.user.profile = null;
     isloading = true;
     Future.delayed(Duration.zero, () async {
+      MyAudioService.instance.stop();
       notifier.pageIndex = 0;
       await notifier.initialOtherProfile(context, argument: widget.arguments).then((value) => isloading = false);
       userData = notifier.manyUser.last;

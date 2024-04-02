@@ -25,6 +25,7 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/utils/zoom_pic/zoom_pic.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/services/audio_service.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -492,6 +493,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
     print("===-=-=-=-=-start--0-0-0-");
     fAliplayer?.stop();
+    MyAudioService.instance.stop();
     dataSelected = data;
 
     isPlay = false;
@@ -509,7 +511,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     // await getAuth(data.music?.apsaraMusic ?? '');
     if (data.reportedStatus != 'BLURRED') {
       // _playMode = ModeTypeAliPLayer.auth;
-      await getAuth(context, data.music?.apsaraMusic ?? '');
+      // await getAuth(context, data.music?.apsaraMusic ?? '');
+      await getMusicUrl(context, data.music?.apsaraMusic ?? '');
     }
 
     setState(() {
@@ -546,19 +549,52 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     // fAliplayer?.setCacheConfig(map);
     print("====---- ---==== ali ${fAliplayer?.getPlayerName()}");
 
+    MyAudioService.instance.play(
+      path: url,
+      startedPlaying: () {},
+      stoppedPlaying: () {},
+      mute: notifier.isMute,
+    );
+    // try {
+    //   print("===============init ali player ${fAliplayer?.playerId} ===========");
+    //   if (isActivePage) {
+    //     fAliplayer?.prepare().then((value) {
+    //       print("===============init ali player 22 ${fAliplayer?.playerId} ===========");
+    //     });
+    //   }
+    // } catch (e) {
+    //   print(e);
+    // }
+
+    // if (notifier.isMute) {
+    //   fAliplayer?.setMuted(true);
+    // }
+  }
+
+  Future getMusicUrl(BuildContext context, String apsaraId) async {
+    setState(() {
+      isloading = true;
+    });
     try {
-      print("===============init ali player ${fAliplayer?.playerId} ===========");
-      if (isActivePage) {
-        fAliplayer?.prepare().then((value) {
-          print("===============init ali player 22 ${fAliplayer?.playerId} ===========");
+      final fixContext = Routing.navigatorKey.currentContext;
+      final notifier = PostsBloc();
+      await notifier.getMusic(fixContext ?? context, apsaraId: apsaraId);
+      final fetch = notifier.postsFetch;
+      if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        Map jsonMap = json.decode(fetch.data.toString());
+
+        setState(() {
+          url = jsonMap['data']['PlayURL'];
+          isloading = false;
+          isPrepareMusic = false;
         });
+        // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
       }
     } catch (e) {
-      print(e);
-    }
-
-    if (notifier.isMute) {
-      fAliplayer?.setMuted(true);
+      setState(() {
+        isloading = false;
+      });
+      // 'Failed to fetch ads data $e'.logger();
     }
   }
 
@@ -635,6 +671,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   void dispose() {
     isActivePage = true;
     fAliplayer?.stop();
+    // MyAudioService.instance.stop();
     // fAliplayer?.destroy();
     print("---=-=-=-=--===-=-=-=-DiSPOSE--=-=-=-=-=-=-=-=-=-=-=----==-=");
     // fAliplayer?.destroy();
@@ -646,6 +683,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void deactivate() {
     print("====== deactivate ");
+    MyAudioService.instance.pause();
     // fAliplayer?.stop();
     System().disposeBlock();
     if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
@@ -661,6 +699,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void didPop() {
     print("====== didpop ");
+    MyAudioService.instance.playagain(false);
     super.didPop();
   }
 
@@ -671,6 +710,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     isInPage = true;
     fAliplayer?.play();
     isActivePage = true;
+    MyAudioService.instance.playagain(false);
 
     // fAliplayer?.prepare();
     // System().disposeBlock();
@@ -687,6 +727,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void didPushNext() {
     print("========= didPushNext");
+    MyAudioService.instance.pause();
     fAliplayer?.pause();
     isActivePage = false;
     System().disposeBlock();
@@ -706,11 +747,13 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         print("========= resumed");
         if (context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds) && isActivePage) {
           fAliplayer?.play();
+          MyAudioService.instance.playagain(false);
         }
         break;
       case AppLifecycleState.paused:
         print("========= paused");
         fAliplayer?.pause();
+        MyAudioService.instance.pause();
         break;
       case AppLifecycleState.detached:
         print("========= detached");
@@ -1163,6 +1206,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
                                       // if (_lastCurIndex != _curIdx) {
                                       if (_lastCurPostId != _curPostId) {
+                                        MyAudioService.instance.stop();
                                         if (mounted) {
                                           setState(() {
                                             isShowShowcase = false;
@@ -1800,7 +1844,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                     fAliplayer?.play();
                   }
                   print("muteeee----------------- ${notifier.isMute}");
-                  fAliplayer?.setMuted(notifier.isMute);
+                  // fAliplayer?.setMuted(notifier.isMute);
+                  MyAudioService.instance.mute(notifier.isMute);
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),

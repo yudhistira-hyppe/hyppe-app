@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/services/audio_service.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
@@ -37,6 +38,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
   late MainNotifier _mainNotifier;
   GlobalKey keyPostButton = GlobalKey();
+  bool isPagePict = true;
 
   @override
   void afterFirstLayout(BuildContext context) {
@@ -332,6 +334,11 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
   }
 
   void tapMenu(int index, MainNotifier notifier, consumerContext) async {
+    if (notifier.pageIndex == 0) {
+      isPagePict = true;
+    } else {
+      isPagePict = false;
+    }
     String newUser = SharedPreference().readStorage(SpKeys.newUser) ?? '';
     if (newUser == "TRUE" || globalTultipShow) {
       return;
@@ -349,6 +356,10 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
             notifier.pageIndex = index;
           });
         }
+      } else if (index == 0) {
+        notifier.pageIndex = index;
+      } else if (index == 1) {
+        notifier.pageIndex = index;
       } else if (index == 4) {
         notifier.pageIndex = index;
         if (isGuest ?? false) {
@@ -358,13 +369,19 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
       } else {
         setState(() {
           'pageIndex now: $index'.logger();
-          notifier.pageIndex = index;
+          // notifier.pageIndex = index;
         });
       }
     } else {
+      MyAudioService.instance.pause();
       if (isGuest ?? false) {
         isactivealiplayer = true;
-        ShowBottomSheet().onLoginApp(Routing.navigatorKey.currentContext ?? context);
+        ShowBottomSheet().onLoginApp(Routing.navigatorKey.currentContext ?? context).whenComplete(() {
+          print("----index $index");
+          if (isPagePict) {
+            MyAudioService.instance.playagain(false);
+          }
+        });
       } else {
         isactivealiplayer = true;
         PreUploadContentNotifier pn = (Routing.navigatorKey.currentContext ?? context).read<PreUploadContentNotifier>();

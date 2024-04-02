@@ -413,6 +413,7 @@ class UrlConstants {
   static const String getMusicTheme = "/api/theme/";
   static const String getMusicMood = "/api/mood/";
   static const String getMusics = "/api/music";
+  static const String getMusicsPath = "/api/posts/music?musicId=";
 
   /// FAQ
   static const String faqList = "/api/faqs/allfaqs";

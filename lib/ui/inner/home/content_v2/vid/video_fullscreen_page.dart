@@ -647,11 +647,12 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
   }
 
   void _onPlayerHide() {
+    print("========------hideddd----=======");
     Future.delayed(const Duration(seconds: 4), () {
       if (!isScrolling) {
         onTapCtrl = false;
       }
-      // setState(() {});
+      setState(() {});
     });
   }
 
@@ -1129,6 +1130,9 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                 onTapCtrl = true;
               });
             },
+            onDoubleTap: () {
+              context.read<LikeNotifier>().likePost(context, data);
+            },
             child: Stack(
               children: [
                 Container(
@@ -1221,7 +1225,8 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
 
   Widget _buildTopWidget(ContentData data) {
     return AnimatedOpacity(
-      opacity: onTapCtrl || isPause ? 1.0 : 0.0,
+      // opacity: onTapCtrl || isPause ? 1.0 : 0.0,
+      opacity: 1.0,
       duration: const Duration(milliseconds: 300),
       onEnd: _onPlayerHide,
       child: Stack(
@@ -1364,11 +1369,11 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
               : Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _buildSkipPrev(iconColor, barHeight),
-                    _buildSkipBack(iconColor, barHeight),
+                    // _buildSkipPrev(iconColor, barHeight),
+                    // _buildSkipBack(iconColor, barHeight),
                     _buildPlayPause(iconColor, barHeight),
-                    _buildSkipForward(iconColor, barHeight),
-                    _buildSkipNext(iconColor, barHeight),
+                    // _buildSkipForward(iconColor, barHeight),
+                    // _buildSkipNext(iconColor, barHeight),
                   ],
                 ),
         ),
@@ -1466,7 +1471,8 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
 
   _buildContentWidget(BuildContext context, Orientation orientation, ContentData data) {
     return AnimatedOpacity(
-      opacity: onTapCtrl || isPause ? 1.0 : 0.0,
+      // opacity: onTapCtrl || isPause ? 1.0 : 0.0,
+      opacity: 1.0,
       duration: const Duration(milliseconds: 300),
       onEnd: _onPlayerHide,
       child: SafeArea(
@@ -1626,65 +1632,65 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                                 ],
                               ),
                             ),
-                          Column(
-                            children: [
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: Text(
-                                    "${System.getTimeformatByMs(_currentPositionText)}/${System.getTimeformatByMs(_videoDuration)}",
-                                    textAlign: TextAlign.end,
-                                    style: const TextStyle(color: Colors.white, fontSize: 11),
-                                  ),
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: SliderTheme(
-                                      data: SliderTheme.of(context).copyWith(
-                                        overlayShape: SliderComponentShape.noThumb,
-                                        activeTrackColor: const Color(0xAA7d7d7d),
-                                        inactiveTrackColor: const Color.fromARGB(170, 156, 155, 155),
-                                        trackHeight: 3.0,
-                                        thumbColor: Colors.purple,
-                                        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8.0),
-                                      ),
-                                      child: Slider(
-                                          min: 0,
-                                          max: _videoDuration == 0 ? 1 : _videoDuration.toDouble(),
-                                          value: _currentPosition.toDouble(),
-                                          activeColor: Colors.purple,
-                                          thumbColor: Colors.purple,
-                                          onChangeStart: (value) {
-                                            _inSeek = true;
-                                            setState(() {});
-                                          },
-                                          onChangeEnd: (value) {
-                                            _inSeek = false;
-                                            setState(() {
-                                              if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
-                                                setState(() {
-                                                  _showTipsWidget = false;
-                                                });
-                                              }
-                                            });
-                                            fAliplayer?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE);
-                                          },
-                                          onChanged: (value) {
-                                            fAliplayer?.requestBitmapAtPosition(value.ceil());
+                          // Column(
+                          //   children: [
+                          //     Align(
+                          //       alignment: Alignment.centerRight,
+                          //       child: Padding(
+                          //         padding: const EdgeInsets.only(right: 8.0),
+                          //         child: Text(
+                          //           "${System.getTimeformatByMs(_currentPositionText)}/${System.getTimeformatByMs(_videoDuration)}",
+                          //           textAlign: TextAlign.end,
+                          //           style: const TextStyle(color: Colors.white, fontSize: 11),
+                          //         ),
+                          //       ),
+                          //     ),
+                          //     Row(
+                          //       children: [
+                          //         Expanded(
+                          //           child: SliderTheme(
+                          //             data: SliderTheme.of(context).copyWith(
+                          //               overlayShape: SliderComponentShape.noThumb,
+                          //               activeTrackColor: const Color(0xAA7d7d7d),
+                          //               inactiveTrackColor: const Color.fromARGB(170, 156, 155, 155),
+                          //               trackHeight: 3.0,
+                          //               thumbColor: Colors.purple,
+                          //               thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8.0),
+                          //             ),
+                          //             child: Slider(
+                          //                 min: 0,
+                          //                 max: _videoDuration == 0 ? 1 : _videoDuration.toDouble(),
+                          //                 value: _currentPosition.toDouble(),
+                          //                 activeColor: Colors.purple,
+                          //                 thumbColor: Colors.purple,
+                          //                 onChangeStart: (value) {
+                          //                   _inSeek = true;
+                          //                   setState(() {});
+                          //                 },
+                          //                 onChangeEnd: (value) {
+                          //                   _inSeek = false;
+                          //                   setState(() {
+                          //                     if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
+                          //                       setState(() {
+                          //                         _showTipsWidget = false;
+                          //                       });
+                          //                     }
+                          //                   });
+                          //                   fAliplayer?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE);
+                          //                 },
+                          //                 onChanged: (value) {
+                          //                   fAliplayer?.requestBitmapAtPosition(value.ceil());
 
-                                            setState(() {
-                                              _currentPosition = value.ceil();
-                                            });
-                                          }),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                          //                   setState(() {
+                          //                     _currentPosition = value.ceil();
+                          //                   });
+                          //                 }),
+                          //           ),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //   ],
+                          // ),
                           if (data.music?.musicTitle != '' && data.music?.musicTitle != null)
                             Container(
                               margin: const EdgeInsets.only(top: 0.0, left: 8.0, right: 8.0),
