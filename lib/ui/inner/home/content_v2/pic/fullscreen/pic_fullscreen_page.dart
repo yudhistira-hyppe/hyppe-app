@@ -256,7 +256,8 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
   @override
   void didPopNext() {
     print("======= didPopNext");
-    MyAudioService.instance.playagain(false);
+    final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
+    MyAudioService.instance.playagain(notifier.isMute);
     fAliplayer?.play();
     fAliplayer?.setMuted(false);
     // System().disposeBlock();
@@ -1161,6 +1162,10 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                       if (data.insight?.isloadingFollow != true) {
                         picNot.followUser(context, data, isUnFollow: data.following, isloading: data.insight!.isloadingFollow ?? false);
                       }
+                    }).then((value) {
+                      if (value){
+                        MyAudioService.instance.playagain(notifier.isMute);
+                      }
                     });
                   },
                   child: data.insight?.isloadingFollow ?? false
@@ -1210,6 +1215,10 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                     },
                     fAliplayer: fAliplayer,
                   );
+                }
+              }).then((value) {
+                if (value){
+                  MyAudioService.instance.playagain(notifier.isMute);
                 }
               });
             },

@@ -30,6 +30,7 @@ class MyAudioService {
           break;
           case ProcessingState.ready: 
             buffering = false;
+            player.setVolume((mute??false)?0:1);
           break;
           case ProcessingState.completed: 
           break;

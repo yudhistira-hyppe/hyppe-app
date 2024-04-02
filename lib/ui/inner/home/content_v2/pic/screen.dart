@@ -81,7 +81,8 @@ class HyppePreviewPic extends StatefulWidget {
   _HyppePreviewPicState createState() => _HyppePreviewPicState();
 }
 
-class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
+class _HyppePreviewPicState extends State<HyppePreviewPic>
+    with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
   FlutterAliplayer? fAliplayer;
   // TransformationController _transformationController = TransformationController();
   ScrollController innerScrollController = ScrollController();
@@ -150,7 +151,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       print("===============init ali player ===========");
       fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPic');
       initAlipayer();
-      print("===============init ali player ${fAliplayer?.playerId} ===========");
+      print(
+          "===============init ali player ${fAliplayer?.playerId} ===========");
 
       //scroll
       // if (mounted) {
@@ -169,12 +171,18 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
   void vidConfig() {
     var configMap = {
-      'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
-      'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
-      'mMaxBufferDuration': GlobalSettings.mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
-      'mMaxDelayTime': GlobalSettings.mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
-      'mNetworkTimeout': GlobalSettings.mNetworkTimeout, // The network timeout period. Unit: milliseconds.
-      'mNetworkRetryCount': GlobalSettings.mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
+      'mStartBufferDuration': GlobalSettings
+          .mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
+      'mHighBufferDuration': GlobalSettings
+          .mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
+      'mMaxBufferDuration': GlobalSettings
+          .mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
+      'mMaxDelayTime': GlobalSettings
+          .mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
+      'mNetworkTimeout': GlobalSettings
+          .mNetworkTimeout, // The network timeout period. Unit: milliseconds.
+      'mNetworkRetryCount': GlobalSettings
+          .mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
       'mEnableLocalCache': GlobalSettings.mEnableCacheConfig,
       'mLocalCacheDir': GlobalSettings.mDirController,
       'mClearFrameWhenStop': true
@@ -229,7 +237,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         fAliplayer?.pause();
       }
 
-      fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
+      fAliplayer
+          ?.getPlayerName()
+          .then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
         if (mounted) {
           setState(() {
@@ -323,7 +333,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       // Fluttertoast.showToast(msg: "SnapShot Save : $path");
     });
     fAliplayer?.setOnError((errorCode, errorExtra, errorMsg, playerId) {
-      print("============init ali player error $errorCode - $errorExtra - $errorMsg - $playerId");
+      print(
+          "============init ali player error $errorCode - $errorExtra - $errorMsg - $playerId");
 
       setState(() {});
     });
@@ -335,7 +346,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         // Fluttertoast.showToast(msg: "${info.trackDefinition}切换成功");
       }
     });
-    fAliplayer?.setOnThumbnailPreparedListener(preparedSuccess: (playerId) {}, preparedFail: (playerId) {});
+    fAliplayer?.setOnThumbnailPreparedListener(
+        preparedSuccess: (playerId) {}, preparedFail: (playerId) {});
 
     fAliplayer?.setOnThumbnailGetListener(
         onThumbnailGetSuccess: (bitmap, range, playerId) {
@@ -381,14 +393,16 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         totItemHeight += notifier.pic?[i].height ?? 0.0;
       }
 
-      var sizeMax = (SizeConfig.screenHeight ?? 0) + (SizeConfig.screenHeight ?? 0) * 0.633;
+      var sizeMax = (SizeConfig.screenHeight ?? 0) +
+          (SizeConfig.screenHeight ?? 0) * 0.633;
       if ((notifier.pic?.length ?? 0) > (_curIdx + 1)) {
         print("====erpppppp");
         print("====offset $offset");
         print("====totItemHeightParam $totItemHeightParam");
         print("====totItemHeightParam $sizeMax");
 
-        if (offset >= totItemHeightParam && (notifier.pic?[itemIndex + 1].height ?? 0) <= sizeMax) {
+        if (offset >= totItemHeightParam &&
+            (notifier.pic?[itemIndex + 1].height ?? 0) <= sizeMax) {
           var position = totItemHeight;
           // if (notifier.pic?[_curIdx + 1].height >= sizeMax) {
           //   position += notifier.pic?[_curIdx + 1].height;
@@ -396,7 +410,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
           if (!homeClick) {
             print("====erpppppp");
             try {
-              widget.scrollController?.animateTo(position, duration: const Duration(milliseconds: 200), curve: Curves.ease);
+              widget.scrollController?.animateTo(position,
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.ease);
               itemIndex++;
             } catch (e) {
               print("====erroorrroooo $e");
@@ -442,14 +458,17 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
           totItemHeight -= notifier.pic?[itemIndex - 1].height ?? 0.0;
         }
         // print("==== totItemHeight ${totItemHeight}");
-        var sizeMax = (SizeConfig.screenHeight ?? 0) + (SizeConfig.screenHeight ?? 0) * 0.633;
+        var sizeMax = (SizeConfig.screenHeight ?? 0) +
+            (SizeConfig.screenHeight ?? 0) * 0.633;
         if (offset <= totItemHeightParam && offset > 0) {
-          if (itemIndex > 0 && (notifier.pic?[itemIndex - 1].height ?? 0) >= sizeMax) {
+          if (itemIndex > 0 &&
+              (notifier.pic?[itemIndex - 1].height ?? 0) >= sizeMax) {
             return;
           }
           var position = totItemHeight;
           if (mounted) {
-            widget.scrollController?.animateTo(position, duration: Duration(milliseconds: 200), curve: Curves.ease);
+            widget.scrollController?.animateTo(position,
+                duration: Duration(milliseconds: 200), curve: Curves.ease);
             itemIndex--;
           }
         }
@@ -489,7 +508,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     });
   }
 
-  void start(BuildContext context, ContentData data, PreviewPicNotifier notifier) async {
+  void start(BuildContext context, ContentData data,
+      PreviewPicNotifier notifier) async {
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
     print("===-=-=-=-=-start--0-0-0-");
     fAliplayer?.stop();
@@ -553,7 +573,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       await MyAudioService.instance.stop();
       playIndex = -1;
       setState(() {});
-    }else{
+    } else {
       MyAudioService.instance.play(
         path: url,
         startedPlaying: () {
@@ -564,7 +584,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         mute: notifier.isMute,
       );
     }
-    
+
     // try {
     //   print("===============init ali player ${fAliplayer?.playerId} ===========");
     //   if (isActivePage) {
@@ -673,7 +693,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
   @override
   void didChangeDependencies() {
-    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    CustomRouteObserver.routeObserver
+        .subscribe(this, ModalRoute.of(context) as PageRoute);
     super.didChangeDependencies();
   }
 
@@ -709,7 +730,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void didPop() {
     print("====== didpop ");
-    MyAudioService.instance.playagain(false);
+    final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
+    MyAudioService.instance.playagain(notifier.isMute);
     super.didPop();
   }
 
@@ -722,8 +744,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     isInPage = true;
     fAliplayer?.play();
     isActivePage = true;
-    if (playIndex == _curIdx){
-      MyAudioService.instance.playagain(false);
+    if (playIndex == _curIdx) {
+      final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
+      MyAudioService.instance.playagain(notifier.isMute);
     }
 
     // fAliplayer?.prepare();
@@ -759,10 +782,14 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         break;
       case AppLifecycleState.resumed:
         print("========= resumed");
-        if (context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds) && isActivePage) {
+        if (context.read<PreviewVidNotifier>().canPlayOpenApps &&
+            !SharedPreference().readStorage(SpKeys.isShowPopAds) &&
+            isActivePage) {
           fAliplayer?.play();
-          if (!isactivealiplayer){
-            MyAudioService.instance.playagain(false);
+          if (!isactivealiplayer) {
+            final notifier =
+                Provider.of<PreviewPicNotifier>(context, listen: false);
+            MyAudioService.instance.playagain(notifier.isMute);
           }
         }
         break;
@@ -801,7 +828,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     context.select((ErrorService value) => value.getError(ErrorType.pic));
     // AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
 
-    return Consumer2<PreviewPicNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
+    return Consumer2<PreviewPicNotifier, HomeNotifier>(
+        builder: (_, notifier, home, __) {
       // if (isactivealiplayer) {
       //   fAliplayer?.pause();
       // } else {
@@ -824,11 +852,17 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                       itemBuilder: (context, index) {
                         fAliplayer?.stop();
                         return CustomShimmer(
-                          width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                          width: (MediaQuery.of(context).size.width -
+                                  11.5 -
+                                  11.5 -
+                                  9) /
+                              2,
                           height: 168,
                           radius: 8,
-                          margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                          padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 4.5, vertical: 10),
+                          padding: const EdgeInsets.only(
+                              left: 8.0, right: 8.0, top: 8.0),
                         );
                       },
                       itemCount: 5,
@@ -842,7 +876,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                           },
                           child: NotificationListener<UserScrollNotification>(
                             onNotification: (notification) {
-                              final ScrollDirection direction = notification.direction;
+                              final ScrollDirection direction =
+                                  notification.direction;
                               setState(() {
                                 // print("-===========scrollll==========");
                                 if (direction == ScrollDirection.reverse) {
@@ -853,7 +888,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                   });
                                   // print("-===========reverse ${homeClick}==========");
                                   // print("-===========reverse==========");
-                                } else if (direction == ScrollDirection.forward) {
+                                } else if (direction ==
+                                    ScrollDirection.forward) {
                                   //up
                                   setState(() {
                                     homeClick = false;
@@ -869,7 +905,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                               // controller: innerScrollController,
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: notifier.pic?.length,
-                              padding: const EdgeInsets.symmetric(horizontal: 11.5),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 11.5),
                               // child: ScrollSnapList(
                               //   listController: controller,
                               //   listViewPadding: EdgeInsets.zero,
@@ -909,7 +946,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                               //   // visualisation: ListVisualisation.perspective(),
                               //   scrollBehavior: ScrollBehavior(),
                               itemBuilder: (context, index) {
-                                if (notifier.pic == null || home.isLoadingPict) {
+                                if (notifier.pic == null ||
+                                    home.isLoadingPict) {
                                   fAliplayer?.pause();
                                   // _lastCurIndex = -1;
                                   _lastCurPostId = '';
@@ -918,13 +956,20 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                   //   child: Text('Test'),
                                   // );
                                   return CustomShimmer(
-                                    width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                                    width: (MediaQuery.of(context).size.width -
+                                            11.5 -
+                                            11.5 -
+                                            9) /
+                                        2,
                                     height: 168,
                                     radius: 8,
-                                    margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                                    padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 4.5, vertical: 10),
+                                    padding: const EdgeInsets.only(
+                                        left: 8.0, right: 8.0, top: 8.0),
                                   );
-                                } else if (index == notifier.pic?.length && notifier.hasNext) {
+                                } else if (index == notifier.pic?.length &&
+                                    notifier.hasNext) {
                                   return UnconstrainedBox(
                                     child: Container(
                                       alignment: Alignment.center,
@@ -946,7 +991,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                 return Visibility(
                                   // visible: (_curIdx - 1) == index || _curIdx == index || (_curIdx + 1) == index,
                                   visible: true,
-                                  child: itemPict(context, notifier, index, home),
+                                  child:
+                                      itemPict(context, notifier, index, home),
                                 );
                               },
                             ),
@@ -965,7 +1011,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   final Map cacheDesc = {};
   List tempHeight = [];
 
-  Widget itemPict(BuildContext context, PreviewPicNotifier notifier, int index, HomeNotifier homeNotifier) {
+  Widget itemPict(BuildContext context, PreviewPicNotifier notifier, int index,
+      HomeNotifier homeNotifier) {
     var picData = notifier.pic?[index];
     final isAds = picData?.inBetweenAds != null && picData?.postID == null;
     return picData?.isContentLoading ?? false
@@ -993,7 +1040,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                               isPlayAds = false;
                             });
                             _curIdx = index;
-                            _curPostId = picData?.inBetweenAds?.adsId ?? index.toString();
+                            _curPostId = picData?.inBetweenAds?.adsId ??
+                                index.toString();
 
                             if (_lastCurIndex > _curIdx) {
                               // fAliplayer?.destroy();
@@ -1012,15 +1060,28 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                   isShowShowcase = false;
                                 });
                               }
-                              final indexList = notifier.pic?.indexWhere((element) => element.inBetweenAds?.adsId == _curPostId);
+                              final indexList = notifier.pic?.indexWhere(
+                                  (element) =>
+                                      element.inBetweenAds?.adsId ==
+                                      _curPostId);
 
-                              if (indexList == (notifier.pic?.length ?? 0) - 1) {
-                                context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {});
+                              if (indexList ==
+                                  (notifier.pic?.length ?? 0) - 1) {
+                                context
+                                    .read<HomeNotifier>()
+                                    .initNewHome(context, mounted,
+                                        isreload: false, isgetMore: true)
+                                    .then((value) {});
                               }
                               fAliplayer?.stop();
-                              Future.delayed(const Duration(milliseconds: 500), () {
-                                System().increaseViewCount2(context, picData ?? ContentData(), check: false);
-                                if ((picData?.saleAmount ?? 0) > 0 || ((picData?.certified ?? false) && (picData?.saleAmount ?? 0) == 0)) {
+                              Future.delayed(const Duration(milliseconds: 500),
+                                  () {
+                                System().increaseViewCount2(
+                                    context, picData ?? ContentData(),
+                                    check: false);
+                                if ((picData?.saleAmount ?? 0) > 0 ||
+                                    ((picData?.certified ?? false) &&
+                                        (picData?.saleAmount ?? 0) == 0)) {
                                   if (mounted) {
                                     setState(() {
                                       isShowShowcase = true;
@@ -1031,8 +1092,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                 }
                               });
                               setState(() {
-                                Future.delayed(const Duration(milliseconds: 400), () {
-                                  itemHeight = notifier.pic?[indexList ?? 0].height ?? 0;
+                                Future.delayed(
+                                    const Duration(milliseconds: 400), () {
+                                  itemHeight =
+                                      notifier.pic?[indexList ?? 0].height ?? 0;
                                 });
                               });
                             }
@@ -1046,7 +1109,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                         },
                         child: Stack(
                           children: [
-                            context.getAdsInBetween(notifier.pic, index, (info) {}, () {
+                            context.getAdsInBetween(
+                                notifier.pic, index, (info) {}, () {
                               notifier.setAdsData(index, null);
                             }, (player, id) {}, isStopPlay: isPlayAds),
                             Positioned.fill(
@@ -1056,7 +1120,11 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                               bottom: kToolbarHeight * 2.5,
                               child: GestureDetector(
                                 onTap: () {
-                                  Routing().move(Routes.picFullScreenDetail, argument: PicFullscreenArgument(picData: notifier.pic!, index: index, scrollPic: false));
+                                  Routing().move(Routes.picFullScreenDetail,
+                                      argument: PicFullscreenArgument(
+                                          picData: notifier.pic!,
+                                          index: index,
+                                          scrollPic: false));
                                 },
                                 child: Container(
                                   color: Colors.transparent,
@@ -1072,7 +1140,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                               borderRadius: BorderRadius.circular(16),
                               color: Colors.white,
                             ),
-                            padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
+                            padding: const EdgeInsets.only(
+                                top: 16, left: 16, right: 16, bottom: 16),
                             margin: const EdgeInsets.only(bottom: 16),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1111,7 +1180,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                 //   child: Text('hahahah'),
                                 // ),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Expanded(
@@ -1126,46 +1196,76 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                         featureType: FeatureType.other,
                                         // isCelebrity: vidpicData?.privacy?.isCelebrity,
                                         isCelebrity: false,
-                                        imageUrl: picData?.avatar == null ? '' : '${System().showUserPicture(picData?.avatar?.mediaEndpoint)}',
+                                        imageUrl: picData?.avatar == null
+                                            ? ''
+                                            : '${System().showUserPicture(picData?.avatar?.mediaEndpoint)}',
                                         onTapOnProfileImage: () {
                                           MyAudioService.instance.pause();
-                                          System().navigateToProfile(context, picData?.email ?? '');
+                                          System().navigateToProfile(
+                                              context, picData?.email ?? '');
                                         },
                                         createdAt: '2022-02-02',
-                                        musicName: picData?.music?.musicTitle ?? '',
+                                        musicName:
+                                            picData?.music?.musicTitle ?? '',
                                         location: picData?.location ?? '',
-                                        isIdVerified: picData?.privacy?.isIdVerified,
+                                        isIdVerified:
+                                            picData?.privacy?.isIdVerified,
                                         badge: picData?.urluserBadge,
                                       ),
                                     ),
-                                    if (picData?.email != email && (picData?.isNewFollowing ?? false))
+                                    if (picData?.email != email &&
+                                        (picData?.isNewFollowing ?? false))
                                       Consumer<PreviewPicNotifier>(
-                                        builder: (context, picNot, child) => Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                        builder: (context, picNot, child) =>
+                                            Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
                                           child: GestureDetector(
                                             onTap: () {
                                               context.handleActionIsGuest(() {
-                                                if (picData?.insight?.isloadingFollow != true) {
-                                                  picNot.followUser(context, picData ?? ContentData(), isUnFollow: picData?.following, isloading: picData?.insight!.isloadingFollow ?? false);
+                                                if (picData?.insight
+                                                        ?.isloadingFollow !=
+                                                    true) {
+                                                  picNot.followUser(context,
+                                                      picData ?? ContentData(),
+                                                      isUnFollow:
+                                                          picData?.following,
+                                                      isloading: picData
+                                                              ?.insight!
+                                                              .isloadingFollow ??
+                                                          false);
                                                 }
                                               }).then((value) {
-                                                if (value){
-                                                  MyAudioService.instance.playagain(notifier.isMute);
+                                                if (value) {
+                                                  MyAudioService.instance
+                                                      .playagain(
+                                                          notifier.isMute);
                                                 }
                                               });
                                             },
-                                            child: picData?.insight?.isloadingFollow ?? false
+                                            child: picData?.insight
+                                                        ?.isloadingFollow ??
+                                                    false
                                                 ? Container(
                                                     height: 40,
                                                     width: 30,
                                                     child: const Align(
-                                                      alignment: Alignment.bottomRight,
+                                                      alignment:
+                                                          Alignment.bottomRight,
                                                       child: CustomLoading(),
                                                     ),
                                                   )
                                                 : Text(
-                                                    (picData?.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
-                                                    style: const TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                                                    (picData?.following ?? false)
+                                                        ? (lang?.following ??
+                                                            '')
+                                                        : (lang?.follow ?? ''),
+                                                    style: const TextStyle(
+                                                        color: kHyppePrimary,
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontFamily: "Lato"),
                                                   ),
                                           ),
                                         ),
@@ -1175,29 +1275,50 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                         // fAliplayer?.pause();
                                         context.handleActionIsGuest(() {
                                           if (picData?.email != email) {
-                                            context.read<PreviewPicNotifier>().reportContent(context, picData ?? ContentData(), fAliplayer: fAliplayer, onCompleted: () async {
+                                            context
+                                                .read<PreviewPicNotifier>()
+                                                .reportContent(context,
+                                                    picData ?? ContentData(),
+                                                    fAliplayer: fAliplayer,
+                                                    onCompleted: () async {
                                               imageCache.clear();
                                               imageCache.clearLiveImages();
-                                              await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 0);
+                                              await (Routing.navigatorKey
+                                                          .currentContext ??
+                                                      context)
+                                                  .read<HomeNotifier>()
+                                                  .initNewHome(context, mounted,
+                                                      isreload: true,
+                                                      forceIndex: 0);
                                             });
                                           } else {
                                             fAliplayer?.setMuted(true);
                                             fAliplayer?.pause();
-                                            ShowBottomSheet().onShowOptionContent(
+                                            ShowBottomSheet()
+                                                .onShowOptionContent(
                                               context,
-                                              contentData: picData ?? ContentData(),
+                                              contentData:
+                                                  picData ?? ContentData(),
                                               captionTitle: hyppePic,
                                               onDetail: false,
                                               isShare: picData?.isShared,
                                               onUpdate: () {
-                                                (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 0);
+                                                (Routing.navigatorKey
+                                                            .currentContext ??
+                                                        context)
+                                                    .read<HomeNotifier>()
+                                                    .initNewHome(
+                                                        context, mounted,
+                                                        isreload: true,
+                                                        forceIndex: 0);
                                               },
                                               fAliplayer: fAliplayer,
                                             );
                                           }
                                         }).then((value) {
-                                          if (value){
-                                            MyAudioService.instance.playagain(notifier.isMute);
+                                          if (value) {
+                                            MyAudioService.instance
+                                                .playagain(notifier.isMute);
                                           }
                                         });
                                       },
@@ -1219,9 +1340,11 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                         globalAdsPopUp?.pause();
                                       }
                                     }
-                                    if (info.visibleFraction == 1 || info.visibleFraction >= 0.6) {
+                                    if (info.visibleFraction == 1 ||
+                                        info.visibleFraction >= 0.6) {
                                       _curIdx = index;
-                                      _curPostId = picData?.postID ?? index.toString();
+                                      _curPostId =
+                                          picData?.postID ?? index.toString();
                                       if (_lastCurIndex > _curIdx) {
                                         // fAliplayer?.destroy();
                                         // double position = 0.0;
@@ -1240,48 +1363,99 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                             isShowShowcase = false;
                                           });
                                         }
-                                        final indexList = notifier.pic?.indexWhere((element) => element.postID == _curPostId);
+                                        final indexList = notifier.pic
+                                            ?.indexWhere((element) =>
+                                                element.postID == _curPostId);
                                         // final latIndexList = notifier.pic?.indexWhere((element) => element.postID == _lastCurPostId);
 
-                                        if (indexList == (notifier.pic?.length ?? 0) - 1) {
-                                          context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {});
+                                        if (indexList ==
+                                            (notifier.pic?.length ?? 0) - 1) {
+                                          context
+                                              .read<HomeNotifier>()
+                                              .initNewHome(context, mounted,
+                                                  isreload: false,
+                                                  isgetMore: true)
+                                              .then((value) {});
                                         }
 
                                         if (picData?.music != null) {
-                                          print("ada musiknya ${picData?.music?.toJson()}");
-                                          print("ada musiknya ${picData?.music?.toJson()}");
+                                          print(
+                                              "ada musiknya ${picData?.music?.toJson()}");
+                                          print(
+                                              "ada musiknya ${picData?.music?.toJson()}");
                                           setState(() {
                                             isPrepareMusic = true;
                                             isactivealiplayer = false;
                                           });
-                                          Future.delayed(const Duration(milliseconds: 100), () {
-                                            start(context, picData ?? ContentData(), notifier);
+                                          Future.delayed(
+                                              const Duration(milliseconds: 100),
+                                              () {
+                                            start(
+                                                context,
+                                                picData ?? ContentData(),
+                                                notifier);
                                           });
                                         } else {
                                           fAliplayer?.stop();
                                         }
 
-                                        Future.delayed(const Duration(milliseconds: 100), () {
-                                          if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
-                                            indexKeySell = mn?.tutorialData.indexWhere((element) => element.key == 'sell') ?? 0;
-                                            indexKeyProtection = mn?.tutorialData.indexWhere((element) => element.key == 'protection') ?? 0;
+                                        Future.delayed(
+                                            const Duration(milliseconds: 100),
+                                            () {
+                                          if (mn?.tutorialData.isNotEmpty ??
+                                              [].isEmpty) {
+                                            indexKeySell = mn?.tutorialData
+                                                    .indexWhere((element) =>
+                                                        element.key ==
+                                                        'sell') ??
+                                                0;
+                                            indexKeyProtection = mn
+                                                    ?.tutorialData
+                                                    .indexWhere((element) =>
+                                                        element.key ==
+                                                        'protection') ??
+                                                0;
                                             // print("==============global challehg $globalChallengePopUp");
                                             // print("==============global challehg ${mn?.tutorialData[indexKeySell].status == false && !globalChallengePopUp}");
-                                            if ((picData?.saleAmount ?? 0) > 0) {
-                                              if (mn?.tutorialData[indexKeySell].status == false && !globalChallengePopUp) {
-                                                ShowCaseWidget.of(context).startShowCase([picData?.keyGlobalSell ?? GlobalKey()]);
+                                            if ((picData?.saleAmount ?? 0) >
+                                                0) {
+                                              if (mn?.tutorialData[indexKeySell]
+                                                          .status ==
+                                                      false &&
+                                                  !globalChallengePopUp) {
+                                                ShowCaseWidget.of(context)
+                                                    .startShowCase([
+                                                  picData?.keyGlobalSell ??
+                                                      GlobalKey()
+                                                ]);
                                               }
                                             }
-                                            if (((picData?.certified ?? false) && (picData?.saleAmount ?? 0) == 0)) {
-                                              if (mn?.tutorialData[indexKeyProtection].status == false && !globalChallengePopUp) {
-                                                ShowCaseWidget.of(context).startShowCase([picData?.keyGlobalOwn ?? GlobalKey()]);
+                                            if (((picData?.certified ??
+                                                    false) &&
+                                                (picData?.saleAmount ?? 0) ==
+                                                    0)) {
+                                              if (mn
+                                                          ?.tutorialData[
+                                                              indexKeyProtection]
+                                                          .status ==
+                                                      false &&
+                                                  !globalChallengePopUp) {
+                                                ShowCaseWidget.of(context)
+                                                    .startShowCase([
+                                                  picData?.keyGlobalOwn ??
+                                                      GlobalKey()
+                                                ]);
                                               }
                                             }
                                           }
                                         });
 
-                                        Future.delayed(const Duration(milliseconds: 500), () {
-                                          System().increaseViewCount2(context, picData ?? ContentData(), check: false);
+                                        Future.delayed(
+                                            const Duration(milliseconds: 500),
+                                            () {
+                                          System().increaseViewCount2(
+                                              context, picData ?? ContentData(),
+                                              check: false);
                                         });
 
                                         if (picData?.certified ?? false) {
@@ -1290,8 +1464,12 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                           System().disposeBlock();
                                         }
                                         setState(() {
-                                          Future.delayed(Duration(milliseconds: 400), () {
-                                            itemHeight = notifier.pic?[indexList ?? 0].height ?? 0;
+                                          Future.delayed(
+                                              Duration(milliseconds: 400), () {
+                                            itemHeight = notifier
+                                                    .pic?[indexList ?? 0]
+                                                    .height ??
+                                                0;
                                           });
                                         });
                                         // Future.delayed(const Duration(milliseconds: 500), () async {
@@ -1306,11 +1484,15 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
                                         ///ADS IN BETWEEN === Hariyanto Lukman ===
                                         if (!notifier.loadAds) {
-                                          if ((notifier.pic?.length ?? 0) > notifier.nextAdsShowed) {
+                                          if ((notifier.pic?.length ?? 0) >
+                                              notifier.nextAdsShowed) {
                                             notifier.loadAds = true;
-                                            context.getInBetweenAds().then((value) {
+                                            context
+                                                .getInBetweenAds()
+                                                .then((value) {
                                               if (value != null) {
-                                                notifier.setAdsData(index, value);
+                                                notifier.setAdsData(
+                                                    index, value);
                                               } else {
                                                 notifier.loadAds = false;
                                               }
@@ -1399,24 +1581,49 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                               // fAliplayer?.pause();
                                               if (!isPrepareMusic) {
                                                 isactivealiplayer = true;
-                                                var res = await Routing().move(Routes.picFullScreenDetail, argument: PicFullscreenArgument(picData: notifier.pic!, index: index, scrollPic: false));
-                                                if (res != null || res == null) {
+                                                var res = await Routing().move(
+                                                    Routes.picFullScreenDetail,
+                                                    argument:
+                                                        PicFullscreenArgument(
+                                                            picData:
+                                                                notifier.pic!,
+                                                            index: index,
+                                                            scrollPic: false));
+                                                if (res != null ||
+                                                    res == null) {
                                                   // fAliplayer?.play();
                                                   isactivealiplayer = false;
-                                                  fAliplayer?.setMuted(notifier.isMute);
+                                                  fAliplayer?.setMuted(
+                                                      notifier.isMute);
                                                   // var temp1 = notifier.pic![_curIdx];
                                                   // var temp2 = notifier.pic![notifier.currentIndex];
-                                                  if (index < notifier.currentIndex) {
+                                                  if (index <
+                                                      notifier.currentIndex) {
                                                     setState(() {
-                                                      index = notifier.currentIndex;
+                                                      index =
+                                                          notifier.currentIndex;
                                                       // notifier.pic!.removeRange(_curIdx, notifier.currentIndex);
-                                                      notifier.pic!.removeRange(0, notifier.currentIndex);
-                                                      widget.scrollController?.animateTo(0, duration: const Duration(milliseconds: 50), curve: Curves.ease);
+                                                      notifier.pic!.removeRange(
+                                                          0,
+                                                          notifier
+                                                              .currentIndex);
+                                                      widget.scrollController
+                                                          ?.animateTo(0,
+                                                              duration:
+                                                                  const Duration(
+                                                                      milliseconds:
+                                                                          50),
+                                                              curve:
+                                                                  Curves.ease);
                                                     });
-                                                  } else if (index > notifier.currentIndex) {
+                                                  } else if (index >
+                                                      notifier.currentIndex) {
                                                     setState(() {
-                                                      index = notifier.currentIndex;
-                                                      notifier.pic!.removeRange(notifier.currentIndex, _curIdx);
+                                                      index =
+                                                          notifier.currentIndex;
+                                                      notifier.pic!.removeRange(
+                                                          notifier.currentIndex,
+                                                          _curIdx);
                                                       // notifier.pic![_curIdx] = temp2;
                                                       // notifier.pic![notifier.currentIndex] = temp1;
                                                     });
@@ -1425,16 +1632,35 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                               }
                                             },
                                             onDoubleTap: () {
-                                              final _likeNotifier = context.read<LikeNotifier>();
+                                              final _likeNotifier =
+                                                  context.read<LikeNotifier>();
                                               if (picData != null) {
-                                                _likeNotifier.likePost(context, notifier.pic![index]).then((value) {
-                                                  List<ContentData>? pic2 = context.read<ScrollPicNotifier>().pics;
-                                                  if (pic2?.isNotEmpty ?? false) {
-                                                    int idx2 = pic2!.indexWhere((e) => e.postID == value['_id']);
+                                                _likeNotifier
+                                                    .likePost(context,
+                                                        notifier.pic![index])
+                                                    .then((value) {
+                                                  List<ContentData>? pic2 =
+                                                      context
+                                                          .read<
+                                                              ScrollPicNotifier>()
+                                                          .pics;
+                                                  if (pic2?.isNotEmpty ??
+                                                      false) {
+                                                    int idx2 = pic2!.indexWhere(
+                                                        (e) =>
+                                                            e.postID ==
+                                                            value['_id']);
                                                     if (idx2 != -1) {
-                                                      pic2[idx2].insight?.isPostLiked = value['isPostLiked'];
-                                                      pic2[idx2].insight?.likes = value['likes'];
-                                                      pic2[idx2].isLiked = value['isLiked'];
+                                                      pic2[idx2]
+                                                              .insight
+                                                              ?.isPostLiked =
+                                                          value['isPostLiked'];
+                                                      pic2[idx2]
+                                                              .insight
+                                                              ?.likes =
+                                                          value['likes'];
+                                                      pic2[idx2].isLiked =
+                                                          value['isLiked'];
                                                     }
                                                   }
                                                 });
@@ -1448,95 +1674,168 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                 // width: SizeConfig.screenWidth,
                                                 // height: picData?.imageHeightTemp,
                                                 child: ZoomableImage(
-                                                  enable: homeNotifier.connectionError ? false : true,
+                                                  enable: homeNotifier
+                                                          .connectionError
+                                                      ? false
+                                                      : true,
                                                   onScaleStart: () {
-                                                    print("================masuk zoom============");
+                                                    print(
+                                                        "================masuk zoom============");
                                                     widget.onScaleStart?.call();
                                                   }, // optional
                                                   onScaleStop: () {
                                                     widget.onScaleStop?.call();
                                                   }, // opt
                                                   child: ValueListenableBuilder(
-                                                      valueListenable: _networklHasErrorNotifier,
-                                                      builder: (BuildContext context, int count, _) {
+                                                      valueListenable:
+                                                          _networklHasErrorNotifier,
+                                                      builder:
+                                                          (BuildContext context,
+                                                              int count, _) {
                                                         return CustomBaseCacheImage(
                                                           // cacheKey: "${picData?.postID}-${cacheDesc[index]}",
                                                           memCacheWidth: 100,
                                                           memCacheHeight: 100,
                                                           widthPlaceHolder: 80,
                                                           heightPlaceHolder: 80,
-                                                          imageUrl: (picData?.isApsara ?? false)
+                                                          imageUrl: (picData
+                                                                      ?.isApsara ??
+                                                                  false)
                                                               ? ("${picData?.mediaEndpoint}?key=${picData?.valueCache}")
                                                               : ("${picData?.fullThumbPath}&key=${picData?.valueCache}"),
-                                                          imageBuilder: (context, imageProvider) {
+                                                          imageBuilder: (context,
+                                                              imageProvider) {
                                                             return ClipRRect(
-                                                              borderRadius: BorderRadius.circular(20), // Image border
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20), // Image border
                                                               child: ImageSize(
-                                                                onChange: (Size size) {
-                                                                  if ((picData?.imageHeightTemp ?? 0) == 0) {
-                                                                    setState(() {
-                                                                      picData?.imageHeightTemp = size.height;
+                                                                onChange: (Size
+                                                                    size) {
+                                                                  if ((picData?.imageHeightTemp ??
+                                                                          0) ==
+                                                                      0) {
+                                                                    setState(
+                                                                        () {
+                                                                      picData?.imageHeightTemp =
+                                                                          size.height;
                                                                     });
                                                                   }
                                                                 },
-                                                                child: picData?.reportedStatus == 'BLURRED'
+                                                                child: picData
+                                                                            ?.reportedStatus ==
+                                                                        'BLURRED'
                                                                     ? ImageFiltered(
-                                                                        imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                                                        child: Image(
-                                                                          image: imageProvider,
-                                                                          fit: BoxFit.fitHeight,
-                                                                          width: SizeConfig.screenWidth,
+                                                                        imageFilter: ImageFilter.blur(
+                                                                            sigmaX:
+                                                                                30,
+                                                                            sigmaY:
+                                                                                30),
+                                                                        child:
+                                                                            Image(
+                                                                          image:
+                                                                              imageProvider,
+                                                                          fit: BoxFit
+                                                                              .fitHeight,
+                                                                          width:
+                                                                              SizeConfig.screenWidth,
                                                                           // height: picData?.imageHeightTemp == 0 ? null : picData?.imageHeightTemp,
                                                                         ),
                                                                       )
                                                                     : Image(
-                                                                        image: imageProvider,
-                                                                        fit: BoxFit.fitHeight,
-                                                                        width: SizeConfig.screenWidth,
+                                                                        image:
+                                                                            imageProvider,
+                                                                        fit: BoxFit
+                                                                            .fitHeight,
+                                                                        width: SizeConfig
+                                                                            .screenWidth,
                                                                         // height: picData?.imageHeightTemp == 0 || (picData?.imageHeightTemp ?? 0) <= 100 ? null : picData?.imageHeightTemp,
                                                                       ),
                                                               ),
                                                             );
                                                           },
-                                                          emptyWidget: GestureDetector(
+                                                          emptyWidget:
+                                                              GestureDetector(
                                                             onTap: () {
-                                                              _networklHasErrorNotifier.value++;
-                                                              Random random = new Random();
-                                                              int randomNumber = random.nextInt(100); // from 0 upto 99 included
+                                                              _networklHasErrorNotifier
+                                                                  .value++;
+                                                              Random random =
+                                                                  new Random();
+                                                              int randomNumber =
+                                                                  random.nextInt(
+                                                                      100); // from 0 upto 99 included
 
-                                                              picData?.valueCache = randomNumber.toString();
+                                                              picData?.valueCache =
+                                                                  randomNumber
+                                                                      .toString();
                                                               setState(() {});
                                                               // reloadImage(index);
                                                             },
                                                             child: Container(
-                                                                decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                                                                width: SizeConfig.screenWidth,
+                                                                decoration: BoxDecoration(
+                                                                    color:
+                                                                        kHyppeNotConnect,
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            16)),
+                                                                width: SizeConfig
+                                                                    .screenWidth,
                                                                 height: 250,
-                                                                padding: EdgeInsets.all(20),
-                                                                alignment: Alignment.center,
-                                                                child: CustomTextWidget(
-                                                                  textToDisplay: lang?.couldntLoadImage ?? 'Error',
+                                                                padding:
+                                                                    EdgeInsets
+                                                                        .all(
+                                                                            20),
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                child:
+                                                                    CustomTextWidget(
+                                                                  textToDisplay:
+                                                                      lang?.couldntLoadImage ??
+                                                                          'Error',
                                                                   maxLines: 3,
                                                                 )),
                                                           ),
-                                                          errorWidget: (context, url, error) {
+                                                          errorWidget: (context,
+                                                              url, error) {
                                                             return GestureDetector(
                                                               onTap: () {
-                                                                Random random = new Random();
-                                                                int randomNumber = random.nextInt(100); // from 0 upto 99 included
-                                                                _networklHasErrorNotifier.value++;
-                                                                picData?.valueCache = randomNumber.toString();
+                                                                Random random =
+                                                                    new Random();
+                                                                int randomNumber =
+                                                                    random.nextInt(
+                                                                        100); // from 0 upto 99 included
+                                                                _networklHasErrorNotifier
+                                                                    .value++;
+                                                                picData?.valueCache =
+                                                                    randomNumber
+                                                                        .toString();
                                                                 setState(() {});
                                                                 // reloadImage(index);
                                                               },
                                                               child: Container(
-                                                                  decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                                                                  width: SizeConfig.screenWidth,
+                                                                  decoration: BoxDecoration(
+                                                                      color:
+                                                                          kHyppeNotConnect,
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              16)),
+                                                                  width: SizeConfig
+                                                                      .screenWidth,
                                                                   height: 250,
-                                                                  padding: const EdgeInsets.all(20),
-                                                                  alignment: Alignment.center,
-                                                                  child: CustomTextWidget(
-                                                                    textToDisplay: lang?.couldntLoadImage ?? 'Error',
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(
+                                                                          20),
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  child:
+                                                                      CustomTextWidget(
+                                                                    textToDisplay:
+                                                                        lang?.couldntLoadImage ??
+                                                                            'Error',
                                                                     maxLines: 3,
                                                                   )),
                                                             );
@@ -1547,34 +1846,51 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                               ),
                                             ),
                                           ),
-                                          _buildBody(context, SizeConfig.screenWidth, picData ?? ContentData(), notifier),
-                                          blurContentWidget(context, picData ?? ContentData()),
+                                          _buildBody(
+                                              context,
+                                              SizeConfig.screenWidth,
+                                              picData ?? ContentData(),
+                                              notifier),
+                                          blurContentWidget(context,
+                                              picData ?? ContentData()),
                                         ],
                                       ),
                                     ),
                                   ),
                                 ),
-                                SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                                        (picData?.boosted.isEmpty ?? [].isEmpty) &&
-                                        (picData?.reportedStatus != 'OWNED' && picData?.reportedStatus != 'BLURRED' && picData?.reportedStatus2 != 'BLURRED') &&
+                                SharedPreference().readStorage(
+                                                SpKeys.statusVerificationId) ==
+                                            VERIFIED &&
+                                        (picData?.boosted.isEmpty ??
+                                            [].isEmpty) &&
+                                        (picData?.reportedStatus != 'OWNED' &&
+                                            picData?.reportedStatus !=
+                                                'BLURRED' &&
+                                            picData?.reportedStatus2 !=
+                                                'BLURRED') &&
                                         picData?.email == email
                                     ? Container(
                                         width: double.infinity,
-                                        margin: const EdgeInsets.only(bottom: 16),
+                                        margin:
+                                            const EdgeInsets.only(bottom: 16),
                                         child: ButtonBoost(
                                           onDetail: false,
                                           marginBool: true,
                                           contentData: picData,
                                           startState: () {
-                                            SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                                            SharedPreference().writeStorage(
+                                                SpKeys.isShowPopAds, true);
                                           },
                                           afterState: () {
-                                            SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                                            SharedPreference().writeStorage(
+                                                SpKeys.isShowPopAds, false);
                                           },
                                         ),
                                       )
                                     : Container(),
-                                if (picData?.email == email && (picData?.boostCount ?? 0) >= 0 && (picData?.boosted.isNotEmpty ?? [].isEmpty))
+                                if (picData?.email == email &&
+                                    (picData?.boostCount ?? 0) >= 0 &&
+                                    (picData?.boosted.isNotEmpty ?? [].isEmpty))
                                   Container(
                                     padding: const EdgeInsets.all(10),
                                     margin: EdgeInsets.only(bottom: 10),
@@ -1583,27 +1899,36 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                       color: kHyppeGreyLight,
                                     ),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
                                         const CustomIconWidget(
-                                          iconData: "${AssetPath.vectorPath}reach.svg",
+                                          iconData:
+                                              "${AssetPath.vectorPath}reach.svg",
                                           defaultColor: false,
                                           height: 24,
                                           color: kHyppeTextLightPrimary,
                                         ),
                                         Padding(
-                                          padding: const EdgeInsets.only(left: 13),
+                                          padding:
+                                              const EdgeInsets.only(left: 13),
                                           child: CustomTextWidget(
-                                            textToDisplay: "${picData?.boostJangkauan ?? '0'} ${lang?.reach}",
-                                            textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                                            textToDisplay:
+                                                "${picData?.boostJangkauan ?? '0'} ${lang?.reach}",
+                                            textStyle: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w700,
+                                                color: kHyppeTextLightPrimary),
                                           ),
                                         )
                                       ],
                                     ),
                                   ),
                                 Consumer<LikeNotifier>(
-                                  builder: (context, likeNotifier, child) => Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                  builder: (context, likeNotifier, child) =>
+                                      Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
@@ -1611,11 +1936,14 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                             width: 30,
                                             child: Align(
                                               alignment: Alignment.bottomRight,
-                                              child: picData?.insight?.isloading ?? false
+                                              child: picData?.insight
+                                                          ?.isloading ??
+                                                      false
                                                   ? const SizedBox(
                                                       height: 28,
                                                       width: 28,
-                                                      child: CircularProgressIndicator(
+                                                      child:
+                                                          CircularProgressIndicator(
                                                         color: kHyppePrimary,
                                                         strokeWidth: 2,
                                                       ),
@@ -1623,19 +1951,49 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                   : InkWell(
                                                       child: CustomIconWidget(
                                                         defaultColor: false,
-                                                        color: (picData?.insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
-                                                        iconData: '${AssetPath.vectorPath}${(picData?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                                        color: (picData?.insight
+                                                                    ?.isPostLiked ??
+                                                                false)
+                                                            ? kHyppeRed
+                                                            : kHyppeTextLightPrimary,
+                                                        iconData:
+                                                            '${AssetPath.vectorPath}${(picData?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
                                                         height: 28,
                                                       ),
                                                       onTap: () async {
                                                         if (picData != null) {
-                                                          likeNotifier.likePost(context, notifier.pic![index]).then((value) {
-                                                            List<ContentData>? pic2 = context.read<ScrollPicNotifier>().pics;
-                                                            if (pic2?.isNotEmpty ?? false) {
-                                                              int idx2 = pic2!.indexWhere((e) => e.postID == value['_id']);
-                                                              pic2[idx2].insight?.isPostLiked = value['isPostLiked'];
-                                                              pic2[idx2].insight?.likes = value['likes'];
-                                                              pic2[idx2].isLiked = value['isLiked'];
+                                                          likeNotifier
+                                                              .likePost(
+                                                                  context,
+                                                                  notifier.pic![
+                                                                      index])
+                                                              .then((value) {
+                                                            List<ContentData>?
+                                                                pic2 = context
+                                                                    .read<
+                                                                        ScrollPicNotifier>()
+                                                                    .pics;
+                                                            if (pic2?.isNotEmpty ??
+                                                                false) {
+                                                              int idx2 = pic2!
+                                                                  .indexWhere((e) =>
+                                                                      e.postID ==
+                                                                      value[
+                                                                          '_id']);
+                                                              pic2[idx2]
+                                                                      .insight
+                                                                      ?.isPostLiked =
+                                                                  value[
+                                                                      'isPostLiked'];
+                                                              pic2[idx2]
+                                                                      .insight
+                                                                      ?.likes =
+                                                                  value[
+                                                                      'likes'];
+                                                              pic2[idx2]
+                                                                      .isLiked =
+                                                                  value[
+                                                                      'isLiked'];
                                                             }
                                                           });
                                                         }
@@ -1645,16 +2003,26 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                           ),
                                           if (picData?.allowComments ?? true)
                                             Padding(
-                                              padding: EdgeInsets.only(left: 21.0),
+                                              padding:
+                                                  EdgeInsets.only(left: 21.0),
                                               child: GestureDetector(
                                                 onTap: () {
-                                                  Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: picData?.postID ?? '', fromFront: true, data: picData ?? ContentData()));
+                                                  Routing().move(
+                                                      Routes.commentsDetail,
+                                                      argument: CommentsArgument(
+                                                          postID:
+                                                              picData?.postID ??
+                                                                  '',
+                                                          fromFront: true,
+                                                          data: picData ??
+                                                              ContentData()));
                                                   // ShowBottomSheet.onShowCommentV2(context, postID: picData?.postID);
                                                 },
                                                 child: const CustomIconWidget(
                                                   defaultColor: false,
                                                   color: kHyppeTextLightPrimary,
-                                                  iconData: '${AssetPath.vectorPath}comment2.svg',
+                                                  iconData:
+                                                      '${AssetPath.vectorPath}comment2.svg',
                                                   height: 24,
                                                 ),
                                               ),
@@ -1662,38 +2030,54 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                           if ((picData?.isShared ?? false))
                                             GestureDetector(
                                               onTap: () {
-                                                context.read<PicDetailNotifier>().createdDynamicLink(context, data: picData);
+                                                context
+                                                    .read<PicDetailNotifier>()
+                                                    .createdDynamicLink(context,
+                                                        data: picData);
                                               },
                                               child: const Padding(
-                                                padding: EdgeInsets.only(left: 21.0),
+                                                padding:
+                                                    EdgeInsets.only(left: 21.0),
                                                 child: CustomIconWidget(
                                                   defaultColor: false,
                                                   color: kHyppeTextLightPrimary,
-                                                  iconData: '${AssetPath.vectorPath}share2.svg',
+                                                  iconData:
+                                                      '${AssetPath.vectorPath}share2.svg',
                                                   height: 24,
                                                 ),
                                               ),
                                             ),
-                                          if ((picData?.saleAmount ?? 0) > 0 && email != picData?.email)
+                                          if ((picData?.saleAmount ?? 0) > 0 &&
+                                              email != picData?.email)
                                             Expanded(
                                               child: GestureDetector(
                                                 onTap: () async {
-                                                  context.handleActionIsGuest(() async {
+                                                  context.handleActionIsGuest(
+                                                      () async {
                                                     fAliplayer?.pause();
-                                                    await ShowBottomSheet.onBuyContent(context, data: picData, fAliplayer: fAliplayer);
+                                                    await ShowBottomSheet
+                                                        .onBuyContent(context,
+                                                            data: picData,
+                                                            fAliplayer:
+                                                                fAliplayer);
                                                   }).then((value) {
                                                     fAliplayer?.pause();
-                                                    if (value){
-                                                      MyAudioService.instance.playagain(notifier.isMute);
+                                                    if (value) {
+                                                      MyAudioService.instance
+                                                          .playagain(
+                                                              notifier.isMute);
                                                     }
                                                   });
                                                 },
                                                 child: const Align(
-                                                  alignment: Alignment.centerRight,
+                                                  alignment:
+                                                      Alignment.centerRight,
                                                   child: CustomIconWidget(
                                                     defaultColor: false,
-                                                    color: kHyppeTextLightPrimary,
-                                                    iconData: '${AssetPath.vectorPath}cart.svg',
+                                                    color:
+                                                        kHyppeTextLightPrimary,
+                                                    iconData:
+                                                        '${AssetPath.vectorPath}cart.svg',
                                                     height: 24,
                                                   ),
                                                 ),
@@ -1705,32 +2089,49 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                       RichText(
                                         text: TextSpan(children: [
                                           TextSpan(
-                                            text: "${picData?.insight?.likes} ${notifier.language.like}",
+                                            text:
+                                                "${picData?.insight?.likes} ${notifier.language.like}",
                                             recognizer: TapGestureRecognizer()
                                               ..onTap = () => Navigator.push(
                                                   context,
                                                   CupertinoPageRoute(
-                                                      builder: (context) => ViewLiked(
-                                                            postId: picData?.postID ?? '',
+                                                      builder: (context) =>
+                                                          ViewLiked(
+                                                            postId: picData
+                                                                    ?.postID ??
+                                                                '',
                                                             eventType: 'LIKE',
                                                           ))),
-                                            style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                                            style: const TextStyle(
+                                                color: kHyppeTextLightPrimary,
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 14),
                                           ),
                                           const TextSpan(
                                             text: " • ",
-                                            style: TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 16),
+                                            style: TextStyle(
+                                                color: kHyppeTextLightPrimary,
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 16),
                                           ),
                                           TextSpan(
-                                            text: "${picData?.insight!.views?.getCountShort()} ${notifier.language.views}",
+                                            text:
+                                                "${picData?.insight!.views?.getCountShort()} ${notifier.language.views}",
                                             recognizer: TapGestureRecognizer()
                                               ..onTap = () => Navigator.push(
                                                   context,
                                                   CupertinoPageRoute(
-                                                      builder: (context) => ViewLiked(
-                                                            postId: picData?.postID ?? '',
+                                                      builder: (context) =>
+                                                          ViewLiked(
+                                                            postId: picData
+                                                                    ?.postID ??
+                                                                '',
                                                             eventType: 'VIEW',
                                                           ))),
-                                            style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                                            style: const TextStyle(
+                                                color: kHyppeTextLightPrimary,
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 14),
                                           ),
                                         ]),
                                       ),
@@ -1749,47 +2150,94 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                   desc: "${picData?.description}",
                                   trimLines: 3,
                                   textAlign: TextAlign.start,
-                                  seeLess: ' ${lang?.less}', // ${notifier2.translate.seeLess}',
-                                  seeMore: ' ${lang?.more}', //${notifier2.translate.seeMoreContent}',
-                                  normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                                  hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary, fontSize: 12),
-                                  expandStyle: const TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
+                                  seeLess:
+                                      ' ${lang?.less}', // ${notifier2.translate.seeLess}',
+                                  seeMore:
+                                      ' ${lang?.more}', //${notifier2.translate.seeMoreContent}',
+                                  normStyle: const TextStyle(
+                                      fontSize: 12,
+                                      color: kHyppeTextLightPrimary),
+                                  hrefStyle: Theme.of(context)
+                                      .textTheme
+                                      .subtitle2
+                                      ?.copyWith(
+                                          color: kHyppePrimary, fontSize: 12),
+                                  expandStyle: const TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 if (picData?.allowComments ?? false)
                                   GestureDetector(
                                     onTap: () {
-                                      Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: picData?.postID ?? '', fromFront: true, data: picData ?? ContentData()));
+                                      Routing().move(Routes.commentsDetail,
+                                          argument: CommentsArgument(
+                                              postID: picData?.postID ?? '',
+                                              fromFront: true,
+                                              data: picData ?? ContentData()));
                                     },
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 4.0),
                                       child: Text(
                                         "${lang?.seeAll} ${picData?.comments} ${lang?.comment}",
-                                        style: const TextStyle(fontSize: 12, color: kHyppeBurem),
+                                        style: const TextStyle(
+                                            fontSize: 12, color: kHyppeBurem),
                                       ),
                                     ),
                                   ),
                                 (picData?.comment?.length ?? 0) > 0
                                     ? Padding(
-                                        padding: const EdgeInsets.only(top: 0.0),
+                                        padding:
+                                            const EdgeInsets.only(top: 0.0),
                                         child: ListView.builder(
                                           shrinkWrap: true,
-                                          physics: const NeverScrollableScrollPhysics(),
-                                          itemCount: (picData?.comment?.length ?? 0) >= 2 ? 2 : 1,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemCount:
+                                              (picData?.comment?.length ?? 0) >=
+                                                      2
+                                                  ? 2
+                                                  : 1,
                                           itemBuilder: (context, indexComment) {
                                             return Padding(
-                                              padding: const EdgeInsets.only(bottom: 6.0),
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 6.0),
                                               child: CustomNewDescContent(
-                                                email: picData?.comment?[indexComment].sender ?? '',
+                                                email: picData
+                                                        ?.comment?[indexComment]
+                                                        .sender ??
+                                                    '',
                                                 // desc: "${picData??.description}",
-                                                username: picData?.comment?[indexComment].userComment?.username ?? '',
-                                                desc: picData?.comment?[indexComment].txtMessages ?? '',
+                                                username: picData
+                                                        ?.comment?[indexComment]
+                                                        .userComment
+                                                        ?.username ??
+                                                    '',
+                                                desc: picData
+                                                        ?.comment?[indexComment]
+                                                        .txtMessages ??
+                                                    '',
                                                 trimLines: 2,
                                                 textAlign: TextAlign.start,
-                                                seeLess: ' ${notifier.language.less}', // ${notifier2.translate.seeLess}',
-                                                seeMore: ' ${notifier.language.more} ', //${notifier2.translate.seeMoreContent}',
-                                                normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                                                hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                                                expandStyle: const TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
+                                                seeLess:
+                                                    ' ${notifier.language.less}', // ${notifier2.translate.seeLess}',
+                                                seeMore:
+                                                    ' ${notifier.language.more} ', //${notifier2.translate.seeMoreContent}',
+                                                normStyle: const TextStyle(
+                                                    fontSize: 12,
+                                                    color:
+                                                        kHyppeTextLightPrimary),
+                                                hrefStyle: Theme.of(context)
+                                                    .textTheme
+                                                    .subtitle2
+                                                    ?.copyWith(
+                                                        color: kHyppePrimary),
+                                                expandStyle: const TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
                                             );
                                           },
@@ -1800,17 +2248,22 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                   padding: EdgeInsets.symmetric(vertical: 4.0),
                                   child: Text(
                                     "${System().readTimestamp(
-                                      DateTime.parse(System().dateTimeRemoveT(picData?.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+                                      DateTime.parse(System().dateTimeRemoveT(
+                                              picData?.createdAt ??
+                                                  DateTime.now().toString()))
+                                          .millisecondsSinceEpoch,
                                       context,
                                       fullCaption: true,
                                     )}",
-                                    style: TextStyle(fontSize: 12, color: kHyppeBurem),
+                                    style: TextStyle(
+                                        fontSize: 12, color: kHyppeBurem),
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                          homeNotifier.isLoadingLoadmore && picData == notifier.pic?.last
+                          homeNotifier.isLoadingLoadmore &&
+                                  picData == notifier.pic?.last
                               ? const Padding(
                                   padding: EdgeInsets.only(bottom: 32),
                                   child: Center(child: CustomLoading()),
@@ -1821,7 +2274,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
           );
   }
 
-  Widget _buildBody(BuildContext context, width, ContentData data, PreviewPicNotifier notifier) {
+  Widget _buildBody(BuildContext context, width, ContentData data,
+      PreviewPicNotifier notifier) {
     // final indexKeySell = mn?.tutorialData.indexWhere((element) => element.key == 'sell') ?? 0;
     // final indexKey = mn?.tutorialData.indexWhere((element) => element.key == 'protection') ?? 0;
 
@@ -1856,28 +2310,38 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
               child: GestureDetector(
                 onTap: () async {
                   fAliplayer?.pause();
+                  MyAudioService.instance.pause();
                   context.handleActionIsGuest(() {
                     ShowBottomSheet.onShowUserTag(
                       context,
-                      value: data.tagPeople??[],
+                      value: data.tagPeople ?? [],
                       function: () {},
                       postId: data.postID,
                       title: lang!.inthisphoto,
                       // storyController: storyController,
                       fAliplayer: fAliplayer,
                       whenComplete: () {
+                        if (data.music != null) {
+                          MyAudioService.instance.playagain(notifier.isMute);
+                        } else {
+                          MyAudioService.instance.stop();
+                        }
                         fAliplayer?.play();
                         print("====hahahahah====");
                       },
                       // orientation: Orientation,
                     );
                   }).then((value) {
-                    if (value){
-                      MyAudioService.instance.playagain(notifier.isMute);
+                    print('data tag people $value');
+                    if (value) {
+                      if (data.music != null) {
+                        MyAudioService.instance.playagain(notifier.isMute);
+                      } else {
+                        MyAudioService.instance.stop();
+                      }
                     }
                   });
                   // await context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID, fAliplayer: fAliplayer, title: lang!.inthisphoto);
-                  
                 },
                 child: const CustomIconWidget(
                   iconData: '${AssetPath.vectorPath}tag_people.svg',
@@ -1894,7 +2358,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                   setState(() {
                     notifier.isMute = !notifier.isMute;
                   });
-                  if (_currentPlayerState == FlutterAvpdef.AVPStatus_AVPStatusStarted) {
+                  if (_currentPlayerState ==
+                      FlutterAvpdef.AVPStatus_AVPStatusStarted) {
                     fAliplayer?.play();
                   }
                   print("muteeee----------------- ${notifier.isMute}");
@@ -1904,7 +2369,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: CustomIconWidget(
-                    iconData: notifier.isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
+                    iconData: notifier.isMute
+                        ? '${AssetPath.vectorPath}sound-off.svg'
+                        : '${AssetPath.vectorPath}sound-on.svg',
                     defaultColor: false,
                     height: 24,
                   ),
@@ -1933,8 +2400,15 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                         defaultColor: false,
                         height: 30,
                       ),
-                      Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                      Text("HyppePic ${transnot.translate.contentContainsSensitiveMaterial}",
+                      Text(
+                          transnot.translate.sensitiveContent ??
+                              'Sensitive Content',
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600)),
+                      Text(
+                          "HyppePic ${transnot.translate.contentContainsSensitiveMaterial}",
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Colors.white,
@@ -1954,11 +2428,14 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                       GestureDetector(
                         onTap: () {
                           System().increaseViewCount2(context, data);
-                          context.read<ReportNotifier>().seeContent(context, data, hyppePic);
+                          context
+                              .read<ReportNotifier>()
+                              .seeContent(context, data, hyppePic);
                         },
                         child: Container(
                           padding: const EdgeInsets.only(top: 8),
-                          margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
+                          margin: const EdgeInsets.only(
+                              bottom: 20, right: 8, left: 8),
                           width: SizeConfig.screenWidth,
                           decoration: const BoxDecoration(
                             border: Border(
@@ -1970,7 +2447,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                           ),
                           child: Text(
                             "${transnot.translate.see} HyppePic",
-                            style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600),
                             textAlign: TextAlign.center,
                           ),
                         ),
