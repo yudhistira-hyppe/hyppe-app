@@ -113,6 +113,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     "++++++++++++++ initState landing diary".logger();
     FirebaseCrashlytics.instance.setCustomKey('layout', 'LandingDiaryPage');
     final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
+    isactivealiplayer = true;
 
     notifier.initAdsCounter();
     lang = context.read<TranslateNotifierV2>().translate;
@@ -716,7 +717,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   @override
   void didPushNext() {
     isHomeScreen = false;
-    isActivePage = false;
+    // isActivePage = false;
     fAliplayer?.pause();
     _pauseScreen();
     super.didPushNext();

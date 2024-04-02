@@ -188,6 +188,7 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
         child: Scaffold(
           appBar: AppBar(
             elevation: 0.0,
+            titleSpacing: 0,
             automaticallyImplyLeading: true,
             titleSpacing: 0,
             title: CustomTextWidget(

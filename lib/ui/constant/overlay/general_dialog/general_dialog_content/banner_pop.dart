@@ -76,47 +76,44 @@ class _BannerPopState extends State<BannerPop> {
                             }),
                         items: notifier.bannerData
                             .map((item) => Container(
-                          margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                              child: GestureDetector(
-                                onTap: () {
-                                  globalChallengePopUp = false;
-                                  Routing().moveBack();
-                                  Routing().move(Routes.chalengeDetail, argument: GeneralArgument()..id = item.sId);
-                                },
-                                child: Container(
-                                  alignment: Alignment.center,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Image.network(
-                                  item.bannerLandingpage ?? '',
-                                  height: constraints.maxHeight,
-                                  fit: BoxFit.cover,
-                                  loadingBuilder: (context, child, loadingProgress) {
-                                      if (loadingProgress == null) return child;
-                                      return Center(
-                                        child: Container(
-                                          height: size.width - 20,
-                                          width: SizeConfig.screenWidth,
-                                          color: Colors.black,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(10)
-                                          ),
-                                          child: const UnconstrainedBox(
-                                            child: SizedBox(
-                                              height: 50,
-                                              width: 50,
-                                              child: CircularProgressIndicator(
-                                                  // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                                  margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      globalChallengePopUp = false;
+                                      Routing().moveBack();
+                                      Routing().move(Routes.chalengeDetail, argument: GeneralArgument()..id = item.sId);
+                                    },
+                                    child: Container(
+                                        alignment: Alignment.center,
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(10),
+                                          child: Image.network(
+                                            item.bannerLandingpage ?? '',
+                                            height: constraints.maxHeight,
+                                            fit: BoxFit.cover,
+                                            loadingBuilder: (context, child, loadingProgress) {
+                                              if (loadingProgress == null) return child;
+                                              return Center(
+                                                child: Container(
+                                                  height: size.width - 20,
+                                                  width: SizeConfig.screenWidth,
+                                                  decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(10)),
+                                                  child: const UnconstrainedBox(
+                                                    child: SizedBox(
+                                                      height: 50,
+                                                      width: 50,
+                                                      child: CircularProgressIndicator(
+                                                          // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                                                          ),
+                                                    ),
                                                   ),
-                                            ),
+                                                ),
+                                              );
+                                            },
                                           ),
-                                        ),
-                                      );
-                                  },
-                                ),
-                                    )),
-                              ),
-                            ))
+                                        )),
+                                  ),
+                                ))
                             .toList(),
                       ),
                     ),

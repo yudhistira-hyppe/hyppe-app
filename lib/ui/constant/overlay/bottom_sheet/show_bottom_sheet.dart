@@ -9,6 +9,7 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart' as messageData;
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/services/audio_service.dart';
 import 'package:hyppe/ui/constant/entities/comment_v2/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/comment_v2/on_show_comment_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/live_streaming/on_list_wacthers.dart';
@@ -323,7 +324,10 @@ class ShowBottomSheet {
           ),
         );
       },
-    ).whenComplete(() => isactivealiplayer = false);
+    ).whenComplete(() {
+      isactivealiplayer = false;
+      MyAudioService.instance.playagain(false);
+    });
   }
 
   static onLongPressDeleteMessage(BuildContext _, {messageData.MessageDataV2? data, required Function() function}) {

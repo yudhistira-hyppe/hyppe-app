@@ -593,7 +593,7 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
 
   @override
   void didPushNext() {
-    isActivePage = false;
+    // isActivePage = false;
     fAliplayer?.pause();
     'didPushNext isOnHomeScreen $isHomeScreen'.logger();
     super.didPushNext();

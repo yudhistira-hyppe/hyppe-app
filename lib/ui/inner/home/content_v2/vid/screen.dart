@@ -137,6 +137,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   @override
   void initState() {
     isStopVideo = true;
+    isactivealiplayer = true;
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppePreviewVid');
     email = SharedPreference().readStorage(SpKeys.email);
     final notifier = Provider.of<PreviewVidNotifier>(context, listen: false);
@@ -681,21 +682,24 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     final notifier = context.read<PreviewVidNotifier>();
     switch (state) {
       case AppLifecycleState.inactive:
+        fAliplayer?.pause();
         _pauseScreen();
         break;
       case AppLifecycleState.resumed:
         print("============= canPlayOpenApps ${context.read<PreviewVidNotifier>().canPlayOpenApps}-- isInactiveState: ${context.read<MainNotifier>().isInactiveState}");
         if (isHomeScreen) _initializeTimer();
-        if (context.read<PreviewVidNotifier>().canPlayOpenApps && !context.read<MainNotifier>().isInactiveState) {
+        if (context.read<PreviewVidNotifier>().canPlayOpenApps && !context.read<MainNotifier>().isInactiveState && isActivePage) {
           try {
             // notifier.vidData?[_curIdx].fAliplayer?.prepare();
-            notifier.vidData?[_curIdx].fAliplayer?.play();
+            // notifier.vidData?[_curIdx].fAliplayer?.play();
+            fAliplayer?.play();
           } catch (e) {
             print(e);
           }
         }
         break;
       case AppLifecycleState.paused:
+        fAliplayer?.pause();
         _pauseScreen();
         break;
       case AppLifecycleState.detached:

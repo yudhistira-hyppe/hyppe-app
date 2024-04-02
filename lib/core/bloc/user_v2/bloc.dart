@@ -313,7 +313,7 @@ class UserBloc {
     }, host: UrlConstants.signUp, data: data.toJson(), methodType: MethodType.post, withAlertMessage: true, withCheckConnection: false, errorServiceType: ErrorType.register, verbose: true);
   }
 
-  Future updateProfileBlocV2(BuildContext context, {required Map<String, dynamic> data}) async {
+  Future updateProfileBlocV2(BuildContext context, {required Map data}) async {
     final email = SharedPreference().readStorage(SpKeys.email);
     setUserFetch(UserFetch(UserState.loading));
     await Repos().reposPost(

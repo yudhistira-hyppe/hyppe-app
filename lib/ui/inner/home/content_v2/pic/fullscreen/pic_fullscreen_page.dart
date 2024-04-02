@@ -23,6 +23,7 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/utils/zoom_pic/zoom_pic.dart';
+import 'package:hyppe/core/services/audio_service.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -91,6 +92,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
   String _curPostId = '';
   String _lastCurPostId = '';
   double itemHeight = 0;
+  String url = '';
 
   bool isZoom = false;
 
@@ -128,6 +130,11 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
     email = SharedPreference().readStorage(SpKeys.email);
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (widget.argument?.picData[widget.argument?.index ?? 0].music != null) {
+        MyAudioService.instance.playagain(notifier.isMute);
+      }
+      pagePictLandingFull = true;
+      _lastCurPostId = widget.argument?.picData[widget.argument?.index ?? 0].postID ?? '';
       fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPicFullScreen');
       WidgetsBinding.instance.addObserver(this);
       fAliplayer?.setAutoPlay(true);
@@ -148,6 +155,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
 
   @override
   void dispose() {
+    pagePictLandingFull = false;
     fAliplayer?.stop();
     fAliplayer!.destroy();
     animatedController.dispose();
@@ -162,20 +170,47 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
     isPlay = false;
     selectedData?.isDiaryPlay = false;
     if (data.reportedStatus != 'BLURRED') {
-      await getAuth(context, data.music?.apsaraMusic ?? '');
+      await getMusicUrl(context, data.music?.apsaraMusic ?? '');
     }
+    MyAudioService.instance.play(path: url, startedPlaying: () {}, stoppedPlaying: () {}, mute: notifier.isMute);
 
     setState(() {
       isPause = false;
     });
-    fAliplayer?.prepare();
-    fAliplayer?.setMuted(notifier.isMute);
+    // fAliplayer?.prepare();
+    // fAliplayer?.setMuted(notifier.isMute);
     if (notifier.isMute) {
       animatedController.stop();
     } else {
       animatedController.repeat();
     }
     // notifier.isMute = !notifier.isMute;
+  }
+
+  Future getMusicUrl(BuildContext context, String apsaraId) async {
+    setState(() {
+      isloading = true;
+    });
+    try {
+      final fixContext = Routing.navigatorKey.currentContext;
+      final notifier = PostsBloc();
+      await notifier.getMusic(fixContext ?? context, apsaraId: apsaraId);
+      final fetch = notifier.postsFetch;
+      if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        Map jsonMap = json.decode(fetch.data.toString());
+
+        setState(() {
+          url = jsonMap['data']['PlayURL'];
+          isloading = false;
+        });
+        // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+      }
+    } catch (e) {
+      setState(() {
+        isloading = false;
+      });
+      // 'Failed to fetch ads data $e'.logger();
+    }
   }
 
   Future getAuth(BuildContext context, String apsaraId) async {
@@ -216,7 +251,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
   @override
   void didPopNext() {
     print("======= didPopNext");
-
+    MyAudioService.instance.playagain(false);
     fAliplayer?.play();
     fAliplayer?.setMuted(false);
     // System().disposeBlock();
@@ -233,6 +268,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
   void didPushNext() {
     print("========= didPushNext");
     fAliplayer?.pause();
+    MyAudioService.instance.pause();
     System().disposeBlock();
     super.didPushNext();
   }
@@ -249,11 +285,13 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
         print("========= resumed");
         // if (context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds)) {
         fAliplayer?.play();
+        MyAudioService.instance.playagain(false);
         // }
         break;
       case AppLifecycleState.paused:
         print("========= paused");
-        fAliplayer?.pause();
+
+        MyAudioService.instance.pause();
         break;
       case AppLifecycleState.detached:
         print("========= detached");
@@ -313,7 +351,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
 
                   return notifier.pic![index].reportedStatus == 'BLURRED'
                       ? blurContentWidget(context, notifier.pic![index])
-                      : imagePic(notifier.pic??[], index: index, notifier: notifier, homeNotifier: home);
+                      : imagePic(notifier.pic ?? [], index: index, notifier: notifier, homeNotifier: home);
                 });
           }),
         ),
@@ -415,7 +453,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                                 startMusic(context, picData[index], notifier);
                               });
                             } else {
-                              fAliplayer?.stop();
+                              MyAudioService.instance.stop();
                             }
 
                             Future.delayed(const Duration(milliseconds: 100), () {

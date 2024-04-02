@@ -208,31 +208,40 @@ class MainNotifier with ChangeNotifier {
   }
 
   Future getProvinceName(BuildContext context, {required UserProfileModel? profile}) async {
-    Locations().permissionLocation().then((result) {
-      Locations().getLocation().then((value) async {
-        final notifier = GoogleMapPlaceBloc();
-        await notifier.getGoogleMapGeocodingBloc(
-          context,
-          latitude: value['latitude'] ?? 0.0,
-          longitude: value['longitude'] ?? 0.0,
-        );
-        final fetch = notifier.googleMapPlaceFetch;
-        if (fetch.googleMapPlaceState == GoogleMapPlaceState.getGoogleMapPlaceBlocSuccess) {
-          googleGeocodingModel = GoogleGeocodingModel.fromJson(fetch.data);
-          AddressComponents? country = googleGeocodingModel?.results?.first.addressComponents?.firstWhere((element) => (element.types ?? []).contains('country'));
-          AddressComponents? province = googleGeocodingModel?.results?.first.addressComponents?.firstWhere((element) => (element.types ?? []).contains('administrative_area_level_1'));
-          final usersNotifier = userV2.UserBloc();
-          final data = <String, dynamic>{};
-          data["country"] = country?.longName;
-          data["area"] = province?.longName;
-          if (profile?.gender == null) {
-            data["gender"] = 'Perempuan'.getGenderByLanguage();
-          }
-          // ignore: use_build_context_synchronously
-          usersNotifier.updateProfileBlocV2(context, data: data);
-        }
-      });
-    });
+    final usersNotifier = userV2.UserBloc();
+    Map<dynamic, dynamic> data = {};
+    data["country"] = "Indonesia";
+    data["area"] = "Daerah Khusus Ibukota Jakarta";
+    if (profile?.gender == null) {
+      data["gender"] = 'Perempuan'.getGenderByLanguage();
+    }
+    // ignore: use_build_context_synchronously
+    usersNotifier.updateProfileBlocV2(context, data: data);
+    // Locations().permissionLocation().then((result) {
+    //   Locations().getLocation().then((value) async {
+    //     final notifier = GoogleMapPlaceBloc();
+    //     await notifier.getGoogleMapGeocodingBloc(
+    //       context,
+    //       latitude: value['latitude'] ?? 0.0,
+    //       longitude: value['longitude'] ?? 0.0,
+    //     );
+    //     final fetch = notifier.googleMapPlaceFetch;
+    //     if (fetch.googleMapPlaceState == GoogleMapPlaceState.getGoogleMapPlaceBlocSuccess) {
+    //       googleGeocodingModel = GoogleGeocodingModel.fromJson(fetch.data);
+    //       AddressComponents? country = googleGeocodingModel?.results?.first.addressComponents?.firstWhere((element) => (element.types ?? []).contains('country'));
+    //       AddressComponents? province = googleGeocodingModel?.results?.first.addressComponents?.firstWhere((element) => (element.types ?? []).contains('administrative_area_level_1'));
+    //       final usersNotifier = userV2.UserBloc();
+    //       final data = <String, dynamic>{};
+    //       data["country"] = country?.longName;
+    //       data["area"] = province?.longName;
+    //       if (profile?.gender == null) {
+    //         data["gender"] = 'Perempuan'.getGenderByLanguage();
+    //       }
+    //       // ignore: use_build_context_synchronously
+    //       usersNotifier.updateProfileBlocV2(context, data: data);
+    //     }
+    //   });
+    // });
   }
 
   String key(bool onUpdateProfile, bool updateProfilePict) {

@@ -597,7 +597,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
   @override
   void didPushNext() {
     print("========= didPushNext dari diary");
-    isActivePage = false;
+    // isActivePage = false;
     fAliplayer?.pause();
     super.didPushNext();
   }
