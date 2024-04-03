@@ -49,6 +49,22 @@ class PaymentMethodNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  //Selected VA
+  String selectedbankdata = '';
+  List<GroupBankData>? _groupdata;
+  List<GroupBankData>? get groupdata => _groupdata;
+  set groupdata(List<GroupBankData>? value) {
+    _groupdata = value;
+    notifyListeners();
+  }
+  void changeSelectedBank(String? selected) {
+    for (int i = 0; i < groupdata!.length; i++) {
+      groupdata![i].selected = false;
+    }
+    groupdata![groupdata!.indexWhere((element) => element.id == selected)].selected = true;
+    notifyListeners();
+  }
+
   BuyResponse? get postResponse => _postResponse;
   set postResponse(BuyResponse? value) {
     _postResponse = value;
@@ -75,6 +91,9 @@ class PaymentMethodNotifier extends ChangeNotifier {
       //List<BankData>? res = BankData.fromJson(fetch.data);
       List<BankData>? res = (fetch.data as List<dynamic>?)?.map((e) => BankData.fromJson(e as Map<String, dynamic>)).toList();
       data = res;
+
+      List<GroupBankData>? resGroup = (fetch.data as List<dynamic>?)?.map((e) => GroupBankData.fromJSON(e as Map<String, dynamic>)).toList();
+      groupdata = resGroup;
       notifyListeners();
     }
   }

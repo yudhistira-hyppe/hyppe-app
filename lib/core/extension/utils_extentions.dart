@@ -214,7 +214,7 @@ extension ContextScreen on BuildContext {
   }
 
   Future<bool> handleActionIsGuest(Function() onSlipOut, {Function()? addAction}) async {
-    MyAudioService.instance.pause();
+    // MyAudioService.instance.pause();
     final bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
     MyAudioService.instance.pause();
     if (isGuest ?? false) {
@@ -225,9 +225,8 @@ extension ContextScreen on BuildContext {
       globalAliPlayer?.pause();
       await ShowBottomSheet().onLoginApp(this).then((value) {
         if (pagePictLandingFull) {
-          MyAudioService.instance.playagain(false);
+          MyAudioService.instance.playagain(isMuteAudioPic);
         }
-
         globalAliPlayer?.play();
       });
     } else {

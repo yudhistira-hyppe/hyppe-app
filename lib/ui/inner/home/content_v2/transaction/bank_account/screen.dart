@@ -1,9 +1,7 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
-import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
@@ -46,29 +44,30 @@ class _BankAccountState extends State<BankAccount> {
         appBar: AppBar(
           leading: const BackButton(),
           title: CustomTextWidget(
-            textStyle: theme.textTheme.subtitle1,
+            textStyle: theme.textTheme.titleMedium,
             textToDisplay: '${notifier2.translate.bankAccount}',
           ),
           actions: [
-            CustomTextButton(
-              onPressed: () {
-                notifier.showDialogHelp(context);
-              },
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CustomTextWidget(
-                    textToDisplay: notifier2.translate.help ?? 'help',
-                    textStyle: theme.textTheme.caption,
-                  ),
-                  fourPx,
-                  const CustomIconWidget(
-                    defaultColor: false,
-                    iconData: '${AssetPath.vectorPath}question-mark.svg',
-                  ),
-                ],
-              ),
-            ),
+            IconButton(onPressed: ()=>notifier.showDialogHelp(context), icon: const Icon(Icons.info_outline)),
+            // CustomTextButton(
+            //   onPressed: () {
+            //     notifier.showDialogHelp(context);
+            //   },
+            //   child: Row(
+            //     mainAxisSize: MainAxisSize.min,
+            //     children: [
+            //       CustomTextWidget(
+            //         textToDisplay: notifier2.translate.help ?? 'help',
+            //         textStyle: theme.textTheme.bodySmall,
+            //       ),
+            //       fourPx,
+            //       const CustomIconWidget(
+            //         defaultColor: false,
+            //         iconData: '${AssetPath.vectorPath}question-mark.svg',
+            //       ),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
         body: notifier.isLoading
@@ -90,7 +89,8 @@ class _BankAccountState extends State<BankAccount> {
                     refreshIndicatorKey: _refreshIndicatorKey,
                     dataAcccount: notifier.dataAcccount,
                     textRemove: notifier2.translate.remove,
-                    textUpTo: notifier2.translate.youCanAddUpTo,
+                    textUpTo: notifier2.translate.infolimitbankaccount,
+                    textsubtitleUpto: notifier2.translate.withdrawnsaldotobank,
                   ),
 
         // Padding(
@@ -161,12 +161,12 @@ class _BankAccountState extends State<BankAccount> {
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.all(8.0),
           child: CustomTextButton(
-            onPressed: (notifier.dataAcccount?.length ?? 0) >= 5
+            onPressed: (notifier.dataAcccount?.length ?? 0) >= 3
                 ? null
                 : () {
-                    notifier.showDialogAllBank(context);
+                    notifier.showButtomSheetAllBankList(context, notifier2.translate, false);
                   },
-            style: ButtonStyle(backgroundColor: (notifier.dataAcccount?.length ?? 0) >= 5 ? MaterialStateProperty.all(kHyppeDisabled) : MaterialStateProperty.all(kHyppePrimary)),
+            style: ButtonStyle(backgroundColor: (notifier.dataAcccount?.length ?? 0) >= 3 ? MaterialStateProperty.all(kHyppeDisabled) : MaterialStateProperty.all(kHyppePrimary)),
             child: CustomTextWidget(
               textToDisplay: notifier2.translate.addBankAccount ?? '',
               textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),

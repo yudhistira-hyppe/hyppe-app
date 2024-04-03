@@ -628,17 +628,34 @@ class LocalizationModelV2 {
   String? vaCopyToClipboard;
   String? expired;
   String? transaction;
+  String? saldocoins;
+  String? topupcoin;
+  String? buyhyppecoins;
+  String? selectPaymentMethod;
+  String? paynow;
+  String? exchangeCoin;
+  String? infolimitbankaccount;
+  String? withdrawnsaldotobank;
+  String? choosebank;
   String? addBankAccount;
   String? withdrawal;
   String? noSavedAccountYet;
   String? addYourBankAccountForAnEasierWithdraw;
+  String? emptyBankAccount;
+  String? processing;
+  String? pinverification;
   String? selectBank;
   String? bankName;
   String? noBankAccount;
+  String? noRek;
   String? messageBankNotMatched;
   String? accountOwnerName;
+  String? accountRekName;
   String? keepThisAccount;
   String? youWillAdd;
+  String? accountIsCorrect;
+  String? atasNama;
+  String? addingtoYourAccount;
   String? accountWithAccountNumber;
   String? aboutBankAccount;
   String? aboutBankAccountContent;
@@ -1736,17 +1753,34 @@ class LocalizationModelV2 {
     this.vaCopyToClipboard,
     this.expired,
     this.transaction,
+    this.saldocoins,
+    this.topupcoin,
+    this.buyhyppecoins,
+    this.selectPaymentMethod,
+    this.exchangeCoin,
+    this.paynow,
+    this.processing,
+    this.pinverification,
+    this.choosebank,
     this.addBankAccount,
     this.withdrawal,
     this.noSavedAccountYet,
     this.addYourBankAccountForAnEasierWithdraw,
     this.selectBank,
+    this.emptyBankAccount,
+    this.infolimitbankaccount,
+    this.withdrawnsaldotobank,
     this.bankName,
     this.noBankAccount,
+    this.noRek,
     this.messageBankNotMatched,
     this.accountOwnerName,
+    this.accountRekName,
     this.keepThisAccount,
     this.youWillAdd,
+    this.accountIsCorrect,
+    this.addingtoYourAccount,
+    this.atasNama,
     this.accountWithAccountNumber,
     this.aboutBankAccount,
     this.aboutBankAccountContent,
@@ -2861,17 +2895,34 @@ class LocalizationModelV2 {
     vaCopyToClipboard = json['vaCopyToClipboard'];
     expired = json['expired'];
     transaction = json['transaction'];
+    saldocoins = json['saldocoins'];
+    topupcoin = json['topupcoin'];
+    buyhyppecoins = json['buyhyppecoins'];
+    selectPaymentMethod = json['selectPaymentMethod'];
+    exchangeCoin = json['exchangeCoin'];
+    paynow = json['paynow'];
+    pinverification = json['pinverification'];
+    infolimitbankaccount = json['infolimitbankaccount'];
+    withdrawnsaldotobank = json['withdrawnsaldotobank'];
+    choosebank = json['choosebank'];
     addBankAccount = json['addBankAccount'];
     withdrawal = json['withdrawal'];
     noSavedAccountYet = json['noSavedAccountYet'];
     addYourBankAccountForAnEasierWithdraw = json['addYourBankAccountForAnEasierWithdraw'];
     selectBank = json['selectBank'];
+    emptyBankAccount = json['emptyBankAccount'];
     bankName = json['bankName'];
+    processing = json['processing'];
     noBankAccount = json['noBankAccount'];
+    noRek = json['noRek'];
     messageBankNotMatched = json['messageBankNotMatched'];
     accountOwnerName = json['accountOwnerName'];
+    accountRekName = json['accountRekName'];
     keepThisAccount = json['keepThisAccount'];
     youWillAdd = json['youWillAdd'];
+    accountIsCorrect = json['accountIsCorrect'];
+    atasNama = json['atasNama'];
+    addingtoYourAccount = json['addingtoYourAccount'];
     accountWithAccountNumber = json['accountWithAccountNumber'];
     aboutBankAccount = json['aboutBankAccount'];
     ownedBy = json['ownedBy'];

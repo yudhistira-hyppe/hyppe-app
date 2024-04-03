@@ -290,7 +290,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
               },
               onRefresh: () async {
                 if (!isZoom) {
-                  MyAudioService.instance.stop();
+                  await MyAudioService.instance.stop();
                   Future.delayed(Duration(milliseconds: 400), () async {
                     imageCache.clear();
                     imageCache.clearLiveImages();

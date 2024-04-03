@@ -166,7 +166,6 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     pageSrc = widget.arguments?.pageSrc ?? PageSrc.otherProfile;
 
     itemPositionsListener.itemPositions.addListener(() async {
-
       index = itemPositionsListener.itemPositions.value.first.index;
 
       if (lastIndex != index) {
@@ -422,7 +421,10 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
         playIndex = _curIdx;
         setState(() {});
       },
-      stoppedPlaying: () {},
+      stoppedPlaying: () {
+        playIndex = -1;
+        setState(() {});
+      },
       mute: notifier.isMute,
     );
   }
@@ -559,7 +561,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     }
     isInPage = true;
     fAliplayer?.play();
-    if (playIndex == _curIdx){
+    if (playIndex == _curIdx) {
       MyAudioService.instance.playagain(notifier.isMute);
     }
     isActivePage = true;
@@ -606,7 +608,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
         if ((Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds) && isInPage) {
           print("==== hahaha aha ah ah ah ah ah ah  resume $isInPage");
           fAliplayer?.play();
-          if (playIndex == _curIdx){
+          if (playIndex == _curIdx) {
             final notifier = Provider.of<ScrollPicNotifier>(context, listen: false);
             MyAudioService.instance.playagain(notifier.isMute);
           }
@@ -696,7 +698,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                               isUnFollow: pics?[pageIndex].following, isloading: pics?[pageIndex].insight!.isloadingFollow ?? false);
                                         }
                                       }).then((value) {
-                                        if (value){
+                                        if (value) {
                                           MyAudioService.instance.playagain(notifier.isMute);
                                         }
                                       });
@@ -897,7 +899,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                 picNot.followUser(context, pics?[index] ?? ContentData(), isUnFollow: pics?[index].following, isloading: pics?[index].insight!.isloadingFollow ?? false);
                               }
                             }).then((value) {
-                              if (value){
+                              if (value) {
                                 MyAudioService.instance.playagain(notifier.isMute);
                               }
                             });
@@ -968,7 +970,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                           );
                         }
                       }).then((value) {
-                        if (value){
+                        if (value) {
                           MyAudioService.instance.playagain(notifier.isMute);
                         }
                       });
@@ -1114,9 +1116,9 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                     if (res != null || res == null) {
                                       fAliplayer?.play();
                                       fAliplayer?.setMuted(notifier.isMute);
-                                      if (playIndex == _curIdx && pics![index].music !=null){
+                                      if (playIndex == _curIdx && pics![index].music != null) {
                                         MyAudioService.instance.playagain(notifier.isMute);
-                                      }else{
+                                      } else {
                                         MyAudioService.instance.stop();
                                       }
                                       notifier.itemScrollController.jumpTo(index: notifier.currentIndex);
@@ -1128,7 +1130,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                   if (pics?[index] != null) {
                                     _likeNotifier.likePost(context, pics?[index] ?? ContentData()).then((value) {
                                       List<ContentData>? pic = context.read<PreviewPicNotifier>().pic;
-                                      if (pic?.isNotEmpty??false){
+                                      if (pic?.isNotEmpty ?? false) {
                                         int idx = pic!.indexWhere((e) => e.postID == value['_id']);
                                         pic[idx].insight?.isPostLiked = value['isPostLiked'];
                                         pic[idx].insight?.likes = value['likes'];
@@ -1379,7 +1381,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                       if (pics?[index] != null) {
                                         likeNotifier.likePost(context, pics![index]).then((value) {
                                           List<ContentData>? pic = context.read<PreviewPicNotifier>().pic;
-                                          if (pic?.isNotEmpty??false){
+                                          if (pic?.isNotEmpty ?? false) {
                                             int idx = pic!.indexWhere((e) => e.postID == value['_id']);
                                             pic[idx].insight?.isPostLiked = value['isPostLiked'];
                                             pic[idx].insight?.likes = value['likes'];
@@ -1437,7 +1439,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                   fAliplayer?.pause();
                                   await ShowBottomSheet.onBuyContent(context, data: pics?[index], fAliplayer: fAliplayer);
                                 }).then((value) {
-                                  if (value){
+                                  if (value) {
                                     MyAudioService.instance.playagain(notifier.isMute);
                                   }
                                 });

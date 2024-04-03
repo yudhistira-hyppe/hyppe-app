@@ -124,7 +124,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
     email = SharedPreference().readStorage(SpKeys.email);
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      playIndex = widget.argument?.page??-1;
+      playIndex = widget.argument?.page ?? -1;
       // fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'HyppePreviewPicR');
       // WidgetsBinding.instance.addObserver(this);
       // fAliplayer?.setAutoPlay(true);
@@ -146,7 +146,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
       // fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
     });
     controller = PageController(initialPage: widget.argument?.page ?? 0);
-    notifier.currIndex = widget.argument?.page??0;
+    notifier.currIndex = widget.argument?.page ?? 0;
   }
 
   @override
@@ -159,7 +159,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
 
   //Start Music
   void startMusic(BuildContext context, ContentData data, ScrollPicNotifier notifier, index) async {
-    debugPrint('data start music ${data.music?.apsaraMusic??''}');
+    debugPrint('data start music ${data.music?.apsaraMusic ?? ''}');
     fAliplayer?.stop();
     selectedData = data;
 
@@ -171,15 +171,17 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
     if (data.reportedStatus != 'BLURRED') {
       await getMusicUrl(context, data.music?.apsaraMusic ?? '');
     }
-    MyAudioService.instance.play(path: url, 
-    startedPlaying: () {
-      playIndex = index;
-      setState(() {});
-    }, stoppedPlaying: () {
-      playIndex = -1;
-      setState(() {});
-    }, 
-    mute: notifier.isMute);
+    MyAudioService.instance.play(
+        path: url,
+        startedPlaying: () {
+          playIndex = index;
+          setState(() {});
+        },
+        stoppedPlaying: () {
+          playIndex = -1;
+          setState(() {});
+        },
+        mute: notifier.isMute);
 
     setState(() {
       isPause = false;
@@ -376,10 +378,10 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                         if (picData.music != null) {
                           print("ada musiknya ${picData.music}");
                           Future.delayed(const Duration(milliseconds: 100), () {
-                            // 
-                            if (playIndex == _curIdx){
+                            //
+                            if (playIndex == _curIdx) {
                               MyAudioService.instance.playagain(notifier.isMute);
-                            }else{
+                            } else {
                               startMusic(context, picData, notifier, index);
                             }
                           });
@@ -521,8 +523,8 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                   context.handleActionIsGuest(() {
                     context.read<LikeNotifier>().likePost(context, notifier!.pics![index]);
                   }).then((value) {
-                    if (value){
-                      MyAudioService.instance.playagain(notifier?.isMute??false);
+                    if (value) {
+                      MyAudioService.instance.playagain(notifier?.isMute ?? false);
                     }
                   });
                 },
@@ -533,7 +535,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                       opacityLevel = 1.0;
                     });
                     fAliplayer?.setMuted(notifier!.isMute);
-                    MyAudioService.instance.playagain(notifier?.isMute??false);
+                    MyAudioService.instance.playagain(notifier?.isMute ?? false);
                     if (notifier!.isMute) {
                       animatedController.stop();
                     } else {
@@ -796,12 +798,12 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                 ),
                 Container(
                   constraints: BoxConstraints(
-                    maxWidth: SizeConfig.screenWidth! * .7,
-                    maxHeight: data.description!.length > 24
-                        ? isShowMore
-                            ? 54
-                            : SizeConfig.screenHeight! * .1
-                        : 54),
+                      maxWidth: SizeConfig.screenWidth! * .7,
+                      maxHeight: data.description!.length > 24
+                          ? isShowMore
+                              ? 54
+                              : SizeConfig.screenHeight! * .1
+                          : 54),
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.symmetric(horizontal: 16.0),
                   padding: const EdgeInsets.only(left: 8.0, top: 20),
@@ -973,8 +975,8 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                     context.handleActionIsGuest(() {
                       likeNotifier.likePost(context, notifier!.pics![index]);
                     }).then((value) {
-                      if (value){
-                        MyAudioService.instance.playagain(notifier?.isMute??false);
+                      if (value) {
+                        MyAudioService.instance.playagain(notifier?.isMute ?? false);
                       }
                     });
                   },
@@ -1153,11 +1155,10 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                   );
                 }
               }).then((value) {
-                if (value){
+                if (value) {
                   MyAudioService.instance.playagain(notifier.isMute);
                 }
               });
-              
             },
             data: data),
       ],

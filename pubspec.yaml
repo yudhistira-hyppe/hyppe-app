@@ -132,6 +132,9 @@ dependencies:
   file_picker: 
     path: packages/flutter_file_picker
 
+  # PIN Code
+  flutter_verification_code: 
+    path: packages/flutter_verification_code
   qr_flutter: ^4.1.0
   pattern_formatter: ^2.0.0
   flutter_countdown_timer: ^4.1.0

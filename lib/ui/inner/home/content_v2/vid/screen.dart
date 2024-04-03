@@ -605,7 +605,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     isActivePage = true;
     final vidNot = context.read<VideoNotifier>();
     vidNot.adsAliplayer?.play();
-    // isHomeScreen = true;
+    isHomeScreen = true;
     // print("============= didPopNext dari vid");
     final notifier = context.read<PreviewVidNotifier>();
 
