@@ -173,7 +173,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     globalAliPlayer = fAliplayer;
     vidConfig();
     fAliplayer?.pause();
-    fAliplayer?.setAutoPlay(true);
+    fAliplayer?.setAutoPlay(false);
 
     // fAliplayer?.setLoop(true);
     fAliplayer?.setMuted(isMute);
@@ -570,7 +570,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   void dispose() {
     fAliplayer?.stop();
     // fAliplayer?.destroy();
-
+    isActivePage = false;
     isStopVideo = false;
     "================ ondispose vid".logger();
     _pauseScreen();
@@ -807,11 +807,12 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
       });
     }
     print("============== is acive $isActivePage");
+    fAliplayer?.prepare();
     if (data.reportedStatus == 'BLURRED') {
     } else {
       if (isActivePage) {
         print("=====prepare=====");
-        fAliplayer?.prepare();
+
         fAliplayer?.play();
       }
     }
