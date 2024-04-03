@@ -377,7 +377,7 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
       if (isGuest ?? false) {
         isactivealiplayer = true;
         ShowBottomSheet().onLoginApp(Routing.navigatorKey.currentContext ?? context).whenComplete(() {
-          print("----index $index");
+          print("----index $isPagePict");
           if (isPagePict) {
             MyAudioService.instance.playagain(false);
           }

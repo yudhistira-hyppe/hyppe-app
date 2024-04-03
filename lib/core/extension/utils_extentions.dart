@@ -216,6 +216,7 @@ extension ContextScreen on BuildContext {
   Future<bool> handleActionIsGuest(Function() onSlipOut, {Function()? addAction}) async {
     MyAudioService.instance.pause();
     final bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
+    MyAudioService.instance.pause();
     if (isGuest ?? false) {
       if (addAction != null) {
         addAction();

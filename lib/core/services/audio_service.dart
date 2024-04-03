@@ -7,6 +7,7 @@ class MyAudioService {
   final AudioPlayer player = AudioPlayer();
 
   Duration newposition = Duration.zero;
+  bool buffering = false;
 
   Future<void> play({
     required String path,
@@ -14,27 +15,32 @@ class MyAudioService {
     required Function() startedPlaying,
     required Function() stoppedPlaying,
   }) async {
-    print("====== Masuk Audio");
     await stop();
     await player.setUrl(path);
     startedPlaying();
     player.playerStateStream.listen((state) {
-      print("====== player $state");
       if (state.playing) {
         switch (state.processingState) {
           case ProcessingState.idle:
+            break;
           case ProcessingState.loading:
+            break;
           case ProcessingState.buffering:
+            buffering = true;
+            break;
           case ProcessingState.ready:
+            buffering = false;
             player.setVolume((mute ?? false) ? 0 : 1);
             break;
           case ProcessingState.completed:
+            break;
         }
       }
     });
     player.positionStream.listen((newPosition) async {
       newposition = newPosition;
     });
+
     await player.play();
     await player.setLoopMode(LoopMode.one);
     await player.stop();
@@ -50,16 +56,14 @@ class MyAudioService {
   }
 
   Future<void> playagain(bool muted) async {
-    print("=====masuk play again $muted -- ${player.playing}");
-    // if (player.playing) {
+    // if (player.playing){
     await player.play();
     if (muted) {
       await player.setVolume(0);
     } else {
       await player.setVolume(1);
     }
-    // } else {}
-
+    // }else{}
     return Future<void>.value();
   }
 
@@ -76,7 +80,6 @@ class MyAudioService {
   }
 
   Future<void> stop() async {
-    print("=====stopn ${player.playing}");
     if (player.playing) {
       await player.stop();
     } else {}

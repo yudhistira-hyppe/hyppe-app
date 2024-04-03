@@ -89,6 +89,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   bool isPrepare = false;
   bool isPlay = false;
   bool isPause = false;
+  int playIndex = -1;
   // bool _showLoading = false;
   // bool _inSeek = false;
   bool isloading = false;
@@ -131,7 +132,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
   @override
   void initState() {
-    print('data screen pic');
     isPrepareMusic = false;
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppePreviewPic');
     final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
@@ -549,12 +549,22 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     // fAliplayer?.setCacheConfig(map);
     print("====---- ---==== ali ${fAliplayer?.getPlayerName()}");
 
-    MyAudioService.instance.play(
-      path: url,
-      startedPlaying: () {},
-      stoppedPlaying: () {},
-      mute: notifier.isMute,
-    );
+    if (playIndex == _curIdx) {
+      await MyAudioService.instance.stop();
+      playIndex = -1;
+      setState(() {});
+    } else {
+      MyAudioService.instance.play(
+        path: url,
+        startedPlaying: () {
+          playIndex = _curIdx;
+          setState(() {});
+        },
+        stoppedPlaying: () {},
+        mute: notifier.isMute,
+      );
+    }
+
     // try {
     //   print("===============init ali player ${fAliplayer?.playerId} ===========");
     //   if (isActivePage) {
@@ -699,18 +709,24 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void didPop() {
     print("====== didpop ");
-    MyAudioService.instance.playagain(false);
+    final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
+    MyAudioService.instance.playagain(notifier.isMute);
     super.didPop();
   }
 
   @override
   void didPopNext() {
     print("======= didPopNext");
+    print("======= didPopNext $_curIdx");
+    print("======= didPopNext $playIndex");
     isactivealiplayer = false;
     isInPage = true;
     fAliplayer?.play();
     isActivePage = true;
-    MyAudioService.instance.playagain(false);
+    if (playIndex == _curIdx) {
+      final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
+      MyAudioService.instance.playagain(notifier.isMute);
+    }
 
     // fAliplayer?.prepare();
     // System().disposeBlock();
@@ -727,7 +743,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void didPushNext() {
     print("========= didPushNext");
-    MyAudioService.instance.pause();
+    // MyAudioService.instance.pause();
     fAliplayer?.pause();
     isActivePage = false;
     System().disposeBlock();
@@ -747,7 +763,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         print("========= resumed");
         if (context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds) && isActivePage) {
           fAliplayer?.play();
-          MyAudioService.instance.playagain(false);
+          if (!isactivealiplayer) {
+            final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
+            MyAudioService.instance.playagain(notifier.isMute);
+          }
         }
         break;
       case AppLifecycleState.paused:
@@ -786,14 +805,14 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     // AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
 
     return Consumer2<PreviewPicNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
-      if (isactivealiplayer) {
-        fAliplayer?.pause();
-      } else {
-        if (isActivePage) {
-          fAliplayer?.play();
-        }
-        //
-      }
+      // if (isactivealiplayer) {
+      //   fAliplayer?.pause();
+      // } else {
+      //   if (isActivePage) {
+      //     fAliplayer?.play();
+      //   }
+      //   //
+      // }
       return Container(
         width: SizeConfig.screenWidth,
         height: SizeWidget.barHyppePic,
@@ -806,6 +825,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
               child: (notifier.pic == null || home.isLoadingPict)
                   ? ListView.builder(
                       itemBuilder: (context, index) {
+                        fAliplayer?.stop();
                         return CustomShimmer(
                           width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
                           height: 168,
@@ -1110,7 +1130,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                         // isCelebrity: vidpicData?.privacy?.isCelebrity,
                                         isCelebrity: false,
                                         imageUrl: picData?.avatar == null ? '' : '${System().showUserPicture(picData?.avatar?.mediaEndpoint)}',
-                                        onTapOnProfileImage: () => System().navigateToProfile(context, picData?.email ?? ''),
+                                        onTapOnProfileImage: () {
+                                          MyAudioService.instance.pause();
+                                          System().navigateToProfile(context, picData?.email ?? '');
+                                        },
                                         createdAt: '2022-02-02',
                                         musicName: picData?.music?.musicTitle ?? '',
                                         location: picData?.location ?? '',
@@ -1127,6 +1150,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                               context.handleActionIsGuest(() {
                                                 if (picData?.insight?.isloadingFollow != true) {
                                                   picNot.followUser(context, picData ?? ContentData(), isUnFollow: picData?.following, isloading: picData?.insight!.isloadingFollow ?? false);
+                                                }
+                                              }).then((value) {
+                                                if (value) {
+                                                  MyAudioService.instance.playagain(notifier.isMute);
                                                 }
                                               });
                                             },
@@ -1170,6 +1197,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                               },
                                               fAliplayer: fAliplayer,
                                             );
+                                          }
+                                        }).then((value) {
+                                          if (value) {
+                                            MyAudioService.instance.playagain(notifier.isMute);
                                           }
                                         });
                                       },
@@ -1370,9 +1401,11 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
                                               // fAliplayer?.pause();
                                               if (!isPrepareMusic) {
+                                                isactivealiplayer = true;
                                                 var res = await Routing().move(Routes.picFullScreenDetail, argument: PicFullscreenArgument(picData: notifier.pic!, index: index, scrollPic: false));
                                                 if (res != null || res == null) {
-                                                  fAliplayer?.play();
+                                                  // fAliplayer?.play();
+                                                  isactivealiplayer = false;
                                                   fAliplayer?.setMuted(notifier.isMute);
                                                   // var temp1 = notifier.pic![_curIdx];
                                                   // var temp2 = notifier.pic![notifier.currentIndex];
@@ -1653,6 +1686,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                     await ShowBottomSheet.onBuyContent(context, data: picData, fAliplayer: fAliplayer);
                                                   }).then((value) {
                                                     fAliplayer?.pause();
+                                                    if (value) {
+                                                      MyAudioService.instance.playagain(notifier.isMute);
+                                                    }
                                                   });
                                                 },
                                                 child: const Align(
@@ -1821,9 +1857,40 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
               bottom: 18,
               left: 12,
               child: GestureDetector(
-                onTap: () {
+                onTap: () async {
                   fAliplayer?.pause();
-                  context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID, fAliplayer: fAliplayer, title: lang!.inthisphoto);
+                  MyAudioService.instance.pause();
+                  context.handleActionIsGuest(() {
+                    ShowBottomSheet.onShowUserTag(
+                      context,
+                      value: data.tagPeople ?? [],
+                      function: () {},
+                      postId: data.postID,
+                      title: lang!.inthisphoto,
+                      // storyController: storyController,
+                      fAliplayer: fAliplayer,
+                      whenComplete: () {
+                        if (data.music != null) {
+                          MyAudioService.instance.playagain(notifier.isMute);
+                        } else {
+                          MyAudioService.instance.stop();
+                        }
+                        fAliplayer?.play();
+                        print("====hahahahah====");
+                      },
+                      // orientation: Orientation,
+                    );
+                  }).then((value) {
+                    print('data tag people $value');
+                    if (value) {
+                      if (data.music != null) {
+                        MyAudioService.instance.playagain(notifier.isMute);
+                      } else {
+                        MyAudioService.instance.stop();
+                      }
+                    }
+                  });
+                  // await context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID, fAliplayer: fAliplayer, title: lang!.inthisphoto);
                 },
                 child: const CustomIconWidget(
                   iconData: '${AssetPath.vectorPath}tag_people.svg',
