@@ -488,7 +488,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     } else if (postType == FeatureType.vid) {
       var vid = context.read<PreviewVidNotifier>();
       homneNotifier.tabIndex = 2;
-
+      MyAudioService.instance.pause();
       if (vid.vidData == null) {
         // await notifier.initNewHome(context, mounted, isreload: true);
         // vid.initialVid(context, reload: true);

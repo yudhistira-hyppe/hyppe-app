@@ -1074,6 +1074,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic>
                                     .then((value) {});
                               }
                               fAliplayer?.stop();
+                              MyAudioService.instance.stop();
                               Future.delayed(const Duration(milliseconds: 500),
                                   () {
                                 System().increaseViewCount2(
@@ -2364,7 +2365,11 @@ class _HyppePreviewPicState extends State<HyppePreviewPic>
                   }
                   print("muteeee----------------- ${notifier.isMute}");
                   // fAliplayer?.setMuted(notifier.isMute);
-                  MyAudioService.instance.mute(notifier.isMute);
+                  if (MyAudioService.instance.player.playing){
+                    MyAudioService.instance.mute(notifier.isMute);
+                  }else{
+                    MyAudioService.instance.playagain(notifier.isMute);
+                  }
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),

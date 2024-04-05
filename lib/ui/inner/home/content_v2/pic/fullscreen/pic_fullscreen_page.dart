@@ -396,6 +396,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                         context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {});
                       }
                       fAliplayer?.stop();
+                      MyAudioService.instance.stop();
                       Future.delayed(const Duration(milliseconds: 500), () {
                         System().increaseViewCount2(context, picData[index], check: false);
                         if ((picData[index].saleAmount ?? 0) > 0 || ((picData[index].certified ?? false) && (picData[index].saleAmount ?? 0) == 0)) {
