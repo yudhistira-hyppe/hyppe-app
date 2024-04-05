@@ -591,7 +591,10 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                     opacityLevel = 1.0;
                     isMuteAudioPic = notifier.isMute;
                   });
-                  MyAudioService.instance.playagain(notifier?.isMute??false);
+                  if (picData.music != null){
+                    MyAudioService.instance.playagain(notifier?.isMute??false);
+                  }
+                  
                   fAliplayer?.setMuted(notifier!.isMute);
                   if (notifier!.isMute) {
                     animatedController.stop();
