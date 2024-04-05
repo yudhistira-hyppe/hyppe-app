@@ -1682,11 +1682,11 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (widget.fromFullScreen) Expanded(child: _buildSkipPrev(iconColor, height)),
-            if (widget.fromFullScreen) Expanded(child: _buildSkipBack(iconColor, height)),
+            // if (widget.fromFullScreen) Expanded(child: _buildSkipPrev(iconColor, height)),
+            // if (widget.fromFullScreen) Expanded(child: _buildSkipBack(iconColor, height)),
             _buildPlayPause(iconColor, barHeight),
-            if (widget.fromFullScreen) Expanded(child: _buildSkipForward(iconColor, height)),
-            if (widget.fromFullScreen) Expanded(child: _buildSkipNext(iconColor, height)),
+            // if (widget.fromFullScreen) Expanded(child: _buildSkipForward(iconColor, height)),
+            // if (widget.fromFullScreen) Expanded(child: _buildSkipNext(iconColor, height)),
           ],
         ),
       ),

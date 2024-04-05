@@ -64,7 +64,6 @@ import '../../../../../ux/routing.dart';
 import '../../../../constant/entities/like/notifier.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../../../../constant/widget/custom_background_layer.dart';
-import 'scroll/widget/vidscroll_fullscreen_page.dart';
 
 class HyppePreviewVid extends StatefulWidget {
   final ScrollController? scrollController;
@@ -1982,6 +1981,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
               vidNotifier.vidData?[vidNotifier.currentIndex] = temp1 ?? ContentData();
             });
           }
+          print(value.seekValue);
+          print(value.positionText);
 
           if (mounted) {
             setState(() {
@@ -2001,7 +2002,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
             isPlay = !_showTipsWidget;
           }
 
-          fAliplayer?.play();
+          fAliplayer?.pause();
+          fAliplayer?.seekTo(_currentPosition, 1);
 
           // int changevalue;
           // changevalue = _currentPosition + 1000;

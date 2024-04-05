@@ -158,7 +158,6 @@ class RegisterNotifier with ChangeNotifier {
     }
   }
 
-
   TextStyle nextTextColor(BuildContext context) {
     if (_validationRegister()) {
       return Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText) ?? const TextStyle();
@@ -218,11 +217,20 @@ class RegisterNotifier with ChangeNotifier {
               String platForm = Platform.isAndroid ? "android" : "ios";
               String deviceId = SharedPreference().readStorage(SpKeys.fcmToken);
               String lang = SharedPreference().readStorage(SpKeys.isoCode);
+              String referral = SharedPreference().readStorage(SpKeys.referralFrom) ?? '';
 
               final notifier = UserBloc();
               await notifier.signUpBlocV2(
                 Routing.navigatorKey.currentContext ?? context,
-                data: SignUpDataArgument(email: email, password: password, deviceId: deviceId, imei: realDeviceId != "" ? realDeviceId : deviceId, platForm: platForm, lang: lang),
+                data: SignUpDataArgument(
+                  email: email,
+                  password: password,
+                  deviceId: deviceId,
+                  imei: realDeviceId != "" ? realDeviceId : deviceId,
+                  platForm: platForm,
+                  lang: lang,
+                  referral: referral,
+                ),
               );
 
               final fetch = notifier.userFetch;
@@ -317,15 +325,15 @@ class RegisterNotifier with ChangeNotifier {
       return null;
     }
   }
-  
+
   LocationResponse? _location;
   LocationResponse? get location => _location;
-  set location(LocationResponse? val){
+  set location(LocationResponse? val) {
     _location = val;
     notifyListeners();
   }
 
-  getLocationDetails(BuildContext context) async{
+  getLocationDetails(BuildContext context) async {
     await Locations().getLocation().then((value) async {
       final double? latitude = value['latitude'];
       final double? longitude = value['longitude'];
@@ -336,7 +344,6 @@ class RegisterNotifier with ChangeNotifier {
   }
 
   Future getLocation(BuildContext context, String coordinate) async {
-
     final notifier = GoogleMapPlaceBloc();
     await notifier.getResults(
       context,
@@ -344,7 +351,7 @@ class RegisterNotifier with ChangeNotifier {
     );
     final fetch = notifier.googleMapPlaceFetch;
     if (fetch.googleMapPlaceState == GoogleMapPlaceState.getGoogleMapPlaceBlocSuccess) {
-      if(fetch.data is LocationResponse){
+      if (fetch.data is LocationResponse) {
         location = location;
         print('Location response: ${location?.toJson()}');
       }

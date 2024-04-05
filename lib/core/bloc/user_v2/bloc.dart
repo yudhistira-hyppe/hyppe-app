@@ -271,6 +271,7 @@ class UserBloc {
         "latitude": longtitude ?? "${double.parse("0.0")}",
       },
       "langIso": lang ?? 'id',
+      "referral": SharedPreference().readStorage(SpKeys.referralFrom) ?? '',
     };
     'Login payload => $payload'.logger();
 

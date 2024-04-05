@@ -61,42 +61,42 @@ class _OtherProfileBottomState extends State<OtherProfileBottom> {
               )
             ],
           ),
-          Column(
-            children: [
-              CustomTextButton(
-                child: Row(
-                  children: [
-                    CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}diary.svg",
-                      width: 20 * SizeConfig.scaleDiagonal,
-                      height: 20 * SizeConfig.scaleDiagonal,
-                      defaultColor: false,
-                      color: notifier.pageIndex == 1 ? Theme.of(context).colorScheme.primary : Theme.of(context).tabBarTheme.unselectedLabelColor,
-                    ),
-                    SizedBox(width: 8 * SizeConfig.scaleDiagonal),
-                    CustomTextWidget(
-                      textToDisplay: "Diary",
-                      textStyle: TextStyle(
-                        fontSize: 14,
-                        color: notifier.pageIndex == 1 ? Theme.of(context).colorScheme.primary : Theme.of(context).tabBarTheme.unselectedLabelColor,
-                      ),
-                    ),
-                  ],
-                ),
-                onPressed: () async {
-                  notifier.pageIndex = 1;
-                  await notifier.getDataPerPgage(context, email: widget.email);
-                  // final OtherProfileScreenState? state = context.findAncestorStateOfType<OtherProfileScreenState>();
-                  // state?.userData?.diaries = notifier.user.diaries;
-                },
-              ),
-              SizedBox(
-                height: 2 * SizeConfig.scaleDiagonal,
-                width: 125 * SizeConfig.scaleDiagonal,
-                child: Container(color: notifier.pageIndex == 1 ? Theme.of(context).colorScheme.primary : null),
-              ),
-            ],
-          ),
+          // Column(
+          //   children: [
+          //     CustomTextButton(
+          //       child: Row(
+          //         children: [
+          //           CustomIconWidget(
+          //             iconData: "${AssetPath.vectorPath}diary.svg",
+          //             width: 20 * SizeConfig.scaleDiagonal,
+          //             height: 20 * SizeConfig.scaleDiagonal,
+          //             defaultColor: false,
+          //             color: notifier.pageIndex == 1 ? Theme.of(context).colorScheme.primary : Theme.of(context).tabBarTheme.unselectedLabelColor,
+          //           ),
+          //           SizedBox(width: 8 * SizeConfig.scaleDiagonal),
+          //           CustomTextWidget(
+          //             textToDisplay: "Diary",
+          //             textStyle: TextStyle(
+          //               fontSize: 14,
+          //               color: notifier.pageIndex == 1 ? Theme.of(context).colorScheme.primary : Theme.of(context).tabBarTheme.unselectedLabelColor,
+          //             ),
+          //           ),
+          //         ],
+          //       ),
+          //       onPressed: () async {
+          //         notifier.pageIndex = 1;
+          //         await notifier.getDataPerPgage(context, email: widget.email);
+          //         // final OtherProfileScreenState? state = context.findAncestorStateOfType<OtherProfileScreenState>();
+          //         // state?.userData?.diaries = notifier.user.diaries;
+          //       },
+          //     ),
+          //     SizedBox(
+          //       height: 2 * SizeConfig.scaleDiagonal,
+          //       width: 125 * SizeConfig.scaleDiagonal,
+          //       child: Container(color: notifier.pageIndex == 1 ? Theme.of(context).colorScheme.primary : null),
+          //     ),
+          //   ],
+          // ),
           Column(
             children: [
               CustomTextButton(

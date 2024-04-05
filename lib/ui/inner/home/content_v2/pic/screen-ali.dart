@@ -63,13 +63,13 @@ import '../../../../../ux/path.dart';
 import '../../../../constant/entities/report/notifier.dart';
 // import 'fullscreen/pic_fullscreen_page.dart';
 
-class HyppePreviewPic extends StatefulWidget {
+class HyppePreviewPicAli extends StatefulWidget {
   final ScrollController? scrollController;
   final Function? onScaleStart;
   final Function? onScaleStop;
   final bool? appbarSeen;
 
-  const HyppePreviewPic({
+  const HyppePreviewPicAli({
     Key? key,
     this.scrollController,
     this.onScaleStart,
@@ -78,10 +78,11 @@ class HyppePreviewPic extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _HyppePreviewPicState createState() => _HyppePreviewPicState();
+  _HyppePreviewPicAliState createState() => _HyppePreviewPicAliState();
 }
 
-class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
+class _HyppePreviewPicAliState extends State<HyppePreviewPicAli> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
+  FlutterAliplayer? fAliplayer;
   // TransformationController _transformationController = TransformationController();
   ScrollController innerScrollController = ScrollController();
   bool isPlayAds = false;
@@ -132,7 +133,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void initState() {
     isPrepareMusic = false;
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppePreviewPic');
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppePreviewPicAli');
     final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
     lang = context.read<TranslateNotifierV2>().translate;
     mn = Provider.of<MainNotifier>(context, listen: false);
@@ -146,9 +147,217 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     // _primaryScrollController = widget.scrollController!;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       WidgetsBinding.instance.addObserver(this);
+      print("===============init ali player ===========");
+      // fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPic');
+      // initAlipayer();
+      print("===============init ali player ${fAliplayer?.playerId} ===========");
+
+      //scroll
+      // if (mounted) {
+      //   Future.delayed(const Duration(milliseconds: 500), () {
+      //     print("=========== global key prirnt ${widget.scrollController} ");
+      //     widget.scrollController?.addListener(() async {
+      //       double offset = widget.scrollController?.position.pixels ?? 0;
+      //       if (mounted) await toPosition(offset, notifier);
+      //     });
+      //   });
+      // }
     });
     context.read<HomeNotifier>().removeWakelock();
     super.initState();
+  }
+
+  void vidConfig() {
+    var configMap = {
+      'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
+      'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
+      'mMaxBufferDuration': GlobalSettings.mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
+      'mMaxDelayTime': GlobalSettings.mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
+      'mNetworkTimeout': GlobalSettings.mNetworkTimeout, // The network timeout period. Unit: milliseconds.
+      'mNetworkRetryCount': GlobalSettings.mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
+      'mEnableLocalCache': GlobalSettings.mEnableCacheConfig,
+      'mLocalCacheDir': GlobalSettings.mDirController,
+      'mClearFrameWhenStop': true
+    };
+    // Configure the application.
+    fAliplayer?.setConfig(configMap);
+    var map = {
+      "mMaxSizeMB": GlobalSettings.mMaxSizeMBController,
+
+      /// The maximum space that can be occupied by the cache directory.
+      "mMaxDurationS": GlobalSettings.mMaxDurationSController,
+
+      /// The maximum cache duration of a single file.
+      "mDir": GlobalSettings.mDirController,
+
+      /// The cache directory.
+      "mEnable": GlobalSettings.mEnableCacheConfig
+
+      /// Specify whether to enable the cache feature.
+    };
+    fAliplayer?.setCacheConfig(map);
+  }
+
+  initAlipayer() {
+    globalAliPlayer = fAliplayer;
+    vidConfig();
+    fAliplayer?.pause();
+    fAliplayer?.setAutoPlay(true);
+    fAliplayer?.setLoop(true);
+
+    //Turn on mix mode
+    if (Platform.isIOS) {
+      FlutterAliplayer.enableMix(true);
+      // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
+    }
+
+    //set player
+    fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
+    fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+    final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
+    _initListener(notifier);
+  }
+
+  _initListener(PreviewPicNotifier notifier) {
+    fAliplayer?.setOnEventReportParams((params, playerId) {
+      print("EventReportParams=${params}");
+    });
+    fAliplayer?.setOnPrepared((playerId) {
+      // Fluttertoast.showToast(msg: "OnPrepared ");
+      if (SharedPreference().readStorage(SpKeys.isShowPopAds)) {
+        notifier.isMute = true;
+        fAliplayer?.pause();
+      }
+
+      fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
+      fAliplayer?.getMediaInfo().then((value) {
+        if (mounted) {
+          setState(() {
+            isPrepare = true;
+          });
+        } else {
+          isPrepare = true;
+        }
+      });
+      isPlay = true;
+      dataSelected?.isDiaryPlay = true;
+    });
+    fAliplayer?.setOnRenderingStart((playerId) {
+      // Fluttertoast.showToast(msg: " OnFirstFrameShow ");
+    });
+    fAliplayer?.setOnVideoSizeChanged((width, height, rotation, playerId) {});
+    fAliplayer?.setOnStateChanged((newState, playerId) {
+      _currentPlayerState = newState;
+      print("aliyun : onStateChanged $newState");
+      switch (newState) {
+        case FlutterAvpdef.AVPStatus_AVPStatusStarted:
+          setState(() {
+            // _showLoading = false;
+            isPause = false;
+          });
+          break;
+        case FlutterAvpdef.AVPStatus_AVPStatusPaused:
+          isPause = true;
+          setState(() {});
+          break;
+        default:
+      }
+    });
+    fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
+      setState(() {
+        // _loadingPercent = 0;
+        // _showLoading = true;
+      });
+    }, loadingProgress: (percent, netSpeed, playerId) {
+      // _loadingPercent = percent;
+      if (percent == 100) {
+        // _showLoading = false;
+      }
+      setState(() {});
+    }, loadingEnd: (playerId) {
+      setState(() {
+        // _showLoading = false;
+      });
+    });
+    fAliplayer?.setOnSeekComplete((playerId) {
+      // _inSeek = false;
+    });
+    fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
+      if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
+        if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
+          // _currentPosition = extraValue ?? 0;
+        }
+        // if (!_inSeek) {
+        //   setState(() {
+        //     _currentPositionText = extraValue ?? 0;
+        //   });
+        // }
+      } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
+        // _bufferPosition = extraValue ?? 0;
+        if (mounted) {
+          setState(() {});
+        }
+      } else if (infoCode == FlutterAvpdef.AUTOPLAYSTART) {
+        // Fluttertoast.showToast(msg: "AutoPlay");
+      } else if (infoCode == FlutterAvpdef.CACHESUCCESS) {
+      } else if (infoCode == FlutterAvpdef.CACHEERROR) {
+      } else if (infoCode == FlutterAvpdef.LOOPINGSTART) {
+        // Fluttertoast.showToast(msg: "Looping Start");
+      } else if (infoCode == FlutterAvpdef.SWITCHTOSOFTWAREVIDEODECODER) {
+        // Fluttertoast.showToast(msg: "change to soft ware decoder");
+        // mOptionsFragment.switchHardwareDecoder();
+      }
+    });
+    fAliplayer?.setOnCompletion((playerId) {
+      // _showLoading = false;
+
+      isPause = true;
+
+      setState(() {
+        // _currentPosition = _videoDuration;
+      });
+    });
+
+    fAliplayer?.setOnSnapShot((path, playerId) {
+      print("aliyun : snapShotPath = $path");
+      // Fluttertoast.showToast(msg: "SnapShot Save : $path");
+    });
+    fAliplayer?.setOnError((errorCode, errorExtra, errorMsg, playerId) {
+      print("============init ali player error $errorCode - $errorExtra - $errorMsg - $playerId");
+
+      setState(() {});
+    });
+
+    fAliplayer?.setOnTrackChanged((value, playerId) {
+      AVPTrackInfo info = AVPTrackInfo.fromJson(value);
+      if ((info.trackDefinition?.length ?? 0) > 0) {
+        // trackFragmentKey.currentState.onTrackChanged(info);
+        // Fluttertoast.showToast(msg: "${info.trackDefinition}切换成功");
+      }
+    });
+    fAliplayer?.setOnThumbnailPreparedListener(preparedSuccess: (playerId) {}, preparedFail: (playerId) {});
+
+    fAliplayer?.setOnThumbnailGetListener(
+        onThumbnailGetSuccess: (bitmap, range, playerId) {
+          // _thumbnailBitmap = bitmap;
+          var provider = MemoryImage(bitmap);
+          precacheImage(provider, context).then((_) {
+            setState(() {});
+          });
+        },
+        onThumbnailGetFail: (playerId) {});
+
+    fAliplayer?.setOnSubtitleHide((trackIndex, subtitleID, playerId) {
+      if (mounted) {
+        setState(() {});
+      }
+    });
+
+    fAliplayer?.setOnSubtitleShow((trackIndex, subtitleID, subtitle, playerId) {
+      if (mounted) {
+        setState(() {});
+      }
+    });
   }
 
   Future toPosition(double offset, PreviewPicNotifier notifier) async {
@@ -282,7 +491,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
   void start(BuildContext context, ContentData data, PreviewPicNotifier notifier) async {
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
-
+    print("===-=-=-=-=-start--0-0-0-");
+    fAliplayer?.stop();
     MyAudioService.instance.stop();
     dataSelected = data;
 
@@ -309,13 +519,41 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       isPause = false;
       // _isFirstRenderShow = false;
     });
+    // var configMap = {
+    //   'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
+    //   'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
+    //   'mMaxBufferDuration': GlobalSettings.mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
+    //   'mMaxDelayTime': GlobalSettings.mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
+    //   'mNetworkTimeout': GlobalSettings.mNetworkTimeout, // The network timeout period. Unit: milliseconds.
+    //   'mNetworkRetryCount': GlobalSettings.mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
+    //   'mEnableLocalCache': GlobalSettings.mEnableCacheConfig,
+    //   'mLocalCacheDir': GlobalSettings.mDirController,
+    //   'mClearFrameWhenStop': true
+    // };
+    // Configure the application.
+    // fAliplayer?.setConfig(configMap);
+    // var map = {
+    //   "mMaxSizeMB": GlobalSettings.mMaxSizeMBController,
+
+    //   /// The maximum space that can be occupied by the cache directory.
+    //   "mMaxDurationS": GlobalSettings.mMaxDurationSController,
+
+    //   /// The maximum cache duration of a single file.
+    //   "mDir": GlobalSettings.mDirController,
+
+    //   /// The cache directory.
+    //   "mEnable": GlobalSettings.mEnableCacheConfig
+
+    //   /// Specify whether to enable the cache feature.
+    // };
+    // fAliplayer?.setCacheConfig(map);
+    print("====---- ---==== ali ${fAliplayer?.getPlayerName()}");
 
     if (playIndex == _curIdx) {
       await MyAudioService.instance.stop();
       playIndex = -1;
       setState(() {});
     } else {
-      print("hahaha url $url");
       MyAudioService.instance.play(
         path: url,
         startedPlaying: () {
@@ -326,6 +564,21 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         mute: notifier.isMute,
       );
     }
+
+    // try {
+    //   print("===============init ali player ${fAliplayer?.playerId} ===========");
+    //   if (isActivePage) {
+    //     fAliplayer?.prepare().then((value) {
+    //       print("===============init ali player 22 ${fAliplayer?.playerId} ===========");
+    //     });
+    //   }
+    // } catch (e) {
+    //   print(e);
+    // }
+
+    // if (notifier.isMute) {
+    //   fAliplayer?.setMuted(true);
+    // }
   }
 
   Future getMusicUrl(BuildContext context, String apsaraId) async {
@@ -355,6 +608,69 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     }
   }
 
+  Future getAuth(BuildContext context, String apsaraId) async {
+    setState(() {
+      isloading = true;
+    });
+    try {
+      final fixContext = Routing.navigatorKey.currentContext;
+      final notifier = PostsBloc();
+      await notifier.getAuthApsara(fixContext ?? context, apsaraId: apsaraId);
+      final fetch = notifier.postsFetch;
+      if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        Map jsonMap = json.decode(fetch.data.toString());
+        auth = jsonMap['PlayAuth'];
+
+        fAliplayer?.setVidAuth(
+          vid: apsaraId,
+          region: DataSourceRelated.defaultRegion,
+          playAuth: auth,
+          definitionList: [DataSourceRelated.definitionList],
+        );
+
+        setState(() {
+          isloading = false;
+          isPrepareMusic = false;
+        });
+        // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+      }
+    } catch (e) {
+      setState(() {
+        isloading = false;
+      });
+      // 'Failed to fetch ads data $e'.logger();
+    }
+  }
+
+  Future getOldVideoUrl(String postId) async {
+    setState(() {
+      isloading = true;
+    });
+    try {
+      final notifier = PostsBloc();
+      await notifier.getOldVideo(context, apsaraId: postId);
+      final fetch = notifier.postsFetch;
+      if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        Map jsonMap = json.decode(fetch.data.toString());
+
+        fAliplayer?.setUrl(jsonMap['data']['url']);
+        setState(() {
+          isloading = false;
+        });
+        // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+      }
+    } catch (e) {
+      setState(() {
+        isloading = false;
+      });
+      // 'Failed to fetch ads data $e'.logger();
+    }
+  }
+
+  void onViewPlayerCreated(viewId) async {
+    fAliplayer?.setPlayerView(viewId);
+  }
+
   @override
   void didChangeDependencies() {
     CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
@@ -364,7 +680,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void dispose() {
     isActivePage = true;
-
+    fAliplayer?.stop();
+    // MyAudioService.instance.stop();
+    // fAliplayer?.destroy();
+    print("---=-=-=-=--===-=-=-=-DiSPOSE--=-=-=-=-=-=-=-=-=-=-=----==-=");
     // fAliplayer?.destroy();
 
     super.dispose();
@@ -375,7 +694,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   void deactivate() {
     print("====== deactivate ");
     MyAudioService.instance.pause();
-    //
+    // fAliplayer?.stop();
     System().disposeBlock();
     if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
       // fAliplayer?.destroy();
@@ -402,7 +721,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     print("======= didPopNext $playIndex");
     isactivealiplayer = false;
     isInPage = true;
-
+    fAliplayer?.play();
     isActivePage = true;
     if (playIndex == _curIdx) {
       final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
@@ -425,7 +744,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   void didPushNext() {
     print("========= didPushNext");
     // MyAudioService.instance.pause();
-
+    fAliplayer?.pause();
     isActivePage = false;
     System().disposeBlock();
     isInPage = false;
@@ -443,6 +762,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       case AppLifecycleState.resumed:
         print("========= resumed");
         if (context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds) && isActivePage) {
+          fAliplayer?.play();
           if (!isactivealiplayer) {
             final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
             MyAudioService.instance.playagain(notifier.isMute);
@@ -451,7 +771,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         break;
       case AppLifecycleState.paused:
         print("========= paused");
-
+        fAliplayer?.pause();
         MyAudioService.instance.pause();
         break;
       case AppLifecycleState.detached:
@@ -463,7 +783,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   }
 
   @override
-  void didUpdateWidget(covariant HyppePreviewPic oldWidget) {
+  void didUpdateWidget(covariant HyppePreviewPicAli oldWidget) {
     // If you want to react only to changes you could check
     // oldWidget.selectedIndex != widget.selectedIndex
     // if (oldWidget.data != widget.data)ç
@@ -486,7 +806,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
     return Consumer2<PreviewPicNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
       // if (isactivealiplayer) {
-      //
+      //   fAliplayer?.pause();
       // } else {
       //   if (isActivePage) {
       //     fAliplayer?.play();
@@ -505,6 +825,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
               child: (notifier.pic == null || home.isLoadingPict)
                   ? ListView.builder(
                       itemBuilder: (context, index) {
+                        fAliplayer?.stop();
                         return CustomShimmer(
                           width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
                           height: 168,
@@ -592,6 +913,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                               //   scrollBehavior: ScrollBehavior(),
                               itemBuilder: (context, index) {
                                 if (notifier.pic == null || home.isLoadingPict) {
+                                  fAliplayer?.pause();
                                   // _lastCurIndex = -1;
                                   _lastCurPostId = '';
                                   // return Container(
@@ -688,7 +1010,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
                             // if (_lastCurIndex != _curIdx) {
                             if (_lastCurPostId != _curPostId) {
-                              MyAudioService.instance.stop();
                               if (mounted) {
                                 setState(() {
                                   isShowShowcase = false;
@@ -699,7 +1020,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                               if (indexList == (notifier.pic?.length ?? 0) - 1) {
                                 context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {});
                               }
-
+                              fAliplayer?.stop();
                               Future.delayed(const Duration(milliseconds: 500), () {
                                 System().increaseViewCount2(context, picData ?? ContentData(), check: false);
                                 if ((picData?.saleAmount ?? 0) > 0 || ((picData?.certified ?? false) && (picData?.saleAmount ?? 0) == 0)) {
@@ -854,15 +1175,17 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                       ),
                                     GestureDetector(
                                       onTap: () {
-                                        //
+                                        // fAliplayer?.pause();
                                         context.handleActionIsGuest(() {
                                           if (picData?.email != email) {
-                                            context.read<PreviewPicNotifier>().reportContent(context, picData ?? ContentData(), fAliplayer: FlutterAliplayer.init('kosong'), onCompleted: () async {
+                                            context.read<PreviewPicNotifier>().reportContent(context, picData ?? ContentData(), fAliplayer: fAliplayer, onCompleted: () async {
                                               imageCache.clear();
                                               imageCache.clearLiveImages();
                                               await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 0);
                                             });
                                           } else {
+                                            fAliplayer?.setMuted(true);
+                                            fAliplayer?.pause();
                                             ShowBottomSheet().onShowOptionContent(
                                               context,
                                               contentData: picData ?? ContentData(),
@@ -872,6 +1195,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                               onUpdate: () {
                                                 (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 0);
                                               },
+                                              fAliplayer: fAliplayer,
                                             );
                                           }
                                         }).then((value) {
@@ -936,7 +1260,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                           Future.delayed(const Duration(milliseconds: 100), () {
                                             start(context, picData ?? ContentData(), notifier);
                                           });
-                                        } else {}
+                                        } else {
+                                          fAliplayer?.stop();
+                                        }
 
                                         Future.delayed(const Duration(milliseconds: 100), () {
                                           if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
@@ -1073,13 +1399,14 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                               //   fAliplayer?.setMuted(notifier.isMute);
                                               // }
 
-                                              //
+                                              // fAliplayer?.pause();
                                               if (!isPrepareMusic) {
                                                 isactivealiplayer = true;
                                                 var res = await Routing().move(Routes.picFullScreenDetail, argument: PicFullscreenArgument(picData: notifier.pic!, index: index, scrollPic: false));
                                                 if (res != null || res == null) {
                                                   // fAliplayer?.play();
                                                   isactivealiplayer = false;
+                                                  fAliplayer?.setMuted(notifier.isMute);
                                                   // var temp1 = notifier.pic![_curIdx];
                                                   // var temp2 = notifier.pic![notifier.currentIndex];
                                                   if (index < notifier.currentIndex) {
@@ -1355,8 +1682,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                               child: GestureDetector(
                                                 onTap: () async {
                                                   context.handleActionIsGuest(() async {
-                                                    await ShowBottomSheet.onBuyContent(context, data: picData);
+                                                    fAliplayer?.pause();
+                                                    await ShowBottomSheet.onBuyContent(context, data: picData, fAliplayer: fAliplayer);
                                                   }).then((value) {
+                                                    fAliplayer?.pause();
                                                     if (value) {
                                                       MyAudioService.instance.playagain(notifier.isMute);
                                                     }
@@ -1529,6 +1858,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
               left: 12,
               child: GestureDetector(
                 onTap: () async {
+                  fAliplayer?.pause();
                   MyAudioService.instance.pause();
                   context.handleActionIsGuest(() {
                     ShowBottomSheet.onShowUserTag(
@@ -1538,14 +1868,14 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                       postId: data.postID,
                       title: lang!.inthisphoto,
                       // storyController: storyController,
-
+                      fAliplayer: fAliplayer,
                       whenComplete: () {
                         if (data.music != null) {
                           MyAudioService.instance.playagain(notifier.isMute);
                         } else {
                           MyAudioService.instance.stop();
                         }
-
+                        fAliplayer?.play();
                         print("====hahahahah====");
                       },
                       // orientation: Orientation,
@@ -1577,7 +1907,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                   setState(() {
                     notifier.isMute = !notifier.isMute;
                   });
-
+                  if (_currentPlayerState == FlutterAvpdef.AVPStatus_AVPStatusStarted) {
+                    fAliplayer?.play();
+                  }
                   print("muteeee----------------- ${notifier.isMute}");
                   // fAliplayer?.setMuted(notifier.isMute);
                   MyAudioService.instance.mute(notifier.isMute);

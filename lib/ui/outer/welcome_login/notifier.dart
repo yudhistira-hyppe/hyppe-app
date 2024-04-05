@@ -228,6 +228,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
             final fetch = notifier.userFetch;
             if (fetch.userState == UserState.LoginSuccess) {
               hide = true;
+              SharedPreference().removeValue(SpKeys.referralFrom);
               final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
               _validateUserData(context, _result, false, onlineVersion: fetch.version, onlineIosVersion: fetch.versionIos, isGuest: true);
             }

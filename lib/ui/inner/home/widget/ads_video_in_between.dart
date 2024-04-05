@@ -44,7 +44,18 @@ class AdsVideoInBetween extends StatefulWidget {
   final bool isStopPlay;
   final Function() afterReport;
   final Function(FlutterAliplayer, String) getPlayer;
-  const AdsVideoInBetween({Key? key, this.onVisibility, this.player, required this.contentData, required this.index, required this.data, required this.afterReport, required this.getPlayer, required this.isVideo, required this.isStopPlay}) : super(key: key);
+  const AdsVideoInBetween(
+      {Key? key,
+      this.onVisibility,
+      this.player,
+      required this.contentData,
+      required this.index,
+      required this.data,
+      required this.afterReport,
+      required this.getPlayer,
+      required this.isVideo,
+      required this.isStopPlay})
+      : super(key: key);
 
   @override
   State<AdsVideoInBetween> createState() => _AdsVideoInBetweenState();
@@ -85,15 +96,16 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'AdsVideoBetween');
-    
+
     _showLoading = true;
     ratio = (widget.data.height != null && widget.data.width != null) ? widget.data.width! / widget.data.height! : 16 / 9;
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      print(" ====== ====== ====== ======init lagi ga yah ======");
       fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: widget.data.adsId);
       // fAliplayer = player;
       WidgetsBinding.instance.addObserver(this);
-      fAliplayer?.pause();
+      // fAliplayer?.pause();
       fAliplayer?.setAutoPlay(true);
       fAliplayer?.setLoop(true);
       // System().adsView(widget.adsData, widget.adsData.duration?.round() ?? 10);
@@ -461,75 +473,63 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
     final language = context.read<TranslateNotifierV2>().translate;
     final notifier = Provider.of<VideoNotifier>(context, listen: false);
     print(isStopPlay);
-    if (widget.isStopPlay || isStopPlay !='screenAds'){
-       fAliplayer?.pause();
-    }else{
+    if (widget.isStopPlay || isStopPlay != 'screenAds') {
+      fAliplayer?.pause();
+    } else {
       fAliplayer?.play();
     }
     return Container(
-        margin: const EdgeInsets.only(bottom: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Text(widget.data.height.toString()),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: widget.data.email));
+      margin: const EdgeInsets.only(bottom: 20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Text(widget.data.height.toString()),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: widget.data.email));
+                      },
+                      child: CustomBaseCacheImage(
+                        imageUrl: widget.data.avatar?.fullLinkURL,
+                        memCacheWidth: 200,
+                        memCacheHeight: 200,
+                        imageBuilder: (_, imageProvider) {
+                          return Container(
+                            width: 36,
+                            height: 36,
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.all(Radius.circular(18)),
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: imageProvider,
+                              ),
+                            ),
+                          );
                         },
-                        child: CustomBaseCacheImage(
-                          imageUrl: widget.data.avatar?.fullLinkURL,
-                          memCacheWidth: 200,
-                          memCacheHeight: 200,
-                          imageBuilder: (_, imageProvider) {
-                            return Container(
-                              width: 36,
-                              height: 36,
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: imageProvider,
-                                ),
-                              ),
-                            );
-                          },
-                          errorWidget: (_, url, ___) {
-                            if (url.isNotEmpty && url.withHttp()) {
-                              return ClipRRect(
-                                  borderRadius: BorderRadius.circular(18),
-                                  child: Container(
-                                      width: 36,
-                                      height: 36,
-                                      decoration: const BoxDecoration(
-                                        borderRadius: BorderRadius.all(Radius.circular(18)),
-                                        image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
-                                        ),
-                                      ),
-                                    ));
-                            }
-                            return Container(
-                              width: 36,
-                              height: 36,
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(18)),
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
-                                ),
-                              ),
-                            );
-                          },
-                          emptyWidget: Container(
+                        errorWidget: (_, url, ___) {
+                          if (url.isNotEmpty && url.withHttp()) {
+                            return ClipRRect(
+                                borderRadius: BorderRadius.circular(18),
+                                child: Container(
+                                  width: 36,
+                                  height: 36,
+                                  decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.all(Radius.circular(18)),
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
+                                    ),
+                                  ),
+                                ));
+                          }
+                          return Container(
                             width: 36,
                             height: 36,
                             decoration: const BoxDecoration(
@@ -539,71 +539,84 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                                 image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
                               ),
                             ),
+                          );
+                        },
+                        emptyWidget: Container(
+                          width: 36,
+                          height: 36,
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(18)),
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
+                            ),
                           ),
                         ),
                       ),
-                      twelvePx,
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CustomTextWidget(
-                              textToDisplay: widget.data.username ?? '',
-                              textStyle: context.getTextTheme().caption?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                            ),
-                            CustomTextWidget(
-                              textToDisplay: language.sponsored ?? 'Sponsored',
-                              textStyle: context.getTextTheme().caption?.copyWith(
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                            )
-                          ],
-                        ),
+                    ),
+                    twelvePx,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomTextWidget(
+                            textToDisplay: widget.data.username ?? '',
+                            textStyle: context.getTextTheme().caption?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                ),
+                          ),
+                          CustomTextWidget(
+                            textToDisplay: language.sponsored ?? 'Sponsored',
+                            textStyle: context.getTextTheme().caption?.copyWith(
+                                  fontWeight: FontWeight.w400,
+                                ),
+                          )
+                        ],
                       ),
-                      twelvePx,
-                      GestureDetector(
-                        onTap: () {
-                          ShowBottomSheet().onReportContent(context, adsData: widget.data, type: adsPopUp, postData: null, onUpdate: () {
-                            setState(() {
-                              widget.data.isReport = true;
-                            });
-                          }, onCompleted: widget.afterReport);
-                        },
-                        child: const CustomIconWidget(
-                          defaultColor: false,
-                          iconData: '${AssetPath.vectorPath}more.svg',
-                          color: kHyppeTextLightPrimary,
-                        ),
+                    ),
+                    twelvePx,
+                    GestureDetector(
+                      onTap: () {
+                        ShowBottomSheet().onReportContent(context, adsData: widget.data, type: adsPopUp, postData: null, onUpdate: () {
+                          setState(() {
+                            widget.data.isReport = true;
+                          });
+                        }, onCompleted: widget.afterReport);
+                      },
+                      child: const CustomIconWidget(
+                        defaultColor: false,
+                        iconData: '${AssetPath.vectorPath}more.svg',
+                        color: kHyppeTextLightPrimary,
                       ),
-                    ],
-                  ),
-                  Column(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      VisibilityDetector(
-                        key: Key(widget.data.videoId ?? 'ads'),
-                        onVisibilityChanged: (info) {
-                          if (widget.onVisibility != null) {
-                            widget.onVisibility!(info);
-                          }
+                    ),
+                  ],
+                ),
+                Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    VisibilityDetector(
+                      key: Key(widget.data.videoId ?? 'ads'),
+                      onVisibilityChanged: (info) {
+                        if (widget.onVisibility != null) {
+                          widget.onVisibility!(info);
+                        }
 
-                          if (info.visibleFraction >= 0.9) {
-                            notifier.currentPostID = widget.data.adsId ?? '';
-                            globalAdsInBetween?.play();
-                          }
-                        },
-                        child: GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            color: Colors.white,
-                            margin: const EdgeInsets.only(top: 20, left: 0, right: 0),
-                            child: AspectRatio(
-                              aspectRatio: ratio,
-                              child: notifier.currentPostID == widget.data.adsId
-                                  ? Stack(
+                        if (info.visibleFraction >= 0.9) {
+                          notifier.currentPostID = widget.data.adsId ?? '';
+                          globalAdsInBetween?.play();
+                          fAliplayer?.play();
+                        }
+                      },
+                      child: GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                          color: Colors.white,
+                          margin: const EdgeInsets.only(top: 20, left: 0, right: 0),
+                          child: AspectRatio(
+                            aspectRatio: ratio,
+                            child: notifier.currentPostID == widget.data.adsId
+                                ? Stack(
                                     children: [
                                       Stack(
                                         children: [
@@ -636,7 +649,7 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                                               //   ),
                                               // );
                                               if (mounted) {
-                                                Future.delayed(const Duration(milliseconds: 300),(){
+                                                Future.delayed(const Duration(milliseconds: 300), () {
                                                   isStopPlay = 'screenAds';
                                                   // fAliplayer?.seekTo(0, FlutterAvpdef.ACCURATE);
                                                   // fAliplayer?.play();
@@ -703,61 +716,61 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                                       )
                                     ],
                                   )
-                                  : Container(
-                                      decoration: const BoxDecoration(color: Colors.black, borderRadius: BorderRadius.all(Radius.circular(16.0))),
-                                      alignment: Alignment.center,
-                                      child: const CustomLoading(),
-                                    ),
-                            ),
+                                : Container(
+                                    decoration: const BoxDecoration(color: Colors.black, borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                                    alignment: Alignment.center,
+                                    child: const CustomLoading(),
+                                  ),
                           ),
                         ),
                       ),
-                      twelvePx,
-                      InkWell(
-                        onTap: () async {
-                          cta();
-                        },
-                        child: Builder(builder: (context) {
-                          final learnMore = (widget.data.ctaButton ?? 'Learn More');
-                          return Container(
-                            alignment: Alignment.center,
-                            padding: const EdgeInsets.only(top: 10, bottom: 10),
-                            decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)), color: KHyppeButtonAds),
-                            child: loadLaunch
-                                ? const SizedBox(width: 40, height: 20, child: CustomLoading())
-                                : Text(
-                                    learnMore,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w700,
-                                    ),
+                    ),
+                    twelvePx,
+                    InkWell(
+                      onTap: () async {
+                        cta();
+                      },
+                      child: Builder(builder: (context) {
+                        final learnMore = (widget.data.ctaButton ?? 'Learn More');
+                        return Container(
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.only(top: 10, bottom: 10),
+                          decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)), color: KHyppeButtonAds),
+                          child: loadLaunch
+                              ? const SizedBox(width: 40, height: 20, child: CustomLoading())
+                              : Text(
+                                  learnMore,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
                                   ),
-                          );
-                        }),
-                      ),
-                      twelvePx,
-                      if (widget.data.adsDescription != null)
-                        Builder(builder: (context) {
-                          final notifier = context.read<TranslateNotifierV2>();
-                          return CustomDescContent(
-                              desc: widget.data.adsDescription ?? '',
-                              trimLines: 2,
-                              textAlign: TextAlign.justify,
-                              seeLess: ' ${notifier.translate.seeLess}',
-                              seeMore: ' ${notifier.translate.seeMoreContent}',
-                              textOverflow: TextOverflow.visible,
-                              normStyle: Theme.of(context).textTheme.bodyText2,
-                              hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
-                              expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary));
-                        })
-                    ],
-                  )
-                ],
-              ),
+                                ),
+                        );
+                      }),
+                    ),
+                    twelvePx,
+                    if (widget.data.adsDescription != null)
+                      Builder(builder: (context) {
+                        final notifier = context.read<TranslateNotifierV2>();
+                        return CustomDescContent(
+                            desc: widget.data.adsDescription ?? '',
+                            trimLines: 2,
+                            textAlign: TextAlign.justify,
+                            seeLess: ' ${notifier.translate.seeLess}',
+                            seeMore: ' ${notifier.translate.seeMoreContent}',
+                            textOverflow: TextOverflow.visible,
+                            normStyle: Theme.of(context).textTheme.bodyText2,
+                            hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                            expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary));
+                      })
+                  ],
+                )
+              ],
             ),
-          ],
-        ),
-      );
+          ),
+        ],
+      ),
+    );
   }
 }

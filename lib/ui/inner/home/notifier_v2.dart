@@ -260,8 +260,8 @@ class HomeNotifier with ChangeNotifier {
         isLoadingLoadmore = true;
         notifyListeners();
         if (index == 0) skipPic = skipPic + limit;
-        if (index == 1) skipDiary = skipDiary + limit;
-        if (index == 2) skipvid = skipvid + limit;
+        // if (index == 1) skipDiary = skipDiary + limit;
+        if (index == 1) skipvid = skipvid + limit;
         isreload = false;
       }
 
@@ -277,16 +277,16 @@ class HomeNotifier with ChangeNotifier {
           data['type'] = 'pict';
           data['skip'] = skipPic;
           break;
+        // case 1:
+        //   if (isreload) {
+        //     skipDiary = 0;
+        //     _isLoadingDiary = true;
+        //     notifyListeners();
+        //   }
+        //   data['type'] = 'diary';
+        //   data['skip'] = skipDiary;
+        //   break;
         case 1:
-          if (isreload) {
-            skipDiary = 0;
-            _isLoadingDiary = true;
-            notifyListeners();
-          }
-          data['type'] = 'diary';
-          data['skip'] = skipDiary;
-          break;
-        case 2:
           if (isreload) {
             skipvid = 0;
             _isLoadingVid = true;
@@ -346,15 +346,15 @@ class HomeNotifier with ChangeNotifier {
             // }
           });
           break;
+        // case 1:
+        //   if (!mounted) return;
+        //   if (!isreload && isNew && diary.diaryData != null) return;
+        //   await diary.initialDiary(Routing.navigatorKey.currentContext ?? context, reload: isreload || isNew, list: allContents);
+        //   if (diary.diaryData != null && (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().tutorialData.isEmpty) {
+        //     // (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().tutorialData = diary.diaryData?.first.tutorial ?? [];
+        //   }
+        //   break;
         case 1:
-          if (!mounted) return;
-          if (!isreload && isNew && diary.diaryData != null) return;
-          await diary.initialDiary(Routing.navigatorKey.currentContext ?? context, reload: isreload || isNew, list: allContents);
-          if (diary.diaryData != null && (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().tutorialData.isEmpty) {
-            // (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().tutorialData = diary.diaryData?.first.tutorial ?? [];
-          }
-          break;
-        case 2:
           if (!mounted) return;
           if (!isreload && isNew && vid.vidData != null) return;
           await vid.initialVid(Routing.navigatorKey.currentContext ?? context, reload: isreload || isNew, list: allContents);
@@ -1068,9 +1068,10 @@ class HomeNotifier with ChangeNotifier {
     if (add) {
       Comment comment = Comment(txtMessages: txtMsg, userComment: UserComment(username: username), sender: email);
       print("===-=-=-=-=- parentID $parentID");
+      print("===-=-=-=-=- parentID ${vid.vidData?[0].description}");
 
       if (parentID == null) {
-        print("===-=-=-=-=- pageDetail $pageDetail ${diaryScroll.diaryData?.length}");
+        print("===-=-=-=-=- pageDetail $pageDetail ${updatedData?.description}");
 
         if (pageDetail) {
           picScroll.pics?.forEach((e) {
@@ -1081,8 +1082,10 @@ class HomeNotifier with ChangeNotifier {
           });
           vidScroll.vidData?.forEach((e) {
             if (e.postID == postID) {
+              print("vidscrolllll");
               e.comment?.insert(0, comment);
               e.comments = (e.comments ?? 0) + 1;
+              context.read<ScrollVidNotifier>().onUpdate();
             }
           });
           diaryScroll.diaryData?.forEach((e) {
@@ -1101,6 +1104,7 @@ class HomeNotifier with ChangeNotifier {
             notifyListeners();
           }
           updatedData?.comments = (updatedData.comments ?? 0) + 1;
+          context.read<PreviewVidNotifier>().onUpdate();
         }
       }
 
@@ -1125,6 +1129,7 @@ class HomeNotifier with ChangeNotifier {
                 e.comment?.removeAt(indexComment);
               }
             }
+            context.read<ScrollVidNotifier>().onUpdate();
           }
         });
         diaryScroll.diaryData?.forEach((e) {

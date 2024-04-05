@@ -1493,111 +1493,111 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                             ],
                           ),
                         ),
-                      Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 6.0),
-                              child: Text(
-                                "${System.getTimeformatByMs(_currentPositionText)}/${System.getTimeformatByMs(_videoDuration)}",
-                                textAlign: TextAlign.end,
-                                style: const TextStyle(color: Colors.white, fontSize: 11),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: SliderTheme(
-                                    data: SliderTheme.of(context).copyWith(
-                                      overlayShape: SliderComponentShape.noThumb,
-                                      activeTrackColor: const Color(0xAA7d7d7d),
-                                      inactiveTrackColor: const Color.fromARGB(170, 156, 155, 155),
-                                      // trackShape: RectangularSliderTrackShape(),
-                                      trackHeight: 3.0,
-                                      thumbColor: Colors.purple,
-                                      thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8.0),
-                                    ),
-                                    child: Slider(
-                                        min: 0,
-                                        max: _videoDuration == 0 ? 1 : _videoDuration.toDouble(),
-                                        value: _currentPosition.toDouble(),
-                                        activeColor: Colors.purple,
-                                        // trackColor: Color(0xAA7d7d7d),
-                                        thumbColor: Colors.purple,
-                                        onChangeStart: (value) {
-                                          _inSeek = true;
-                                          // _showLoading = false;
-                                          setState(() {});
-                                        },
-                                        onChangeEnd: (value) {
-                                          _inSeek = false;
-                                          setState(() {
-                                            if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
-                                              setState(() {
-                                                _showTipsWidget = false;
-                                              });
-                                            }
-                                          });
-                                          // isActiveAds
-                                          //     ? fAliplayerAds?.seekTo(value.ceil(), GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE)
-                                          //     : fAliplayer?.seekTo(value.ceil(), GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
-                                          widget.fAliplayer?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE);
-                                        },
-                                        onChanged: (value) {
-                                          print('on change');
+                      // Column(
+                      //   children: [
+                      //     Align(
+                      //       alignment: Alignment.centerRight,
+                      //       child: Padding(
+                      //         padding: const EdgeInsets.only(right: 6.0),
+                      //         child: Text(
+                      //           "${System.getTimeformatByMs(_currentPositionText)}/${System.getTimeformatByMs(_videoDuration)}",
+                      //           textAlign: TextAlign.end,
+                      //           style: const TextStyle(color: Colors.white, fontSize: 11),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     Padding(
+                      //       padding: const EdgeInsets.only(bottom: 8.0),
+                      //       child: Row(
+                      //         children: [
+                      //           Expanded(
+                      //             child: SliderTheme(
+                      //               data: SliderTheme.of(context).copyWith(
+                      //                 overlayShape: SliderComponentShape.noThumb,
+                      //                 activeTrackColor: const Color(0xAA7d7d7d),
+                      //                 inactiveTrackColor: const Color.fromARGB(170, 156, 155, 155),
+                      //                 // trackShape: RectangularSliderTrackShape(),
+                      //                 trackHeight: 3.0,
+                      //                 thumbColor: Colors.purple,
+                      //                 thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8.0),
+                      //               ),
+                      //               child: Slider(
+                      //                   min: 0,
+                      //                   max: _videoDuration == 0 ? 1 : _videoDuration.toDouble(),
+                      //                   value: _currentPosition.toDouble(),
+                      //                   activeColor: Colors.purple,
+                      //                   // trackColor: Color(0xAA7d7d7d),
+                      //                   thumbColor: Colors.purple,
+                      //                   onChangeStart: (value) {
+                      //                     _inSeek = true;
+                      //                     // _showLoading = false;
+                      //                     setState(() {});
+                      //                   },
+                      //                   onChangeEnd: (value) {
+                      //                     _inSeek = false;
+                      //                     setState(() {
+                      //                       if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
+                      //                         setState(() {
+                      //                           _showTipsWidget = false;
+                      //                         });
+                      //                       }
+                      //                     });
+                      //                     // isActiveAds
+                      //                     //     ? fAliplayerAds?.seekTo(value.ceil(), GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE)
+                      //                     //     : fAliplayer?.seekTo(value.ceil(), GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
+                      //                     widget.fAliplayer?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE);
+                      //                   },
+                      //                   onChanged: (value) {
+                      //                     print('on change');
 
-                                          widget.fAliplayer?.requestBitmapAtPosition(value.ceil());
+                      //                     widget.fAliplayer?.requestBitmapAtPosition(value.ceil());
 
-                                          setState(() {
-                                            _currentPosition = value.ceil();
-                                          });
-                                        }),
-                                  ),
-                                ),
-                                // GestureDetector(
-                                //   onTap: () {
-                                //     setState(() {
-                                //       isMute = !isMute;
-                                //     });
-                                //     widget.fAliplayer?.setMuted(isMute);
-                                //   },
-                                //   child: Padding(
-                                //     padding: const EdgeInsets.only(right: 2.0),
-                                //     child: CustomIconWidget(
-                                //       iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
-                                //       defaultColor: false,
-                                //       height: 24,
-                                //     ),
-                                //   ),
-                                // ),
-                                // GestureDetector(
-                                //   onTap: () async {
-                                //     int changevalue;
-                                //     changevalue = _currentPosition + 1000;
-                                //     if (changevalue > _videoDuration) {
-                                //       changevalue = _videoDuration;
-                                //     }
-                                //     widget.data.isLoading = true;
-                                //     setState(() {});
-                                //     Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
-                                //   },
-                                //   child: const Padding(
-                                //     padding: EdgeInsets.only(right: 12.0),
-                                //     child: Icon(
-                                //       Icons.fullscreen_exit,
-                                //       color: Colors.white,
-                                //     ),
-                                //   ),
-                                // ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                      //                     setState(() {
+                      //                       _currentPosition = value.ceil();
+                      //                     });
+                      //                   }),
+                      //             ),
+                      //           ),
+                      //           // GestureDetector(
+                      //           //   onTap: () {
+                      //           //     setState(() {
+                      //           //       isMute = !isMute;
+                      //           //     });
+                      //           //     widget.fAliplayer?.setMuted(isMute);
+                      //           //   },
+                      //           //   child: Padding(
+                      //           //     padding: const EdgeInsets.only(right: 2.0),
+                      //           //     child: CustomIconWidget(
+                      //           //       iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
+                      //           //       defaultColor: false,
+                      //           //       height: 24,
+                      //           //     ),
+                      //           //   ),
+                      //           // ),
+                      //           // GestureDetector(
+                      //           //   onTap: () async {
+                      //           //     int changevalue;
+                      //           //     changevalue = _currentPosition + 1000;
+                      //           //     if (changevalue > _videoDuration) {
+                      //           //       changevalue = _videoDuration;
+                      //           //     }
+                      //           //     widget.data.isLoading = true;
+                      //           //     setState(() {});
+                      //           //     Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
+                      //           //   },
+                      //           //   child: const Padding(
+                      //           //     padding: EdgeInsets.only(right: 12.0),
+                      //           //     child: Icon(
+                      //           //       Icons.fullscreen_exit,
+                      //           //       color: Colors.white,
+                      //           //     ),
+                      //           //   ),
+                      //           // ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                       if (widget.data.music?.musicTitle != '' && widget.data.music?.musicTitle != null)
                         SizedBox(
                           height: 42,
@@ -1734,11 +1734,11 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
               : Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _buildSkipPrev(iconColor, barHeight),
-                    _buildSkipBack(iconColor, barHeight),
+                    // _buildSkipPrev(iconColor, barHeight),
+                    // _buildSkipBack(iconColor, barHeight),
                     _buildPlayPause(iconColor, barHeight),
-                    _buildSkipForward(iconColor, barHeight),
-                    _buildSkipNext(iconColor, barHeight),
+                    // _buildSkipForward(iconColor, barHeight),
+                    // _buildSkipNext(iconColor, barHeight),
                   ],
                 ),
         ),

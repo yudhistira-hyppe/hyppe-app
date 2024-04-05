@@ -423,11 +423,11 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
             showVideoToast(const Duration(seconds: 3));
           }
         } else {
-          if (tempDuration.inMilliseconds >= 15900) {
-            await _routing.move(Routes.previewContent);
-          } else {
-            showVideoToast(const Duration(seconds: 3));
-          }
+          // if (tempDuration.inMilliseconds >= 15900) {
+          await _routing.move(Routes.previewContent);
+          // } else {
+          //   showVideoToast(const Duration(seconds: 3));
+          // }
         }
       });
     } catch (e) {

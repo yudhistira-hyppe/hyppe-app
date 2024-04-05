@@ -1546,7 +1546,7 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
                                   (data.reportedStatus != 'OWNED' && data.reportedStatus != 'BLURRED' && data.reportedStatus2 != 'BLURRED') &&
                                   data.email == SharedPreference().readStorage(SpKeys.email)
                               ? Container(
-                                  width: orientation == Orientation.landscape ? SizeConfig.screenWidth! * .28 : SizeConfig.screenWidth!,
+                                  width: MediaQuery.of(context).orientation == Orientation.landscape ? SizeConfig.screenWidth! * .28 : SizeConfig.screenWidth!,
                                   margin: const EdgeInsets.only(bottom: 16),
                                   padding: const EdgeInsets.only(top: 12, left: 8.0, right: 8.0),
                                   child: ButtonBoost(
@@ -1562,6 +1562,7 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
                                   ),
                                 )
                               : Container(),
+                          // Text("${MediaQuery.of(context).orientation}"),
                           if (data.email == email && (data.boostCount ?? 0) >= 0 && (data.boosted.isNotEmpty))
                             Container(
                               padding: const EdgeInsets.all(10),

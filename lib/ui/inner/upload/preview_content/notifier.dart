@@ -1268,8 +1268,8 @@ class PreviewContentNotifier with ChangeNotifier {
                       : 'Error';
               showToast(const Duration(seconds: 3));
             } else if (videoDuration < Duration(seconds: 14)) {
-              messageLimit = language.messageLessLimitVideo ?? 'Error';
-              showToast(const Duration(seconds: 3));
+              // messageLimit = language.messageLessLimitVideo ?? 'Error';
+              // showToast(const Duration(seconds: 3));
             }
           }
           _betterPlayerController?.play();

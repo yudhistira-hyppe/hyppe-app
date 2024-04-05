@@ -30,7 +30,6 @@ import 'package:hyppe/ui/constant/widget/custom_desc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/diary_sensitive.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
@@ -577,12 +576,14 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
 
   @override
   void dispose() {
+    print("==============full screen dispose");
+    super.dispose();
     fAliplayer?.stop();
     fAliplayer?.destroy();
     _pauseScreen();
     whileDispose();
     animatedController.dispose();
-    super.dispose();
+    isActivePage = false;
   }
 
   whileDispose() async {
@@ -977,9 +978,9 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                   }
 
                   vidData?[widget.index ?? 0].isLoading = true;
-                  Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
-
                   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+                  Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
+                  fAliplayer?.destroy();
                 }
               }
             },
@@ -1256,9 +1257,10 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                     }
 
                     vidData?[widget.index ?? 0].isLoading = true;
-                    Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
-
                     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+                    Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
+                    fAliplayer?.destroy();
+
                     // }
                   },
                   onTapOnProfileImage: () async {
@@ -1398,7 +1400,7 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
           if (data.allowComments ?? false)
             buttonVideoRight(
               onFunctionTap: () {
-                Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data, pageDetail: true));
+                Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data, pageDetail: false));
               },
               iconData: '${AssetPath.vectorPath}comment-shadow.svg',
               value: data.comments! > 0 ? data.comments.toString() : lang?.comments ?? '',
