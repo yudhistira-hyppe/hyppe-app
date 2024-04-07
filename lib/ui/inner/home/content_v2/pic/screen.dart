@@ -532,8 +532,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic>
     if (data.reportedStatus != 'BLURRED') {
       // _playMode = ModeTypeAliPLayer.auth;
       // await getAuth(context, data.music?.apsaraMusic ?? '');
-      await getMusicUrl(context, data.music?.apsaraMusic ?? '');
+      // await getMusicUrl(context, data.music?.apsaraMusic ?? '');
     }
+
+    await getMusicUrl(context, data.music?.apsaraMusic ?? '');
 
     setState(() {
       isPause = false;
@@ -568,7 +570,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic>
     // };
     // fAliplayer?.setCacheConfig(map);
     print("====---- ---==== ali ${fAliplayer?.getPlayerName()}");
-    print('ada musiknya ${playIndex} ${_curIdx}');
     if (data.reportedStatus != 'BLURRED') {
       if (playIndex == _curIdx) {
         await MyAudioService.instance.stop();
