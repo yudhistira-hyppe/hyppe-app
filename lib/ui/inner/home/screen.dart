@@ -293,6 +293,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                   Future.delayed(Duration(milliseconds: 400), () async {
                     imageCache.clear();
                     imageCache.clearLiveImages();
+                    globalAliPlayer?.pause();
                     await notifier.initNewHome(context, mounted, isreload: true);
                   });
                 }
@@ -489,7 +490,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     else if (postType == FeatureType.vid) {
       var vid = context.read<PreviewVidNotifier>();
       homneNotifier.tabIndex = 1;
-
+      MyAudioService.instance.pause();
       if (vid.vidData == null) {
         // await notifier.initNewHome(context, mounted, isreload: true);
         // vid.initialVid(context, reload: true);

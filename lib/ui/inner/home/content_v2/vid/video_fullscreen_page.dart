@@ -143,10 +143,10 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
 
   @override
   void afterFirstLayout(BuildContext context) {
-    if (fAliplayer == null && fAliplayer?.getPlayerName().toString() != 'FullVideoLandingpage') {
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'FullVideoLandingpage');
-      initAlipayer();
-    }
+    // if (fAliplayer == null && fAliplayer?.getPlayerName().toString() != 'FullVideoLandingpage') {
+    fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'FullVideoLandingpage');
+    initAlipayer();
+    // }
     landscape();
     var notifier = (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>();
     if (notifier.vidData?[widget.index ?? 0].certified ?? false) {
@@ -576,25 +576,30 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
 
   @override
   void dispose() {
-    print("==============full screen dispose");
-    super.dispose();
     fAliplayer?.stop();
-    fAliplayer?.destroy();
-    _pauseScreen();
-    whileDispose();
+    print("==============full screen dispose");
+
     animatedController.dispose();
-    isActivePage = false;
+    whileDispose();
+    super.dispose();
   }
 
-  whileDispose() async {
-    fAliplayer?.pause();
-    final notifier = (Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
-    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
-    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-    if (!notifier.isShowingAds) {
-      fAliplayer?.play();
+  whileDispose() {
+    try {
+      fAliplayer?.destroy();
+      _pauseScreen();
+      final notifier = (Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
+      notifier.adsAliplayer?.stop();
+      isActivePage = false;
+      // final notifier = (Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
+
+      // if (!notifier.isShowingAds) {
+      //   fAliplayer?.play();
+      // }
+      // fAliplayer?.play();
+    } catch (e) {
+      print("==========error dispose $e ==============");
     }
-    // fAliplayer?.play();
   }
 
   void scrollPage(height, width) async {
@@ -660,13 +665,15 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    print("=====state $state =====");
+    print("=====state fullscreen $state =====");
     switch (state) {
       case AppLifecycleState.inactive:
+        // isActivePage = false;
         fAliplayer?.pause();
         _pauseScreen();
         break;
       case AppLifecycleState.resumed:
+        isActivePage = true;
         // isactivealiplayer = false;
         fAliplayer?.play();
         break;
@@ -676,6 +683,9 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
         break;
       case AppLifecycleState.detached:
         _pauseScreen();
+        break;
+      case AppLifecycleState.hidden:
+        isActivePage = false;
         break;
       default:
         break;
@@ -976,11 +986,12 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                   if (changevalue > _videoDuration) {
                     changevalue = _videoDuration;
                   }
-
+                  // whileDispose();
                   vidData?[widget.index ?? 0].isLoading = true;
-                  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-                  Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
-                  fAliplayer?.destroy();
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+                    Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
+                  });
                 }
               }
             },
@@ -1246,7 +1257,7 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                   showTipsWidget: _showTipsWidget,
                   videoDuration: _videoDuration,
                   email: email,
-                  lang: lang!,
+                  lang: lang ?? LocalizationModelV2(),
                   isMute: isMute,
                   backFunction: () {
                     // if (!notifier.isShowingAds) {
@@ -1257,9 +1268,11 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                     }
 
                     vidData?[widget.index ?? 0].isLoading = true;
-                    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-                    Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
-                    fAliplayer?.destroy();
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+                      Navigator.pop(
+                          context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
+                    });
 
                     // }
                   },
@@ -1634,65 +1647,65 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                                 ],
                               ),
                             ),
-                          // Column(
-                          //   children: [
-                          //     Align(
-                          //       alignment: Alignment.centerRight,
-                          //       child: Padding(
-                          //         padding: const EdgeInsets.only(right: 8.0),
-                          //         child: Text(
-                          //           "${System.getTimeformatByMs(_currentPositionText)}/${System.getTimeformatByMs(_videoDuration)}",
-                          //           textAlign: TextAlign.end,
-                          //           style: const TextStyle(color: Colors.white, fontSize: 11),
-                          //         ),
-                          //       ),
-                          //     ),
-                          //     Row(
-                          //       children: [
-                          //         Expanded(
-                          //           child: SliderTheme(
-                          //             data: SliderTheme.of(context).copyWith(
-                          //               overlayShape: SliderComponentShape.noThumb,
-                          //               activeTrackColor: const Color(0xAA7d7d7d),
-                          //               inactiveTrackColor: const Color.fromARGB(170, 156, 155, 155),
-                          //               trackHeight: 3.0,
-                          //               thumbColor: Colors.purple,
-                          //               thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8.0),
-                          //             ),
-                          //             child: Slider(
-                          //                 min: 0,
-                          //                 max: _videoDuration == 0 ? 1 : _videoDuration.toDouble(),
-                          //                 value: _currentPosition.toDouble(),
-                          //                 activeColor: Colors.purple,
-                          //                 thumbColor: Colors.purple,
-                          //                 onChangeStart: (value) {
-                          //                   _inSeek = true;
-                          //                   setState(() {});
-                          //                 },
-                          //                 onChangeEnd: (value) {
-                          //                   _inSeek = false;
-                          //                   setState(() {
-                          //                     if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
-                          //                       setState(() {
-                          //                         _showTipsWidget = false;
-                          //                       });
-                          //                     }
-                          //                   });
-                          //                   fAliplayer?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE);
-                          //                 },
-                          //                 onChanged: (value) {
-                          //                   fAliplayer?.requestBitmapAtPosition(value.ceil());
+                          Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Text(
+                                    "${System.getTimeformatByMs(_currentPositionText)}/${System.getTimeformatByMs(_videoDuration)}",
+                                    textAlign: TextAlign.end,
+                                    style: const TextStyle(color: Colors.white, fontSize: 11),
+                                  ),
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: SliderTheme(
+                                      data: SliderTheme.of(context).copyWith(
+                                        overlayShape: SliderComponentShape.noThumb,
+                                        activeTrackColor: const Color(0xAA7d7d7d),
+                                        inactiveTrackColor: const Color.fromARGB(170, 156, 155, 155),
+                                        trackHeight: 3.0,
+                                        thumbColor: Colors.purple,
+                                        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8.0),
+                                      ),
+                                      child: Slider(
+                                          min: 0,
+                                          max: _videoDuration == 0 ? 1 : _videoDuration.toDouble(),
+                                          value: _currentPosition.toDouble(),
+                                          activeColor: Colors.purple,
+                                          thumbColor: Colors.purple,
+                                          onChangeStart: (value) {
+                                            _inSeek = true;
+                                            setState(() {});
+                                          },
+                                          onChangeEnd: (value) {
+                                            _inSeek = false;
+                                            setState(() {
+                                              if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
+                                                setState(() {
+                                                  _showTipsWidget = false;
+                                                });
+                                              }
+                                            });
+                                            fAliplayer?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE);
+                                          },
+                                          onChanged: (value) {
+                                            fAliplayer?.requestBitmapAtPosition(value.ceil());
 
-                          //                   setState(() {
-                          //                     _currentPosition = value.ceil();
-                          //                   });
-                          //                 }),
-                          //           ),
-                          //         ),
-                          //       ],
-                          //     ),
-                          //   ],
-                          // ),
+                                            setState(() {
+                                              _currentPosition = value.ceil();
+                                            });
+                                          }),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                           if (data.music?.musicTitle != '' && data.music?.musicTitle != null)
                             Container(
                               margin: const EdgeInsets.only(top: 0.0, left: 8.0, right: 8.0),

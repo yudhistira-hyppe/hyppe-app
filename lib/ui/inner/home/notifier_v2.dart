@@ -323,6 +323,7 @@ class HomeNotifier with ChangeNotifier {
       _isLoadingDiary = false;
       _isLoadingVid = false;
       notifyListeners();
+      print("index= ====== $index");
       switch (index) {
         case 0:
           if (!mounted) return;

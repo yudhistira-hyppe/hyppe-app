@@ -568,7 +568,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   @override
   void dispose() {
     fAliplayer?.stop();
-    // fAliplayer?.destroy();
+    fAliplayer?.destroy();
     isActivePage = false;
     isStopVideo = false;
     "================ ondispose vid".logger();
@@ -600,7 +600,9 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   }
 
   @override
-  void didPopNext() {
+  void didPopNext() async {
+    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     isActivePage = true;
     final vidNot = context.read<VideoNotifier>();
     vidNot.adsAliplayer?.play();
@@ -1078,6 +1080,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                             _showLoading = false;
                           });
                           if (info.visibleFraction >= 0.8) {
+                            _videoDuration = 0;
                             setState(() {
                               isPlayAds = false;
                             });
@@ -1210,6 +1213,9 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                 final latIndexList = notifier.vidData?.indexWhere((element) => element.postID == _lastCurPostId);
 
                                 if (_lastCurPostId != _curPostId) {
+                                  setState(() {
+                                    _currentPosition = 0;
+                                  });
                                   Future.delayed(const Duration(milliseconds: 400), () {
                                     try {
                                       if (_curIdx != -1) {

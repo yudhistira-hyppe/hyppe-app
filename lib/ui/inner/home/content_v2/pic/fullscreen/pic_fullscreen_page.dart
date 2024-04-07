@@ -99,6 +99,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
   MainNotifier? mn;
   int indexKeySell = 0;
   int indexKeyProtection = 0;
+  bool isActivePage = false;
 
   @override
   void initState() {
@@ -122,6 +123,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
 
   Future<void> initialPage() async {
     //Ads
+    isActivePage = true;
     final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
     mn = Provider.of<MainNotifier>(context, listen: false);
     notifier.initialPicConnection(context);
@@ -163,6 +165,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
     fAliplayer?.stop();
     fAliplayer!.destroy();
     animatedController.dispose();
+    isActivePage = false;
     super.dispose();
   }
 
@@ -259,6 +262,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
     MyAudioService.instance.playagain(notifier.isMute);
     fAliplayer?.play();
     fAliplayer?.setMuted(false);
+    isActivePage = true;
     // System().disposeBlock();
     super.didPopNext();
   }
@@ -275,6 +279,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
     fAliplayer?.pause();
     MyAudioService.instance.pause();
     System().disposeBlock();
+    isActivePage = false;
     super.didPushNext();
   }
 
@@ -287,10 +292,12 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
         print("========= inactive");
         break;
       case AppLifecycleState.resumed:
-        print("========= resumed");
+        print("========= resumed fullscreen $isActivePage");
         // if (context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds)) {
         fAliplayer?.play();
-        MyAudioService.instance.playagain(false);
+        if (isActivePage) {
+          MyAudioService.instance.playagain(false);
+        }
         // }
         break;
       case AppLifecycleState.paused:
@@ -395,6 +402,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                         context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {});
                       }
                       fAliplayer?.stop();
+                      MyAudioService.instance.stop();
                       Future.delayed(const Duration(milliseconds: 500), () {
                         System().increaseViewCount2(context, picData[index], check: false);
                         if ((picData[index].saleAmount ?? 0) > 0 || ((picData[index].certified ?? false) && (picData[index].saleAmount ?? 0) == 0)) {
@@ -589,7 +597,10 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                     opacityLevel = 1.0;
                     isMuteAudioPic = notifier.isMute;
                   });
-                  MyAudioService.instance.playagain(notifier?.isMute ?? false);
+                  if (picData.music != null) {
+                    MyAudioService.instance.playagain(notifier?.isMute ?? false);
+                  }
+
                   fAliplayer?.setMuted(notifier!.isMute);
                   if (notifier!.isMute) {
                     animatedController.stop();

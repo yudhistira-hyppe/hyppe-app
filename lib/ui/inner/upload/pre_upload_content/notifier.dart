@@ -975,14 +975,15 @@ class PreUploadContentNotifier with ChangeNotifier {
     );
   }
 
-  void clearUpAndBackToHome(BuildContext context) {
-    context.read<PreviewContentNotifier>().clearAdditionalItem();
-
-    // context.read<CameraNotifier>().disposeCamera(context);
-    context.read<PreviewContentNotifier>().isForcePaused = false;
-    // Routing().move(Routes.lobby);
-    if (_boostContent != null) _onExit();
-    Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
+  void clearUpAndBackToHome(BuildContext context) async {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<PreviewContentNotifier>().clearAdditionalItem();
+      // context.read<CameraNotifier>().disposeCamera(context);
+      context.read<PreviewContentNotifier>().isForcePaused = false;
+      // Routing().move(Routes.lobby);
+      if (_boostContent != null) _onExit();
+      Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
+    });
   }
 
   Future<void> onClickPost(BuildContext context, bool mounted, {required bool onEdit, ContentData? data, String? content}) async {

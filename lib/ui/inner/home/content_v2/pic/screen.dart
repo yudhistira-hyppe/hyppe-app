@@ -363,7 +363,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
   @override
   void dispose() {
-    isActivePage = true;
+    isActivePage = false;
 
     // fAliplayer?.destroy();
 
@@ -417,13 +417,13 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void didPush() {
     print("========= didPush");
-    isActivePage = true;
+    isActivePage = false;
     super.didPush();
   }
 
   @override
   void didPushNext() {
-    print("========= didPushNext");
+    print("========= didPushNext dari pict");
     // MyAudioService.instance.pause();
 
     isActivePage = false;
@@ -435,13 +435,13 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-
+    print("========= pict  inactive $state ");
     switch (state) {
       case AppLifecycleState.inactive:
         print("========= inactive");
         break;
       case AppLifecycleState.resumed:
-        print("========= resumed");
+        print("========= resumed pict $isActivePage - ${context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds) && isActivePage}");
         if (context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds) && isActivePage) {
           if (!isactivealiplayer) {
             final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
@@ -450,8 +450,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         }
         break;
       case AppLifecycleState.paused:
-        print("========= paused");
-
         MyAudioService.instance.pause();
         break;
       case AppLifecycleState.detached:
@@ -699,7 +697,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                               if (indexList == (notifier.pic?.length ?? 0) - 1) {
                                 context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {});
                               }
-
+                              // fAliplayer?.stop();
+                              MyAudioService.instance.stop();
                               Future.delayed(const Duration(milliseconds: 500), () {
                                 System().increaseViewCount2(context, picData ?? ContentData(), check: false);
                                 if ((picData?.saleAmount ?? 0) > 0 || ((picData?.certified ?? false) && (picData?.saleAmount ?? 0) == 0)) {
@@ -1580,7 +1579,11 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
                   print("muteeee----------------- ${notifier.isMute}");
                   // fAliplayer?.setMuted(notifier.isMute);
-                  MyAudioService.instance.mute(notifier.isMute);
+                  if (MyAudioService.instance.player.playing) {
+                    MyAudioService.instance.mute(notifier.isMute);
+                  } else {
+                    MyAudioService.instance.playagain(notifier.isMute);
+                  }
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),

@@ -384,9 +384,12 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
         });
       } else {
         isactivealiplayer = true;
+        print('Disini objectnya');
         PreUploadContentNotifier pn = (Routing.navigatorKey.currentContext ?? context).read<PreUploadContentNotifier>();
         pn.hastagChallange = '';
-        notifier.onShowPostContent(consumerContext);
+        notifier.onShowPostContent(consumerContext).then((value) {
+          print(value);
+        });
       }
     }
   }
