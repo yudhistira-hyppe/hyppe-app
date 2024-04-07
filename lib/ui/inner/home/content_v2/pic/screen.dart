@@ -568,21 +568,28 @@ class _HyppePreviewPicState extends State<HyppePreviewPic>
     // };
     // fAliplayer?.setCacheConfig(map);
     print("====---- ---==== ali ${fAliplayer?.getPlayerName()}");
-
-    if (playIndex == _curIdx) {
-      await MyAudioService.instance.stop();
-      playIndex = -1;
-      setState(() {});
-    } else {
-      MyAudioService.instance.play(
-        path: url,
-        startedPlaying: () {
-          playIndex = _curIdx;
-          setState(() {});
-        },
-        stoppedPlaying: () {},
-        mute: notifier.isMute,
-      );
+    print('ada musiknya ${playIndex} ${_curIdx}');
+    if (data.reportedStatus != 'BLURRED') {
+      if (playIndex == _curIdx) {
+        await MyAudioService.instance.stop();
+        playIndex = -1;
+        setState(() {});
+      } else {
+        MyAudioService.instance.play(
+          path: url,
+          startedPlaying: () {
+            playIndex = _curIdx;
+            setState(() {});
+          },
+          stoppedPlaying: () {
+            playIndex = -1;
+            setState(() {});
+          },
+          mute: notifier.isMute,
+        );
+      }
+    }else{
+      MyAudioService.instance.stop();
     }
 
     // try {
@@ -1398,6 +1405,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic>
                                           });
                                         } else {
                                           fAliplayer?.stop();
+                                          MyAudioService.instance.stop();
                                         }
 
                                         Future.delayed(
