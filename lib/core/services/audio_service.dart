@@ -57,6 +57,7 @@ class MyAudioService {
   }
 
   Future<void> playagain(bool muted) async {
+    print('====== player ${player.playing} mute $muted');
     // if (player.playing){
       await player.play();
       if (muted) {

@@ -2,6 +2,7 @@ import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/services/audio_service.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
@@ -30,6 +31,7 @@ class _MakeContentScreenState extends State<MakeContentScreen> with AfterFirstLa
   @override
   void initState() {
     isactivealiplayer = true;
+    MyAudioService.instance.stop();
     print('initState make content');
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     super.initState();

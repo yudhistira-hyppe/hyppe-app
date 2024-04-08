@@ -1,6 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/services/audio_service.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/content/preview_content.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/content/preview_id_verification.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
@@ -23,6 +24,7 @@ class _PreviewContentScreenState extends State<PreviewContentScreen> {
 
   @override
   void initState() {
+    MyAudioService.instance.stop();
     final _notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
     _notifier.initialMatrixColor();
     _notifier.scrollController = ScrollController();

@@ -571,12 +571,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic>
     // fAliplayer?.setCacheConfig(map);
     print("====---- ---==== ali ${fAliplayer?.getPlayerName()}");
     if (data.reportedStatus != 'BLURRED') {
-      if (playIndex == _curIdx) {
-        await MyAudioService.instance.stop();
-        playIndex = -1;
-        setState(() {});
-      } else {
-        MyAudioService.instance.play(
+      MyAudioService.instance.play(
           path: url,
           startedPlaying: () {
             playIndex = _curIdx;
@@ -588,7 +583,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic>
           },
           mute: notifier.isMute,
         );
-      }
     }else{
       MyAudioService.instance.stop();
     }
@@ -957,6 +951,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic>
                                 if (notifier.pic == null ||
                                     home.isLoadingPict) {
                                   fAliplayer?.pause();
+                                  
                                   // _lastCurIndex = -1;
                                   _lastCurPostId = '';
                                   // return Container(
