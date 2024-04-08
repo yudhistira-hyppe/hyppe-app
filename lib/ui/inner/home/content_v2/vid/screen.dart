@@ -135,7 +135,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
 
   @override
   void initState() {
-    isStopVideo = true;
+    isStopVideo = false;
     isactivealiplayer = true;
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppePreviewVid');
     email = SharedPreference().readStorage(SpKeys.email);
@@ -632,7 +632,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
 
     if (_curIdx < notifier.currentIndex) {
       setState(() {
-        notifier.vidData?[_curIdx].fAliplayer?.stop();
+        // notifier.vidData?[_curIdx].fAliplayer?.stop();
         _curIdx = notifier.currentIndex;
         // pn.diaryData!.removeRange(_curIdx, pn.currentIndex);
         notifier.vidData!.removeRange(0, notifier.currentIndex);
@@ -687,12 +687,14 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
         _pauseScreen();
         break;
       case AppLifecycleState.resumed:
-        print("============= canPlayOpenApps ${context.read<PreviewVidNotifier>().canPlayOpenApps}-- isInactiveState: ${context.read<MainNotifier>().isInactiveState}");
+        print("============= canPlayOpenApps ${context.read<PreviewVidNotifier>().canPlayOpenApps}-- isInactiveState: ${context.read<MainNotifier>().isInactiveState} $isActivePage");
         if (isHomeScreen) _initializeTimer();
         if (context.read<PreviewVidNotifier>().canPlayOpenApps && !context.read<MainNotifier>().isInactiveState && isActivePage) {
           try {
             // notifier.vidData?[_curIdx].fAliplayer?.prepare();
             // notifier.vidData?[_curIdx].fAliplayer?.play();
+            print("masuk lagi video ${fAliplayer?.getVideoHeight()}");
+            // fAliplayer?.prepare();
             fAliplayer?.play();
           } catch (e) {
             print(e);
@@ -1416,6 +1418,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                     ],
                                   ), // Text("${postIdVisibility}"),
                                   tenPx,
+                                  Text("${postIdVisibility != vidData.postID}"),
                                   globalInternetConnection
                                       ? vidData.reportedStatus == 'BLURRED'
                                           ? blurContentWidget(context, vidData)
@@ -1928,6 +1931,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
         orientation: Orientation.portrait,
       );
     }
+
     return GestureDetector(
       onTap: () async {
         if (isPlay) print('page fullscreen $isPause $isPlay');
@@ -2048,7 +2052,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                   y: 0,
                   height: MediaQuery.of(context).size.width,
                   width: MediaQuery.of(context).size.width,
-                  aliPlayerViewType: AliPlayerViewTypeForAndroid.textureview,
+                  // aliPlayerViewType: AliPlayerViewTypeForAndroid.textureview,
                 ),
                 // if (isloading)
                 //   Container(

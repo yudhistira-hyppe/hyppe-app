@@ -340,7 +340,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                         data: vidData[index],
                         height: MediaQuery.of(context).size.width * 9.0 / 16.0,
                         width: MediaQuery.of(context).size.width,
-                        inLanding: true,
+                        inLanding: false,
                         fromDeeplink: false,
                         functionFullTriger: (value) {},
                         onPlay: (exec) async {
@@ -379,9 +379,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                           });
                           print('Vid Player1: after $index ${globalAliPlayer} : ${vidData[index].fAliplayer}');
                         },
-                        getAdsPlayer: (ads) {
-                          // vidData?[index].fAliplayerAds = ads;
-                        },
+
                         // fAliplayer: vidData?[index].fAliplayer,
                         // fAliplayerAds: vidData?[index].fAliplayerAds,
                       );

@@ -302,29 +302,65 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     if (data.reportedStatus != 'BLURRED') {
       // _playMode = ModeTypeAliPLayer.auth;
       // await getAuth(context, data.music?.apsaraMusic ?? '');
-      await getMusicUrl(context, data.music?.apsaraMusic ?? '');
+      // await getMusicUrl(context, data.music?.apsaraMusic ?? '');
     }
+
+    await getMusicUrl(context, data.music?.apsaraMusic ?? '');
 
     setState(() {
       isPause = false;
       // _isFirstRenderShow = false;
     });
+    // var configMap = {
+    //   'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
+    //   'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
+    //   'mMaxBufferDuration': GlobalSettings.mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
+    //   'mMaxDelayTime': GlobalSettings.mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
+    //   'mNetworkTimeout': GlobalSettings.mNetworkTimeout, // The network timeout period. Unit: milliseconds.
+    //   'mNetworkRetryCount': GlobalSettings.mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
+    //   'mEnableLocalCache': GlobalSettings.mEnableCacheConfig,
+    //   'mLocalCacheDir': GlobalSettings.mDirController,
+    //   'mClearFrameWhenStop': true
+    // };
+    // Configure the application.
+    // fAliplayer?.setConfig(configMap);
+    // var map = {
+    //   "mMaxSizeMB": GlobalSettings.mMaxSizeMBController,
 
-    if (playIndex == _curIdx) {
-      await MyAudioService.instance.stop();
-      playIndex = -1;
-      setState(() {});
+    //   /// The maximum space that can be occupied by the cache directory.
+    //   "mMaxDurationS": GlobalSettings.mMaxDurationSController,
+
+    //   /// The maximum cache duration of a single file.
+    //   "mDir": GlobalSettings.mDirController,
+
+    //   /// The cache directory.
+    //   "mEnable": GlobalSettings.mEnableCacheConfig
+
+    //   /// Specify whether to enable the cache feature.
+    // };
+    // fAliplayer?.setCacheConfig(map);
+    // print("====---- ---==== ali ${fAliplayer?.getPlayerName()}");
+    if (data.reportedStatus != 'BLURRED') {
+      if (playIndex == _curIdx) {
+        await MyAudioService.instance.stop();
+        playIndex = -1;
+        setState(() {});
+      } else {
+        MyAudioService.instance.play(
+          path: url,
+          startedPlaying: () {
+            playIndex = _curIdx;
+            setState(() {});
+          },
+          stoppedPlaying: () {
+            playIndex = -1;
+            setState(() {});
+          },
+          mute: notifier.isMute,
+        );
+      }
     } else {
-      print("hahaha url $url");
-      MyAudioService.instance.play(
-        path: url,
-        startedPlaying: () {
-          playIndex = _curIdx;
-          setState(() {});
-        },
-        stoppedPlaying: () {},
-        mute: notifier.isMute,
-      );
+      MyAudioService.instance.stop();
     }
   }
 
@@ -417,7 +453,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void didPush() {
     print("========= didPush");
-    isActivePage = false;
+    // isActivePage = false;
     super.didPush();
   }
 
@@ -441,10 +477,12 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         print("========= inactive");
         break;
       case AppLifecycleState.resumed:
-        print("========= resumed pict $isActivePage - ${context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds) && isActivePage}");
+        print(
+            "========= resumed pict  $isactivealiplayer - $isActivePage - ${context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds) && isActivePage}");
         if (context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds) && isActivePage) {
           if (!isactivealiplayer) {
             final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
+            print(notifier.isMute);
             MyAudioService.instance.playagain(notifier.isMute);
           }
         }
@@ -746,260 +784,263 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                             ),
                           ],
                         ))
-                    : Column(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16),
-                              color: Colors.white,
-                            ),
-                            padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
-                            margin: const EdgeInsets.only(bottom: 16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // SelectableText(((picData?.isApsara ?? false) ? (picData?.mediaThumbEndPoint ?? "") : "${picData?.fullThumbPath}") + "&key=${cacheDesc[index]}"),
+                    : VisibilityDetector(
+                        key: Key(picData?.postID ?? index.toString()),
+                        onVisibilityChanged: (info) {
+                          if (info.visibleFraction == 0.8) {
+                            if (!isShowingDialog) {
+                              globalAdsPopUp?.pause();
+                            }
+                          }
+                          print("hahaha ======  info ${info.visibleFraction}");
+                          var persentage = (picData?.imageHeightTemp ?? 0) <= 160 ? 1.0 : 0.6;
+                          if (info.visibleFraction >= persentage) {
+                            _curIdx = index;
+                            _curPostId = picData?.postID ?? index.toString();
+                            if (_lastCurIndex > _curIdx) {
+                              MyAudioService.instance.stop();
+                              // fAliplayer?.destroy();
+                              // double position = 0.0;
+                              // for (var i = 0; i < _curIdx; i++) {
+                              //   position += notifier.pic?[i].height ?? 0.0;
+                              //   // position = position - (notifier.pic?[_curIdx].height);
+                              // }
+                              // context.read<MainNotifier>().globalKey.currentState?.innerController.jumpTo(position);
+                            }
 
-                                // Text("mn?.status own ${mn?.tutorialData[indexKeyProtection].status}"),
-                                // Text("mn?.status sell ${mn?.tutorialData[indexKeySell].status}"),
-                                // Text("global ${picData?.keyGlobalOwn}"),
-                                // Text("global ${picData?.keyGlobalSell}"),
-                                // Text("itemHeight $itemHeight"),
-                                // Text("height ${picData?.imageHeightTemp}"),
-                                // Text("$_lastCurIndex"),
-                                // Text("$index"),
-                                // Text("${picData?.height}"),
-                                // GestureDetector(
-                                //   onScaleStart: (details) {
-                                //     widget.functionZoomTriger();
-                                //     print("***************** dua jari ***************");
-                                //     print(details.pointerCount);
-                                //   },
-                                //   onScaleEnd: (details) {
-                                //     print("***************** satu jari ***************");
-                                //   },
+                            // if (_lastCurIndex != _curIdx) {
+                            if (_lastCurPostId != _curPostId) {
+                              if (mounted) {
+                                setState(() {
+                                  isShowShowcase = false;
+                                });
+                              }
+                              final indexList = notifier.pic?.indexWhere((element) => element.postID == _curPostId);
+                              // final latIndexList = notifier.pic?.indexWhere((element) => element.postID == _lastCurPostId);
 
-                                //   child: Container(
-                                //     width: 500,
-                                //     height: 200,
-                                //     color: Colors.red,
-                                //   ),
-                                // ),
-                                // GestureDetector(
-                                //   onTap: () {
-                                //     Routing().move(Routes.testImage);
-                                //   },
-                                //   child: Text('hahahah'),
-                                // ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      child: ProfileLandingPage(
-                                        show: true,
-                                        // cacheKey: vidData?.email == email ? homeNotifier.profileImageKey : null,
-                                        onFollow: () {},
-                                        following: true,
-                                        haveStory: false,
-                                        textColor: kHyppeTextLightPrimary,
-                                        username: picData?.username,
-                                        featureType: FeatureType.other,
-                                        // isCelebrity: vidpicData?.privacy?.isCelebrity,
-                                        isCelebrity: false,
-                                        imageUrl: picData?.avatar == null ? '' : '${System().showUserPicture(picData?.avatar?.mediaEndpoint)}',
-                                        onTapOnProfileImage: () {
-                                          MyAudioService.instance.pause();
-                                          System().navigateToProfile(context, picData?.email ?? '');
-                                        },
-                                        createdAt: '2022-02-02',
-                                        musicName: picData?.music?.musicTitle ?? '',
-                                        location: picData?.location ?? '',
-                                        isIdVerified: picData?.privacy?.isIdVerified,
-                                        badge: picData?.urluserBadge,
-                                      ),
-                                    ),
-                                    if (picData?.email != email && (picData?.isNewFollowing ?? false))
-                                      Consumer<PreviewPicNotifier>(
-                                        builder: (context, picNot, child) => Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              context.handleActionIsGuest(() {
-                                                if (picData?.insight?.isloadingFollow != true) {
-                                                  picNot.followUser(context, picData ?? ContentData(), isUnFollow: picData?.following, isloading: picData?.insight!.isloadingFollow ?? false);
-                                                }
-                                              }).then((value) {
-                                                if (value) {
-                                                  MyAudioService.instance.playagain(notifier.isMute);
-                                                }
-                                              });
-                                            },
-                                            child: picData?.insight?.isloadingFollow ?? false
-                                                ? Container(
-                                                    height: 40,
-                                                    width: 30,
-                                                    child: const Align(
-                                                      alignment: Alignment.bottomRight,
-                                                      child: CustomLoading(),
-                                                    ),
-                                                  )
-                                                : Text(
-                                                    (picData?.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
-                                                    style: const TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
-                                                  ),
-                                          ),
+                              if (indexList == (notifier.pic?.length ?? 0) - 1) {
+                                context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {});
+                              }
+
+                              if (picData?.music != null) {
+                                print("ada musiknya ${picData?.music?.toJson()}");
+                                print("ada musiknya ${picData?.music?.toJson()}");
+                                setState(() {
+                                  isPrepareMusic = true;
+                                  isactivealiplayer = false;
+                                });
+                                Future.delayed(const Duration(milliseconds: 100), () {
+                                  start(context, picData ?? ContentData(), notifier);
+                                });
+                              } else {
+                                // fAliplayer?.stop();
+                                MyAudioService.instance.stop();
+                              }
+
+                              Future.delayed(const Duration(milliseconds: 100), () {
+                                if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
+                                  indexKeySell = mn?.tutorialData.indexWhere((element) => element.key == 'sell') ?? 0;
+                                  indexKeyProtection = mn?.tutorialData.indexWhere((element) => element.key == 'protection') ?? 0;
+                                  // print("==============global challehg $globalChallengePopUp");
+                                  // print("==============global challehg ${mn?.tutorialData[indexKeySell].status == false && !globalChallengePopUp}");
+                                  if ((picData?.saleAmount ?? 0) > 0) {
+                                    if (mn?.tutorialData[indexKeySell].status == false && !globalChallengePopUp) {
+                                      ShowCaseWidget.of(context).startShowCase([picData?.keyGlobalSell ?? GlobalKey()]);
+                                    }
+                                  }
+                                  if (((picData?.certified ?? false) && (picData?.saleAmount ?? 0) == 0)) {
+                                    if (mn?.tutorialData[indexKeyProtection].status == false && !globalChallengePopUp) {
+                                      ShowCaseWidget.of(context).startShowCase([picData?.keyGlobalOwn ?? GlobalKey()]);
+                                    }
+                                  }
+                                }
+                              });
+
+                              Future.delayed(const Duration(milliseconds: 500), () {
+                                System().increaseViewCount2(context, picData ?? ContentData(), check: false);
+                              });
+
+                              if (picData?.certified ?? false) {
+                                System().block(context);
+                              } else {
+                                System().disposeBlock();
+                              }
+                              setState(() {
+                                Future.delayed(Duration(milliseconds: 400), () {
+                                  itemHeight = notifier.pic?[indexList ?? 0].height ?? 0;
+                                });
+                              });
+                              // Future.delayed(const Duration(milliseconds: 500), () async {
+                              //   if (indexList == (notifier.pic?.length ?? 0) - 1) {
+                              //     await context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {
+                              //       notifier.getTemp(indexList, latIndexList, indexList);
+                              //     });
+                              //   } else {
+                              //     notifier.getTemp(indexList, latIndexList, indexList);
+                              //   }
+                              // });
+
+                              ///ADS IN BETWEEN === Hariyanto Lukman ===
+                              if (!notifier.loadAds) {
+                                if ((notifier.pic?.length ?? 0) > notifier.nextAdsShowed) {
+                                  notifier.loadAds = true;
+                                  context.getInBetweenAds().then((value) {
+                                    if (value != null) {
+                                      notifier.setAdsData(index, value);
+                                    } else {
+                                      notifier.loadAds = false;
+                                    }
+                                  });
+                                }
+                              }
+                            }
+
+                            _lastCurIndex = _curIdx;
+                            _lastCurPostId = _curPostId;
+                          }
+                        },
+                        child: Column(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                color: Colors.white,
+                              ),
+                              padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
+                              margin: const EdgeInsets.only(bottom: 16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // SelectableText(((picData?.isApsara ?? false) ? (picData?.mediaThumbEndPoint ?? "") : "${picData?.fullThumbPath}") + "&key=${cacheDesc[index]}"),
+
+                                  // Text("mn?.status own ${mn?.tutorialData[indexKeyProtection].status}"),
+                                  // Text("mn?.status sell ${mn?.tutorialData[indexKeySell].status}"),
+                                  // Text("global ${picData?.keyGlobalOwn}"),
+                                  // Text("global ${picData?.keyGlobalSell}"),
+                                  // Text("itemHeight $itemHeight"),
+                                  // Text("height ${picData?.imageHeightTemp}"),
+                                  // Text("$_lastCurIndex"),
+                                  // Text("$isActivePage"),
+                                  // Text("${picData?.height}"),
+                                  // GestureDetector(
+                                  //   onScaleStart: (details) {
+                                  //     widget.functionZoomTriger();
+                                  //     print("***************** dua jari ***************");
+                                  //     print(details.pointerCount);
+                                  //   },
+                                  //   onScaleEnd: (details) {
+                                  //     print("***************** satu jari ***************");
+                                  //   },
+
+                                  //   child: Container(
+                                  //     width: 500,
+                                  //     height: 200,
+                                  //     color: Colors.red,
+                                  //   ),
+                                  // ),
+                                  // GestureDetector(
+                                  //   onTap: () {
+                                  //     Routing().move(Routes.testImage);
+                                  //   },
+                                  //   child: Text('hahahah'),
+                                  // ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Expanded(
+                                        child: ProfileLandingPage(
+                                          show: true,
+                                          // cacheKey: vidData?.email == email ? homeNotifier.profileImageKey : null,
+                                          onFollow: () {},
+                                          following: true,
+                                          haveStory: false,
+                                          textColor: kHyppeTextLightPrimary,
+                                          username: picData?.username,
+                                          featureType: FeatureType.other,
+                                          // isCelebrity: vidpicData?.privacy?.isCelebrity,
+                                          isCelebrity: false,
+                                          imageUrl: picData?.avatar == null ? '' : '${System().showUserPicture(picData?.avatar?.mediaEndpoint)}',
+                                          onTapOnProfileImage: () {
+                                            MyAudioService.instance.pause();
+                                            System().navigateToProfile(context, picData?.email ?? '');
+                                          },
+                                          createdAt: '2022-02-02',
+                                          musicName: picData?.music?.musicTitle ?? '',
+                                          location: picData?.location ?? '',
+                                          isIdVerified: picData?.privacy?.isIdVerified,
+                                          badge: picData?.urluserBadge,
                                         ),
                                       ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        //
-                                        context.handleActionIsGuest(() {
-                                          if (picData?.email != email) {
-                                            context.read<PreviewPicNotifier>().reportContent(context, picData ?? ContentData(), fAliplayer: FlutterAliplayer.init('kosong'), onCompleted: () async {
-                                              imageCache.clear();
-                                              imageCache.clearLiveImages();
-                                              await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 0);
-                                            });
-                                          } else {
-                                            ShowBottomSheet().onShowOptionContent(
-                                              context,
-                                              contentData: picData ?? ContentData(),
-                                              captionTitle: hyppePic,
-                                              onDetail: false,
-                                              isShare: picData?.isShared,
-                                              onUpdate: () {
-                                                (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 0);
+                                      if (picData?.email != email && (picData?.isNewFollowing ?? false))
+                                        Consumer<PreviewPicNotifier>(
+                                          builder: (context, picNot, child) => Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                context.handleActionIsGuest(() {
+                                                  if (picData?.insight?.isloadingFollow != true) {
+                                                    picNot.followUser(context, picData ?? ContentData(), isUnFollow: picData?.following, isloading: picData?.insight!.isloadingFollow ?? false);
+                                                  }
+                                                }).then((value) {
+                                                  if (value) {
+                                                    MyAudioService.instance.playagain(notifier.isMute);
+                                                  }
+                                                });
                                               },
-                                            );
-                                          }
-                                        }).then((value) {
-                                          if (value) {
-                                            MyAudioService.instance.playagain(notifier.isMute);
-                                          }
-                                        });
-                                      },
-                                      child: const Icon(
-                                        Icons.more_vert,
-                                        color: kHyppeTextLightPrimary,
+                                              child: picData?.insight?.isloadingFollow ?? false
+                                                  ? Container(
+                                                      height: 40,
+                                                      width: 30,
+                                                      child: const Align(
+                                                        alignment: Alignment.bottomRight,
+                                                        child: CustomLoading(),
+                                                      ),
+                                                    )
+                                                  : Text(
+                                                      (picData?.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+                                                      style: const TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                                                    ),
+                                            ),
+                                          ),
+                                        ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          //
+                                          context.handleActionIsGuest(() {
+                                            if (picData?.email != email) {
+                                              context.read<PreviewPicNotifier>().reportContent(context, picData ?? ContentData(), fAliplayer: FlutterAliplayer.init('kosong'), onCompleted: () async {
+                                                imageCache.clear();
+                                                imageCache.clearLiveImages();
+                                                await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 0);
+                                              });
+                                            } else {
+                                              ShowBottomSheet().onShowOptionContent(
+                                                context,
+                                                contentData: picData ?? ContentData(),
+                                                captionTitle: hyppePic,
+                                                onDetail: false,
+                                                isShare: picData?.isShared,
+                                                onUpdate: () {
+                                                  (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 0);
+                                                },
+                                              );
+                                            }
+                                          }).then((value) {
+                                            if (value) {
+                                              MyAudioService.instance.playagain(notifier.isMute);
+                                            }
+                                          });
+                                        },
+                                        child: const Icon(
+                                          Icons.more_vert,
+                                          color: kHyppeTextLightPrimary,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                tenPx,
-
-                                VisibilityDetector(
-                                  key: Key(index.toString()),
-                                  // key: Key(picData?.postID ?? index.toString()),
-                                  onVisibilityChanged: (info) {
-                                    if (info.visibleFraction == 0.8) {
-                                      if (!isShowingDialog) {
-                                        globalAdsPopUp?.pause();
-                                      }
-                                    }
-                                    if (info.visibleFraction == 1 || info.visibleFraction >= 0.6) {
-                                      _curIdx = index;
-                                      _curPostId = picData?.postID ?? index.toString();
-                                      if (_lastCurIndex > _curIdx) {
-                                        // fAliplayer?.destroy();
-                                        // double position = 0.0;
-                                        // for (var i = 0; i < _curIdx; i++) {
-                                        //   position += notifier.pic?[i].height ?? 0.0;
-                                        //   // position = position - (notifier.pic?[_curIdx].height);
-                                        // }
-                                        // context.read<MainNotifier>().globalKey.currentState?.innerController.jumpTo(position);
-                                      }
-
-                                      // if (_lastCurIndex != _curIdx) {
-                                      if (_lastCurPostId != _curPostId) {
-                                        MyAudioService.instance.stop();
-                                        if (mounted) {
-                                          setState(() {
-                                            isShowShowcase = false;
-                                          });
-                                        }
-                                        final indexList = notifier.pic?.indexWhere((element) => element.postID == _curPostId);
-                                        // final latIndexList = notifier.pic?.indexWhere((element) => element.postID == _lastCurPostId);
-
-                                        if (indexList == (notifier.pic?.length ?? 0) - 1) {
-                                          context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {});
-                                        }
-
-                                        if (picData?.music != null) {
-                                          print("ada musiknya ${picData?.music?.toJson()}");
-                                          print("ada musiknya ${picData?.music?.toJson()}");
-                                          setState(() {
-                                            isPrepareMusic = true;
-                                            isactivealiplayer = false;
-                                          });
-                                          Future.delayed(const Duration(milliseconds: 100), () {
-                                            start(context, picData ?? ContentData(), notifier);
-                                          });
-                                        } else {}
-
-                                        Future.delayed(const Duration(milliseconds: 100), () {
-                                          if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
-                                            indexKeySell = mn?.tutorialData.indexWhere((element) => element.key == 'sell') ?? 0;
-                                            indexKeyProtection = mn?.tutorialData.indexWhere((element) => element.key == 'protection') ?? 0;
-                                            // print("==============global challehg $globalChallengePopUp");
-                                            // print("==============global challehg ${mn?.tutorialData[indexKeySell].status == false && !globalChallengePopUp}");
-                                            if ((picData?.saleAmount ?? 0) > 0) {
-                                              if (mn?.tutorialData[indexKeySell].status == false && !globalChallengePopUp) {
-                                                ShowCaseWidget.of(context).startShowCase([picData?.keyGlobalSell ?? GlobalKey()]);
-                                              }
-                                            }
-                                            if (((picData?.certified ?? false) && (picData?.saleAmount ?? 0) == 0)) {
-                                              if (mn?.tutorialData[indexKeyProtection].status == false && !globalChallengePopUp) {
-                                                ShowCaseWidget.of(context).startShowCase([picData?.keyGlobalOwn ?? GlobalKey()]);
-                                              }
-                                            }
-                                          }
-                                        });
-
-                                        Future.delayed(const Duration(milliseconds: 500), () {
-                                          System().increaseViewCount2(context, picData ?? ContentData(), check: false);
-                                        });
-
-                                        if (picData?.certified ?? false) {
-                                          System().block(context);
-                                        } else {
-                                          System().disposeBlock();
-                                        }
-                                        setState(() {
-                                          Future.delayed(Duration(milliseconds: 400), () {
-                                            itemHeight = notifier.pic?[indexList ?? 0].height ?? 0;
-                                          });
-                                        });
-                                        // Future.delayed(const Duration(milliseconds: 500), () async {
-                                        //   if (indexList == (notifier.pic?.length ?? 0) - 1) {
-                                        //     await context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {
-                                        //       notifier.getTemp(indexList, latIndexList, indexList);
-                                        //     });
-                                        //   } else {
-                                        //     notifier.getTemp(indexList, latIndexList, indexList);
-                                        //   }
-                                        // });
-
-                                        ///ADS IN BETWEEN === Hariyanto Lukman ===
-                                        if (!notifier.loadAds) {
-                                          if ((notifier.pic?.length ?? 0) > notifier.nextAdsShowed) {
-                                            notifier.loadAds = true;
-                                            context.getInBetweenAds().then((value) {
-                                              if (value != null) {
-                                                notifier.setAdsData(index, value);
-                                              } else {
-                                                notifier.loadAds = false;
-                                              }
-                                            });
-                                          }
-                                        }
-                                      }
-
-                                      _lastCurIndex = _curIdx;
-                                      _lastCurPostId = _curPostId;
-                                    }
-                                  },
-                                  child: Container(
+                                    ],
+                                  ),
+                                  tenPx,
+                                  Container(
                                     // height: picData?.imageHeightTemp == 0 ? null : picData?.imageHeightTemp,
                                     margin: const EdgeInsets.only(bottom: 20),
                                     width: SizeConfig.screenWidth,
@@ -1228,268 +1269,268 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                       ),
                                     ),
                                   ),
-                                ),
-                                SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                                        (picData?.boosted.isEmpty ?? [].isEmpty) &&
-                                        (picData?.reportedStatus != 'OWNED' && picData?.reportedStatus != 'BLURRED' && picData?.reportedStatus2 != 'BLURRED') &&
-                                        picData?.email == email
-                                    ? Container(
-                                        width: double.infinity,
-                                        margin: const EdgeInsets.only(bottom: 16),
-                                        child: ButtonBoost(
-                                          onDetail: false,
-                                          marginBool: true,
-                                          contentData: picData,
-                                          startState: () {
-                                            SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
-                                          },
-                                          afterState: () {
-                                            SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
-                                          },
-                                        ),
-                                      )
-                                    : Container(),
-                                if (picData?.email == email && (picData?.boostCount ?? 0) >= 0 && (picData?.boosted.isNotEmpty ?? [].isEmpty))
-                                  Container(
-                                    padding: const EdgeInsets.all(10),
-                                    margin: EdgeInsets.only(bottom: 10),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(6),
-                                      color: kHyppeGreyLight,
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        const CustomIconWidget(
-                                          iconData: "${AssetPath.vectorPath}reach.svg",
-                                          defaultColor: false,
-                                          height: 24,
-                                          color: kHyppeTextLightPrimary,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(left: 13),
-                                          child: CustomTextWidget(
-                                            textToDisplay: "${picData?.boostJangkauan ?? '0'} ${lang?.reach}",
-                                            textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                                  SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
+                                          (picData?.boosted.isEmpty ?? [].isEmpty) &&
+                                          (picData?.reportedStatus != 'OWNED' && picData?.reportedStatus != 'BLURRED' && picData?.reportedStatus2 != 'BLURRED') &&
+                                          picData?.email == email
+                                      ? Container(
+                                          width: double.infinity,
+                                          margin: const EdgeInsets.only(bottom: 16),
+                                          child: ButtonBoost(
+                                            onDetail: false,
+                                            marginBool: true,
+                                            contentData: picData,
+                                            startState: () {
+                                              SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                                            },
+                                            afterState: () {
+                                              SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                                            },
                                           ),
                                         )
-                                      ],
-                                    ),
-                                  ),
-                                Consumer<LikeNotifier>(
-                                  builder: (context, likeNotifier, child) => Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
+                                      : Container(),
+                                  if (picData?.email == email && (picData?.boostCount ?? 0) >= 0 && (picData?.boosted.isNotEmpty ?? [].isEmpty))
+                                    Container(
+                                      padding: const EdgeInsets.all(10),
+                                      margin: EdgeInsets.only(bottom: 10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(6),
+                                        color: kHyppeGreyLight,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
-                                          SizedBox(
-                                            width: 30,
-                                            child: Align(
-                                              alignment: Alignment.bottomRight,
-                                              child: picData?.insight?.isloading ?? false
-                                                  ? const SizedBox(
-                                                      height: 28,
-                                                      width: 28,
-                                                      child: CircularProgressIndicator(
-                                                        color: kHyppePrimary,
-                                                        strokeWidth: 2,
-                                                      ),
-                                                    )
-                                                  : InkWell(
-                                                      child: CustomIconWidget(
-                                                        defaultColor: false,
-                                                        color: (picData?.insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
-                                                        iconData: '${AssetPath.vectorPath}${(picData?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
-                                                        height: 28,
-                                                      ),
-                                                      onTap: () async {
-                                                        if (picData != null) {
-                                                          likeNotifier.likePost(context, notifier.pic![index]).then((value) {
-                                                            List<ContentData>? pic2 = context.read<ScrollPicNotifier>().pics;
-                                                            if (pic2?.isNotEmpty ?? false) {
-                                                              int idx2 = pic2!.indexWhere((e) => e.postID == value['_id']);
-                                                              pic2[idx2].insight?.isPostLiked = value['isPostLiked'];
-                                                              pic2[idx2].insight?.likes = value['likes'];
-                                                              pic2[idx2].isLiked = value['isLiked'];
-                                                            }
-                                                          });
-                                                        }
-                                                      },
-                                                    ),
-                                            ),
+                                          const CustomIconWidget(
+                                            iconData: "${AssetPath.vectorPath}reach.svg",
+                                            defaultColor: false,
+                                            height: 24,
+                                            color: kHyppeTextLightPrimary,
                                           ),
-                                          if (picData?.allowComments ?? true)
-                                            Padding(
-                                              padding: EdgeInsets.only(left: 21.0),
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: picData?.postID ?? '', fromFront: true, data: picData ?? ContentData()));
-                                                  // ShowBottomSheet.onShowCommentV2(context, postID: picData?.postID);
-                                                },
-                                                child: const CustomIconWidget(
-                                                  defaultColor: false,
-                                                  color: kHyppeTextLightPrimary,
-                                                  iconData: '${AssetPath.vectorPath}comment2.svg',
-                                                  height: 24,
-                                                ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 13),
+                                            child: CustomTextWidget(
+                                              textToDisplay: "${picData?.boostJangkauan ?? '0'} ${lang?.reach}",
+                                              textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  Consumer<LikeNotifier>(
+                                    builder: (context, likeNotifier, child) => Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            SizedBox(
+                                              width: 30,
+                                              child: Align(
+                                                alignment: Alignment.bottomRight,
+                                                child: picData?.insight?.isloading ?? false
+                                                    ? const SizedBox(
+                                                        height: 28,
+                                                        width: 28,
+                                                        child: CircularProgressIndicator(
+                                                          color: kHyppePrimary,
+                                                          strokeWidth: 2,
+                                                        ),
+                                                      )
+                                                    : InkWell(
+                                                        child: CustomIconWidget(
+                                                          defaultColor: false,
+                                                          color: (picData?.insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
+                                                          iconData: '${AssetPath.vectorPath}${(picData?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                                          height: 28,
+                                                        ),
+                                                        onTap: () async {
+                                                          if (picData != null) {
+                                                            likeNotifier.likePost(context, notifier.pic![index]).then((value) {
+                                                              List<ContentData>? pic2 = context.read<ScrollPicNotifier>().pics;
+                                                              if (pic2?.isNotEmpty ?? false) {
+                                                                int idx2 = pic2!.indexWhere((e) => e.postID == value['_id']);
+                                                                pic2[idx2].insight?.isPostLiked = value['isPostLiked'];
+                                                                pic2[idx2].insight?.likes = value['likes'];
+                                                                pic2[idx2].isLiked = value['isLiked'];
+                                                              }
+                                                            });
+                                                          }
+                                                        },
+                                                      ),
                                               ),
                                             ),
-                                          if ((picData?.isShared ?? false))
-                                            GestureDetector(
-                                              onTap: () {
-                                                context.read<PicDetailNotifier>().createdDynamicLink(context, data: picData);
-                                              },
-                                              child: const Padding(
+                                            if (picData?.allowComments ?? true)
+                                              Padding(
                                                 padding: EdgeInsets.only(left: 21.0),
-                                                child: CustomIconWidget(
-                                                  defaultColor: false,
-                                                  color: kHyppeTextLightPrimary,
-                                                  iconData: '${AssetPath.vectorPath}share2.svg',
-                                                  height: 24,
-                                                ),
-                                              ),
-                                            ),
-                                          if ((picData?.saleAmount ?? 0) > 0 && email != picData?.email)
-                                            Expanded(
-                                              child: GestureDetector(
-                                                onTap: () async {
-                                                  context.handleActionIsGuest(() async {
-                                                    await ShowBottomSheet.onBuyContent(context, data: picData);
-                                                  }).then((value) {
-                                                    if (value) {
-                                                      MyAudioService.instance.playagain(notifier.isMute);
-                                                    }
-                                                  });
-                                                },
-                                                child: const Align(
-                                                  alignment: Alignment.centerRight,
-                                                  child: CustomIconWidget(
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: picData?.postID ?? '', fromFront: true, data: picData ?? ContentData()));
+                                                    // ShowBottomSheet.onShowCommentV2(context, postID: picData?.postID);
+                                                  },
+                                                  child: const CustomIconWidget(
                                                     defaultColor: false,
                                                     color: kHyppeTextLightPrimary,
-                                                    iconData: '${AssetPath.vectorPath}cart.svg',
+                                                    iconData: '${AssetPath.vectorPath}comment2.svg',
                                                     height: 24,
                                                   ),
                                                 ),
                                               ),
+                                            if ((picData?.isShared ?? false))
+                                              GestureDetector(
+                                                onTap: () {
+                                                  context.read<PicDetailNotifier>().createdDynamicLink(context, data: picData);
+                                                },
+                                                child: const Padding(
+                                                  padding: EdgeInsets.only(left: 21.0),
+                                                  child: CustomIconWidget(
+                                                    defaultColor: false,
+                                                    color: kHyppeTextLightPrimary,
+                                                    iconData: '${AssetPath.vectorPath}share2.svg',
+                                                    height: 24,
+                                                  ),
+                                                ),
+                                              ),
+                                            if ((picData?.saleAmount ?? 0) > 0 && email != picData?.email)
+                                              Expanded(
+                                                child: GestureDetector(
+                                                  onTap: () async {
+                                                    context.handleActionIsGuest(() async {
+                                                      await ShowBottomSheet.onBuyContent(context, data: picData);
+                                                    }).then((value) {
+                                                      if (value) {
+                                                        MyAudioService.instance.playagain(notifier.isMute);
+                                                      }
+                                                    });
+                                                  },
+                                                  child: const Align(
+                                                    alignment: Alignment.centerRight,
+                                                    child: CustomIconWidget(
+                                                      defaultColor: false,
+                                                      color: kHyppeTextLightPrimary,
+                                                      iconData: '${AssetPath.vectorPath}cart.svg',
+                                                      height: 24,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
+                                        ),
+                                        twelvePx,
+                                        RichText(
+                                          text: TextSpan(children: [
+                                            TextSpan(
+                                              text: "${picData?.insight?.likes} ${notifier.language.like}",
+                                              recognizer: TapGestureRecognizer()
+                                                ..onTap = () => Navigator.push(
+                                                    context,
+                                                    CupertinoPageRoute(
+                                                        builder: (context) => ViewLiked(
+                                                              postId: picData?.postID ?? '',
+                                                              eventType: 'LIKE',
+                                                            ))),
+                                              style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
                                             ),
-                                        ],
-                                      ),
-                                      twelvePx,
-                                      RichText(
-                                        text: TextSpan(children: [
-                                          TextSpan(
-                                            text: "${picData?.insight?.likes} ${notifier.language.like}",
-                                            recognizer: TapGestureRecognizer()
-                                              ..onTap = () => Navigator.push(
-                                                  context,
-                                                  CupertinoPageRoute(
-                                                      builder: (context) => ViewLiked(
-                                                            postId: picData?.postID ?? '',
-                                                            eventType: 'LIKE',
-                                                          ))),
-                                            style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
-                                          ),
-                                          const TextSpan(
-                                            text: " • ",
-                                            style: TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 16),
-                                          ),
-                                          TextSpan(
-                                            text: "${picData?.insight!.views?.getCountShort()} ${notifier.language.views}",
-                                            recognizer: TapGestureRecognizer()
-                                              ..onTap = () => Navigator.push(
-                                                  context,
-                                                  CupertinoPageRoute(
-                                                      builder: (context) => ViewLiked(
-                                                            postId: picData?.postID ?? '',
-                                                            eventType: 'VIEW',
-                                                          ))),
-                                            style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
-                                          ),
-                                        ]),
-                                      ),
-                                      // Text(
-                                      //   "${picData?.insight?.likes}  ${notifier.language.like}",
-                                      //   style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
-                                      // ),
-                                    ],
-                                  ),
-                                ),
-                                fourPx,
-                                CustomNewDescContent(
-                                  // desc: "${data?.description}",
-                                  email: picData?.email ?? '',
-                                  username: picData?.username ?? '',
-                                  desc: "${picData?.description}",
-                                  trimLines: 3,
-                                  textAlign: TextAlign.start,
-                                  seeLess: ' ${lang?.less}', // ${notifier2.translate.seeLess}',
-                                  seeMore: ' ${lang?.more}', //${notifier2.translate.seeMoreContent}',
-                                  normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                                  hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary, fontSize: 12),
-                                  expandStyle: const TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
-                                ),
-                                if (picData?.allowComments ?? false)
-                                  GestureDetector(
-                                    onTap: () {
-                                      Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: picData?.postID ?? '', fromFront: true, data: picData ?? ContentData()));
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 4.0),
-                                      child: Text(
-                                        "${lang?.seeAll} ${picData?.comments} ${lang?.comment}",
-                                        style: const TextStyle(fontSize: 12, color: kHyppeBurem),
-                                      ),
+                                            const TextSpan(
+                                              text: " • ",
+                                              style: TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 16),
+                                            ),
+                                            TextSpan(
+                                              text: "${picData?.insight!.views?.getCountShort()} ${notifier.language.views}",
+                                              recognizer: TapGestureRecognizer()
+                                                ..onTap = () => Navigator.push(
+                                                    context,
+                                                    CupertinoPageRoute(
+                                                        builder: (context) => ViewLiked(
+                                                              postId: picData?.postID ?? '',
+                                                              eventType: 'VIEW',
+                                                            ))),
+                                              style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                                            ),
+                                          ]),
+                                        ),
+                                        // Text(
+                                        //   "${picData?.insight?.likes}  ${notifier.language.like}",
+                                        //   style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                                        // ),
+                                      ],
                                     ),
                                   ),
-                                (picData?.comment?.length ?? 0) > 0
-                                    ? Padding(
-                                        padding: const EdgeInsets.only(top: 0.0),
-                                        child: ListView.builder(
-                                          shrinkWrap: true,
-                                          physics: const NeverScrollableScrollPhysics(),
-                                          itemCount: (picData?.comment?.length ?? 0) >= 2 ? 2 : 1,
-                                          itemBuilder: (context, indexComment) {
-                                            return Padding(
-                                              padding: const EdgeInsets.only(bottom: 6.0),
-                                              child: CustomNewDescContent(
-                                                email: picData?.comment?[indexComment].sender ?? '',
-                                                // desc: "${picData??.description}",
-                                                username: picData?.comment?[indexComment].userComment?.username ?? '',
-                                                desc: picData?.comment?[indexComment].txtMessages ?? '',
-                                                trimLines: 2,
-                                                textAlign: TextAlign.start,
-                                                seeLess: ' ${notifier.language.less}', // ${notifier2.translate.seeLess}',
-                                                seeMore: ' ${notifier.language.more} ', //${notifier2.translate.seeMoreContent}',
-                                                normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                                                hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                                                expandStyle: const TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      )
-                                    : Container(),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 4.0),
-                                  child: Text(
-                                    "${System().readTimestamp(
-                                      DateTime.parse(System().dateTimeRemoveT(picData?.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
-                                      context,
-                                      fullCaption: true,
-                                    )}",
-                                    style: TextStyle(fontSize: 12, color: kHyppeBurem),
+                                  fourPx,
+                                  CustomNewDescContent(
+                                    // desc: "${data?.description}",
+                                    email: picData?.email ?? '',
+                                    username: picData?.username ?? '',
+                                    desc: "${picData?.description}",
+                                    trimLines: 3,
+                                    textAlign: TextAlign.start,
+                                    seeLess: ' ${lang?.less}', // ${notifier2.translate.seeLess}',
+                                    seeMore: ' ${lang?.more}', //${notifier2.translate.seeMoreContent}',
+                                    normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
+                                    hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary, fontSize: 12),
+                                    expandStyle: const TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
                                   ),
-                                ),
-                              ],
+                                  if (picData?.allowComments ?? false)
+                                    GestureDetector(
+                                      onTap: () {
+                                        Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: picData?.postID ?? '', fromFront: true, data: picData ?? ContentData()));
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                        child: Text(
+                                          "${lang?.seeAll} ${picData?.comments} ${lang?.comment}",
+                                          style: const TextStyle(fontSize: 12, color: kHyppeBurem),
+                                        ),
+                                      ),
+                                    ),
+                                  (picData?.comment?.length ?? 0) > 0
+                                      ? Padding(
+                                          padding: const EdgeInsets.only(top: 0.0),
+                                          child: ListView.builder(
+                                            shrinkWrap: true,
+                                            physics: const NeverScrollableScrollPhysics(),
+                                            itemCount: (picData?.comment?.length ?? 0) >= 2 ? 2 : 1,
+                                            itemBuilder: (context, indexComment) {
+                                              return Padding(
+                                                padding: const EdgeInsets.only(bottom: 6.0),
+                                                child: CustomNewDescContent(
+                                                  email: picData?.comment?[indexComment].sender ?? '',
+                                                  // desc: "${picData??.description}",
+                                                  username: picData?.comment?[indexComment].userComment?.username ?? '',
+                                                  desc: picData?.comment?[indexComment].txtMessages ?? '',
+                                                  trimLines: 2,
+                                                  textAlign: TextAlign.start,
+                                                  seeLess: ' ${notifier.language.less}', // ${notifier2.translate.seeLess}',
+                                                  seeMore: ' ${notifier.language.more} ', //${notifier2.translate.seeMoreContent}',
+                                                  normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
+                                                  hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
+                                                  expandStyle: const TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        )
+                                      : Container(),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 4.0),
+                                    child: Text(
+                                      "${System().readTimestamp(
+                                        DateTime.parse(System().dateTimeRemoveT(picData?.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+                                        context,
+                                        fullCaption: true,
+                                      )}",
+                                      style: TextStyle(fontSize: 12, color: kHyppeBurem),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          homeNotifier.isLoadingLoadmore && picData == notifier.pic?.last
-                              ? const Padding(
-                                  padding: EdgeInsets.only(bottom: 32),
-                                  child: Center(child: CustomLoading()),
-                                )
-                              : Container(),
-                        ],
+                            homeNotifier.isLoadingLoadmore && picData == notifier.pic?.last
+                                ? const Padding(
+                                    padding: EdgeInsets.only(bottom: 32),
+                                    child: Center(child: CustomLoading()),
+                                  )
+                                : Container(),
+                          ],
+                        ),
                       ),
           );
   }

@@ -217,10 +217,8 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
       // _inSeek = false;
     });
     fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
-      print('====Run again');
       if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
         try {
-          print('====Run again');
           if (mounted) {
             setState(() {
               _currentPositionText = extraValue ?? 0;
@@ -249,7 +247,7 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
     });
     fAliplayer?.setOnCompletion((playerId) {
       _showLoading = false;
-      print('====Run again');
+
       isPause = false;
 
       setState(() {
