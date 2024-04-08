@@ -32,6 +32,7 @@ class _MakeContentScreenState extends State<MakeContentScreen> with AfterFirstLa
   @override
   void initState() {
     isactivealiplayer = true;
+    MyAudioService.instance.stop();
     print('initState make content');
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     super.initState();

@@ -10,12 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
-import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/pic_fullscreen_argument.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
-import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -341,24 +339,18 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     // fAliplayer?.setCacheConfig(map);
     // print("====---- ---==== ali ${fAliplayer?.getPlayerName()}");
     if (data.reportedStatus != 'BLURRED') {
-      if (playIndex == _curIdx) {
-        await MyAudioService.instance.stop();
-        playIndex = -1;
-        setState(() {});
-      } else {
-        MyAudioService.instance.play(
-          path: url,
-          startedPlaying: () {
-            playIndex = _curIdx;
-            setState(() {});
-          },
-          stoppedPlaying: () {
-            playIndex = -1;
-            setState(() {});
-          },
-          mute: notifier.isMute,
-        );
-      }
+      MyAudioService.instance.play(
+        path: url,
+        startedPlaying: () {
+          playIndex = _curIdx;
+          setState(() {});
+        },
+        stoppedPlaying: () {
+          playIndex = -1;
+          setState(() {});
+        },
+        mute: notifier.isMute,
+      );
     } else {
       MyAudioService.instance.stop();
     }
@@ -628,6 +620,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                               //   scrollBehavior: ScrollBehavior(),
                               itemBuilder: (context, index) {
                                 if (notifier.pic == null || home.isLoadingPict) {
+                                  // fAliplayer?.pause();
+
                                   // _lastCurIndex = -1;
                                   _lastCurPostId = '';
                                   // return Container(
