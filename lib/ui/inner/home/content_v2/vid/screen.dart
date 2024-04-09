@@ -568,7 +568,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   @override
   void dispose() {
     fAliplayer?.stop();
-    fAliplayer?.destroy();
+    // fAliplayer?.destroy();
     isActivePage = false;
     isStopVideo = false;
     "================ ondispose vid".logger();
@@ -1418,7 +1418,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                     ],
                                   ), // Text("${postIdVisibility}"),
                                   tenPx,
-                                  Text("${postIdVisibility != vidData.postID}"),
+                                  // Text("${postIdVisibility != vidData.postID}"),
                                   globalInternetConnection
                                       ? vidData.reportedStatus == 'BLURRED'
                                           ? blurContentWidget(context, vidData)

@@ -250,6 +250,7 @@ class RegisterNotifier with ChangeNotifier {
                       iconSvg: "${AssetPath.vectorPath}info_white.svg", function: () {
                     SharedPreference().writeStorage(SpKeys.email, _result.email);
                     SharedPreference().writeStorage(SpKeys.isUserInOTP, true);
+                    SharedPreference().removeValue(SpKeys.referralFrom);
                     // signUpPinNotifier.userToken = fetch.data['token'];
                     // signUpPinNotifier.userID = _result.userID; >>>>> Backend tidak memberikan key userID
                     signUpPinNotifier.username = _result.userName ?? "";
