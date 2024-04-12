@@ -913,7 +913,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   }
 
   Future<VideoIndicator> navigateTo(VideoNotifier notifier, int changevalue, int index) async {
-    return await Navigator.of(context, rootNavigator: true).push(
+    final navigator = Navigator.of(context, rootNavigator: true);
+    return await navigator.push(
       CupertinoPageRoute(
           builder: (_) => VideoFullLandingscreenPage(
               enableWakelock: true,

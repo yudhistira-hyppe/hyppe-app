@@ -106,13 +106,14 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
       (Routing.navigatorKey.currentContext ?? context).read<ReportNotifier>().inPosition = contentPosition.searchFirst;
       final notifier = Routing.navigatorKey.currentContext!.read<SearchNotifier>();
       if (mounted) {
+        debugPrint("curentslider -- ${_currentIndexSlider.toString()}");
         _controllerSlider.jumpToPage(_currentIndexSlider);
         if (notifier.layout == SearchLayout.searchMore) {
           // notifier.getDataSearch(context);
         }
       }
     });
-    // debugPrint(_currentIndexSlider.toString());
+
     //
 
     super.didPopNext();
@@ -212,11 +213,11 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
           return FirstLayout(notifier: notifier);
         }
       case SearchLayout.interestDetail:
-        if (notifier.selectedInterest != null) {
-          return InterestDetailScreen(data: notifier.selectedInterest!);
-        } else {
-          return FirstLayout(notifier: notifier);
-        }
+        // if (notifier.selectedInterest != null) {
+        return InterestDetailScreen(data: notifier.selectedInterest!);
+      // } else {
+      //   return FirstLayout(notifier: notifier);
+      // }
     }
   }
 }

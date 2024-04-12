@@ -1039,9 +1039,11 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
   }
 
   Future<VideoIndicator> navigateTo(VideoNotifier notifier, int changevalue) async {
+    final navigator = Navigator.of(context, rootNavigator: true);
+
     if (widget.isVidFormProfile ?? false) {
       // if (isPause)
-      return await Navigator.of(context, rootNavigator: true).push(
+      return await navigator.push(
         CupertinoPageRoute(
             builder: (_) => VidScrollFullScreenPage(
                 enableWakelock: widget.enableWakelock,
@@ -1068,7 +1070,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             settings: const RouteSettings()),
       );
     } else {
-      return await Navigator.of(context, rootNavigator: true).push(
+      return await navigator.push(
         CupertinoPageRoute(
             builder: (_) => VideoFullscreenPage(
                 enableWakelock: widget.enableWakelock,

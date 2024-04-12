@@ -658,7 +658,9 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
       if (!isScrolling) {
         onTapCtrl = false;
       }
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     });
   }
 
