@@ -227,8 +227,10 @@ class UploadNotifier extends ChangeNotifier {
 
   set isUploading(bool value) {
     var res = SharedPreference().readStorage(SpKeys.uploadContent) is bool;
-    if (value && res && progress < 1) _isUploading = value;
-    notifyListeners();
+    if (value && res && progress < 1){
+       _isUploading = value;
+       notifyListeners();
+    }
   }
 
   set message(String value) {
