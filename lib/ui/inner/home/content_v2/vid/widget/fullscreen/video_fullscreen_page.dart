@@ -734,6 +734,12 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                         onTapCtrl = true;
                         setState(() {});
                       },
+                      onDoubleTap: () {
+                        onTapCtrl = true;
+                        setState(() {});
+                        final likeNotifier = context.read<LikeNotifier>();
+                        likeNotifier.likePost(context, widget.data);
+                      },
                       child: Stack(
                         children: [
                           Container(
