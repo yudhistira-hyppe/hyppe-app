@@ -1083,10 +1083,14 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                 onTap: () {
                                   setState(() {
                                     postIdVisibility = vidData?[index].postID ?? '';
-                                    fAliplayer?.stop();
-                                    fAliplayer?.clearScreen();
-                                    start(context, vidData?[index] ?? ContentData());
+                                    // fAliplayer?.stop();
+                                    // fAliplayer?.clearScreen();
+                                    // start(context, vidData?[index] ?? ContentData());
                                   });
+                                  fAliplayer?.stop();
+                                  fAliplayer?.clearScreen();
+                                  start(context, vidData?[index] ?? ContentData());
+                                  
                                   var vidNotifier = context.read<PreviewVidNotifier>();
                                   double position = 0.0;
                                   for (var i = 0; i < index; i++) {
@@ -1115,14 +1119,15 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                         withMargin: true,
                                       ),
                                     ),
-                                    Positioned(
-                                      bottom: 20,
-                                      child: SizedBox(
-                                          // color: Colors.red,
-                                          width: MediaQuery.of(context).size.width,
-                                          // height: MediaQuery.of(context).size.height,
-                                          child: Offstage(offstage: _isLock, child: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, vidData?[index] ?? ContentData()))),
-                                    ),
+
+                                    // Positioned(
+                                    //   bottom: 20,
+                                    //   child: SizedBox(
+                                    //       // color: Colors.red,
+                                    //       width: MediaQuery.of(context).size.width,
+                                    //       // height: MediaQuery.of(context).size.height,
+                                    //       child: Offstage(offstage: _isLock, child: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, vidData?[index] ?? ContentData()))),
+                                    // ),
                                     //Show Button Play
                                     if (dataSelected != vidData?[index])
                                       Center(
@@ -1534,7 +1539,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                   y: 0,
                   height: MediaQuery.of(context).size.width,
                   width: MediaQuery.of(context).size.width,
-                  aliPlayerViewType: AliPlayerViewTypeForAndroid.textureview,
+                  // aliPlayerViewType: AliPlayerViewTypeForAndroid.textureview,
                 ),
                 if (!isPlay)
                   Container(
