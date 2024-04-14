@@ -417,11 +417,12 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
         notifyListeners();
         messageToast = notifier.featureType == FeatureType.story ? (notifier.language.recordAtLeast4Seconds ?? 'Error') : (notifier.language.recordAtLeast15Seconds ?? 'Error');
         if (featureType == FeatureType.story) {
-          if (tempDuration.inMilliseconds >= 4900) {
-            await _routing.move(Routes.previewContent);
-          } else {
-            showVideoToast(const Duration(seconds: 3));
-          }
+          // if (tempDuration.inMilliseconds >= 4900) {
+          //   await _routing.move(Routes.previewContent);
+          // } else {
+          //   showVideoToast(const Duration(seconds: 3));
+          // }
+          await _routing.move(Routes.previewContent);
         } else {
           // if (tempDuration.inMilliseconds >= 15900) {
           await _routing.move(Routes.previewContent);

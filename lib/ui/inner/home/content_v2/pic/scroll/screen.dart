@@ -1437,6 +1437,10 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                               onTap: () async {
                                 await context.handleActionIsGuest(() async {
                                   fAliplayer?.pause();
+                                  MyAudioService.instance.pause();
+                                  setState(() {
+                                    notifier.isMute = true;
+                                  });
                                   await ShowBottomSheet.onBuyContent(context, data: pics?[index], fAliplayer: fAliplayer);
                                 }).then((value) {
                                   if (value) {

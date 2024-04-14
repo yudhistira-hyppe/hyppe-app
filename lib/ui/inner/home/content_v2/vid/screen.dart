@@ -1625,6 +1625,10 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                                     "=============== pause 4".logger();
                                                     context.handleActionIsGuest(() async {
                                                       vidData.fAliplayer?.pause();
+                                                      fAliplayer!.pause();
+                                                      setState(() {
+                                                        isPause = !isPause;
+                                                      });
                                                       await ShowBottomSheet.onBuyContent(context, data: vidData, fAliplayer: vidData.fAliplayer);
                                                       // fAliplayer?.play();
                                                     });

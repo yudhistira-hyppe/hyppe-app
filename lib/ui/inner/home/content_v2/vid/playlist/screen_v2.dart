@@ -508,6 +508,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                       child: InkWell(
                         onTap: () async {
                           await context.handleActionIsGuest(() async {
+                            
                             await ShowBottomSheet.onBuyContent(context, data: data);
                           });
                         },
