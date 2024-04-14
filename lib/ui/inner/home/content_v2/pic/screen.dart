@@ -418,8 +418,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void didPop() {
     print("====== didpop ");
-    final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
-    MyAudioService.instance.playagain(notifier.isMute);
+    if (playIndex == _curIdx) {
+      final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
+      MyAudioService.instance.playagain(notifier.isMute);
+    }
     super.didPop();
   }
 
@@ -467,6 +469,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     switch (state) {
       case AppLifecycleState.inactive:
         print("========= inactive");
+        MyAudioService.instance.stop();
         break;
       case AppLifecycleState.resumed:
         print(
@@ -474,7 +477,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         if (context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds) && isActivePage) {
           if (!isactivealiplayer) {
             final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
-            print(notifier.isMute);
             MyAudioService.instance.playagain(notifier.isMute);
           }
         }

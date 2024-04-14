@@ -263,6 +263,9 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                 isPlay = true;
               });
             } catch (e) {
+              setState(() {
+                _showLoading = false;
+              });
               print('error AVPStatus_AVPStatusStarted: $e');
             }
 
