@@ -58,12 +58,20 @@ class MyAudioService {
   Future<void> playagain(bool muted) async {
     print('====== player ${player.playing} mute $muted');
     // if (player.playing){
-    await player.play();
+
     if (muted) {
       await player.setVolume(0);
     } else {
+      print("===== not muted ");
       await player.setVolume(1);
     }
+    try {
+      print("===== audio source ${player.audioSource!.sequence.first.duration} ");
+      await player.play();
+    } catch (e) {
+      print("===== error $e ");
+    }
+
     // }else{}
     return Future<void>.value();
   }

@@ -579,9 +579,12 @@ class PreUploadContentNotifier with ChangeNotifier {
     _tmpBoostTime = '';
     tmpBoostInterval = '';
     editData = null;
+    globalAudioPlayer == null;
     // _isCompress = false;
 
     final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
+    notifier.audioPreviewPlayer.stop();
+    notifier.audioPreviewPlayer.dispose();
     if (isDisposeVid) {
       notifier.height = null;
       notifier.width = null;
@@ -594,6 +597,7 @@ class PreUploadContentNotifier with ChangeNotifier {
 
       musicSelected = null;
       notifier.defaultPath = null;
+
       if (notifier.betterPlayerController != null) {
         // notifier.betterPlayerController!.dispose();
         notifier.betterPlayerController!.pause();

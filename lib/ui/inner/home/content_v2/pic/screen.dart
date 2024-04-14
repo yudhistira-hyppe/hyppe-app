@@ -280,7 +280,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
   void start(BuildContext context, ContentData data, PreviewPicNotifier notifier) async {
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
-
+    globalAliPlayer?.stop();
+    globalAudioPlayer?.stop();
     MyAudioService.instance.stop();
     dataSelected = data;
 
@@ -418,8 +419,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void didPop() {
     print("====== didpop ");
-    final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
-    MyAudioService.instance.playagain(notifier.isMute);
+    if (playIndex == _curIdx) {
+      final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
+      MyAudioService.instance.playagain(notifier.isMute);
+    }
     super.didPop();
   }
 
@@ -467,6 +470,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     switch (state) {
       case AppLifecycleState.inactive:
         print("========= inactive");
+        MyAudioService.instance.stop();
         break;
       case AppLifecycleState.resumed:
         print(
@@ -474,8 +478,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         if (context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds) && isActivePage) {
           if (!isactivealiplayer) {
             final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
-            print(notifier.isMute);
-            MyAudioService.instance.playagain(notifier.isMute);
+            print("========= resumed music ${notifier.isMute}");
+            if (!notifier.isMute) {
+              MyAudioService.instance.playagain(false);
+            }
           }
         }
         break;

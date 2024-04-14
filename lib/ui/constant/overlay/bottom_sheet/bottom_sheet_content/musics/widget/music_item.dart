@@ -17,27 +17,31 @@ class MusicItemScreen extends StatefulWidget {
   final Music music;
   final int index;
   final bool isExplored;
-  const MusicItemScreen({Key? key, required this.music, required this.index, this.isExplored = false }) : super(key: key);
+  const MusicItemScreen({Key? key, required this.music, required this.index, this.isExplored = false}) : super(key: key);
 
   @override
   State<MusicItemScreen> createState() => _MusicItemScreenState();
 }
 
 class _MusicItemScreenState extends State<MusicItemScreen> with WidgetsBindingObserver {
+  // @override
+  // void dispose() {
+  //   var not = context.read<PreviewContentNotifier>();
+  //   not.audioPlayer.dispose();
 
-
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<PreviewContentNotifier>(context);
     return InkWell(
-      onTap: (){
-        if(!widget.isExplored){
+      onTap: () {
+        if (!widget.isExplored) {
           notifier.selectMusic(widget.music, widget.index);
-        }else{
+        } else {
           notifier.selectExpMusic(widget.music, widget.index);
         }
-
       },
       child: Container(
         padding: const EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
@@ -96,51 +100,59 @@ class _MusicItemScreenState extends State<MusicItemScreen> with WidgetsBindingOb
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CustomTextWidget(textToDisplay: widget.music.musicTitle ?? '', textStyle: Theme.of(context)
-                            .textTheme
-                            .bodyText1?.copyWith( fontSize: 14, fontWeight: FontWeight.w700),),
+                        CustomTextWidget(
+                          textToDisplay: widget.music.musicTitle ?? '',
+                          textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 14, fontWeight: FontWeight.w700),
+                        ),
                         fourPx,
-                        CustomTextWidget( textAlign: TextAlign.start, maxLines: 2, textToDisplay: '${widget.music.artistName} • ${widget.music.apsaraMusicUrl?.duration?.toInt().getMinutes() ?? '00'}', textStyle: const TextStyle(color: kHyppeLightSecondary, fontSize: 12, fontWeight: FontWeight.w400),)
+                        CustomTextWidget(
+                          textAlign: TextAlign.start,
+                          maxLines: 2,
+                          textToDisplay: '${widget.music.artistName} • ${widget.music.apsaraMusicUrl?.duration?.toInt().getMinutes() ?? '00'}',
+                          textStyle: const TextStyle(color: kHyppeLightSecondary, fontSize: 12, fontWeight: FontWeight.w400),
+                        )
                       ],
                     ),
                   )
                 ],
               ),
             ),
-            !widget.music.isLoad ?
-            widget.music.isPlay ? MusicProgress(
-              totalSeconds: widget.music.apsaraMusicUrl?.duration?.toInt() ?? 0,
-              onClick: (){
-                if(!widget.isExplored){
-                  notifier.playMusic(context, widget.music, widget.index);
-                }else{
-                  notifier.playExpMusic(context, widget.music, widget.index);
-                }
-              },):
-            Container(
-              width: 50,
-              height: 50,
-              child: IconButton(
-                focusColor: Colors.grey,
-                icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}play_circle.svg"),
-                splashRadius: 1,
-                onPressed: () {
-                  if(!widget.isExplored){
-                    notifier.playMusic(context, widget.music, widget.index);
-                  }else{
-                    notifier.playExpMusic(context, widget.music, widget.index);
-                  }
-                },
-              ),
-            ) :
-            UnconstrainedBox(
-              child: Container(
-                alignment: Alignment.center,
-                child: const CustomLoading(),
-                width: 48,
-                height: 48,
-              ),
-            ),
+            !widget.music.isLoad
+                ? widget.music.isPlay
+                    ? MusicProgress(
+                        totalSeconds: widget.music.apsaraMusicUrl?.duration?.toInt() ?? 0,
+                        onClick: () {
+                          if (!widget.isExplored) {
+                            notifier.playMusic(context, widget.music, widget.index);
+                          } else {
+                            notifier.playExpMusic(context, widget.music, widget.index);
+                          }
+                        },
+                      )
+                    : Container(
+                        width: 50,
+                        height: 50,
+                        child: IconButton(
+                          focusColor: Colors.grey,
+                          icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}play_circle.svg"),
+                          splashRadius: 1,
+                          onPressed: () {
+                            if (!widget.isExplored) {
+                              notifier.playMusic(context, widget.music, widget.index);
+                            } else {
+                              notifier.playExpMusic(context, widget.music, widget.index);
+                            }
+                          },
+                        ),
+                      )
+                : UnconstrainedBox(
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: const CustomLoading(),
+                      width: 48,
+                      height: 48,
+                    ),
+                  ),
           ],
         ),
       ),
@@ -152,6 +164,4 @@ class _MusicItemScreenState extends State<MusicItemScreen> with WidgetsBindingOb
     print('deactive music item');
     super.deactivate();
   }
-
 }
-
