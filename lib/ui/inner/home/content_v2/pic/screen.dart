@@ -280,7 +280,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
   void start(BuildContext context, ContentData data, PreviewPicNotifier notifier) async {
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
-
+    globalAliPlayer?.stop();
+    globalAudioPlayer?.stop();
     MyAudioService.instance.stop();
     dataSelected = data;
 
