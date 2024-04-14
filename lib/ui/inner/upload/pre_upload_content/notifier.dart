@@ -580,6 +580,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     tmpBoostInterval = '';
     editData = null;
     globalAudioPlayer == null;
+
     // _isCompress = false;
 
     final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();

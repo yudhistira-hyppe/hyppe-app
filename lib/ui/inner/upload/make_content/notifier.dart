@@ -114,6 +114,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
   onInitialUploadContent() {
     _selectedDuration = 15;
+
     // if (_featureType == FeatureType.vid) {
     //   _durationOptions = {
     //     15: "15${language.timerSecond}",
