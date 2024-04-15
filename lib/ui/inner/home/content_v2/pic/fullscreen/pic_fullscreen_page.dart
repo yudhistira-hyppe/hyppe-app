@@ -178,8 +178,12 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
     selectedData?.isDiaryPlay = false;
     if (data.reportedStatus != 'BLURRED') {
       await getMusicUrl(context, data.music?.apsaraMusic ?? '');
+      MyAudioService.instance.play(path: url, startedPlaying: () {}, stoppedPlaying: () {}, mute: notifier.isMute);
+    }else{
+      MyAudioService.instance.stop();
     }
-    MyAudioService.instance.play(path: url, startedPlaying: () {}, stoppedPlaying: () {}, mute: notifier.isMute);
+
+    
 
     setState(() {
       isPause = false;
@@ -402,6 +406,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                         context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {});
                       }
                       fAliplayer?.stop();
+                      globalAudioPlayer?.pause();
                       MyAudioService.instance.stop();
                       Future.delayed(const Duration(milliseconds: 500), () {
                         System().increaseViewCount2(context, picData[index], check: false);
@@ -461,11 +466,15 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                               context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {});
                             }
                             if (picData[index].music != null) {
+                              fAliplayer?.stop();
+                              globalAudioPlayer?.stop();
                               print("ada musiknya ${picData[index].music}");
                               Future.delayed(const Duration(milliseconds: 100), () {
                                 startMusic(context, picData[index], notifier);
                               });
                             } else {
+                              fAliplayer?.stop();
+                              globalAudioPlayer?.stop();
                               MyAudioService.instance.stop();
                             }
 
@@ -592,17 +601,17 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                   context.read<LikeNotifier>().likePost(context, notifier!.pic![index]);
                 },
                 onTap: () {
+                  notifier!.setIsSound(!notifier.isMute);
                   setState(() {
-                    notifier!.isMute = !notifier.isMute;
                     opacityLevel = 1.0;
                     isMuteAudioPic = notifier.isMute;
                   });
                   if (picData.music != null) {
-                    MyAudioService.instance.playagain(notifier?.isMute ?? false);
+                    MyAudioService.instance.playagain(notifier.isMute);
                   }
 
-                  fAliplayer?.setMuted(notifier!.isMute);
-                  if (notifier!.isMute) {
+                  fAliplayer?.setMuted(notifier.isMute);
+                  if (notifier.isMute) {
                     animatedController.stop();
                   } else {
                     animatedController.repeat();
@@ -694,6 +703,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
   }
 
   Widget blurContentWidget(BuildContext context, ContentData data, {int index = 0, PreviewPicNotifier? notifier}) {
+    MyAudioService.instance.stop();
     return Stack(
       children: [
         Positioned.fill(
@@ -1035,17 +1045,16 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                   onFunctionTap: () async {
                     
                     fAliplayer?.pause();
+                    notifier!.setIsSound(true);
                     setState(() {
-                      notifier!.isMute = true;
-                      // opacityLevel = 1.0;
                       isMuteAudioPic = notifier.isMute;
                     });
                     if (picData.music != null) {
-                      MyAudioService.instance.playagain(notifier?.isMute ?? false);
+                      MyAudioService.instance.playagain(notifier.isMute);
                     }
 
-                    fAliplayer?.setMuted(notifier!.isMute);
-                    if (notifier!.isMute) {
+                    fAliplayer?.setMuted(notifier.isMute);
+                    if (notifier.isMute) {
                       animatedController.stop();
                     } else {
                       animatedController.repeat();

@@ -144,6 +144,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     // _primaryScrollController = widget.scrollController!;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       WidgetsBinding.instance.addObserver(this);
+      notifier.setIsSound(true);
     });
     context.read<HomeNotifier>().removeWakelock();
     super.initState();
@@ -1394,9 +1395,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                   onTap: () async {
                                                     context.handleActionIsGuest(() async {
                                                       MyAudioService.instance.pause();
-                                                      setState(() {
-                                                        notifier.isMute = true;
-                                                      });
+                                                      notifier.setIsSound(true);
                                                       await ShowBottomSheet.onBuyContent(context, data: picData);
                                                     }).then((value) {
                                                       if (value) {
@@ -1617,12 +1616,15 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
               alignment: Alignment.bottomRight,
               child: GestureDetector(
                 onTap: () {
-                  setState(() {
-                    notifier.isMute = !notifier.isMute;
-                  });
+                  notifier.setIsSound(!notifier.isMute);
 
                   print("muteeee----------------- ${notifier.isMute}");
                   // fAliplayer?.setMuted(notifier.isMute);
+                  // if (playIndex == _curIdx){
+                  //   MyAudioService.instance.playagain(notifier.isMute);
+                  // }else{
+                  //   start(data, notifier);
+                  // }
                   if (MyAudioService.instance.player.playing) {
                     MyAudioService.instance.mute(notifier.isMute);
                   } else {
