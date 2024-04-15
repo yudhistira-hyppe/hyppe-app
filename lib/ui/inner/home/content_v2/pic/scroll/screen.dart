@@ -361,6 +361,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
 
     fAliplayer?.stop();
+    MyAudioService.instance.stop();
     dataSelected = data;
 
     isPlay = false;
@@ -1438,9 +1439,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                 await context.handleActionIsGuest(() async {
                                   fAliplayer?.pause();
                                   MyAudioService.instance.pause();
-                                  setState(() {
-                                    notifier.isMute = true;
-                                  });
+                                  notifier.setIsSound(true);
                                   await ShowBottomSheet.onBuyContent(context, data: pics?[index], fAliplayer: fAliplayer);
                                 }).then((value) {
                                   if (value) {
@@ -1611,10 +1610,13 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
               alignment: Alignment.bottomRight,
               child: GestureDetector(
                 onTap: () {
-                  setState(() {
-                    notifier.isMute = !notifier.isMute;
-                  });
-                  MyAudioService.instance.playagain(notifier.isMute);
+                  notifier.setIsSound(!notifier.isMute);
+                  if (playIndex == _curIdx){
+                    MyAudioService.instance.playagain(notifier.isMute);
+                  }else{
+                    start(data, notifier);
+                  }
+                  
                   fAliplayer?.setMuted(notifier.isMute);
                 },
                 child: Padding(

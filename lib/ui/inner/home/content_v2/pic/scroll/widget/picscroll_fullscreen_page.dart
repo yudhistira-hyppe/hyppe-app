@@ -317,7 +317,8 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                 },
                 itemBuilder: (context, index) {
                   if (picData![index].reportedStatus == 'BLURRED') {
-                    notifier.isMute = true;
+                    notifier.setIsSound(true);
+                    // notifier.isMute = true;
                     if (picData![index].music != null) {
                       Future.delayed(const Duration(milliseconds: 100), () {
                         // startMusic(context, picData![index], notifier);
@@ -530,13 +531,13 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                 },
                 onTap: () {
                   if (picData.music != null) {
+                    notifier!.setIsSound(!notifier.isMute);
                     setState(() {
-                      notifier!.isMute = !notifier.isMute;
                       opacityLevel = 1.0;
                     });
-                    fAliplayer?.setMuted(notifier!.isMute);
-                    MyAudioService.instance.playagain(notifier?.isMute ?? false);
-                    if (notifier!.isMute) {
+                    fAliplayer?.setMuted(notifier.isMute);
+                    MyAudioService.instance.playagain(notifier.isMute);
+                    if (notifier.isMute) {
                       animatedController.stop();
                     } else {
                       animatedController.repeat();
@@ -1010,9 +1011,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                   onFunctionTap: () async {
                     fAliplayer?.pause();
                     MyAudioService.instance.pause();
-                    setState(() {
-                      notifier!.isMute = true;
-                    });
+                    notifier!.setIsSound(true);
                     await ShowBottomSheet.onBuyContent(context, data: picData, fAliplayer: fAliplayer);
                     
                   },

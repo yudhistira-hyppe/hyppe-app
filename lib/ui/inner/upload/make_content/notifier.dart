@@ -267,7 +267,9 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
           resetVariable(dispose: false);
         } else {
           resetVariable(dispose: true);
-          _routing.moveBack();
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _routing.moveBack();
+          });
         }
       }
     } catch (e) {
