@@ -1299,6 +1299,10 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                               onTap: () async {
                                 await context.handleActionIsGuest(() async {
                                   vidData?[index].fAliplayer?.pause();
+                                  fAliplayer?.pause();
+                                  setState(() {
+                                    isPause = !isPause;
+                                  });
                                   await ShowBottomSheet.onBuyContent(context, data: vidData?[index] ?? ContentData(), fAliplayer: vidData?[index].fAliplayer);
                                 });
                               },

@@ -419,6 +419,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void didPop() {
     print("====== didpop ");
+    print("====== didpop $playIndex");
+    print("====== didpop $_curIdx");
     if (playIndex == _curIdx) {
       final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
       MyAudioService.instance.playagain(notifier.isMute);
@@ -1394,6 +1396,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                 child: GestureDetector(
                                                   onTap: () async {
                                                     context.handleActionIsGuest(() async {
+                                                      MyAudioService.instance.pause();
+                                                      setState(() {
+                                                        notifier.isMute = true;
+                                                      });
                                                       await ShowBottomSheet.onBuyContent(context, data: picData);
                                                     }).then((value) {
                                                       if (value) {

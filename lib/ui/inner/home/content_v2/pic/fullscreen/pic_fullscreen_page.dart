@@ -1036,8 +1036,26 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
             if ((picData.saleAmount ?? 0) > 0 && email != picData.email)
               buttonRight(
                   onFunctionTap: () async {
+                    
                     fAliplayer?.pause();
-                    await ShowBottomSheet.onBuyContent(context, data: picData, fAliplayer: fAliplayer);
+                    setState(() {
+                      notifier!.isMute = true;
+                      // opacityLevel = 1.0;
+                      isMuteAudioPic = notifier.isMute;
+                    });
+                    if (picData.music != null) {
+                      MyAudioService.instance.playagain(notifier?.isMute ?? false);
+                    }
+
+                    fAliplayer?.setMuted(notifier!.isMute);
+                    if (notifier!.isMute) {
+                      animatedController.stop();
+                    } else {
+                      animatedController.repeat();
+                    }
+                    
+                    var res = await ShowBottomSheet.onBuyContent(context, data: picData, fAliplayer: fAliplayer);
+                    print('disini $res');
                   },
                   iconData: '${AssetPath.vectorPath}ic-cart-shadow.svg',
                   value: lang!.buy ?? 'Buy'),

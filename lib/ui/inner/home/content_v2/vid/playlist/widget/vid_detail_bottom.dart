@@ -1,6 +1,7 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -206,6 +207,7 @@ class VidDetailBottom extends StatelessWidget {
                   value2.translate.buy ?? '',
                   () async {
                     await context.handleActionIsGuest(() async  {
+                      globalAliPlayer?.pause();
                       ShowBottomSheet.onBuyContent(context, data: data);
                     });
                   },

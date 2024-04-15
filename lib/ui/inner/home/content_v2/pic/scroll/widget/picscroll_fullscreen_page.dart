@@ -1009,7 +1009,12 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
               buttonRight(
                   onFunctionTap: () async {
                     fAliplayer?.pause();
+                    MyAudioService.instance.pause();
+                    setState(() {
+                      notifier!.isMute = true;
+                    });
                     await ShowBottomSheet.onBuyContent(context, data: picData, fAliplayer: fAliplayer);
+                    
                   },
                   iconData: '${AssetPath.vectorPath}ic-cart-shadow.svg',
                   value: lang!.buy ?? 'Buy'),
