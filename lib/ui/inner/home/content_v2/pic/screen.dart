@@ -706,7 +706,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                 /// ADS IN BETWEEN === Hariyanto Lukman ===
                 isAds
                     ? VisibilityDetector(
-                        key: Key(index.toString()),
+                        key: Key(picData?.inBetweenAds?.adsId ?? index.toString()),
                         onVisibilityChanged: (info) async {
                           if (info.visibleFraction >= 0.8) {
                             setState(() {

@@ -61,10 +61,10 @@ class Env {
     appStoreID: appStoreID,
     debugShowMaterialGrid: false,
     debugShowCheckedModeBanner: false,
-    baseUrl: "https://p1-new.hyppe.cloud",
-    baseUrl2: "https://p2-new.hyppe.cloud",
+    baseUrl: "https://p1.hyppe.cloud",
+    baseUrl2: "https://p2.hyppe.cloud",
     baseUrlSocket: "https://p3.hyppe.cloud",
-    apiBaseUrl: "https://p1-new.hyppe.cloud",
+    apiBaseUrl: "https://p1.hyppe.cloud",
     deeplinkBaseUrl: "https://share.hyppe.app",
     versionApi: UrlConstants.apiV0,
   );
