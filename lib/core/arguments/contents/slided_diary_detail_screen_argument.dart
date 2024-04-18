@@ -13,6 +13,7 @@ class SlidedDiaryDetailScreenArgument extends ContentScreenArgument {
   final Widget? titleAppbar;
   final PageSrc? pageSrc;
   final String? key;
+  final String? postId;
   final ScrollController? scrollController;
   final double? heightBox;
   final double? heightTopProfile;
@@ -32,6 +33,7 @@ class SlidedDiaryDetailScreenArgument extends ContentScreenArgument {
     this.titleAppbar,
     this.pageSrc,
     this.key,
+    this.postId,
     this.scrollController,
     this.heightBox,
     this.heightTopProfile,

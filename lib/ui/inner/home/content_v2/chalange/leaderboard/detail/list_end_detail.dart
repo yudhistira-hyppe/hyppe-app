@@ -132,7 +132,14 @@ class _ListEndDetailState extends State<ListEndDetail> {
                                                       onTap: () {
                                                         var post = cn.leaderBoardDetaiEndlData?.getlastrank?[index].postChallengess?[0];
                                                         var email = cn.leaderBoardDetaiEndlData?.getlastrank?[index].email;
-                                                        cn.navigateToScreen(context, post?.index, email, post?.postType);
+                                                        cn.navigateToScreen(
+                                                          context,
+                                                          post?.index,
+                                                          email,
+                                                          post?.postType,
+                                                          indexContent: cn.leaderBoardDetaiEndlData?.getlastrank?[index].postChallengess?[0].index,
+                                                          postId: post?.postID,
+                                                        );
                                                       },
                                                       child: ContentLeaderboard(
                                                         data: cn.leaderBoardDetaiEndlData?.getlastrank?[index],

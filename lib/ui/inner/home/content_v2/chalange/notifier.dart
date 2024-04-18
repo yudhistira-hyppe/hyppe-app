@@ -20,6 +20,7 @@ import 'package:hyppe/core/models/collection/localization_v2/localization_model.
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
 import 'package:hyppe/core/models/combination_v2/get_user_profile.dart';
+import 'package:hyppe/core/query_request/contents_data_query.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
@@ -450,7 +451,7 @@ class ChallangeNotifier with ChangeNotifier {
     }
   }
 
-  void navigateToScreen(BuildContext context, index, email, postType) async {
+  void navigateToScreen(BuildContext context, index, email, postType, {int? indexContent, String? postId}) async {
     // Routing().move(
     //   Routes.shimmerSlider,
     //   argument: SlidedPicDetailScreenArgument(
@@ -495,20 +496,23 @@ class ChallangeNotifier with ChangeNotifier {
     if (postType == 'pict') {
       on.pageIndex = 0;
     } else if (postType == 'diary') {
-      on.pageIndex = 1;
+      // on.pageIndex = 1;
+      on.pageIndex = 2;
     } else {
       on.pageIndex = 2;
     }
     Widget widgetTitle;
     String title = "";
 
-    await on.getDataPerPgage(context, email: email);
+    await on.getDataPerPgage(context, email: email, indexContent: indexContent, postID: postId);
     if (postType == 'pict') {
       data = on.manyUser.last.pics ?? [];
       title = "Pict";
     } else if (postType == 'diary') {
-      data = on.manyUser.last.diaries ?? [];
-      title = "Diary";
+      // data = on.manyUser.last.diaries ?? [];
+      // title = "Diary";
+      data = on.manyUser.last.vids ?? [];
+      title = "Vid";
     } else {
       data = on.manyUser.last.vids ?? [];
       title = "Vid";
@@ -519,7 +523,8 @@ class ChallangeNotifier with ChangeNotifier {
       style: TextStyle(color: kHyppeTextLightPrimary),
     );
     Routing().moveBack();
-    on.navigateToSeeAllScreen(context, index - 1, data: data, title: widgetTitle);
+    // on.navigateToSeeAllScreen(context, index - 1, data: data, title: widgetTitle);
+    on.navigateToSeeAllScreen(context, 0, data: data, title: widgetTitle, postId: postId);
   }
 
   Future getOption(LeaderboardChallangeModel data, {DateTime? dateTime, int? session}) async {

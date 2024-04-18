@@ -33,6 +33,7 @@ class PostsBloc {
     bool onlyMyData = false,
     bool myContent = false,
     bool otherContent = false,
+    int? indexContent,
   }) async {
     final formData = FormData();
     final email = SharedPreference().readStorage(SpKeys.email);
@@ -90,6 +91,11 @@ class PostsBloc {
       formData.fields.add(MapEntry('email', email));
       // url = UrlConstants.getMyUserPostsV2;
       url = UrlConstants.getMyUserPosts;
+    }
+
+    if (indexContent != null) {
+      formData.fields.add(MapEntry('index', '$indexContent'));
+      url = UrlConstants.getuserposts;
     }
 
     print('hahahahahahahaha');

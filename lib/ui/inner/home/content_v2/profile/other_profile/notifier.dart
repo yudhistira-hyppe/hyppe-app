@@ -262,8 +262,9 @@ class OtherProfileNotifier with ChangeNotifier {
     }
   }
 
-  Future initialOtherProfile(BuildContext context, {OtherProfileArgument? argument, bool refresh = false}) async {
+  Future initialOtherProfile(BuildContext context, {OtherProfileArgument? argument, bool refresh = false, String? postId}) async {
     // pageIndex = 0;
+    print("haha----ini post id === $postId");
     final connect = await _system.checkConnections();
     if (!connect) {
       isConnect = false;
@@ -357,7 +358,11 @@ class OtherProfileNotifier with ChangeNotifier {
     // user.vids = null;
     // user.diaries = null;
 
-    await getDataPerPgage(context);
+    if (postId != null) {
+      await getDataPerPgage(context, postID: postId, indexContent: 0);
+    } else {
+      await getDataPerPgage(context);
+    }
 
     // context.read<ScrollPicNotifier>().pics = user.pics;
     // user.diaries = await diaryContentsQuery.reload(context, otherContent: true);
@@ -365,7 +370,7 @@ class OtherProfileNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future getDataPerPgage(BuildContext context, {String? email}) async {
+  Future getDataPerPgage(BuildContext context, {String? email, int? indexContent, String? postID}) async {
     final connect = await _system.checkConnections();
     if (!connect) {
       isConnectContent = false;
@@ -387,7 +392,11 @@ class OtherProfileNotifier with ChangeNotifier {
           }
 
           UserInfoModel user2 = UserInfoModel();
-          user2.pics = await picContentsQuery.reload(context, otherContent: true);
+          if (indexContent != null) {
+            picContentsQuery.postID = postID;
+          }
+
+          user2.pics = await picContentsQuery.reload(context, otherContent: true, indexContent: indexContent);
           // user.pics = await picContentsQuery.reload(context, otherContent: true);
           manyUser.last.pics = user2.pics;
           Future.delayed(const Duration(milliseconds: 1000), () {
@@ -410,7 +419,10 @@ class OtherProfileNotifier with ChangeNotifier {
           print("${manyUser.last.diaries}");
           manyUser.last.diaries = [];
           UserInfoModel user2 = UserInfoModel();
-          user2.diaries = await diaryContentsQuery.reload(context, otherContent: true);
+          if (indexContent != null) {
+            diaryContentsQuery.postID = postID;
+          }
+          user2.diaries = await diaryContentsQuery.reload(context, otherContent: true, indexContent: indexContent);
           // user.diaries = await diaryContentsQuery.reload(context, otherContent: true);
           manyUser.last.diaries = user2.diaries;
           notifyListeners();
@@ -440,7 +452,10 @@ class OtherProfileNotifier with ChangeNotifier {
             vidContentsQuery.searchText = email;
           }
           UserInfoModel user2 = UserInfoModel();
-          user2.vids = await vidContentsQuery.reload(context, otherContent: true);
+          if (indexContent != null) {
+            vidContentsQuery.postID = postID;
+          }
+          user2.vids = await vidContentsQuery.reload(context, otherContent: true, indexContent: indexContent);
           // user.vids = await vidContentsQuery.reload(context, otherContent: true);
           manyUser.last.vids = user2.vids;
 
@@ -505,7 +520,7 @@ class OtherProfileNotifier with ChangeNotifier {
     return pages[pageIndex];
   }
 
-  navigateToSeeAllScreen(BuildContext context, int index, {contentPosition? inPosition, Widget? title, List<ContentData>? data, scrollController, double? heightProfile}) async {
+  navigateToSeeAllScreen(BuildContext context, int index, {contentPosition? inPosition, Widget? title, List<ContentData>? data, scrollController, double? heightProfile, String? postId}) async {
     context.read<ReportNotifier>().inPosition = contentPosition.otherprofile;
     final connect = await _system.checkConnections();
 
@@ -523,6 +538,7 @@ class OtherProfileNotifier with ChangeNotifier {
             picData: data,
             scrollController: scrollController,
             heightTopProfile: heightProfile,
+            postId: postId,
           ));
 
       // _routing.move(Routes.picSlideDetailPreview,
@@ -541,6 +557,7 @@ class OtherProfileNotifier with ChangeNotifier {
             diaryData: data,
             scrollController: scrollController,
             heightTopProfile: heightProfile,
+            postId: postId,
           ));
 
       // _routing.move(Routes.diaryDetail,
@@ -559,6 +576,7 @@ class OtherProfileNotifier with ChangeNotifier {
             vidData: data,
             scrollController: scrollController,
             heightTopProfile: heightProfile,
+            postId: postId,
           ));
 
       // _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));

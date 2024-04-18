@@ -104,7 +104,7 @@ class ContentsDataQuery extends PaginationQueryInterface {
   }
 
   @override
-  Future<List<ContentData>> reload(BuildContext context, {bool myContent = false, bool otherContent = false, String? visibility}) async {
+  Future<List<ContentData>> reload(BuildContext context, {bool myContent = false, bool otherContent = false, String? visibility, int? indexContent}) async {
     print('reload');
 
     List<ContentData>? res;
@@ -122,6 +122,8 @@ class ContentsDataQuery extends PaginationQueryInterface {
       // final box = Boxes.boxDataContents;
 
       // page = 0;
+
+      print("post id contedata -- $postID");
       final notifierMain = Provider.of<HomeNotifier>(context, listen: false);
       final notifier = PostsBloc();
       await notifier.getContentsBlocV2(context,
@@ -133,7 +135,8 @@ class ContentsDataQuery extends PaginationQueryInterface {
           onlyMyData: onlyMyData,
           visibility: visibility ?? notifierMain.visibilty,
           myContent: myContent,
-          otherContent: otherContent);
+          otherContent: otherContent,
+          indexContent: indexContent);
       final fetch = notifier.postsFetch;
 
       res = (fetch.data as List<dynamic>?)?.map((e) => ContentData.fromJson(e as Map<String, dynamic>)).toList();
