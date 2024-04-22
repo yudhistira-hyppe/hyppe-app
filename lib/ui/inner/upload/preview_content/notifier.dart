@@ -63,6 +63,8 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  bool isActivePagePreview = false;
+
   double? _aspectRatio;
   FeatureType? _featureType;
   List<String?>? _fileContent;
@@ -511,10 +513,12 @@ class PreviewContentNotifier with ChangeNotifier {
   }
 
   void resumeAudioPreview() {
-    try {
-      audioPreviewPlayer.resume();
-    } catch (e) {
-      e.logger();
+    if (isActivePagePreview) {
+      try {
+        audioPreviewPlayer.resume();
+      } catch (e) {
+        e.logger();
+      }
     }
   }
 

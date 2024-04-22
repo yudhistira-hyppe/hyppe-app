@@ -484,7 +484,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                 }
                 if (isScrolled) {
                   return VisibilityDetector(
-                    key: Key(widget.data.postID??index.toString()),
+                    key: Key(widget.data.postID ?? index.toString()),
                     onVisibilityChanged: (info) {
                       if (info.visibleFraction >= 0.6) {
                         _cardIndex = index;

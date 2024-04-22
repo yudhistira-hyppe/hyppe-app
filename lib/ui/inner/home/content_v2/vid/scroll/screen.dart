@@ -837,7 +837,8 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                 setState(() {
                                   isloading = true;
                                 });
-                                await vidNotifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                                await vidNotifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '', postId: widget.arguments?.postId);
+                                // await vidNotifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
                                 setState(() {
                                   vidData = vidNotifier.vidData;
                                 });
@@ -1090,7 +1091,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                   fAliplayer?.stop();
                                   fAliplayer?.clearScreen();
                                   start(context, vidData?[index] ?? ContentData());
-                                  
+
                                   var vidNotifier = context.read<PreviewVidNotifier>();
                                   double position = 0.0;
                                   for (var i = 0; i < index; i++) {

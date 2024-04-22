@@ -481,7 +481,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         if (context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds) && isActivePage) {
           if (!isactivealiplayer) {
             final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
-            MyAudioService.instance.playagain(notifier.isMute);
+            print("========= resumed music ${notifier.isMute}");
+            if (!notifier.isMute) {
+              MyAudioService.instance.playagain(false);
+            }
           }
         }
         break;
@@ -703,7 +706,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                 /// ADS IN BETWEEN === Hariyanto Lukman ===
                 isAds
                     ? VisibilityDetector(
-                        key: Key(index.toString()),
+                        key: Key(picData?.inBetweenAds?.adsId ?? index.toString()),
                         onVisibilityChanged: (info) async {
                           if (info.visibleFraction >= 0.8) {
                             setState(() {

@@ -114,6 +114,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
   onInitialUploadContent() {
     _selectedDuration = 15;
+
     // if (_featureType == FeatureType.vid) {
     //   _durationOptions = {
     //     15: "15${language.timerSecond}",
@@ -266,7 +267,9 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
           resetVariable(dispose: false);
         } else {
           resetVariable(dispose: true);
-          _routing.moveBack();
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _routing.moveBack();
+          });
         }
       }
     } catch (e) {

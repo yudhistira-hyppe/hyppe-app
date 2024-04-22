@@ -156,7 +156,10 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
-      notifier.itemScrollController.jumpTo(index: widget.arguments?.page ?? 0);
+      print("====length data = ${pics?.length} -- ${widget.arguments?.page}");
+      if ((pics?.length ?? 0) >= (widget.arguments?.page ?? 0)) {
+        notifier.itemScrollController.jumpTo(index: widget.arguments?.page ?? 0);
+      }
       // scrollIndex = widget.arguments?.page ?? 0;
       // _initListener(notifier);
     });
@@ -744,11 +747,12 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                           : RefreshIndicator(
                               onRefresh: () async {
                                 bool connect = await System().checkConnections();
+
                                 if (connect) {
                                   setState(() {
                                     isloading = true;
                                   });
-                                  await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                                  await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '', postId: widget.arguments?.postId);
                                   setState(() {
                                     pics = notifier.pics;
                                   });
@@ -1611,12 +1615,12 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
               child: GestureDetector(
                 onTap: () {
                   notifier.setIsSound(!notifier.isMute);
-                  if (playIndex == _curIdx){
+                  if (playIndex == _curIdx) {
                     MyAudioService.instance.playagain(notifier.isMute);
-                  }else{
+                  } else {
                     start(data, notifier);
                   }
-                  
+
                   fAliplayer?.setMuted(notifier.isMute);
                 },
                 child: Padding(

@@ -10,6 +10,7 @@ import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/content/upload_content.dart';
 import 'package:hyppe/ui/inner/upload/make_content/content/upload_id_verification.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,6 +27,7 @@ class _MakeContentScreenState extends State<MakeContentScreen> with AfterFirstLa
   @override
   void afterFirstLayout(BuildContext context) {
     context.read<MakeContentNotifier>().onInitialUploadContent();
+    context.read<PreUploadContentNotifier>().certifiedTmp = false;
     MyAudioService.instance.pause();
   }
 

@@ -234,6 +234,8 @@ class UrlConstants {
   /// get => Get My Contents.
   static const String getOtherUserPosts = "$postRouteV2/getuserposts/byprofile/v2";
 
+  static const String getUserPostsIndex = "$postRouteV2/getuserposts/byprofile/index";
+
   /// post => Get Apsara Video.
   static const String getVideoApsara = "$postRouteV2/getvideo";
 

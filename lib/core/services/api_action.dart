@@ -125,6 +125,12 @@ class ApiAction {
       }
     }
 
+    // if (Env.dataBaseUrl2.contains(url)) {
+    //   _dio.options.baseUrl = Env.data.baseUrl2;
+    // } else {
+    //   _dio.options.baseUrl = Env.data.apiBaseUrl;
+    // }
+
     try {
       final _response = await _dio.post(
         url,

@@ -20,12 +20,12 @@ class ScrollPicNotifier with ChangeNotifier {
   bool isMute = true;
   int currIndex = 0;
   int get currentIndex => currIndex;
-  
-  setIsSound(bool val){
+
+  setIsSound(bool val) {
     isMute = val;
     notifyListeners();
   }
-  
+
   bool get isLoadingLoadmore => _isLoadingLoadmore;
   set isLoadingLoadmore(bool state) {
     _isLoadingLoadmore = state;
@@ -135,7 +135,7 @@ class ScrollPicNotifier with ChangeNotifier {
     }
   }
 
-  Future reload(BuildContext context, PageSrc pageSrc, {String key = ""}) async {
+  Future reload(BuildContext context, PageSrc pageSrc, {String key = "", String? postId}) async {
     bool connect = await System().checkConnections();
     final searchNotifier = context.read<SearchNotifier>();
     connectionError = !connect;
@@ -152,7 +152,7 @@ class ScrollPicNotifier with ChangeNotifier {
       if (pageSrc == PageSrc.otherProfile) {
         final op = context.read<OtherProfileNotifier>();
         op.pageIndex = 0;
-        await op.initialOtherProfile(context, refresh: true);
+        await op.initialOtherProfile(context, refresh: true, postId: postId);
         pics = op.manyUser.last.pics;
         isLoadingLoadmore = false;
       }
@@ -202,18 +202,18 @@ class ScrollPicNotifier with ChangeNotifier {
 
   void initialPicConnection(BuildContext context) async {
     final connect = await System().checkConnections();
-      if (!connect) {
-        isConnect = false;
-        notifyListeners();
-        // ignore: use_build_context_synchronously
-        ShowGeneralDialog.showToastAlert(
-          context,
-          language.internetConnectionLost ?? ' Error',
-          () async {},
-        );
-      } else {
-        isConnect = true;
-        notifyListeners();
-      }
+    if (!connect) {
+      isConnect = false;
+      notifyListeners();
+      // ignore: use_build_context_synchronously
+      ShowGeneralDialog.showToastAlert(
+        context,
+        language.internetConnectionLost ?? ' Error',
+        () async {},
+      );
+    } else {
+      isConnect = true;
+      notifyListeners();
+    }
   }
 }

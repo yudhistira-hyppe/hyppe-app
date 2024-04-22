@@ -300,7 +300,10 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
         // if (context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds)) {
         fAliplayer?.play();
         if (isActivePage) {
-          MyAudioService.instance.playagain(false);
+          final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
+          if (!notifier.isMute) {
+            MyAudioService.instance.playagain(false);
+          }
         }
         // }
         break;
