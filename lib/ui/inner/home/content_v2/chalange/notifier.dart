@@ -496,8 +496,8 @@ class ChallangeNotifier with ChangeNotifier {
     if (postType == 'pict') {
       on.pageIndex = 0;
     } else if (postType == 'diary') {
-      // on.pageIndex = 1;
-      on.pageIndex = 2;
+      on.pageIndex = 1;
+      // on.pageIndex = 2;
     } else {
       on.pageIndex = 2;
     }
@@ -509,9 +509,9 @@ class ChallangeNotifier with ChangeNotifier {
       data = on.manyUser.last.pics ?? [];
       title = "Pict";
     } else if (postType == 'diary') {
-      // data = on.manyUser.last.diaries ?? [];
+      data = on.manyUser.last.diaries ?? [];
       // title = "Diary";
-      data = on.manyUser.last.vids ?? [];
+      // data = on.manyUser.last.vids ?? [];
       title = "Vid";
     } else {
       data = on.manyUser.last.vids ?? [];

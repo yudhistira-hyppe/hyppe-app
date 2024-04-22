@@ -583,7 +583,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AlivcLivePusher_Interactive: b692d3aab33c036654050a8ae1dd7ffffa0e5200
   AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
-  audio_session: 4f3e461722055d21515cf3261b64c973c062f345
+  audio_session: 088d2483ebd1dc43f51d253d4a1c517d9a2e7207
   audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
   camera_avfoundation: 3125e8cd1a4387f6f31c6c63abb8a55892a9eeeb
   deepar_flutter: e89060abce0c460f36a0bf73802f8a5443f1fdb5
