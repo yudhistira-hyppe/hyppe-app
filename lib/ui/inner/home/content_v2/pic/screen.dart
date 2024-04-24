@@ -325,7 +325,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     // Configure the application.
     // fAliplayer?.setConfig(configMap);
     // var map = {
-    //   "mMaxSizeMB": GlobalSettings.mMaxSizeMBController,
+    //   "mMaxSizeMB": GlobalSettingFs.mMaxSizeMBController,
 
     //   /// The maximum space that can be occupied by the cache directory.
     //   "mMaxDurationS": GlobalSettings.mMaxDurationSController,
@@ -1514,17 +1514,17 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                           ),
                                         )
                                       : Container(),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 4.0),
-                                    child: Text(
-                                      "${System().readTimestamp(
-                                        DateTime.parse(System().dateTimeRemoveT(picData?.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
-                                        context,
-                                        fullCaption: true,
-                                      )}",
-                                      style: TextStyle(fontSize: 12, color: kHyppeBurem),
-                                    ),
-                                  ),
+                                  // Padding(
+                                  //   padding: EdgeInsets.symmetric(vertical: 4.0),
+                                  //   child: Text(
+                                  //     "${System().readTimestamp(
+                                  //       DateTime.parse(System().dateTimeRemoveT(picData?.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+                                  //       context,
+                                  //       fullCaption: true,
+                                  //     )}",
+                                  //     style: TextStyle(fontSize: 12, color: kHyppeBurem),
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                             ),

@@ -552,7 +552,8 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     ContentData? data,
     // StoryController? storyController,
     AnimationController? animationController,
-    Function play,
+    final Function(bool)? selectedText,
+    // Function play,
   ) async {
     print("ini data reaction ");
     // storyController?.pause();
@@ -597,7 +598,10 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
           pageBuilder: (context, animation, secondaryAnimation) {
             if (animationController != null) {
               return ShowReactionsIcon(
-                  onTap: () => _routing.moveBack(),
+                  onTap: () {
+                    _routing.moveBack();
+                    selectedText!(false);
+                  },
                   crossAxisCount: 3,
                   data: _data?.data ?? [],
                   itemBuilder: (context, index) {
@@ -605,7 +609,8 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
                       onTap: () {
                         reaction = _data?.data[index].icon;
                         _routing.moveBack();
-                        play(); //play story
+                        // play(); //play story
+                        selectedText!(false);
                         final emoji = _data?.data[index];
                         if (emoji != null) {
                           loadReaction = true;

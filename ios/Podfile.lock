@@ -1,4 +1,44 @@
 PODS:
+  - agora_rtc_engine (6.3.0):
+    - AgoraIrisRTC_iOS (= 4.3.0-build.2)
+    - AgoraRtcEngine_iOS (= 4.3.0)
+    - Flutter
+  - agora_rtm (1.5.9):
+    - AgoraRtm_iOS (= 1.5.1)
+    - Flutter
+  - AgoraIrisRTC_iOS (4.3.0-build.2)
+  - AgoraRtcEngine_iOS (4.3.0):
+    - AgoraRtcEngine_iOS/AIAEC (= 4.3.0)
+    - AgoraRtcEngine_iOS/AINS (= 4.3.0)
+    - AgoraRtcEngine_iOS/AudioBeauty (= 4.3.0)
+    - AgoraRtcEngine_iOS/ClearVision (= 4.3.0)
+    - AgoraRtcEngine_iOS/ContentInspect (= 4.3.0)
+    - AgoraRtcEngine_iOS/FaceCapture (= 4.3.0)
+    - AgoraRtcEngine_iOS/FaceDetection (= 4.3.0)
+    - AgoraRtcEngine_iOS/ReplayKit (= 4.3.0)
+    - AgoraRtcEngine_iOS/RtcBasic (= 4.3.0)
+    - AgoraRtcEngine_iOS/SpatialAudio (= 4.3.0)
+    - AgoraRtcEngine_iOS/VideoAv1CodecDec (= 4.3.0)
+    - AgoraRtcEngine_iOS/VideoCodecDec (= 4.3.0)
+    - AgoraRtcEngine_iOS/VideoCodecEnc (= 4.3.0)
+    - AgoraRtcEngine_iOS/VirtualBackground (= 4.3.0)
+    - AgoraRtcEngine_iOS/VQA (= 4.3.0)
+  - AgoraRtcEngine_iOS/AIAEC (4.3.0)
+  - AgoraRtcEngine_iOS/AINS (4.3.0)
+  - AgoraRtcEngine_iOS/AudioBeauty (4.3.0)
+  - AgoraRtcEngine_iOS/ClearVision (4.3.0)
+  - AgoraRtcEngine_iOS/ContentInspect (4.3.0)
+  - AgoraRtcEngine_iOS/FaceCapture (4.3.0)
+  - AgoraRtcEngine_iOS/FaceDetection (4.3.0)
+  - AgoraRtcEngine_iOS/ReplayKit (4.3.0)
+  - AgoraRtcEngine_iOS/RtcBasic (4.3.0)
+  - AgoraRtcEngine_iOS/SpatialAudio (4.3.0)
+  - AgoraRtcEngine_iOS/VideoAv1CodecDec (4.3.0)
+  - AgoraRtcEngine_iOS/VideoCodecDec (4.3.0)
+  - AgoraRtcEngine_iOS/VideoCodecEnc (4.3.0)
+  - AgoraRtcEngine_iOS/VirtualBackground (4.3.0)
+  - AgoraRtcEngine_iOS/VQA (4.3.0)
+  - AgoraRtm_iOS (1.5.1)
   - AlivcLivePusher_Interactive (6.1.0):
     - AlivcLivePusher_Interactive/AlivcLivePusher (= 6.1.0)
   - AlivcLivePusher_Interactive/AlivcLivePusher (6.1.0)
@@ -189,9 +229,6 @@ PODS:
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
-  - FMDB (2.7.9):
-    - FMDB/standard (= 2.7.9)
-  - FMDB/standard (2.7.9)
   - google_mlkit_commons (0.2.0):
     - Flutter
     - MLKitVision
@@ -279,6 +316,8 @@ PODS:
     - TOCropViewController (~> 2.6.1)
   - image_picker_ios (0.0.1):
     - Flutter
+  - iris_method_channel (0.0.1):
+    - Flutter
   - just_audio (0.0.1):
     - Flutter
   - libwebp (1.3.2):
@@ -343,7 +382,7 @@ PODS:
     - Flutter
   - PromisesObjC (2.4.0)
   - Protobuf (3.25.3)
-  - receive_sharing_intent (0.0.1):
+  - receive_sharing_intent (1.6.7):
     - Flutter
   - screen_protector (1.2.1):
     - Flutter
@@ -364,7 +403,7 @@ PODS:
     - Flutter
   - sqflite (0.0.3):
     - Flutter
-    - FMDB (>= 2.7.5)
+    - FlutterMacOS
   - SwiftyGif (5.4.4)
   - Toast (4.1.0)
   - TOCropViewController (2.6.1)
@@ -384,6 +423,8 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - agora_rtc_engine (from `.symlinks/plugins/agora_rtc_engine/ios`)
+  - agora_rtm (from `.symlinks/plugins/agora_rtm/ios`)
   - audio_session (from `.symlinks/plugins/audio_session/ios`)
   - audioplayers_darwin (from `.symlinks/plugins/audioplayers_darwin/ios`)
   - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
@@ -414,6 +455,7 @@ DEPENDENCIES:
   - heif_converter (from `.symlinks/plugins/heif_converter/ios`)
   - image_cropper (from `.symlinks/plugins/image_cropper/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
+  - iris_method_channel (from `.symlinks/plugins/iris_method_channel/ios`)
   - just_audio (from `.symlinks/plugins/just_audio/ios`)
   - light_compressor (from `.symlinks/plugins/light_compressor/ios`)
   - location (from `.symlinks/plugins/location/ios`)
@@ -427,7 +469,7 @@ DEPENDENCIES:
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
-  - sqflite (from `.symlinks/plugins/sqflite/ios`)
+  - sqflite (from `.symlinks/plugins/sqflite/darwin`)
   - unique_identifier (from `.symlinks/plugins/unique_identifier/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/darwin`)
@@ -437,6 +479,9 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - AgoraIrisRTC_iOS
+    - AgoraRtcEngine_iOS
+    - AgoraRtm_iOS
     - AlivcLivePusher_Interactive
     - AppAuth
     - DKImagePickerController
@@ -452,7 +497,6 @@ SPEC REPOS:
     - FirebaseDynamicLinks
     - FirebaseInstallations
     - FirebaseMessaging
-    - FMDB
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleMLKit
@@ -481,6 +525,10 @@ SPEC REPOS:
     - TOCropViewController
 
 EXTERNAL SOURCES:
+  agora_rtc_engine:
+    :path: ".symlinks/plugins/agora_rtc_engine/ios"
+  agora_rtm:
+    :path: ".symlinks/plugins/agora_rtm/ios"
   audio_session:
     :path: ".symlinks/plugins/audio_session/ios"
   audioplayers_darwin:
@@ -539,6 +587,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_cropper/ios"
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
+  iris_method_channel:
+    :path: ".symlinks/plugins/iris_method_channel/ios"
   just_audio:
     :path: ".symlinks/plugins/just_audio/ios"
   light_compressor:
@@ -566,7 +616,7 @@ EXTERNAL SOURCES:
   sign_in_with_apple:
     :path: ".symlinks/plugins/sign_in_with_apple/ios"
   sqflite:
-    :path: ".symlinks/plugins/sqflite/ios"
+    :path: ".symlinks/plugins/sqflite/darwin"
   unique_identifier:
     :path: ".symlinks/plugins/unique_identifier/ios"
   url_launcher_ios:
@@ -581,11 +631,16 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
+  agora_rtc_engine: f737aeb9ac7fdfcfda875d0d0125eedaa09602f9
+  agora_rtm: 51b5cef21d9d664563b9a420f2c59531b1ad3e4c
+  AgoraIrisRTC_iOS: 2caf892fa827777fe43b6ac7d12e9b42579eb865
+  AgoraRtcEngine_iOS: 267c0980c1fb97e056d05b850f8629b05b6e467a
+  AgoraRtm_iOS: 595a9fa33a409831e6183396ea8f8bc563918403
   AlivcLivePusher_Interactive: b692d3aab33c036654050a8ae1dd7ffffa0e5200
   AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
-  audio_session: 088d2483ebd1dc43f51d253d4a1c517d9a2e7207
+  audio_session: 4f3e461722055d21515cf3261b64c973c062f345
   audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
-  camera_avfoundation: 3125e8cd1a4387f6f31c6c63abb8a55892a9eeeb
+  camera_avfoundation: 8b8d780bcfb6a4a02b0fbe2b4bd17b5b71946e68
   deepar_flutter: e89060abce0c460f36a0bf73802f8a5443f1fdb5
   device_info_plus: c6fb39579d0f423935b0c9ce7ee2f44b71b9fce6
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
@@ -619,7 +674,6 @@ SPEC CHECKSUMS:
   flutter_sharing_intent: e35380d0e1501d7111dbb7e46d5ac6339da6da98
   flutter_video_info: a932e1b0da369bba95c3a14b7f61d5f8b0d03280
   fluttertoast: 31b00dabfa7fb7bacd9e7dbee580d7a2ff4bf265
-  FMDB: aa44149f6fb634b1ac54f64f47064bb0d0c5a032
   google_mlkit_commons: e9070f57232c3a3e4bd42fdfa621bb1f4bb3e709
   google_mlkit_text_recognition: 9967360384e93b09686aca67fc9f13f9a957d770
   google_sign_in_ios: 8115e3fbe097e6509beb819ed602d47369d9011f
@@ -634,7 +688,8 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 5595ec75acf5be50814f81e9189490412bad82ba
   heif_converter: e3802659e4104e27e28c4d7bff07903da2f69318
   image_cropper: a3291c624a953049bc6a02e1f8c8ceb162a24b25
-  image_picker_ios: 4a8aadfbb6dc30ad5141a2ce3832af9214a705b5
+  image_picker_ios: 99dfe1854b4fa34d0364e74a78448a0151025425
+  iris_method_channel: 0617c689164d8154c020c50f63ca79f92b8a7b9d
   just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
   light_compressor: 789ed7df289f0cd43f1dae8a6eed5d932b214c59
@@ -650,29 +705,29 @@ SPEC CHECKSUMS:
   native_device_orientation: 3b4cfc9565a7b879cc4fde282b3e27745e852d0d
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
   package_info_plus: 115f4ad11e0698c8c1c5d8a689390df880f47e85
-  path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
+  path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   Protobuf: 8e9074797a13c484a79959fdb819ef4ae6da7dbe
-  receive_sharing_intent: c0d87310754e74c0f9542947e7cbdf3a0335a3b1
+  receive_sharing_intent: 9ca20ae908f83c36ddaaaa8c9bd30ce4700495e8
   screen_protector: 6f92086bd2f2f4b54f54913289b9d1310610140b
   ScreenProtectorKit: 83a6281b02c7a5902ee6eac4f5045f674e902ae4
   SDWebImage: 981fd7e860af070920f249fd092420006014c3eb
-  SDWebImageWebPCoder: eb09ecbb5a65a1deb5c5f7960fdb788daae0dd43
+  SDWebImageWebPCoder: c94f09adbca681822edad9e532ac752db713eabf
   share_plus: c3fef564749587fc939ef86ffb283ceac0baf9f5
-  shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
+  shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
   sign_in_with_apple: f3bf75217ea4c2c8b91823f225d70230119b8440
-  sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
+  sqflite: 673a0e54cc04b7d6dba8d24fb8095b31c3a99eec
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
   Toast: ec33c32b8688982cecc6348adeae667c1b9938da
   TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
   unique_identifier: 5b4b48cfe07a95df6aa11746944c0dce22ab5400
-  url_launcher_ios: 68d46cc9766d0c41dbdc884310529557e3cd7a86
+  url_launcher_ios: bbd758c6e7f9fd7b5b1d4cde34d2b95fcce5e812
   video_player_avfoundation: e9e6f9cae7d7a6d9b43519b0aab382bca60fcfd1
   video_thumbnail: c4e2a3c539e247d4de13cd545344fd2d26ffafd1
   wakelock_plus: 8b09852c8876491e4b6d179e17dfe2a0b5f60d47
-  webview_flutter_wkwebview: 2e2d318f21a5e036e2c3f26171342e95908bd60a
+  webview_flutter_wkwebview: 4f3e50f7273d31e5500066ed267e3ae4309c5ae4
 
 PODFILE CHECKSUM: 5dd05eb3e611b6e78105ddbae2f3e1d06a5ba0bd
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.15.2

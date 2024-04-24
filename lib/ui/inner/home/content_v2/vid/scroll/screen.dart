@@ -1066,7 +1066,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                         } catch (e) {
                           e.logger();
                         }
-                        // System().increaseViewCount2(context, vidData);
+                        // System().increaseViewCount2(context, vidData![index]);
                       });
                       if (vidData?[index].certified ?? false) {
                         System().block(context);
@@ -1091,6 +1091,8 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                   fAliplayer?.stop();
                                   fAliplayer?.clearScreen();
                                   start(context, vidData?[index] ?? ContentData());
+
+                                  System().increaseViewCount2(context, vidData![index]);
 
                                   var vidNotifier = context.read<PreviewVidNotifier>();
                                   double position = 0.0;
@@ -1417,17 +1419,17 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                       ),
                     )
                   : Container(),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 4.0),
-                child: Text(
-                  "${System().readTimestamp(
-                    DateTime.parse(System().dateTimeRemoveT(vidData?[index].createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
-                    context,
-                    fullCaption: true,
-                  )}",
-                  style: TextStyle(fontSize: 12, color: kHyppeBurem),
-                ),
-              ),
+              // Padding(
+              //   padding: EdgeInsets.symmetric(vertical: 4.0),
+              //   child: Text(
+              //     "${System().readTimestamp(
+              //       DateTime.parse(System().dateTimeRemoveT(vidData?[index].createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+              //       context,
+              //       fullCaption: true,
+              //     )}",
+              //     style: TextStyle(fontSize: 12, color: kHyppeBurem),
+              //   ),
+              // ),
             ],
           ),
         ),

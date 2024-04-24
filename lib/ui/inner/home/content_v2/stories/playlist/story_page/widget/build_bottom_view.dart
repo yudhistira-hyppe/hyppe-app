@@ -20,8 +20,11 @@ class BuildBottomView extends StatefulWidget {
   final ContentData? data;
   final int? currentStory;
   final int currentIndex;
-  final Function? pause;
-  final Function? play;
+  final Function()? pause;
+  final Function()? play;
+  final Function(bool)? selectedText;
+  // final VoidCallback(bool? bool)? onTap;
+
 
   BuildBottomView({
     Key? key,
@@ -32,6 +35,7 @@ class BuildBottomView extends StatefulWidget {
     required this.currentIndex,
     this.pause,
     this.play,
+    this.selectedText,
   });
 
   @override
@@ -40,11 +44,12 @@ class BuildBottomView extends StatefulWidget {
 
 class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayoutMixin {
 
-  final node = FocusNode();
+  FocusNode _focus = FocusNode();
 
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'BuildBottomView');
+    _focus.addListener(_onFocusChange);
     super.initState();
   }
 
@@ -53,6 +58,19 @@ class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayout
     final notifier = context.read<StoriesPlaylistNotifier>();
     notifier.setIsPreventedEmoji(true);
     super.deactivate();
+  }
+
+  void _onFocusChange() {
+    // widget.onTap
+    widget.selectedText!(_focus.hasFocus);
+    debugPrint("Focus: ${_focus.hasFocus.toString()}");
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _focus.removeListener(_onFocusChange);
+    _focus.dispose();
   }
 
   @override
@@ -139,7 +157,7 @@ class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayout
                               child: Material(
                                 color: Colors.transparent,
                                 child: TextFormField(
-                                  focusNode: node,
+                                  focusNode: _focus,
                                   maxLines: null,
                                   validator: (String? input) {
                                     if (input?.isEmpty ?? true) {
@@ -178,7 +196,7 @@ class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayout
 
                                       notifier.forceStop = true;
                                     }, addAction: (){
-                                      node.unfocus();
+                                      _focus.unfocus();
                                     });
                                     widget.play!();
                                   },
@@ -201,6 +219,7 @@ class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayout
                                   data: widget.data,
                                   pause: widget.pause,
                                   play: widget.play,
+                                  selectedText: widget.selectedText,
                                 ),
                               ),
                             ),

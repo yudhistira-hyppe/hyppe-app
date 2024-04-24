@@ -1561,17 +1561,17 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                       ),
                     )
                   : Container(),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 4.0),
-                child: Text(
-                  "${System().readTimestamp(
-                    DateTime.parse(System().dateTimeRemoveT(pics?[index].createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
-                    context,
-                    fullCaption: true,
-                  )}",
-                  style: TextStyle(fontSize: 12, color: kHyppeBurem),
-                ),
-              ),
+              // Padding(
+              //   padding: EdgeInsets.symmetric(vertical: 4.0),
+              //   child: Text(
+              //     "${System().readTimestamp(
+              //       DateTime.parse(System().dateTimeRemoveT(pics?[index].createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+              //       context,
+              //       fullCaption: true,
+              //     )}",
+              //     style: TextStyle(fontSize: 12, color: kHyppeBurem),
+              //   ),
+              // ),
             ],
           ),
         ),
