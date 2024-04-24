@@ -211,6 +211,12 @@ class OtherProfileNotifier with ChangeNotifier {
       return false;
     }
 
+    print("isload $isLoad");
+    print("isload ${scrollController?.offset}");
+    print("isload ${scrollController?.position.maxScrollExtent}");
+    print("isload ${scrollController?.position.outOfRange}");
+    print("isload ${scrollController != null && scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange}");
+
     if (isLoad || (scrollController != null && scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange)) {
       switch (pageIndex) {
         case 0:
@@ -399,6 +405,7 @@ class OtherProfileNotifier with ChangeNotifier {
           user2.pics = await picContentsQuery.reload(context, otherContent: true, indexContent: indexContent);
           // user.pics = await picContentsQuery.reload(context, otherContent: true);
           manyUser.last.pics = user2.pics;
+          print("ini pict haha ${manyUser.last.pics?.length}");
           Future.delayed(const Duration(milliseconds: 1000), () {
             isLoading = false;
           });

@@ -80,7 +80,7 @@ class OtherProfileTop extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Text("${notifier.displayPhotoProfile()}"),
+            // Text("${notifier.manyUser.last.pics?.length}"),
             Row(
               children: [
                 // StoryColorValidator(
@@ -241,14 +241,13 @@ class OtherProfileTop extends StatelessWidget {
                           function: notifier.isCheckLoading
                               ? null
                               : () {
-                            context.handleActionIsGuest(() {
-                              if (notifier.statusFollowing == StatusFollowing.none || notifier.statusFollowing == StatusFollowing.rejected) {
-                                notifier.followUser(context);
-                              } else if (notifier.statusFollowing == StatusFollowing.following) {
-                                notifier.followUser(context, isUnFollow: true);
-                              }
-                            });
-
+                                  context.handleActionIsGuest(() {
+                                    if (notifier.statusFollowing == StatusFollowing.none || notifier.statusFollowing == StatusFollowing.rejected) {
+                                      notifier.followUser(context);
+                                    } else if (notifier.statusFollowing == StatusFollowing.following) {
+                                      notifier.followUser(context, isUnFollow: true);
+                                    }
+                                  });
                                 },
                           child: notifier.isCheckLoading
                               ? const CustomLoading()
@@ -279,7 +278,6 @@ class OtherProfileTop extends StatelessWidget {
                                 // ShowBottomSheet.onInternalServerError(context, statusCode: 500, onReload: await notifier.createDiscussion(context));
                               }
                             });
-
                           },
                           child: CustomTextWidget(
                             textToDisplay: notifier.language.message ?? 'message',
