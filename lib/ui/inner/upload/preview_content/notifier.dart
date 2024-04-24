@@ -63,6 +63,8 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  bool isActivePagePreview = false;
+
   double? _aspectRatio;
   FeatureType? _featureType;
   List<String?>? _fileContent;
@@ -511,10 +513,12 @@ class PreviewContentNotifier with ChangeNotifier {
   }
 
   void resumeAudioPreview() {
-    try {
-      audioPreviewPlayer.resume();
-    } catch (e) {
-      e.logger();
+    if (isActivePagePreview) {
+      try {
+        audioPreviewPlayer.resume();
+      } catch (e) {
+        e.logger();
+      }
     }
   }
 
@@ -1268,8 +1272,8 @@ class PreviewContentNotifier with ChangeNotifier {
                       : 'Error';
               showToast(const Duration(seconds: 3));
             } else if (videoDuration < Duration(seconds: 14)) {
-              messageLimit = language.messageLessLimitVideo ?? 'Error';
-              showToast(const Duration(seconds: 3));
+              // messageLimit = language.messageLessLimitVideo ?? 'Error';
+              // showToast(const Duration(seconds: 3));
             }
           }
           _betterPlayerController?.play();

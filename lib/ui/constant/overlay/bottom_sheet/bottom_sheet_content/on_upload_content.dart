@@ -239,34 +239,34 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                         )
                       : Container(),
 
-                  widget.isDiary
-                      ? Column(
-                          children: [
-                            menu(
-                                title: "HyppeDiary",
-                                subTitle: notifier.language.howAreYouToday ?? '',
-                                icon: "${AssetPath.vectorPath}diary.svg",
-                                function: () async {
-                                  if (newUser == "FALSE") {
-                                    context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
-                                    // notifier.thumbnailLocalMedia();
-                                    notifier.featureType = FeatureType.diary;
-                                    notifier.isVideo = true;
-                                    notifier.selectedDuration = 15;
-                                    final tempIsHome = isHomeScreen;
-                                    if (tempIsHome) {
-                                      isHomeScreen = false;
-                                    }
-                                    Routing().moveAndPop(Routes.makeContent);
-                                    if (tempIsHome) {
-                                      isHomeScreen = true;
-                                    }
-                                  }
-                                }),
-                            Divider(thickness: 1, color: Theme.of(context).dividerColor),
-                          ],
-                        )
-                      : Container(),
+                  // widget.isDiary
+                  //     ? Column(
+                  //         children: [
+                  //           menu(
+                  //               title: "HyppeDiary",
+                  //               subTitle: notifier.language.howAreYouToday ?? '',
+                  //               icon: "${AssetPath.vectorPath}diary.svg",
+                  //               function: () async {
+                  //                 if (newUser == "FALSE") {
+                  //                   context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
+                  //                   // notifier.thumbnailLocalMedia();
+                  //                   notifier.featureType = FeatureType.diary;
+                  //                   notifier.isVideo = true;
+                  //                   notifier.selectedDuration = 15;
+                  //                   final tempIsHome = isHomeScreen;
+                  //                   if (tempIsHome) {
+                  //                     isHomeScreen = false;
+                  //                   }
+                  //                   Routing().moveAndPop(Routes.makeContent);
+                  //                   if (tempIsHome) {
+                  //                     isHomeScreen = true;
+                  //                   }
+                  //                 }
+                  //               }),
+                  //           Divider(thickness: 1, color: Theme.of(context).dividerColor),
+                  //         ],
+                  //       )
+                  //     : Container(),
                   widget.isVid
                       ? Column(
                           children: [

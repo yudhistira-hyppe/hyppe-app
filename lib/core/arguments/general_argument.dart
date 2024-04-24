@@ -1,3 +1,5 @@
+import 'package:image_picker/image_picker.dart';
+
 class GeneralArgument {
   bool isTrue;
   String? id;
@@ -7,4 +9,11 @@ class GeneralArgument {
   String? body;
 
   GeneralArgument({this.isTrue = true, this.id, this.index, this.session, this.body, this.title});
+}
+
+class FileArgument {
+  String date;
+  XFile xfile;
+
+  FileArgument({required this.date, required this.xfile});
 }

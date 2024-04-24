@@ -84,7 +84,7 @@ class _TransactionState extends State<Transaction> {
                       padding: const EdgeInsets.all(16),
                       child: Column(
                         children: [
-                          TotalBalance(accountBalance: System().currencyFormat(amount: notifier.accountBalance?.totalsaldo ?? 0)),
+                          TotalBalance(accountBalance: System().numberFormat(amount: notifier.accountBalance?.totalsaldo ?? 0)),
                           const ButtonTransaction(),
                           sixPx,
                           // Container(

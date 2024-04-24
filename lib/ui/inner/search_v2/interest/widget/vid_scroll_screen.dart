@@ -53,7 +53,7 @@ class VidScrollScreen extends StatefulWidget {
   State<VidScrollScreen> createState() => _VidScrollScreenState();
 }
 
-class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware  {
+class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
   bool isPrepare = false;
   bool isPlay = false;
   bool isPause = false;
@@ -90,7 +90,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
       ShowGeneralDialog.showToastAlert(
         Routing.navigatorKey.currentContext ?? context,
         notifier.language.internetConnectionLost ?? ' Error',
-            () async {
+        () async {
           Routing().moveBack();
         },
       );
@@ -166,30 +166,30 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
     SizeConfig().init(context);
 
     return Consumer<SearchNotifier>(
-      builder: (_, vidNotifier, __){
+      builder: (_, vidNotifier, __) {
         final vidData = vidNotifier.interestContents[widget.interestKey]?.vid;
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             (vidData != null)
                 ? Flexible(
-              child: NotificationListener<OverscrollIndicatorNotification>(
-                onNotification: (overscroll) {
-                  overscroll.disallowIndicator();
-                  return false;
-                },
-                child: Column(
-                  children: List.generate(vidData.length, (index) => itemVid(vidNotifier, index, vidData)),
-                ),
-              ),
-            )
+                    child: NotificationListener<OverscrollIndicatorNotification>(
+                      onNotification: (overscroll) {
+                        overscroll.disallowIndicator();
+                        return false;
+                      },
+                      child: Column(
+                        children: List.generate(vidData.length, (index) => itemVid(vidNotifier, index, vidData)),
+                      ),
+                    ),
+                  )
                 : const AspectRatio(
-              aspectRatio: 16 / 9,
-              child: CustomShimmer(
-                height: double.infinity,
-                width: double.infinity,
-              ),
-            ),
+                    aspectRatio: 16 / 9,
+                    child: CustomShimmer(
+                      height: double.infinity,
+                      width: double.infinity,
+                    ),
+                  ),
           ],
         );
       },
@@ -254,32 +254,26 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                       },
                       child: vidData[index].insight?.isloadingFollow ?? false
                           ? Container(
-                        height: 40,
-                        width: 30,
-                        child: const Align(
-                          alignment: Alignment.bottomRight,
-                          child: CustomLoading(),
-                        ),
-                      )
+                              height: 40,
+                              width: 30,
+                              child: const Align(
+                                alignment: Alignment.bottomRight,
+                                child: CustomLoading(),
+                              ),
+                            )
                           : Text(
-                        (vidData[index].following ?? false) ? (notifier.language.following ?? '') : (notifier.language.follow ?? ''),
-                        style: const TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
-                      ),
+                              (vidData[index].following ?? false) ? (notifier.language.following ?? '') : (notifier.language.follow ?? ''),
+                              style: const TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                            ),
                     ),
                   ),
                 ),
               GestureDetector(
                 onTap: () {
-                  context.handleActionIsGuest(() async  {
+                  context.handleActionIsGuest(() async {
                     if (vidData[index].email != email) {
                       // FlutterAliplayer? fAliplayer
-                      context.read<PreviewPicNotifier>()
-                          .reportContent(
-                          context,
-                          vidData[index] ,
-                          fAliplayer: vidData[index].fAliplayer,
-                          onCompleted: (){},
-                          key: widget.interestKey);
+                      context.read<PreviewPicNotifier>().reportContent(context, vidData[index], fAliplayer: vidData[index].fAliplayer, onCompleted: () {}, key: widget.interestKey);
                     } else {
                       if (_curIdx != -1) {
                         print('Vid Landing Page: pause $_curIdx');
@@ -288,7 +282,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
 
                       ShowBottomSheet().onShowOptionContent(
                         context,
-                        contentData: vidData[index] ,
+                        contentData: vidData[index],
                         captionTitle: hyppeVid,
                         onDetail: false,
                         isShare: vidData[index].isShared,
@@ -297,7 +291,6 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                       );
                     }
                   });
-
                 },
                 child: const Icon(
                   Icons.more_vert,
@@ -338,103 +331,100 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
             },
             child: !notifier.connectionError
                 ? Container(
-              margin: const EdgeInsets.only(bottom: 20),
-              child: Builder(builder: (context) {
-                return VidPlayerPage(
-                  orientation: Orientation.portrait,
-                  playMode: (vidData[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
-                  dataSourceMap: map,
-                  data: vidData[index] ,
-                  height: MediaQuery.of(context).size.width * 9.0 / 16.0,
-                  width: MediaQuery.of(context).size.width,
-                  inLanding: true,
-                  fromDeeplink: false,
-                  functionFullTriger: (value) {
-                  },
-                  onPlay: (exec) async {
-                    await notifier.checkConnection();
-                    try {
-                      if (_curIdx != -1) {
-                        if (_curIdx != index) {
-                          print('Vid Landing Page: stop $_curIdx ${vidData[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
-                          if (vidData[_curIdx].fAliplayer != null) {
-                            vidData[_curIdx].fAliplayer?.stop();
-                          } else {
-                            final player = dataAli[_curIdx];
-                            if (player != null) {
-                              // vidData?[_curIdx].fAliplayer = player;
-                              player.stop();
+                    margin: const EdgeInsets.only(bottom: 20),
+                    child: Builder(builder: (context) {
+                      return VidPlayerPage(
+                        orientation: Orientation.portrait,
+                        playMode: (vidData[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
+                        dataSourceMap: map,
+                        data: vidData[index],
+                        height: MediaQuery.of(context).size.width * 9.0 / 16.0,
+                        width: MediaQuery.of(context).size.width,
+                        inLanding: false,
+                        fromDeeplink: false,
+                        functionFullTriger: (value) {},
+                        onPlay: (exec) async {
+                          await notifier.checkConnection();
+                          try {
+                            if (_curIdx != -1) {
+                              if (_curIdx != index) {
+                                print('Vid Landing Page: stop $_curIdx ${vidData[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
+                                if (vidData[_curIdx].fAliplayer != null) {
+                                  vidData[_curIdx].fAliplayer?.stop();
+                                } else {
+                                  final player = dataAli[_curIdx];
+                                  if (player != null) {
+                                    // vidData?[_curIdx].fAliplayer = player;
+                                    player.stop();
+                                  }
+                                }
+                                // vidData?[_curIdx].fAliplayerAds?.stop();
+                              }
                             }
+                          } catch (e) {
+                            e.logger();
+                          } finally {
+                            setState(() {
+                              _curIdx = index;
+                            });
                           }
-                          // vidData?[_curIdx].fAliplayerAds?.stop();
-                        }
-                      }
-                    } catch (e) {
-                      e.logger();
-                    } finally {
-                      setState(() {
-                        _curIdx = index;
-                      });
-                    }
-                    // _lastCurIndex = _curIdx;
-                  },
-                  getPlayer: (main, id) {
-                    print('Vid Player1: screen ${main}');
-                    // notifier.setAliPlayer(index, main);
-                    setState(() {
-                      vidData[index].fAliplayer = main;
-                      dataAli[index] = main;
-                    });
-                    print('Vid Player1: after $index ${globalAliPlayer} : ${vidData[index].fAliplayer}');
-                  },
-                  getAdsPlayer: (ads) {
-                    // vidData?[index].fAliplayerAds = ads;
-                  },
-                  // fAliplayer: vidData?[index].fAliplayer,
-                  // fAliplayerAds: vidData?[index].fAliplayerAds,
-                );
-              }),
-            )
+                          // _lastCurIndex = _curIdx;
+                        },
+                        getPlayer: (main, id) {
+                          print('Vid Player1: screen ${main}');
+                          // notifier.setAliPlayer(index, main);
+                          setState(() {
+                            vidData[index].fAliplayer = main;
+                            dataAli[index] = main;
+                          });
+                          print('Vid Player1: after $index ${globalAliPlayer} : ${vidData[index].fAliplayer}');
+                        },
+
+                        // fAliplayer: vidData?[index].fAliplayer,
+                        // fAliplayerAds: vidData?[index].fAliplayerAds,
+                      );
+                    }),
+                  )
                 : GestureDetector(
-              onTap: () {
-                notifier.checkConnection();
-              },
-              child: Container(
-                  decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                  width: SizeConfig.screenWidth,
-                  height: 250,
-                  alignment: Alignment.center,
-                  child: CustomTextWidget(textToDisplay: notifier.language.couldntLoadVideo ?? 'Error')),
-            ),
+                    onTap: () {
+                      notifier.checkConnection();
+                    },
+                    child: Container(
+                        decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                        width: SizeConfig.screenWidth,
+                        height: 250,
+                        alignment: Alignment.center,
+                        child: CustomTextWidget(textToDisplay: notifier.language.couldntLoadVideo ?? 'Error')),
+                  ),
           ),
           SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-              (vidData[index].boosted.isEmpty) &&
-              (vidData[index].reportedStatus != 'OWNED' && vidData[index].reportedStatus != 'BLURRED' && vidData[index].reportedStatus2 != 'BLURRED') &&
-              vidData[index].email == email
+                  (vidData[index].boosted.isEmpty) &&
+                  (vidData[index].reportedStatus != 'OWNED' && vidData[index].reportedStatus != 'BLURRED' && vidData[index].reportedStatus2 != 'BLURRED') &&
+                  vidData[index].email == email
               ? Container(
-            width: double.infinity,
-            margin: const EdgeInsets.only(bottom: 16),
-            child: ButtonBoost(
-              onDetail: false,
-              marginBool: true,
-              contentData: vidData[index] ,
-              startState: () {
-                SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
-              },
-              afterState: () {
-                SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
-              },
-            ),
-          )
+                  width: double.infinity,
+                  margin: const EdgeInsets.only(bottom: 16),
+                  child: ButtonBoost(
+                    onDetail: false,
+                    marginBool: true,
+                    contentData: vidData[index],
+                    startState: () {
+                      SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                    },
+                    afterState: () {
+                      SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                    },
+                  ),
+                )
               : Container(),
           vidData[index].email == SharedPreference().readStorage(SpKeys.email) && (vidData[index].reportedStatus == 'OWNED')
               ? Padding(
-            padding: const EdgeInsets.only(bottom: 11.0),
-            child: ContentViolationWidget(
-              data: vidData[index] ,
-              text: notifier.language.thisHyppeVidisSubjectToModeration ?? '',
-            ),
-          )
+                  padding: const EdgeInsets.only(bottom: 11.0),
+                  child: ContentViolationWidget(
+                    data: vidData[index],
+                    text: notifier.language.thisHyppeVidisSubjectToModeration ?? '',
+                  ),
+                )
               : Container(),
           if (vidData[index].email == email && (vidData[index].boostCount ?? 0) >= 0 && (vidData[index].boosted.isNotEmpty))
             Container(
@@ -474,24 +464,24 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                         alignment: Alignment.bottomRight,
                         child: vidData[index].insight?.isloading ?? false
                             ? const SizedBox(
-                          height: 28,
-                          width: 28,
-                          child: CircularProgressIndicator(
-                            color: kHyppePrimary,
-                            strokeWidth: 2,
-                          ),
-                        )
+                                height: 28,
+                                width: 28,
+                                child: CircularProgressIndicator(
+                                  color: kHyppePrimary,
+                                  strokeWidth: 2,
+                                ),
+                              )
                             : InkWell(
-                          child: CustomIconWidget(
-                            defaultColor: false,
-                            color: (vidData[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
-                            iconData: '${AssetPath.vectorPath}${(vidData[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
-                            height: 28,
-                          ),
-                          onTap: () {
-                            likeNotifier.likePost(context, vidData[index]);
-                          },
-                        ),
+                                child: CustomIconWidget(
+                                  defaultColor: false,
+                                  color: (vidData[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
+                                  iconData: '${AssetPath.vectorPath}${(vidData[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                  height: 28,
+                                ),
+                                onTap: () {
+                                  likeNotifier.likePost(context, vidData[index]);
+                                },
+                              ),
                       ),
                     ),
                     if (vidData[index].allowComments ?? false)
@@ -535,12 +525,10 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                       Expanded(
                         child: GestureDetector(
                           onTap: () async {
-                            await context.handleActionIsGuest(() async  {
+                            await context.handleActionIsGuest(() async {
                               vidData[index].fAliplayer?.pause();
                               await ShowBottomSheet.onBuyContent(context, data: vidData[index], fAliplayer: vidData[index].fAliplayer);
-
                             });
-
                           },
                           child: const Align(
                             alignment: Alignment.centerRight,
@@ -578,7 +566,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
           ),
           twelvePx,
           CustomNewDescContent(
-            email: vidData[index].email??'',
+            email: vidData[index].email ?? '',
             username: vidData[index].username ?? '',
             desc: "${vidData[index].description}",
             trimLines: 2,
@@ -597,7 +585,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                     argument: CommentsArgument(
                       postID: vidData[index].postID ?? '',
                       fromFront: true,
-                      data: vidData[index] ,
+                      data: vidData[index],
                       pageDetail: true,
                     ));
               },
@@ -611,31 +599,31 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
             ),
           (vidData[index].comment?.length ?? 0) > 0
               ? Padding(
-            padding: const EdgeInsets.only(top: 0.0),
-            child: ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: (vidData[index].comment?.length ?? 0) >= 2 ? 2 : 1,
-              itemBuilder: (context, indexComment) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 6.0),
-                  child: CustomNewDescContent(
-                    // desc: "${vidData?.description}",
-                    // email: vidData[index].comment?[indexComment].userComment?.email ?? '',
-                    username: vidData[index].comment?[indexComment].userComment?.username ?? '',
-                    desc: vidData[index].comment?[indexComment].txtMessages ?? '',
-                    trimLines: 2,
-                    textAlign: TextAlign.start,
-                    seeLess: ' ${notifier.language.seeLess}', // ${notifier2.translate.seeLess}',
-                    seeMore: ' ${notifier.language.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
-                    normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                    hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                    expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                  padding: const EdgeInsets.only(top: 0.0),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: (vidData[index].comment?.length ?? 0) >= 2 ? 2 : 1,
+                    itemBuilder: (context, indexComment) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 6.0),
+                        child: CustomNewDescContent(
+                          // desc: "${vidData?.description}",
+                          // email: vidData[index].comment?[indexComment].userComment?.email ?? '',
+                          username: vidData[index].comment?[indexComment].userComment?.username ?? '',
+                          desc: vidData[index].comment?[indexComment].txtMessages ?? '',
+                          trimLines: 2,
+                          textAlign: TextAlign.start,
+                          seeLess: ' ${notifier.language.seeLess}', // ${notifier2.translate.seeLess}',
+                          seeMore: ' ${notifier.language.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                          normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
+                          hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
+                          expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
-          )
+                )
               : Container(),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 4.0),
@@ -653,60 +641,59 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
     );
   }
 
-
   Widget blurContentWidget(BuildContext context, LocalizationModelV2 lang, ContentData data) {
     return data.reportedStatus == 'BLURRED'
         ? Positioned.fill(
-      child: Align(
-          alignment: Alignment.centerRight,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Spacer(),
-                const CustomIconWidget(
-                  iconData: "${AssetPath.vectorPath}eye-off.svg",
-                  defaultColor: false,
-                  height: 30,
-                ),
-                Text(lang.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                Text("HyppeVid ${lang.contentContainsSensitiveMaterial}",
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 13,
-                    )),
-                const Spacer(),
-                GestureDetector(
-                  onTap: () {
-                    data.reportedStatus = '';
-                    data.fAliplayer?.prepare();
-                    data.fAliplayer?.play();
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.only(top: 8),
-                    margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
-                    width: SizeConfig.screenWidth,
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        top: BorderSide(
-                          color: Colors.white,
-                          width: 1,
+            child: Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Spacer(),
+                      const CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}eye-off.svg",
+                        defaultColor: false,
+                        height: 30,
+                      ),
+                      Text(lang.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                      Text("HyppeVid ${lang.contentContainsSensitiveMaterial}",
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                          )),
+                      const Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          data.reportedStatus = '';
+                          data.fAliplayer?.prepare();
+                          data.fAliplayer?.play();
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.only(top: 8),
+                          margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
+                          width: SizeConfig.screenWidth,
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              top: BorderSide(
+                                color: Colors.white,
+                                width: 1,
+                              ),
+                            ),
+                          ),
+                          child: Text(
+                            "${lang.see} HyppeVid",
+                            style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ),
-                    ),
-                    child: Text(
-                      "${lang.see} HyppeVid",
-                      style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
-                      textAlign: TextAlign.center,
-                    ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-          )),
-    )
+                )),
+          )
         : Container();
   }
 

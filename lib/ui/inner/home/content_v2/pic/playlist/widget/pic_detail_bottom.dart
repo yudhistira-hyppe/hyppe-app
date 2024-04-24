@@ -266,8 +266,9 @@ class PicDetailBottom extends StatelessWidget {
                   await context.handleActionIsGuest(() async {
                     // value.preventMusic = true;
                     globalAudioPlayer?.pause();
-                    await ShowBottomSheet.onBuyContent(context, data: data);
-                    globalAudioPlayer?.resume();
+                    ShowBottomSheet.onBuyContent(context, data: data);
+                    
+                    // globalAudioPlayer?.resume();
                     // value.preventMusic = false;
                   });
                 },

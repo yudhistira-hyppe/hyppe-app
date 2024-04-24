@@ -93,6 +93,8 @@ class Routes {
   static const String verificationIDFailed = '/verification-id-failed';
   static const String verificationIDSuccess = '/verification-id-success';
   static const String verificationCameraSupport = '/verification-camera-support';
+  static const String previewSelfieSupport = '/preview-selfie-support';
+  static const String verificationSupportSuccess = '/verification-support-success';
 
   //delete account
   static const String deleteAccount = '/delete-account';
@@ -103,6 +105,14 @@ class Routes {
   static const String paymentMethodScreen = '/payment-method-screen';
   static const String paymentSummaryScreen = '/payment-summary-screen';
 
+  //Coins
+  static const String saldoCoins = '/saldo-coins';
+  static const String topUpCoins = '/topup-coins';
+  static const String paymentCoins = '/payment-coins';
+  static const String exchangeCoins = '/exchange-coins';
+  // verification pin
+  static const String verificationPinPage = 'verification-pin-page';
+  static const String finishTrxPage = 'finish-trx-page';
   //transaction
   static const String transaction = '/transaction';
   static const String allTransaction = '/all-transaction';

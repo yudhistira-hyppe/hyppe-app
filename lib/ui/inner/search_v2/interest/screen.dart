@@ -135,12 +135,12 @@ class _InterestScreenState extends State<InterestScreen> {
                       } else {
                         return Container(
                           margin: const EdgeInsets.only(left: 16, right: 16),
-                          child: Column(
+                          child: const Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Row(
                                 mainAxisSize: MainAxisSize.max,
-                                children: const [
+                                children: [
                                   Expanded(
                                     child: CustomShimmer(
                                       height: 50,
@@ -161,7 +161,7 @@ class _InterestScreenState extends State<InterestScreen> {
                               eightPx,
                               Row(
                                 mainAxisSize: MainAxisSize.max,
-                                children: const [
+                                children: [
                                   Expanded(
                                     child: CustomShimmer(
                                       height: 50,
@@ -182,7 +182,7 @@ class _InterestScreenState extends State<InterestScreen> {
                               eightPx,
                               Row(
                                 mainAxisSize: MainAxisSize.max,
-                                children: const [
+                                children: [
                                   Expanded(
                                     child: CustomShimmer(
                                       height: 50,
@@ -211,8 +211,8 @@ class _InterestScreenState extends State<InterestScreen> {
   }
 
   Widget _shimmerInterests(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(12),
+    return const Padding(
+      padding: EdgeInsets.all(12),
       child: Column(
         children: [
           Row(
@@ -222,14 +222,14 @@ class _InterestScreenState extends State<InterestScreen> {
                 height: 50,
                 width: double.infinity,
                 radius: 8,
-                margin: const EdgeInsets.only(right: 6),
+                margin: EdgeInsets.only(right: 6),
               )),
               Expanded(
                   child: CustomShimmer(
                 height: 50,
                 width: double.infinity,
                 radius: 8,
-                margin: const EdgeInsets.only(left: 6),
+                margin: EdgeInsets.only(left: 6),
               ))
             ],
           ),
@@ -241,14 +241,14 @@ class _InterestScreenState extends State<InterestScreen> {
                 height: 50,
                 width: double.infinity,
                 radius: 8,
-                margin: const EdgeInsets.only(right: 6),
+                margin: EdgeInsets.only(right: 6),
               )),
               Expanded(
                   child: CustomShimmer(
                 height: 50,
                 width: double.infinity,
                 radius: 8,
-                margin: const EdgeInsets.only(left: 6),
+                margin: EdgeInsets.only(left: 6),
               ))
             ],
           ),
@@ -260,14 +260,14 @@ class _InterestScreenState extends State<InterestScreen> {
                 height: 50,
                 width: double.infinity,
                 radius: 8,
-                margin: const EdgeInsets.only(right: 6),
+                margin: EdgeInsets.only(right: 6),
               )),
               Expanded(
                   child: CustomShimmer(
                 height: 50,
                 width: double.infinity,
                 radius: 8,
-                margin: const EdgeInsets.only(left: 6),
+                margin: EdgeInsets.only(left: 6),
               ))
             ],
           ),

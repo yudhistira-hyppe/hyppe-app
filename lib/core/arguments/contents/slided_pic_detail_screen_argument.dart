@@ -17,6 +17,7 @@ class SlidedPicDetailScreenArgument extends ContentScreenArgument {
   final double? heightBox;
   final double? heightTopProfile;
   final bool? isProfile;
+  final String? postId;
   @override
   FeatureType get featureType => FeatureType.pic;
 
@@ -33,5 +34,6 @@ class SlidedPicDetailScreenArgument extends ContentScreenArgument {
     this.heightBox,
     this.heightTopProfile,
     this.isProfile = false,
+    this.postId,
   });
 }

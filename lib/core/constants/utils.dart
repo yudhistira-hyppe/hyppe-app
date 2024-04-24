@@ -14,3 +14,7 @@ const diaryIndex = 2;
 const pictIndex = 3;
 
 const limitSearch = 12;
+
+const withdrawalfree = 6000;
+const withdrawalfeecoin = 0.1;
+const minimalwithdrawal = 50000;

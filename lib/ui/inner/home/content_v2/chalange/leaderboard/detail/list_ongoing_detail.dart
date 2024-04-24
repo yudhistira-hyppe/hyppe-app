@@ -116,7 +116,14 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                                                       onTap: () {
                                                         var post = cn.leaderBoardDetailData?.getlastrank?[index].postChallengess?[0];
                                                         var email = cn.leaderBoardDetailData?.getlastrank?[index].email;
-                                                        cn.navigateToScreen(context, post?.index, email, post?.postType);
+                                                        cn.navigateToScreen(
+                                                          context,
+                                                          post?.index,
+                                                          email,
+                                                          post?.postType,
+                                                          indexContent: cn.leaderBoardDetailData?.getlastrank?[index].postChallengess?[0].index,
+                                                          postId: post?.postID,
+                                                        );
                                                       },
                                                       child: ContentLeaderboard(
                                                         data: cn.leaderBoardDetailData?.getlastrank?[index],

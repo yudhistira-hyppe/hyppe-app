@@ -46,9 +46,11 @@ bool globalAfterReport = false;
 bool homeClick = false;
 bool globalTultipShow = false;
 bool globalChallengePopUp = true; //untuk menahan tutorial muncul sebelum challange
+bool pagePictLandingFull = false;
+bool isMuteAudioPic = true;
 
 int storyMin = 4;
-int vidMin = 15;
+int vidMin = 5;
 
 bool globalPreventAction = false;
 bool fromGuest = false;

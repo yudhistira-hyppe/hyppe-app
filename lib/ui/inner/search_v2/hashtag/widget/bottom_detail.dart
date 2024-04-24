@@ -21,21 +21,17 @@ class BottomDetail extends StatefulWidget {
 }
 
 class _BottomDetailState extends State<BottomDetail> {
-
   @override
   void initState() {
     final notif = context.read<SearchNotifier>();
     notif.initAllHasNext();
     FirebaseCrashlytics.instance.setCustomKey('layout', 'BottomDetail');
     widget.scrollController.addListener(() {
-      if (widget.scrollController.offset >=
-          widget.scrollController.position.maxScrollExtent &&
-          !widget.scrollController.position.outOfRange) {
+      if (widget.scrollController.offset >= widget.scrollController.position.maxScrollExtent && !widget.scrollController.position.outOfRange) {
         final notifier = context.read<SearchNotifier>();
         final key = widget.hashtag.tag ?? ' ';
         final type = notifier.hashtagTab;
-        notifier.getDetailHashtag(context, key.replaceAll(' ', ''),
-            reload: false, hyppe: type);
+        notifier.getDetailHashtag(context, key.replaceAll(' ', ''), reload: false, hyppe: type);
       }
     });
     super.initState();
@@ -59,8 +55,8 @@ class _BottomDetailState extends State<BottomDetail> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             MeasuredSize(
-              onChange: (value){
-                if(mounted){
+              onChange: (value) {
+                if (mounted) {
                   setState(() {
                     bottomTab = value.height;
                   });
@@ -80,23 +76,23 @@ class _BottomDetailState extends State<BottomDetail> {
                             isActive: notifier.hashtagTab == HyppeType.HyppePic,
                             // data: data.pict ?? [],
                             type: HyppeType.HyppePic)),
+                    // Expanded(
+                    //     child: HashtagTab(
+                    //         onTap: (value) {
+                    //           notifier.hashtagTab = value;
+                    //         },
+                    //         isActive: notifier.hashtagTab == HyppeType.HyppeDiary,
+                    //         // data: data.diary ?? [],
+                    //         type: HyppeType.HyppeDiary)),
                     Expanded(
                         child: HashtagTab(
-                            onTap: (value) {
-                              notifier.hashtagTab = value;
-                            },
-                            isActive: notifier.hashtagTab == HyppeType.HyppeDiary,
-                            // data: data.diary ?? [],
-                            type: HyppeType.HyppeDiary)),
-                    Expanded(
-                        child: HashtagTab(
-                          onTap: (value) {
-                            notifier.hashtagTab = value;
-                          },
-                          isActive: notifier.hashtagTab == HyppeType.HyppeVid,
-                          // data: data.vid ?? [],
-                          type: HyppeType.HyppeVid,
-                        )),
+                      onTap: (value) {
+                        notifier.hashtagTab = value;
+                      },
+                      isActive: notifier.hashtagTab == HyppeType.HyppeVid,
+                      // data: data.vid ?? [],
+                      type: HyppeType.HyppeVid,
+                    )),
                   ],
                 ),
               ),
@@ -105,8 +101,7 @@ class _BottomDetailState extends State<BottomDetail> {
               child: RefreshIndicator(
                 strokeWidth: 2.0,
                 color: context.getColorScheme().primary,
-                onRefresh: () => notifier.getDetailHashtag(
-                    context, widget.hashtag.tag ?? 'tag', force: true),
+                onRefresh: () => notifier.getDetailHashtag(context, widget.hashtag.tag ?? 'tag', force: true),
                 child: CustomScrollView(
                   controller: widget.scrollController,
                   scrollDirection: Axis.vertical,

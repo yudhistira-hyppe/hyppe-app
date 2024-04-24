@@ -48,7 +48,6 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:light_compressor/light_compressor.dart';
@@ -580,9 +579,13 @@ class PreUploadContentNotifier with ChangeNotifier {
     _tmpBoostTime = '';
     tmpBoostInterval = '';
     editData = null;
+    globalAudioPlayer == null;
+
     // _isCompress = false;
 
     final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
+    notifier.audioPreviewPlayer.stop();
+    notifier.audioPreviewPlayer.dispose();
     if (isDisposeVid) {
       notifier.height = null;
       notifier.width = null;
@@ -595,6 +598,7 @@ class PreUploadContentNotifier with ChangeNotifier {
 
       musicSelected = null;
       notifier.defaultPath = null;
+
       if (notifier.betterPlayerController != null) {
         // notifier.betterPlayerController!.dispose();
         notifier.betterPlayerController!.pause();
@@ -976,14 +980,15 @@ class PreUploadContentNotifier with ChangeNotifier {
     );
   }
 
-  void clearUpAndBackToHome(BuildContext context) {
-    context.read<PreviewContentNotifier>().clearAdditionalItem();
-
-    // context.read<CameraNotifier>().disposeCamera(context);
-    context.read<PreviewContentNotifier>().isForcePaused = false;
-    // Routing().move(Routes.lobby);
-    if (_boostContent != null) _onExit();
-    Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
+  void clearUpAndBackToHome(BuildContext context) async {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<PreviewContentNotifier>().clearAdditionalItem();
+      // context.read<CameraNotifier>().disposeCamera(context);
+      context.read<PreviewContentNotifier>().isForcePaused = false;
+      // Routing().move(Routes.lobby);
+      if (_boostContent != null) _onExit();
+      Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
+    });
   }
 
   Future<void> onClickPost(BuildContext context, bool mounted, {required bool onEdit, ContentData? data, String? content}) async {

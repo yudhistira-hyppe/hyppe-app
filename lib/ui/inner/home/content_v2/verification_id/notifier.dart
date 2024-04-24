@@ -414,9 +414,11 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
         }
 
         if (selfieOnSupportDocs) {
+          // notifier.onSaveSupportedDocument(context);
           // onPickSupportedDocument(context, true);
           // pickedSupportingDocs!.add(filePath);
-          Routing().moveAndPop(Routes.verificationIDStep7, argument: (cameraDirection == CameraLensDirection.back));
+          // Routing().moveAndPop(Routes.verificationIDStep7, argument: (cameraDirection == CameraLensDirection.back));
+          Routing().moveAndPop(Routes.previewSelfieSupport);
         } else {
           await postVerificationData(context);
         }
@@ -584,6 +586,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
     try {
       debugPrint('idCardFile => ' + imagePath);
       debugPrint('selfieFile => ' + "${pickedSupportingDocs}");
+      ShowGeneralDialog.loadingKycDialog(context);
 
       final bloc = VerificationIDBloc();
       await bloc
@@ -620,14 +623,15 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
 
         SharedPreference().writeStorage(SpKeys.statusVerificationId, REVIEW);
 
-        bool? _sheetResponse = await ShowBottomSheet().onShowColouredSheet(
-          context,
-          "Success Upload",
-          maxLines: 2,
-        );
-        print('inin $_sheetResponse');
+        // bool? _sheetResponse = await ShowBottomSheet().onShowColouredSheet(
+        //   context,
+        //   "Success Upload",
+        //   maxLines: 2,
+        // );
+        // print('inin $_sheetResponse');
         // if (_sheetResponse) {
-        clearAndMoveToLobby();
+        Routing().move(Routes.verificationSupportSuccess);
+        // clearAndMoveToLobby();
         // }
       } else if (fetch.verificationIDState == VerificationIDState.loading) {
         {

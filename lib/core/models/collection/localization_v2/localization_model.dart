@@ -628,17 +628,34 @@ class LocalizationModelV2 {
   String? vaCopyToClipboard;
   String? expired;
   String? transaction;
+  String? saldocoins;
+  String? topupcoin;
+  String? buyhyppecoins;
+  String? selectPaymentMethod;
+  String? paynow;
+  String? exchangeCoin;
+  String? infolimitbankaccount;
+  String? withdrawnsaldotobank;
+  String? choosebank;
   String? addBankAccount;
   String? withdrawal;
   String? noSavedAccountYet;
   String? addYourBankAccountForAnEasierWithdraw;
+  String? emptyBankAccount;
+  String? processing;
+  String? pinverification;
   String? selectBank;
   String? bankName;
   String? noBankAccount;
+  String? noRek;
   String? messageBankNotMatched;
   String? accountOwnerName;
+  String? accountRekName;
   String? keepThisAccount;
   String? youWillAdd;
+  String? accountIsCorrect;
+  String? atasNama;
+  String? addingtoYourAccount;
   String? accountWithAccountNumber;
   String? aboutBankAccount;
   String? aboutBankAccountContent;
@@ -1086,6 +1103,13 @@ class LocalizationModelV2 {
   String? areYouSureYouWantToEndTheLIVEBroadcast;
   String? liveBroadcastRemaining5Minutes;
   String? youOnlyHave5MinutesLeftinTheLiveBroadcast;
+  String? weWillBeganProcessingYourVerification;
+  String? thisProcessWillTakeUpTo3WorkingDaysPleaseWait;
+  String? failedIdCardInfo_1;
+  String? failedIdCardInfo_2;
+  String? failedIdCardInfo_3;
+  String? failedIdCardInfo_4;
+  String? failedIdCardInfo_5;
   String? commentsAreDisabled;
   String? endNow;
   String? pause;
@@ -1746,17 +1770,34 @@ class LocalizationModelV2 {
       this.vaCopyToClipboard,
       this.expired,
       this.transaction,
+      this.saldocoins,
+      this.topupcoin,
+      this.buyhyppecoins,
+      this.selectPaymentMethod,
+      this.exchangeCoin,
+      this.paynow,
+      this.processing,
+      this.pinverification,
+      this.choosebank,
       this.addBankAccount,
       this.withdrawal,
       this.noSavedAccountYet,
       this.addYourBankAccountForAnEasierWithdraw,
       this.selectBank,
+      this.emptyBankAccount,
+      this.infolimitbankaccount,
+      this.withdrawnsaldotobank,
       this.bankName,
       this.noBankAccount,
+      this.noRek,
       this.messageBankNotMatched,
       this.accountOwnerName,
+      this.accountRekName,
       this.keepThisAccount,
       this.youWillAdd,
+      this.accountIsCorrect,
+      this.addingtoYourAccount,
+      this.atasNama,
       this.accountWithAccountNumber,
       this.aboutBankAccount,
       this.aboutBankAccountContent,
@@ -1817,7 +1858,6 @@ class LocalizationModelV2 {
       this.reaNameNotice,
       this.continueStep,
       this.uploadIdCardNotice1,
-      this.ektpPhoto,
       this.uploadIdCardNotice2,
       this.uploadIdCardNotice3,
       this.uploadIdCardNotice4,
@@ -2204,6 +2244,13 @@ class LocalizationModelV2 {
       this.areYouSureYouWantToEndTheLIVEBroadcast,
       this.liveBroadcastRemaining5Minutes,
       this.youOnlyHave5MinutesLeftinTheLiveBroadcast,
+      this.weWillBeganProcessingYourVerification,
+      this.thisProcessWillTakeUpTo3WorkingDaysPleaseWait,
+      this.failedIdCardInfo_1,
+      this.failedIdCardInfo_2,
+      this.failedIdCardInfo_3,
+      this.failedIdCardInfo_4,
+      this.failedIdCardInfo_5,
       this.commentsAreDisabled,
       this.endNow,
       this.pause,
@@ -2223,16 +2270,7 @@ class LocalizationModelV2 {
       this.inthisphoto,
       this.addATitle,
       this.inThisDiary,
-      this.inThisVideo,
-      this.userAgreementCheck,
-      this.reTake,
-      this.uploadSupportingDocuments,
-      this.descFailedktp2,
-      this.descFailedktp1,
-      this.uploadeKTPFailed,
-      this.process,
-      this.openCamera,
-      this.userAgreement});
+      this.inThisVideo});
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
     login = json['login'];
@@ -2880,17 +2918,34 @@ class LocalizationModelV2 {
     vaCopyToClipboard = json['vaCopyToClipboard'];
     expired = json['expired'];
     transaction = json['transaction'];
+    saldocoins = json['saldocoins'];
+    topupcoin = json['topupcoin'];
+    buyhyppecoins = json['buyhyppecoins'];
+    selectPaymentMethod = json['selectPaymentMethod'];
+    exchangeCoin = json['exchangeCoin'];
+    paynow = json['paynow'];
+    pinverification = json['pinverification'];
+    infolimitbankaccount = json['infolimitbankaccount'];
+    withdrawnsaldotobank = json['withdrawnsaldotobank'];
+    choosebank = json['choosebank'];
     addBankAccount = json['addBankAccount'];
     withdrawal = json['withdrawal'];
     noSavedAccountYet = json['noSavedAccountYet'];
     addYourBankAccountForAnEasierWithdraw = json['addYourBankAccountForAnEasierWithdraw'];
     selectBank = json['selectBank'];
+    emptyBankAccount = json['emptyBankAccount'];
     bankName = json['bankName'];
+    processing = json['processing'];
     noBankAccount = json['noBankAccount'];
+    noRek = json['noRek'];
     messageBankNotMatched = json['messageBankNotMatched'];
     accountOwnerName = json['accountOwnerName'];
+    accountRekName = json['accountRekName'];
     keepThisAccount = json['keepThisAccount'];
     youWillAdd = json['youWillAdd'];
+    accountIsCorrect = json['accountIsCorrect'];
+    atasNama = json['atasNama'];
+    addingtoYourAccount = json['addingtoYourAccount'];
     accountWithAccountNumber = json['accountWithAccountNumber'];
     aboutBankAccount = json['aboutBankAccount'];
     ownedBy = json['ownedBy'];
@@ -3340,6 +3395,14 @@ class LocalizationModelV2 {
     areYouSureYouWantToEndTheLIVEBroadcast = json['areYouSureYouWantToEndTheLIVEBroadcast'];
     liveBroadcastRemaining5Minutes = json['liveBroadcastRemaining5Minutes'];
     youOnlyHave5MinutesLeftinTheLiveBroadcast = json['youOnlyHave5MinutesLeftinTheLiveBroadcast'];
+    weWillBeganProcessingYourVerification = json['weWillBeganProcessingYourVerification'];
+    thisProcessWillTakeUpTo3WorkingDaysPleaseWait = json['thisProcessWillTakeUpTo3WorkingDaysPleaseWait'];
+    thisProcessWillTakeUpTo3WorkingDaysPleaseWait = json['thisProcessWillTakeUpTo3WorkingDaysPleaseWait'];
+    failedIdCardInfo_1 = json['failedIdCardInfo_1'];
+    failedIdCardInfo_2 = json['failedIdCardInfo_2'];
+    failedIdCardInfo_3 = json['failedIdCardInfo_3'];
+    failedIdCardInfo_4 = json['failedIdCardInfo_4'];
+    failedIdCardInfo_5 = json['failedIdCardInfo_5'];
     commentsAreDisabled = json['commentsAreDisabled'];
     endNow = json['endNow'];
     pause = json['pause'];

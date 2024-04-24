@@ -9,6 +9,7 @@ import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/core/services/audio_service.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
@@ -54,8 +55,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   double offset = 0.0;
   List filterList = [
     {"id": '1', 'name': "Pic"},
-    {"id": '2', 'name': "Diary"},
-    {"id": '3', 'name': "Vid"},
+    {"id": '2', 'name': "Vid"},
   ];
 
   LocalizationModelV2? _language;
@@ -136,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HomeScreen');
     isHomeScreen = widget.canShowAds;
     'initState isOnHomeScreen $isHomeScreen'.logger();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
 
     Future.delayed(Duration.zero, () {
       // _tabController.index = 0;
@@ -270,7 +270,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
             child: HomeAppBar(name: "${selfnotifier.user.profile?.fullName}", offset: offset),
           ),
           body: DefaultTabController(
-            length: 3,
+            length: 2,
             child: RefreshIndicator(
               color: kHyppePrimary,
               notificationPredicate: (notification) {
@@ -288,11 +288,12 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                 }
               },
               onRefresh: () async {
-                print(isZoom);
                 if (!isZoom) {
+                  await MyAudioService.instance.stop();
                   Future.delayed(Duration(milliseconds: 400), () async {
                     imageCache.clear();
                     imageCache.clearLiveImages();
+                    globalAliPlayer?.pause();
                     await notifier.initNewHome(context, mounted, isreload: true);
                   });
                 }
@@ -410,14 +411,14 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                       //         );
                       //       },
                       //     )),
-                      Container(
-                        padding: const EdgeInsets.only(left: 6.0, right: 6),
-                        color: kHyppeLightSurface,
-                        child: LandingDiaryPage(
-                          scrollController: globalKey.currentState?.innerController,
-                          // scrollController: context.read<MainNotifier>().globalKey?.currentState?.innerController,
-                        ),
-                      ),
+                      // Container(
+                      //   padding: const EdgeInsets.only(left: 6.0, right: 6),
+                      //   color: kHyppeLightSurface,
+                      //   child: LandingDiaryPage(
+                      //     scrollController: globalKey.currentState?.innerController,
+                      //     // scrollController: context.read<MainNotifier>().globalKey?.currentState?.innerController,
+                      //   ),
+                      // ),
                       // second tab bar viiew widget
                       Container(
                         padding: const EdgeInsets.only(left: 16.0, right: 16),
@@ -480,14 +481,16 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     var homneNotifier = context.read<HomeNotifier>();
     if (postType == FeatureType.pic) {
       homneNotifier.tabIndex = 0;
-    } else if (homneNotifier.uploadedPostType == FeatureType.diary) {
-      setState(() {
-        homneNotifier.tabIndex = 1;
-      });
-    } else if (postType == FeatureType.vid) {
+    }
+    //  else if (homneNotifier.uploadedPostType == FeatureType.diary) {
+    //   setState(() {
+    //     homneNotifier.tabIndex = 1;
+    //   });
+    // }
+    else if (postType == FeatureType.vid) {
       var vid = context.read<PreviewVidNotifier>();
-      homneNotifier.tabIndex = 2;
-
+      homneNotifier.tabIndex = 1;
+      MyAudioService.instance.pause();
       if (vid.vidData == null) {
         // await notifier.initNewHome(context, mounted, isreload: true);
         // vid.initialVid(context, reload: true);

@@ -75,6 +75,8 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
                   SettingTile(
                     icon: 'verification-icon.svg',
                     onTap: () {
+                      // Routing().move(Routes.verificationIDStep1);
+
                       switch (SharedPreference().readStorage(SpKeys.statusVerificationId)) {
                         case REVIEW:
                           // ShowBottomSheet().onShowColouredSheet(
@@ -97,7 +99,7 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
                       }
                     },
                     caption: '${notifier.translate.idVerification}',
-                    trailing: verificationStatus(context, SharedPreference().readStorage(SpKeys.statusVerificationId) ?? UNVERIFIED), //verified, unverified, review
+                    trailing: verificationStatus(context, SharedPreference().readStorage(SpKeys.statusVerificationId) ?? notifier.translate.unverified, notifier), //verified, unverified, review
                   ),
                 ],
               ),
@@ -108,7 +110,7 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
     );
   }
 
-  Container verificationStatus(BuildContext context, String status) {
+  Container verificationStatus(BuildContext context, String status, TranslateNotifierV2 notifier) {
     String statusText;
     Color? statusColor;
     Color? bgColor;
@@ -120,7 +122,7 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
         bgColor = const Color.fromRGBO(171, 34, 175, 0.08);
         break;
       case UNVERIFIED:
-        statusText = "Unverified";
+        statusText = notifier.translate.unverified ?? 'Unverified';
         statusColor = isDark ? Colors.black87 : Colors.white;
         bgColor = kHyppePrimary;
         break;
@@ -130,7 +132,7 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
         bgColor = Colors.yellow[200];
         break;
       default:
-        statusText = "Unverified";
+        statusText = notifier.translate.unverified ?? 'Unverified';
         statusColor = isDark ? Colors.black87 : Colors.white;
     }
 

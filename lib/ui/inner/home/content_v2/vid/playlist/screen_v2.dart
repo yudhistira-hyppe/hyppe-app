@@ -195,7 +195,6 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
               : SafeArea(child: _contentDetailShimmer(context)),
         ),
       );
-
     });
   }
 
@@ -359,7 +358,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                       width: 50,
                       child: CustomTextButton(
                         onPressed: () async {
-                          context.handleActionIsGuest(() async  {
+                          context.handleActionIsGuest(() async {
                             if (globalAudioPlayer != null) {
                               globalAudioPlayer!.pause();
                             }
@@ -384,7 +383,6 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                               }
                             }
                           });
-
                         },
                         child: const CustomIconWidget(
                           defaultColor: false,
@@ -509,10 +507,10 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                       margin: const EdgeInsets.only(left: 10),
                       child: InkWell(
                         onTap: () async {
-                          await context.handleActionIsGuest(() async  {
+                          await context.handleActionIsGuest(() async {
+                            
                             await ShowBottomSheet.onBuyContent(context, data: data);
                           });
-
                         },
                         child: const CustomIconWidget(
                           width: 25,
@@ -597,7 +595,6 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                   context.handleActionIsGuest(() {
                     notifier.goToComments(CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data));
                   });
-                  
                 },
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 16),

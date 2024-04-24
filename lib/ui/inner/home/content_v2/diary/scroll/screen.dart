@@ -720,7 +720,8 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                                     setState(() {
                                       isloading = true;
                                     });
-                                    await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                                    await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '', postId: widget.arguments?.postId);
+                                    // await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
                                     setState(() {
                                       diaryData = notifier.diaryData;
                                     });

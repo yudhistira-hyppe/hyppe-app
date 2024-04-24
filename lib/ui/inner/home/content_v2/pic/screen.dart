@@ -10,12 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
-import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/pic_fullscreen_argument.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
-import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -25,6 +23,7 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/utils/zoom_pic/zoom_pic.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/services/audio_service.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -81,13 +80,13 @@ class HyppePreviewPic extends StatefulWidget {
 }
 
 class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
-  FlutterAliplayer? fAliplayer;
   // TransformationController _transformationController = TransformationController();
   ScrollController innerScrollController = ScrollController();
   bool isPlayAds = false;
   bool isPrepare = false;
   bool isPlay = false;
   bool isPause = false;
+  int playIndex = -1;
   // bool _showLoading = false;
   // bool _inSeek = false;
   bool isloading = false;
@@ -130,7 +129,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
   @override
   void initState() {
-    print('data screen pic');
     isPrepareMusic = false;
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppePreviewPic');
     final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
@@ -146,217 +144,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     // _primaryScrollController = widget.scrollController!;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       WidgetsBinding.instance.addObserver(this);
-      print("===============init ali player ===========");
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPic');
-      initAlipayer();
-      print("===============init ali player ${fAliplayer?.playerId} ===========");
-
-      //scroll
-      // if (mounted) {
-      //   Future.delayed(const Duration(milliseconds: 500), () {
-      //     print("=========== global key prirnt ${widget.scrollController} ");
-      //     widget.scrollController?.addListener(() async {
-      //       double offset = widget.scrollController?.position.pixels ?? 0;
-      //       if (mounted) await toPosition(offset, notifier);
-      //     });
-      //   });
-      // }
+      notifier.setIsSound(true);
     });
     context.read<HomeNotifier>().removeWakelock();
     super.initState();
-  }
-
-  void vidConfig() {
-    var configMap = {
-      'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
-      'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
-      'mMaxBufferDuration': GlobalSettings.mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
-      'mMaxDelayTime': GlobalSettings.mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
-      'mNetworkTimeout': GlobalSettings.mNetworkTimeout, // The network timeout period. Unit: milliseconds.
-      'mNetworkRetryCount': GlobalSettings.mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
-      'mEnableLocalCache': GlobalSettings.mEnableCacheConfig,
-      'mLocalCacheDir': GlobalSettings.mDirController,
-      'mClearFrameWhenStop': true
-    };
-    // Configure the application.
-    fAliplayer?.setConfig(configMap);
-    var map = {
-      "mMaxSizeMB": GlobalSettings.mMaxSizeMBController,
-
-      /// The maximum space that can be occupied by the cache directory.
-      "mMaxDurationS": GlobalSettings.mMaxDurationSController,
-
-      /// The maximum cache duration of a single file.
-      "mDir": GlobalSettings.mDirController,
-
-      /// The cache directory.
-      "mEnable": GlobalSettings.mEnableCacheConfig
-
-      /// Specify whether to enable the cache feature.
-    };
-    fAliplayer?.setCacheConfig(map);
-  }
-
-  initAlipayer() {
-    globalAliPlayer = fAliplayer;
-    vidConfig();
-    fAliplayer?.pause();
-    fAliplayer?.setAutoPlay(true);
-    fAliplayer?.setLoop(true);
-
-    //Turn on mix mode
-    if (Platform.isIOS) {
-      FlutterAliplayer.enableMix(true);
-      // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
-    }
-
-    //set player
-    fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
-    fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
-    final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
-    _initListener(notifier);
-  }
-
-  _initListener(PreviewPicNotifier notifier) {
-    fAliplayer?.setOnEventReportParams((params, playerId) {
-      print("EventReportParams=${params}");
-    });
-    fAliplayer?.setOnPrepared((playerId) {
-      // Fluttertoast.showToast(msg: "OnPrepared ");
-      if (SharedPreference().readStorage(SpKeys.isShowPopAds)) {
-        notifier.isMute = true;
-        fAliplayer?.pause();
-      }
-
-      fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
-      fAliplayer?.getMediaInfo().then((value) {
-        if (mounted) {
-          setState(() {
-            isPrepare = true;
-          });
-        } else {
-          isPrepare = true;
-        }
-      });
-      isPlay = true;
-      dataSelected?.isDiaryPlay = true;
-    });
-    fAliplayer?.setOnRenderingStart((playerId) {
-      // Fluttertoast.showToast(msg: " OnFirstFrameShow ");
-    });
-    fAliplayer?.setOnVideoSizeChanged((width, height, rotation, playerId) {});
-    fAliplayer?.setOnStateChanged((newState, playerId) {
-      _currentPlayerState = newState;
-      print("aliyun : onStateChanged $newState");
-      switch (newState) {
-        case FlutterAvpdef.AVPStatus_AVPStatusStarted:
-          setState(() {
-            // _showLoading = false;
-            isPause = false;
-          });
-          break;
-        case FlutterAvpdef.AVPStatus_AVPStatusPaused:
-          isPause = true;
-          setState(() {});
-          break;
-        default:
-      }
-    });
-    fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
-      setState(() {
-        // _loadingPercent = 0;
-        // _showLoading = true;
-      });
-    }, loadingProgress: (percent, netSpeed, playerId) {
-      // _loadingPercent = percent;
-      if (percent == 100) {
-        // _showLoading = false;
-      }
-      setState(() {});
-    }, loadingEnd: (playerId) {
-      setState(() {
-        // _showLoading = false;
-      });
-    });
-    fAliplayer?.setOnSeekComplete((playerId) {
-      // _inSeek = false;
-    });
-    fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
-      if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
-        if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
-          // _currentPosition = extraValue ?? 0;
-        }
-        // if (!_inSeek) {
-        //   setState(() {
-        //     _currentPositionText = extraValue ?? 0;
-        //   });
-        // }
-      } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
-        // _bufferPosition = extraValue ?? 0;
-        if (mounted) {
-          setState(() {});
-        }
-      } else if (infoCode == FlutterAvpdef.AUTOPLAYSTART) {
-        // Fluttertoast.showToast(msg: "AutoPlay");
-      } else if (infoCode == FlutterAvpdef.CACHESUCCESS) {
-      } else if (infoCode == FlutterAvpdef.CACHEERROR) {
-      } else if (infoCode == FlutterAvpdef.LOOPINGSTART) {
-        // Fluttertoast.showToast(msg: "Looping Start");
-      } else if (infoCode == FlutterAvpdef.SWITCHTOSOFTWAREVIDEODECODER) {
-        // Fluttertoast.showToast(msg: "change to soft ware decoder");
-        // mOptionsFragment.switchHardwareDecoder();
-      }
-    });
-    fAliplayer?.setOnCompletion((playerId) {
-      // _showLoading = false;
-
-      isPause = true;
-
-      setState(() {
-        // _currentPosition = _videoDuration;
-      });
-    });
-
-    fAliplayer?.setOnSnapShot((path, playerId) {
-      print("aliyun : snapShotPath = $path");
-      // Fluttertoast.showToast(msg: "SnapShot Save : $path");
-    });
-    fAliplayer?.setOnError((errorCode, errorExtra, errorMsg, playerId) {
-      print("============init ali player error $errorCode - $errorExtra - $errorMsg - $playerId");
-
-      setState(() {});
-    });
-
-    fAliplayer?.setOnTrackChanged((value, playerId) {
-      AVPTrackInfo info = AVPTrackInfo.fromJson(value);
-      if ((info.trackDefinition?.length ?? 0) > 0) {
-        // trackFragmentKey.currentState.onTrackChanged(info);
-        // Fluttertoast.showToast(msg: "${info.trackDefinition}切换成功");
-      }
-    });
-    fAliplayer?.setOnThumbnailPreparedListener(preparedSuccess: (playerId) {}, preparedFail: (playerId) {});
-
-    fAliplayer?.setOnThumbnailGetListener(
-        onThumbnailGetSuccess: (bitmap, range, playerId) {
-          // _thumbnailBitmap = bitmap;
-          var provider = MemoryImage(bitmap);
-          precacheImage(provider, context).then((_) {
-            setState(() {});
-          });
-        },
-        onThumbnailGetFail: (playerId) {});
-
-    fAliplayer?.setOnSubtitleHide((trackIndex, subtitleID, playerId) {
-      if (mounted) {
-        setState(() {});
-      }
-    });
-
-    fAliplayer?.setOnSubtitleShow((trackIndex, subtitleID, subtitle, playerId) {
-      if (mounted) {
-        setState(() {});
-      }
-    });
   }
 
   Future toPosition(double offset, PreviewPicNotifier notifier) async {
@@ -490,8 +281,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
   void start(BuildContext context, ContentData data, PreviewPicNotifier notifier) async {
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
-    print("===-=-=-=-=-start--0-0-0-");
-    fAliplayer?.stop();
+    globalAliPlayer?.stop();
+    globalAudioPlayer?.stop();
+    MyAudioService.instance.stop();
     dataSelected = data;
 
     isPlay = false;
@@ -509,8 +301,11 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     // await getAuth(data.music?.apsaraMusic ?? '');
     if (data.reportedStatus != 'BLURRED') {
       // _playMode = ModeTypeAliPLayer.auth;
-      await getAuth(context, data.music?.apsaraMusic ?? '');
+      // await getAuth(context, data.music?.apsaraMusic ?? '');
+      // await getMusicUrl(context, data.music?.apsaraMusic ?? '');
     }
+
+    await getMusicUrl(context, data.music?.apsaraMusic ?? '');
 
     setState(() {
       isPause = false;
@@ -544,45 +339,39 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     //   /// Specify whether to enable the cache feature.
     // };
     // fAliplayer?.setCacheConfig(map);
-    print("====---- ---==== ali ${fAliplayer?.getPlayerName()}");
-
-    try {
-      print("===============init ali player ${fAliplayer?.playerId} ===========");
-      if (isActivePage) {
-        fAliplayer?.prepare().then((value) {
-          print("===============init ali player 22 ${fAliplayer?.playerId} ===========");
-        });
-      }
-    } catch (e) {
-      print(e);
-    }
-
-    if (notifier.isMute) {
-      fAliplayer?.setMuted(true);
+    // print("====---- ---==== ali ${fAliplayer?.getPlayerName()}");
+    if (data.reportedStatus != 'BLURRED') {
+      MyAudioService.instance.play(
+        path: url,
+        startedPlaying: () {
+          playIndex = _curIdx;
+          setState(() {});
+        },
+        stoppedPlaying: () {
+          playIndex = -1;
+          setState(() {});
+        },
+        mute: notifier.isMute,
+      );
+    } else {
+      MyAudioService.instance.stop();
     }
   }
 
-  Future getAuth(BuildContext context, String apsaraId) async {
+  Future getMusicUrl(BuildContext context, String apsaraId) async {
     setState(() {
       isloading = true;
     });
     try {
       final fixContext = Routing.navigatorKey.currentContext;
       final notifier = PostsBloc();
-      await notifier.getAuthApsara(fixContext ?? context, apsaraId: apsaraId);
+      await notifier.getMusic(fixContext ?? context, apsaraId: apsaraId);
       final fetch = notifier.postsFetch;
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
         Map jsonMap = json.decode(fetch.data.toString());
-        auth = jsonMap['PlayAuth'];
-
-        fAliplayer?.setVidAuth(
-          vid: apsaraId,
-          region: DataSourceRelated.defaultRegion,
-          playAuth: auth,
-          definitionList: [DataSourceRelated.definitionList],
-        );
 
         setState(() {
+          url = jsonMap['data']['PlayURL'];
           isloading = false;
           isPrepareMusic = false;
         });
@@ -596,35 +385,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     }
   }
 
-  Future getOldVideoUrl(String postId) async {
-    setState(() {
-      isloading = true;
-    });
-    try {
-      final notifier = PostsBloc();
-      await notifier.getOldVideo(context, apsaraId: postId);
-      final fetch = notifier.postsFetch;
-      if (fetch.postsState == PostsState.videoApsaraSuccess) {
-        Map jsonMap = json.decode(fetch.data.toString());
-
-        fAliplayer?.setUrl(jsonMap['data']['url']);
-        setState(() {
-          isloading = false;
-        });
-        // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
-      }
-    } catch (e) {
-      setState(() {
-        isloading = false;
-      });
-      // 'Failed to fetch ads data $e'.logger();
-    }
-  }
-
-  void onViewPlayerCreated(viewId) async {
-    fAliplayer?.setPlayerView(viewId);
-  }
-
   @override
   void didChangeDependencies() {
     CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
@@ -633,10 +393,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
   @override
   void dispose() {
-    isActivePage = true;
-    fAliplayer?.stop();
-    // fAliplayer?.destroy();
-    print("---=-=-=-=--===-=-=-=-DiSPOSE--=-=-=-=-=-=-=-=-=-=-=----==-=");
+    isActivePage = false;
+
     // fAliplayer?.destroy();
 
     super.dispose();
@@ -646,7 +404,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void deactivate() {
     print("====== deactivate ");
-    // fAliplayer?.stop();
+    MyAudioService.instance.pause();
+    //
     System().disposeBlock();
     if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
       // fAliplayer?.destroy();
@@ -661,16 +420,28 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void didPop() {
     print("====== didpop ");
+    print("====== didpop $playIndex");
+    print("====== didpop $_curIdx");
+    if (playIndex == _curIdx) {
+      final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
+      MyAudioService.instance.playagain(notifier.isMute);
+    }
     super.didPop();
   }
 
   @override
   void didPopNext() {
     print("======= didPopNext");
+    print("======= didPopNext $_curIdx");
+    print("======= didPopNext $playIndex");
     isactivealiplayer = false;
     isInPage = true;
-    fAliplayer?.play();
+
     isActivePage = true;
+    if (playIndex == _curIdx) {
+      final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
+      MyAudioService.instance.playagain(notifier.isMute);
+    }
 
     // fAliplayer?.prepare();
     // System().disposeBlock();
@@ -680,14 +451,15 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void didPush() {
     print("========= didPush");
-    isActivePage = true;
+    // isActivePage = false;
     super.didPush();
   }
 
   @override
   void didPushNext() {
-    print("========= didPushNext");
-    fAliplayer?.pause();
+    print("========= didPushNext dari pict");
+    // MyAudioService.instance.pause();
+
     isActivePage = false;
     System().disposeBlock();
     isInPage = false;
@@ -697,20 +469,27 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-
+    print("========= pict  inactive $state ");
     switch (state) {
       case AppLifecycleState.inactive:
         print("========= inactive");
+        MyAudioService.instance.stop();
         break;
       case AppLifecycleState.resumed:
-        print("========= resumed");
+        print(
+            "========= resumed pict  $isactivealiplayer - $isActivePage - ${context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds) && isActivePage}");
         if (context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds) && isActivePage) {
-          fAliplayer?.play();
+          if (!isactivealiplayer) {
+            final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
+            print("========= resumed music ${notifier.isMute}");
+            if (!notifier.isMute) {
+              MyAudioService.instance.playagain(false);
+            }
+          }
         }
         break;
       case AppLifecycleState.paused:
-        print("========= paused");
-        fAliplayer?.pause();
+        MyAudioService.instance.pause();
         break;
       case AppLifecycleState.detached:
         print("========= detached");
@@ -743,14 +522,14 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     // AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
 
     return Consumer2<PreviewPicNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
-      if (isactivealiplayer) {
-        fAliplayer?.pause();
-      } else {
-        if (isActivePage) {
-          fAliplayer?.play();
-        }
-        //
-      }
+      // if (isactivealiplayer) {
+      //
+      // } else {
+      //   if (isActivePage) {
+      //     fAliplayer?.play();
+      //   }
+      //   //
+      // }
       return Container(
         width: SizeConfig.screenWidth,
         height: SizeWidget.barHyppePic,
@@ -850,7 +629,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                               //   scrollBehavior: ScrollBehavior(),
                               itemBuilder: (context, index) {
                                 if (notifier.pic == null || home.isLoadingPict) {
-                                  fAliplayer?.pause();
+                                  // fAliplayer?.pause();
+
                                   // _lastCurIndex = -1;
                                   _lastCurPostId = '';
                                   // return Container(
@@ -926,7 +706,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                 /// ADS IN BETWEEN === Hariyanto Lukman ===
                 isAds
                     ? VisibilityDetector(
-                        key: Key(index.toString()),
+                        key: Key(picData?.inBetweenAds?.adsId ?? index.toString()),
                         onVisibilityChanged: (info) async {
                           if (info.visibleFraction >= 0.8) {
                             setState(() {
@@ -947,6 +727,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
                             // if (_lastCurIndex != _curIdx) {
                             if (_lastCurPostId != _curPostId) {
+                              MyAudioService.instance.stop();
                               if (mounted) {
                                 setState(() {
                                   isShowShowcase = false;
@@ -957,7 +738,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                               if (indexList == (notifier.pic?.length ?? 0) - 1) {
                                 context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {});
                               }
-                              fAliplayer?.stop();
+                              // fAliplayer?.stop();
+                              MyAudioService.instance.stop();
                               Future.delayed(const Duration(milliseconds: 500), () {
                                 System().increaseViewCount2(context, picData ?? ContentData(), check: false);
                                 if ((picData?.saleAmount ?? 0) > 0 || ((picData?.certified ?? false) && (picData?.saleAmount ?? 0) == 0)) {
@@ -1005,253 +787,263 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                             ),
                           ],
                         ))
-                    : Column(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16),
-                              color: Colors.white,
-                            ),
-                            padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
-                            margin: const EdgeInsets.only(bottom: 16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // SelectableText(((picData?.isApsara ?? false) ? (picData?.mediaThumbEndPoint ?? "") : "${picData?.fullThumbPath}") + "&key=${cacheDesc[index]}"),
+                    : VisibilityDetector(
+                        key: Key(picData?.postID ?? index.toString()),
+                        onVisibilityChanged: (info) {
+                          if (info.visibleFraction == 0.8) {
+                            if (!isShowingDialog) {
+                              globalAdsPopUp?.pause();
+                            }
+                          }
+                          print("hahaha ======  info ${info.visibleFraction}");
+                          var persentage = (picData?.imageHeightTemp ?? 0) <= 160 ? 1.0 : 0.6;
+                          if (info.visibleFraction >= persentage) {
+                            _curIdx = index;
+                            _curPostId = picData?.postID ?? index.toString();
+                            if (_lastCurIndex > _curIdx) {
+                              MyAudioService.instance.stop();
+                              // fAliplayer?.destroy();
+                              // double position = 0.0;
+                              // for (var i = 0; i < _curIdx; i++) {
+                              //   position += notifier.pic?[i].height ?? 0.0;
+                              //   // position = position - (notifier.pic?[_curIdx].height);
+                              // }
+                              // context.read<MainNotifier>().globalKey.currentState?.innerController.jumpTo(position);
+                            }
 
-                                // Text("mn?.status own ${mn?.tutorialData[indexKeyProtection].status}"),
-                                // Text("mn?.status sell ${mn?.tutorialData[indexKeySell].status}"),
-                                // Text("global ${picData?.keyGlobalOwn}"),
-                                // Text("global ${picData?.keyGlobalSell}"),
-                                // Text("itemHeight $itemHeight"),
-                                // Text("height ${picData?.imageHeightTemp}"),
-                                // Text("$_lastCurIndex"),
-                                // Text("$index"),
-                                // Text("${picData?.height}"),
-                                // GestureDetector(
-                                //   onScaleStart: (details) {
-                                //     widget.functionZoomTriger();
-                                //     print("***************** dua jari ***************");
-                                //     print(details.pointerCount);
-                                //   },
-                                //   onScaleEnd: (details) {
-                                //     print("***************** satu jari ***************");
-                                //   },
+                            // if (_lastCurIndex != _curIdx) {
+                            if (_lastCurPostId != _curPostId) {
+                              if (mounted) {
+                                setState(() {
+                                  isShowShowcase = false;
+                                });
+                              }
+                              final indexList = notifier.pic?.indexWhere((element) => element.postID == _curPostId);
+                              // final latIndexList = notifier.pic?.indexWhere((element) => element.postID == _lastCurPostId);
 
-                                //   child: Container(
-                                //     width: 500,
-                                //     height: 200,
-                                //     color: Colors.red,
-                                //   ),
-                                // ),
-                                // GestureDetector(
-                                //   onTap: () {
-                                //     Routing().move(Routes.testImage);
-                                //   },
-                                //   child: Text('hahahah'),
-                                // ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      child: ProfileLandingPage(
-                                        show: true,
-                                        // cacheKey: vidData?.email == email ? homeNotifier.profileImageKey : null,
-                                        onFollow: () {},
-                                        following: true,
-                                        haveStory: false,
-                                        textColor: kHyppeTextLightPrimary,
-                                        username: picData?.username,
-                                        featureType: FeatureType.other,
-                                        // isCelebrity: vidpicData?.privacy?.isCelebrity,
-                                        isCelebrity: false,
-                                        imageUrl: picData?.avatar == null ? '' : '${System().showUserPicture(picData?.avatar?.mediaEndpoint)}',
-                                        onTapOnProfileImage: () => System().navigateToProfile(context, picData?.email ?? ''),
-                                        createdAt: '2022-02-02',
-                                        musicName: picData?.music?.musicTitle ?? '',
-                                        location: picData?.location ?? '',
-                                        isIdVerified: picData?.privacy?.isIdVerified,
-                                        badge: picData?.urluserBadge,
-                                      ),
-                                    ),
-                                    if (picData?.email != email && (picData?.isNewFollowing ?? false))
-                                      Consumer<PreviewPicNotifier>(
-                                        builder: (context, picNot, child) => Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              context.handleActionIsGuest(() {
-                                                if (picData?.insight?.isloadingFollow != true) {
-                                                  picNot.followUser(context, picData ?? ContentData(), isUnFollow: picData?.following, isloading: picData?.insight!.isloadingFollow ?? false);
-                                                }
-                                              });
-                                            },
-                                            child: picData?.insight?.isloadingFollow ?? false
-                                                ? Container(
-                                                    height: 40,
-                                                    width: 30,
-                                                    child: const Align(
-                                                      alignment: Alignment.bottomRight,
-                                                      child: CustomLoading(),
-                                                    ),
-                                                  )
-                                                : Text(
-                                                    (picData?.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
-                                                    style: const TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
-                                                  ),
-                                          ),
+                              if (indexList == (notifier.pic?.length ?? 0) - 1) {
+                                context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {});
+                              }
+
+                              if (picData?.music != null) {
+                                print("ada musiknya ${picData?.music?.toJson()}");
+                                print("ada musiknya ${picData?.music?.toJson()}");
+                                setState(() {
+                                  isPrepareMusic = true;
+                                  isactivealiplayer = false;
+                                });
+                                Future.delayed(const Duration(milliseconds: 100), () {
+                                  start(context, picData ?? ContentData(), notifier);
+                                });
+                              } else {
+                                // fAliplayer?.stop();
+                                MyAudioService.instance.stop();
+                              }
+
+                              Future.delayed(const Duration(milliseconds: 100), () {
+                                if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
+                                  indexKeySell = mn?.tutorialData.indexWhere((element) => element.key == 'sell') ?? 0;
+                                  indexKeyProtection = mn?.tutorialData.indexWhere((element) => element.key == 'protection') ?? 0;
+                                  // print("==============global challehg $globalChallengePopUp");
+                                  // print("==============global challehg ${mn?.tutorialData[indexKeySell].status == false && !globalChallengePopUp}");
+                                  if ((picData?.saleAmount ?? 0) > 0) {
+                                    if (mn?.tutorialData[indexKeySell].status == false && !globalChallengePopUp) {
+                                      ShowCaseWidget.of(context).startShowCase([picData?.keyGlobalSell ?? GlobalKey()]);
+                                    }
+                                  }
+                                  if (((picData?.certified ?? false) && (picData?.saleAmount ?? 0) == 0)) {
+                                    if (mn?.tutorialData[indexKeyProtection].status == false && !globalChallengePopUp) {
+                                      ShowCaseWidget.of(context).startShowCase([picData?.keyGlobalOwn ?? GlobalKey()]);
+                                    }
+                                  }
+                                }
+                              });
+
+                              Future.delayed(const Duration(milliseconds: 500), () {
+                                System().increaseViewCount2(context, picData ?? ContentData(), check: false);
+                              });
+
+                              if (picData?.certified ?? false) {
+                                System().block(context);
+                              } else {
+                                System().disposeBlock();
+                              }
+                              setState(() {
+                                Future.delayed(Duration(milliseconds: 400), () {
+                                  itemHeight = notifier.pic?[indexList ?? 0].height ?? 0;
+                                });
+                              });
+                              // Future.delayed(const Duration(milliseconds: 500), () async {
+                              //   if (indexList == (notifier.pic?.length ?? 0) - 1) {
+                              //     await context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {
+                              //       notifier.getTemp(indexList, latIndexList, indexList);
+                              //     });
+                              //   } else {
+                              //     notifier.getTemp(indexList, latIndexList, indexList);
+                              //   }
+                              // });
+
+                              ///ADS IN BETWEEN === Hariyanto Lukman ===
+                              if (!notifier.loadAds) {
+                                if ((notifier.pic?.length ?? 0) > notifier.nextAdsShowed) {
+                                  notifier.loadAds = true;
+                                  context.getInBetweenAds().then((value) {
+                                    if (value != null) {
+                                      notifier.setAdsData(index, value);
+                                    } else {
+                                      notifier.loadAds = false;
+                                    }
+                                  });
+                                }
+                              }
+                            }
+
+                            _lastCurIndex = _curIdx;
+                            _lastCurPostId = _curPostId;
+                          }
+                        },
+                        child: Column(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                color: Colors.white,
+                              ),
+                              padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
+                              margin: const EdgeInsets.only(bottom: 16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // SelectableText(((picData?.isApsara ?? false) ? (picData?.mediaThumbEndPoint ?? "") : "${picData?.fullThumbPath}") + "&key=${cacheDesc[index]}"),
+
+                                  // Text("mn?.status own ${mn?.tutorialData[indexKeyProtection].status}"),
+                                  // Text("mn?.status sell ${mn?.tutorialData[indexKeySell].status}"),
+                                  // Text("global ${picData?.keyGlobalOwn}"),
+                                  // Text("global ${picData?.keyGlobalSell}"),
+                                  // Text("itemHeight $itemHeight"),
+                                  // Text("height ${picData?.imageHeightTemp}"),
+                                  // Text("$_lastCurIndex"),
+                                  // Text("$isActivePage"),
+                                  // Text("${picData?.height}"),
+                                  // GestureDetector(
+                                  //   onScaleStart: (details) {
+                                  //     widget.functionZoomTriger();
+                                  //     print("***************** dua jari ***************");
+                                  //     print(details.pointerCount);
+                                  //   },
+                                  //   onScaleEnd: (details) {
+                                  //     print("***************** satu jari ***************");
+                                  //   },
+
+                                  //   child: Container(
+                                  //     width: 500,
+                                  //     height: 200,
+                                  //     color: Colors.red,
+                                  //   ),
+                                  // ),
+                                  // GestureDetector(
+                                  //   onTap: () {
+                                  //     Routing().move(Routes.testImage);
+                                  //   },
+                                  //   child: Text('hahahah'),
+                                  // ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Expanded(
+                                        child: ProfileLandingPage(
+                                          show: true,
+                                          // cacheKey: vidData?.email == email ? homeNotifier.profileImageKey : null,
+                                          onFollow: () {},
+                                          following: true,
+                                          haveStory: false,
+                                          textColor: kHyppeTextLightPrimary,
+                                          username: picData?.username,
+                                          featureType: FeatureType.other,
+                                          // isCelebrity: vidpicData?.privacy?.isCelebrity,
+                                          isCelebrity: false,
+                                          imageUrl: picData?.avatar == null ? '' : '${System().showUserPicture(picData?.avatar?.mediaEndpoint)}',
+                                          onTapOnProfileImage: () {
+                                            MyAudioService.instance.pause();
+                                            System().navigateToProfile(context, picData?.email ?? '');
+                                          },
+                                          createdAt: '2022-02-02',
+                                          musicName: picData?.music?.musicTitle ?? '',
+                                          location: picData?.location ?? '',
+                                          isIdVerified: picData?.privacy?.isIdVerified,
+                                          badge: picData?.urluserBadge,
                                         ),
                                       ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        // fAliplayer?.pause();
-                                        context.handleActionIsGuest(() {
-                                          if (picData?.email != email) {
-                                            context.read<PreviewPicNotifier>().reportContent(context, picData ?? ContentData(), fAliplayer: fAliplayer, onCompleted: () async {
-                                              imageCache.clear();
-                                              imageCache.clearLiveImages();
-                                              await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 0);
-                                            });
-                                          } else {
-                                            fAliplayer?.setMuted(true);
-                                            fAliplayer?.pause();
-                                            ShowBottomSheet().onShowOptionContent(
-                                              context,
-                                              contentData: picData ?? ContentData(),
-                                              captionTitle: hyppePic,
-                                              onDetail: false,
-                                              isShare: picData?.isShared,
-                                              onUpdate: () {
-                                                (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 0);
+                                      if (picData?.email != email && (picData?.isNewFollowing ?? false))
+                                        Consumer<PreviewPicNotifier>(
+                                          builder: (context, picNot, child) => Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                context.handleActionIsGuest(() {
+                                                  if (picData?.insight?.isloadingFollow != true) {
+                                                    picNot.followUser(context, picData ?? ContentData(), isUnFollow: picData?.following, isloading: picData?.insight!.isloadingFollow ?? false);
+                                                  }
+                                                }).then((value) {
+                                                  if (value) {
+                                                    MyAudioService.instance.playagain(notifier.isMute);
+                                                  }
+                                                });
                                               },
-                                              fAliplayer: fAliplayer,
-                                            );
-                                          }
-                                        });
-                                      },
-                                      child: const Icon(
-                                        Icons.more_vert,
-                                        color: kHyppeTextLightPrimary,
+                                              child: picData?.insight?.isloadingFollow ?? false
+                                                  ? Container(
+                                                      height: 40,
+                                                      width: 30,
+                                                      child: const Align(
+                                                        alignment: Alignment.bottomRight,
+                                                        child: CustomLoading(),
+                                                      ),
+                                                    )
+                                                  : Text(
+                                                      (picData?.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+                                                      style: const TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                                                    ),
+                                            ),
+                                          ),
+                                        ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          //
+                                          context.handleActionIsGuest(() {
+                                            if (picData?.email != email) {
+                                              context.read<PreviewPicNotifier>().reportContent(context, picData ?? ContentData(), fAliplayer: FlutterAliplayer.init('kosong'), onCompleted: () async {
+                                                imageCache.clear();
+                                                imageCache.clearLiveImages();
+                                                await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 0);
+                                              });
+                                            } else {
+                                              ShowBottomSheet().onShowOptionContent(
+                                                context,
+                                                contentData: picData ?? ContentData(),
+                                                captionTitle: hyppePic,
+                                                onDetail: false,
+                                                isShare: picData?.isShared,
+                                                onUpdate: () {
+                                                  (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 0);
+                                                },
+                                              );
+                                            }
+                                          }).then((value) {
+                                            if (value) {
+                                              MyAudioService.instance.playagain(notifier.isMute);
+                                            }
+                                          });
+                                        },
+                                        child: const Icon(
+                                          Icons.more_vert,
+                                          color: kHyppeTextLightPrimary,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                tenPx,
-
-                                VisibilityDetector(
-                                  key: Key(index.toString()),
-                                  // key: Key(picData?.postID ?? index.toString()),
-                                  onVisibilityChanged: (info) {
-                                    if (info.visibleFraction == 0.8) {
-                                      if (!isShowingDialog) {
-                                        globalAdsPopUp?.pause();
-                                      }
-                                    }
-                                    if (info.visibleFraction == 1 || info.visibleFraction >= 0.6) {
-                                      _curIdx = index;
-                                      _curPostId = picData?.postID ?? index.toString();
-                                      if (_lastCurIndex > _curIdx) {
-                                        // fAliplayer?.destroy();
-                                        // double position = 0.0;
-                                        // for (var i = 0; i < _curIdx; i++) {
-                                        //   position += notifier.pic?[i].height ?? 0.0;
-                                        //   // position = position - (notifier.pic?[_curIdx].height);
-                                        // }
-                                        // context.read<MainNotifier>().globalKey.currentState?.innerController.jumpTo(position);
-                                      }
-
-                                      // if (_lastCurIndex != _curIdx) {
-                                      if (_lastCurPostId != _curPostId) {
-                                        if (mounted) {
-                                          setState(() {
-                                            isShowShowcase = false;
-                                          });
-                                        }
-                                        final indexList = notifier.pic?.indexWhere((element) => element.postID == _curPostId);
-                                        // final latIndexList = notifier.pic?.indexWhere((element) => element.postID == _lastCurPostId);
-
-                                        if (indexList == (notifier.pic?.length ?? 0) - 1) {
-                                          context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {});
-                                        }
-
-                                        if (picData?.music != null) {
-                                          print("ada musiknya ${picData?.music?.toJson()}");
-                                          print("ada musiknya ${picData?.music?.toJson()}");
-                                          setState(() {
-                                            isPrepareMusic = true;
-                                            isactivealiplayer = false;
-                                          });
-                                          Future.delayed(const Duration(milliseconds: 100), () {
-                                            start(context, picData ?? ContentData(), notifier);
-                                          });
-                                        } else {
-                                          fAliplayer?.stop();
-                                        }
-
-                                        Future.delayed(const Duration(milliseconds: 100), () {
-                                          if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
-                                            indexKeySell = mn?.tutorialData.indexWhere((element) => element.key == 'sell') ?? 0;
-                                            indexKeyProtection = mn?.tutorialData.indexWhere((element) => element.key == 'protection') ?? 0;
-                                            // print("==============global challehg $globalChallengePopUp");
-                                            // print("==============global challehg ${mn?.tutorialData[indexKeySell].status == false && !globalChallengePopUp}");
-                                            if ((picData?.saleAmount ?? 0) > 0) {
-                                              if (mn?.tutorialData[indexKeySell].status == false && !globalChallengePopUp) {
-                                                ShowCaseWidget.of(context).startShowCase([picData?.keyGlobalSell ?? GlobalKey()]);
-                                              }
-                                            }
-                                            if (((picData?.certified ?? false) && (picData?.saleAmount ?? 0) == 0)) {
-                                              if (mn?.tutorialData[indexKeyProtection].status == false && !globalChallengePopUp) {
-                                                ShowCaseWidget.of(context).startShowCase([picData?.keyGlobalOwn ?? GlobalKey()]);
-                                              }
-                                            }
-                                          }
-                                        });
-
-                                        Future.delayed(const Duration(milliseconds: 500), () {
-                                          System().increaseViewCount2(context, picData ?? ContentData(), check: false);
-                                        });
-
-                                        if (picData?.certified ?? false) {
-                                          System().block(context);
-                                        } else {
-                                          System().disposeBlock();
-                                        }
-                                        setState(() {
-                                          Future.delayed(Duration(milliseconds: 400), () {
-                                            itemHeight = notifier.pic?[indexList ?? 0].height ?? 0;
-                                          });
-                                        });
-                                        // Future.delayed(const Duration(milliseconds: 500), () async {
-                                        //   if (indexList == (notifier.pic?.length ?? 0) - 1) {
-                                        //     await context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {
-                                        //       notifier.getTemp(indexList, latIndexList, indexList);
-                                        //     });
-                                        //   } else {
-                                        //     notifier.getTemp(indexList, latIndexList, indexList);
-                                        //   }
-                                        // });
-
-                                        ///ADS IN BETWEEN === Hariyanto Lukman ===
-                                        if (!notifier.loadAds) {
-                                          if ((notifier.pic?.length ?? 0) > notifier.nextAdsShowed) {
-                                            notifier.loadAds = true;
-                                            context.getInBetweenAds().then((value) {
-                                              if (value != null) {
-                                                notifier.setAdsData(index, value);
-                                              } else {
-                                                notifier.loadAds = false;
-                                              }
-                                            });
-                                          }
-                                        }
-                                      }
-
-                                      _lastCurIndex = _curIdx;
-                                      _lastCurPostId = _curPostId;
-                                    }
-                                  },
-                                  child: Container(
+                                    ],
+                                  ),
+                                  tenPx,
+                                  Container(
                                     // height: picData?.imageHeightTemp == 0 ? null : picData?.imageHeightTemp,
                                     margin: const EdgeInsets.only(bottom: 20),
                                     width: SizeConfig.screenWidth,
@@ -1324,12 +1116,13 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                               //   fAliplayer?.setMuted(notifier.isMute);
                                               // }
 
-                                              // fAliplayer?.pause();
+                                              //
                                               if (!isPrepareMusic) {
+                                                isactivealiplayer = true;
                                                 var res = await Routing().move(Routes.picFullScreenDetail, argument: PicFullscreenArgument(picData: notifier.pic!, index: index, scrollPic: false));
                                                 if (res != null || res == null) {
-                                                  fAliplayer?.play();
-                                                  fAliplayer?.setMuted(notifier.isMute);
+                                                  // fAliplayer?.play();
+                                                  isactivealiplayer = false;
                                                   // var temp1 = notifier.pic![_curIdx];
                                                   // var temp2 = notifier.pic![notifier.currentIndex];
                                                   if (index < notifier.currentIndex) {
@@ -1479,267 +1272,270 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                       ),
                                     ),
                                   ),
-                                ),
-                                SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                                        (picData?.boosted.isEmpty ?? [].isEmpty) &&
-                                        (picData?.reportedStatus != 'OWNED' && picData?.reportedStatus != 'BLURRED' && picData?.reportedStatus2 != 'BLURRED') &&
-                                        picData?.email == email
-                                    ? Container(
-                                        width: double.infinity,
-                                        margin: const EdgeInsets.only(bottom: 16),
-                                        child: ButtonBoost(
-                                          onDetail: false,
-                                          marginBool: true,
-                                          contentData: picData,
-                                          startState: () {
-                                            SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
-                                          },
-                                          afterState: () {
-                                            SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
-                                          },
-                                        ),
-                                      )
-                                    : Container(),
-                                if (picData?.email == email && (picData?.boostCount ?? 0) >= 0 && (picData?.boosted.isNotEmpty ?? [].isEmpty))
-                                  Container(
-                                    padding: const EdgeInsets.all(10),
-                                    margin: EdgeInsets.only(bottom: 10),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(6),
-                                      color: kHyppeGreyLight,
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        const CustomIconWidget(
-                                          iconData: "${AssetPath.vectorPath}reach.svg",
-                                          defaultColor: false,
-                                          height: 24,
-                                          color: kHyppeTextLightPrimary,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(left: 13),
-                                          child: CustomTextWidget(
-                                            textToDisplay: "${picData?.boostJangkauan ?? '0'} ${lang?.reach}",
-                                            textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                                  SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
+                                          (picData?.boosted.isEmpty ?? [].isEmpty) &&
+                                          (picData?.reportedStatus != 'OWNED' && picData?.reportedStatus != 'BLURRED' && picData?.reportedStatus2 != 'BLURRED') &&
+                                          picData?.email == email
+                                      ? Container(
+                                          width: double.infinity,
+                                          margin: const EdgeInsets.only(bottom: 16),
+                                          child: ButtonBoost(
+                                            onDetail: false,
+                                            marginBool: true,
+                                            contentData: picData,
+                                            startState: () {
+                                              SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                                            },
+                                            afterState: () {
+                                              SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                                            },
                                           ),
                                         )
-                                      ],
-                                    ),
-                                  ),
-                                Consumer<LikeNotifier>(
-                                  builder: (context, likeNotifier, child) => Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
+                                      : Container(),
+                                  if (picData?.email == email && (picData?.boostCount ?? 0) >= 0 && (picData?.boosted.isNotEmpty ?? [].isEmpty))
+                                    Container(
+                                      padding: const EdgeInsets.all(10),
+                                      margin: EdgeInsets.only(bottom: 10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(6),
+                                        color: kHyppeGreyLight,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
-                                          SizedBox(
-                                            width: 30,
-                                            child: Align(
-                                              alignment: Alignment.bottomRight,
-                                              child: picData?.insight?.isloading ?? false
-                                                  ? const SizedBox(
-                                                      height: 28,
-                                                      width: 28,
-                                                      child: CircularProgressIndicator(
-                                                        color: kHyppePrimary,
-                                                        strokeWidth: 2,
-                                                      ),
-                                                    )
-                                                  : InkWell(
-                                                      child: CustomIconWidget(
-                                                        defaultColor: false,
-                                                        color: (picData?.insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
-                                                        iconData: '${AssetPath.vectorPath}${(picData?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
-                                                        height: 28,
-                                                      ),
-                                                      onTap: () async {
-                                                        if (picData != null) {
-                                                          likeNotifier.likePost(context, notifier.pic![index]).then((value) {
-                                                            List<ContentData>? pic2 = context.read<ScrollPicNotifier>().pics;
-                                                            if (pic2?.isNotEmpty ?? false) {
-                                                              int idx2 = pic2!.indexWhere((e) => e.postID == value['_id']);
-                                                              pic2[idx2].insight?.isPostLiked = value['isPostLiked'];
-                                                              pic2[idx2].insight?.likes = value['likes'];
-                                                              pic2[idx2].isLiked = value['isLiked'];
-                                                            }
-                                                          });
-                                                        }
-                                                      },
-                                                    ),
-                                            ),
+                                          const CustomIconWidget(
+                                            iconData: "${AssetPath.vectorPath}reach.svg",
+                                            defaultColor: false,
+                                            height: 24,
+                                            color: kHyppeTextLightPrimary,
                                           ),
-                                          if (picData?.allowComments ?? true)
-                                            Padding(
-                                              padding: EdgeInsets.only(left: 21.0),
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: picData?.postID ?? '', fromFront: true, data: picData ?? ContentData()));
-                                                  // ShowBottomSheet.onShowCommentV2(context, postID: picData?.postID);
-                                                },
-                                                child: const CustomIconWidget(
-                                                  defaultColor: false,
-                                                  color: kHyppeTextLightPrimary,
-                                                  iconData: '${AssetPath.vectorPath}comment2.svg',
-                                                  height: 24,
-                                                ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 13),
+                                            child: CustomTextWidget(
+                                              textToDisplay: "${picData?.boostJangkauan ?? '0'} ${lang?.reach}",
+                                              textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  Consumer<LikeNotifier>(
+                                    builder: (context, likeNotifier, child) => Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            SizedBox(
+                                              width: 30,
+                                              child: Align(
+                                                alignment: Alignment.bottomRight,
+                                                child: picData?.insight?.isloading ?? false
+                                                    ? const SizedBox(
+                                                        height: 28,
+                                                        width: 28,
+                                                        child: CircularProgressIndicator(
+                                                          color: kHyppePrimary,
+                                                          strokeWidth: 2,
+                                                        ),
+                                                      )
+                                                    : InkWell(
+                                                        child: CustomIconWidget(
+                                                          defaultColor: false,
+                                                          color: (picData?.insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
+                                                          iconData: '${AssetPath.vectorPath}${(picData?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                                          height: 28,
+                                                        ),
+                                                        onTap: () async {
+                                                          if (picData != null) {
+                                                            likeNotifier.likePost(context, notifier.pic![index]).then((value) {
+                                                              List<ContentData>? pic2 = context.read<ScrollPicNotifier>().pics;
+                                                              if (pic2?.isNotEmpty ?? false) {
+                                                                int idx2 = pic2!.indexWhere((e) => e.postID == value['_id']);
+                                                                pic2[idx2].insight?.isPostLiked = value['isPostLiked'];
+                                                                pic2[idx2].insight?.likes = value['likes'];
+                                                                pic2[idx2].isLiked = value['isLiked'];
+                                                              }
+                                                            });
+                                                          }
+                                                        },
+                                                      ),
                                               ),
                                             ),
-                                          if ((picData?.isShared ?? false))
-                                            GestureDetector(
-                                              onTap: () {
-                                                context.read<PicDetailNotifier>().createdDynamicLink(context, data: picData);
-                                              },
-                                              child: const Padding(
+                                            if (picData?.allowComments ?? true)
+                                              Padding(
                                                 padding: EdgeInsets.only(left: 21.0),
-                                                child: CustomIconWidget(
-                                                  defaultColor: false,
-                                                  color: kHyppeTextLightPrimary,
-                                                  iconData: '${AssetPath.vectorPath}share2.svg',
-                                                  height: 24,
-                                                ),
-                                              ),
-                                            ),
-                                          if ((picData?.saleAmount ?? 0) > 0 && email != picData?.email)
-                                            Expanded(
-                                              child: GestureDetector(
-                                                onTap: () async {
-                                                  context.handleActionIsGuest(() async {
-                                                    fAliplayer?.pause();
-                                                    await ShowBottomSheet.onBuyContent(context, data: picData, fAliplayer: fAliplayer);
-                                                  }).then((value) {
-                                                    fAliplayer?.pause();
-                                                  });
-                                                },
-                                                child: const Align(
-                                                  alignment: Alignment.centerRight,
-                                                  child: CustomIconWidget(
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: picData?.postID ?? '', fromFront: true, data: picData ?? ContentData()));
+                                                    // ShowBottomSheet.onShowCommentV2(context, postID: picData?.postID);
+                                                  },
+                                                  child: const CustomIconWidget(
                                                     defaultColor: false,
                                                     color: kHyppeTextLightPrimary,
-                                                    iconData: '${AssetPath.vectorPath}cart.svg',
+                                                    iconData: '${AssetPath.vectorPath}comment2.svg',
                                                     height: 24,
                                                   ),
                                                 ),
                                               ),
+                                            if ((picData?.isShared ?? false))
+                                              GestureDetector(
+                                                onTap: () {
+                                                  context.read<PicDetailNotifier>().createdDynamicLink(context, data: picData);
+                                                },
+                                                child: const Padding(
+                                                  padding: EdgeInsets.only(left: 21.0),
+                                                  child: CustomIconWidget(
+                                                    defaultColor: false,
+                                                    color: kHyppeTextLightPrimary,
+                                                    iconData: '${AssetPath.vectorPath}share2.svg',
+                                                    height: 24,
+                                                  ),
+                                                ),
+                                              ),
+                                            if ((picData?.saleAmount ?? 0) > 0 && email != picData?.email)
+                                              Expanded(
+                                                child: GestureDetector(
+                                                  onTap: () async {
+                                                    context.handleActionIsGuest(() async {
+                                                      MyAudioService.instance.pause();
+                                                      notifier.setIsSound(true);
+                                                      await ShowBottomSheet.onBuyContent(context, data: picData);
+                                                    }).then((value) {
+                                                      if (value) {
+                                                        MyAudioService.instance.playagain(notifier.isMute);
+                                                      }
+                                                    });
+                                                  },
+                                                  child: const Align(
+                                                    alignment: Alignment.centerRight,
+                                                    child: CustomIconWidget(
+                                                      defaultColor: false,
+                                                      color: kHyppeTextLightPrimary,
+                                                      iconData: '${AssetPath.vectorPath}cart.svg',
+                                                      height: 24,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
+                                        ),
+                                        twelvePx,
+                                        RichText(
+                                          text: TextSpan(children: [
+                                            TextSpan(
+                                              text: "${picData?.insight?.likes} ${notifier.language.like}",
+                                              recognizer: TapGestureRecognizer()
+                                                ..onTap = () => Navigator.push(
+                                                    context,
+                                                    CupertinoPageRoute(
+                                                        builder: (context) => ViewLiked(
+                                                              postId: picData?.postID ?? '',
+                                                              eventType: 'LIKE',
+                                                            ))),
+                                              style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
                                             ),
-                                        ],
-                                      ),
-                                      twelvePx,
-                                      RichText(
-                                        text: TextSpan(children: [
-                                          TextSpan(
-                                            text: "${picData?.insight?.likes} ${notifier.language.like}",
-                                            recognizer: TapGestureRecognizer()
-                                              ..onTap = () => Navigator.push(
-                                                  context,
-                                                  CupertinoPageRoute(
-                                                      builder: (context) => ViewLiked(
-                                                            postId: picData?.postID ?? '',
-                                                            eventType: 'LIKE',
-                                                          ))),
-                                            style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
-                                          ),
-                                          const TextSpan(
-                                            text: " • ",
-                                            style: TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 16),
-                                          ),
-                                          TextSpan(
-                                            text: "${picData?.insight!.views?.getCountShort()} ${notifier.language.views}",
-                                            recognizer: TapGestureRecognizer()
-                                              ..onTap = () => Navigator.push(
-                                                  context,
-                                                  CupertinoPageRoute(
-                                                      builder: (context) => ViewLiked(
-                                                            postId: picData?.postID ?? '',
-                                                            eventType: 'VIEW',
-                                                          ))),
-                                            style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
-                                          ),
-                                        ]),
-                                      ),
-                                      // Text(
-                                      //   "${picData?.insight?.likes}  ${notifier.language.like}",
-                                      //   style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
-                                      // ),
-                                    ],
-                                  ),
-                                ),
-                                fourPx,
-                                CustomNewDescContent(
-                                  // desc: "${data?.description}",
-                                  email: picData?.email ?? '',
-                                  username: picData?.username ?? '',
-                                  desc: "${picData?.description}",
-                                  trimLines: 3,
-                                  textAlign: TextAlign.start,
-                                  seeLess: ' ${lang?.less}', // ${notifier2.translate.seeLess}',
-                                  seeMore: ' ${lang?.more}', //${notifier2.translate.seeMoreContent}',
-                                  normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                                  hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary, fontSize: 12),
-                                  expandStyle: const TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
-                                ),
-                                if (picData?.allowComments ?? false)
-                                  GestureDetector(
-                                    onTap: () {
-                                      Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: picData?.postID ?? '', fromFront: true, data: picData ?? ContentData()));
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 4.0),
-                                      child: Text(
-                                        "${lang?.seeAll} ${picData?.comments} ${lang?.comment}",
-                                        style: const TextStyle(fontSize: 12, color: kHyppeBurem),
-                                      ),
+                                            const TextSpan(
+                                              text: " • ",
+                                              style: TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 16),
+                                            ),
+                                            TextSpan(
+                                              text: "${picData?.insight!.views?.getCountShort()} ${notifier.language.views}",
+                                              recognizer: TapGestureRecognizer()
+                                                ..onTap = () => Navigator.push(
+                                                    context,
+                                                    CupertinoPageRoute(
+                                                        builder: (context) => ViewLiked(
+                                                              postId: picData?.postID ?? '',
+                                                              eventType: 'VIEW',
+                                                            ))),
+                                              style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                                            ),
+                                          ]),
+                                        ),
+                                        // Text(
+                                        //   "${picData?.insight?.likes}  ${notifier.language.like}",
+                                        //   style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                                        // ),
+                                      ],
                                     ),
                                   ),
-                                (picData?.comment?.length ?? 0) > 0
-                                    ? Padding(
-                                        padding: const EdgeInsets.only(top: 0.0),
-                                        child: ListView.builder(
-                                          shrinkWrap: true,
-                                          physics: const NeverScrollableScrollPhysics(),
-                                          itemCount: (picData?.comment?.length ?? 0) >= 2 ? 2 : 1,
-                                          itemBuilder: (context, indexComment) {
-                                            return Padding(
-                                              padding: const EdgeInsets.only(bottom: 6.0),
-                                              child: CustomNewDescContent(
-                                                email: picData?.comment?[indexComment].sender ?? '',
-                                                // desc: "${picData??.description}",
-                                                username: picData?.comment?[indexComment].userComment?.username ?? '',
-                                                desc: picData?.comment?[indexComment].txtMessages ?? '',
-                                                trimLines: 2,
-                                                textAlign: TextAlign.start,
-                                                seeLess: ' ${notifier.language.less}', // ${notifier2.translate.seeLess}',
-                                                seeMore: ' ${notifier.language.more} ', //${notifier2.translate.seeMoreContent}',
-                                                normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                                                hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                                                expandStyle: const TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      )
-                                    : Container(),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 4.0),
-                                  child: Text(
-                                    "${System().readTimestamp(
-                                      DateTime.parse(System().dateTimeRemoveT(picData?.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
-                                      context,
-                                      fullCaption: true,
-                                    )}",
-                                    style: TextStyle(fontSize: 12, color: kHyppeBurem),
+                                  fourPx,
+                                  CustomNewDescContent(
+                                    // desc: "${data?.description}",
+                                    email: picData?.email ?? '',
+                                    username: picData?.username ?? '',
+                                    desc: "${picData?.description}",
+                                    trimLines: 3,
+                                    textAlign: TextAlign.start,
+                                    seeLess: ' ${lang?.less}', // ${notifier2.translate.seeLess}',
+                                    seeMore: ' ${lang?.more}', //${notifier2.translate.seeMoreContent}',
+                                    normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
+                                    hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary, fontSize: 12),
+                                    expandStyle: const TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
                                   ),
-                                ),
-                              ],
+                                  if (picData?.allowComments ?? false)
+                                    GestureDetector(
+                                      onTap: () {
+                                        Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: picData?.postID ?? '', fromFront: true, data: picData ?? ContentData()));
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                        child: Text(
+                                          "${lang?.seeAll} ${picData?.comments} ${lang?.comment}",
+                                          style: const TextStyle(fontSize: 12, color: kHyppeBurem),
+                                        ),
+                                      ),
+                                    ),
+                                  (picData?.comment?.length ?? 0) > 0
+                                      ? Padding(
+                                          padding: const EdgeInsets.only(top: 0.0),
+                                          child: ListView.builder(
+                                            shrinkWrap: true,
+                                            physics: const NeverScrollableScrollPhysics(),
+                                            itemCount: (picData?.comment?.length ?? 0) >= 2 ? 2 : 1,
+                                            itemBuilder: (context, indexComment) {
+                                              return Padding(
+                                                padding: const EdgeInsets.only(bottom: 6.0),
+                                                child: CustomNewDescContent(
+                                                  email: picData?.comment?[indexComment].sender ?? '',
+                                                  // desc: "${picData??.description}",
+                                                  username: picData?.comment?[indexComment].userComment?.username ?? '',
+                                                  desc: picData?.comment?[indexComment].txtMessages ?? '',
+                                                  trimLines: 2,
+                                                  textAlign: TextAlign.start,
+                                                  seeLess: ' ${notifier.language.less}', // ${notifier2.translate.seeLess}',
+                                                  seeMore: ' ${notifier.language.more} ', //${notifier2.translate.seeMoreContent}',
+                                                  normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
+                                                  hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
+                                                  expandStyle: const TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        )
+                                      : Container(),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 4.0),
+                                    child: Text(
+                                      "${System().readTimestamp(
+                                        DateTime.parse(System().dateTimeRemoveT(picData?.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+                                        context,
+                                        fullCaption: true,
+                                      )}",
+                                      style: TextStyle(fontSize: 12, color: kHyppeBurem),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          homeNotifier.isLoadingLoadmore && picData == notifier.pic?.last
-                              ? const Padding(
-                                  padding: EdgeInsets.only(bottom: 32),
-                                  child: Center(child: CustomLoading()),
-                                )
-                              : Container(),
-                        ],
+                            homeNotifier.isLoadingLoadmore && picData == notifier.pic?.last
+                                ? const Padding(
+                                    padding: EdgeInsets.only(bottom: 32),
+                                    child: Center(child: CustomLoading()),
+                                  )
+                                : Container(),
+                          ],
+                        ),
                       ),
           );
   }
@@ -1777,9 +1573,39 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
               bottom: 18,
               left: 12,
               child: GestureDetector(
-                onTap: () {
-                  fAliplayer?.pause();
-                  context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID, fAliplayer: fAliplayer, title: lang!.inthisphoto);
+                onTap: () async {
+                  MyAudioService.instance.pause();
+                  context.handleActionIsGuest(() {
+                    ShowBottomSheet.onShowUserTag(
+                      context,
+                      value: data.tagPeople ?? [],
+                      function: () {},
+                      postId: data.postID,
+                      title: lang!.inthisphoto,
+                      // storyController: storyController,
+
+                      whenComplete: () {
+                        if (data.music != null) {
+                          MyAudioService.instance.playagain(notifier.isMute);
+                        } else {
+                          MyAudioService.instance.stop();
+                        }
+
+                        print("====hahahahah====");
+                      },
+                      // orientation: Orientation,
+                    );
+                  }).then((value) {
+                    print('data tag people $value');
+                    if (value) {
+                      if (data.music != null) {
+                        MyAudioService.instance.playagain(notifier.isMute);
+                      } else {
+                        MyAudioService.instance.stop();
+                      }
+                    }
+                  });
+                  // await context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID, fAliplayer: fAliplayer, title: lang!.inthisphoto);
                 },
                 child: const CustomIconWidget(
                   iconData: '${AssetPath.vectorPath}tag_people.svg',
@@ -1793,14 +1619,20 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
               alignment: Alignment.bottomRight,
               child: GestureDetector(
                 onTap: () {
-                  setState(() {
-                    notifier.isMute = !notifier.isMute;
-                  });
-                  if (_currentPlayerState == FlutterAvpdef.AVPStatus_AVPStatusStarted) {
-                    fAliplayer?.play();
-                  }
+                  notifier.setIsSound(!notifier.isMute);
+
                   print("muteeee----------------- ${notifier.isMute}");
-                  fAliplayer?.setMuted(notifier.isMute);
+                  // fAliplayer?.setMuted(notifier.isMute);
+                  // if (playIndex == _curIdx){
+                  //   MyAudioService.instance.playagain(notifier.isMute);
+                  // }else{
+                  //   start(data, notifier);
+                  // }
+                  if (MyAudioService.instance.player.playing) {
+                    MyAudioService.instance.mute(notifier.isMute);
+                  } else {
+                    MyAudioService.instance.playagain(notifier.isMute);
+                  }
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),

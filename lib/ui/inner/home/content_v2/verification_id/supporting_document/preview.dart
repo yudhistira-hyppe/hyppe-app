@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/system.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
-import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:path/path.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -143,7 +143,8 @@ class _VerificationIDStepSupportingDocsPreviewState extends State<VerificationID
               height: 44.0 * SizeConfig.scaleDiagonal,
               function: () {
                 // if (!notifier.isLoading) {
-                notifier.onSaveSupportedDocument(context);
+                // notifier.onSaveSupportedDocument(context);
+                Routing().move(Routes.verificationIDStep6);
                 // }
               },
               buttonStyle: ButtonStyle(
@@ -165,7 +166,8 @@ class _VerificationIDStepSupportingDocsPreviewState extends State<VerificationID
                     ),
                   const SizedBox(width: 10),
                   CustomTextWidget(
-                    textToDisplay: notifier.language.upload ?? '',
+                    // textToDisplay: notifier.language.upload ?? '',
+                    textToDisplay: notifier.language.next ?? '',
                     textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                   ),
                 ],

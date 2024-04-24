@@ -95,6 +95,8 @@ class StreamerNotifier with ChangeNotifier {
 
   FocusNode titleFocusNode = FocusNode();
   TextEditingController titleLiveCtrl = TextEditingController();
+  TextEditingController urlLiveCtrl = TextEditingController();
+  TextEditingController titleUrlLiveCtrl = TextEditingController();
   TextEditingController commentCtrl = TextEditingController();
   Timer? inactivityTimer;
   DateTime dateTimeStart = DateTime.now();
@@ -118,6 +120,8 @@ class StreamerNotifier with ChangeNotifier {
     _titleLive = val;
     notifyListeners();
   }
+
+  onUpdate() => notifyListeners();
 
   LocalizationModelV2? tn;
   double a = 0;

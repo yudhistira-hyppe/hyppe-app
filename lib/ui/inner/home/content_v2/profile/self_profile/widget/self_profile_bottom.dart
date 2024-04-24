@@ -6,6 +6,8 @@ import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class SelfProfileBottom extends StatefulWidget {
@@ -30,6 +32,12 @@ class _SelfProfileBottomState extends State<SelfProfileBottom> {
         children: [
           Column(
             children: [
+              GestureDetector(
+                  onTap: () {
+                    // Routing().move(Routes.verificationSupportSuccess);
+                    Routing().move(Routes.streamer);
+                  },
+                  child: Text("hahaha")),
               CustomTextButton(
                 child: Row(
                   children: [
@@ -59,37 +67,37 @@ class _SelfProfileBottomState extends State<SelfProfileBottom> {
               )
             ],
           ),
-          Column(
-            children: [
-              CustomTextButton(
-                child: Row(
-                  children: [
-                    CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}diary.svg",
-                      width: 20 * SizeConfig.scaleDiagonal,
-                      height: 20 * SizeConfig.scaleDiagonal,
-                      defaultColor: false,
-                      color: notifier.pageIndex == 1 ? Theme.of(context).colorScheme.primary : Theme.of(context).tabBarTheme.unselectedLabelColor,
-                    ),
-                    SizedBox(width: 8 * SizeConfig.scaleDiagonal),
-                    CustomTextWidget(
-                      textToDisplay: "Diary",
-                      textStyle: TextStyle(fontSize: 14, color: notifier.pageIndex == 1 ? Theme.of(context).colorScheme.primary : Theme.of(context).tabBarTheme.unselectedLabelColor),
-                    ),
-                  ],
-                ),
-                onPressed: () {
-                  notifier.pageIndex = 1;
-                  notifier.getDataPerPgage(context);
-                },
-              ),
-              SizedBox(
-                height: 2 * SizeConfig.scaleDiagonal,
-                width: 125 * SizeConfig.scaleDiagonal,
-                child: Container(color: notifier.pageIndex == 1 ? Theme.of(context).colorScheme.primary : null),
-              ),
-            ],
-          ),
+          // Column(
+          //   children: [
+          //     CustomTextButton(
+          //       child: Row(
+          //         children: [
+          //           CustomIconWidget(
+          //             iconData: "${AssetPath.vectorPath}diary.svg",
+          //             width: 20 * SizeConfig.scaleDiagonal,
+          //             height: 20 * SizeConfig.scaleDiagonal,
+          //             defaultColor: false,
+          //             color: notifier.pageIndex == 1 ? Theme.of(context).colorScheme.primary : Theme.of(context).tabBarTheme.unselectedLabelColor,
+          //           ),
+          //           SizedBox(width: 8 * SizeConfig.scaleDiagonal),
+          //           CustomTextWidget(
+          //             textToDisplay: "Diary",
+          //             textStyle: TextStyle(fontSize: 14, color: notifier.pageIndex == 1 ? Theme.of(context).colorScheme.primary : Theme.of(context).tabBarTheme.unselectedLabelColor),
+          //           ),
+          //         ],
+          //       ),
+          //       onPressed: () {
+          //         notifier.pageIndex = 1;
+          //         notifier.getDataPerPgage(context);
+          //       },
+          //     ),
+          //     SizedBox(
+          //       height: 2 * SizeConfig.scaleDiagonal,
+          //       width: 125 * SizeConfig.scaleDiagonal,
+          //       child: Container(color: notifier.pageIndex == 1 ? Theme.of(context).colorScheme.primary : null),
+          //     ),
+          //   ],
+          // ),
           Column(
             children: [
               CustomTextButton(

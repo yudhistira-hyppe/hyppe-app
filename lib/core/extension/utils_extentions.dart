@@ -10,6 +10,7 @@ import 'package:hyppe/core/arguments/ads_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/services/audio_service.dart';
 import 'package:hyppe/ui/inner/home/widget/ads_in_between.dart';
 import 'package:hyppe/ui/inner/home/widget/ads_in_between_full.dart';
 import 'package:hyppe/ui/inner/home/widget/ads_video_in_between.dart';
@@ -213,7 +214,9 @@ extension ContextScreen on BuildContext {
   }
 
   Future<bool> handleActionIsGuest(Function() onSlipOut, {Function()? addAction}) async {
+    // MyAudioService.instance.pause();
     final bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
+    MyAudioService.instance.pause();
     if (isGuest ?? false) {
       if (addAction != null) {
         addAction();
@@ -221,6 +224,9 @@ extension ContextScreen on BuildContext {
       isactivealiplayer = true;
       globalAliPlayer?.pause();
       await ShowBottomSheet().onLoginApp(this).then((value) {
+        if (pagePictLandingFull) {
+          MyAudioService.instance.playagain(isMuteAudioPic);
+        }
         globalAliPlayer?.play();
       });
     } else {

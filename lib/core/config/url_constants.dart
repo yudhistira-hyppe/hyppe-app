@@ -234,6 +234,8 @@ class UrlConstants {
   /// get => Get My Contents.
   static const String getOtherUserPosts = "$postRouteV2/getuserposts/byprofile/v2";
 
+  static const String getUserPostsIndex = "$postRouteV2/getuserposts/byprofile/index";
+
   /// post => Get Apsara Video.
   static const String getVideoApsara = "$postRouteV2/getvideo";
 
@@ -413,6 +415,7 @@ class UrlConstants {
   static const String getMusicTheme = "/api/theme/";
   static const String getMusicMood = "/api/mood/";
   static const String getMusics = "/api/music";
+  static const String getMusicsPath = "/api/posts/music?musicId=";
 
   /// FAQ
   static const String faqList = "/api/faqs/allfaqs";

@@ -36,7 +36,7 @@ class _AllSearchContentState extends State<AllSearchContent> {
 
   final listTab = [
     HyppeType.HyppePic,
-    HyppeType.HyppeDiary,
+    // HyppeType.HyppeDiary,
     HyppeType.HyppeVid
   ];
 
@@ -56,7 +56,7 @@ class _AllSearchContentState extends State<AllSearchContent> {
   Widget build(BuildContext context) {
     final _themes = Theme.of(context);
 
-    return Consumer<SearchNotifier>(builder: (context, notifier, _){
+    return Consumer<SearchNotifier>(builder: (context, notifier, _) {
       final vids = notifier.searchVid;
       final diaries = notifier.searchDiary;
       final pics = notifier.searchPic;
@@ -65,34 +65,38 @@ class _AllSearchContentState extends State<AllSearchContent> {
       final isAllEmpty = !vids.isNotNullAndEmpty() && !diaries.isNotNullAndEmpty() && !pics.isNotNullAndEmpty() && !tags.isNotNullAndEmpty() && !users.isNotNullAndEmpty();
       return !notifier.isLoading
           ? RefreshIndicator(
-        strokeWidth: 2.0,
-        color: context.getColorScheme().primary,
-        onRefresh: () => notifier.getDataSearch(context, forceLoad: true),
-            child: SingleChildScrollView(
-        child: isAllEmpty ? SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text,) :Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            widgetUserList(_themes, notifier),
-            sixteenPx,
-            widgetContents(notifier)
-            // ------video content search
-            // VidSearchContent(content: vids, featureType: FeatureType.vid, title: 'HyppeVid', selecIndex: 2),
-            // sixteenPx,
-            // //------diaries content search
-            // VidSearchContent(content: diaries, featureType: FeatureType.diary, title: 'HyppeDiary', selecIndex: 3),
-            // sixteenPx,
-            // //------pic  content search
-            // VidSearchContent(content: pics, featureType: FeatureType.pic, title: 'HyppePic', selecIndex: 4),
-          ],
-        ),
-      ),
-          )
+              strokeWidth: 2.0,
+              color: context.getColorScheme().primary,
+              onRefresh: () => notifier.getDataSearch(context, forceLoad: true),
+              child: SingleChildScrollView(
+                child: isAllEmpty
+                    ? SearchNoResultImage(
+                        locale: notifier.language,
+                        keyword: notifier.searchController.text,
+                      )
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          widgetUserList(_themes, notifier),
+                          sixteenPx,
+                          widgetContents(notifier)
+                          // ------video content search
+                          // VidSearchContent(content: vids, featureType: FeatureType.vid, title: 'HyppeVid', selecIndex: 2),
+                          // sixteenPx,
+                          // //------diaries content search
+                          // VidSearchContent(content: diaries, featureType: FeatureType.diary, title: 'HyppeDiary', selecIndex: 3),
+                          // sixteenPx,
+                          // //------pic  content search
+                          // VidSearchContent(content: pics, featureType: FeatureType.pic, title: 'HyppePic', selecIndex: 4),
+                        ],
+                      ),
+              ),
+            )
           : const AllSearchShimmer();
     });
-
   }
-  
-  Widget widgetContents(SearchNotifier notifier){
+
+  Widget widgetContents(SearchNotifier notifier) {
     final vids = notifier.searchVid;
     final diaries = notifier.searchDiary;
     final pics = notifier.searchPic;
@@ -115,18 +119,14 @@ class _AllSearchContentState extends State<AllSearchContent> {
                   final isActive = e == notifier.mainContentTab;
                   return Expanded(
                     child: Container(
-                      margin:
-                      const EdgeInsets.only(right: 12, top: 10, bottom: 16),
+                      margin: const EdgeInsets.only(right: 12, top: 10, bottom: 16),
                       child: Material(
                         color: Colors.transparent,
                         child: Ink(
                           height: 36,
                           decoration: BoxDecoration(
-                            color: isActive
-                                ? context.getColorScheme().primary
-                                : context.getColorScheme().background,
-                            borderRadius:
-                            const BorderRadius.all(Radius.circular(18)),
+                            color: isActive ? context.getColorScheme().primary : context.getColorScheme().background,
+                            borderRadius: const BorderRadius.all(Radius.circular(18)),
                           ),
                           child: InkWell(
                             onTap: () {
@@ -137,19 +137,11 @@ class _AllSearchContentState extends State<AllSearchContent> {
                             child: Container(
                               alignment: Alignment.center,
                               height: 36,
-                              padding: const EdgeInsets.symmetric( horizontal: 16),
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                  const BorderRadius.all(Radius.circular(18)),
-                                  border: !isActive
-                                      ? Border.all(
-                                      color:
-                                      context.getColorScheme().secondary,
-                                      width: 1)
-                                      : null),
+                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              decoration:
+                                  BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(18)), border: !isActive ? Border.all(color: context.getColorScheme().secondary, width: 1) : null),
                               child: CustomTextWidget(
-                                textToDisplay:
-                                System().getTitleHyppe(e),
+                                textToDisplay: System().getTitleHyppe(e),
                                 textStyle: context.getTextTheme().bodyText2?.copyWith(color: isActive ? context.getColorScheme().background : context.getColorScheme().secondary),
                               ),
                             ),
@@ -160,43 +152,41 @@ class _AllSearchContentState extends State<AllSearchContent> {
                   );
                 }).toList()),
           ),
-          Builder(
-              builder: (context) {
-                final fixVid = vids?.where((element){
-                  final index = vids.indexOf(element);
-                  return index < 6;
-                }).toList();
-                final fixPic = pics?.where((element){
-                  final index = pics.indexOf(element);
-                  return index < 6;
-                }).toList();
-                final fixDiary = diaries?.where((element){
-                  final index = diaries.indexOf(element);
-                  return index < 6;
-                }).toList();
-                final type = notifier.mainContentTab;
-                switch(type){
-                  case HyppeType.HyppePic:
-                    return fixPic.isNotNullAndEmpty() ? GridContentView(type: type, data: fixPic ?? [],
-                      isLoading: false,
-                      keyword: widget.keyword,
-                      api: TypeApiSearch.normal,
-                      controller: _scrollController, heightTab: 0.0) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text,);
-                  case HyppeType.HyppeDiary:
-                    return fixDiary.isNotNullAndEmpty() ? GridContentView(type: type, data: fixDiary ?? [],
-                      isLoading: false,
-                      keyword: widget.keyword,
-                      api: TypeApiSearch.normal,
-                      controller: _scrollController, heightTab: 0.0) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text, );
-                  case HyppeType.HyppeVid:
-                    return fixVid.isNotNullAndEmpty() ? GridContentView(type: type, data: fixVid ?? [],
-                      isLoading: false,
-                      keyword: widget.keyword,
-                      api: TypeApiSearch.normal,
-                      controller: _scrollController, heightTab: 0.0) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text);
-                }
-              }
-          )
+          Builder(builder: (context) {
+            final fixVid = vids?.where((element) {
+              final index = vids.indexOf(element);
+              return index < 6;
+            }).toList();
+            final fixPic = pics?.where((element) {
+              final index = pics.indexOf(element);
+              return index < 6;
+            }).toList();
+            final fixDiary = diaries?.where((element) {
+              final index = diaries.indexOf(element);
+              return index < 6;
+            }).toList();
+            final type = notifier.mainContentTab;
+            switch (type) {
+              case HyppeType.HyppePic:
+                return fixPic.isNotNullAndEmpty()
+                    ? GridContentView(type: type, data: fixPic ?? [], isLoading: false, keyword: widget.keyword, api: TypeApiSearch.normal, controller: _scrollController, heightTab: 0.0)
+                    : SearchNoResultImage(
+                        locale: notifier.language,
+                        keyword: notifier.searchController.text,
+                      );
+              case HyppeType.HyppeDiary:
+                return fixDiary.isNotNullAndEmpty()
+                    ? GridContentView(type: type, data: fixDiary ?? [], isLoading: false, keyword: widget.keyword, api: TypeApiSearch.normal, controller: _scrollController, heightTab: 0.0)
+                    : SearchNoResultImage(
+                        locale: notifier.language,
+                        keyword: notifier.searchController.text,
+                      );
+              case HyppeType.HyppeVid:
+                return fixVid.isNotNullAndEmpty()
+                    ? GridContentView(type: type, data: fixVid ?? [], isLoading: false, keyword: widget.keyword, api: TypeApiSearch.normal, controller: _scrollController, heightTab: 0.0)
+                    : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text);
+            }
+          })
         ],
       ),
     );
@@ -230,7 +220,7 @@ class _AllSearchContentState extends State<AllSearchContent> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         widget.tabController.animateTo(1, duration: const Duration(seconds: 1));
                       },
                       child: Row(
@@ -240,7 +230,12 @@ class _AllSearchContentState extends State<AllSearchContent> {
                             textStyle: context.getTextTheme().bodyText2?.copyWith(color: kHyppeBurem, fontWeight: FontWeight.w400),
                             textAlign: TextAlign.start,
                           ),
-                          const CustomIconWidget(defaultColor: false, iconData: '${AssetPath.vectorPath}arrow_right.svg', height: 14, width: 14,)
+                          const CustomIconWidget(
+                            defaultColor: false,
+                            iconData: '${AssetPath.vectorPath}arrow_right.svg',
+                            height: 14,
+                            width: 14,
+                          )
                         ],
                       ),
                     ),
@@ -248,35 +243,42 @@ class _AllSearchContentState extends State<AllSearchContent> {
                 ),
               ),
               twelvePx,
-              !isHashtag ? users.isNotNullAndEmpty() ? Column(
-                children: [
-                  ...List.generate(
-                    (users?.length ?? 0) >= 3 ? 3 : users?.length ?? 0,
-                        (index) => Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: ListTile(
-                        onTap: () => _system.navigateToProfile(context, users?[index].email ?? ''),
-                        contentPadding: EdgeInsets.zero,
-                        title: Text("${users?[index].fullName}"),
-                        subtitle: Text(isIndo ? (users?[index].statusID?.capitalizeFirstofEach ?? '') : (users?[index].statusEN?.capitalizeFirstofEach ?? ''), style: context.getTextTheme().caption,),
-                        leading: StoryColorValidator(
-                          haveStory: false,
-                          featureType: FeatureType.pic,
-                          child: CustomProfileImage(
-                            width: 50,
-                            height: 50,
-                            onTap: () {},
-                            imageUrl: System().showUserPicture(users?[index].avatar?[0].mediaEndpoint?.split('_')[0]),
-                            badge: users?[index].urluserBadge,
-                            following: true,
-                            onFollow: () {},
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ) : SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text): SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text),
+              !isHashtag
+                  ? users.isNotNullAndEmpty()
+                      ? Column(
+                          children: [
+                            ...List.generate(
+                              (users?.length ?? 0) >= 3 ? 3 : users?.length ?? 0,
+                              (index) => Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: ListTile(
+                                  onTap: () => _system.navigateToProfile(context, users?[index].email ?? ''),
+                                  contentPadding: EdgeInsets.zero,
+                                  title: Text("${users?[index].fullName}"),
+                                  subtitle: Text(
+                                    isIndo ? (users?[index].statusID?.capitalizeFirstofEach ?? '') : (users?[index].statusEN?.capitalizeFirstofEach ?? ''),
+                                    style: context.getTextTheme().caption,
+                                  ),
+                                  leading: StoryColorValidator(
+                                    haveStory: false,
+                                    featureType: FeatureType.pic,
+                                    child: CustomProfileImage(
+                                      width: 50,
+                                      height: 50,
+                                      onTap: () {},
+                                      imageUrl: System().showUserPicture(users?[index].avatar?[0].mediaEndpoint?.split('_')[0]),
+                                      badge: users?[index].urluserBadge,
+                                      following: true,
+                                      onFollow: () {},
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text)
+                  : SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text),
             ],
           ),
         ),
@@ -302,7 +304,7 @@ class _AllSearchContentState extends State<AllSearchContent> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         widget.tabController.animateTo(3, duration: const Duration(seconds: 1));
                       },
                       child: Row(
@@ -312,7 +314,12 @@ class _AllSearchContentState extends State<AllSearchContent> {
                             textStyle: context.getTextTheme().bodyText2?.copyWith(color: kHyppeBurem, fontWeight: FontWeight.w400),
                             textAlign: TextAlign.start,
                           ),
-                          const CustomIconWidget(defaultColor: false, iconData: '${AssetPath.vectorPath}arrow_right.svg', height: 14, width: 14,)
+                          const CustomIconWidget(
+                            defaultColor: false,
+                            iconData: '${AssetPath.vectorPath}arrow_right.svg',
+                            height: 14,
+                            width: 14,
+                          )
                         ],
                       ),
                     ),
@@ -320,35 +327,34 @@ class _AllSearchContentState extends State<AllSearchContent> {
                 ),
               ),
               twelvePx,
-              tags.isNotNullAndEmpty() ? Column(
-                children: [
-                  ...List.generate(
-                    (tags?.length ?? 0) >= 2 ? 2 : tags?.length ?? 0,
-                        (index) => Builder(
-                        builder: (context){
-                          final data = tags?[index];
-                          if (data != null) {
-                            return HashtagItem(
-                                onTap: () {
-                                  notifier.selectedHashtag = data;
-                                  if(notifier.layout == SearchLayout.searchMore){
-                                    notifier.isFromComplete = true;
-                                  }
-                                  notifier.layout = SearchLayout.mainHashtagDetail;
-                                },
-                                padding: const EdgeInsets.only(top: 10, bottom: 10),
-                                title: '${data.tag}',
-                                count: data.total ?? 0,
-                                countContainer:
-                                notifier.language.posts ?? 'Posts');
-                          }else{
-                            return Container();
-                          }
-                        }
-                    ),
-                  ),
-                ],
-              ) : SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text),
+              tags.isNotNullAndEmpty()
+                  ? Column(
+                      children: [
+                        ...List.generate(
+                          (tags?.length ?? 0) >= 2 ? 2 : tags?.length ?? 0,
+                          (index) => Builder(builder: (context) {
+                            final data = tags?[index];
+                            if (data != null) {
+                              return HashtagItem(
+                                  onTap: () {
+                                    notifier.selectedHashtag = data;
+                                    if (notifier.layout == SearchLayout.searchMore) {
+                                      notifier.isFromComplete = true;
+                                    }
+                                    notifier.layout = SearchLayout.mainHashtagDetail;
+                                  },
+                                  padding: const EdgeInsets.only(top: 10, bottom: 10),
+                                  title: '${data.tag}',
+                                  count: data.total ?? 0,
+                                  countContainer: notifier.language.posts ?? 'Posts');
+                            } else {
+                              return Container();
+                            }
+                          }),
+                        ),
+                      ],
+                    )
+                  : SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text),
             ],
           ),
         ),
@@ -357,7 +363,6 @@ class _AllSearchContentState extends State<AllSearchContent> {
           height: 12,
           color: context.getColorScheme().surface,
         ),
-
       ],
     );
   }

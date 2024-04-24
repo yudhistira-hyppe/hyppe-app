@@ -135,153 +135,156 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen> with RouteAwa
           ),
         ),
         body: SafeArea(
-          child: notifier.connectionError ? OfflineMode(function: (){
-            notifier.checkConnection();
-            notifier.getDetailHashtag(context, widget.argument.hashtag.tag?.replaceAll(' ', '') ?? ' ');
-          },) : Stack(
-            children: [
-              Positioned.fill(
-                child: Column(
+          child: notifier.connectionError
+              ? OfflineMode(
+                  function: () {
+                    notifier.checkConnection();
+                    notifier.getDetailHashtag(context, widget.argument.hashtag.tag?.replaceAll(' ', '') ?? ' ');
+                  },
+                )
+              : Stack(
                   children: [
-                    MeasuredSize(
-                      onChange: (value){
-                        if(mounted){
-                          setState(() {
-                            heightTab = value.height;
-                          });
-                        }
-
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 12),
-                        child: Column(
-                          children: [
-                            !notifier.loadTagDetail
-                                ? Row(
-                              children: [
-                                Builder(builder: (context) {
-                                  return CustomBaseCacheImage(
-                                    imageUrl: notifier.tagImageMain,
-                                    memCacheWidth: 70,
-                                    memCacheHeight: 70,
-                                    imageBuilder: (_, imageProvider) {
-                                      return Container(
-                                        width: 56,
-                                        height: 56,
-                                        decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.all(Radius.circular(28)),
-                                          image: DecorationImage(
-                                            fit: BoxFit.contain,
-                                            image: imageProvider,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    errorWidget: (_, __, ___) {
-                                      return Container(
-                                        width: 56,
-                                        height: 56,
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            fit: BoxFit.contain,
-                                            image: const AssetImage('${AssetPath.pngPath}default_hashtag.png'),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    emptyWidget: Container(
-                                      width: 56,
-                                      height: 56,
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          fit: BoxFit.contain,
-                                          image: const AssetImage('${AssetPath.pngPath}default_hashtag.png'),
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }),
-                                twelvePx,
-                                Expanded(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      CustomTextWidget(
-                                        textToDisplay: '#${widget.argument.hashtag.tag}',
-                                        textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700, color: context.getColorScheme().onBackground),
-                                        textAlign: TextAlign.start,
-                                      ),
-                                      fourPx,
-                                      Text(
-                                        "${notifier.countTag} ${notifier.language.posts}",
-                                        style: const TextStyle(fontSize: 12, color: kHyppeGrey),
-                                      )
-                                    ],
-                                  ),
-                                )
-                              ],
-                            )
-                                : Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                    Positioned.fill(
+                      child: Column(
+                        children: [
+                          MeasuredSize(
+                            onChange: (value) {
+                              if (mounted) {
+                                setState(() {
+                                  heightTab = value.height;
+                                });
+                              }
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 12),
+                              child: Column(
                                 children: [
-                                  CustomShimmer(
-                                    height: 50,
-                                    width: 50,
-                                    radius: 25,
-                                  ),
-                                  tenPx,
-                                  Expanded(
-                                      child: Column(
-                                        children: [
-                                          CustomShimmer(
-                                            height: 20,
-                                            width: double.infinity,
-                                            radius: 5,
+                                  !notifier.loadTagDetail
+                                      ? Row(
+                                          children: [
+                                            Builder(builder: (context) {
+                                              return CustomBaseCacheImage(
+                                                imageUrl: notifier.tagImageMain,
+                                                memCacheWidth: 70,
+                                                memCacheHeight: 70,
+                                                imageBuilder: (_, imageProvider) {
+                                                  return Container(
+                                                    width: 56,
+                                                    height: 56,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: const BorderRadius.all(Radius.circular(28)),
+                                                      image: DecorationImage(
+                                                        fit: BoxFit.contain,
+                                                        image: imageProvider,
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                errorWidget: (_, __, ___) {
+                                                  return Container(
+                                                    width: 56,
+                                                    height: 56,
+                                                    decoration: BoxDecoration(
+                                                      image: DecorationImage(
+                                                        fit: BoxFit.contain,
+                                                        image: const AssetImage('${AssetPath.pngPath}default_hashtag.png'),
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                emptyWidget: Container(
+                                                  width: 56,
+                                                  height: 56,
+                                                  decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                      fit: BoxFit.contain,
+                                                      image: const AssetImage('${AssetPath.pngPath}default_hashtag.png'),
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            }),
+                                            twelvePx,
+                                            Expanded(
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  CustomTextWidget(
+                                                    textToDisplay: '#${widget.argument.hashtag.tag}',
+                                                    textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700, color: context.getColorScheme().onBackground),
+                                                    textAlign: TextAlign.start,
+                                                  ),
+                                                  fourPx,
+                                                  Text(
+                                                    "${notifier.countTag} ${notifier.language.posts}",
+                                                    style: const TextStyle(fontSize: 12, color: kHyppeGrey),
+                                                  )
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        )
+                                      : Container(
+                                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                                          child: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              CustomShimmer(
+                                                height: 50,
+                                                width: 50,
+                                                radius: 25,
+                                              ),
+                                              tenPx,
+                                              Expanded(
+                                                  child: Column(
+                                                children: [
+                                                  CustomShimmer(
+                                                    height: 20,
+                                                    width: double.infinity,
+                                                    radius: 5,
+                                                  ),
+                                                  sixteenPx,
+                                                  CustomShimmer(
+                                                    height: 20,
+                                                    width: double.infinity,
+                                                    radius: 5,
+                                                  )
+                                                ],
+                                              ))
+                                            ],
                                           ),
-                                          sixteenPx,
-                                          CustomShimmer(
-                                            height: 20,
-                                            width: double.infinity,
-                                            radius: 5,
-                                          )
-                                        ],
-                                      ))
+                                        )
                                 ],
                               ),
-                            )
-                          ],
-                        ),
+                            ),
+                          ),
+                          Container(
+                            height: 2,
+                            width: double.infinity,
+                            color: context.getColorScheme().surface,
+                          ),
+                          Expanded(
+                              child: BottomDetail(
+                            hashtag: widget.argument.hashtag,
+                            fromRoute: widget.argument.fromRoute,
+                            scrollController: _scrollController,
+                            tab: heightTab,
+                          ))
+                        ],
                       ),
                     ),
-                    Container(
-                      height: 2,
-                      width: double.infinity,
-                      color: context.getColorScheme().surface,
-                    ),
-                    Expanded(
-                        child: BottomDetail(
-                          hashtag: widget.argument.hashtag,
-                          fromRoute: widget.argument.fromRoute,
-                          scrollController: _scrollController,
-                          tab: heightTab,
-                        ))
+                    if (notifier.loadNavigate)
+                      Positioned.fill(
+                          child: Container(
+                        alignment: Alignment.center,
+                        color: Colors.black.withOpacity(0.5),
+                        child: const CustomLoading(),
+                      ))
                   ],
                 ),
-              ),
-              if(notifier.loadNavigate)
-              Positioned.fill(child: Container(
-                alignment: Alignment.center,
-                color: Colors.black.withOpacity(0.5),
-                child: const CustomLoading(),
-              ))
-            ],
-          ),
         ),
       );
     });
-
   }
 }

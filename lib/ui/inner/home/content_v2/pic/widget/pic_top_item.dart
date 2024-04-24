@@ -85,14 +85,13 @@ class _PicTopItemState extends State<PicTopItem> {
     return VisibilityDetector(
       key: Key(widget.postId ?? indexKeySell.toString()),
       onVisibilityChanged: (VisibilityInfo info) {
-        if ((widget.data?.saleAmount ?? 0) > 0 || ((widget.data?.certified ?? false) && (widget.data?.saleAmount ?? 0) == 0)){
+        if ((widget.data?.saleAmount ?? 0) > 0 || ((widget.data?.certified ?? false) && (widget.data?.saleAmount ?? 0) == 0)) {
           if (info.visibleFraction < 0.5) {
-            if(globalTultipShow){
+            if (globalTultipShow) {
               closeTooltip(indexKeySell);
             }
           }
         }
-
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -105,12 +104,14 @@ class _PicTopItemState extends State<PicTopItem> {
               targetPadding: const EdgeInsets.all(0),
               tooltipPosition: TooltipPosition.top,
               description: (mn?.tutorialData.isEmpty ?? [].isEmpty)
-                  ? ''
+                  ? lang?.localeDatetime == 'id'
+                      ? 'Temukan ikon ini pada konten dan beli karya digital dari kreator favoritmu dengan mengetuk ikon keranjang!'
+                      : 'Find this icon on content and purchase digital works from your favorite creators by tapping the cart!'
                   : lang?.localeDatetime == 'id'
                       ? mn?.tutorialData[indexKeySell].textID ?? ''
                       : mn?.tutorialData[indexKeySell].textEn ?? '',
               descTextStyle: const TextStyle(fontSize: 10, color: kHyppeNotConnect),
-              descriptionPadding: EdgeInsets.all(6),
+              descriptionPadding: const EdgeInsets.all(6),
               textColor: Colors.white,
               targetShapeBorder: const CircleBorder(),
               positionYplus: 25,
@@ -156,7 +157,9 @@ class _PicTopItemState extends State<PicTopItem> {
               targetPadding: const EdgeInsets.all(0),
               tooltipPosition: TooltipPosition.top,
               description: (mn?.tutorialData.isEmpty ?? [].isEmpty)
-                  ? ''
+                  ? lang?.localeDatetime == 'id'
+                      ? 'Konten dengan ikon ini menunjukkan konten telah memiliki hak kepemilikan yang di lindungi oleh Hyppe!'
+                      : 'The icon shows that the content has been registered for ownership and is protected by Hyppe.'
                   : lang?.localeDatetime == 'id'
                       ? mn?.tutorialData[indexKeyProtection].textID ?? ''
                       : mn?.tutorialData[indexKeyProtection].textEn ?? '',

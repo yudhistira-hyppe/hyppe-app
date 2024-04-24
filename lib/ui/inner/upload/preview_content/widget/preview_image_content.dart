@@ -29,50 +29,48 @@ class PreviewImageContent extends StatefulWidget {
 }
 
 class _PreviewImageContentState extends State<PreviewImageContent> with AfterFirstLayoutMixin {
-
   @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<PreviewContentNotifier>(context);
 
     return !widget.validateUrl
         ? Stack(
-          children: [
-            Positioned(
-              left: 0,
-              top: 0,
-              right: 0,
-              bottom: 0,
-              child: notifier.featureType == FeatureType.pic
-              ? Image.memory(
-                  File(notifier.fileContent?[widget.currIndex] ?? '').readAsBytesSync(),
-                )
-              : Image.file(
-                 File(notifier.fileContent?[widget.currIndex] ?? ''),
-                  filterQuality: FilterQuality.high,
-                  frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                    return wasSynchronouslyLoaded
-                        ? child
-                        : AnimatedOpacity(
-                            opacity: frame == null ? 0 : 1,
-                            duration: const Duration(seconds: 1),
-                            curve: Curves.easeOut,
-                            child: child,
-                          );
-                  },
-                ),
-            ),
-            if (notifier.fixSelectedMusic != null)
+            children: [
               Positioned(
-                top: notifier.featureType == FeatureType.story ||
-                    notifier.featureType == FeatureType.diary ? 16 : 96,
-                left: 52,
-                child: MusicStatusSelected(
-                  music: notifier.fixSelectedMusic!,
-                  onClose: () {
-                    notifier.setDefaultVideo(context);
-                  },
-                ),
+                left: 0,
+                top: 0,
+                right: 0,
+                bottom: 0,
+                child: notifier.featureType == FeatureType.pic
+                    ? Image.memory(
+                        File(notifier.fileContent?[widget.currIndex] ?? '').readAsBytesSync(),
+                      )
+                    : Image.file(
+                        File(notifier.fileContent?[widget.currIndex] ?? ''),
+                        filterQuality: FilterQuality.high,
+                        frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                          return wasSynchronouslyLoaded
+                              ? child
+                              : AnimatedOpacity(
+                                  opacity: frame == null ? 0 : 1,
+                                  duration: const Duration(seconds: 1),
+                                  curve: Curves.easeOut,
+                                  child: child,
+                                );
+                        },
+                      ),
               ),
+              if (notifier.fixSelectedMusic != null)
+                Positioned(
+                  top: notifier.featureType == FeatureType.story || notifier.featureType == FeatureType.diary ? 16 : 96,
+                  left: 52,
+                  child: MusicStatusSelected(
+                    music: notifier.fixSelectedMusic!,
+                    onClose: () {
+                      notifier.setDefaultVideo(context);
+                    },
+                  ),
+                ),
               for (var i = 0; i < notifier.onScreenStickers.length; i++) notifier.onScreenStickers[i],
               Visibility(
                 visible: notifier.isDragging,
@@ -193,44 +191,46 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
                         ),
                       twentyFourPx,
                       if (notifier.featureType == FeatureType.story || notifier.featureType == FeatureType.diary)
-                      InkWell(
-                        onTap: () async {
-                          notifier.initStickerScroll(context);
-                          notifier.stickerScrollPosition = 0.0;
-                          ShowBottomSheet.onShowSticker(context: context, whenComplete: () {
-                            notifier.removeStickerScroll(context);
-                            notifier.stickerSearchActive = false;
-                            notifier.stickerSearchText = '';
-                            notifier.stickerTextController.text = '';
-                          });
-                          notifier.getSticker(context, index: notifier.stickerTabIndex);
-                        },
-                        child: const Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            CustomIconWidget(
-                              defaultColor: false,
-                              iconData: "${AssetPath.vectorPath}circle_sticker.svg",
-                            ),
-                            fourPx,
-                            CustomTextWidget(
-                              maxLines: 1,
-                              textToDisplay: 'Stiker',
-                              textAlign: TextAlign.left,
-                              textStyle:  TextStyle(
-                                fontWeight: FontWeight.normal,
-                                color: Colors.white,
-                                fontSize: 14,
+                        InkWell(
+                          onTap: () async {
+                            notifier.initStickerScroll(context);
+                            notifier.stickerScrollPosition = 0.0;
+                            ShowBottomSheet.onShowSticker(
+                                context: context,
+                                whenComplete: () {
+                                  notifier.removeStickerScroll(context);
+                                  notifier.stickerSearchActive = false;
+                                  notifier.stickerSearchText = '';
+                                  notifier.stickerTextController.text = '';
+                                });
+                            notifier.getSticker(context, index: notifier.stickerTabIndex);
+                          },
+                          child: const Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              CustomIconWidget(
+                                defaultColor: false,
+                                iconData: "${AssetPath.vectorPath}circle_sticker.svg",
                               ),
-                            ),
-                          ],
-                        ),
-                      )
+                              fourPx,
+                              CustomTextWidget(
+                                maxLines: 1,
+                                textToDisplay: 'Stiker',
+                                textAlign: TextAlign.left,
+                                textStyle: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
                     ],
                   ),
                 ),
-          ],
-        )
+            ],
+          )
         : Image.network(
             notifier.fileContent?[widget.currIndex] ?? '',
             filterQuality: FilterQuality.high,

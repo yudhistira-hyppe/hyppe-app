@@ -7,16 +7,18 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-import 'package:hyppe/ui/inner/home/content_v2/transaction/bank_account/widget/info.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:provider/provider.dart';
+
+import 'info_new.dart';
 
 class ListDataBankAccount extends StatelessWidget {
   final GlobalKey<RefreshIndicatorState> refreshIndicatorKey;
   final List<BankAccount>? dataAcccount;
   final String? textRemove;
   final String? textUpTo;
-  const ListDataBankAccount({Key? key, required this.refreshIndicatorKey, this.dataAcccount, this.textRemove, this.textUpTo}) : super(key: key);
+  final String? textsubtitleUpto;
+  const ListDataBankAccount({Key? key, required this.refreshIndicatorKey, this.dataAcccount, this.textRemove, this.textUpTo, this.textsubtitleUpto}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,7 @@ class ListDataBankAccount extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
+          InfoNew(title: textUpTo ?? '', subtitle: textsubtitleUpto??'',),
           RefreshIndicator(
             key: refreshIndicatorKey,
             color: kHyppePrimary,
@@ -108,7 +111,7 @@ class ListDataBankAccount extends StatelessWidget {
                   );
                 }),
           ),
-          infoMaxAccount(title: textUpTo ?? '')
+          // infoMaxAccount(title: textUpTo ?? '')
         ],
       ),
     );

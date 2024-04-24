@@ -1,6 +1,8 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/services/audio_service.dart';
+import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/content/preview_content.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/content/preview_id_verification.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
@@ -16,18 +18,20 @@ class PreviewContentScreen extends StatefulWidget {
   _PreviewContentScreenState createState() => _PreviewContentScreenState();
 }
 
-class _PreviewContentScreenState extends State<PreviewContentScreen> {
+class _PreviewContentScreenState extends State<PreviewContentScreen> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
   final GlobalKey _globalKey = GlobalKey();
   final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
   final PageController _pageController = PageController(initialPage: 0);
 
   @override
   void initState() {
+    MyAudioService.instance.stop();
     final _notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
     _notifier.initialMatrixColor();
     _notifier.scrollController = ScrollController();
     _notifier.scrollExpController = ScrollController();
     _notifier.audioPlayer = AudioPlayer();
+    _notifier.isActivePagePreview = true;
 
     super.initState();
   }
@@ -38,6 +42,7 @@ class _PreviewContentScreenState extends State<PreviewContentScreen> {
     final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
     notifier.audioPlayer.stop();
     notifier.audioPlayer.dispose();
+    notifier.isActivePagePreview = false;
     try {
       notifier.scrollController.dispose();
     } catch (e) {
@@ -49,6 +54,26 @@ class _PreviewContentScreenState extends State<PreviewContentScreen> {
       e.logger();
     }
     super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    super.didChangeDependencies();
+  }
+
+  @override
+  void didPushNext() {
+    final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
+    notifier.isActivePagePreview = false;
+    super.didPushNext();
+  }
+
+  @override
+  void didPopNext() {
+    final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
+    notifier.isActivePagePreview = true;
+    super.didPopNext();
   }
 
   @override

@@ -712,13 +712,13 @@ class System {
                 await getVideoMetadata(result.files[element].path ?? '').then((value) {
                   _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
                   // hapus file yang durasinya lebih dari 60 detik
-                  if (_duration.inSeconds < 14) {
-                    // _failFile = '$_failFile, ${_pickerResult.files[element].name}\n';
-                    if (onException != null) {
-                      onException();
-                    }
-                    result.files.removeAt(element);
-                  }
+                  // if (_duration.inSeconds < 14) {
+                  //   // _failFile = '$_failFile, ${_pickerResult.files[element].name}\n';
+                  //   if (onException != null) {
+                  //     onException();
+                  //   }
+                  //   result.files.removeAt(element);
+                  // }
                 });
               } else {
                 _errorMsg = '${notifier.weCurrentlySupportOnlyMP4andMOVformat} ${result.names.single}';

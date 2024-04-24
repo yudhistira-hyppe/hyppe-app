@@ -255,20 +255,20 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
         case FlutterAvpdef.AVPStatus_AVPStatusPaused:
           isPause = true;
           WakelockPlus.disable();
-"================ disable wakelock 1".logger();
+          "================ disable wakelock 1".logger();
           setState(() {});
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusStopped:
           WakelockPlus.disable();
-"================ disable wakelock 2".logger();
+          "================ disable wakelock 2".logger();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusCompletion:
           WakelockPlus.disable();
-"================ disable wakelock 3".logger();
+          "================ disable wakelock 3".logger();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusError:
           WakelockPlus.disable();
-"================ disable wakelock 4".logger();
+          "================ disable wakelock 4".logger();
           break;
         default:
       }
@@ -673,7 +673,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
   @override
   void dispose() {
     WakelockPlus.disable();
-"================ disable wakelock 5".logger();
+    "================ disable wakelock 5".logger();
     globalAliPlayer = null;
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
@@ -819,14 +819,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
                 right: 0,
                 child: Align(
                   alignment: Alignment.center,
-                  child: _buildController(
-                    Colors.transparent,
-                    Colors.white,
-                    100,
-                    widget.width ?? 0,
-                    widget.height ?? 0,
-                    orientation
-                  ),
+                  child: _buildController(Colors.transparent, Colors.white, 100, widget.width ?? 0, widget.height ?? 0, orientation),
                 ),
               ),
           ],
@@ -932,9 +925,9 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildSkipBack(iconColor, barHeight),
+            // _buildSkipBack(iconColor, barHeight),
             _buildPlayPause(iconColor, barHeight),
-            _buildSkipForward(iconColor, barHeight),
+            // _buildSkipForward(iconColor, barHeight),
           ],
         ),
       ),

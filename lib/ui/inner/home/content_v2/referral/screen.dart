@@ -76,7 +76,11 @@ class _ReferralState extends State<Referral> {
               leading: CustomIconButtonWidget(
                 defaultColor: true,
                 iconData: "${AssetPath.vectorPath}back-arrow.svg",
-                onPressed: () => Routing().moveBack(),
+                onPressed: () {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Routing().moveBack();
+                  });
+                },
               ),
               titleSpacing: 0,
               title: CustomTextWidget(

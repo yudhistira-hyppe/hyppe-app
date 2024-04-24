@@ -33,6 +33,7 @@ class PostsBloc {
     bool onlyMyData = false,
     bool myContent = false,
     bool otherContent = false,
+    int? indexContent,
   }) async {
     final formData = FormData();
     final email = SharedPreference().readStorage(SpKeys.email);
@@ -90,6 +91,11 @@ class PostsBloc {
       formData.fields.add(MapEntry('email', email));
       // url = UrlConstants.getMyUserPostsV2;
       url = UrlConstants.getMyUserPosts;
+    }
+
+    if (indexContent != null) {
+      formData.fields.add(MapEntry('index', '$indexContent'));
+      url = UrlConstants.getuserposts;
     }
 
     print('hahahahahahahaha');
@@ -568,6 +574,34 @@ class PostsBloc {
       },
       withAlertMessage: false,
       withCheckConnection: false,
+      host: url,
+      methodType: MethodType.get,
+    );
+  }
+
+  Future getMusic(BuildContext context, {required String apsaraId, bool check = true}) async {
+    final email = SharedPreference().readStorage(SpKeys.email);
+
+    setPostsFetch(PostsFetch(PostsState.loading));
+    var url = UrlConstants.getMusicsPath + apsaraId;
+
+    await _repos.reposPost(
+      context,
+      (onResult) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+          setPostsFetch(PostsFetch(PostsState.videoApsaraError));
+        } else {
+          setPostsFetch(PostsFetch(PostsState.videoApsaraSuccess, data: onResult));
+        }
+      },
+      (errorData) {
+        setPostsFetch(PostsFetch(PostsState.videoApsaraError));
+      },
+      headers: {
+        'x-auth-user': email,
+      },
+      withAlertMessage: false,
+      withCheckConnection: check,
       host: url,
       methodType: MethodType.get,
     );

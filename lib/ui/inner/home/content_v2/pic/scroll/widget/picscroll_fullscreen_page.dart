@@ -23,6 +23,7 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/utils/zoom_pic/zoom_pic.dart';
+import 'package:hyppe/core/services/audio_service.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
@@ -82,8 +83,10 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
   int indexPic = 0;
   LocalizationModelV2? lang;
   String email = '';
+  String url = '';
 
   int _curIdx = 0;
+  int playIndex = -1;
   int _lastCurIndex = -1;
   String _curPostId = '';
   String _lastCurPostId = '';
@@ -121,22 +124,29 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
     email = SharedPreference().readStorage(SpKeys.email);
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'HyppePreviewPicR');
-      WidgetsBinding.instance.addObserver(this);
-      fAliplayer?.setAutoPlay(true);
-      fAliplayer?.setLoop(true);
+      playIndex = widget.argument?.page ?? -1;
+      // fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'HyppePreviewPicR');
+      // WidgetsBinding.instance.addObserver(this);
+      // fAliplayer?.setAutoPlay(true);
+      // fAliplayer?.setLoop(true);
 
       //Turn on mix mode
-      if (Platform.isIOS) {
-        FlutterAliplayer.enableMix(true);
-      }
+      // if (Platform.isIOS) {
+      //   FlutterAliplayer.enableMix(true);
+      // }
+
+      // if (picData![widget.argument?.page ?? 0].music != null) {
+      //   if (MyAudioService.instance.player.playing){
+      //     MyAudioService.instance.playagain(notifier.isMute);
+      //   }
+      // }
 
       //set player
-      fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
-      fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+      // fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
+      // fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
     });
     controller = PageController(initialPage: widget.argument?.page ?? 0);
-    notifier.currIndex = widget.argument?.page??0;
+    notifier.currIndex = widget.argument?.page ?? 0;
   }
 
   @override
@@ -148,27 +158,68 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
   }
 
   //Start Music
-  void startMusic(BuildContext context, ContentData data, ScrollPicNotifier notifier) async {
+  void startMusic(BuildContext context, ContentData data, ScrollPicNotifier notifier, index) async {
+    debugPrint('data start music ${data.music?.apsaraMusic ?? ''}');
     fAliplayer?.stop();
     selectedData = data;
 
     isPlay = false;
     selectedData?.isDiaryPlay = false;
+    // if (data.reportedStatus != 'BLURRED') {
+    //   await getAuth(context, data.music?.apsaraMusic ?? '');
+    // }
     if (data.reportedStatus != 'BLURRED') {
-      await getAuth(context, data.music?.apsaraMusic ?? '');
+      await getMusicUrl(context, data.music?.apsaraMusic ?? '');
     }
+    MyAudioService.instance.play(
+        path: url,
+        startedPlaying: () {
+          playIndex = index;
+          setState(() {});
+        },
+        stoppedPlaying: () {
+          playIndex = -1;
+          setState(() {});
+        },
+        mute: notifier.isMute);
 
     setState(() {
       isPause = false;
     });
-    fAliplayer?.prepare();
-    fAliplayer?.setMuted(notifier.isMute);
+    // fAliplayer?.prepare();
+    // fAliplayer?.setMuted(notifier.isMute);
     if (notifier.isMute) {
       animatedController.stop();
     } else {
       animatedController.repeat();
     }
     // notifier.isMute = !notifier.isMute;
+  }
+
+  Future getMusicUrl(BuildContext context, String apsaraId) async {
+    setState(() {
+      isloading = true;
+    });
+    try {
+      final fixContext = Routing.navigatorKey.currentContext;
+      final notifier = PostsBloc();
+      await notifier.getMusic(fixContext ?? context, apsaraId: apsaraId);
+      final fetch = notifier.postsFetch;
+      if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        Map jsonMap = json.decode(fetch.data.toString());
+
+        setState(() {
+          url = jsonMap['data']['PlayURL'];
+          isloading = false;
+        });
+        // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+      }
+    } catch (e) {
+      setState(() {
+        isloading = false;
+      });
+      // 'Failed to fetch ads data $e'.logger();
+    }
   }
 
   Future getAuth(BuildContext context, String apsaraId) async {
@@ -212,11 +263,14 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
         print("========= resumed");
         // if (context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds)) {
         fAliplayer?.play();
+        final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
+        MyAudioService.instance.playagain(notifier.isMute);
         // }
         break;
       case AppLifecycleState.paused:
         print("========= paused");
         fAliplayer?.pause();
+        MyAudioService.instance.pause();
         break;
       case AppLifecycleState.detached:
         print("========= detached");
@@ -235,6 +289,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
           if (dragEndDetails.primaryVelocity! < 0) {
           } else if (dragEndDetails.primaryVelocity! > 0) {
             fAliplayer?.pause();
+            MyAudioService.instance.pause();
             Routing().moveBack();
           }
         },
@@ -262,10 +317,11 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                 },
                 itemBuilder: (context, index) {
                   if (picData![index].reportedStatus == 'BLURRED') {
-                    notifier.isMute = true;
+                    notifier.setIsSound(true);
+                    // notifier.isMute = true;
                     if (picData![index].music != null) {
                       Future.delayed(const Duration(milliseconds: 100), () {
-                        startMusic(context, picData![index], notifier);
+                        // startMusic(context, picData![index], notifier);
                       });
                     } else {
                       fAliplayer?.stop();
@@ -323,9 +379,15 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                         if (picData.music != null) {
                           print("ada musiknya ${picData.music}");
                           Future.delayed(const Duration(milliseconds: 100), () {
-                            startMusic(context, picData, notifier);
+                            //
+                            if (playIndex == _curIdx) {
+                              MyAudioService.instance.playagain(notifier.isMute);
+                            } else {
+                              startMusic(context, picData, notifier, index);
+                            }
                           });
                         } else {
+                          MyAudioService.instance.stop();
                           fAliplayer?.stop();
                         }
 
@@ -461,16 +523,21 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                 onDoubleTap: () {
                   context.handleActionIsGuest(() {
                     context.read<LikeNotifier>().likePost(context, notifier!.pics![index]);
+                  }).then((value) {
+                    if (value) {
+                      MyAudioService.instance.playagain(notifier?.isMute ?? false);
+                    }
                   });
                 },
                 onTap: () {
                   if (picData.music != null) {
+                    notifier!.setIsSound(!notifier.isMute);
                     setState(() {
-                      notifier!.isMute = !notifier.isMute;
                       opacityLevel = 1.0;
                     });
-                    fAliplayer?.setMuted(notifier!.isMute);
-                    if (notifier!.isMute) {
+                    fAliplayer?.setMuted(notifier.isMute);
+                    MyAudioService.instance.playagain(notifier.isMute);
+                    if (notifier.isMute) {
                       animatedController.stop();
                     } else {
                       animatedController.repeat();
@@ -732,12 +799,12 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                 ),
                 Container(
                   constraints: BoxConstraints(
-                    maxWidth: SizeConfig.screenWidth! * .7,
-                    maxHeight: data.description!.length > 24
-                        ? isShowMore
-                            ? 54
-                            : SizeConfig.screenHeight! * .1
-                        : 54),
+                      maxWidth: SizeConfig.screenWidth! * .7,
+                      maxHeight: data.description!.length > 24
+                          ? isShowMore
+                              ? 54
+                              : SizeConfig.screenHeight! * .1
+                          : 54),
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.symmetric(horizontal: 16.0),
                   padding: const EdgeInsets.only(left: 8.0, top: 20),
@@ -908,6 +975,10 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                   onFunctionTap: () {
                     context.handleActionIsGuest(() {
                       likeNotifier.likePost(context, notifier!.pics![index]);
+                    }).then((value) {
+                      if (value) {
+                        MyAudioService.instance.playagain(notifier?.isMute ?? false);
+                      }
                     });
                   },
                   iconData: '${AssetPath.vectorPath}${(picData?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'love-shadow.svg'}',
@@ -939,7 +1010,10 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
               buttonRight(
                   onFunctionTap: () async {
                     fAliplayer?.pause();
+                    MyAudioService.instance.pause();
+                    notifier!.setIsSound(true);
                     await ShowBottomSheet.onBuyContent(context, data: picData, fAliplayer: fAliplayer);
+                    
                   },
                   iconData: '${AssetPath.vectorPath}ic-cart-shadow.svg',
                   value: lang!.buy ?? 'Buy'),
@@ -1027,12 +1101,14 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                 haveStory: false,
                 isCelebrity: false,
                 isUserVerified: data.privacy!.isIdVerified ?? false,
-                onTapOnProfileImage: () {
+                onTapOnProfileImage: () async {
                   fAliplayer?.setMuted(true);
-                  System().navigateToProfile(context, data.email ?? '');
-                  setState(() {
-                    notifier.isMute = true;
-                  });
+                  MyAudioService.instance.pause();
+                  await System().navigateToProfile(context, data.email ?? '');
+                  // setState(() {
+                  //   notifier.isMute = true;
+                  // });
+                  MyAudioService.instance.playagain(notifier.isMute);
                 },
                 featureType: FeatureType.pic,
                 imageUrl: '${System().showUserPicture(data.avatar?.mediaEndpoint)}',
@@ -1082,8 +1158,11 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                     fAliplayer: fAliplayer,
                   );
                 }
+              }).then((value) {
+                if (value) {
+                  MyAudioService.instance.playagain(notifier.isMute);
+                }
               });
-              
             },
             data: data),
       ],
