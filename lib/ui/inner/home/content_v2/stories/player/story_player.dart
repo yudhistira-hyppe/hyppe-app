@@ -778,7 +778,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
             padding: const EdgeInsets.only(left: 10.0, right: 10),
             child: Row(
               children: (_groupUserStories?[index].story ?? []).map((it) {
-                print('seconds: ${_animationController?.value}');
+                // print('seconds: ${_animationController?.value}');
                 return Expanded(
                   child: Container(
                     padding: EdgeInsets.only(top: 5, right: _groupUserStories![index].story!.last == it ? 0 : 4),
@@ -890,8 +890,18 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                     currentStory: _groupUserStories?[index].story?.indexOf(_groupUserStories![index].story?[_curChildIdx] ?? ContentData()),
                     animationController: emojiController,
                     currentIndex: _curChildIdx,
-                    pause: pause,
-                    play: play,
+                    selectedText: (p0) {
+                      // pause();
+                      if (p0){
+                        pause();
+                      }else{
+                        play();
+                      }
+                    },
+                    // pause: (){
+
+                    // },
+                    // play: play,
                     // play: play,
                   ),
                 ),

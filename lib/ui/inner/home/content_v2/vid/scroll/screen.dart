@@ -1066,7 +1066,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                         } catch (e) {
                           e.logger();
                         }
-                        // System().increaseViewCount2(context, vidData);
+                        // System().increaseViewCount2(context, vidData![index]);
                       });
                       if (vidData?[index].certified ?? false) {
                         System().block(context);
@@ -1091,6 +1091,8 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                   fAliplayer?.stop();
                                   fAliplayer?.clearScreen();
                                   start(context, vidData?[index] ?? ContentData());
+                                  
+                                  System().increaseViewCount2(context, vidData![index]);
 
                                   var vidNotifier = context.read<PreviewVidNotifier>();
                                   double position = 0.0;

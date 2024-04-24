@@ -43,9 +43,9 @@ class EditPhotoNotifier extends ChangeNotifier {
     filters.addAll([
       LayerModel(name: '${language.brightness}', icon: 'brightness.svg'),
       LayerModel(name: '${language.contrast}', icon: 'contrast.svg'),
-      LayerModel(name: '${language.warmth}', icon: 'warmness.svg'),
-      LayerModel(name: '${language.saturation}', icon: 'saturation.svg'),
-      LayerModel(name: '${language.tint}', icon: 'airdrop.svg'),
+      LayerModel(name: '${language.saturation}', icon: 'warmness.svg'),
+      LayerModel(name: '${language.tint}', icon: 'saturation.svg'),
+      LayerModel(name: '${language.warmth}', icon: 'airdrop.svg'),
     ]);
   }
 
