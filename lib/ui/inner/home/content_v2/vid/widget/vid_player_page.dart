@@ -1295,8 +1295,8 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                     notifier.isLoading = false;
                                   });
                                   if (widget.isVidFormProfile ?? false) {
-                                    var notifScroll = context.read<ScrollVidNotifier>();
-                                    notifScroll.itemScrollController.jumpTo(index: notifScroll.lastScrollIndex);
+                                    // var notifScroll = context.read<ScrollVidNotifier>();
+                                    // notifScroll.itemScrollController.jumpTo(index: notifScroll.lastScrollIndex);
                                   }
                                   if (mounted) {
                                     setState(() {

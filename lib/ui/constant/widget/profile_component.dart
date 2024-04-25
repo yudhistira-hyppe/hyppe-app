@@ -70,7 +70,7 @@ class ProfileComponent extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               StoryColorValidator(
                 haveStory: haveStory,
@@ -91,6 +91,8 @@ class ProfileComponent extends StatelessWidget {
                 visible: showNameAndTimeStamp,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     GestureDetector(
                       onTap: onTapOnProfileImage as void Function(),
@@ -134,29 +136,29 @@ class ProfileComponent extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      width: widthText,
-                      child: isDetail
-                          ? CustomStrokeTextWidget(
-                              maxLines: 1,
-                              textToDisplay: createdAt,
-                              textAlign: TextAlign.left,
-                              textStyle: Theme.of(context).textTheme.caption?.copyWith(fontSize: 12),
-                            )
-                          : CustomTextWidget(
-                              maxLines: 1,
-                              textToDisplay: createdAt,
-                              textAlign: TextAlign.left,
-                              textStyle: TextStyle(
-                                color: textColor,
-                                fontSize: 10,
-                                shadows: const [
-                                  Shadow(offset: Offset(0.0, 1.0), blurRadius: 2.0, color: Colors.black12),
-                                  Shadow(offset: Offset(0.0, 1.0), blurRadius: 4.0, color: Colors.black12),
-                                ],
-                              ),
-                            ),
-                    ),
+                    // SizedBox(
+                    //   width: widthText,
+                    //   child: isDetail
+                    //       ? CustomStrokeTextWidget(
+                    //           maxLines: 1,
+                    //           textToDisplay: createdAt,
+                    //           textAlign: TextAlign.left,
+                    //           textStyle: Theme.of(context).textTheme.caption?.copyWith(fontSize: 12),
+                    //         )
+                    //       : CustomTextWidget(
+                    //           maxLines: 1,
+                    //           textToDisplay: createdAt,
+                    //           textAlign: TextAlign.left,
+                    //           textStyle: TextStyle(
+                    //             color: textColor,
+                    //             fontSize: 10,
+                    //             shadows: const [
+                    //               Shadow(offset: Offset(0.0, 1.0), blurRadius: 2.0, color: Colors.black12),
+                    //               Shadow(offset: Offset(0.0, 1.0), blurRadius: 4.0, color: Colors.black12),
+                    //             ],
+                    //           ),
+                    //         ),
+                    // ),
                   ],
                 ),
               )

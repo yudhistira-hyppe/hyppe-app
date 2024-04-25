@@ -74,6 +74,7 @@ class ScrollVid extends StatefulWidget {
 }
 
 class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
+  final ItemScrollController itemScrollController = ItemScrollController();
   FlutterAliplayer? fAliplayer;
   LocalizationModelV2? lang;
   ContentData? dataSelected;
@@ -157,7 +158,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
         initAlipayer();
       }
       print("============== widget argument ${widget.arguments!.vidData}");
-      notifier.itemScrollController.jumpTo(index: widget.arguments!.page!);
+      itemScrollController.jumpTo(index: widget.arguments!.page!);
       // notifier.checkConnection();
     });
     var index = 0;
@@ -858,7 +859,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                 return false;
                               },
                               child: ScrollablePositionedList.builder(
-                                itemScrollController: vidNotifier.itemScrollController,
+                                itemScrollController: itemScrollController,
                                 itemPositionsListener: itemPositionsListener,
                                 scrollOffsetController: scrollOffsetController,
                                 physics: const AlwaysScrollableScrollPhysics(),
@@ -1403,7 +1404,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                             padding: const EdgeInsets.only(bottom: 6.0),
                             child: CustomNewDescContent(
                               // desc: "${vidData?.description}",
-                              email: vidData?[index].email ?? '',
+                              email: vidData?[index].comment?[indexComment].sender ?? '',
                               username: vidData?[index].comment?[indexComment].userComment?.username ?? '',
                               desc: vidData?[index].comment?[indexComment].txtMessages ?? '',
                               trimLines: 2,

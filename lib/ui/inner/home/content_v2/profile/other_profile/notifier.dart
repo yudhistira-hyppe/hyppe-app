@@ -297,9 +297,9 @@ class OtherProfileNotifier with ChangeNotifier {
     diaryContentsQuery.featureType = FeatureType.diary;
     picContentsQuery.featureType = FeatureType.pic;
 
-    vidContentsQuery.limit = 12;
-    diaryContentsQuery.limit = 12;
-    picContentsQuery.limit = 12;
+    // vidContentsQuery.limit = 12;
+    // diaryContentsQuery.limit = 12;
+    // picContentsQuery.limit = 12;
 
     vidContentsQuery.searchText = userEmail ?? '';
     diaryContentsQuery.searchText = userEmail ?? '';

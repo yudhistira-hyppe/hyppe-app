@@ -508,7 +508,6 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                       child: InkWell(
                         onTap: () async {
                           await context.handleActionIsGuest(() async {
-                            
                             await ShowBottomSheet.onBuyContent(context, data: data);
                           });
                         },
@@ -567,14 +566,14 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                   }
                 }),
               if (data.tagPeople != null) twelvePx,
-              CustomTextWidget(
-                textToDisplay: '${System().readTimestamp(
-                  DateTime.parse(System().dateTimeRemoveT(data.createdAt ?? '')).millisecondsSinceEpoch,
-                  context,
-                  fullCaption: true,
-                )}',
-                textStyle: context.getTextTheme().overline?.copyWith(color: context.getColorScheme().secondary),
-              ),
+              // CustomTextWidget(
+              //   textToDisplay: '${System().readTimestamp(
+              //     DateTime.parse(System().dateTimeRemoveT(data.createdAt ?? '')).millisecondsSinceEpoch,
+              //     context,
+              //     fullCaption: true,
+              //   )}',
+              //   textStyle: context.getTextTheme().overline?.copyWith(color: context.getColorScheme().secondary),
+              // ),
             ],
           ),
         ),
