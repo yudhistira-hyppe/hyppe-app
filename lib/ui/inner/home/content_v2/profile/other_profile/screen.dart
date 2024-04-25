@@ -275,9 +275,8 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
                                 if (mounted) {
                                   heightProfileCard = e.height;
                                 }
-
                                 await Future.delayed(Duration(milliseconds: 300), () {
-                                  isloading = true;
+                                  isloading = false;
                                 });
                                 // await Future.delayed(Duration(milliseconds: 1000), () {
                                 isloading = false;
@@ -306,12 +305,12 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
                           ),
                           SliverAppBar(
                             pinned: true,
-                            flexibleSpace: OtherProfileBottom(email: widget.arguments.senderEmail),
+                            flexibleSpace: OtherProfileBottom(email: widget.arguments.senderEmail, userData: userData),
                             automaticallyImplyLeading: false,
                             backgroundColor: Theme.of(context).colorScheme.background,
                           ),
                           if (notifier.user.profile != null && notifier.statusFollowing == StatusFollowing.following)
-                            (isloading)
+                            (notifier.isLoading)
                                 ? BothProfileContentShimmer()
                                 : !notifier.isConnectContent
                                     ? SliverFillRemaining(
@@ -328,11 +327,11 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
                                           },
                                         ),
                                       )
-                                    : optionButton(isloading, notifier.pageIndex, heightProfileCard)
+                                    : optionButton(notifier.isLoading, notifier.pageIndex, heightProfileCard)
                           // else if (notifier.peopleProfile?.userDetail?.data?.isPrivate ?? false)
                           //     SliverList(delegate: SliverChildListDelegate([PrivateAccount()]))
                           else
-                            (isloading)
+                            (notifier.isLoading)
                                 ? BothProfileContentShimmer()
                                 : !notifier.isConnectContent
                                     ? SliverFillRemaining(
