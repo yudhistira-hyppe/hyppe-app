@@ -257,7 +257,7 @@ class AppDependencies {
         ChangeNotifierProvider<VideoNotifier>(create: (context) => VideoNotifier()),
         ChangeNotifierProvider<StreamingFeedbackNotifier>(create: (context) => StreamingFeedbackNotifier()),
         ChangeNotifierProvider<StreamerNotifier>(create: (context) => StreamerNotifier()),
-        // ChangeNotifierProvider<StreameriOSNotifier>(create: (context) => StreameriOSNotifier()),
+        ChangeNotifierProvider<StreameriOSNotifier>(create: (context) => StreameriOSNotifier()),
         ChangeNotifierProvider<StreamingFeedbackNotifier>(create: (context) => StreamingFeedbackNotifier()),
         ChangeNotifierProvider<ViewStreamingNotifier>(create: (context) => ViewStreamingNotifier()),
 
