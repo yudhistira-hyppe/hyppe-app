@@ -206,7 +206,7 @@ class VidDetailBottom extends StatelessWidget {
                   '${AssetPath.vectorPath}cart.svg',
                   value2.translate.buy ?? '',
                   () async {
-                    await context.handleActionIsGuest(() async  {
+                    await context.handleActionIsGuest(() async {
                       globalAliPlayer?.pause();
                       ShowBottomSheet.onBuyContent(context, data: data);
                     });

@@ -74,6 +74,7 @@ class ScrollPic extends StatefulWidget {
 }
 
 class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
+  final ItemScrollController itemScrollController = ItemScrollController();
   FlutterAliplayer? fAliplayer;
   List<ContentData>? pics = [];
   int pageIndex = 0;
@@ -158,7 +159,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
       print("====length data = ${pics?.length} -- ${widget.arguments?.page}");
       if ((pics?.length ?? 0) >= (widget.arguments?.page ?? 0)) {
-        notifier.itemScrollController.jumpTo(index: widget.arguments?.page ?? 0);
+        itemScrollController.jumpTo(index: widget.arguments?.page ?? 0);
       }
       // scrollIndex = widget.arguments?.page ?? 0;
       // _initListener(notifier);
@@ -784,7 +785,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                 },
                                 child: ScrollablePositionedList.builder(
                                   scrollDirection: Axis.vertical,
-                                  itemScrollController: notifier.itemScrollController,
+                                  itemScrollController: itemScrollController,
                                   itemPositionsListener: itemPositionsListener,
                                   scrollOffsetController: scrollOffsetController,
                                   scrollOffsetListener: scrollOffsetListener,
@@ -1126,7 +1127,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                       } else {
                                         MyAudioService.instance.stop();
                                       }
-                                      notifier.itemScrollController.jumpTo(index: notifier.currentIndex);
+                                      itemScrollController.jumpTo(index: notifier.currentIndex);
                                     }
                                   }
                                 },
@@ -1561,17 +1562,17 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                       ),
                     )
                   : Container(),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 4.0),
-                child: Text(
-                  "${System().readTimestamp(
-                    DateTime.parse(System().dateTimeRemoveT(pics?[index].createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
-                    context,
-                    fullCaption: true,
-                  )}",
-                  style: TextStyle(fontSize: 12, color: kHyppeBurem),
-                ),
-              ),
+              // Padding(
+              //   padding: EdgeInsets.symmetric(vertical: 4.0),
+              //   child: Text(
+              //     "${System().readTimestamp(
+              //       DateTime.parse(System().dateTimeRemoveT(pics?[index].createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+              //       context,
+              //       fullCaption: true,
+              //     )}",
+              //     style: TextStyle(fontSize: 12, color: kHyppeBurem),
+              //   ),
+              // ),
             ],
           ),
         ),

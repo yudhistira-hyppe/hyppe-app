@@ -309,7 +309,13 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                               // if (tempIsHome) {
                               //   isHomeScreen = false;
                               // }
-                              if (isCreator) Routing().moveAndPop(Routes.streamer);
+                              if (isCreator) {
+                                if (Platform.isAndroid) {
+                                  Routing().moveAndPop(Routes.streamer);
+                                } else if (Platform.isIOS) {
+                                  Routing().moveAndPop(Routes.streameriOS);
+                                }
+                              }
                               // if (tempIsHome) {
                               //   isHomeScreen = true;
                               // }

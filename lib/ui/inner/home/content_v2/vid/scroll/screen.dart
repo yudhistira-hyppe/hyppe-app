@@ -74,6 +74,7 @@ class ScrollVid extends StatefulWidget {
 }
 
 class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
+  final ItemScrollController itemScrollController = ItemScrollController();
   FlutterAliplayer? fAliplayer;
   LocalizationModelV2? lang;
   ContentData? dataSelected;
@@ -157,7 +158,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
         initAlipayer();
       }
       print("============== widget argument ${widget.arguments!.vidData}");
-      notifier.itemScrollController.jumpTo(index: widget.arguments!.page!);
+      itemScrollController.jumpTo(index: widget.arguments!.page!);
       // notifier.checkConnection();
     });
     var index = 0;
@@ -858,7 +859,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                 return false;
                               },
                               child: ScrollablePositionedList.builder(
-                                itemScrollController: vidNotifier.itemScrollController,
+                                itemScrollController: itemScrollController,
                                 itemPositionsListener: itemPositionsListener,
                                 scrollOffsetController: scrollOffsetController,
                                 physics: const AlwaysScrollableScrollPhysics(),
@@ -1066,7 +1067,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                         } catch (e) {
                           e.logger();
                         }
-                        // System().increaseViewCount2(context, vidData);
+                        // System().increaseViewCount2(context, vidData![index]);
                       });
                       if (vidData?[index].certified ?? false) {
                         System().block(context);
@@ -1091,6 +1092,8 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                   fAliplayer?.stop();
                                   fAliplayer?.clearScreen();
                                   start(context, vidData?[index] ?? ContentData());
+
+                                  System().increaseViewCount2(context, vidData![index]);
 
                                   var vidNotifier = context.read<PreviewVidNotifier>();
                                   double position = 0.0;
@@ -1401,7 +1404,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                             padding: const EdgeInsets.only(bottom: 6.0),
                             child: CustomNewDescContent(
                               // desc: "${vidData?.description}",
-                              email: vidData?[index].email ?? '',
+                              email: vidData?[index].comment?[indexComment].sender ?? '',
                               username: vidData?[index].comment?[indexComment].userComment?.username ?? '',
                               desc: vidData?[index].comment?[indexComment].txtMessages ?? '',
                               trimLines: 2,
@@ -1417,17 +1420,17 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                       ),
                     )
                   : Container(),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 4.0),
-                child: Text(
-                  "${System().readTimestamp(
-                    DateTime.parse(System().dateTimeRemoveT(vidData?[index].createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
-                    context,
-                    fullCaption: true,
-                  )}",
-                  style: TextStyle(fontSize: 12, color: kHyppeBurem),
-                ),
-              ),
+              // Padding(
+              //   padding: EdgeInsets.symmetric(vertical: 4.0),
+              //   child: Text(
+              //     "${System().readTimestamp(
+              //       DateTime.parse(System().dateTimeRemoveT(vidData?[index].createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+              //       context,
+              //       fullCaption: true,
+              //     )}",
+              //     style: TextStyle(fontSize: 12, color: kHyppeBurem),
+              //   ),
+              // ),
             ],
           ),
         ),

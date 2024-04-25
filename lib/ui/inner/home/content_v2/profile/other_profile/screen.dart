@@ -45,7 +45,6 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
   UserInfoModel? userData;
   Map<String, List<ContentData>>? otherStoryGroup;
   bool isloading = false;
-
   void scroll() {
     print("==================hihihi==============");
   }
@@ -61,11 +60,14 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
     final notifier = Provider.of<OtherProfileNotifier>(context, listen: false);
     final sn = Provider.of<PreviewStoriesNotifier>(context, listen: false);
     // notifier.user.profile = null;
+    
     isloading = true;
     Future.delayed(Duration.zero, () async {
       MyAudioService.instance.stop();
       notifier.pageIndex = 0;
-      await notifier.initialOtherProfile(context, argument: widget.arguments).then((value) => isloading = false);
+      await notifier.initialOtherProfile(context, argument: widget.arguments).then((value) {
+        isloading = false;
+      });
       userData = notifier.manyUser.last;
       otherStoryGroup = sn.otherStoryGroup;
     });
@@ -221,6 +223,10 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
             strokeWidth: 2.0,
             color: Colors.purple,
             onRefresh: () async {
+              // setState(() {
+              //   isloading = true;
+              // });
+              
               await notifier.initialOtherProfile(context, refresh: true, argument: widget.arguments);
               final sn = Provider.of<PreviewStoriesNotifier>(context, listen: false);
               otherStoryGroup = sn.otherStoryGroup;
@@ -269,12 +275,11 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
                                 if (mounted) {
                                   heightProfileCard = e.height;
                                 }
-
-                                // await Future.delayed(Duration(milliseconds: 300), () {
-                                //   isloading = true;
-                                // });
-                                // // await Future.delayed(Duration(milliseconds: 1000), () {
-                                // isloading = false;
+                                await Future.delayed(Duration(milliseconds: 300), () {
+                                  isloading = false;
+                                });
+                                // await Future.delayed(Duration(milliseconds: 1000), () {
+                                isloading = false;
                                 // // });
                                 // print("=============================== height");
                                 // print(heightProfileCard);
@@ -300,12 +305,12 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
                           ),
                           SliverAppBar(
                             pinned: true,
-                            flexibleSpace: OtherProfileBottom(email: widget.arguments.senderEmail),
+                            flexibleSpace: OtherProfileBottom(email: widget.arguments.senderEmail, userData: userData),
                             automaticallyImplyLeading: false,
                             backgroundColor: Theme.of(context).colorScheme.background,
                           ),
                           if (notifier.user.profile != null && notifier.statusFollowing == StatusFollowing.following)
-                            isloading
+                            (notifier.isLoading)
                                 ? BothProfileContentShimmer()
                                 : !notifier.isConnectContent
                                     ? SliverFillRemaining(
@@ -326,7 +331,7 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
                           // else if (notifier.peopleProfile?.userDetail?.data?.isPrivate ?? false)
                           //     SliverList(delegate: SliverChildListDelegate([PrivateAccount()]))
                           else
-                            isloading
+                            (notifier.isLoading)
                                 ? BothProfileContentShimmer()
                                 : !notifier.isConnectContent
                                     ? SliverFillRemaining(
@@ -343,7 +348,7 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
                                           },
                                         ),
                                       )
-                                    : optionButton(notifier.isLoading, notifier.pageIndex, heightProfileCard)
+                                    : optionButton(isloading, notifier.pageIndex, heightProfileCard)
                         ],
                       ),
           ),
