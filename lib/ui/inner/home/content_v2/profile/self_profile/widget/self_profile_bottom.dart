@@ -6,6 +6,7 @@ import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/test/testlootie.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
@@ -36,6 +37,11 @@ class _SelfProfileBottomState extends State<SelfProfileBottom> {
                   onTap: () {
                     // Routing().move(Routes.verificationSupportSuccess);
                     Routing().move(Routes.streamer);
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (context) => TestLootie(),
+                    //     ));
                   },
                   child: Text("hahaha")),
               CustomTextButton(

@@ -12,7 +12,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../../../../../../core/services/system.dart';
 
 class ScrollPicNotifier with ChangeNotifier {
-  final ItemScrollController itemScrollController = ItemScrollController();
+  // final ItemScrollController itemScrollController = ItemScrollController();
   LocalizationModelV2 language = LocalizationModelV2();
   Offset positionDxDy = const Offset(0, 0);
   bool _isLoadingLoadmore = false;
