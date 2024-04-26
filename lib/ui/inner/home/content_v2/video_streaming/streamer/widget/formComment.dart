@@ -87,12 +87,17 @@ class FormCommentLive extends StatelessWidget {
               ],
             ),
           ),
-          // commentFocusNode!.hasFocus
-          //     ? Container()
-          //     : Padding(
-          //         padding: const EdgeInsets.only(left: 8.0),
-          //         child: IconButtonLive(widget: const CustomIconWidget(iconData: "${AssetPath.vectorPath}share2.svg", color: Colors.white, defaultColor: false), onPressed: () {}),
-          //       ),
+          commentFocusNode!.hasFocus
+              ? Container()
+              : Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: IconButtonLive(
+                    widget: const CustomIconWidget(iconData: "${AssetPath.vectorPath}share2.svg", color: Colors.white, defaultColor: false),
+                    onPressed: () {
+                      ShowBottomSheet().onShowShareLive(_);
+                    },
+                  ),
+                ),
           commentFocusNode!.hasFocus
               ? Container()
               : Padding(

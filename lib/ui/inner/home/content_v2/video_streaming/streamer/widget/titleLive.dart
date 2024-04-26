@@ -21,58 +21,74 @@ class TitleLive extends StatelessWidget {
     return Consumer<StreamerNotifier>(
       builder: (_, notifier, __) => Expanded(
           flex: 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomProfileImage(
-                cacheKey: profileImageKey,
-                following: true,
-                forStory: false,
-                width: 36 * SizeConfig.scaleDiagonal,
-                height: 36 * SizeConfig.scaleDiagonal,
-                imageUrl: System().showUserPicture(profileImage),
-                // badge: notifier.user.profile?.urluserBadge,
-                allwaysUseBadgePadding: false,
-              ),
-              sixPx,
-              Flexible(
-                child: GestureDetector(
-                  onTap: () {
-                    ShowBottomSheet.onStreamWatchersStatus(context, false, notifier);
-                  },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        (notifier.titleLive.isNotEmpty) ? notifier.titleLive : notifier.userName,
-                        style: const TextStyle(
-                          color: kHyppeTextPrimary,
-                          fontWeight: FontWeight.w700,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Text(
-                        '${notifier.totLikes} ${tn.like}',
-                        style: const TextStyle(
-                          fontSize: 10,
-                          color: kHyppeTextPrimary,
-                        ),
-                      )
-                    ],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CustomProfileImage(
+                    cacheKey: profileImageKey,
+                    following: true,
+                    forStory: false,
+                    width: 36 * SizeConfig.scaleDiagonal,
+                    height: 36 * SizeConfig.scaleDiagonal,
+                    imageUrl: System().showUserPicture(profileImage),
+                    // badge: notifier.user.profile?.urluserBadge,
+                    allwaysUseBadgePadding: false,
                   ),
-                ),
+                  sixPx,
+                  Flexible(
+                    child: GestureDetector(
+                      onTap: () {
+                        ShowBottomSheet.onStreamWatchersStatus(context, false, notifier);
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            (notifier.titleLive.isNotEmpty) ? notifier.titleLive : notifier.userName,
+                            style: const TextStyle(
+                              color: kHyppeTextPrimary,
+                              fontWeight: FontWeight.w700,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            '${notifier.totLikes} ${tn.like}',
+                            style: const TextStyle(
+                              fontSize: 10,
+                              color: kHyppeTextPrimary,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      ShowBottomSheet.onStreamWatchersStatus(context, false, notifier);
+                    },
+                    child: const Icon(
+                      Icons.keyboard_arrow_down,
+                      color: kHyppeTextPrimary,
+                    ),
+                  )
+                ],
               ),
-              GestureDetector(
-                onTap: () {
-                  ShowBottomSheet.onStreamWatchersStatus(context, false, notifier);
-                },
-                child: const Icon(
-                  Icons.keyboard_arrow_down,
-                  color: kHyppeTextPrimary,
-                ),
-              )
+              twentyPx,
+              Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(
+                    "Klisk Disini!",
+                    style: TextStyle(color: Colors.white),
+                  )),
             ],
           )),
     );

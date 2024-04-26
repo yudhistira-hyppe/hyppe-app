@@ -1177,4 +1177,14 @@ class StreamerNotifier with ChangeNotifier {
 
     return randomValue;
   }
+
+  bool urlFalse = true;
+  void urlValidation(String url) {
+    if (Uri.tryParse(url)?.hasAbsolutePath ?? false) {
+      urlFalse = true;
+    } else {
+      urlFalse = false;
+    }
+    notifyListeners();
+  }
 }

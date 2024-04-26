@@ -148,11 +148,14 @@ class BeforeLive extends StatelessWidget {
                                     hintText: 'Tambhkan URL',
                                     counterText: '',
                                     border: InputBorder.none,
-                                    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: kHyppeTextLightPrimary)),
-                                    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: kHyppeTextLightPrimary)),
+                                    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: !notifier.urlFalse ? Colors.red : kHyppeTextLightPrimary)),
+                                    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: !notifier.urlFalse ? Colors.red : kHyppeTextLightPrimary)),
                                     contentPadding: const EdgeInsets.only(left: 20, bottom: 8),
                                     hintStyle: const TextStyle(fontSize: 13, color: kHyppeBurem),
                                   ),
+                                  onChanged: (value) {
+                                    notifier.urlValidation(value);
+                                  },
                                 ),
                                 const CustomIconWidget(
                                   defaultColor: false,
@@ -160,6 +163,14 @@ class BeforeLive extends StatelessWidget {
                                 ),
                               ],
                             ),
+                            if (!notifier.urlFalse)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 4),
+                                child: Text(
+                                  "Silakan masukkan link yang valid",
+                                  style: TextStyle(color: Colors.red, fontSize: 10),
+                                ),
+                              ),
                             twelvePx,
                             Stack(
                               children: [

@@ -47,6 +47,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_s
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_id_verification_failed.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_idcard_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_license_agreement.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_share_live.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_sticker.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_user_tag.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_user_view_content.dart';
@@ -1396,7 +1397,6 @@ class ShowBottomSheet {
       if (fAliplayer != null) {
         fAliplayer.play();
       }
-      
     });
   }
 
@@ -1564,61 +1564,58 @@ class ShowBottomSheet {
     double? initialChildSize,
   }) {
     showModalBottomSheet(
-      backgroundColor: Colors.transparent,
-      context: context,
-      isScrollControlled: true,
-      builder: (context) {
-        return DraggableScrollableSheet(
-          expand: false,
-          maxChildSize: .9,
-          initialChildSize: initialChildSize ?? 0.5,
-          builder: (_, controller) {
-            return Container(
-              clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(16.0),
-                  topRight: Radius.circular(16.0),
-                ),
-              ),
-              child: Column(
-                children: [
-                  FractionallySizedBox(
-                    widthFactor: 0.15,
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(
-                        vertical: 12.0,
-                      ),
-                      child: Container(
-                        height: 5.0,
-                        decoration: const BoxDecoration(
-                          color: kHyppeBurem,
-                          borderRadius: BorderRadius.all(Radius.circular(2.5)),
+        backgroundColor: Colors.transparent,
+        context: context,
+        isScrollControlled: true,
+        builder: (context) {
+          return DraggableScrollableSheet(
+              expand: false,
+              maxChildSize: .9,
+              initialChildSize: initialChildSize ?? 0.5,
+              builder: (_, controller) {
+                return Container(
+                  clipBehavior: Clip.antiAlias,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(16.0),
+                      topRight: Radius.circular(16.0),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      FractionallySizedBox(
+                        widthFactor: 0.15,
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(
+                            vertical: 12.0,
+                          ),
+                          child: Container(
+                            height: 5.0,
+                            decoration: const BoxDecoration(
+                              color: kHyppeBurem,
+                              borderRadius: BorderRadius.all(Radius.circular(2.5)),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                      Center(
+                        child: Text(
+                          title,
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      fivePx,
+                      const Divider(
+                        color: kHyppeBurem,
+                      ),
+                      fivePx,
+                      child ?? SizedBox.fromSize()
+                    ],
                   ),
-                  Center(
-                    child: Text(
-                      title,
-                      style: Theme.of(context)
-                            .textTheme
-                            .titleLarge
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  fivePx,
-                  const Divider(color: kHyppeBurem,),
-                  fivePx,
-                  child ?? SizedBox.fromSize()
-                ],
-              ),
-            );
-          }
-        );
-      }
-    );
+                );
+              });
+        });
   }
 
   static onShowCategorySupportTicket(
@@ -1868,5 +1865,31 @@ class ShowBottomSheet {
         );
       },
     );
+  }
+
+  onShowShareLive(BuildContext _) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: _,
+        backgroundColor: Colors.transparent,
+        builder: (builder) {
+          return DraggableScrollableSheet(
+            maxChildSize: 0.8,
+            minChildSize: 0.4,
+            builder: (_, scrollController) {
+              return Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    topRight: Radius.circular(8),
+                  ),
+                ),
+                padding: const EdgeInsets.all(0),
+                child: OnShowShareLiveBottomSheet(scrollController: scrollController),
+              );
+            },
+          );
+        });
   }
 }
