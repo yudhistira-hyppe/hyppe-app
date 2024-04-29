@@ -338,7 +338,8 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  UserTemplate(username: '${data.username}', isVerified: data.isIdVerified ?? (data.privacy?.isIdVerified ?? false), date: data.createdAt ?? DateTime.now().toString()),
+                  // UserTemplate(username: '${data.username}', isVerified: data.isIdVerified ?? (data.privacy?.isIdVerified ?? false), date: data.createdAt ?? DateTime.now().toString()),
+                  UserTemplate(username: '${data.username}', isVerified: data.isIdVerified ?? (data.privacy?.isIdVerified ?? false)),
                   twoPx,
                   Row(
                     children: [

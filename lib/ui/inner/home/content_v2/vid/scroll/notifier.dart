@@ -48,6 +48,7 @@ class ScrollVidNotifier with ChangeNotifier {
         await sp.onScrollListener(context, scrollController: scrollController, isLoad: true);
         vidData = sp.user.vids;
         isLoadingLoadmore = false;
+        notifyListeners();
       }
 
       if (pageSrc == PageSrc.otherProfile) {
@@ -56,6 +57,7 @@ class ScrollVidNotifier with ChangeNotifier {
         await op.onScrollListener(context, scrollController: scrollController, isLoad: true);
         vidData = op.manyUser.last.vids;
         isLoadingLoadmore = false;
+        notifyListeners();
       }
 
       final searchNotifier = context.read<SearchNotifier>();

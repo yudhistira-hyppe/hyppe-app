@@ -207,9 +207,9 @@ class _PicTopItemState extends State<PicTopItem> {
 
   void closeTooltip(int index) {
     globalTultipShow = false;
-    context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[index].key ?? '');
-    mn?.tutorialData[index].status = true;
     ShowCaseWidget.of(context).dismiss();
+    mn?.tutorialData[index].status = true;
+    context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[index].key ?? '');
     if (widget.fAliplayer != null) {
       widget.fAliplayer?.play();
     }

@@ -39,7 +39,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
 
   bool _isRestart = false;
   bool get isRestart => _isRestart;
-  set isRestart(bool state){
+  set isRestart(bool state) {
     _isRestart = state;
     notifyListeners();
   }
@@ -164,26 +164,26 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     }
   }
 
-  Future notUseEffect(BuildContext context) async{
+  Future notUseEffect(BuildContext context) async {
     isRestart = true;
     await deepArController?.destroy();
     deepArController = DeepArController();
     final notifier = Provider.of<MakeContentNotifier>(context, listen: false);
     await deepArController!
         .initialize(
-    androidLicenseKey: "2a5a8cfda693ae38f2e20925295b950b13f0a7c186dcd167b5997655932d82ceb0cbc27be4c0b513",
-    iosLicenseKey: "6389e21310378b39591d7a24897a1f59456ce3c5cf0fbf89033d535438d2f1cf10ea4829b25cf117",
-    resolution: _configureResolutionDeepArPreset(onStoryIsPhoto: notifier.featureType == FeatureType.story ? !notifier.isVideo : null),
+      androidLicenseKey: "2a5a8cfda693ae38f2e20925295b950b13f0a7c186dcd167b5997655932d82ceb0cbc27be4c0b513",
+      iosLicenseKey: "6389e21310378b39591d7a24897a1f59456ce3c5cf0fbf89033d535438d2f1cf10ea4829b25cf117",
+      resolution: _configureResolutionDeepArPreset(onStoryIsPhoto: notifier.featureType == FeatureType.story ? !notifier.isVideo : null),
     )
         .then((value) {
-    print('DeepAR: DeepAR done initialized $value');
-    Future.delayed(const Duration(milliseconds: 1000), (){
-      isRestart = false;
-    });
-    isInitializedIos = true;
-    print(deepArController!.isInitialized);
-    print(isInitialized);
-    initEffect(context);
+      print('DeepAR: DeepAR done initialized $value');
+      Future.delayed(const Duration(milliseconds: 1000), () {
+        isRestart = false;
+      });
+      isInitializedIos = true;
+      print(deepArController!.isInitialized);
+      print(isInitialized);
+      initEffect(context);
     });
   }
 
@@ -258,16 +258,14 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     // isFlash = false;
     deepArController!.flipCamera();
     print('myFlash: $isFlash');
-    if(notifier.featureType == FeatureType.pic || (notifier.featureType == FeatureType.story && !notifier.isVideo)){
-      
-    }else{
+    if (notifier.featureType == FeatureType.pic || (notifier.featureType == FeatureType.story && !notifier.isVideo)) {
+    } else {
       if (isFlash) {
         Future.delayed(const Duration(seconds: 1), () async {
           await deepArController!.toggleFlash();
         });
       }
     }
-
   }
 
   disposeCamera(BuildContext context) async {
@@ -309,48 +307,47 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     print('DeepAR: onStoryIsPhoto: ${onStoryIsPhoto}');
     print('DeepAR: Platform.isIOS: ${Platform.isIOS}, _iOSVersion: ${_iOSVersion}, minIphoneVersionForResolutionCamera: ${minIphoneVersionForResolutionCamera}');
 
+    // return Resolution.high;
     return Resolution.veryHigh;
   }
 
   Future<void> onFlashButtonPressed(BuildContext context) async {
     final notifier = Provider.of<MakeContentNotifier>(context, listen: false);
-    if(notifier.featureType == FeatureType.pic){
+    if (notifier.featureType == FeatureType.pic) {
       isFlash = !isFlash;
-    }else if(notifier.featureType == FeatureType.story){
+    } else if (notifier.featureType == FeatureType.story) {
       // if(notifier.isVideo){
       //   isFlash = await deepArController!.toggleFlash();
       // }else{
       //   isFlash = !isFlash;
       // }
       isFlash = !isFlash;
-    }else{
+    } else {
       isFlash = await deepArController!.toggleFlash();
     }
-
   }
 
   void flashOff(BuildContext context) async {
     final notifier = Provider.of<MakeContentNotifier>(context, listen: false);
-    if(notifier.featureType == FeatureType.pic){
-      if(isFlash){
+    if (notifier.featureType == FeatureType.pic) {
+      if (isFlash) {
         isFlash = !isFlash;
       }
-    }else if(notifier.featureType == FeatureType.story){
-      if(notifier.isVideo){
+    } else if (notifier.featureType == FeatureType.story) {
+      if (notifier.isVideo) {
         if (deepArController!.flashState) {
           isFlash = await deepArController!.toggleFlash();
         }
-      }else{
-        if(isFlash){
+      } else {
+        if (isFlash) {
           isFlash = !isFlash;
         }
       }
-    }else{
+    } else {
       if (deepArController!.flashState) {
         isFlash = await deepArController!.toggleFlash();
       }
     }
-
   }
 
   String flashIcon() {
@@ -372,12 +369,12 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
 
   Future<File?> takePicture(BuildContext context) async {
     final notifier = Provider.of<MakeContentNotifier>(context, listen: false);
-    if(notifier.featureType == FeatureType.pic || (notifier.featureType == FeatureType.story && !notifier.isVideo)){
-      if (isFlash){
+    if (notifier.featureType == FeatureType.pic || (notifier.featureType == FeatureType.story && !notifier.isVideo)) {
+      if (isFlash) {
         await deepArController?.toggleFlash();
         await Future.delayed(const Duration(seconds: 1));
       }
-    }else{
+    } else {
       if (isFlash) {
         isFlash = (await deepArController?.toggleFlash() ?? false);
       }
@@ -396,7 +393,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     try {
       await deepArController!.takeScreenshot().then((file) {
         _result2 = file;
-        if(isFlash){
+        if (isFlash) {
           deepArController?.toggleFlash();
         }
         // OpenFile.open(file.path);
@@ -417,7 +414,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     if (!isInitialized) {
       return;
     }
-    if(notifier.featureType == FeatureType.story && isFlash){
+    if (notifier.featureType == FeatureType.story && isFlash) {
       await deepArController?.toggleFlash();
     }
 
@@ -429,9 +426,9 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
       _showEffected = false;
       await deepArController!.startVideoRecording();
       notifyListeners();
-      if(Platform.isIOS){
+      if (Platform.isIOS) {
         Future.delayed(const Duration(seconds: 1), () async {
-          if(isFlash){
+          if (isFlash) {
             await deepArController?.toggleFlash();
           }
         });
@@ -447,9 +444,9 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     if (!isRecordingVideo) {
       return null;
     }
-    if(notifier.featureType == FeatureType.story && isFlash){
+    if (notifier.featureType == FeatureType.story && isFlash) {
       await deepArController?.toggleFlash();
-    }else if (isFlash) {
+    } else if (isFlash) {
       isFlash = (await deepArController?.toggleFlash() ?? false);
     }
 
