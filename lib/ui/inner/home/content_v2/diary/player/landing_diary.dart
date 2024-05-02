@@ -157,7 +157,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     globalAliPlayer = fAliplayer;
     vidConfig();
     fAliplayer?.pause();
-    fAliplayer?.setAutoPlay(true);
+    fAliplayer?.setAutoPlay(false);
 
     // fAliplayer?.setLoop(true);
     fAliplayer?.setMuted(isMute);
@@ -487,13 +487,15 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         // _isFirstRenderShow = false;
       });
     }
-
+    fAliplayer?.prepare();
     if (data.reportedStatus == 'BLURRED') {
     } else {
       if (isActivePage) {
         print("=====prepare=====");
-        fAliplayer?.prepare();
+
         fAliplayer?.play();
+      } else {
+        fAliplayer?.pause();
       }
     }
     // this syntax below to prevent video play after changing video
@@ -668,6 +670,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   @override
   void dispose() {
     print("=======dispose diary page ==========");
+    isActivePage = false;
     fAliplayer?.stop();
     // fAliplayer?.destroy();
     if (Platform.isIOS) {
@@ -717,7 +720,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   @override
   void didPushNext() {
     isHomeScreen = false;
-    // isActivePage = false;
+    isActivePage = false;
     fAliplayer?.pause();
     _pauseScreen();
     super.didPushNext();

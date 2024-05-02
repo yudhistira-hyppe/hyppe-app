@@ -7,6 +7,7 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/services/audio_service.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
@@ -65,6 +66,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
   @override
   void initState() {
     // final _notifier = context.read<PreUploadContentNotifier>();
+    MyAudioService.instance.stop();
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     mn = Provider.of<MainNotifier>(context, listen: false);
     super.initState();

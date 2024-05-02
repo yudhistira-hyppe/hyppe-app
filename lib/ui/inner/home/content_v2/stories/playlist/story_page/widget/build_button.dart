@@ -20,12 +20,14 @@ class BuildButton extends StatefulWidget {
   final ContentData? data;
   final Function? pause;
   final Function? play;
+  final Function(bool)? selectedText;
   const BuildButton({
     // this.storyController,
     required this.animationController,
     required this.data,
     this.pause,
     this.play,
+    this.selectedText,
   });
 
   @override
@@ -60,22 +62,25 @@ class _BuildButtonState extends State<BuildButton> {
             children: [
               InkWell(
                 onTap: () async {
-                  widget.pause!();
+                  widget.selectedText!(true);
+                  // widget.pause!();
                  await context.handleActionIsGuest(() async  {
                     print('sdsdfsdf');
-                    if (widget.pause != null) {
-                      widget.pause!();
-                    }
+                    // if (widget.pause != null) {
+                    //   widget.pause!();
+                    // }
                     notifier.showMyReaction(
                       context,
                       mounted,
                       widget.data,
                       // widget.storyController,
                       widget.animationController,
-                      widget.play!,
+                      widget.selectedText
+                      // widget.play!,
                     );
                   });
-                  widget.play!();
+                  // widget.play!();
+                  // widget.selectedText!(false);
                 },
                 child: CustomIconWidget(
                   defaultColor: false,

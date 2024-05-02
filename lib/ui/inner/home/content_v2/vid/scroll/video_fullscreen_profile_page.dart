@@ -975,9 +975,10 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
                 }
 
                 vidData?[widget.index ?? 0].isLoading = true;
-                Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
-
-                SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
+                  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+                });
               }
             },
             child: notifier.loadVideo
@@ -1077,7 +1078,16 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
               print("========= wkwkwkwkwkw-========");
               setState(() {
                 onTapCtrl = true;
+
+                if (isPause) {
+                  fAliplayer?.play();
+                } else {
+                  fAliplayer?.pause();
+                }
               });
+            },
+            onDoubleTap: () {
+              context.read<LikeNotifier>().likePost(context, data);
             },
             child: Stack(
               children: [
@@ -1184,7 +1194,8 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
 
   Widget _buildTopWidget(ContentData data) {
     return AnimatedOpacity(
-      opacity: onTapCtrl || isPause ? 1.0 : 0.0,
+      // opacity: onTapCtrl || isPause ? 1.0 : 0.0,
+      opacity: 1.0,
       duration: const Duration(milliseconds: 300),
       onEnd: _onPlayerHide,
       child: Stack(
@@ -1213,7 +1224,10 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
                     }
 
                     vidData?[widget.index ?? 0].isLoading = true;
-                    Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      Navigator.pop(
+                          context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
+                    });
                   },
                   onTapOnProfileImage: () async {
                     var res = await System().navigateToProfile(context, data.email ?? '');
@@ -1322,11 +1336,11 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
               : Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _buildSkipPrev(iconColor, barHeight),
-                    _buildSkipBack(iconColor, barHeight),
+                    // _buildSkipPrev(iconColor, barHeight),
+                    // _buildSkipBack(iconColor, barHeight),
                     _buildPlayPause(iconColor, barHeight),
-                    _buildSkipForward(iconColor, barHeight),
-                    _buildSkipNext(iconColor, barHeight),
+                    // _buildSkipForward(iconColor, barHeight),
+                    // _buildSkipNext(iconColor, barHeight),
                   ],
                 ),
         ),
@@ -1419,7 +1433,8 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
 
   _buildContentWidget(BuildContext context, Orientation orientation, ContentData data) {
     return AnimatedOpacity(
-      opacity: onTapCtrl || isPause ? 1.0 : 0.0,
+      // opacity: onTapCtrl || isPause ? 1.0 : 0.0,
+      opacity: 1.0,
       duration: const Duration(milliseconds: 300),
       onEnd: _onPlayerHide,
       child: SafeArea(
@@ -1535,7 +1550,7 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
                                   (data.reportedStatus != 'OWNED' && data.reportedStatus != 'BLURRED' && data.reportedStatus2 != 'BLURRED') &&
                                   data.email == SharedPreference().readStorage(SpKeys.email)
                               ? Container(
-                                  width: orientation == Orientation.landscape ? SizeConfig.screenWidth! * .28 : SizeConfig.screenWidth!,
+                                  width: MediaQuery.of(context).orientation == Orientation.landscape ? SizeConfig.screenWidth! * .28 : SizeConfig.screenWidth!,
                                   margin: const EdgeInsets.only(bottom: 16),
                                   padding: const EdgeInsets.only(top: 12, left: 8.0, right: 8.0),
                                   child: ButtonBoost(
@@ -1551,6 +1566,7 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
                                   ),
                                 )
                               : Container(),
+                          // Text("${MediaQuery.of(context).orientation}"),
                           if (data.email == email && (data.boostCount ?? 0) >= 0 && (data.boosted.isNotEmpty))
                             Container(
                               padding: const EdgeInsets.all(10),

@@ -99,6 +99,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
   MainNotifier? mn;
   int indexKeySell = 0;
   int indexKeyProtection = 0;
+  bool isActivePage = false;
 
   @override
   void initState() {
@@ -122,6 +123,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
 
   Future<void> initialPage() async {
     //Ads
+    isActivePage = true;
     final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
     mn = Provider.of<MainNotifier>(context, listen: false);
     notifier.initialPicConnection(context);
@@ -131,10 +133,9 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (widget.argument?.picData[widget.argument?.index ?? 0].music != null) {
-        if (MyAudioService.instance.player.playing){
+        if (MyAudioService.instance.player.playing) {
           MyAudioService.instance.playagain(notifier.isMute);
         }
-        
       }
 
       pagePictLandingFull = true;
@@ -164,6 +165,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
     fAliplayer?.stop();
     fAliplayer!.destroy();
     animatedController.dispose();
+    isActivePage = false;
     super.dispose();
   }
 
@@ -176,8 +178,12 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
     selectedData?.isDiaryPlay = false;
     if (data.reportedStatus != 'BLURRED') {
       await getMusicUrl(context, data.music?.apsaraMusic ?? '');
+      MyAudioService.instance.play(path: url, startedPlaying: () {}, stoppedPlaying: () {}, mute: notifier.isMute);
+    }else{
+      MyAudioService.instance.stop();
     }
-    MyAudioService.instance.play(path: url, startedPlaying: () {}, stoppedPlaying: () {}, mute: notifier.isMute);
+
+    
 
     setState(() {
       isPause = false;
@@ -256,9 +262,11 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
   @override
   void didPopNext() {
     print("======= didPopNext");
-    MyAudioService.instance.playagain(false);
+    final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
+    MyAudioService.instance.playagain(notifier.isMute);
     fAliplayer?.play();
     fAliplayer?.setMuted(false);
+    isActivePage = true;
     // System().disposeBlock();
     super.didPopNext();
   }
@@ -275,6 +283,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
     fAliplayer?.pause();
     MyAudioService.instance.pause();
     System().disposeBlock();
+    isActivePage = false;
     super.didPushNext();
   }
 
@@ -287,10 +296,15 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
         print("========= inactive");
         break;
       case AppLifecycleState.resumed:
-        print("========= resumed");
+        print("========= resumed fullscreen $isActivePage");
         // if (context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds)) {
         fAliplayer?.play();
-        MyAudioService.instance.playagain(false);
+        if (isActivePage) {
+          final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
+          if (!notifier.isMute) {
+            MyAudioService.instance.playagain(false);
+          }
+        }
         // }
         break;
       case AppLifecycleState.paused:
@@ -395,6 +409,8 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                         context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {});
                       }
                       fAliplayer?.stop();
+                      globalAudioPlayer?.pause();
+                      MyAudioService.instance.stop();
                       Future.delayed(const Duration(milliseconds: 500), () {
                         System().increaseViewCount2(context, picData[index], check: false);
                         if ((picData[index].saleAmount ?? 0) > 0 || ((picData[index].certified ?? false) && (picData[index].saleAmount ?? 0) == 0)) {
@@ -453,11 +469,15 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                               context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {});
                             }
                             if (picData[index].music != null) {
+                              fAliplayer?.stop();
+                              globalAudioPlayer?.stop();
                               print("ada musiknya ${picData[index].music}");
                               Future.delayed(const Duration(milliseconds: 100), () {
                                 startMusic(context, picData[index], notifier);
                               });
                             } else {
+                              fAliplayer?.stop();
+                              globalAudioPlayer?.stop();
                               MyAudioService.instance.stop();
                             }
 
@@ -584,14 +604,17 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                   context.read<LikeNotifier>().likePost(context, notifier!.pic![index]);
                 },
                 onTap: () {
+                  notifier!.setIsSound(!notifier.isMute);
                   setState(() {
-                    notifier!.isMute = !notifier.isMute;
                     opacityLevel = 1.0;
                     isMuteAudioPic = notifier.isMute;
                   });
-                  MyAudioService.instance.playagain(notifier?.isMute??false);
-                  fAliplayer?.setMuted(notifier!.isMute);
-                  if (notifier!.isMute) {
+                  if (picData.music != null) {
+                    MyAudioService.instance.playagain(notifier.isMute);
+                  }
+
+                  fAliplayer?.setMuted(notifier.isMute);
+                  if (notifier.isMute) {
                     animatedController.stop();
                   } else {
                     animatedController.repeat();
@@ -683,6 +706,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
   }
 
   Widget blurContentWidget(BuildContext context, ContentData data, {int index = 0, PreviewPicNotifier? notifier}) {
+    MyAudioService.instance.stop();
     return Stack(
       children: [
         Positioned.fill(
@@ -1022,8 +1046,25 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
             if ((picData.saleAmount ?? 0) > 0 && email != picData.email)
               buttonRight(
                   onFunctionTap: () async {
+                    
                     fAliplayer?.pause();
-                    await ShowBottomSheet.onBuyContent(context, data: picData, fAliplayer: fAliplayer);
+                    notifier!.setIsSound(true);
+                    setState(() {
+                      isMuteAudioPic = notifier.isMute;
+                    });
+                    if (picData.music != null) {
+                      MyAudioService.instance.playagain(notifier.isMute);
+                    }
+
+                    fAliplayer?.setMuted(notifier.isMute);
+                    if (notifier.isMute) {
+                      animatedController.stop();
+                    } else {
+                      animatedController.repeat();
+                    }
+                    
+                    var res = await ShowBottomSheet.onBuyContent(context, data: picData, fAliplayer: fAliplayer);
+                    print('disini $res');
                   },
                   iconData: '${AssetPath.vectorPath}ic-cart-shadow.svg',
                   value: lang!.buy ?? 'Buy'),
@@ -1161,6 +1202,10 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                       if (data.insight?.isloadingFollow != true) {
                         picNot.followUser(context, data, isUnFollow: data.following, isloading: data.insight!.isloadingFollow ?? false);
                       }
+                    }).then((value) {
+                      if (value) {
+                        MyAudioService.instance.playagain(notifier.isMute);
+                      }
                     });
                   },
                   child: data.insight?.isloadingFollow ?? false
@@ -1210,6 +1255,10 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                     },
                     fAliplayer: fAliplayer,
                   );
+                }
+              }).then((value) {
+                if (value) {
+                  MyAudioService.instance.playagain(notifier.isMute);
                 }
               });
             },

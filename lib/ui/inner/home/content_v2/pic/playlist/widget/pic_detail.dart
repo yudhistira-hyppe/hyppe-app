@@ -266,6 +266,7 @@ class _PicDetailState extends State<PicDetail> {
                             function: () async {
                               // notifier.preventMusic = true;
                               await context.handleActionIsGuest(() async  {
+                                
                                 ShowBottomSheet.onBuyContent(context, data: widget.arguments);
                               });
 

@@ -10,7 +10,7 @@ import '../../../../../../core/services/system.dart';
 import '../../../../search_v2/notifier.dart';
 
 class ScrollVidNotifier with ChangeNotifier {
-  final ItemScrollController itemScrollController = ItemScrollController();  
+  final ItemScrollController itemScrollController = ItemScrollController();
   int lastScrollIdx = 0;
   int get lastScrollIndex => lastScrollIdx;
 
@@ -48,6 +48,7 @@ class ScrollVidNotifier with ChangeNotifier {
         await sp.onScrollListener(context, scrollController: scrollController, isLoad: true);
         vidData = sp.user.vids;
         isLoadingLoadmore = false;
+        notifyListeners();
       }
 
       if (pageSrc == PageSrc.otherProfile) {
@@ -56,6 +57,7 @@ class ScrollVidNotifier with ChangeNotifier {
         await op.onScrollListener(context, scrollController: scrollController, isLoad: true);
         vidData = op.manyUser.last.vids;
         isLoadingLoadmore = false;
+        notifyListeners();
       }
 
       final searchNotifier = context.read<SearchNotifier>();
@@ -85,7 +87,7 @@ class ScrollVidNotifier with ChangeNotifier {
     }
   }
 
-  Future reload(BuildContext context, PageSrc pageSrc, {String key = ""}) async {
+  Future reload(BuildContext context, PageSrc pageSrc, {String key = "", String? postId}) async {
     bool connect = await System().checkConnections();
     final searchNotifier = context.read<SearchNotifier>();
     connectionError = !connect;
@@ -101,7 +103,7 @@ class ScrollVidNotifier with ChangeNotifier {
       if (pageSrc == PageSrc.otherProfile) {
         final op = context.read<OtherProfileNotifier>();
         op.pageIndex = 2;
-        await op.initialOtherProfile(context, refresh: true);
+        await op.initialOtherProfile(context, refresh: true, postId: postId);
         vidData = op.manyUser.last.vids;
         isLoadingLoadmore = false;
       }
@@ -135,4 +137,6 @@ class ScrollVidNotifier with ChangeNotifier {
     vidData?[index].fAliplayer = player;
     notifyListeners();
   }
+
+  void onUpdate() => notifyListeners();
 }

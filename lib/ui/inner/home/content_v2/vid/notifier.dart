@@ -24,6 +24,7 @@ import '../../../../../core/bloc/ads_video/state.dart';
 import '../../../../../core/models/collection/advertising/ads_video_data.dart';
 
 class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
+  void onUpdate() => notifyListeners();
   LocalizationModelV2 language = LocalizationModelV2();
   translate(LocalizationModelV2 translate) {
     language = translate;

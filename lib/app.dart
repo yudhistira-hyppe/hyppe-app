@@ -50,7 +50,7 @@ bool pagePictLandingFull = false;
 bool isMuteAudioPic = true;
 
 int storyMin = 4;
-int vidMin = 15;
+int vidMin = 5;
 
 bool globalPreventAction = false;
 bool fromGuest = false;

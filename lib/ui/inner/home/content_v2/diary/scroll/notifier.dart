@@ -124,7 +124,7 @@ class ScrollDiaryNotifier with ChangeNotifier {
     }
   }
 
-  Future reload(BuildContext context, PageSrc pageSrc, {String key = ""}) async {
+  Future reload(BuildContext context, PageSrc pageSrc, {String key = "", String? postId}) async {
     bool connect = await System().checkConnections();
     // final searchNotifier = context.read<SearchNotifier>();
     connectionError = !connect;
@@ -141,7 +141,7 @@ class ScrollDiaryNotifier with ChangeNotifier {
       if (pageSrc == PageSrc.otherProfile) {
         final op = context.read<OtherProfileNotifier>();
         op.pageIndex = 1;
-        await op.initialOtherProfile(context);
+        await op.initialOtherProfile(context, postId: postId);
         diaryData = op.manyUser.last.diaries;
         isLoadingLoadmore = false;
         notifyListeners();

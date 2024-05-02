@@ -46,18 +46,11 @@ class _SettingScreenState extends State<SettingScreen> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
         setState(() {
-          indexKey = mn?.tutorialData
-                  .indexWhere((element) => element.key == 'transaction') ??
-              0;
-          indexreferral = mn?.tutorialData
-                  .indexWhere((element) => element.key == 'idRefferal') ??
-              0;
+          indexKey = mn?.tutorialData.indexWhere((element) => element.key == 'transaction') ?? 0;
+          indexreferral = mn?.tutorialData.indexWhere((element) => element.key == 'idRefferal') ?? 0;
         });
-        if (mn?.tutorialData[indexKey].status == false ||
-            mn?.tutorialData[indexreferral].status == false) {
-          WidgetsBinding.instance.addPostFrameCallback((_) =>
-              ShowCaseWidget.of(myContext)
-                  .startShowCase([keyTransaction, keyReferral]));
+        if (mn?.tutorialData[indexKey].status == false || mn?.tutorialData[indexreferral].status == false) {
+          WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(myContext).startShowCase([keyTransaction, keyReferral]));
         }
       }
     });
@@ -95,7 +88,24 @@ class _SettingScreenState extends State<SettingScreen> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  //Change Balance to Coins
+                  SettingTile(
+                    icon: 'transaction-icon.svg',
+                    onTap: () {
+                      context.handleActionIsGuest(() {
+                        context.read<SettingNotifier>().validateUser(context, notifier);
+                      });
+                    },
+                    caption: '${notifier.translate.transaction}',
+                    keyGLobal: keyTransaction,
+                    descriptionCas: (mn?.tutorialData.isEmpty ?? [].isEmpty)
+                        ? ''
+                        : notifier.translate.localeDatetime == 'id'
+                            ? mn?.tutorialData[indexKey].textID
+                            : mn?.tutorialData[indexKey].textEn,
+                    positionTooltip: TooltipPosition.bottom,
+                    positionYplus: -10,
+                    indexTutor: indexKey,
+                  ),
                   const Padding(
                     padding: EdgeInsets.all(16.0),
                     child: MyBalance(),
@@ -130,13 +140,7 @@ class _SettingScreenState extends State<SettingScreen> {
                         onTap: () => Routing().move(Routes.userInterest,
                             argument: UserInterestScreenArgument(
                               fromSetting: true,
-                              userInterested: Provider.of<SelfProfileNotifier>(
-                                          context,
-                                          listen: false)
-                                      .user
-                                      .profile
-                                      ?.interest ??
-                                  [],
+                              userInterested: Provider.of<SelfProfileNotifier>(context, listen: false).user.profile?.interest ?? [],
                             )),
                         caption: '${notifier.translate.interest}',
                         icon: 'heart-icon.svg',
@@ -147,9 +151,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       //   onTap: () => Routing().move(Routes.themeScreen),
                       // ),
                       SettingTile(
-                        onTap: () =>
-                            ShowGeneralDialog.newAccountLanguageDropDown(
-                                context),
+                        onTap: () => ShowGeneralDialog.newAccountLanguageDropDown(context),
                         icon: 'language-icon.svg',
                         caption: '${notifier.translate.language}',
                       ),
@@ -176,26 +178,6 @@ class _SettingScreenState extends State<SettingScreen> {
                       //   icon: 'person-plus.svg',
                       //   caption: '${notifier.translate.referralID}',
                       // ),
-                      SettingTile(
-                        icon: 'transaction-icon.svg',
-                        onTap: () {
-                          context.handleActionIsGuest(() {
-                            context
-                                .read<SettingNotifier>()
-                                .validateUser(context, notifier);
-                          });
-                        },
-                        caption: '${notifier.translate.transaction}',
-                        keyGLobal: keyTransaction,
-                        descriptionCas: (mn?.tutorialData.isEmpty ?? [].isEmpty)
-                            ? ''
-                            : notifier.translate.localeDatetime == 'id'
-                                ? mn?.tutorialData[indexKey].textID
-                                : mn?.tutorialData[indexKey].textEn,
-                        positionTooltip: TooltipPosition.bottom,
-                        positionYplus: -10,
-                        indexTutor: indexKey,
-                      ),
                     ],
                   ),
                   sixteenPx,
@@ -224,14 +206,12 @@ class _SettingScreenState extends State<SettingScreen> {
                     headerCaption: '${notifier.translate.support}',
                     tiles: [
                       SettingTile(
-                        caption: System().capitalizeFirstLetter(
-                            notifier.translate.help ?? ""),
+                        caption: System().capitalizeFirstLetter(notifier.translate.help ?? ""),
                         icon: 'help-icon.svg',
                         onTap: () => Routing().move(Routes.help),
                       ),
                       SettingTile(
-                        caption: System().capitalizeFirstLetter(
-                            notifier.translate.privacyPolicy ?? ""),
+                        caption: System().capitalizeFirstLetter(notifier.translate.privacyPolicy ?? ""),
                         icon: 'privacy-police-icon.svg',
                         onTap: () => Routing().move(Routes.userAgreement),
                       ),
@@ -259,8 +239,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       tiles: [
                         SettingTile(
                           icon: 'info-icon.svg',
-                          caption: System().capitalizeFirstLetter(
-                              notifier.translate.version ?? ""),
+                          caption: System().capitalizeFirstLetter(notifier.translate.version ?? ""),
                           trailing: Selector<SettingNotifier, String>(
                             builder: (_, value, __) {
                               return CustomTextWidget(
@@ -274,7 +253,7 @@ class _SettingScreenState extends State<SettingScreen> {
                         SettingTile(
                           onTap: () {
                             var res = SharedPreference().readStorage(SpKeys.uploadContent) is bool;
-                            if (res){
+                            if (res) {
                               var message = "${notifier.translate.contentCreatedProcess}";
                               ShowBottomSheet().onShowColouredSheet(
                                 Routing.navigatorKey.currentContext ?? context,
@@ -289,7 +268,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                   }
                                 },
                               );
-                            }else{
+                            } else {
                               ShowBottomSheet.onShowSignOut(
                                 context,
                                 onSignOut: () {
@@ -298,7 +277,6 @@ class _SettingScreenState extends State<SettingScreen> {
                                 },
                               );
                             }
-                            
                           },
                           icon: 'logout-icon.svg',
                           caption: '${notifier.translate.logOut}',
@@ -312,8 +290,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           tiles: [
                             SettingTile(
                               icon: 'info-icon.svg',
-                              caption: System().capitalizeFirstLetter(
-                                  notifier.translate.version ?? ""),
+                              caption: System().capitalizeFirstLetter(notifier.translate.version ?? ""),
                               trailing: Selector<SettingNotifier, String>(
                                 builder: (_, value, __) {
                                   return CustomTextWidget(

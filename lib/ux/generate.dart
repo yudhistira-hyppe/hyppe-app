@@ -102,6 +102,7 @@ import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/feedback/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamerios/screen.dart';
 import 'package:hyppe/ui/inner/home/widget/ads_in_between_full.dart';
 import 'package:hyppe/ui/inner/home/widget/ads_video_in_between_full.dart';
 import 'package:hyppe/ui/inner/home/widget/aliplayer.dart';
@@ -453,6 +454,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const HomeTutorScreen());
       case Routes.streamer:
         return MaterialPageRoute(builder: (_) => const StreamerScreen());
+      case Routes.streameriOS:
+        return MaterialPageRoute(builder: (_) => const StreamerIOSScreen());
       case Routes.streamingFeedback:
         return MaterialPageRoute(builder: (_) => StreamingFeedbackScreen(arguments: settings.arguments as SummaryLiveArgument));
       case Routes.listStreamers:
@@ -467,7 +470,7 @@ class Generate {
       case Routes.picScrollFullScreenDetail:
         return CupertinoPageRoute(builder: (_) => PicScrollFullscreenPage(argument: settings.arguments as SlidedPicDetailScreenArgument));
 
-      // Coins 
+      // Coins
       case Routes.saldoCoins:
         return MaterialPageRoute(builder: (_) => const CoinPage());
       case Routes.topUpCoins:
@@ -476,9 +479,9 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const PaymentCoinPage(), settings: settings);
       case Routes.exchangeCoins:
         return MaterialPageRoute(builder: (_) => const ExchangeCoinPage(), settings: settings);
-      
-      case Routes.verificationPinPage:
-        return MaterialPageRoute(builder: (_) => const VerificationPinPage(), settings: settings);
+
+      // case Routes.verificationPinPage:
+      // return MaterialPageRoute(builder: (_) => const VerificationPinPage(), settings: settings);
       case Routes.finishTrxPage:
         return MaterialPageRoute(builder: (_) => const FinishTrxPage(), settings: settings);
     }

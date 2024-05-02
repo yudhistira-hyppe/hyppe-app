@@ -124,7 +124,7 @@ class _MusicStatusSelectedState extends State<MusicStatusSelected> with RouteAwa
   void deactivate() {
     print('deactivate MusicStatusSelected false');
     final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
-    notifier.audioPreviewPlayer.pause();
+    notifier.audioPreviewPlayer.stop();
     super.deactivate();
   }
 

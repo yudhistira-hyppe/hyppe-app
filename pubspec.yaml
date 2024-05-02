@@ -4,7 +4,7 @@ homepage: https://www.hyppe.id
 
 publish_to: "none"
 
-version: 1.6.2+157 #26-02-2024
+version: 1.6.5+160 #26-02-2024
 
 environment:
   sdk: ">=2.18.0 <3.0.0"
@@ -104,6 +104,10 @@ dependencies:
   flutter_livepush_plugin: ^2.1.0+1
   just_audio: ^0.9.37
 
+  # //Agora
+  agora_rtc_engine: ^6.2.6
+  agora_rtm: ^1.5.9
+  
   dynamic_widget: # Dynamic widget builder
     git:
       url: https://github.com/dengyin2000/dynamic_widget.git

@@ -64,7 +64,6 @@ import '../../../../../ux/routing.dart';
 import '../../../../constant/entities/like/notifier.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../../../../constant/widget/custom_background_layer.dart';
-import 'scroll/widget/vidscroll_fullscreen_page.dart';
 
 class HyppePreviewVid extends StatefulWidget {
   final ScrollController? scrollController;
@@ -100,6 +99,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   bool _inSeek = false;
   bool _thumbnailSuccess = false;
   bool isActivePage = true;
+  bool isStandBy = true;
   bool onTapCtrl = false;
   bool isActiveAds = false;
 
@@ -136,7 +136,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
 
   @override
   void initState() {
-    isStopVideo = true;
+    isStopVideo = false;
     isactivealiplayer = true;
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppePreviewVid');
     email = SharedPreference().readStorage(SpKeys.email);
@@ -173,7 +173,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     globalAliPlayer = fAliplayer;
     vidConfig();
     fAliplayer?.pause();
-    fAliplayer?.setAutoPlay(true);
+    fAliplayer?.setAutoPlay(false);
 
     // fAliplayer?.setLoop(true);
     fAliplayer?.setMuted(isMute);
@@ -264,6 +264,9 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                 isPlay = true;
               });
             } catch (e) {
+              setState(() {
+                _showLoading = false;
+              });
               print('error AVPStatus_AVPStatusStarted: $e');
             }
 
@@ -570,7 +573,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   void dispose() {
     fAliplayer?.stop();
     // fAliplayer?.destroy();
-
+    isActivePage = false;
     isStopVideo = false;
     "================ ondispose vid".logger();
     _pauseScreen();
@@ -601,7 +604,9 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   }
 
   @override
-  void didPopNext() {
+  void didPopNext() async {
+    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     isActivePage = true;
     final vidNot = context.read<VideoNotifier>();
     vidNot.adsAliplayer?.play();
@@ -631,7 +636,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
 
     if (_curIdx < notifier.currentIndex) {
       setState(() {
-        notifier.vidData?[_curIdx].fAliplayer?.stop();
+        // notifier.vidData?[_curIdx].fAliplayer?.stop();
         _curIdx = notifier.currentIndex;
         // pn.diaryData!.removeRange(_curIdx, pn.currentIndex);
         notifier.vidData!.removeRange(0, notifier.currentIndex);
@@ -686,12 +691,15 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
         _pauseScreen();
         break;
       case AppLifecycleState.resumed:
-        print("============= canPlayOpenApps ${context.read<PreviewVidNotifier>().canPlayOpenApps}-- isInactiveState: ${context.read<MainNotifier>().isInactiveState}");
+        print("============= canPlayOpenApps ${context.read<PreviewVidNotifier>().canPlayOpenApps}-- isInactiveState: ${context.read<MainNotifier>().isInactiveState} $isActivePage");
         if (isHomeScreen) _initializeTimer();
         if (context.read<PreviewVidNotifier>().canPlayOpenApps && !context.read<MainNotifier>().isInactiveState && isActivePage) {
           try {
+            isStandBy = true;
             // notifier.vidData?[_curIdx].fAliplayer?.prepare();
             // notifier.vidData?[_curIdx].fAliplayer?.play();
+            print("masuk lagi video ${fAliplayer?.getVideoHeight()}");
+            // fAliplayer?.prepare();
             fAliplayer?.play();
           } catch (e) {
             print(e);
@@ -700,6 +708,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
         break;
       case AppLifecycleState.paused:
         fAliplayer?.pause();
+        isStandBy = false;
         _pauseScreen();
         break;
       case AppLifecycleState.detached:
@@ -807,11 +816,12 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
       });
     }
     print("============== is acive $isActivePage");
+    fAliplayer?.prepare();
     if (data.reportedStatus == 'BLURRED') {
     } else {
-      if (isActivePage) {
+      if (isActivePage && isStandBy) {
         print("=====prepare=====");
-        fAliplayer?.prepare();
+
         fAliplayer?.play();
       }
     }
@@ -909,7 +919,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   }
 
   Future<VideoIndicator> navigateTo(VideoNotifier notifier, int changevalue, int index) async {
-    return await Navigator.of(context, rootNavigator: true).push(
+    final navigator = Navigator.of(context, rootNavigator: true);
+    return await navigator.push(
       CupertinoPageRoute(
           builder: (_) => VideoFullLandingscreenPage(
               enableWakelock: true,
@@ -1078,6 +1089,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                             _showLoading = false;
                           });
                           if (info.visibleFraction >= 0.8) {
+                            _videoDuration = 0;
                             setState(() {
                               isPlayAds = false;
                             });
@@ -1210,6 +1222,9 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                 final latIndexList = notifier.vidData?.indexWhere((element) => element.postID == _lastCurPostId);
 
                                 if (_lastCurPostId != _curPostId) {
+                                  setState(() {
+                                    _currentPosition = 0;
+                                  });
                                   Future.delayed(const Duration(milliseconds: 400), () {
                                     try {
                                       if (_curIdx != -1) {
@@ -1410,6 +1425,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                     ],
                                   ), // Text("${postIdVisibility}"),
                                   tenPx,
+                                  // Text("${postIdVisibility != vidData.postID}"),
                                   globalInternetConnection
                                       ? vidData.reportedStatus == 'BLURRED'
                                           ? blurContentWidget(context, vidData)
@@ -1612,6 +1628,10 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                                     "=============== pause 4".logger();
                                                     context.handleActionIsGuest(() async {
                                                       vidData.fAliplayer?.pause();
+                                                      fAliplayer!.pause();
+                                                      setState(() {
+                                                        isPause = !isPause;
+                                                      });
                                                       await ShowBottomSheet.onBuyContent(context, data: vidData, fAliplayer: vidData.fAliplayer);
                                                       // fAliplayer?.play();
                                                     });
@@ -1723,17 +1743,17 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                           ),
                                         )
                                       : Container(),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 4.0),
-                                    child: Text(
-                                      "${System().readTimestamp(
-                                        DateTime.parse(System().dateTimeRemoveT(vidData.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
-                                        context,
-                                        fullCaption: true,
-                                      )}",
-                                      style: TextStyle(fontSize: 12, color: kHyppeBurem),
-                                    ),
-                                  ),
+                                  // Padding(
+                                  //   padding: EdgeInsets.symmetric(vertical: 4.0),
+                                  //   child: Text(
+                                  //     "${System().readTimestamp(
+                                  //       DateTime.parse(System().dateTimeRemoveT(vidData.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+                                  //       context,
+                                  //       fullCaption: true,
+                                  //     )}",
+                                  //     style: TextStyle(fontSize: 12, color: kHyppeBurem),
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                             ),
@@ -1922,6 +1942,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
         orientation: Orientation.portrait,
       );
     }
+
     return GestureDetector(
       onTap: () async {
         if (isPlay) print('page fullscreen $isPause $isPlay');
@@ -1981,6 +2002,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
               vidNotifier.vidData?[vidNotifier.currentIndex] = temp1 ?? ContentData();
             });
           }
+          print(value.seekValue);
+          print(value.positionText);
 
           if (mounted) {
             setState(() {
@@ -2000,7 +2023,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
             isPlay = !_showTipsWidget;
           }
 
-          fAliplayer?.play();
+          fAliplayer?.pause();
+          fAliplayer?.seekTo(_currentPosition, 1);
 
           // int changevalue;
           // changevalue = _currentPosition + 1000;
@@ -2039,7 +2063,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                   y: 0,
                   height: MediaQuery.of(context).size.width,
                   width: MediaQuery.of(context).size.width,
-                  aliPlayerViewType: AliPlayerViewTypeForAndroid.textureview,
+                  // aliPlayerViewType: AliPlayerViewTypeForAndroid.textureview,
                 ),
                 // if (isloading)
                 //   Container(

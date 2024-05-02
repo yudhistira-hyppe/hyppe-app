@@ -458,9 +458,10 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
               }
 
               widget.data.isLoading = true;
-              Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
-
-              SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
+                SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+              });
             }
           },
           child: notifier.loadVideo
@@ -732,6 +733,12 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                       onTap: () {
                         onTapCtrl = true;
                         setState(() {});
+                      },
+                      onDoubleTap: () {
+                        onTapCtrl = true;
+                        setState(() {});
+                        final likeNotifier = context.read<LikeNotifier>();
+                        likeNotifier.likePost(context, widget.data);
                       },
                       child: Stack(
                         children: [
@@ -1734,11 +1741,11 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
               : Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _buildSkipPrev(iconColor, barHeight),
-                    _buildSkipBack(iconColor, barHeight),
+                    // _buildSkipPrev(iconColor, barHeight),
+                    // _buildSkipBack(iconColor, barHeight),
                     _buildPlayPause(iconColor, barHeight),
-                    _buildSkipForward(iconColor, barHeight),
-                    _buildSkipNext(iconColor, barHeight),
+                    // _buildSkipForward(iconColor, barHeight),
+                    // _buildSkipNext(iconColor, barHeight),
                   ],
                 ),
         ),

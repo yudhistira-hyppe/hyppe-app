@@ -29,22 +29,16 @@ class BuildTopView extends StatefulWidget {
   final bool isOther;
   // final StoryController? storyController;
 
-  const BuildTopView({
-    Key? key,
-    this.data,
-    required this.when,
-    this.onDetail = true,
-    this.fromProfile = false,
-    this.isOther = false
-    // this.storyController,
-  }) : super(key: key);
+  const BuildTopView({Key? key, this.data, required this.when, this.onDetail = true, this.fromProfile = false, this.isOther = false
+      // this.storyController,
+      })
+      : super(key: key);
 
   @override
   State<BuildTopView> createState() => _BuildTopViewState();
 }
 
 class _BuildTopViewState extends State<BuildTopView> {
-
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'BuildTopView');
@@ -87,6 +81,7 @@ class _BuildTopViewState extends State<BuildTopView> {
                               "${!notifier.isUserLoggedIn(widget.data?.email) ? widget.data?.avatar?.mediaEndpoint : valueNotifier?.avatar?.mediaEndpoint ?? ''}",
                             ),
                             badge: widget.data?.urluserBadge,
+                            hideCreated: false,
                             // onTapOnProfileImage: () => System().navigateToProfileScreen(context, null, storyData: data, userIdStory: userID),
                           );
                         },
@@ -98,15 +93,10 @@ class _BuildTopViewState extends State<BuildTopView> {
                 widget.data?.email == SharedPreference().readStorage(SpKeys.email)
                     ? GestureDetector(
                         onTap: () {
-                          context.handleActionIsGuest(() async  {
-                            ShowBottomSheet().onShowOptionContent(
-                              context,
-                              contentData: widget.data!,
-                              captionTitle: hyppeStory,
-                              onDetail: widget.onDetail,
-                              screen: Routes.showStories
-                              // storyController: widget.storyController,
-                            );
+                          context.handleActionIsGuest(() async {
+                            ShowBottomSheet().onShowOptionContent(context, contentData: widget.data!, captionTitle: hyppeStory, onDetail: widget.onDetail, screen: Routes.showStories
+                                // storyController: widget.storyController,
+                                );
                           });
                           // widget.storyController?.pause();
                         },

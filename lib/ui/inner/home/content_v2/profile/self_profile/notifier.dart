@@ -280,9 +280,9 @@ class SelfProfileNotifier with ChangeNotifier {
     diaryContentsQuery.featureType = FeatureType.diary;
     vidContentsQuery.featureType = FeatureType.vid;
 
-    picContentsQuery.limit = 12;
-    diaryContentsQuery.limit = 12;
-    vidContentsQuery.limit = 12;
+    // picContentsQuery.limit = 12;
+    // diaryContentsQuery.limit = 12;
+    // vidContentsQuery.limit = 12;
 
     picContentsQuery.searchText = SharedPreference().readStorage(SpKeys.email);
     diaryContentsQuery.searchText = SharedPreference().readStorage(SpKeys.email);

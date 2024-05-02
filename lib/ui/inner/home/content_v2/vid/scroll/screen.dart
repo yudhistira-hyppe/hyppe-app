@@ -74,6 +74,7 @@ class ScrollVid extends StatefulWidget {
 }
 
 class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
+  final ItemScrollController itemScrollController = ItemScrollController();
   FlutterAliplayer? fAliplayer;
   LocalizationModelV2? lang;
   ContentData? dataSelected;
@@ -150,6 +151,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
     vidData = widget.arguments?.vidData;
     indexVid = widget.arguments!.page ?? 0;
     notifier.vidData = widget.arguments?.vidData;
+    notifier.isLoadingLoadmore = false;
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (fAliplayer == null && fAliplayer?.getPlayerName().toString() != 'VideoProfileScroll') {
@@ -157,7 +159,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
         initAlipayer();
       }
       print("============== widget argument ${widget.arguments!.vidData}");
-      notifier.itemScrollController.jumpTo(index: widget.arguments!.page!);
+      itemScrollController.jumpTo(index: widget.arguments!.page!);
       // notifier.checkConnection();
     });
     var index = 0;
@@ -165,7 +167,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
     itemPositionsListener.itemPositions.addListener(() async {
       index = itemPositionsListener.itemPositions.value.first.index;
       if (lastIndex != index) {
-        if (index == vidData!.length - 2) {
+        if (index >= vidData!.length - 2) {
           bool connect = await System().checkConnections();
           if (connect) {
             print("ini reload harusnya");
@@ -732,12 +734,13 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
   }
 
   Future<VideoIndicator> navigateTo(List<ContentData>? vidData, int changevalue, int index) async {
-    return await Navigator.of(context, rootNavigator: true).push(
+    final navigator = Navigator.of(context, rootNavigator: true);
+    return await navigator.push(
       CupertinoPageRoute(
         builder: (_) => VideoFullProfilescreenPage(
             vidData: vidData,
             enableWakelock: true,
-            pageSrc: widget.arguments?.pageSrc??PageSrc.selfProfile,
+            pageSrc: widget.arguments?.pageSrc ?? PageSrc.selfProfile,
             thumbnail: (dataSelected?.isApsara ?? false) ? (dataSelected?.mediaThumbEndPoint ?? '') : '${dataSelected?.fullThumbPath}',
             onClose: () {
               setState(() {
@@ -836,7 +839,8 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                 setState(() {
                                   isloading = true;
                                 });
-                                await vidNotifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                                await vidNotifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '', postId: widget.arguments?.postId);
+                                // await vidNotifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
                                 setState(() {
                                   vidData = vidNotifier.vidData;
                                 });
@@ -856,7 +860,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                 return false;
                               },
                               child: ScrollablePositionedList.builder(
-                                itemScrollController: vidNotifier.itemScrollController,
+                                itemScrollController: itemScrollController,
                                 itemPositionsListener: itemPositionsListener,
                                 scrollOffsetController: scrollOffsetController,
                                 physics: const AlwaysScrollableScrollPhysics(),
@@ -1064,7 +1068,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                         } catch (e) {
                           e.logger();
                         }
-                        // System().increaseViewCount2(context, vidData);
+                        // System().increaseViewCount2(context, vidData![index]);
                       });
                       if (vidData?[index].certified ?? false) {
                         System().block(context);
@@ -1082,10 +1086,16 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                 onTap: () {
                                   setState(() {
                                     postIdVisibility = vidData?[index].postID ?? '';
-                                    fAliplayer?.stop();
-                                    fAliplayer?.clearScreen();
-                                    start(context, vidData?[index] ?? ContentData());
+                                    // fAliplayer?.stop();
+                                    // fAliplayer?.clearScreen();
+                                    // start(context, vidData?[index] ?? ContentData());
                                   });
+                                  fAliplayer?.stop();
+                                  fAliplayer?.clearScreen();
+                                  start(context, vidData?[index] ?? ContentData());
+
+                                  System().increaseViewCount2(context, vidData![index]);
+
                                   var vidNotifier = context.read<PreviewVidNotifier>();
                                   double position = 0.0;
                                   for (var i = 0; i < index; i++) {
@@ -1114,10 +1124,19 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                         withMargin: true,
                                       ),
                                     ),
+
+                                    // Positioned(
+                                    //   bottom: 20,
+                                    //   child: SizedBox(
+                                    //       // color: Colors.red,
+                                    //       width: MediaQuery.of(context).size.width,
+                                    //       // height: MediaQuery.of(context).size.height,
+                                    //       child: Offstage(offstage: _isLock, child: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, vidData?[index] ?? ContentData()))),
+                                    // ),
                                     //Show Button Play
                                     if (dataSelected != vidData?[index])
-                                    Center(
-                                        child: Align(
+                                      Center(
+                                          child: Align(
                                         alignment: Alignment.center,
                                         child: SizedBox(
                                           height: MediaQuery.of(context).size.width * 9.0 / 16.0,
@@ -1285,6 +1304,10 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                               onTap: () async {
                                 await context.handleActionIsGuest(() async {
                                   vidData?[index].fAliplayer?.pause();
+                                  fAliplayer?.pause();
+                                  setState(() {
+                                    isPause = !isPause;
+                                  });
                                   await ShowBottomSheet.onBuyContent(context, data: vidData?[index] ?? ContentData(), fAliplayer: vidData?[index].fAliplayer);
                                 });
                               },
@@ -1382,7 +1405,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                             padding: const EdgeInsets.only(bottom: 6.0),
                             child: CustomNewDescContent(
                               // desc: "${vidData?.description}",
-                              email: vidData?[index].email ?? '',
+                              email: vidData?[index].comment?[indexComment].sender ?? '',
                               username: vidData?[index].comment?[indexComment].userComment?.username ?? '',
                               desc: vidData?[index].comment?[indexComment].txtMessages ?? '',
                               trimLines: 2,
@@ -1398,17 +1421,17 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                       ),
                     )
                   : Container(),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 4.0),
-                child: Text(
-                  "${System().readTimestamp(
-                    DateTime.parse(System().dateTimeRemoveT(vidData?[index].createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
-                    context,
-                    fullCaption: true,
-                  )}",
-                  style: TextStyle(fontSize: 12, color: kHyppeBurem),
-                ),
-              ),
+              // Padding(
+              //   padding: EdgeInsets.symmetric(vertical: 4.0),
+              //   child: Text(
+              //     "${System().readTimestamp(
+              //       DateTime.parse(System().dateTimeRemoveT(vidData?[index].createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+              //       context,
+              //       fullCaption: true,
+              //     )}",
+              //     style: TextStyle(fontSize: 12, color: kHyppeBurem),
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -1489,7 +1512,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
             isPlay = !_showTipsWidget;
           }
 
-          if (_currentPosition > 0){
+          if (_currentPosition > 0) {
             fAliplayer?.seekTo(_currentPosition.ceil(), FlutterAvpdef.ACCURATE);
           }
           fAliplayer?.play();
@@ -1525,7 +1548,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                   y: 0,
                   height: MediaQuery.of(context).size.width,
                   width: MediaQuery.of(context).size.width,
-                  aliPlayerViewType: AliPlayerViewTypeForAndroid.textureview,
+                  // aliPlayerViewType: AliPlayerViewTypeForAndroid.textureview,
                 ),
                 if (!isPlay)
                   Container(
@@ -1581,51 +1604,52 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
   Widget _buildContentWidget(BuildContext context, ContentData data) {
     return isPause
         ? AnimatedOpacity(
-            opacity: onTapCtrl || isPause ? 1.0 : 0.0,
+            // opacity: onTapCtrl || isPause ? 1.0 : 0.0,
+            opacity: 1.0,
             duration: const Duration(milliseconds: 300),
             onEnd: _onPlayerHide,
             child: SafeArea(
-                child: _currentPosition <= 0
-                    ? Container()
-                    : Padding(
-                        padding: const EdgeInsets.all(18.0),
-                        child: Stack(
-                          // mainAxisAlignment: MainAxisAlignment.end,
-                          // crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            sixPx,
-                            if (onTapCtrl || isPause)
-                              if (data.tagPeople?.isNotEmpty ?? false)
-                                Align(
-                                  alignment: Alignment.bottomLeft,
-                                  child: Container(
-                                    margin: const EdgeInsets.only(right: 12.0),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          fAliplayer?.pause();
-                                          context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID, title: lang!.inThisVideo, fAliplayer: fAliplayer);
-                                        },
-                                        child: const CustomIconWidget(
-                                          iconData: '${AssetPath.vectorPath}tag-people-light.svg',
-                                          defaultColor: false,
-                                          height: 18,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                            Align(
-                              alignment: Alignment.bottomRight,
-                              child: Text(
-                                System.getTimeformatByMs(isActiveAds ? _currentAdsPositionText : _currentPositionText),
-                                style: const TextStyle(color: Colors.white, fontSize: 11),
+                child: Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: Stack(
+                // mainAxisAlignment: MainAxisAlignment.end,
+                // crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  sixPx,
+                  if (onTapCtrl || isPause)
+                    if (data.tagPeople?.isNotEmpty ?? false)
+                      Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 12.0),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                fAliplayer?.pause();
+                                context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID, title: lang!.inThisVideo, fAliplayer: fAliplayer);
+                              },
+                              child: const CustomIconWidget(
+                                iconData: '${AssetPath.vectorPath}tag-people-light.svg',
+                                defaultColor: false,
+                                height: 18,
                               ),
                             ),
-                          ],
+                          ),
                         ),
-                      )))
+                      ),
+                  _currentPosition <= 0
+                      ? Container()
+                      : Align(
+                          alignment: Alignment.bottomRight,
+                          child: Text(
+                            System.getTimeformatByMs(isActiveAds ? _currentAdsPositionText : _currentPositionText),
+                            style: const TextStyle(color: Colors.white, fontSize: 11),
+                          ),
+                        ),
+                ],
+              ),
+            )))
         : AnimatedOpacity(
             opacity: onTapCtrl || isPause ? 0.0 : 1.0,
             duration: const Duration(milliseconds: 300),

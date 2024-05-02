@@ -39,6 +39,7 @@ class PeopleFrameStory extends StatelessWidget {
         notifier.storiesGroups?[index].story?.forEach((element) {
           print("ini story hahahahhahahahahahhahahahahahhah");
           isView = element.isViewed ?? false;
+          print('story grouped ${element.username} ${element.isViewed}');
           print("ini story $isView");
         });
       } else {

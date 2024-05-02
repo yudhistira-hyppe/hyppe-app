@@ -74,6 +74,7 @@ class ScrollPic extends StatefulWidget {
 }
 
 class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
+  final ItemScrollController itemScrollController = ItemScrollController();
   FlutterAliplayer? fAliplayer;
   List<ContentData>? pics = [];
   int pageIndex = 0;
@@ -137,6 +138,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     pics = widget.arguments?.picData;
     pageIndex = widget.arguments!.page ?? 0;
     notifier.pics = widget.arguments?.picData;
+    notifier.isLoadingLoadmore = false;
     print("${pics}");
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -156,23 +158,26 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
-      notifier.itemScrollController.jumpTo(index: widget.arguments?.page ?? 0);
+      print("====length data = ${pics?.length} -- ${widget.arguments?.page}");
+      if ((pics?.length ?? 0) >= (widget.arguments?.page ?? 0)) {
+        itemScrollController.jumpTo(index: widget.arguments?.page ?? 0);
+      }
       // scrollIndex = widget.arguments?.page ?? 0;
       // _initListener(notifier);
     });
 
-    var index = 0;
-    var lastIndex = 0;
+    var index = widget.arguments?.page ?? 0;
+    var lastIndex = -1;
     pageSrc = widget.arguments?.pageSrc ?? PageSrc.otherProfile;
 
     itemPositionsListener.itemPositions.addListener(() async {
-
       index = itemPositionsListener.itemPositions.value.first.index;
-
-      if (lastIndex != index) {
+      print("index====$lastIndex===$index == ${pics!.length}-- ${notifier.isLoadingLoadmore}");
+      print("index====${lastIndex != index}===${index == (pics!.length - 1)}");
+      if (lastIndex != index || index == (pics!.length - 1)) {
         bool connect = await System().checkConnections();
 
-        if (index == pics!.length - 2) {
+        if (index >= pics!.length - 2) {
           if (connect) {
             if (!notifier.isLoadingLoadmore) {
               await notifier.loadMore(context, _scrollController, pageSrc, widget.arguments?.key ?? '');
@@ -362,6 +367,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
 
     fAliplayer?.stop();
+    MyAudioService.instance.stop();
     dataSelected = data;
 
     isPlay = false;
@@ -562,7 +568,9 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     }
     isInPage = true;
     fAliplayer?.play();
-    MyAudioService.instance.playagain(notifier.isMute);
+    if (playIndex == _curIdx) {
+      MyAudioService.instance.playagain(notifier.isMute);
+    }
     isActivePage = true;
     // System().disposeBlock();
 
@@ -607,7 +615,10 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
         if ((Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds) && isInPage) {
           print("==== hahaha aha ah ah ah ah ah ah  resume $isInPage");
           fAliplayer?.play();
-          MyAudioService.instance.playagain(false);
+          if (playIndex == _curIdx) {
+            final notifier = Provider.of<ScrollPicNotifier>(context, listen: false);
+            MyAudioService.instance.playagain(notifier.isMute);
+          }
         }
         break;
       case AppLifecycleState.paused:
@@ -693,6 +704,10 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                           picNot.followUser(context, pics?[pageIndex] ?? ContentData(),
                                               isUnFollow: pics?[pageIndex].following, isloading: pics?[pageIndex].insight!.isloadingFollow ?? false);
                                         }
+                                      }).then((value) {
+                                        if (value) {
+                                          MyAudioService.instance.playagain(notifier.isMute);
+                                        }
                                       });
                                     },
                                     child: pics?[pageIndex].insight?.isloadingFollow ?? false
@@ -735,11 +750,12 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                           : RefreshIndicator(
                               onRefresh: () async {
                                 bool connect = await System().checkConnections();
+
                                 if (connect) {
                                   setState(() {
                                     isloading = true;
                                   });
-                                  await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                                  await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '', postId: widget.arguments?.postId);
                                   setState(() {
                                     pics = notifier.pics;
                                   });
@@ -755,15 +771,12 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                               },
                               child: NotificationListener<ScrollNotification>(
                                 onNotification: (scrollNotification) {
-                                  print("scrollNotification ===== $scrollNotification");
                                   // scrollNotification.disallowIndicator();
                                   if (scrollNotification is ScrollStartNotification) {
-                                    print("=======start=======");
                                     // _onStartScroll(scrollNotification.metrics);
                                   } else if (scrollNotification is ScrollUpdateNotification) {
                                     // _onUpdateScroll(scrollNotification.metrics);
                                   } else if (scrollNotification is ScrollEndNotification) {
-                                    print("=======end=======");
                                     // _onEndScroll(scrollNotification.metrics);
                                   }
 
@@ -771,7 +784,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                 },
                                 child: ScrollablePositionedList.builder(
                                   scrollDirection: Axis.vertical,
-                                  itemScrollController: notifier.itemScrollController,
+                                  itemScrollController: itemScrollController,
                                   itemPositionsListener: itemPositionsListener,
                                   scrollOffsetController: scrollOffsetController,
                                   scrollOffsetListener: scrollOffsetListener,
@@ -890,6 +903,10 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                               if (pics?[index].insight?.isloadingFollow != true) {
                                 picNot.followUser(context, pics?[index] ?? ContentData(), isUnFollow: pics?[index].following, isloading: pics?[index].insight!.isloadingFollow ?? false);
                               }
+                            }).then((value) {
+                              if (value) {
+                                MyAudioService.instance.playagain(notifier.isMute);
+                              }
                             });
                           },
                           child: pics?[index].insight?.isloadingFollow ?? false
@@ -956,6 +973,10 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                             },
                             fAliplayer: fAliplayer,
                           );
+                        }
+                      }).then((value) {
+                        if (value) {
+                          MyAudioService.instance.playagain(notifier.isMute);
                         }
                       });
                       // fAliplayer?.pause();
@@ -1100,7 +1121,12 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                     if (res != null || res == null) {
                                       fAliplayer?.play();
                                       fAliplayer?.setMuted(notifier.isMute);
-                                      notifier.itemScrollController.jumpTo(index: notifier.currentIndex);
+                                      if (playIndex == _curIdx && pics![index].music != null) {
+                                        MyAudioService.instance.playagain(notifier.isMute);
+                                      } else {
+                                        MyAudioService.instance.stop();
+                                      }
+                                      itemScrollController.jumpTo(index: notifier.currentIndex);
                                     }
                                   }
                                 },
@@ -1109,7 +1135,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                   if (pics?[index] != null) {
                                     _likeNotifier.likePost(context, pics?[index] ?? ContentData()).then((value) {
                                       List<ContentData>? pic = context.read<PreviewPicNotifier>().pic;
-                                      if (pic?.isNotEmpty??false){
+                                      if (pic?.isNotEmpty ?? false) {
                                         int idx = pic!.indexWhere((e) => e.postID == value['_id']);
                                         pic[idx].insight?.isPostLiked = value['isPostLiked'];
                                         pic[idx].insight?.likes = value['likes'];
@@ -1360,7 +1386,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                       if (pics?[index] != null) {
                                         likeNotifier.likePost(context, pics![index]).then((value) {
                                           List<ContentData>? pic = context.read<PreviewPicNotifier>().pic;
-                                          if (pic?.isNotEmpty??false){
+                                          if (pic?.isNotEmpty ?? false) {
                                             int idx = pic!.indexWhere((e) => e.postID == value['_id']);
                                             pic[idx].insight?.isPostLiked = value['isPostLiked'];
                                             pic[idx].insight?.likes = value['likes'];
@@ -1416,7 +1442,13 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                               onTap: () async {
                                 await context.handleActionIsGuest(() async {
                                   fAliplayer?.pause();
+                                  MyAudioService.instance.pause();
+                                  notifier.setIsSound(true);
                                   await ShowBottomSheet.onBuyContent(context, data: pics?[index], fAliplayer: fAliplayer);
+                                }).then((value) {
+                                  if (value) {
+                                    MyAudioService.instance.playagain(notifier.isMute);
+                                  }
                                 });
                               },
                               child: const Align(
@@ -1529,17 +1561,17 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                       ),
                     )
                   : Container(),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 4.0),
-                child: Text(
-                  "${System().readTimestamp(
-                    DateTime.parse(System().dateTimeRemoveT(pics?[index].createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
-                    context,
-                    fullCaption: true,
-                  )}",
-                  style: TextStyle(fontSize: 12, color: kHyppeBurem),
-                ),
-              ),
+              // Padding(
+              //   padding: EdgeInsets.symmetric(vertical: 4.0),
+              //   child: Text(
+              //     "${System().readTimestamp(
+              //       DateTime.parse(System().dateTimeRemoveT(pics?[index].createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+              //       context,
+              //       fullCaption: true,
+              //     )}",
+              //     style: TextStyle(fontSize: 12, color: kHyppeBurem),
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -1582,10 +1614,13 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
               alignment: Alignment.bottomRight,
               child: GestureDetector(
                 onTap: () {
-                  setState(() {
-                    notifier.isMute = !notifier.isMute;
-                  });
-                  MyAudioService.instance.playagain(notifier.isMute);
+                  notifier.setIsSound(!notifier.isMute);
+                  if (playIndex == _curIdx) {
+                    MyAudioService.instance.playagain(notifier.isMute);
+                  } else {
+                    start(data, notifier);
+                  }
+
                   fAliplayer?.setMuted(notifier.isMute);
                 },
                 child: Padding(

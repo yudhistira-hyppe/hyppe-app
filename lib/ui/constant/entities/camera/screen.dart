@@ -34,16 +34,11 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver, Af
   bool isloading = false;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void afterFirstLayout(BuildContext context) async {
     isloading = true;
     notifier = Provider.of<CameraNotifier>(context, listen: false);
-    await notifier.initCamera(context, mounted, backCamera: widget.backCamera).then((value){
-      Future.delayed(const Duration(milliseconds: 100), (){
+    await notifier.initCamera(context, mounted, backCamera: widget.backCamera).then((value) async {
+      Future.delayed(const Duration(milliseconds: 400), () {
         setState(() {
           isloading = false;
         });
@@ -92,12 +87,10 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver, Af
               child: CustomLoading(),
             ))
         : Stack(
-      children: [
-        GestureDetector(
-            onDoubleTap: widget.onDoubleTap,
-            child: const CameraView()),
-        ...widget.additionalViews,
-      ],
-    );
+            children: [
+              GestureDetector(onDoubleTap: widget.onDoubleTap, child: const CameraView()),
+              ...widget.additionalViews,
+            ],
+          );
   }
 }

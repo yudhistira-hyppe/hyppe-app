@@ -52,6 +52,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
   bool isloading = false;
   bool isPrepare = false;
   bool isPause = false;
+  bool isActivePage = true;
   int? bottomIndex;
   List<Widget>? mFramePage;
   // ModeTypeAliPLayer? _playMode;
@@ -199,7 +200,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
 
       WidgetsBinding.instance.addObserver(this);
       bottomIndex = 0;
-      fAliplayer?.setAutoPlay(true);
+      fAliplayer?.setAutoPlay(false);
       // _playMode = ModeTypeAliPLayer.auth;
       isPlay = false;
       isPrepare = false;
@@ -529,6 +530,8 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
 
   @override
   void dispose() {
+    isActivePage = false;
+
     globalAliPlayer = null;
     WakelockPlus.disable();
     "================ disable wakelock 9".logger();
@@ -567,6 +570,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
   @override
   void didPopNext() {
     print("======= didPopNext dari story");
+    isActivePage = true;
     fAliplayer?.play();
     setState(() => isPause = false);
     // System().disposeBlock();
@@ -577,6 +581,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
   @override
   void didPushNext() {
     print("========= didPushNext dari story");
+    isActivePage = false;
     pause();
     super.didPushNext();
   }
@@ -649,7 +654,6 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
             // );
             return Stack(
               children: [
-                // Text("${_groupUserStories?[_curIdx].story?[_curChildIdx].music?.apsaraMusic != null || _groupUserStories?[_curIdx].story?[_curChildIdx].mediaType != 'image'}"),
                 // _groupUserStories?[_curIdx].story?[_curChildIdx].music?.apsaraMusic != null || _groupUserStories?[_curIdx].story?[_curChildIdx].mediaType != 'image'
                 //     ? AliPlayerView(
                 //         onCreated: onViewPlayerCreated,
@@ -663,6 +667,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                     child: Container(
                   color: Colors.black,
                 )),
+                // Positioned.fill(child: Text("${_groupUserStories?[_curIdx].story?[_curChildIdx].music?.apsaraMusic != null || _groupUserStories?[_curIdx].story?[_curChildIdx].mediaType != 'image'}")),
                 Builder(builder: (context) {
                   return !isOnPageTurning
                       // ? AliPlayerView(
@@ -773,7 +778,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
             padding: const EdgeInsets.only(left: 10.0, right: 10),
             child: Row(
               children: (_groupUserStories?[index].story ?? []).map((it) {
-                print('seconds: ${_animationController?.value}');
+                // print('seconds: ${_animationController?.value}');
                 return Expanded(
                   child: Container(
                     padding: EdgeInsets.only(top: 5, right: _groupUserStories![index].story!.last == it ? 0 : 4),
@@ -885,8 +890,18 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                     currentStory: _groupUserStories?[index].story?.indexOf(_groupUserStories![index].story?[_curChildIdx] ?? ContentData()),
                     animationController: emojiController,
                     currentIndex: _curChildIdx,
-                    pause: pause,
-                    play: play,
+                    selectedText: (p0) {
+                      // pause();
+                      if (p0){
+                        pause();
+                      }else{
+                        play();
+                      }
+                    },
+                    // pause: (){
+
+                    // },
+                    // play: play,
                     // play: play,
                   ),
                 ),
@@ -1083,7 +1098,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
 
     if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'video') {
       await getAuth(_groupUserStories?[_curIdx].story?[_curChildIdx].apsaraId ?? '');
-      print("startsttt==========");
+      // print("startsttt==========");
       // _isPause = false;
       // _isFirstRenderShow = false;
       if (mounted) {
@@ -1118,6 +1133,9 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       // };
       // fAliplayer?.setCacheConfig(map);
       fAliplayer?.prepare();
+      if (isActivePage) {
+        fAliplayer?.play();
+      }
     } else {
       print("animasi start");
       if (_groupUserStories?[_curIdx].story?[_curChildIdx].music?.apsaraMusic != null) {
@@ -1125,6 +1143,9 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
         print("================== gambar music ${_groupUserStories?[_curIdx].story?[_curChildIdx].music?.apsaraMusic}");
         await getAuth(_groupUserStories?[_curIdx].story?[_curChildIdx].music?.apsaraMusic ?? '');
         fAliplayer?.prepare();
+        if (isActivePage) {
+          fAliplayer?.play();
+        }
       } else {
         _animationController?.duration = const Duration(milliseconds: 8000);
         _animationController?.forward();

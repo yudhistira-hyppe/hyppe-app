@@ -47,7 +47,10 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
   Offset positionDxDy = const Offset(0, 0);
 
   List<ContentData>? get pic => _pic;
-
+  setIsSound(bool val){
+    isMute = val;
+    notifyListeners();
+  }
   set pic(List<ContentData>? val) {
     _pic = val;
     notifyListeners();

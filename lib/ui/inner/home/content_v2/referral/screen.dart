@@ -76,7 +76,11 @@ class _ReferralState extends State<Referral> {
               leading: CustomIconButtonWidget(
                 defaultColor: true,
                 iconData: "${AssetPath.vectorPath}back-arrow.svg",
-                onPressed: () => Routing().moveBack(),
+                onPressed: () {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Routing().moveBack();
+                  });
+                },
               ),
               titleSpacing: 0,
               title: CustomTextWidget(
@@ -160,54 +164,55 @@ class _ReferralState extends State<Referral> {
   }
 
   Widget textInputReff(LocalizationModelV2 lang) {
-    return SizedBox(
-      height: 30,
-      child: Showcase(
-        key: keyCode,
-        tooltipBackgroundColor: kHyppeTextLightPrimary,
-        overlayOpacity: 0,
-        targetPadding: const EdgeInsets.all(0),
-        tooltipPosition: TooltipPosition.top,
-        description: (mn?.tutorialData.isEmpty ?? [].isEmpty)
-            ? ''
-            : lang.localeDatetime == 'id'
-                ? mn?.tutorialData[indexCode].textID ?? ''
-                : mn?.tutorialData[indexCode].textEn ?? '',
-        descTextStyle: TextStyle(fontSize: 10, color: kHyppeNotConnect),
-        descriptionPadding: EdgeInsets.all(6),
-        textColor: Colors.white,
-        targetShapeBorder: const CircleBorder(),
-        positionYplus: 20,
-        onToolTipClick: () {
-          context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexCode].key ?? '');
-          mn?.tutorialData[indexCode].status = true;
-          ShowCaseWidget.of(myContext).next();
-        },
-        closeWidget: GestureDetector(
-          onTap: () {
-            context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexCode].key ?? '');
-            mn?.tutorialData[indexCode].status = true;
-            ShowCaseWidget.of(myContext).next();
-          },
-          child: const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: CustomIconWidget(
-              iconData: '${AssetPath.vectorPath}close.svg',
-              defaultColor: false,
-              height: 16,
-            ),
-          ),
-        ),
-        child: GestureDetector(
-          onTap: () {
-            Routing().move(Routes.insertReferral);
-          },
-          child: const Text(
-            'Masukkan Referral',
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppePrimary),
-          ),
-        ),
-      ),
-    );
+    return Container();
+    // return SizedBox(
+    //   height: 30,
+    //   child: Showcase(
+    //     key: keyCode,
+    //     tooltipBackgroundColor: kHyppeTextLightPrimary,
+    //     overlayOpacity: 0,
+    //     targetPadding: const EdgeInsets.all(0),
+    //     tooltipPosition: TooltipPosition.top,
+    //     description: (mn?.tutorialData.isEmpty ?? [].isEmpty)
+    //         ? ''
+    //         : lang.localeDatetime == 'id'
+    //             ? mn?.tutorialData[indexCode].textID ?? ''
+    //             : mn?.tutorialData[indexCode].textEn ?? '',
+    //     descTextStyle: TextStyle(fontSize: 10, color: kHyppeNotConnect),
+    //     descriptionPadding: EdgeInsets.all(6),
+    //     textColor: Colors.white,
+    //     targetShapeBorder: const CircleBorder(),
+    //     positionYplus: 20,
+    //     onToolTipClick: () {
+    //       context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexCode].key ?? '');
+    //       mn?.tutorialData[indexCode].status = true;
+    //       ShowCaseWidget.of(myContext).next();
+    //     },
+    //     closeWidget: GestureDetector(
+    //       onTap: () {
+    //         context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexCode].key ?? '');
+    //         mn?.tutorialData[indexCode].status = true;
+    //         ShowCaseWidget.of(myContext).next();
+    //       },
+    //       child: const Padding(
+    //         padding: EdgeInsets.all(8.0),
+    //         child: CustomIconWidget(
+    //           iconData: '${AssetPath.vectorPath}close.svg',
+    //           defaultColor: false,
+    //           height: 16,
+    //         ),
+    //       ),
+    //     ),
+    //     child: GestureDetector(
+    //       onTap: () {
+    //         Routing().move(Routes.insertReferral);
+    //       },
+    //       child: const Text(
+    //         'Masukkan Referral',
+    //         style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppePrimary),
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 }

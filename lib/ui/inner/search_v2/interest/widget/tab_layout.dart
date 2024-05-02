@@ -78,7 +78,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
 
   @override
   Widget build(BuildContext context) {
-    final listTab = [HyppeType.HyppePic, HyppeType.HyppeDiary, HyppeType.HyppeVid];
+    final listTab = [HyppeType.HyppePic, HyppeType.HyppeVid];
     return Consumer<SearchNotifier>(builder: (context, notifier, _) {
       final data = notifier.interestContents[widget.interest.id];
       print('size pic (${widget.interest.id}): ${data?.pict?.length}');

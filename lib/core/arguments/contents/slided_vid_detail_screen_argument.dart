@@ -13,6 +13,7 @@ class SlidedVidDetailScreenArgument extends ContentScreenArgument {
   final Widget? titleAppbar;
   final PageSrc? pageSrc;
   final String? key;
+  final String? postId;
   final ScrollController? scrollController;
   final double? heightBox;
   final double? heightTopProfile;
@@ -31,6 +32,7 @@ class SlidedVidDetailScreenArgument extends ContentScreenArgument {
     this.titleAppbar,
     this.pageSrc,
     this.key,
+    this.postId,
     this.scrollController,
     this.heightBox,
     this.heightTopProfile,

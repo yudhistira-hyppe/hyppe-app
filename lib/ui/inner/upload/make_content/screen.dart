@@ -2,6 +2,7 @@ import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/services/audio_service.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
@@ -9,6 +10,7 @@ import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/content/upload_content.dart';
 import 'package:hyppe/ui/inner/upload/make_content/content/upload_id_verification.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,11 +27,14 @@ class _MakeContentScreenState extends State<MakeContentScreen> with AfterFirstLa
   @override
   void afterFirstLayout(BuildContext context) {
     context.read<MakeContentNotifier>().onInitialUploadContent();
+    context.read<PreUploadContentNotifier>().certifiedTmp = false;
+    MyAudioService.instance.pause();
   }
 
   @override
   void initState() {
     isactivealiplayer = true;
+    MyAudioService.instance.stop();
     print('initState make content');
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     super.initState();
