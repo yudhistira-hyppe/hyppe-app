@@ -1127,5 +1127,6 @@
   "inThisDiary": "Dalam diary ini",
   "inThisVideo": "Dalam video ini",
   "titleLink": "Judul Link",
-  "addLink": "Tambahkan Link"
+  "addLink": "Tambahkan Link",
+  "deleteLink":"Hapus Link"
 }

@@ -132,8 +132,8 @@ class PreUploadContentNotifier with ChangeNotifier {
   dynamic _thumbNail;
   Music? _musicSelected;
 
-  String? urlLink;
-  String? judulLink;
+  String urlLink = '';
+  String judulLink = '';
 
   List<String> _interestData = [];
   List<Interest> _interest = [];
@@ -408,8 +408,8 @@ class PreUploadContentNotifier with ChangeNotifier {
   }
 
   void setDefaultExternalLink(BuildContext context) {
-    urlLink = null;
-    judulLink = null;
+    urlLink = '';
+    judulLink = '';
     notifyListeners();
   }
 
@@ -709,6 +709,8 @@ class PreUploadContentNotifier with ChangeNotifier {
         saleLike: _includeTotalLikes,
         saleView: _includeTotalViews,
         isShared: isShared,
+        urlLink: urlLink,
+        judulLink: judulLink,
         rotate: orientation ?? NativeDeviceOrientation.portraitUp,
         location: locationName == language.addLocation ? '' : locationName,
         stickers: previewContentNotifier.stickers,
@@ -760,6 +762,7 @@ class PreUploadContentNotifier with ChangeNotifier {
 
         if (value is dio.Response) {
           dio.Response res = value;
+          print('====data Json ${jsonEncode(res.data['data'])}');
           "return data ${jsonEncode(res.data['data'])}".loggerV2();
           ContentData uploadedData = ContentData.fromJson(res.data['data']);
           SharedPreference().removeValue(SpKeys.uploadContent);
@@ -822,6 +825,8 @@ class PreUploadContentNotifier with ChangeNotifier {
       saleLike: _includeTotalLikes,
       saleView: _includeTotalViews,
       isShared: isShared,
+      urlLink: urlLink,
+      judulLink: judulLink,
       location: locationName == language.addLocation ? '' : locationName,
     );
     final fetch = notifier.postsFetch;

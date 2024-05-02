@@ -263,6 +263,8 @@ class PostsBloc {
     String? idMusic,
     int? width,
     int? height,
+    String? urlLink,
+    String? judulLink,
     List<StickerModel>? stickers,
   }) async {
     final formData = FormData();
@@ -290,6 +292,8 @@ class PostsBloc {
     formData.fields.add(MapEntry('visibility', visibility));
     formData.fields.add(MapEntry('allowComments', allowComment.toString()));
     formData.fields.add(MapEntry('certified', certified.toString()));
+    formData.fields.add(MapEntry('urlLink', urlLink.toString()));
+    formData.fields.add(MapEntry('judulLink', judulLink.toString()));
     if (idMusic != null) {
       formData.fields.add(MapEntry('musicId', idMusic));
     }
@@ -420,6 +424,8 @@ class PostsBloc {
       String? saleAmount,
       bool? saleLike,
       bool? isShared,
+      String? urlLink,
+      String? judulLink,
       bool? saleView}) async {
     final email = SharedPreference().readStorage(SpKeys.email);
 
@@ -439,6 +445,8 @@ class PostsBloc {
     formData.fields.add(MapEntry('saleLike', saleLike != null ? saleLike.toString() : "false"));
     formData.fields.add(MapEntry('saleView', saleView != null ? saleView.toString() : "false"));
     formData.fields.add(MapEntry('isShared', isShared.toString()));
+    formData.fields.add(MapEntry('urlLink', urlLink.toString()));
+    formData.fields.add(MapEntry('judulLink', judulLink.toString()));
 
     print('hahahahahahahaha');
     print(type);

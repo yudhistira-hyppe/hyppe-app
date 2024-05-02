@@ -159,6 +159,7 @@ class LocalizationModelV2 {
   String? afterThatThis;
   String? willBePermanentlyDeleted;
   String? delete;
+  String? deleteLink;
   String? dontDelete;
   String? yourContentHadSuccessfullyDeleted;
   String? views;
@@ -1288,6 +1289,7 @@ class LocalizationModelV2 {
     this.afterThatThis,
     this.willBePermanentlyDeleted,
     this.delete,
+    this.deleteLink,
     this.dontDelete,
     this.yourContentHadSuccessfullyDeleted,
     this.views,
@@ -2418,6 +2420,7 @@ class LocalizationModelV2 {
     afterThatThis = json['afterThatThis'];
     willBePermanentlyDeleted = json['willBePermanentlyDeleted'];
     delete = json['delete'];
+    deleteLink = json['deleteLink'];
     dontDelete = json['dontDelete'];
     yourContentHadSuccessfullyDeleted = json['yourContentHadSuccessfullyDeleted'];
     views = json['views'];

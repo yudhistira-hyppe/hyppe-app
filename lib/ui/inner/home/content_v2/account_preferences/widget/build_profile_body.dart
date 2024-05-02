@@ -96,12 +96,34 @@ class BuildProfileBody extends StatelessWidget {
                 hintText: "Bio",
                 inputFormatter: [LengthLimitingTextInputFormatter(150)],
                 maxLength: 150,
-                inputAreaHeight: 100 * SizeConfig.scaleDiagonal,
+                inputAreaHeight: 72 * SizeConfig.scaleDiagonal,
                 minLines: 3,
                 textInput: TextInputType.multiline,
                 keyboardNewline: true,
               ),
+              if (notifier.titleLinkController.text.isEmpty)
+                TextInputAccountPreferences(
+                  controller: notifier.urlLinkController,
+                  labelText: "Link",
+                  hintText: 'Link',
+                  readOnly: true,
+                  onTap: () {
+
+                  },
+                )
+              else 
+                TextInputAccountPreferences(
+                  controller: notifier.titleLinkController,
+                  labelText: "Link",
+                  hintText: 'Link',
+                  readOnly: true,
+                  onTap: () {
+                    
+                  },
+                ),
               const ProofPicture(),
+              sixtyFourPx,
+              sixtyFourPx,
             ],
           ),
         ),

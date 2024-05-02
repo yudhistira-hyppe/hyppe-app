@@ -52,6 +52,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
   final TextEditingController genderController = TextEditingController();
   final TextEditingController dobController = TextEditingController();
   final TextEditingController mobileController = TextEditingController();
+  final TextEditingController urlLinkController = TextEditingController();
+  final TextEditingController titleLinkController = TextEditingController();
   String _progress = "0%";
   bool _hold = false;
   int _initialIndex = 0;

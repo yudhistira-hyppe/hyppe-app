@@ -1126,5 +1126,6 @@
   "inThisDiary": "In this diary",
   "inThisVideo": "In this video",
   "titleLink": "Title Link",
-  "addLink": "Add Link"
+  "addLink": "Add Link",
+  "deleteLink":"Delete Link"
 }

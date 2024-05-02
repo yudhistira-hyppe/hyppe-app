@@ -111,6 +111,7 @@ import 'package:hyppe/ui/inner/message_v2/message_detail/screen.dart' as message
 import 'package:hyppe/ui/inner/message_v2/message_detail/widget/image_preview_view.dart';
 import 'package:hyppe/ui/inner/message_v2/screen.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more/screen.dart';
+import 'package:hyppe/ui/inner/upload/link/screen.dart';
 import 'package:hyppe/ui/inner/upload/make_content/screen.dart';
 import 'package:hyppe/ui/inner/upload/payment/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/boost/screen.dart';
@@ -484,6 +485,9 @@ class Generate {
       // return MaterialPageRoute(builder: (_) => const VerificationPinPage(), settings: settings);
       case Routes.finishTrxPage:
         return MaterialPageRoute(builder: (_) => const FinishTrxPage(), settings: settings);
+      
+      case Routes.addlink:
+        return MaterialPageRoute(builder: (_) => const AddLinkPage(), settings: settings);
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }
