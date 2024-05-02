@@ -31,6 +31,7 @@ class LocalizationModelV2 {
   String? didntReceiveTheCode;
   String? pleaseWaitFor;
   String? verify;
+  String? verifyNow;
   String? verified;
   String? resendNewCode;
   String? yourIdentityHasBeenVerified;
@@ -180,6 +181,8 @@ class LocalizationModelV2 {
   String? music;
   String? searchMusic;
   String? addMusic;
+  String? titleLink;
+  String? addLink;
   String? tapOnTrackToTrim;
   String? loading;
   String? popular;
@@ -537,6 +540,7 @@ class LocalizationModelV2 {
   String? pleaseVerifyYourIdToUseHyppeFeatures;
   String? verifyYourAccount;
   String? unfortunately;
+  String? verifyId;
   String? needVerifyId;
   String? needVerifyIdDescriptions;
   String? needVerifyIdDescriptions2;
@@ -1156,6 +1160,7 @@ class LocalizationModelV2 {
     this.didntReceiveTheCode,
     this.pleaseWaitFor,
     this.verify,
+    this.verifyNow,
     this.verified,
     this.resendNewCode,
     this.yourIdentityHasBeenVerified,
@@ -1305,6 +1310,8 @@ class LocalizationModelV2 {
     this.music,
     this.searchMusic,
     this.addMusic,
+    this.titleLink,
+    this.addLink,
     this.tapOnTrackToTrim,
     this.loading,
     this.popular,
@@ -1663,6 +1670,7 @@ class LocalizationModelV2 {
     this.verifyYourAccount,
     this.unfortunately,
     this.needVerifyId,
+    this.verifyId,
     this.needVerifyIdDescriptions,
     this.needVerifyIdDescriptions2,
     this.confirm,
@@ -2282,6 +2290,7 @@ class LocalizationModelV2 {
     didntReceiveTheCode = json['didntReceiveTheCode'];
     pleaseWaitFor = json['pleaseWaitFor'];
     verify = json['verify'];
+    verifyNow = json['verifyNow'];
     verified = json['verified'];
     resendNewCode = json['resendNewCode'];
     yourIdentityHasBeenVerified = json['yourIdentityHasBeenVerified'];
@@ -2431,6 +2440,8 @@ class LocalizationModelV2 {
     music = json['music'];
     searchMusic = json['search_music'];
     addMusic = json['add_music'];
+    titleLink = json['titleLink'];
+    addLink = json['addLink'];
     tapOnTrackToTrim = json['tap_on_track_to_trim'];
     loading = json['loading'];
     popular = json['popular'];
@@ -2789,6 +2800,7 @@ class LocalizationModelV2 {
     pleaseVerifyYourIdToUseHyppeFeatures = json["pleaseVerifyYourIdToUseHyppeFeatures"];
     verifyYourAccount = json["verifyYourAccount"];
     unfortunately = json['unfortunately'];
+    verifyId = json['verifyId'];
     needVerifyId = json['needVerifyId'];
     needVerifyIdDescriptions = json['needVerifyIdDescriptions'];
     needVerifyIdDescriptions2 = json['needVerifyIdDescriptions2'];

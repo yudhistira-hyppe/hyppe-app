@@ -133,6 +133,9 @@ class PreUploadContentNotifier with ChangeNotifier {
   dynamic _thumbNail;
   Music? _musicSelected;
 
+  String? urlLink;
+  String? judulLink;
+
   List<String> _interestData = [];
   List<Interest> _interest = [];
   List<Interest> _interestList = [];
@@ -402,6 +405,12 @@ class PreUploadContentNotifier with ChangeNotifier {
       notifierPre.fileContent?[index] = notifierPre.defaultPath;
       _fileContent?[0] = notifierPre.defaultPath;
     }
+    notifyListeners();
+  }
+
+  void setDefaultExternalLink(BuildContext context) {
+    urlLink = null;
+    judulLink = null;
     notifyListeners();
   }
 

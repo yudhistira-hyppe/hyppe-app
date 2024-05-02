@@ -4,7 +4,6 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_rich_text_widget.dart';
-import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -18,62 +17,63 @@ class OnShowIDVerificationBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<PreUploadContentNotifier>(
       builder: (_, notifier, __) => Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8 * SizeConfig.scaleDiagonal),
+        padding: EdgeInsets.symmetric(vertical: 8 * SizeConfig.scaleDiagonal, horizontal: 16 * SizeConfig.scaleDiagonal),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.max,
           children: [
-            fivePx,
             const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
-            twentyEightPx,
-            const CustomIconWidget(iconData: "${AssetPath.vectorPath}verification-need-new.svg", defaultColor: false,),
-            twentyEightPx,
+            Image.asset("assets/png/verification-need.png"),
             CustomTextWidget(
-              textToDisplay: notifier.language.verifyId ?? 'Verifikasi Identitas',
-              textStyle: Theme.of(context).textTheme.titleMedium,
+              textToDisplay: notifier.language.needVerifyId ?? '',
+              textStyle: Theme.of(context).textTheme.subtitle1,
             ),
-            fourteenPx,
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text("• "),
-                      Expanded(
-                        child: CustomRichTextWidget(
-                          maxLines: 20,
-                          textAlign: TextAlign.start,
-                          textOverflow: TextOverflow.clip,
-                          textSpan: TextSpan(text: notifier.language.needVerifyIdDescriptions ?? '', style: Theme.of(context).textTheme.caption?.copyWith(height: 1.6)),
+            // CustomTextWidget(
+            //   textToDisplay: notifier.language.needVerifyIdDescriptions,
+            //   textStyle: Theme.of(context).textTheme.caption,
+            //   textOverflow: TextOverflow.clip,
+            // ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text("• "),
+                    Expanded(
+                      child: CustomRichTextWidget(
+                        maxLines: 20,
+                        textAlign: TextAlign.start,
+                        textOverflow: TextOverflow.clip,
+                        textSpan: TextSpan(text: notifier.language.needVerifyIdDescriptions ?? '', style: Theme.of(context).textTheme.caption?.copyWith(height: 1.6)),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10 * SizeConfig.scaleDiagonal),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text("• "),
+                    Expanded(
+                      child: CustomRichTextWidget(
+                        textAlign: TextAlign.start,
+                        textOverflow: TextOverflow.clip,
+                        textSpan: TextSpan(
+                          text: notifier.language.needVerifyIdDescriptions2 ?? '',
+                          style: Theme.of(context).textTheme.caption?.copyWith(height: 1.6),
                         ),
                       ),
-                    ],
-                  ),
-                  SizedBox(height: 10 * SizeConfig.scaleDiagonal),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text("• "),
-                      Expanded(
-                        child: CustomRichTextWidget(
-                          textAlign: TextAlign.start,
-                          textOverflow: TextOverflow.clip,
-                          textSpan: TextSpan(
-                            text: notifier.language.needVerifyIdDescriptions2 ?? '',
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(height: 1.6),
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
+                    ),
+                  ],
+                )
+              ],
             ),
-            fourteenPx,
             CustomElevatedButton(
+              child: CustomTextWidget(
+                textToDisplay: notifier.language.verify ?? '',
+                textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+              ),
               width: double.infinity,
               height: 50 * SizeConfig.scaleDiagonal,
               function: () {
@@ -90,20 +90,16 @@ class OnShowIDVerificationBottomSheet extends StatelessWidget {
               },
               buttonStyle: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary), overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary)),
-              child: CustomTextWidget(
-                textToDisplay: notifier.language.verifyNow ?? 'Verifikasi Sekarang',
-                textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(color: kHyppeLightButtonText),
-              ),
             ),
             CustomElevatedButton(
+              child: CustomTextWidget(
+                textToDisplay: notifier.language.cancel ?? 'cancel',
+                textStyle: Theme.of(context).textTheme.button,
+              ),
               width: double.infinity,
               height: 50 * SizeConfig.scaleDiagonal,
               function: () => Routing().moveBack(),
               buttonStyle: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.transparent), overlayColor: MaterialStateProperty.all(Colors.transparent)),
-              child: CustomTextWidget(
-                textToDisplay: notifier.language.cancel ?? 'cancel',
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
             )
           ],
         ),

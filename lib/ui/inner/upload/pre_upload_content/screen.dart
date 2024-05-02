@@ -196,6 +196,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                             twentyFourPx,
                             categoryWidget(textTheme, notifier),
                             _buildDivider(context),
+                            _externalLink(context, notifier),
                             eightPx,
                             tagPeopleWidget(textTheme, notifier),
                             _buildDivider(context),
@@ -1123,5 +1124,123 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
             ],
           )
         : const SizedBox();
+  }
+
+  Widget _externalLink(BuildContext context, PreUploadContentNotifier notifier) {
+    if (notifier.isEdit) {
+      if (widget.arguments.contentData?.judulLink != null) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomTextWidget(
+                      textToDisplay: widget.arguments.contentData?.judulLink ?? '',
+                      textStyle: const TextStyle(color: kHyppeTextLightPrimary, fontSize: 14, fontWeight: FontWeight.w700),
+                    ),
+                    fourPx,
+                    SizedBox(
+                      width: SizeConfig.screenWidth! * .7,
+                      child: CustomTextWidget(
+                        textToDisplay: '${widget.arguments.contentData?.urlLink}}',
+                        maxLines: 1,
+                        textStyle: const TextStyle(color: kHyppeLightSecondary, fontSize: 12, fontWeight: FontWeight.w400),
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
+            eightPx,
+            _buildDivider(context),
+          ],
+        );
+      }else{
+        return const SizedBox.shrink();
+      }
+    }else{
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          notifier.urlLink != null
+              ? InkWell(
+                  onTap: () async {
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomTextWidget(
+                            textToDisplay: notifier.judulLink ?? '',
+                            textStyle: const TextStyle(color: kHyppeTextLightPrimary, fontSize: 14, fontWeight: FontWeight.w700),
+                          ),
+                          fourPx,
+                          SizedBox(
+                            width: SizeConfig.screenWidth! * .7,
+                            child: CustomTextWidget(
+                              textToDisplay: '${notifier.urlLink}',
+                              maxLines: 1,
+                              textStyle: const TextStyle(color: kHyppeLightSecondary, fontSize: 12, fontWeight: FontWeight.w400),
+                            ),
+                          )
+                        ],
+                      ),
+                      InkWell(
+                          onTap: () {
+                            notifier.setDefaultExternalLink(context);
+                          },
+                          child: const CustomIconWidget(
+                            iconData: '${AssetPath.vectorPath}close_ads.svg',
+                            width: 25,
+                            height: 25,
+                          ))
+                    ],
+                  ),
+                )
+              : InkWell(
+                  onTap: () async {
+                    if (!notifier.certified || statusKyc != VERIFIED) {
+                      System().actionReqiredIdCard(context, action: () {
+                        // notifier.navigateToOwnership(context);
+                      });
+                    } else {
+                      // notifier.navigateToOwnership(context);
+                    }
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.only(top: 10, bottom: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomTextWidget(
+                          textToDisplay: notifier.language.addLink ?? 'Tambahkan link',
+                          textAlign: TextAlign.start,
+                          textStyle: const TextStyle(fontSize: 12, color: kHyppeLightSecondary, fontWeight: FontWeight.w400),
+                        ),
+                        const Icon(Icons.arrow_forward_ios_rounded, color: kHyppeTextLightPrimary),
+                      ],
+                    ),
+                  ),
+                ),
+          eightPx,
+          _buildDivider(context),
+        ],
+      );
+    }
   }
 }
