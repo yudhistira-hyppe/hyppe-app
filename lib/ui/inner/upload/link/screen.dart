@@ -9,6 +9,8 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_form_field.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/account_preferences/notifier.dart';
+import 'package:hyppe/ux/path.dart';
 import 'package:provider/provider.dart';
 
 import '../pre_upload_content/notifier.dart';
@@ -47,13 +49,13 @@ class _AddLinkPageState extends State<AddLinkPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      var res = ModalRoute.of(context)!.settings.arguments as List;
+      var res = ModalRoute.of(context)!.settings.arguments as Map;
       final stream = Provider.of<ExternalLinkNotifier>(context, listen: false);
-      
+      stream.beforeCurrentRoutes = res['routes'];
       stream.urlValidator(false);
-      if (res.isNotEmpty){
-        stream.linkController.text = res[0];
-        stream.titleController.text = res[1];
+      if (res['urlLink'] != null || res['judulLink'] != null){
+        stream.linkController.text = res['urlLink']??'';
+        stream.titleController.text = res['judulLink']??'';
         stream.urlValidator(true);
         stream.setIsEdited(true);
         stream.setselectedPermission(true);
@@ -101,9 +103,16 @@ class _AddLinkPageState extends State<AddLinkPage> {
             actions: [
               TextButton(
                 onPressed: notifier.urlValid ? () {
-                  final stream = Provider.of<PreUploadContentNotifier>(context, listen: false);
-                  stream.urlLink = notifier.linkController.text;
-                  stream.judulLink = notifier.titleController.text;
+                  if (notifier.beforeCurrentRoutes == Routes.preUploadContent){
+                    final stream = Provider.of<PreUploadContentNotifier>(context, listen: false);
+                    stream.urlLink = notifier.linkController.text;
+                    stream.judulLink = notifier.titleController.text;
+                  }else if (notifier.beforeCurrentRoutes == Routes.selfProfile){
+                    final stream = Provider.of<AccountPreferencesNotifier>(context, listen: false);
+                    stream.urlLinkController.text = notifier.linkController.text;
+                    stream.titleLinkController.text = notifier.titleController.text;
+                  }
+                  
                   notifier.onWillPop(context);
                 } : null,
                 child: Text(notifier.language.done ?? 'Selesai',
@@ -122,8 +131,14 @@ class _AddLinkPageState extends State<AddLinkPage> {
                 thirtyTwoPx,
                 if (notifier.isEdited)
                 TextButton(onPressed: (){
-                  final stream = Provider.of<PreUploadContentNotifier>(context, listen: false);
-                  stream.setDefaultExternalLink(context);
+                  if (notifier.beforeCurrentRoutes == Routes.preUploadContent){
+                    final stream = Provider.of<PreUploadContentNotifier>(context, listen: false);
+                    stream.setDefaultExternalLink(context);
+                  }else if (notifier.beforeCurrentRoutes == Routes.selfProfile){
+                    final stream = Provider.of<AccountPreferencesNotifier>(context, listen: false);
+                    stream.setDefaultExternalLink(context);
+                  }
+                  
                   notifier.onWillPop(context);
                 }, child: Text(notifier.language.deleteLink ?? 'Hapus Link', style: TextStyle(color: Colors.red),))
               ],

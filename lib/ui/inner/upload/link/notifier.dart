@@ -8,6 +8,8 @@ class ExternalLinkNotifier with ChangeNotifier {
     language = translate;
     notifyListeners();
   }
+  String? beforeCurrentRoutes = '';
+  
   TextEditingController _linkController = TextEditingController();
   final FocusNode linkFocus = FocusNode();
   final FocusNode titleFocus = FocusNode();

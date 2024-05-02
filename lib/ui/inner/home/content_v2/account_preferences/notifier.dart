@@ -106,6 +106,12 @@ class AccountPreferencesNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setDefaultExternalLink(BuildContext context) {
+    urlLinkController.clear();
+    titleLinkController.clear();
+    notifyListeners();
+  }
+
   TextStyle label(BuildContext context) => Theme.of(context).textTheme.headline6?.copyWith(color: kHyppePrimary) ?? const TextStyle();
   TextStyle text(BuildContext context) => Theme.of(context).textTheme.bodyText1 ?? const TextStyle();
   TextStyle hint(BuildContext context) => Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).tabBarTheme.unselectedLabelColor) ?? const TextStyle();
@@ -125,6 +131,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
     genderController.text = (notifierData.user.profile?.gender ?? "").getGenderByLanguage();
     dobController.text = notifierData.user.profile?.dob ?? "";
     mobileController.text = notifierData.user.profile?.mobileNumber ?? "";
+    urlLinkController.text = notifierData.user.profile?.urlLink??"";
+    titleLinkController.text = notifierData.user.profile?.urlJudul??"";
   }
 
   DateTime initialDateTime() {
@@ -197,7 +205,9 @@ class AccountPreferencesNotifier extends ChangeNotifier {
             cityController.text != notifierData.user.profile?.city ||
             genderController.text != notifierData.user.profile?.gender ||
             dobController.text != notifierData.user.profile?.dob ||
-            mobileController.text != notifierData.user.profile?.mobileNumber) &&
+            mobileController.text != notifierData.user.profile?.mobileNumber ||
+            urlLinkController.text != notifierData.user.profile?.urlLink ||
+            titleLinkController.text != notifierData.user.profile?.urlJudul) &&
         fullNameController.text.isNotEmpty;
   }
 
@@ -375,6 +385,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
             bio: bio,
             fullName: fullNameController.text,
             username: userNameController.text,
+            urlLink: urlLinkController.text,
+            urlJudul: titleLinkController.text
           );
 
           SignUpCompleteProfiles _dataPersonalInfo = SignUpCompleteProfiles(
@@ -385,6 +397,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
             mobileNumber: mobileController.text,
             gender: genderController.text,
             dateOfBirth: dobController.text,
+            urlLink: urlLinkController.text,
+            urlJudul: titleLinkController.text,
             // username: userNameController.text,
             langIso: SharedPreference().readStorage(SpKeys.isoCode) ?? 'en',
           );

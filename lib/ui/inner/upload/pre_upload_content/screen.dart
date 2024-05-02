@@ -1139,9 +1139,9 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
       return GestureDetector(
         onTap: () {
           if (notifier.urlLink != ''){
-            Navigator.pushNamed(context, Routes.addlink, arguments: [notifier.urlLink, notifier.judulLink]);
+            Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent, 'urlLink': notifier.urlLink, 'judulLink':notifier.judulLink});
           }else{
-            Navigator.pushNamed(context, Routes.addlink);
+            Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent});
           }
         },
         child: Column(
@@ -1180,7 +1180,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
           notifier.urlLink != ''
               ? InkWell(
                   onTap: () async {
-                    Navigator.pushNamed(context, Routes.addlink, arguments: [notifier.urlLink, notifier.judulLink]);
+                    Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent, 'urlLink': notifier.urlLink, 'judulLink':notifier.judulLink});
                   },
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
@@ -1207,10 +1207,10 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                     if (!notifier.certified || statusKyc != VERIFIED) {
                       System().actionReqiredIdCard(context, action: () {
                         // notifier.navigateToOwnership(context);
-                        Navigator.pushNamed(context, Routes.addlink);
+                        Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent });
                       });
                     } else {
-                      Navigator.pushNamed(context, Routes.addlink);
+                      Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent });
                       // notifier.navigateToOwnership(context);
                     }
                   },

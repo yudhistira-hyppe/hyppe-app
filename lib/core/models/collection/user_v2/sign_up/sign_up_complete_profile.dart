@@ -12,6 +12,8 @@ class SignUpCompleteProfiles {
   String? fullName;
   List<String>? interests;
   String? username;
+  String? urlLink;
+  String? urlJudul;
 
   SignUpCompleteProfiles({
     this.email,
@@ -27,6 +29,8 @@ class SignUpCompleteProfiles {
     this.fullName,
     this.interests,
     this.username,
+    this.urlLink,
+    this.urlJudul
   });
 
   Map<String, dynamic> toUpdateProfileJson() {
@@ -47,6 +51,8 @@ class SignUpCompleteProfiles {
     // }
     data["event"] = "UPDATE_PROFILE";
     data["status"] = "COMPLETE_BIO";
+    data["urlLink"] = urlLink;
+    data["urlJudul"] = urlJudul;
     return data;
   }
 
@@ -60,6 +66,8 @@ class SignUpCompleteProfiles {
     }
     data["event"] = "UPDATE_BIO";
     data["status"] = "IN_PROGRESS";
+    data["urlLink"] = urlLink;
+    data["urlJudul"] = urlJudul;
     return data;
   }
 }
