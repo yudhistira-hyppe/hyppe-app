@@ -12,6 +12,7 @@ import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/button_challange.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/screen.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class OnShowShareLiveBottomSheet extends StatefulWidget {
@@ -33,6 +34,9 @@ class _OnShowShareLiveBottomSheetState extends State<OnShowShareLiveBottomSheet>
     });
     super.initState();
     _focus.addListener(_onFocusChange);
+    widget.scrollController.addListener(() {
+      context.read<StreamerNotifier>().loadMore(context, widget.scrollController);
+    });
   }
 
   @override
@@ -65,13 +69,25 @@ class _OnShowShareLiveBottomSheetState extends State<OnShowShareLiveBottomSheet>
                 _search(notifier.searchUserCtrl),
                 if (!_focus.hasFocus) sixPx,
                 if (!_focus.hasFocus)
-                  _iconButton(
-                    child: CustomIconWidget(height: 23, iconData: "${AssetPath.vectorPath}link.svg", color: kHyppeTextLightPrimary, defaultColor: false),
+                  GestureDetector(
+                    onTap: () async {
+                      await notifier.createLinkStream(context, copiedToClipboard: true, description: 'Link Streame');
+                      Routing().moveBack();
+                    },
+                    child: _iconButton(
+                      child: CustomIconWidget(height: 23, iconData: "${AssetPath.vectorPath}link.svg", color: kHyppeTextLightPrimary, defaultColor: false),
+                    ),
                   ),
                 if (!_focus.hasFocus) sixPx,
                 if (!_focus.hasFocus)
-                  _iconButton(
-                    child: CustomIconWidget(iconData: "${AssetPath.vectorPath}share2.svg", color: kHyppeTextLightPrimary, defaultColor: false),
+                  GestureDetector(
+                    onTap: () async {
+                      await notifier.createLinkStream(context, copiedToClipboard: false, description: 'Link Streame');
+                      Routing().moveBack();
+                    },
+                    child: _iconButton(
+                      child: CustomIconWidget(iconData: "${AssetPath.vectorPath}share2.svg", color: kHyppeTextLightPrimary, defaultColor: false),
+                    ),
                   ),
               ],
             ),

@@ -1144,5 +1144,6 @@
   "ballance": "Saldo",
   "toBeUsed": "Saldo yang akan digunakan",
   "pinned": "Disematkan",
-  "unpinComment": "Lepas Sematan Komentar"
+  "unpinComment": "Lepas Stematan Komentar",
+  "sentSuccessfully": "Berhasil dikirim"
 }

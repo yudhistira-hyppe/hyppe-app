@@ -32,6 +32,7 @@ import 'package:hyppe/core/models/collection/live_stream/live_summary_model.dart
 import 'package:hyppe/core/models/collection/live_stream/viewers_live_model.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
+import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
 import 'package:hyppe/core/models/collection/utils/search_people/search_people.dart';
 import 'package:hyppe/core/query_request/users_data_query.dart';
 import 'package:hyppe/core/response/generic_response.dart';
@@ -50,8 +51,9 @@ import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'dart:math' as math;
+import 'package:hyppe/ui/constant/entities/general_mixin/general_mixin.dart';
 
-class StreamerNotifier with ChangeNotifier {
+class StreamerNotifier with ChangeNotifier, GeneralMixin {
   final UsersDataQuery _usersFollowingQuery = UsersDataQuery()
     ..eventType = InteractiveEventType.following
     ..withEvents = [InteractiveEvent.initial, InteractiveEvent.accept, InteractiveEvent.request];
@@ -1217,7 +1219,7 @@ class StreamerNotifier with ChangeNotifier {
   }
 
   Future getUserShare(BuildContext context, bool mounted, {bool isLoadmore = false}) async {
-    isloadingUserShare = true;
+    if (!isLoadmore) isloadingUserShare = true;
     notifyListeners();
     bool connect = await System().checkConnections();
 
@@ -1265,6 +1267,16 @@ class StreamerNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  void loadMore(BuildContext context, ScrollController scrollController) async {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
+      print('kebawah');
+      pageNumberUserShare++;
+      notifyListeners();
+      await getUserShare(context, context.mounted, isLoadmore: true);
+      notifyListeners();
+    }
+  }
+
   insertListShare(SearchPeolpleData data) {
     shareUsers.add(data);
     notifyListeners();
@@ -1284,9 +1296,11 @@ class StreamerNotifier with ChangeNotifier {
     ScaffoldMessengerState().hideCurrentSnackBar();
     messageShareCtrl.clear();
     if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      tn = context.read<TranslateNotifierV2>().translate;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        margin: const EdgeInsets.only(bottom: 60, left: 16, right: 16),
         backgroundColor: kHyppeTextLightPrimary,
-        content: Text('', style: TextStyle(color: Colors.white)),
+        content: Text(tn?.sentSuccessfully ?? '', style: const TextStyle(color: Colors.white)),
         behavior: SnackBarBehavior.floating,
       ));
     }
@@ -1299,9 +1313,7 @@ class StreamerNotifier with ChangeNotifier {
       messageShareCtrl.text.logger();
 
       final message = messageShareCtrl.text;
-
       final emailSender = SharedPreference().readStorage(SpKeys.email);
-
       final param = DiscussArgument(
         email: emailSender,
         receiverParty: recipientEmail,
@@ -1317,5 +1329,30 @@ class StreamerNotifier with ChangeNotifier {
     } catch (e) {
       e.toString().logger();
     }
+  }
+
+  Future createLinkStream(BuildContext context, {required bool copiedToClipboard, required String description}) async {
+    await createdDynamicLinkMixin(
+      context,
+      data: DynamicLinkData(
+        routes: Routes.viewStreaming,
+        postID: 'asdasd',
+        fullName: 'Username',
+        description: 'descriot',
+        thumb: '',
+      ),
+      copiedToClipboard: copiedToClipboard,
+    ).then((value) {
+      if (value) {
+        if (copiedToClipboard && context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            margin: EdgeInsets.only(bottom: 60, left: 16, right: 16),
+            backgroundColor: kHyppeTextLightPrimary,
+            content: Text('Link Copied', style: TextStyle(color: Colors.white)),
+            behavior: SnackBarBehavior.floating,
+          ));
+        }
+      }
+    });
   }
 }

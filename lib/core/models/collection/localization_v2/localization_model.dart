@@ -1136,6 +1136,7 @@ class LocalizationModelV2 {
   String? pinned;
   String? reTake;
   String? uploadSupportingDocuments;
+  String? sentSuccessfully;
   String? descFailedktp2;
   String? descFailedktp1;
   String? uploadeKTPFailed;
@@ -1151,6 +1152,7 @@ class LocalizationModelV2 {
       this.emailOrUsername,
       this.password,
       this.forgotPassword,
+      this.sentSuccessfully,
       this.dontHaveAnAccount,
       this.registerHere,
       this.welcomeDescOne,
@@ -3435,6 +3437,7 @@ class LocalizationModelV2 {
     pinned = json['pinned'];
     reTake = json['reTake'];
     uploadSupportingDocuments = json['uploadSupportingDocuments'];
+    sentSuccessfully = json['sentSuccessfully'];
     descFailedktp2 = json['descFailedktp2'];
     descFailedktp1 = json['descFailedktp1'];
     uploadeKTPFailed = json['uploadeKTPFailed'];
