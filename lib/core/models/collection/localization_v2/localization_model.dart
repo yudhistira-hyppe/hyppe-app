@@ -680,6 +680,8 @@ class LocalizationModelV2 {
   String? verificationBankAccount;
   String? adminFee;
   String? ballanceAmount;
+  String? toBeUsed;
+  String? ballance;
   String? contentDetail;
   String? contentPrice;
   String? originalContent;
@@ -1131,6 +1133,7 @@ class LocalizationModelV2 {
   String? inThisDiary;
   String? inThisVideo;
   String? userAgreementCheck;
+  String? pinned;
   String? reTake;
   String? uploadSupportingDocuments;
   String? descFailedktp2;
@@ -1138,6 +1141,7 @@ class LocalizationModelV2 {
   String? uploadeKTPFailed;
   String? process;
   String? openCamera;
+  String? unpinComment;
   String? userAgreement;
 
   LocalizationModelV2(
@@ -1822,6 +1826,8 @@ class LocalizationModelV2 {
       this.verificationBankAccount,
       this.adminFee,
       this.ballanceAmount,
+      this.toBeUsed,
+      this.ballance,
       this.contentDetail,
       this.contentPrice,
       this.originalContent,
@@ -2970,6 +2976,8 @@ class LocalizationModelV2 {
     verificationBankAccount = json['verificationBankAccount'];
     adminFee = json['adminFee'];
     ballanceAmount = json['ballanceAmount'];
+    toBeUsed = json['toBeUsed'];
+    ballance = json['ballance'];
     contentDetail = json['contentDetail'];
     contentPrice = json['contentPrice'];
     originalContent = json['originalContent'];
@@ -3424,6 +3432,7 @@ class LocalizationModelV2 {
     inThisDiary = json['inThisDiary'];
     inThisVideo = json['inThisVideo'];
     userAgreementCheck = json['userAgreementCheck'];
+    pinned = json['pinned'];
     reTake = json['reTake'];
     uploadSupportingDocuments = json['uploadSupportingDocuments'];
     descFailedktp2 = json['descFailedktp2'];
@@ -3431,6 +3440,7 @@ class LocalizationModelV2 {
     uploadeKTPFailed = json['uploadeKTPFailed'];
     process = json['process'];
     openCamera = json['openCamera'];
+    unpinComment = json['unpinComment'];
     userAgreement = json['userAgreement'];
   }
 }

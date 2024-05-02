@@ -27,7 +27,7 @@ class ListCommentLive extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onLongPress: () {
-                      // ShowBottomSheet.onWatcherStatus(context, notifier.comment[index].email ?? '');
+                      ShowBottomSheet().onShowCommentOptionLive(context, notifier.comment[index]);
                     },
                     child: Container(
                       color: Colors.transparent,

@@ -1140,5 +1140,9 @@
   "failedIdCardInfo_2": "NIK dan foto selfie tidak sesuai dengan foto E-KTP.",
   "failedIdCardInfo_3": "Dokumen pendukung tidak sesuai dengan foto E-KTP dan selfie.",
   "failedIdCardInfo_4": "E-KTP sudah terdaftar di aplikasi Hyppe.",
-  "failedIdCardInfo_5": "Terdeteksi adanya upaya penipuan dan/atau tindakan melawan hukum."
+  "failedIdCardInfo_5": "Terdeteksi adanya upaya penipuan dan/atau tindakan melawan hukum.",
+  "ballance": "Saldo",
+  "toBeUsed": "Saldo yang akan digunakan",
+  "pinned": "Disematkan",
+  "unpinComment": "Lepas Sematan Komentar"
 }

@@ -9,18 +9,22 @@ import 'package:flutter_livepush_plugin/live_pusher.dart';
 /// Import a header file.
 import 'package:flutter_livepush_plugin/live_push_config.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hyppe/core/arguments/discuss_argument.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
 import 'package:hyppe/core/arguments/summary_live_argument.dart';
 import 'package:hyppe/core/bloc/follow/bloc.dart';
 import 'package:hyppe/core/bloc/follow/state.dart';
 import 'package:hyppe/core/bloc/live_stream/bloc.dart';
 import 'package:hyppe/core/bloc/live_stream/state.dart';
+import 'package:hyppe/core/bloc/message_v2/bloc.dart';
+import 'package:hyppe/core/bloc/message_v2/state.dart';
 import 'package:hyppe/core/bloc/user_v2/bloc.dart';
 import 'package:hyppe/core/bloc/user_v2/state.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/live_stream/comment_live_model.dart';
 import 'package:hyppe/core/models/collection/live_stream/link_stream_model.dart';
@@ -28,6 +32,7 @@ import 'package:hyppe/core/models/collection/live_stream/live_summary_model.dart
 import 'package:hyppe/core/models/collection/live_stream/viewers_live_model.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
+import 'package:hyppe/core/models/collection/utils/search_people/search_people.dart';
 import 'package:hyppe/core/query_request/users_data_query.dart';
 import 'package:hyppe/core/response/generic_response.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -65,6 +70,8 @@ class StreamerNotifier with ChangeNotifier {
   int pageViewers = 0;
   int rowViewers = 10;
   int totPause = 0;
+  int pageNumberUserShare = 0;
+  int limitNumberUserShare = 15;
 
   LinkStreamModel dataStream = LinkStreamModel();
   UserProfileModel audienceProfile = UserProfileModel();
@@ -86,6 +93,7 @@ class StreamerNotifier with ChangeNotifier {
   bool isloadingProfileViewer = false;
   bool isCheckLoading = false;
   bool isloadingButton = false;
+  bool isloadingUserShare = false;
   bool mute = false;
   bool isPause = false;
   bool isCommentDisable = false;
@@ -98,6 +106,8 @@ class StreamerNotifier with ChangeNotifier {
   TextEditingController urlLiveCtrl = TextEditingController();
   TextEditingController titleUrlLiveCtrl = TextEditingController();
   TextEditingController commentCtrl = TextEditingController();
+  TextEditingController searchUserCtrl = TextEditingController();
+  TextEditingController messageShareCtrl = TextEditingController();
   Timer? inactivityTimer;
   DateTime dateTimeStart = DateTime.now();
 
@@ -115,6 +125,10 @@ class StreamerNotifier with ChangeNotifier {
   List<ViewersLiveModel> dataViewers = [];
   List<CommentLiveModel> comment = [];
   List<int> animationIndexes = [];
+  List<SearchPeolpleData> listShareUser = [];
+  List<SearchPeolpleData> shareUsers = [];
+
+  CommentLiveModel? pinComment;
 
   set titleLive(String val) {
     _titleLive = val;
@@ -135,6 +149,7 @@ class StreamerNotifier with ChangeNotifier {
   Future<void> init(BuildContext context, mounted, {bool forConfig = false}) async {
     print("-------- init stream $forConfig ---------");
     isloading = true;
+
     isloadingPreview = true;
     notifyListeners();
 
@@ -433,6 +448,7 @@ class StreamerNotifier with ChangeNotifier {
 // rtmp://live.hyppe.cloud/Hyppe/hdstream_hd-v?auth_key=1700732018-0-0-8e221f09856a236e9f2454e8dfddfae1
 
   Future<void> clickPushAction(BuildContext context, mounted) async {
+    pinComment = null;
     isCancel = false;
     timeReady = 3;
     userName = context.read<SelfProfileNotifier>().user.profile?.username ?? '';
@@ -1186,5 +1202,120 @@ class StreamerNotifier with ChangeNotifier {
       urlFalse = false;
     }
     notifyListeners();
+  }
+
+  void insertPinComment(CommentLiveModel data) {
+    pinComment = data;
+    comment.removeWhere((element) => element.sId == data.sId);
+    notifyListeners();
+  }
+
+  void removePinComment() async {
+    comment.insert(0, pinComment ?? CommentLiveModel());
+    pinComment = null;
+    notifyListeners();
+  }
+
+  Future getUserShare(BuildContext context, bool mounted, {bool isLoadmore = false}) async {
+    isloadingUserShare = true;
+    notifyListeners();
+    bool connect = await System().checkConnections();
+
+    if (connect) {
+      try {
+        final notifier = LiveStreamBloc();
+        Map data = {
+          "pageNumber": pageNumberUserShare,
+          "pageRow": limitNumberUserShare,
+        };
+
+        if (searchUserCtrl.text != '') {
+          data["username"] = searchUserCtrl.text;
+        }
+
+        if (mounted) await notifier.getLinkStream(context, data, UrlConstants.userShare);
+
+        final fetch = notifier.liveStreamFetch;
+        if (fetch.postsState == LiveStreamState.getApiSuccess) {
+          if (!isLoadmore) listShareUser = [];
+          fetch.data.forEach((v) => listShareUser.add(SearchPeolpleData.fromJson(v)));
+          if (shareUsers.isNotEmpty) {
+            for (var e in listShareUser) {
+              for (var f in shareUsers) {
+                if (e.username == f.username) {
+                  e.isSelected = true;
+                }
+              }
+            }
+          }
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+
+      notifyListeners();
+    } else {
+      if (context.mounted) {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
+        });
+      }
+    }
+    isloadingUserShare = false;
+    notifyListeners();
+  }
+
+  insertListShare(SearchPeolpleData data) {
+    shareUsers.add(data);
+    notifyListeners();
+  }
+
+  removeListShare(SearchPeolpleData data) {
+    shareUsers.removeWhere((element) => element.username == data.username);
+    notifyListeners();
+  }
+
+  Future sendShareMassage(BuildContext context) async {
+    Routing().moveBack();
+    for (var i = 0; i < shareUsers.length; i++) {
+      sendMessageDirect(context, shareUsers[i].email ?? '');
+    }
+
+    ScaffoldMessengerState().hideCurrentSnackBar();
+    messageShareCtrl.clear();
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        backgroundColor: kHyppeTextLightPrimary,
+        content: Text('', style: TextStyle(color: Colors.white)),
+        behavior: SnackBarBehavior.floating,
+      ));
+    }
+  }
+
+  Future sendMessageDirect(BuildContext context, String recipientEmail) async {
+    if (messageShareCtrl.text.trim().isEmpty) return;
+
+    try {
+      messageShareCtrl.text.logger();
+
+      final message = messageShareCtrl.text;
+
+      final emailSender = SharedPreference().readStorage(SpKeys.email);
+
+      final param = DiscussArgument(
+        email: emailSender,
+        receiverParty: recipientEmail,
+      )..txtMessages = message;
+
+      final notifier = MessageBlocV2();
+      await notifier.createDiscussionBloc(context, disqusArgument: param);
+
+      final fetch = notifier.messageFetch;
+
+      if (fetch.chatState == MessageState.createDiscussionBlocSuccess) {}
+      if (fetch.chatState == MessageState.createDiscussionBlocError) {}
+    } catch (e) {
+      e.toString().logger();
+    }
   }
 }

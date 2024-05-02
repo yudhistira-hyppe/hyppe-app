@@ -1139,5 +1139,9 @@
   "failedIdCardInfo_2": "NIK and selfie do not match the E-KTP photo.",
   "failedIdCardInfo_3": "Supporting documents do not match the E-KTP and selfie photos.",
   "failedIdCardInfo_4": "E-KTP has been registered in the Hyppe application.",
-  "failedIdCardInfo_5": "Fraud and/or unlawful acts have been detected."
+  "failedIdCardInfo_5": "Fraud and/or unlawful acts have been detected.",
+  "ballance": "Ballance",
+  "toBeUsed": "To be used",
+  "pinned": "Pinned",
+  "unpinComment": "Unpin Comment"
 }

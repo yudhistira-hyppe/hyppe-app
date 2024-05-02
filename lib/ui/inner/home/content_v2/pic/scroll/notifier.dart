@@ -71,6 +71,7 @@ class ScrollPicNotifier with ChangeNotifier {
           pics = sp.user.pics;
         }
         isLoadingLoadmore = false;
+        notifyListeners();
       }
 
       if (pageSrc == PageSrc.otherProfile) {
@@ -83,6 +84,7 @@ class ScrollPicNotifier with ChangeNotifier {
         }
 
         isLoadingLoadmore = false;
+        notifyListeners();
       }
 
       if (pageSrc == PageSrc.searchData) {
@@ -92,6 +94,7 @@ class ScrollPicNotifier with ChangeNotifier {
           pics = searchNotifier.searchPic;
         }
         isLoadingLoadmore = false;
+        notifyListeners();
       }
 
       if (pageSrc == PageSrc.hashtag) {

@@ -138,6 +138,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     pics = widget.arguments?.picData;
     pageIndex = widget.arguments!.page ?? 0;
     notifier.pics = widget.arguments?.picData;
+    notifier.isLoadingLoadmore = false;
     print("${pics}");
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -165,17 +166,18 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
       // _initListener(notifier);
     });
 
-    var index = 0;
-    var lastIndex = 0;
+    var index = widget.arguments?.page ?? 0;
+    var lastIndex = -1;
     pageSrc = widget.arguments?.pageSrc ?? PageSrc.otherProfile;
 
     itemPositionsListener.itemPositions.addListener(() async {
       index = itemPositionsListener.itemPositions.value.first.index;
-
-      if (lastIndex != index) {
+      print("index====$lastIndex===$index == ${pics!.length}-- ${notifier.isLoadingLoadmore}");
+      print("index====${lastIndex != index}===${index == (pics!.length - 1)}");
+      if (lastIndex != index || index == (pics!.length - 1)) {
         bool connect = await System().checkConnections();
 
-        if (index == pics!.length - 2) {
+        if (index >= pics!.length - 2) {
           if (connect) {
             if (!notifier.isLoadingLoadmore) {
               await notifier.loadMore(context, _scrollController, pageSrc, widget.arguments?.key ?? '');
@@ -769,15 +771,12 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                               },
                               child: NotificationListener<ScrollNotification>(
                                 onNotification: (scrollNotification) {
-                                  print("scrollNotification ===== $scrollNotification");
                                   // scrollNotification.disallowIndicator();
                                   if (scrollNotification is ScrollStartNotification) {
-                                    print("=======start=======");
                                     // _onStartScroll(scrollNotification.metrics);
                                   } else if (scrollNotification is ScrollUpdateNotification) {
                                     // _onUpdateScroll(scrollNotification.metrics);
                                   } else if (scrollNotification is ScrollEndNotification) {
-                                    print("=======end=======");
                                     // _onEndScroll(scrollNotification.metrics);
                                   }
 

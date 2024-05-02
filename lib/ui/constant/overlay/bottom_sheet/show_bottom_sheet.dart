@@ -7,12 +7,14 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
+import 'package:hyppe/core/models/collection/live_stream/comment_live_model.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart' as messageData;
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/audio_service.dart';
 import 'package:hyppe/ui/constant/entities/comment_v2/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/comment_v2/on_show_comment_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/live_streaming/on_list_wacthers.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/live_streaming/on_show_comment_option_live.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_boost_interval.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_boost_time.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_buy_content.dart';
@@ -42,12 +44,13 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_s
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_complete_profile_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_effect.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_filters.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/live_streaming/on_show_gift_live.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_help_bank_account.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_help_support_docs.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_id_verification_failed.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_idcard_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_license_agreement.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_share_live.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/live_streaming/on_show_share_live.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_sticker.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_user_tag.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_user_view_content.dart';
@@ -1871,11 +1874,12 @@ class ShowBottomSheet {
     showModalBottomSheet(
         isScrollControlled: true,
         context: _,
-        backgroundColor: Colors.transparent,
+        backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
         builder: (builder) {
           return DraggableScrollableSheet(
             maxChildSize: 0.8,
             minChildSize: 0.4,
+            initialChildSize: 0.7,
             builder: (_, scrollController) {
               return Container(
                 decoration: const BoxDecoration(
@@ -1889,6 +1893,54 @@ class ShowBottomSheet {
                 child: OnShowShareLiveBottomSheet(scrollController: scrollController),
               );
             },
+          );
+        }).whenComplete(() {
+      _.read<StreamerNotifier>().shareUsers = [];
+    });
+  }
+
+  onShowGiftLive(BuildContext _) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: _,
+        backgroundColor: Colors.transparent,
+        builder: (builder) {
+          return DraggableScrollableSheet(
+            maxChildSize: 0.95,
+            initialChildSize: 0.7,
+            builder: (_, scrollController) {
+              return Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    topRight: Radius.circular(8),
+                  ),
+                ),
+                padding: const EdgeInsets.all(0),
+                child: OnShowGiftLiveBottomSheet(scrollController: scrollController),
+              );
+            },
+          );
+        });
+  }
+
+  onShowCommentOptionLive(BuildContext _, CommentLiveModel data, {bool isReady = false}) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: _,
+        backgroundColor: Colors.transparent,
+        builder: (builder) {
+          return Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            padding: const EdgeInsets.all(0),
+            child: OnShowCommentOptionLiveBottomSheet(dataComment: data, isReady: isReady),
           );
         });
   }

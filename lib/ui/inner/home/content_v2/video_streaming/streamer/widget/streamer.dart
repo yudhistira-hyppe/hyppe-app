@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/formComment.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/listComment.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/listGiftLive.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/pinComment.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/statusNControl.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/titleLive.dart';
 
@@ -16,7 +18,9 @@ class StreamerWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          const Padding(padding: EdgeInsets.only(bottom: 20), child: ListGift()),
           ListCommentLive(commentFocusNode: commentFocusNode),
+          const PinCommenmt(),
           fifteenPx,
           FormCommentLive(commentFocusNode: commentFocusNode),
         ],

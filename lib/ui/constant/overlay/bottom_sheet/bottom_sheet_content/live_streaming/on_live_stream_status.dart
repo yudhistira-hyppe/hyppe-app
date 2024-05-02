@@ -3,6 +3,7 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_gesture.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -306,21 +307,48 @@ class _ItemAccountState extends State<ItemAccount> {
                   ),
                 ),
                 if (!widget.isHost) tenPx,
+                // if (!widget.isHost && widget.showThreeDot && SharedPreference().readStorage(SpKeys.email) != widget.email)
+                //   CustomGesture(
+                //     margin: EdgeInsets.zero,
+                //     onTap: () async {
+                //       Routing().moveBack();
+                //       ShowBottomSheet.onWatcherStatus(context, widget.email, widget.idStream ?? '');
+                //     },
+                //     child: Container(
+                //       alignment: Alignment.center,
+                //       child: const RotationTransition(
+                //         turns: AlwaysStoppedAnimation(90 / 360),
+                //         child: Align(alignment: Alignment.center, child: CustomIconWidget(width: 24, iconData: "${AssetPath.vectorPath}more.svg", color: Colors.black, defaultColor: false)),
+                //       ),
+                //     ),
+                //   ),
                 if (!widget.isHost && widget.showThreeDot && SharedPreference().readStorage(SpKeys.email) != widget.email)
-                  CustomGesture(
-                    margin: EdgeInsets.zero,
-                    onTap: () async {
-                      Routing().moveBack();
-                      ShowBottomSheet.onWatcherStatus(context, widget.email, widget.idStream ?? '');
+                  GestureDetector(
+                    onTap: () {
+                      ShowGeneralDialog.generalDialog(
+                        _,
+                        functionPrimary: () {},
+                        barrierDismissible: true,
+                        titleText: 'Remove kevinsaputra?',
+                        bodyText: 'hahaha ahaha ha a',
+                        functionSecondary: () {
+                          Routing().moveBack();
+                        },
+                        titleButtonPrimary: 'Remove',
+                        titleButtonSecondary: 'Cance',
+                        isHorizontal: false,
+                      );
                     },
                     child: Container(
-                      alignment: Alignment.center,
-                      child: const RotationTransition(
-                        turns: AlwaysStoppedAnimation(90 / 360),
-                        child: Align(alignment: Alignment.center, child: CustomIconWidget(width: 24, iconData: "${AssetPath.vectorPath}more.svg", color: Colors.black, defaultColor: false)),
+                      padding: EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                      decoration: BoxDecoration(border: Border.all(color: kHyppeBorderTab), borderRadius: BorderRadius.circular(8)),
+                      child: Text(
+                        language.removeUser ?? '',
+                        style: const TextStyle(fontWeight: FontWeight.w700),
                       ),
                     ),
                   ),
+
                 // Text("${widget.notifier.statusFollowingViewer}"),
                 if (widget.isHost && widget.isViewer)
                   CustomElevatedButton(

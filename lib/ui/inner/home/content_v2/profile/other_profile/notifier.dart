@@ -211,18 +211,12 @@ class OtherProfileNotifier with ChangeNotifier {
       return false;
     }
 
-    print("isload $isLoad");
-    print("isload ${scrollController?.offset}");
-    print("isload ${scrollController?.position.maxScrollExtent}");
-    print("isload ${scrollController?.position.outOfRange}");
-    print("isload ${scrollController != null && scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange}");
-
     if (isLoad || (scrollController != null && scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange)) {
       switch (pageIndex) {
         case 0:
           {
-            print("===== hahaha ${picContentsQuery.loading} ");
-            print("===== hahaha $picHasNext ");
+            // print("===== hahaha ${picContentsQuery.loading} ");
+            // print("===== hahaha $picHasNext ");
             if (!picContentsQuery.loading && picHasNext) {
               List<ContentData> res = await picContentsQuery.loadNext(context, otherContent: true);
               if (res.isNotEmpty) {

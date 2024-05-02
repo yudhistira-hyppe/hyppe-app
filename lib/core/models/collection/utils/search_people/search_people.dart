@@ -13,7 +13,7 @@ class ModelSearchPeople {
       );
 
   Map<String, dynamic> toJson() => {
-        "data": List<dynamic>.from(data??[].map((x) => x.toJson())),
+        "data": List<dynamic>.from(data ?? [].map((x) => x.toJson())),
       };
 }
 
@@ -25,16 +25,9 @@ class SearchPeolpleData {
   String? fullName;
   String? email;
   UserBadgeModel? urluserBadge;
+  bool? isSelected;
 
-  SearchPeolpleData({
-    this.id,
-    this.avatar,
-    this.idUserAuth,
-    this.username,
-    this.fullName,
-    this.email,
-    this.urluserBadge,
-  });
+  SearchPeolpleData({this.id, this.avatar, this.idUserAuth, this.username, this.fullName, this.email, this.urluserBadge, this.isSelected,});
 
   factory SearchPeolpleData.createPeopleData(Map<String, dynamic> object) => SearchPeolpleData(
         id: object['id'],
@@ -43,12 +36,11 @@ class SearchPeolpleData {
         username: object['username'],
         fullName: object['fullName'],
         email: object['email'],
-        urluserBadge:
-            object['urluserBadge'] != null && object['urluserBadge'].isNotEmpty
-                ? object['urluserBadge'] is List
-                    ? UserBadgeModel.fromJson(object['urluserBadge'].first)
-                    : UserBadgeModel.fromJson(object['urluserBadge'])
-                : null,
+        urluserBadge: object['urluserBadge'] != null && object['urluserBadge'].isNotEmpty
+            ? object['urluserBadge'] is List
+                ? UserBadgeModel.fromJson(object['urluserBadge'].first)
+                : UserBadgeModel.fromJson(object['urluserBadge'])
+            : null,
       );
 
   static SearchPeolpleData fromJson(json) => SearchPeolpleData(
@@ -58,12 +50,11 @@ class SearchPeolpleData {
         username: json['username'],
         fullName: json['fullName'],
         email: json['email'],
-        urluserBadge:
-            json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty
-                ? json['urluserBadge'] is List
-                    ? UserBadgeModel.fromJson(json['urluserBadge'].first)
-                    : UserBadgeModel.fromJson(json['urluserBadge'])
-                : null,
+        urluserBadge: json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty
+            ? json['urluserBadge'] is List
+                ? UserBadgeModel.fromJson(json['urluserBadge'].first)
+                : UserBadgeModel.fromJson(json['urluserBadge'])
+            : null,
       );
 
   Map<String, dynamic> toJson() => {

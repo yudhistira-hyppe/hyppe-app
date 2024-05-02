@@ -151,6 +151,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
     vidData = widget.arguments?.vidData;
     indexVid = widget.arguments!.page ?? 0;
     notifier.vidData = widget.arguments?.vidData;
+    notifier.isLoadingLoadmore = false;
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (fAliplayer == null && fAliplayer?.getPlayerName().toString() != 'VideoProfileScroll') {
@@ -166,7 +167,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
     itemPositionsListener.itemPositions.addListener(() async {
       index = itemPositionsListener.itemPositions.value.first.index;
       if (lastIndex != index) {
-        if (index == vidData!.length - 2) {
+        if (index >= vidData!.length - 2) {
           bool connect = await System().checkConnections();
           if (connect) {
             print("ini reload harusnya");

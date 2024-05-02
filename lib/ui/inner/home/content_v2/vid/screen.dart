@@ -99,6 +99,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   bool _inSeek = false;
   bool _thumbnailSuccess = false;
   bool isActivePage = true;
+  bool isStandBy = true;
   bool onTapCtrl = false;
   bool isActiveAds = false;
 
@@ -694,6 +695,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
         if (isHomeScreen) _initializeTimer();
         if (context.read<PreviewVidNotifier>().canPlayOpenApps && !context.read<MainNotifier>().isInactiveState && isActivePage) {
           try {
+            isStandBy = true;
             // notifier.vidData?[_curIdx].fAliplayer?.prepare();
             // notifier.vidData?[_curIdx].fAliplayer?.play();
             print("masuk lagi video ${fAliplayer?.getVideoHeight()}");
@@ -706,6 +708,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
         break;
       case AppLifecycleState.paused:
         fAliplayer?.pause();
+        isStandBy = false;
         _pauseScreen();
         break;
       case AppLifecycleState.detached:
@@ -816,7 +819,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     fAliplayer?.prepare();
     if (data.reportedStatus == 'BLURRED') {
     } else {
-      if (isActivePage) {
+      if (isActivePage && isStandBy) {
         print("=====prepare=====");
 
         fAliplayer?.play();

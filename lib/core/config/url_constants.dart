@@ -90,6 +90,8 @@ class UrlConstants {
 
   static const String challange = "/api/challenge";
 
+  static const String userShare = "/api/streamsharelist";
+
   ///---------------------------------------------------------------------------------------------------------///
   /* APIs Bookmark */
   /// get => Get bookmark.
