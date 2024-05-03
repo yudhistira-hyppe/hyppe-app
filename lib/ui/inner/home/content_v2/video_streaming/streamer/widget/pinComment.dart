@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/extension/custom_extension.dart';
 import 'package:hyppe/core/models/collection/live_stream/comment_live_model.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
@@ -56,7 +55,7 @@ class PinCommenmt extends StatelessWidget {
                                 children: [
                                   Text.rich(TextSpan(text: notifier.pinComment?.username ?? '', style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700))),
                                   sixPx,
-                                  CustomIconWidget(
+                                  const CustomIconWidget(
                                     iconData: "${AssetPath.vectorPath}push-pin.svg",
                                     color: Colors.white,
                                     defaultColor: false,

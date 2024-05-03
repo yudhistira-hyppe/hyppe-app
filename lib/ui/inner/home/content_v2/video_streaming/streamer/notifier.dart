@@ -121,6 +121,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   ///Status => Offline - Prepare - StandBy - Ready - Online
   StatusStream statusLive = StatusStream.offline;
 
+  List giftBasic = [];
   List<Item> _items = <Item>[];
   List<Item> get items => _items;
 
@@ -1158,6 +1159,13 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
       var messages = CommentLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
       if (messages.idStream == dataStream.sId) {
         comment.insert(0, messages);
+        giftBasic.insert(0, messages.sId);
+        // startTimerBasic();
+
+        if (timerBasic?.isActive ?? false) {
+        } else {
+          startTimerBasic();
+        }
       }
     } else if (event == eventLikeStream) {
       var messages = CountLikeLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
@@ -1352,6 +1360,22 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
             behavior: SnackBarBehavior.floating,
           ));
         }
+      }
+    });
+  }
+
+  Timer? timerBasic;
+
+  void startTimerBasic() {
+    timerBasic = Timer.periodic(const Duration(seconds: 3), (timer) {
+      print("=== ${timer}");
+      print("=== ${giftBasic.isNotEmpty}");
+      if (giftBasic.isNotEmpty) {
+        print("===================================haous========================");
+        giftBasic.removeAt(0);
+        notifyListeners();
+      } else {
+        timerBasic?.cancel();
       }
     });
   }
