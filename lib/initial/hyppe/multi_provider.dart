@@ -41,6 +41,7 @@ import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier
 // import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamerios/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/notification/notifier.dart';
+import 'package:hyppe/ui/inner/upload/link/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/payment_summary/notifier.dart';
@@ -265,6 +266,8 @@ class AppDependencies {
         ChangeNotifierProvider<CoinNotifier>(create: (context) => CoinNotifier()),
         ChangeNotifierProvider<TopUpCoinNotifier>(create: (context) => TopUpCoinNotifier()),
         ChangeNotifierProvider<PaymentCoinNotifier>(create: (context) => PaymentCoinNotifier()),
-        ChangeNotifierProvider<ExchangeCoinNotifier>(create: (context) => ExchangeCoinNotifier())
+        ChangeNotifierProvider<ExchangeCoinNotifier>(create: (context) => ExchangeCoinNotifier()),
+
+        ChangeNotifierProvider<ExternalLinkNotifier>(create: (context) => ExternalLinkNotifier())
       ];
 }

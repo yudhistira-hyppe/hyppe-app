@@ -9,6 +9,7 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
 import 'package:hyppe/core/models/collection/live_stream/comment_live_model.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart' as messageData;
+import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart' as messageData;
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/audio_service.dart';
 import 'package:hyppe/ui/constant/entities/comment_v2/notifier.dart';
@@ -559,17 +560,25 @@ class ShowBottomSheet {
       isDismissible: true,
       backgroundColor: Colors.transparent,
       builder: (builder) {
-        return Container(
-            height: 450,
-            decoration: BoxDecoration(
-              color: Theme.of(_).colorScheme.surface,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(8),
-                topRight: Radius.circular(8),
+        return DraggableScrollableSheet(
+          expand: false,
+          maxChildSize: .9,
+          initialChildSize: .65,
+          builder: (context, controller) {
+            return Container(
+              clipBehavior: Clip.antiAlias,
+              padding: const EdgeInsets.symmetric(horizontal: 22.0),
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(16.0),
+                  topRight: Radius.circular(16.0),
+                ),
               ),
-            ),
-            padding: const EdgeInsets.all(0),
-            child: const OnShowIDVerificationBottomSheet());
+              child: const OnShowIDVerificationBottomSheet(),
+            );
+          },
+        );
       },
     );
   }

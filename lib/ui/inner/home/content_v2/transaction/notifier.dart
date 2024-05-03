@@ -18,16 +18,19 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/filter/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/dialog_filters.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 import 'bank_account/widget/bank_account.dart';
+import 'widget/dialog_date.dart';
 
 class TransactionNotifier extends ChangeNotifier {
   int _skip = 0;
   int get skip => _skip;
   int _limit = 5;
+
   List<BankAccount>? dataAcccount = [];
   List<TransactionHistoryModel>? dataTransaction = [];
   List<TransactionHistoryModel>? dataAllTransaction = [];
@@ -103,6 +106,96 @@ class TransactionNotifier extends ChangeNotifier {
   int get minuteVa => _minuteVa;
   int _secondVa = 0;
   int get secondVa => _secondVa;
+
+  
+  //Selected Value Transaction
+  List selectedFiltersValue = [];
+  String selectedFiltersLabel = 'Semua Transaksi';
+  List<GroupModel> filterList = [];
+  //Selected Value Date
+  int selectedDateValue = 1;
+  String selectedDateLabel = 'Semua Tanggal';
+  List<GroupModel> filterDate = [
+      GroupModel(text: "All", index: 1, selected: true),
+      GroupModel(text: "Last 7 Days", index: 2, selected: false),
+      GroupModel(text: "Last 30 Days", index: 3, selected: false),
+    ];
+
+  void getTypeFilter(BuildContext context) {
+    final language = context.read<TranslateNotifierV2>().translate;
+    filterList = [
+      GroupModel(text: "${language.buy}", index: 1, selected: false),
+      GroupModel(text: "${language.sell}", index: 2, selected: false),
+      GroupModel(text: "${language.withdrawal}", index: 3, selected: false),
+      GroupModel(text: "${language.postBoost}", index: 4, selected: false),
+      GroupModel(text: "${language.reward}", index: 5, selected: false),
+      GroupModel(text: "Voucher", index: 6, selected: false),
+    ];
+  }
+
+  void pickType(int? index) {
+    if (selectedFiltersValue.contains(filterList[index??0].text)) {
+      selectedFiltersValue.removeWhere((v) => v == filterList[index??0].text);
+      filterList[index??0].selected = false;
+    } else {
+      filterList[index??0].selected = true;
+      selectedFiltersValue.add(filterList[index??0].text);
+    }
+    notifyListeners();
+  }
+
+  void changeSelectedDate() {
+    for (int i = 0; i < filterDate.length; i++) {
+      filterDate[i].selected = false;
+    }
+    filterDate[filterDate.indexWhere((element) => element.index == selectedDateValue)].selected = true;
+    if (selectedDateValue == 1){
+      selectedDateLabel = 'Semua Tanggal';
+    }else{
+      if (filterDate.firstWhere((element) => element.selected == true).index == 4){
+        var res = filterDate.firstWhere((element) => element.selected == true);
+        selectedDateLabel = res.text;
+      }else{
+        selectedDateLabel = filterDate.firstWhere((element) => element.selected == true).text;
+      }
+    }
+    notifyListeners();
+  }
+
+  void showButtomSheetFilters(BuildContext context) {
+    getTypeFilter(context);
+    showModalBottomSheet<int>(
+        backgroundColor: Colors.transparent,
+        context: context,
+        isScrollControlled: true,
+        builder: (context) {
+          return const DialogFilters();
+        }
+    );
+  }
+
+  void showButtomSheetDate(BuildContext context) {
+    showModalBottomSheet<int>(
+        backgroundColor: Colors.transparent,
+        context: context,
+        isScrollControlled: true,
+        builder: (context) {
+          return const DialogDate();
+        }
+    );
+  }
+
+  void resetSelected(){
+    for (var i = 0; i < filterDate.length; i++) {
+      filterDate[i].selected = false;
+    }
+    selectedDateValue = 1;
+    filterDate[0].selected = true;
+    selectedFiltersValue.clear();
+    selectedFiltersLabel = 'Semua Transaksi';
+    selectedDateLabel = 'Semua Tanggal';
+    notifyListeners();
+  }
 
   set amountWithDrawal(String? val) {
     _amountWithDrawal = val;
@@ -820,4 +913,13 @@ class TransactionNotifier extends ChangeNotifier {
     }
     return pandingTransaction;
   }
+}
+
+class GroupModel {
+  String text;
+  int index;
+  bool selected;
+  String? startDate;
+  String? endDate;
+  GroupModel({required this.text, required this.index, required this.selected, this.startDate, this.endDate});
 }

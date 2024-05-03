@@ -1,10 +1,14 @@
+import 'dart:math';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/constant/widget/custom_text_form_field.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
@@ -30,10 +34,12 @@ class BuildProfileBody extends StatelessWidget {
               twentyPx,
               GestureDetector(
                 onTap: () {
-                  Routing().move(Routes.chalengeCollectionBadge, argument: GeneralArgument(isTrue: true));
+                  Routing().move(Routes.chalengeCollectionBadge,
+                      argument: GeneralArgument(isTrue: true));
                 },
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   decoration: ShapeDecoration(
                     gradient: const LinearGradient(
                       begin: Alignment(1.00, 0.00),
@@ -43,7 +49,8 @@ class BuildProfileBody extends StatelessWidget {
                         Color(0xFF7551C0),
                       ],
                     ),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)),
                   ),
                   child: Row(
                     children: [
@@ -96,16 +103,121 @@ class BuildProfileBody extends StatelessWidget {
                 hintText: "Bio",
                 inputFormatter: [LengthLimitingTextInputFormatter(150)],
                 maxLength: 150,
-                inputAreaHeight: 100 * SizeConfig.scaleDiagonal,
+                inputAreaHeight: 72 * SizeConfig.scaleDiagonal,
                 minLines: 3,
                 textInput: TextInputType.multiline,
                 keyboardNewline: true,
               ),
+              if (notifier.titleLinkController.text.isEmpty)
+                uriWidget(context, notifier)
+              else
+                titleWidget(context, notifier),
               const ProofPicture(),
+              sixtyFourPx,
+              tenPx
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget uriWidget(BuildContext context, AccountPreferencesNotifier notifier) {
+    return CustomTextFormField(
+      // focusNode: notifier.emailFocus,
+      inputAreaHeight: 55 * SizeConfig.scaleDiagonal,
+      inputAreaWidth: SizeConfig.screenWidth!,
+      textEditingController: notifier.urlLinkController,
+      style: Theme.of(context)
+          .textTheme
+          .bodyLarge
+          ?.copyWith(color: Theme.of(context).colorScheme.onBackground),
+      textInputType: TextInputType.text,
+      onChanged: (v) {
+        // notifier.email = v;
+      },
+      inputDecoration: InputDecoration(
+          hintText: notifier.language.addLink ?? 'Tambah Link',
+          labelText: 'Link',
+          hintStyle: notifier.hint(context),
+          labelStyle: notifier.label(context),
+          enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                  color: notifier.urlLinkController.text.isEmpty
+                      ? Theme.of(context).iconTheme.color ?? Colors.white
+                      : kHyppePrimary,
+                  width: 0.2)),
+          focusedBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: Color(0xff822E6E), width: 0.1)),
+          contentPadding: const EdgeInsets.only(bottom: 2),
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          suffixIcon: Transform.translate(
+            offset: Offset(10, 0),
+            child: const Icon(
+              Icons.arrow_forward_ios,
+              size: 18,
+            ),
+          )),
+      readOnly: true,
+      onTap: () => Navigator.pushNamed(context, Routes.addlink, arguments: {
+        'routes': Routes.selfProfile,
+        'urlLink': notifier.urlLinkController.text.isEmpty
+            ? null
+            : notifier.urlLinkController.text,
+        'judulLink': notifier.titleLinkController.text.isEmpty
+            ? null
+            : notifier.titleLinkController.text
+      }),
+    );
+  }
+
+  Widget titleWidget(
+      BuildContext context, AccountPreferencesNotifier notifier) {
+    return CustomTextFormField(
+      // focusNode: notifier.emailFocus,
+      inputAreaHeight: 55 * SizeConfig.scaleDiagonal,
+      inputAreaWidth: SizeConfig.screenWidth!,
+      textEditingController: notifier.titleLinkController,
+      style: Theme.of(context)
+          .textTheme
+          .bodyLarge
+          ?.copyWith(color: Theme.of(context).colorScheme.onBackground),
+      textInputType: TextInputType.text,
+      onChanged: (v) {
+        // notifier.email = v;
+      },
+      inputDecoration: InputDecoration(
+          hintText: notifier.language.addLink ?? 'Tambah Link',
+          labelText: 'Link',
+          hintStyle: notifier.hint(context),
+          labelStyle: notifier.label(context),
+          enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                  color: notifier.titleLinkController.text.isEmpty
+                      ? Theme.of(context).iconTheme.color ?? Colors.white
+                      : kHyppePrimary,
+                  width: 0.2)),
+          focusedBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: Color(0xff822E6E), width: 0.1)),
+          contentPadding: const EdgeInsets.only(bottom: 2),
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          suffixIcon: Transform.translate(
+            offset: const Offset(10, 0),
+            child: const Icon(
+              Icons.arrow_forward_ios,
+              size: 18,
+            ),
+          )),
+      readOnly: true,
+      onTap: () => Navigator.pushNamed(context, Routes.addlink, arguments: {
+        'routes': Routes.selfProfile,
+        'urlLink': notifier.urlLinkController.text.isEmpty
+            ? null
+            : notifier.urlLinkController.text,
+        'judulLink': notifier.titleLinkController.text.isEmpty
+            ? null
+            : notifier.titleLinkController.text
+      }),
     );
   }
 }

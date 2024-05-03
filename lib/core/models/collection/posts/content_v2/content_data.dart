@@ -213,6 +213,8 @@ class ContentData {
   GlobalKey? keyGlobalSell;
   bool? isContentLoading;
   List<String>? viewer;
+  String? urlLink;
+  String? judulLink;
 
   ContentData({
     this.metadata,
@@ -287,6 +289,8 @@ class ContentData {
     this.inBetweenAds,
     this.isContentLoading,
     this.viewer,
+    this.urlLink,
+    this.judulLink,
   });
 
   ContentData.fromJson(Map<String, dynamic> json) {
@@ -411,6 +415,8 @@ class ContentData {
     if (json['viewer'] != null) {
       viewer = json['viewer'].cast<String>();
     }
+    urlLink = json['urlLink'] ?? '';
+    judulLink = json['judulLink'] ?? '';
   }
 
   Map<String, dynamic> toJson() {
@@ -476,6 +482,9 @@ class ContentData {
     if (stickers != null) {
       data['stiker'] = stickers!.map((v) => v.toJson()).toList();
     }
+
+    data['urlLink'] = urlLink;
+    data['judulLink'] = judulLink;
     return data;
   }
 

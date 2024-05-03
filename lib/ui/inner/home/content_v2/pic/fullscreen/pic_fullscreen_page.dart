@@ -3,10 +3,12 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/pic_fullscreen_argument.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
@@ -51,6 +53,7 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
 import 'package:showcaseview/showcaseview.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'dart:math' as math;
 
@@ -877,6 +880,34 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                       hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
                       expandStyle: const TextStyle(fontSize: 14, color: kHyppeTextPrimary, fontWeight: FontWeight.bold),
                     ),
+                  ),
+                ),
+                if (data.urlLink != null)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: RichText(
+                    text: TextSpan(children: [
+                      TextSpan(
+                        text: (data.judulLink != null)
+                            ? data.judulLink
+                            : data.urlLink,
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.bold),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () async {
+                            var uri = data.urlLink??'';
+                            if (!uri.withHttp()){
+                              uri='https://$uri';
+                            }
+                            if (await canLaunchUrl(Uri.parse(uri))) {
+                                await launchUrl(Uri.parse(uri));
+                              } else {
+                                throw  Fluttertoast.showToast(msg: 'Could not launch $uri');
+                              }
+                          },
+                      )
+                    ]),
                   ),
                 ),
                 SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&

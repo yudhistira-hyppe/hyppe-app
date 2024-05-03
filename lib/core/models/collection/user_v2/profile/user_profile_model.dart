@@ -40,6 +40,8 @@ class UserProfileModel {
   bool? creator;
   bool? following;
   List<Tutorial>? tutorial;
+  String? urlLink;
+  String? urlJudul;
 
   UserProfileModel({
     this.country,
@@ -75,6 +77,8 @@ class UserProfileModel {
     this.creator,
     this.following,
     this.tutorial,
+    this.urlLink,
+    this.urlJudul,
   });
 
   UserProfileModel.fromJson(Map<String, dynamic> json) {
@@ -137,6 +141,8 @@ class UserProfileModel {
         tutorial!.add(Tutorial.fromJson(v));
       });
     }
+    urlLink = json['urlLink'] ?? '';
+    urlJudul = json['urlJudul'] ?? '';
   }
 
   Map<String, dynamic> toJson() {

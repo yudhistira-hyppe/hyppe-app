@@ -28,6 +28,7 @@ import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/build_auto_complete_user_tag.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/build_category.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/validate_type.dart';
+import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:showcaseview/showcaseview.dart';
@@ -74,10 +75,14 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
     PreUploadContentNotifier notifier = context.read<PreUploadContentNotifier>();
     if (!widget.arguments.onEdit) {
       notifier.captionController.text = notifier.hastagChallange;
-      notifier.captionController.selection = TextSelection.collapsed(offset: 0);
+      notifier.captionController.selection = const TextSelection.collapsed(offset: 0);
+      notifier.setDefaultExternalLink(context);
+    }else{
+      notifier.urlLink = widget.arguments.contentData?.urlLink??'';
+      notifier.judulLink = widget.arguments.contentData?.judulLink??'';
     }
     // notifier.initThumbnail();
-
+    
     notifier.getInitialInterest(context);
 
     // Future.microtask(() => context.read<PreUploadContentNotifier>().checkLandingpage(context));
@@ -198,6 +203,8 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                             twentyFourPx,
                             categoryWidget(textTheme, notifier),
                             _buildDivider(context),
+                            eightPx,
+                            _externalLink(context, notifier),
                             eightPx,
                             tagPeopleWidget(textTheme, notifier),
                             _buildDivider(context),
@@ -1125,5 +1132,108 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
             ],
           )
         : const SizedBox();
+  }
+
+  Widget _externalLink(BuildContext context, PreUploadContentNotifier notifier) {
+    if (notifier.isEdit) {
+      return GestureDetector(
+        onTap: () {
+          if (notifier.urlLink != ''){
+            Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent, 'urlLink': notifier.urlLink, 'judulLink':notifier.judulLink});
+          }else{
+            Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent});
+          }
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: SizeConfig.screenWidth! * .8,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: CustomTextWidget(
+                      maxLines: 1,
+                      textToDisplay: notifier.judulLink == '' ? notifier.urlLink == '' ? notifier.language.addLink ?? 'Tambahkan link' : notifier.urlLink : notifier.judulLink,
+                      textStyle: const TextStyle(color: kHyppeTextLightPrimary, fontSize: 14, fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                ),
+                const Icon(Icons.arrow_forward_ios_rounded, color: kHyppeTextLightPrimary),
+              ],
+            ),
+            eightPx,
+            _buildDivider(context),
+          ],
+        ),
+      );
+    }else{
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          notifier.urlLink != ''
+              ? InkWell(
+                  onTap: () async {
+                    Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent, 'urlLink': notifier.urlLink, 'judulLink':notifier.judulLink});
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: SizeConfig.screenWidth! * .8,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: CustomTextWidget(
+                            maxLines: 1,
+                            textToDisplay: notifier.judulLink == '' ? notifier.urlLink : notifier.judulLink,
+                            textStyle: const TextStyle(color: kHyppeTextLightPrimary, fontSize: 14, fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                      ),
+                      const Icon(Icons.arrow_forward_ios_rounded, color: kHyppeTextLightPrimary),
+                    ],
+                  ),
+                )
+              : InkWell(
+                  onTap: () async {
+                    if (!notifier.certified || statusKyc != VERIFIED) {
+                      System().actionReqiredIdCard(context, action: () {
+                        // notifier.navigateToOwnership(context);
+                        Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent });
+                      });
+                    } else {
+                      Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent });
+                      // notifier.navigateToOwnership(context);
+                    }
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.only(top: 10, bottom: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomTextWidget(
+                          textToDisplay: notifier.language.addLink ?? 'Tambahkan link',
+                          textAlign: TextAlign.start,
+                          textStyle: const TextStyle(fontSize: 12, color: kHyppeLightSecondary, fontWeight: FontWeight.w400),
+                        ),
+                        const Icon(Icons.arrow_forward_ios_rounded, color: kHyppeTextLightPrimary),
+                      ],
+                    ),
+                  ),
+                ),
+          eightPx,
+          _buildDivider(context),
+        ],
+      );
+    }
   }
 }

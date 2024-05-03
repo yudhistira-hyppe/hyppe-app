@@ -1,24 +1,26 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_livepush_plugin/live_base.dart';
+import 'package:flutter_livepush_plugin/live_push_def.dart';
+import 'package:flutter_livepush_plugin/live_pusher.dart';
+
+/// Import a header file.
+import 'package:flutter_livepush_plugin/live_push_config.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:hyppe/core/arguments/discuss_argument.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
 import 'package:hyppe/core/arguments/summary_live_argument.dart';
 import 'package:hyppe/core/bloc/follow/bloc.dart';
 import 'package:hyppe/core/bloc/follow/state.dart';
 import 'package:hyppe/core/bloc/live_stream/bloc.dart';
 import 'package:hyppe/core/bloc/live_stream/state.dart';
-import 'package:hyppe/core/bloc/message_v2/bloc.dart';
-import 'package:hyppe/core/bloc/message_v2/state.dart';
 import 'package:hyppe/core/bloc/user_v2/bloc.dart';
 import 'package:hyppe/core/bloc/user_v2/state.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
-import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/live_stream/comment_live_model.dart';
 import 'package:hyppe/core/models/collection/live_stream/link_stream_model.dart';
@@ -26,8 +28,6 @@ import 'package:hyppe/core/models/collection/live_stream/live_summary_model.dart
 import 'package:hyppe/core/models/collection/live_stream/viewers_live_model.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
-import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
-import 'package:hyppe/core/models/collection/utils/search_people/search_people.dart';
 import 'package:hyppe/core/query_request/users_data_query.dart';
 import 'package:hyppe/core/response/generic_response.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -45,9 +45,8 @@ import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'dart:math' as math;
-import 'package:hyppe/ui/constant/entities/general_mixin/general_mixin.dart';
 
-class StreamerNotifier with ChangeNotifier, GeneralMixin {
+class StreamerNotifier with ChangeNotifier {
   final UsersDataQuery _usersFollowingQuery = UsersDataQuery()
     ..eventType = InteractiveEventType.following
     ..withEvents = [InteractiveEvent.initial, InteractiveEvent.accept, InteractiveEvent.request];
@@ -66,8 +65,6 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   int pageViewers = 0;
   int rowViewers = 10;
   int totPause = 0;
-  int pageNumberUserShare = 0;
-  int limitNumberUserShare = 15;
 
   LinkStreamModel dataStream = LinkStreamModel();
   UserProfileModel audienceProfile = UserProfileModel();
@@ -77,10 +74,9 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   StatusFollowing statusFollowingViewer = StatusFollowing.none;
   LiveSummaryModel dataSummary = LiveSummaryModel();
 
-  // late AlivcBase _alivcBase;
-  // late AlivcLivePusher _alivcLivePusher;
+  late AlivcBase _alivcBase;
+  late AlivcLivePusher _alivcLivePusher;
   // late AlivcLiveBeautyManager _beautyManager;
-  bool flipCameraVisible = true;
 
   bool isloadingPreview = true;
   bool isloading = false;
@@ -90,7 +86,6 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   bool isloadingProfileViewer = false;
   bool isCheckLoading = false;
   bool isloadingButton = false;
-  bool isloadingUserShare = false;
   bool mute = false;
   bool isPause = false;
   bool isCommentDisable = false;
@@ -98,89 +93,63 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   bool isSendComment = false;
   bool isFirst = true;
 
-  // Agora
-  int? remoteUid;
-  String? token;
-  String? channel;
-  bool localUserJoined = false;
-
-  // Engine Agora
-  late RtcEngine engine;
-
   FocusNode titleFocusNode = FocusNode();
-  TextEditingController titleUrlLiveCtrl = TextEditingController();
   TextEditingController titleLiveCtrl = TextEditingController();
-  TextEditingController urlLiveCtrl = TextEditingController();
   TextEditingController commentCtrl = TextEditingController();
-  TextEditingController searchUserCtrl = TextEditingController();
-  TextEditingController messageShareCtrl = TextEditingController();
-
   Timer? inactivityTimer;
   DateTime dateTimeStart = DateTime.now();
 
   String userName = '';
   String _titleLive = '';
   String get titleLive => _titleLive;
-  // String pushURL = "rtmp://ingest.hyppe.cloud/Hyppe/hdstream?auth_key=1700732018-0-0-580e7fb4d21585a87315470a335513c1";
+  String pushURL = "rtmp://ingest.hyppe.cloud/Hyppe/hdstream?auth_key=1700732018-0-0-580e7fb4d21585a87315470a335513c1";
 
   ///Status => Offline - Prepare - StandBy - Ready - Online
   StatusStream statusLive = StatusStream.offline;
 
-  List giftBasic = [];
   List<Item> _items = <Item>[];
   List<Item> get items => _items;
 
   List<ViewersLiveModel> dataViewers = [];
   List<CommentLiveModel> comment = [];
   List<int> animationIndexes = [];
-  List<SearchPeolpleData> listShareUser = [];
-  List<SearchPeolpleData> shareUsers = [];
-
-  CommentLiveModel? pinComment;
 
   set titleLive(String val) {
     _titleLive = val;
     notifyListeners();
   }
 
-  onUpdate() => notifyListeners();
-
   LocalizationModelV2? tn;
   double a = 0;
-  // void zoom() {
-  //   a++;
-  //   _alivcLivePusher.setZoom(a);
-  //   _alivcLivePusher.setResolution(AlivcLivePushResolution.resolution_1080P);
-  //   print(a);
-  // }
+  void zoom() {
+    a++;
+    _alivcLivePusher.setZoom(a);
+    _alivcLivePusher.setResolution(AlivcLivePushResolution.resolution_1080P);
+    print(a);
+  }
 
   Future<void> init(BuildContext context, mounted, {bool forConfig = false}) async {
     print("-------- init stream $forConfig ---------");
     isloading = true;
-
     isloadingPreview = true;
     notifyListeners();
 
-    // _alivcBase = AlivcBase.init();
+    _alivcBase = AlivcBase.init();
 
-    // await _alivcBase.registerSDK();
-    // await _alivcBase.setObserver();
-    // if (!forConfig) {
-    //   await setLiveConfig();
-    //   await _setLivePusher();
+    await _alivcBase.registerSDK();
+    await _alivcBase.setObserver();
+    if (!forConfig) {
+      await setLiveConfig();
+      await _setLivePusher();
 
-    //   if (isFirst && mounted) {
-    //     isFirst = false;
-    //     await init(context, mounted);
-    //   }
-    //   await _onListen(context, mounted);
-    // }
-
-    await initAgora();
-
-    // notifyListeners();
-
-    if (!mounted) return;
+      if (isFirst && mounted) {
+        isFirst = false;
+        await init(context, mounted);
+      }
+      await _onListen(context, mounted);
+    }
+    isloading = false;
+    notifyListeners();
     tn = context.read<TranslateNotifierV2>().translate;
   }
 
@@ -206,309 +175,253 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     print("=== skrng ${index} -- ${animationIndexes}");
   }
 
-  Future<void> initAgora() async {
-    // retrieve permissions
-    // await [Permission.microphone, Permission.camera].request();
+  Future<void> _onListen(BuildContext context, mounted) async {
+    /// Listener for stream ingest errors
+    /// Configure the callback for SDK errors.
+    _alivcBase.setOnLicenceCheck((result, reason) {
+      if (result != AlivcLiveLicenseCheckResultCode.success) {
+        print("======== belum ada lisensi $reason ========");
+      }
+    });
 
-    //create the engine
-    engine = createAgoraRtcEngine();
-    await engine.initialize(const RtcEngineContext(
-      appId: UrlConstants.agoraId,
-      channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
-    ));
+    /// Configure the callback for system errors.
+    _alivcLivePusher.setOnSDKError((errorCode, errorDescription) {
+      print("========  setOnSDKError $errorDescription ========");
+      // Fluttertoast.showToast(
+      //   msg: AppLocalizations.of(ctx.context)!.camerapush_sdk_error,
+      //   gravity: ToastGravity.CENTER,
+      // );
+    });
 
-    isloading = false;
-    notifyListeners();
+    /// 系统错误回调
+    _alivcLivePusher.setOnSystemError((errorCode, errorDescription) {
+      print("========  setOnSystemError $errorDescription ========");
+      Fluttertoast.showToast(
+        msg: 'Camera Stream Error, Please back and stream again',
+        gravity: ToastGravity.CENTER,
+      );
+    });
 
-    engine.registerEventHandler(
-      RtcEngineEventHandler(
-        onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
-          debugPrint("local user ${connection.localUid} joined");
-          localUserJoined = true;
-          notifyListeners();
-        },
-        onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
-          debugPrint("remote user $remoteUid joined");
-          remoteUid = remoteUid;
-          notifyListeners();
-        },
-        onRemoteVideoStateChanged: ((connection, remoteUid, state, reason, elapsed) {
-          debugPrint("connection $connection, remote user $remoteUid, state $state, resion $reason, $elapsed");
-        }),
-        onUserOffline: (RtcConnection connection, int remoteUid, UserOfflineReasonType reason) {
-          debugPrint("remote user $remoteUid left channel");
-          remoteUid = -1;
-          statusLive = StatusStream.offline;
-          notifyListeners();
-        },
-      ),
-    );
+    /// Listener for the stream ingest status`
+    /// Configure the callback for preview start.
+    _alivcLivePusher.setOnPreviewStarted(() {
+      isloadingPreview = false;
+      notifyListeners();
+    });
 
-    await engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
+    /// Configure the callback for preview stop.
+    _alivcLivePusher.setOnPreviewStoped(() {
+      isloadingPreview = false;
+      notifyListeners();
+    });
 
-    await engine.enableAudio();
-    await engine.enableVideo();
-    await engine.startPreview();
+    /// Configure the callback for first frame rendering.
+    _alivcLivePusher.setOnFirstFramePreviewed(() {
+      isloadingPreview = false;
+      notifyListeners();
+    });
 
-    isloadingPreview = false;
-    notifyListeners();
+    /// Configure the callback for start of stream ingest.
+    _alivcLivePusher.setOnPushStarted(() {
+      statusLive = StatusStream.standBy;
+      notifyListeners();
+      countDown(context, mounted);
+    });
+
+    /// Configure the callback for pause of stream ingest from the camera.
+    _alivcLivePusher.setOnPushPaused(() {
+      isPause = true;
+      notifyListeners();
+    });
+
+    /// Configure the callback for resume of stream ingest from the camera.
+    _alivcLivePusher.setOnPushResumed(() {
+      isPause = false;
+      notifyListeners();
+    });
+
+    /// Configure the callback for restart of stream ingest.
+    _alivcLivePusher.setOnPushRestart(() {});
+
+    /// Configure the callback for end of stream ingest.
+    _alivcLivePusher.setOnPushStoped(() {});
+
+    /// Listener for the network status during stream ingest
+    /// Configure the callback for failed connection of stream ingest.
+    _alivcLivePusher.setOnConnectFail((errorCode, errorDescription) {
+      "Error Init Live Streaming : $errorDescription".logger();
+    });
+
+    /// Configure the callback for network recovery.
+    _alivcLivePusher.setOnConnectRecovery(() {});
+
+    /// Configure the callback for disconnection.
+    _alivcLivePusher.setOnConnectionLost(() {
+      Fluttertoast.showToast(
+        msg: 'Error no connection lost',
+        gravity: ToastGravity.CENTER,
+      );
+    });
+
+    /// Configure the callback for poor network.
+    _alivcLivePusher.setOnNetworkPoor(() {
+      ShowGeneralDialog.showToastAlert(Routing.navigatorKey.currentContext!, 'There was a bad network', () async {});
+    });
+
+    /// Configure the callback for failed reconnection.
+    _alivcLivePusher.setOnReconnectError((errorCode, errorDescription) {
+      Fluttertoast.showToast(
+        msg: 'Failed Reconnection',
+        gravity: ToastGravity.CENTER,
+      );
+    });
+
+    /// Configure the callback for reconnection start.
+    _alivcLivePusher.setOnReconnectStart(() {
+      Fluttertoast.showToast(
+        msg: 'Reconnection start',
+        gravity: ToastGravity.CENTER,
+      );
+    });
+
+    /// Configure the callback for successful reconnection.
+    _alivcLivePusher.setOnReconnectSuccess(() {
+      Fluttertoast.showToast(
+        msg: 'Successful reconnection',
+        gravity: ToastGravity.CENTER,
+      );
+    });
+
+    /// Send data timeout
+    _alivcLivePusher.setOnSendDataTimeout(() {
+      Fluttertoast.showToast(
+        msg: 'Send data timeout',
+        gravity: ToastGravity.CENTER,
+      );
+    });
+
+    /// Configure the callback for complete playback of background music.
+    _alivcLivePusher.setOnBGMCompleted(() {});
+
+    /// Configure the callback for timeout of the download of background music.
+    _alivcLivePusher.setOnBGMDownloadTimeout(() {});
+
+    /// Configure the callback for failed playback of background music.
+    _alivcLivePusher.setOnBGMOpenFailed(() {});
+
+    /// Configure the callback for paused playback of background music.
+    _alivcLivePusher.setOnBGMPaused(() {});
+
+    /// Configure the callback for playback progress.
+    _alivcLivePusher.setOnBGMProgress((progress, duration) {
+      // ctx.dispatch(CameraPushActionCreator.onUpdateBGMProgress(progress));
+      // ctx.dispatch(CameraPushActionCreator.onUpdateBGMDuration(duration));
+    });
+
+    /// Configure the callback for resumed playback of background music.
+    _alivcLivePusher.setOnBGMResumed(() {
+      // ctx.dispatch(CameraPushActionCreator.updatePushStatusTip(AppLocalizations.of(ctx.context)!.camerapush_bgm_resume_log));
+    });
+
+    /// Configure the callback for start of playback of background music.
+    _alivcLivePusher.setOnBGMStarted(() {
+      // ctx.dispatch(CameraPushActionCreator.updatePushStatusTip(AppLocalizations.of(ctx.context)!.camerapush_bgm_start_log));
+    });
+
+    /// Configure the callback for stop of playback of background music.
+    _alivcLivePusher.setOnBGMStoped(() {
+      // ctx.dispatch(CameraPushActionCreator.updatePushStatusTip(AppLocalizations.of(ctx.context)!.camerapush_bgm_stop_log));
+      // ctx.dispatch(CameraPushActionCreator.onUpdateBGMProgress(0));
+      // ctx.dispatch(CameraPushActionCreator.onUpdateBGMDuration(0));
+    });
+
+    /// Configure callbacks related to snapshot capture.
+    _alivcLivePusher.setOnSnapshot((saveResult, savePath, {dirTypeForIOS}) {
+      // if (saveResult == true) {
+      //   String tip = AppLocalizations.of(ctx.context)!.camerapush_snapshot_tip;
+      //   if (Platform.isIOS) {
+      //     DirType saveDirType = DirType.document;
+      //     if (dirTypeForIOS == AlivcLiveSnapshotDirType.document) {
+      //       saveDirType = DirType.document;
+      //     } else {
+      //       saveDirType = DirType.library;
+      //     }
+      //     CommomUtils.getSaveDir(saveDirType, savePath).then((value) {
+      //       Fluttertoast.showToast(msg: tip + value.path, gravity: ToastGravity.CENTER);
+      //     });
+      //   } else {
+      //     Fluttertoast.showToast(msg: tip + savePath, gravity: ToastGravity.CENTER);
+      //   }
+      // }
+    });
   }
 
-  Future<void> startStreamer(BuildContext context, mounted) async {
-    statusLive = StatusStream.standBy;
-    notifyListeners();
+  Future<void> setLiveConfig() async {
+    AlivcLivePusherConfig pusherConfig = AlivcLivePusherConfig.init();
+    pusherConfig.setCameraType(AlivcLivePushCameraType.front);
 
-    if (!mounted) return;
-    countDown(context, mounted);
+    /// Set the resolution to 540p.
+    pusherConfig.setResolution(AlivcLivePushResolution.resolution_480P);
+
+    /// Specify the frame rate. We recommend that you set the frame rate to 20 frames per second (FPS).
+    pusherConfig.setFps(AlivcLivePushFPS.fps_20);
+
+    /// Enable adaptive bitrate streaming. The default value is true.
+    pusherConfig.setEnableAutoBitrate(true);
+
+    /// Specify the group of pictures (GOP) size. A larger value indicates a higher latency. We recommend that you set the value to a number from 1 to 2.
+    pusherConfig.setVideoEncodeGop(AlivcLivePushVideoEncodeGOP.gop_2);
+
+    /// Specify the reconnection duration. The value cannot be less than 1000. Unit: milliseconds. We recommend that you use the default value.
+    pusherConfig.setConnectRetryInterval(2000);
+
+    /// Disable the mirroring mode for preview.
+    pusherConfig.setPreviewMirror(false);
+
+    pusherConfig.setPushMirror(true);
+
+    /// Set the stream ingest orientation to portrait.
+    pusherConfig.setOrientation(AlivcLivePushOrientation.portrait);
+
+    pusherConfig.setPreviewDisplayMode(AlivcPusherPreviewDisplayMode.preview_aspect_fill);
+    pusherConfig.setQualityMode(AlivcLivePushQualityMode.resolution_first);
   }
 
-  // Future<void> _onListen(BuildContext context, mounted) async {
-  //   /// Listener for stream ingest errors
-  //   /// Configure the callback for SDK errors.
-  //   _alivcBase.setOnLicenceCheck((result, reason) {
-  //     if (result != AlivcLiveLicenseCheckResultCode.success) {
-  //       print("======== belum ada lisensi $reason ========");
-  //     }
-  //   });
+  Future<void> _setLivePusher() async {
+    _alivcLivePusher = AlivcLivePusher.init();
+    _alivcLivePusher.initLivePusher();
+    _alivcLivePusher.createConfig();
+    _alivcLivePusher.setErrorDelegate();
+    _alivcLivePusher.setInfoDelegate();
+    _alivcLivePusher.setNetworkDelegate();
+    _alivcLivePusher.setCustomFilterDelegate();
+    _alivcLivePusher.setCustomDetectorDelegate();
+    _alivcLivePusher.setBGMDelegate();
+    _alivcLivePusher.setResolution(AlivcLivePushResolution.resolution_540P);
+  }
 
-  //   /// Configure the callback for system errors.
-  //   _alivcLivePusher.setOnSDKError((errorCode, errorDescription) {
-  //     print("========  setOnSDKError $errorDescription ========");
-  //     // Fluttertoast.showToast(
-  //     //   msg: AppLocalizations.of(ctx.context)!.camerapush_sdk_error,
-  //     //   gravity: ToastGravity.CENTER,
-  //     // );
-  //   });
+  Future<void> _clickSnapShot() async {
+    if (Platform.isIOS) {
+      /// dir parameter: On iOS, the path is a relative path. A custom directory is automatically generated in the system sandbox. If you set this parameter to "", snapshots are stored in the root directory of the system sandbox.
+      /// dirTypeForIOS parameter: Optional. If you do not specify this parameter, snapshots are stored in the [document] directory of the system sandbox.
+      _alivcLivePusher.snapshot(1, 0, "snapshot", dirTypeForIOS: AlivcLiveSnapshotDirType.document);
+    } else {
+      // CommomUtils.getSystemPath(DirType.externalFile).then((value) {
+      //   _alivcLivePusher.snapshot(1, 0, value);
+      // });
+    }
 
-  //   /// 系统错误回调
-  //   _alivcLivePusher.setOnSystemError((errorCode, errorDescription) {
-  //     print("========  setOnSystemError $errorDescription ========");
-  //     Fluttertoast.showToast(
-  //       msg: 'Camera Stream Error, Please back and stream again',
-  //       gravity: ToastGravity.CENTER,
-  //     );
-  //   });
+    /// Set the listener for snapshot capture.
+    _alivcLivePusher.setSnapshotDelegate();
+  }
 
-  //   /// Listener for the stream ingest status`
-  //   /// Configure the callback for preview start.
-  //   _alivcLivePusher.setOnPreviewStarted(() {
-  //     isloadingPreview = false;
-  //     notifyListeners();
-  //   });
-
-  //   /// Configure the callback for preview stop.
-  //   _alivcLivePusher.setOnPreviewStoped(() {
-  //     isloadingPreview = false;
-  //     notifyListeners();
-  //   });
-
-  //   /// Configure the callback for first frame rendering.
-  //   _alivcLivePusher.setOnFirstFramePreviewed(() {
-  //     isloadingPreview = false;
-  //     notifyListeners();
-  //   });
-
-  //   /// Configure the callback for start of stream ingest.
-  //   _alivcLivePusher.setOnPushStarted(() {
-  //     statusLive = StatusStream.standBy;
-  //     notifyListeners();
-  //     countDown(context, mounted);
-  //   });
-
-  //   /// Configure the callback for pause of stream ingest from the camera.
-  //   _alivcLivePusher.setOnPushPaused(() {
-  //     isPause = true;
-  //     notifyListeners();
-  //   });
-
-  //   /// Configure the callback for resume of stream ingest from the camera.
-  //   _alivcLivePusher.setOnPushResumed(() {
-  //     isPause = false;
-  //     notifyListeners();
-  //   });
-
-  //   /// Configure the callback for restart of stream ingest.
-  //   _alivcLivePusher.setOnPushRestart(() {});
-
-  //   /// Configure the callback for end of stream ingest.
-  //   _alivcLivePusher.setOnPushStoped(() {});
-
-  //   /// Listener for the network status during stream ingest
-  //   /// Configure the callback for failed connection of stream ingest.
-  //   _alivcLivePusher.setOnConnectFail((errorCode, errorDescription) {
-  //     "Error Init Live Streaming : $errorDescription".logger();
-  //   });
-
-  //   /// Configure the callback for network recovery.
-  //   _alivcLivePusher.setOnConnectRecovery(() {});
-
-  //   /// Configure the callback for disconnection.
-  //   _alivcLivePusher.setOnConnectionLost(() {
-  //     Fluttertoast.showToast(
-  //       msg: 'Error no connection lost',
-  //       gravity: ToastGravity.CENTER,
-  //     );
-  //   });
-
-  //   /// Configure the callback for poor network.
-  //   _alivcLivePusher.setOnNetworkPoor(() {
-  //     ShowGeneralDialog.showToastAlert(Routing.navigatorKey.currentContext!, 'There was a bad network', () async {});
-  //   });
-
-  //   /// Configure the callback for failed reconnection.
-  //   _alivcLivePusher.setOnReconnectError((errorCode, errorDescription) {
-  //     Fluttertoast.showToast(
-  //       msg: 'Failed Reconnection',
-  //       gravity: ToastGravity.CENTER,
-  //     );
-  //   });
-
-  //   /// Configure the callback for reconnection start.
-  //   _alivcLivePusher.setOnReconnectStart(() {
-  //     Fluttertoast.showToast(
-  //       msg: 'Reconnection start',
-  //       gravity: ToastGravity.CENTER,
-  //     );
-  //   });
-
-  //   /// Configure the callback for successful reconnection.
-  //   _alivcLivePusher.setOnReconnectSuccess(() {
-  //     Fluttertoast.showToast(
-  //       msg: 'Successful reconnection',
-  //       gravity: ToastGravity.CENTER,
-  //     );
-  //   });
-
-  //   /// Send data timeout
-  //   _alivcLivePusher.setOnSendDataTimeout(() {
-  //     Fluttertoast.showToast(
-  //       msg: 'Send data timeout',
-  //       gravity: ToastGravity.CENTER,
-  //     );
-  //   });
-
-  //   /// Configure the callback for complete playback of background music.
-  //   _alivcLivePusher.setOnBGMCompleted(() {});
-
-  //   /// Configure the callback for timeout of the download of background music.
-  //   _alivcLivePusher.setOnBGMDownloadTimeout(() {});
-
-  //   /// Configure the callback for failed playback of background music.
-  //   _alivcLivePusher.setOnBGMOpenFailed(() {});
-
-  //   /// Configure the callback for paused playback of background music.
-  //   _alivcLivePusher.setOnBGMPaused(() {});
-
-  //   /// Configure the callback for playback progress.
-  //   _alivcLivePusher.setOnBGMProgress((progress, duration) {
-  //     // ctx.dispatch(CameraPushActionCreator.onUpdateBGMProgress(progress));
-  //     // ctx.dispatch(CameraPushActionCreator.onUpdateBGMDuration(duration));
-  //   });
-
-  //   /// Configure the callback for resumed playback of background music.
-  //   _alivcLivePusher.setOnBGMResumed(() {
-  //     // ctx.dispatch(CameraPushActionCreator.updatePushStatusTip(AppLocalizations.of(ctx.context)!.camerapush_bgm_resume_log));
-  //   });
-
-  //   /// Configure the callback for start of playback of background music.
-  //   _alivcLivePusher.setOnBGMStarted(() {
-  //     // ctx.dispatch(CameraPushActionCreator.updatePushStatusTip(AppLocalizations.of(ctx.context)!.camerapush_bgm_start_log));
-  //   });
-
-  //   /// Configure the callback for stop of playback of background music.
-  //   _alivcLivePusher.setOnBGMStoped(() {
-  //     // ctx.dispatch(CameraPushActionCreator.updatePushStatusTip(AppLocalizations.of(ctx.context)!.camerapush_bgm_stop_log));
-  //     // ctx.dispatch(CameraPushActionCreator.onUpdateBGMProgress(0));
-  //     // ctx.dispatch(CameraPushActionCreator.onUpdateBGMDuration(0));
-  //   });
-
-  //   /// Configure callbacks related to snapshot capture.
-  //   _alivcLivePusher.setOnSnapshot((saveResult, savePath, {dirTypeForIOS}) {
-  //     // if (saveResult == true) {
-  //     //   String tip = AppLocalizations.of(ctx.context)!.camerapush_snapshot_tip;
-  //     //   if (Platform.isIOS) {
-  //     //     DirType saveDirType = DirType.document;
-  //     //     if (dirTypeForIOS == AlivcLiveSnapshotDirType.document) {
-  //     //       saveDirType = DirType.document;
-  //     //     } else {
-  //     //       saveDirType = DirType.library;
-  //     //     }
-  //     //     CommomUtils.getSaveDir(saveDirType, savePath).then((value) {
-  //     //       Fluttertoast.showToast(msg: tip + value.path, gravity: ToastGravity.CENTER);
-  //     //     });
-  //     //   } else {
-  //     //     Fluttertoast.showToast(msg: tip + savePath, gravity: ToastGravity.CENTER);
-  //     //   }
-  //     // }
-  //   });
-  // }
-
-  // Future<void> setLiveConfig() async {
-  //   AlivcLivePusherConfig pusherConfig = AlivcLivePusherConfig.init();
-  //   pusherConfig.setCameraType(AlivcLivePushCameraType.front);
-
-  //   /// Set the resolution to 540p.
-  //   pusherConfig.setResolution(AlivcLivePushResolution.resolution_480P);
-
-  //   /// Specify the frame rate. We recommend that you set the frame rate to 20 frames per second (FPS).
-  //   pusherConfig.setFps(AlivcLivePushFPS.fps_20);
-
-  //   /// Enable adaptive bitrate streaming. The default value is true.
-  //   pusherConfig.setEnableAutoBitrate(true);
-
-  //   /// Specify the group of pictures (GOP) size. A larger value indicates a higher latency. We recommend that you set the value to a number from 1 to 2.
-  //   pusherConfig.setVideoEncodeGop(AlivcLivePushVideoEncodeGOP.gop_2);
-
-  //   /// Specify the reconnection duration. The value cannot be less than 1000. Unit: milliseconds. We recommend that you use the default value.
-  //   pusherConfig.setConnectRetryInterval(2000);
-
-  //   /// Disable the mirroring mode for preview.
-  //   pusherConfig.setPreviewMirror(false);
-
-  //   pusherConfig.setPushMirror(true);
-
-  //   /// Set the stream ingest orientation to portrait.
-  //   pusherConfig.setOrientation(AlivcLivePushOrientation.portrait);
-
-  //   pusherConfig.setPreviewDisplayMode(AlivcPusherPreviewDisplayMode.preview_aspect_fill);
-  //   pusherConfig.setQualityMode(AlivcLivePushQualityMode.resolution_first);
-  // }
-
-  // Future<void> _setLivePusher() async {
-  //   _alivcLivePusher = AlivcLivePusher.init();
-  //   _alivcLivePusher.initLivePusher();
-  //   _alivcLivePusher.createConfig();
-  //   _alivcLivePusher.setErrorDelegate();
-  //   _alivcLivePusher.setInfoDelegate();
-  //   _alivcLivePusher.setNetworkDelegate();
-  //   _alivcLivePusher.setCustomFilterDelegate();
-  //   _alivcLivePusher.setCustomDetectorDelegate();
-  //   _alivcLivePusher.setBGMDelegate();
-  //   _alivcLivePusher.setResolution(AlivcLivePushResolution.resolution_540P);
-  // }
-
-  // Future<void> _clickSnapShot() async {
-  //   if (Platform.isIOS) {
-  //     /// dir parameter: On iOS, the path is a relative path. A custom directory is automatically generated in the system sandbox. If you set this parameter to "", snapshots are stored in the root directory of the system sandbox.
-  //     /// dirTypeForIOS parameter: Optional. If you do not specify this parameter, snapshots are stored in the [document] directory of the system sandbox.
-  //     _alivcLivePusher.snapshot(1, 0, "snapshot", dirTypeForIOS: AlivcLiveSnapshotDirType.document);
-  //   } else {
-  //     // CommomUtils.getSystemPath(DirType.externalFile).then((value) {
-  //     //   _alivcLivePusher.snapshot(1, 0, value);
-  //     // });
-  //   }
-
-  //   /// Set the listener for snapshot capture.
-  //   _alivcLivePusher.setSnapshotDelegate();
-  // }
-
-  // Future<void> previewCreated() async {
-  //   _alivcLivePusher.startPreview().then((value) {
-  //     print("===== start preview ====");
-  //   });
-  //   // _beautyManager.setupBeauty();
-  //   // ctx.dispatch(CameraPushActionCreator.onClickPreview(CameraPushPagePreviewState.startPreview));
-  // }
+  Future<void> previewCreated() async {
+    _alivcLivePusher.startPreview().then((value) {
+      print("===== start preview ====");
+    });
+    // _beautyManager.setupBeauty();
+    // ctx.dispatch(CameraPushActionCreator.onClickPreview(CameraPushPagePreviewState.startPreview));
+  }
 
 //   rtmp://ingest.hyppe.cloud/Hyppe/hdstream?auth_key=1700732018-0-0-580e7fb4d21585a87315470a335513c1
 
@@ -516,7 +429,6 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
 // rtmp://live.hyppe.cloud/Hyppe/hdstream_hd-v?auth_key=1700732018-0-0-8e221f09856a236e9f2454e8dfddfae1
 
   Future<void> clickPushAction(BuildContext context, mounted) async {
-    pinComment = null;
     isCancel = false;
     timeReady = 3;
     userName = context.read<SelfProfileNotifier>().user.profile?.username ?? '';
@@ -529,11 +441,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     var init = await initLiveStream(context, mounted);
     if (init) {
       Future.delayed(const Duration(seconds: 1));
-
-      // _alivcLivePusher.startPushWithURL(dataStream.urlIngest ?? '');
-      if (!mounted) return;
-      await startStreamer(context, mounted);
-
+      _alivcLivePusher.startPushWithURL(dataStream.urlIngest ?? '');
       if (_socketService.isRunning) {
         _socketService.closeSocket(eventComment);
         _socketService.closeSocket(eventLikeStream);
@@ -554,10 +462,10 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     _socketService.closeSocket(eventComment);
     _socketService.closeSocket(eventLikeStream);
     _socketService.closeSocket(eventViewStream);
-    // _alivcLivePusher.stopPush();
-    // _alivcLivePusher.stopPreview();
-    // _alivcLivePusher.destroy();
-    engine.release();
+    _alivcLivePusher.stopPush();
+    _alivcLivePusher.stopPreview();
+
+    _alivcLivePusher.destroy();
 
     WakelockPlus.disable();
     statusLive = StatusStream.offline;
@@ -578,7 +486,6 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     mute = false;
     isPause = false;
     isCommentDisable = false;
-    flipCameraVisible = true;
     titleLiveCtrl.clear();
     userName = '';
     _titleLive = '';
@@ -600,12 +507,11 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   }
 
   void flipCamera() {
-    engine.switchCamera();
-    // _alivcLivePusher.switchCamera();
+    _alivcLivePusher.switchCamera();
   }
 
   void countDown(BuildContext context, mounted) async {
-    await Future.delayed(const Duration(milliseconds: 1000), () async {
+    await Future.delayed(const Duration(milliseconds: 1000), () {
       timeReady--;
       notifyListeners();
       if (timeReady > 0) {
@@ -614,15 +520,6 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
         if (!isCancel) {
           statusLive = StatusStream.ready;
           notifyListeners();
-
-          // Agora
-          // await engine.joinChannel(
-          //   token: token,
-          //   channelId: 'testChannel',
-          //   uid: 0,
-          //   options: const ChannelMediaOptions(),
-          // );
-
           Future.delayed(const Duration(seconds: 2), () {
             statusLive = StatusStream.online;
             initTimer(context, mounted);
@@ -651,7 +548,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
             duration: const Duration(seconds: 10),
             child: FadeTransition(
               opacity: animatedOpacity,
-              child: const Material(color: Colors.transparent, child: Icon(Icons.heart_broken)),
+              child: Material(color: Colors.transparent, child: Icon(Icons.heart_broken)),
             )),
       );
     }).toList();
@@ -673,8 +570,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
 
   void soundMute() {
     mute = !mute;
-    engine.muteLocalAudioStream(mute);
-    // _alivcLivePusher.setMute(mute);
+    _alivcLivePusher.setMute(mute);
     debugPrint(mute.toString());
     notifyListeners();
   }
@@ -683,12 +579,8 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     var pause = await pauseSendStatus(context);
     if (pause) {
       mute = true;
-      flipCameraVisible = false;
-      await engine.stopPreview();
-      engine.muteLocalVideoStream(mute);
-      engine.muteLocalAudioStream(mute);
-      // _alivcLivePusher.setMute(true);
-      // _alivcLivePusher.pause();
+      _alivcLivePusher.setMute(true);
+      _alivcLivePusher.pause();
       totPause++;
       notifyListeners();
     }
@@ -701,12 +593,8 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
 
     if (pause) {
       mute = false;
-      flipCameraVisible = true;
-      engine.startPreview();
-      engine.muteLocalVideoStream(mute);
-      engine.muteLocalAudioStream(mute);
-      // _alivcLivePusher.resume();
-      // _alivcLivePusher.setMute(false);
+      _alivcLivePusher.resume();
+      _alivcLivePusher.setMute(false);
       isPause = false;
     }
     isloadingButton = false;
@@ -716,8 +604,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   Future<void> cancelLive(BuildContext context, mounted) async {
     isCancel = true;
     statusLive = StatusStream.offline;
-    // _alivcLivePusher.stopPush();
-    engine.release();
+    _alivcLivePusher.stopPush();
     inactivityTimer?.cancel();
     stopStream(context, mounted);
   }
@@ -733,7 +620,6 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     var dateTimeFinish = DateTime.now();
     Duration duration = dateTimeFinish.difference(dateTimeStart);
     await destoryPusher();
-    if (!mounted) return;
     await stopStream(context, mounted);
     Routing().moveReplacement(Routes.streamingFeedback, argument: SummaryLiveArgument(duration: duration, data: dataSummary));
   }
@@ -858,7 +744,6 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
         }
         final fetch = notifier.liveStreamFetch;
         if (fetch.postsState == LiveStreamState.getApiSuccess) {
-          print('datas fetch ${fetch.data}');
           dataStream = LinkStreamModel.fromJson(fetch.data);
           returnNext = true;
         }
@@ -872,7 +757,6 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
       if (context.mounted) {
         ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
           Routing().moveBack();
-          Fluttertoast.showToast(msg: 'Please try again letter');
           initLiveStream(context, mounted);
         });
       }
@@ -1252,13 +1136,6 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
       var messages = CommentLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
       if (messages.idStream == dataStream.sId) {
         comment.insert(0, messages);
-        giftBasic.insert(0, messages.sId);
-        // startTimerBasic();
-
-        if (timerBasic?.isActive ?? false) {
-        } else {
-          startTimerBasic();
-        }
       }
     } else if (event == eventLikeStream) {
       var messages = CountLikeLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
@@ -1295,181 +1172,5 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     randomValue = double.parse(randomValue.toStringAsFixed(4));
 
     return randomValue;
-  }
-
-  bool urlFalse = true;
-  void urlValidation(String url) {
-    if (Uri.tryParse(url)?.hasAbsolutePath ?? false) {
-      urlFalse = true;
-    } else {
-      urlFalse = false;
-    }
-    notifyListeners();
-  }
-
-  void insertPinComment(CommentLiveModel data) {
-    pinComment = data;
-    comment.removeWhere((element) => element.sId == data.sId);
-    notifyListeners();
-  }
-
-  void removePinComment() async {
-    comment.insert(0, pinComment ?? CommentLiveModel());
-    pinComment = null;
-    notifyListeners();
-  }
-
-  Future getUserShare(BuildContext context, bool mounted, {bool isLoadmore = false}) async {
-    if (!isLoadmore) isloadingUserShare = true;
-    notifyListeners();
-    bool connect = await System().checkConnections();
-
-    if (connect) {
-      try {
-        final notifier = LiveStreamBloc();
-        Map data = {
-          "pageNumber": pageNumberUserShare,
-          "pageRow": limitNumberUserShare,
-        };
-
-        if (searchUserCtrl.text != '') {
-          data["username"] = searchUserCtrl.text;
-        }
-
-        if (mounted) await notifier.getLinkStream(context, data, UrlConstants.userShare);
-
-        final fetch = notifier.liveStreamFetch;
-        if (fetch.postsState == LiveStreamState.getApiSuccess) {
-          if (!isLoadmore) listShareUser = [];
-          fetch.data.forEach((v) => listShareUser.add(SearchPeolpleData.fromJson(v)));
-          if (shareUsers.isNotEmpty) {
-            for (var e in listShareUser) {
-              for (var f in shareUsers) {
-                if (e.username == f.username) {
-                  e.isSelected = true;
-                }
-              }
-            }
-          }
-        }
-      } catch (e) {
-        debugPrint(e.toString());
-      }
-
-      notifyListeners();
-    } else {
-      if (context.mounted) {
-        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
-          Routing().moveBack();
-        });
-      }
-    }
-    isloadingUserShare = false;
-    notifyListeners();
-  }
-
-  void loadMore(BuildContext context, ScrollController scrollController) async {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
-      print('kebawah');
-      pageNumberUserShare++;
-      notifyListeners();
-      await getUserShare(context, context.mounted, isLoadmore: true);
-      notifyListeners();
-    }
-  }
-
-  insertListShare(SearchPeolpleData data) {
-    shareUsers.add(data);
-    notifyListeners();
-  }
-
-  removeListShare(SearchPeolpleData data) {
-    shareUsers.removeWhere((element) => element.username == data.username);
-    notifyListeners();
-  }
-
-  Future sendShareMassage(BuildContext context) async {
-    Routing().moveBack();
-    for (var i = 0; i < shareUsers.length; i++) {
-      sendMessageDirect(context, shareUsers[i].email ?? '');
-    }
-
-    ScaffoldMessengerState().hideCurrentSnackBar();
-    messageShareCtrl.clear();
-    if (context.mounted) {
-      tn = context.read<TranslateNotifierV2>().translate;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        margin: const EdgeInsets.only(bottom: 60, left: 16, right: 16),
-        backgroundColor: kHyppeTextLightPrimary,
-        content: Text(tn?.sentSuccessfully ?? '', style: const TextStyle(color: Colors.white)),
-        behavior: SnackBarBehavior.floating,
-      ));
-    }
-  }
-
-  Future sendMessageDirect(BuildContext context, String recipientEmail) async {
-    if (messageShareCtrl.text.trim().isEmpty) return;
-
-    try {
-      messageShareCtrl.text.logger();
-
-      final message = messageShareCtrl.text;
-      final emailSender = SharedPreference().readStorage(SpKeys.email);
-      final param = DiscussArgument(
-        email: emailSender,
-        receiverParty: recipientEmail,
-      )..txtMessages = message;
-
-      final notifier = MessageBlocV2();
-      await notifier.createDiscussionBloc(context, disqusArgument: param);
-
-      final fetch = notifier.messageFetch;
-
-      if (fetch.chatState == MessageState.createDiscussionBlocSuccess) {}
-      if (fetch.chatState == MessageState.createDiscussionBlocError) {}
-    } catch (e) {
-      e.toString().logger();
-    }
-  }
-
-  Future createLinkStream(BuildContext context, {required bool copiedToClipboard, required String description}) async {
-    await createdDynamicLinkMixin(
-      context,
-      data: DynamicLinkData(
-        routes: Routes.viewStreaming,
-        postID: 'asdasd',
-        fullName: 'Username',
-        description: 'descriot',
-        thumb: '',
-      ),
-      copiedToClipboard: copiedToClipboard,
-    ).then((value) {
-      if (value) {
-        if (copiedToClipboard && context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            margin: EdgeInsets.only(bottom: 60, left: 16, right: 16),
-            backgroundColor: kHyppeTextLightPrimary,
-            content: Text('Link Copied', style: TextStyle(color: Colors.white)),
-            behavior: SnackBarBehavior.floating,
-          ));
-        }
-      }
-    });
-  }
-
-  Timer? timerBasic;
-
-  void startTimerBasic() {
-    timerBasic = Timer.periodic(const Duration(seconds: 3), (timer) {
-      print("=== ${timer}");
-      print("=== ${giftBasic.isNotEmpty}");
-      if (giftBasic.isNotEmpty) {
-        print("===================================haous========================");
-        giftBasic.removeAt(0);
-        notifyListeners();
-      } else {
-        timerBasic?.cancel();
-      }
-    });
   }
 }

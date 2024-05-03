@@ -77,7 +77,7 @@ class _SettingScreenState extends State<SettingScreen> {
             appBar: AppBar(
               leading: const BackButton(),
               title: CustomTextWidget(
-                textStyle: theme.textTheme.subtitle1,
+                textStyle: theme.textTheme.titleMedium,
                 textToDisplay: '${notifier.translate.settings}',
               ),
             ),
@@ -88,24 +88,24 @@ class _SettingScreenState extends State<SettingScreen> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SettingTile(
-                    icon: 'transaction-icon.svg',
-                    onTap: () {
-                      context.handleActionIsGuest(() {
-                        context.read<SettingNotifier>().validateUser(context, notifier);
-                      });
-                    },
-                    caption: '${notifier.translate.transaction}',
-                    keyGLobal: keyTransaction,
-                    descriptionCas: (mn?.tutorialData.isEmpty ?? [].isEmpty)
-                        ? ''
-                        : notifier.translate.localeDatetime == 'id'
-                            ? mn?.tutorialData[indexKey].textID
-                            : mn?.tutorialData[indexKey].textEn,
-                    positionTooltip: TooltipPosition.bottom,
-                    positionYplus: -10,
-                    indexTutor: indexKey,
-                  ),
+                  // SettingTile(
+                  //   icon: 'transaction-icon.svg',
+                  //   onTap: () {
+                  //     context.handleActionIsGuest(() {
+                  //       context.read<SettingNotifier>().validateUser(context, notifier);
+                  //     });
+                  //   },
+                  //   caption: '${notifier.translate.transaction}',
+                  //   keyGLobal: keyTransaction,
+                  //   descriptionCas: (mn?.tutorialData.isEmpty ?? [].isEmpty)
+                  //       ? ''
+                  //       : notifier.translate.localeDatetime == 'id'
+                  //           ? mn?.tutorialData[indexKey].textID
+                  //           : mn?.tutorialData[indexKey].textEn,
+                  //   positionTooltip: TooltipPosition.bottom,
+                  //   positionYplus: -10,
+                  //   indexTutor: indexKey,
+                  // ),
                   const Padding(
                     padding: EdgeInsets.all(16.0),
                     child: MyBalance(),
@@ -179,6 +179,24 @@ class _SettingScreenState extends State<SettingScreen> {
                       //   caption: '${notifier.translate.referralID}',
                       // ),
                     ],
+                  ),
+                  SettingTile(
+                    icon: 'transaction-icon.svg',
+                    onTap: () {
+                      context.handleActionIsGuest(() {
+                        context.read<SettingNotifier>().validateUser(context, notifier);
+                      });
+                    },
+                    caption: '${notifier.translate.transaction}',
+                    keyGLobal: keyTransaction,
+                    descriptionCas: (mn?.tutorialData.isEmpty ?? [].isEmpty)
+                        ? ''
+                        : notifier.translate.localeDatetime == 'id'
+                            ? mn?.tutorialData[indexKey].textID
+                            : mn?.tutorialData[indexKey].textEn,
+                    positionTooltip: TooltipPosition.bottom,
+                    positionYplus: -10,
+                    indexTutor: indexKey,
                   ),
                   sixteenPx,
                   Divider(
