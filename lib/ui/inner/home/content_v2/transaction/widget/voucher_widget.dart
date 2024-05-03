@@ -50,9 +50,10 @@ class VoucherWidget extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.background,
-        borderRadius: BorderRadius.circular(5),
-        boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+        color: kHyppeBurem.withOpacity(.05),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: kHyppeBurem.withOpacity(.3))
+        // boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
       ),
       child: Material(
         color: Colors.transparent,
@@ -103,7 +104,7 @@ class VoucherWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-                const Divider(height: 0.2, thickness: 1, color: Color(0xffF7F7F7)),
+                Divider(height: 0.2, thickness: 1, color: kHyppeBurem.withOpacity(.3)),
                 twelvePx,
                 // SelectableText("${data.apsara ? data.media.imageInfo.isEmpty ? data.media.videoList[0].coverURL : data.media.imageInfo[0].url : data?.fullThumbPath}"),
                 Row(

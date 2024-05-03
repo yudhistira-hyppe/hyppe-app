@@ -1,22 +1,22 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
-import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-import 'package:hyppe/ui/constant/widget/section_dropdown_widget.dart';
-import 'package:hyppe/ui/inner/home/content_v2/coins/widgets/custom_listtile.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/filter/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/button_transaction.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/buysell_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/empty_bank_account.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/reward_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/shimmer_transaction_history.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/total_balance.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/voucher_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/witdhdrawal_widget.dart';
 import 'package:hyppe/ux/path.dart';
@@ -37,8 +37,8 @@ class _TransactionState extends State<Transaction> {
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'Transaction');
     final _notifier = context.read<TransactionNotifier>();
-    _notifier.getTypeFilter(context);
     _notifier.setSkip(0);
+    print('initstate');
     _notifier.initTransactionHistory(context);
     _scrollController.addListener(() => _notifier.scrollList(context, _scrollController));
     super.initState();
@@ -63,12 +63,9 @@ class _TransactionState extends State<Transaction> {
           appBar: AppBar(
             leading: const BackButton(),
             title: CustomTextWidget(
-              textStyle: theme.textTheme.titleMedium,
+              textStyle: theme.textTheme.subtitle1,
               textToDisplay: '${notifier2.translate.transaction}',
             ),
-            actions: [
-              IconButton(onPressed: (){}, icon: const Icon(Icons.info_outline_rounded))
-            ],
           ),
           body: RefreshIndicator(
             strokeWidth: 2.0,
@@ -87,33 +84,61 @@ class _TransactionState extends State<Transaction> {
                       padding: const EdgeInsets.all(16),
                       child: Column(
                         children: [
-                          // TotalBalance(accountBalance: System().numberFormat(amount: notifier.accountBalance?.totalsaldo ?? 0)),
-                          // const ButtonTransaction(),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: kHyppeBurem.withOpacity(.05),
-                              border: Border.all(color: kHyppeBurem, width: .5),
-                              borderRadius: BorderRadius.circular(18.0)
-                            ),
-                            child: CustomListTile(
-                              iconData: "${AssetPath.vectorPath}transaction-new.svg",
-                              title: "Pesanan Kamu",
-                              onTap: () {
-                                notifier.navigateToBankAccount();
-                              },
-                            ),
-                          ),
-                          twentyPx,
+                          TotalBalance(accountBalance: System().numberFormat(amount: notifier.accountBalance?.totalsaldo ?? 0)),
+                          const ButtonTransaction(),
+                          sixPx,
+                          // Container(
+                          //   decoration: BoxDecoration(
+                          //     color: Theme.of(context).colorScheme.background,
+                          //     borderRadius: BorderRadius.circular(5),
+                          //     boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+                          //   ),
+                          //   child: Material(
+                          //     color: Colors.transparent,
+                          //     child: InkWell(
+                          //       onTap: () => Routing().move(Routes.transactionInProgress),
+                          //       child: Container(
+                          //         decoration: BoxDecoration(
+                          //           borderRadius: BorderRadius.circular(8),
+                          //         ),
+                          //         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
+                          //         child: Row(
+                          //           children: [
+                          //             const CustomIconWidget(
+                          //               iconData: "${AssetPath.vectorPath}hitory-inprogress.svg",
+                          //               defaultColor: false,
+                          //             ),
+                          //             sixPx,
+                          //             CustomTextWidget(
+                          //               textToDisplay: notifier2.translate.transactionInProgress ?? '',
+                          //               textStyle: Theme.of(context).textTheme.caption,
+                          //             ),
+                          //             Expanded(
+                          //               child: Align(
+                          //                 alignment: Alignment.centerRight,
+                          //                 child: Container(
+                          //                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                          //                   decoration: BoxDecoration(
+                          //                     borderRadius: BorderRadius.circular(8),
+                          //                     color: (notifier.countTransactionProgress ?? 0) > 0 ? kHyppeDanger : kHyppeLightSecondary,
+                          //                   ),
+                          //                   child: CustomTextWidget(
+                          //                     textToDisplay: "${notifier.countTransactionProgress}",
+                          //                     textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightBackground),
+                          //                   ),
+                          //                 ),
+                          //               ),
+                          //             )
+                          //           ],
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              CustomTextWidget(
-                                textToDisplay: notifier2.translate.recentTransaction ?? 'Recent Transaction',
-                                textStyle: const TextStyle(
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold
-                                ),  
-                              ),
+                              const CustomTextWidget(textToDisplay: 'Recent Transaction'),
                               CustomTextButton(
                                 onPressed: () {
                                   context.read<FilterTransactionNotifier>().getTypeFilter(context);
@@ -121,50 +146,12 @@ class _TransactionState extends State<Transaction> {
                                 },
                                 child: CustomTextWidget(
                                     textToDisplay: notifier2.translate.seeMore ?? '',
-                                    textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
                                           color: kHyppePrimary,
                                           fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
+                                        )),
                               )
                             ],
-                          ),
-                          twelvePx,
-                          Container(
-                            height: kToolbarHeight - 8,
-                            padding: const EdgeInsets.symmetric(vertical: 4.0),
-                            child: ListView(
-                              physics: const BouncingScrollPhysics(),
-                              scrollDirection: Axis.horizontal,
-                              children: [
-                                Visibility(
-                                  visible: notifier.selectedFiltersValue.isNotEmpty || notifier.selectedDateValue != 1,
-                                  child: GestureDetector(
-                                    onTap: () => notifier.resetSelected(),
-                                    child: Container(
-                                      margin: const EdgeInsets.only(right: 12.0),
-                                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: kHyppeBurem, width: .5),
-                                        borderRadius: BorderRadius.circular(32.0)
-                                      ),
-                                      child: const Icon(Icons.close),
-                                    ),
-                                  ),
-                                ),
-                                SectionDropdownWidget(
-                                  title: notifier.selectedFiltersValue.isEmpty ? notifier.selectedFiltersLabel : notifier.selectedFiltersValue.map((e) => e).join(', ') ,
-                                  onTap: () => notifier.showButtomSheetFilters(context),
-                                  isActive: notifier.selectedFiltersValue.isNotEmpty,
-                                ),
-                                SectionDropdownWidget(
-                                  title: notifier.selectedDateLabel, 
-                                  onTap: () => notifier.showButtomSheetDate(context),
-                                  isActive: notifier.selectedDateValue!=1
-                                  // isActive: false
-                                ),
-                              ],
-                            ),
                           ),
                           (notifier.dataTransaction?.isEmpty ?? true)
                               ? EmptyBankAccount(

@@ -31,7 +31,6 @@ class LocalizationModelV2 {
   String? didntReceiveTheCode;
   String? pleaseWaitFor;
   String? verify;
-  String? verifyNow;
   String? verified;
   String? resendNewCode;
   String? yourIdentityHasBeenVerified;
@@ -159,7 +158,6 @@ class LocalizationModelV2 {
   String? afterThatThis;
   String? willBePermanentlyDeleted;
   String? delete;
-  String? deleteLink;
   String? dontDelete;
   String? yourContentHadSuccessfullyDeleted;
   String? views;
@@ -182,8 +180,6 @@ class LocalizationModelV2 {
   String? music;
   String? searchMusic;
   String? addMusic;
-  String? titleLink;
-  String? addLink;
   String? tapOnTrackToTrim;
   String? loading;
   String? popular;
@@ -348,6 +344,7 @@ class LocalizationModelV2 {
   String? personalInfo;
   String? pleaseTryAgain;
   String? recent;
+  String? recentTransaction;
   String? reEnter;
   String? select;
   String? signUp;
@@ -383,6 +380,9 @@ class LocalizationModelV2 {
   String? reportThisProfile;
   String? blockCaption;
   String? reportCaption;
+  String? reportSubmitted;
+  String? reportSubmittedLabel;
+  String? reportSubmittedLabel2;
   String? blockHeader;
   String? blockSubject;
   String? blockBody;
@@ -486,6 +486,7 @@ class LocalizationModelV2 {
   String? profilePhoto;
   String? retake;
   String? close;
+  String? exitLive;
   String? upload;
   String? typeAMessage;
   String? successUploadId;
@@ -541,7 +542,6 @@ class LocalizationModelV2 {
   String? pleaseVerifyYourIdToUseHyppeFeatures;
   String? verifyYourAccount;
   String? unfortunately;
-  String? verifyId;
   String? needVerifyId;
   String? needVerifyIdDescriptions;
   String? needVerifyIdDescriptions2;
@@ -848,6 +848,7 @@ class LocalizationModelV2 {
   String? startDate;
   String? autoSelect;
   String? selectManual;
+  String? selectReport;
   String? boostTime;
   String? interval;
   String? contentWillbeBoostedfor30days;
@@ -1074,6 +1075,7 @@ class LocalizationModelV2 {
   String? itstimetoLIVEandinteract;
   String? liveVideo;
   String? liveHost;
+  String? keepWatching;
   String? whosWatching;
   String? whosWatchingDetail;
   String? removeUser;
@@ -1088,7 +1090,18 @@ class LocalizationModelV2 {
   String? totalShares;
   String? newFollowers;
   String? totalComments;
+  String? totalPemberiGift;
+  String? totalGift;
+  String? income;
+  String? totalIncomeLive;
   String? viewerList;
+  String? giftList;
+  String? labelBlockLive;
+  String? labelBlockLive2;
+  String? labelBlockLive3;
+  String? timingblock30s;
+  String? communityguidelines;
+  String? communityguidelinelabel;
   String? howWasYourLiveExperience;
   String? poor;
   String? neutral;
@@ -1127,7 +1140,11 @@ class LocalizationModelV2 {
   String? addATitle;
   String? inThisDiary;
   String? inThisVideo;
-
+  String? verifyNow;
+  String? verifyId;
+  String? addLink;
+  String? titleLink;
+  String? deleteLink;
   LocalizationModelV2({
     this.login,
     this.logIn,
@@ -1161,7 +1178,6 @@ class LocalizationModelV2 {
     this.didntReceiveTheCode,
     this.pleaseWaitFor,
     this.verify,
-    this.verifyNow,
     this.verified,
     this.resendNewCode,
     this.yourIdentityHasBeenVerified,
@@ -1289,7 +1305,6 @@ class LocalizationModelV2 {
     this.afterThatThis,
     this.willBePermanentlyDeleted,
     this.delete,
-    this.deleteLink,
     this.dontDelete,
     this.yourContentHadSuccessfullyDeleted,
     this.views,
@@ -1312,8 +1327,6 @@ class LocalizationModelV2 {
     this.music,
     this.searchMusic,
     this.addMusic,
-    this.titleLink,
-    this.addLink,
     this.tapOnTrackToTrim,
     this.loading,
     this.popular,
@@ -1478,6 +1491,7 @@ class LocalizationModelV2 {
     this.personalInfo,
     this.pleaseTryAgain,
     this.recent,
+    this.recentTransaction,
     this.reEnter,
     this.select,
     this.signUp,
@@ -1513,6 +1527,9 @@ class LocalizationModelV2 {
     this.reportThisProfile,
     this.blockCaption,
     this.reportCaption,
+    this.reportSubmitted,
+    this.reportSubmittedLabel,
+    this.reportSubmittedLabel2,
     this.blockHeader,
     this.blockSubject,
     this.blockBody,
@@ -1616,6 +1633,7 @@ class LocalizationModelV2 {
     this.profilePhoto,
     this.retake,
     this.close,
+    this.exitLive,
     this.upload,
     this.typeAMessage,
     this.successUploadId,
@@ -1672,7 +1690,6 @@ class LocalizationModelV2 {
     this.verifyYourAccount,
     this.unfortunately,
     this.needVerifyId,
-    this.verifyId,
     this.needVerifyIdDescriptions,
     this.needVerifyIdDescriptions2,
     this.confirm,
@@ -1978,6 +1995,7 @@ class LocalizationModelV2 {
     this.startDate,
     this.autoSelect,
     this.selectManual,
+    this.selectReport,
     this.boostTime,
     this.interval,
     this.contentWillbeBoostedfor30days,
@@ -2204,6 +2222,7 @@ class LocalizationModelV2 {
     this.itstimetoLIVEandinteract,
     this.liveVideo,
     this.liveHost,
+    this.keepWatching,
     this.whosWatching,
     this.whosWatchingDetail,
     this.removeUser,
@@ -2218,7 +2237,18 @@ class LocalizationModelV2 {
     this.totalShares,
     this.newFollowers,
     this.totalComments,
+    this.totalPemberiGift,
+    this.totalGift,
+    this.income,
+    this.totalIncomeLive,
     this.viewerList,
+    this.giftList,
+    this.labelBlockLive,
+    this.labelBlockLive2,
+    this.labelBlockLive3,
+    this.timingblock30s,
+    this.communityguidelines,
+    this.communityguidelinelabel,
     this.howWasYourLiveExperience,
     this.poor,
     this.neutral,
@@ -2256,7 +2286,12 @@ class LocalizationModelV2 {
     this.inthisphoto,
     this.addATitle,
     this.inThisDiary,
-    this.inThisVideo
+    this.inThisVideo,
+    this.verifyNow,
+    this.verifyId,
+    this.addLink,
+    this.titleLink,
+    this.deleteLink,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2292,7 +2327,6 @@ class LocalizationModelV2 {
     didntReceiveTheCode = json['didntReceiveTheCode'];
     pleaseWaitFor = json['pleaseWaitFor'];
     verify = json['verify'];
-    verifyNow = json['verifyNow'];
     verified = json['verified'];
     resendNewCode = json['resendNewCode'];
     yourIdentityHasBeenVerified = json['yourIdentityHasBeenVerified'];
@@ -2420,7 +2454,6 @@ class LocalizationModelV2 {
     afterThatThis = json['afterThatThis'];
     willBePermanentlyDeleted = json['willBePermanentlyDeleted'];
     delete = json['delete'];
-    deleteLink = json['deleteLink'];
     dontDelete = json['dontDelete'];
     yourContentHadSuccessfullyDeleted = json['yourContentHadSuccessfullyDeleted'];
     views = json['views'];
@@ -2443,8 +2476,6 @@ class LocalizationModelV2 {
     music = json['music'];
     searchMusic = json['search_music'];
     addMusic = json['add_music'];
-    titleLink = json['titleLink'];
-    addLink = json['addLink'];
     tapOnTrackToTrim = json['tap_on_track_to_trim'];
     loading = json['loading'];
     popular = json['popular'];
@@ -2610,6 +2641,7 @@ class LocalizationModelV2 {
     personalInfo = json['personalInfo'];
     pleaseTryAgain = json['pleaseTryAgain'];
     recent = json['recent'];
+    recentTransaction = json['recentTransaction'];
     reEnter = json['reEnter'];
     select = json['select'];
     signUp = json['signUp'];
@@ -2645,6 +2677,9 @@ class LocalizationModelV2 {
     reportThisProfile = json['reportThisProfile'];
     blockCaption = json['blockCaption'];
     reportCaption = json['reportCaption'];
+    reportSubmitted = json['reportSubmitted'];
+    reportSubmittedLabel = json['reportSubmittedLabel'];
+    reportSubmittedLabel2 = json['reportSubmittedLabel2'];
     blockHeader = json['blockHeader'];
     blockSubject = json['blockSubject'];
     blockBody = json['blockBody'];
@@ -2748,6 +2783,7 @@ class LocalizationModelV2 {
     profilePhoto = json['profilePhoto'];
     retake = json['retake'];
     close = json['close'];
+    exitLive = json['exitLive'];
     upload = json['upload'];
     typeAMessage = json['typeAMessage'];
     successUploadId = json['successUploadId'];
@@ -2803,7 +2839,6 @@ class LocalizationModelV2 {
     pleaseVerifyYourIdToUseHyppeFeatures = json["pleaseVerifyYourIdToUseHyppeFeatures"];
     verifyYourAccount = json["verifyYourAccount"];
     unfortunately = json['unfortunately'];
-    verifyId = json['verifyId'];
     needVerifyId = json['needVerifyId'];
     needVerifyIdDescriptions = json['needVerifyIdDescriptions'];
     needVerifyIdDescriptions2 = json['needVerifyIdDescriptions2'];
@@ -3131,6 +3166,7 @@ class LocalizationModelV2 {
     startDate = json["startDate"];
     autoSelect = json["autoSelect"];
     selectManual = json["selectManual"];
+    selectReport = json["selectReport"];
     boostTime = json["boostTime"];
     interval = json["interval"];
     minutes = json["minutes"];
@@ -3353,6 +3389,7 @@ class LocalizationModelV2 {
     itstimetoLIVEandinteract = json['itstimetoLIVEandinteract'];
     liveVideo = json['liveVideo'];
     liveHost = json['liveHost'];
+    keepWatching = json['keepWatching'];
     whosWatching = json['whosWatching'];
     whosWatchingDetail = json['whosWatchingDetail'];
     removeUser = json['removeUser'];
@@ -3367,7 +3404,18 @@ class LocalizationModelV2 {
     totalShares = json["totalShares"];
     newFollowers = json["newFollowers"];
     totalComments = json["totalComments"];
+    totalPemberiGift = json["totalPemberiGift"];
+    totalGift = json["totalGift"];
+    income = json["income"];
+    totalIncomeLive = json["totalIncomeLive"];
     viewerList = json["viewerList"];
+    giftList = json["giftList"];
+    labelBlockLive = json["labelBlockLive"];
+    labelBlockLive2 = json["labelBlockLive2"];
+    labelBlockLive3 = json["labelBlockLive3"];
+    communityguidelines = json["communityguidelines"];
+    communityguidelinelabel = json["communityguidelinelabel"];
+    timingblock30s = json["timingblock30s"];
     howWasYourLiveExperience = json["howWasYourLiveExperience"];
     poor = json["poor"];
     neutral = json["neutral"];
@@ -3406,5 +3454,10 @@ class LocalizationModelV2 {
     addATitle = json['addATitle'];
     inThisDiary = json['inThisDiary'];
     inThisVideo = json['inThisVideo'];
+    verifyNow = json['verifyNow'];
+    verifyId = json['verifyId'];
+    addLink = json['addLink'];
+    titleLink = json['titleLink'];
+    deleteLink = json['deleteLink'];
   }
 }

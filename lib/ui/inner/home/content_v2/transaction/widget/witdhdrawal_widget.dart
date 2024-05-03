@@ -35,9 +35,10 @@ class WithdrawalWidget extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.background,
-        borderRadius: BorderRadius.circular(5),
-        boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+        color: kHyppeBurem.withOpacity(.05),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: kHyppeBurem.withOpacity(.3))
+        // boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
       ),
       child: Material(
         color: Colors.transparent,
@@ -66,7 +67,7 @@ class WithdrawalWidget extends StatelessWidget {
                     textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeCyan),
                   ),
                 ),
-                const Divider(height: 0.2, thickness: 1, color: Color(0xffF7F7F7)),
+                Divider(height: 0.2, thickness: 1, color: kHyppeBurem.withOpacity(.3)),
                 twelvePx,
                 CustomTextWidget(
                   textToDisplay: descText,

@@ -1,3 +1,4 @@
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_livepush_plugin/live_pusher_preview.dart';
@@ -69,29 +70,29 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
         // print("Has focus: ${commentFocusNode.hasFocus}");
       });
 
-      AlivcPusherPreviewType viewType;
-      // if (Platform.isAndroid) {
-      //   if (notifier.livePushMode == 0) {
-      //     viewType = AlivcPusherPreviewType.base;
-      //   } else {
-      //     viewType = AlivcPusherPreviewType.push;
-      //   }
-      // } else {
-      //   viewType = AlivcPusherPreviewType.push;
-      // }
-      viewType = AlivcPusherPreviewType.base;
+      // AlivcPusherPreviewType viewType;
+      // // if (Platform.isAndroid) {
+      // //   if (notifier.livePushMode == 0) {
+      // //     viewType = AlivcPusherPreviewType.base;
+      // //   } else {
+      // //     viewType = AlivcPusherPreviewType.push;
+      // //   }
+      // // } else {
+      // //   viewType = AlivcPusherPreviewType.push;
+      // // }
+      // viewType = AlivcPusherPreviewType.base;
 
-      pusherPreviewView = AlivcPusherPreview(
-        viewType: viewType,
-        onCreated: (id) async {
-          // await Future.delayed(const Duration(milliseconds: 500));
-          streampro.previewCreated();
-        },
-        x: 0,
-        y: 0,
-        width: SizeConfig.screenWidth,
-        height: SizeConfig.screenHeight,
-      );
+      // pusherPreviewView = AlivcPusherPreview(
+      //   viewType: viewType,
+      //   onCreated: (id) async {
+      //     // await Future.delayed(const Duration(milliseconds: 500));
+      //     streampro.previewCreated();
+      //   },
+      //   x: 0,
+      //   y: 0,
+      //   width: SizeConfig.screenWidth,
+      //   height: SizeConfig.screenHeight,
+      // );
       Future.delayed(const Duration(milliseconds: 1000), () {
         setState(() {
           isloading = false;
@@ -353,35 +354,54 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
     );
   }
 
-  Widget _buildPreviewWidget(BuildContext context, StreamerNotifier notifier) {
+  // Widget _buildPreviewWidget(BuildContext context, StreamerNotifier notifier) {
+  //   var width = MediaQuery.of(context).size.width;
+  //   var height = 1000.0;
+
+  //   // AlivcPusherPreviewType viewType;
+  //   // if (Platform.isAndroid) {
+  //   //   if (notifier.livePushMode == 0) {
+  //   //     viewType = AlivcPusherPreviewType.base;
+  //   //   } else {
+  //   //     viewType = AlivcPusherPreviewType.push;
+  //   //   }
+  //   // } else {
+  //   //   viewType = AlivcPusherPreviewType.push;
+  //   // }
+  //   // viewType = AlivcPusherPreviewType.base;
+
+  //   // AlivcPusherPreview pusherPreviewView = AlivcPusherPreview(
+  //   //   viewType: viewType,
+  //   //   onCreated: (id) async {
+  //   //     // await Future.delayed(const Duration(milliseconds: 500));
+  //   //     notifier.previewCreated();
+  //   //   },
+  //   //   x: x,
+  //   //   y: y,
+  //   //   width: width,
+  //   //   height: height,
+  //   // );
+  //   return Positioned(
+  //     child: Container(color: Colors.black, width: width, height: height, child: pusherPreviewView),
+  //   );
+  // }
+
+  Widget _buildPreviewWidget(
+      BuildContext context, StreamerNotifier notifier) {
     var width = MediaQuery.of(context).size.width;
-    var height = 1000.0;
-
-    // AlivcPusherPreviewType viewType;
-    // if (Platform.isAndroid) {
-    //   if (notifier.livePushMode == 0) {
-    //     viewType = AlivcPusherPreviewType.base;
-    //   } else {
-    //     viewType = AlivcPusherPreviewType.push;
-    //   }
-    // } else {
-    //   viewType = AlivcPusherPreviewType.push;
-    // }
-    // viewType = AlivcPusherPreviewType.base;
-
-    // AlivcPusherPreview pusherPreviewView = AlivcPusherPreview(
-    //   viewType: viewType,
-    //   onCreated: (id) async {
-    //     // await Future.delayed(const Duration(milliseconds: 500));
-    //     notifier.previewCreated();
-    //   },
-    //   x: x,
-    //   y: y,
-    //   width: width,
-    //   height: height,
-    // );
+    var height = MediaQuery.of(context).size.height;
     return Positioned(
-      child: Container(color: Colors.black, width: width, height: height, child: pusherPreviewView),
+      child: Container(
+        color: Colors.black,
+        width: width,
+        height: height,
+        child: AgoraVideoView(
+          controller: VideoViewController(
+            rtcEngine: notifier.engine,
+            canvas: const VideoCanvas(uid: 0,),
+          ),
+        ),
+      ),
     );
   }
 }

@@ -7,6 +7,9 @@ class UrlConstants {
     return _instance;
   }
 
+  // ====Agora
+  static const String agoraId = '7c3726a8377c4662be2e5b555aa35dbf';
+
   /// Versioning
   static const String apiV0 = '';
 
