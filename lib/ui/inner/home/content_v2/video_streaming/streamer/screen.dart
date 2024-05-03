@@ -46,7 +46,8 @@ class StreamerScreen extends StatefulWidget {
   State<StreamerScreen> createState() => _StreamerScreenState();
 }
 
-class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStateMixin, WidgetsBindingObserver, RouteAware {
+class _StreamerScreenState extends State<StreamerScreen>
+    with TickerProviderStateMixin, WidgetsBindingObserver, RouteAware {
   bool isloading = true;
   FocusNode commentFocusNode = FocusNode();
   AlivcPusherPreview? pusherPreviewView;
@@ -62,6 +63,7 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      
       final streampro = Provider.of<StreamerNotifier>(context, listen: false);
       streampro.requestPermission(context);
       streampro.init(context, mounted);
@@ -104,14 +106,16 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
   @override
   void dispose() {
     // print("====dispose stremer ===");
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: SystemUiOverlay.values);
     context.read<StreamerNotifier>().inactivityTimer?.cancel();
     super.dispose();
   }
 
   @override
   void didChangeDependencies() {
-    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    CustomRouteObserver.routeObserver
+        .subscribe(this, ModalRoute.of(context) as PageRoute);
     super.didChangeDependencies();
   }
 
@@ -139,8 +143,10 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
   @override
   Widget build(BuildContext context) {
     final tn = context.read<TranslateNotifierV2>().translate;
-    return Consumer<StreamerNotifier>(
-      builder: (_, notifier, __) => Scaffold(
+    return Consumer<StreamerNotifier>(builder: (_, notifier, __) {
+      print('===== ${notifier.isloading}');
+      print('===== ${notifier.isloadingPreview}');
+      return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.black,
         body: WillPopScope(
@@ -200,7 +206,8 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
                                     child: CustomIconButtonWidget(
                                       padding: const EdgeInsets.all(0),
                                       alignment: Alignment.center,
-                                      iconData: "${AssetPath.vectorPath}close.svg",
+                                      iconData:
+                                          "${AssetPath.vectorPath}close.svg",
                                       defaultColor: false,
                                       onPressed: () {
                                         Routing().moveBack();
@@ -215,12 +222,18 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
                             : notifier.statusLive == StatusStream.prepare
                                 ? prepare()
                                 : notifier.statusLive == StatusStream.standBy
-                                    ? startCounting(notifier.timeReady, notifier, tn)
+                                    ? startCounting(
+                                        notifier.timeReady, notifier, tn)
                                     : notifier.statusLive == StatusStream.ready
-                                        ? prepare(titile: notifier.tn?.liveVideoHasStarted ?? '')
+                                        ? prepare(
+                                            titile: notifier
+                                                    .tn?.liveVideoHasStarted ??
+                                                '')
                                         : Container(),
                     if (notifier.isPause) PauseLive(notifier: notifier),
-                    if (notifier.statusLive == StatusStream.ready || notifier.statusLive == StatusStream.online) StreamerWidget(commentFocusNode: commentFocusNode),
+                    if (notifier.statusLive == StatusStream.ready ||
+                        notifier.statusLive == StatusStream.online)
+                      StreamerWidget(commentFocusNode: commentFocusNode),
                     // StreamerWidget(commentFocusNode: commentFocusNode),
                     // Align(
                     //   alignment: Alignment.center,
@@ -282,8 +295,8 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
         //   child: Icon(Icons.favorite),
         // ),
         // bottomSheet: _buildBottomSheet(state, viewService, dispatch),
-      ),
-    );
+      );
+    });
   }
 
   int a = 0;
@@ -308,7 +321,8 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
     );
   }
 
-  Widget startCounting(int time, StreamerNotifier notifier, LocalizationModelV2 tn) {
+  Widget startCounting(
+      int time, StreamerNotifier notifier, LocalizationModelV2 tn) {
     return Stack(
       children: [
         Align(
@@ -386,8 +400,7 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
   //   );
   // }
 
-  Widget _buildPreviewWidget(
-      BuildContext context, StreamerNotifier notifier) {
+  Widget _buildPreviewWidget(BuildContext context, StreamerNotifier notifier) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
     return Positioned(
@@ -398,7 +411,9 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
         child: AgoraVideoView(
           controller: VideoViewController(
             rtcEngine: notifier.engine,
-            canvas: const VideoCanvas(uid: 0,),
+            canvas: const VideoCanvas(
+              uid: 0,
+            ),
           ),
         ),
       ),

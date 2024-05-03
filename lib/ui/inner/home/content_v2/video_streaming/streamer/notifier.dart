@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
 import 'package:hyppe/core/arguments/summary_live_argument.dart';
 import 'package:hyppe/core/bloc/follow/bloc.dart';
@@ -158,7 +159,7 @@ class StreamerNotifier with ChangeNotifier {
     
     await initAgora();
 
-    notifyListeners();
+    // notifyListeners();
 
     if (!mounted) return;
     tn = context.read<TranslateNotifierV2>().translate;
@@ -188,7 +189,7 @@ class StreamerNotifier with ChangeNotifier {
 
   Future<void> initAgora() async {
     // retrieve permissions
-    await [Permission.microphone, Permission.camera].request();
+    // await [Permission.microphone, Permission.camera].request();
 
     //create the engine
     engine = createAgoraRtcEngine();
@@ -852,7 +853,9 @@ class StreamerNotifier with ChangeNotifier {
       returnNext = false;
       if (context.mounted) {
         ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          
           Routing().moveBack();
+          Fluttertoast.showToast(msg: 'Please try again letter');
           initLiveStream(context, mounted);
         });
       }

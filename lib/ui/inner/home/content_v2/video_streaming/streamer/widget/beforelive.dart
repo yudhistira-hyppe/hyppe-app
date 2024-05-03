@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
- import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -116,6 +116,111 @@ class BeforeLive extends StatelessWidget {
                         )
                       ],
                     ),
+                  ),
+                ),
+                twelvePx,
+                Container(
+                  width: SizeConfig.screenWidth! * 0.7,
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.black.withOpacity(0.4),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Stack(
+                        children: [
+                          TextFormField(
+                            keyboardType: TextInputType.text,
+                            controller: notifier.urlLiveCtrl,
+                            textAlignVertical: TextAlignVertical.top,
+                            textAlign: TextAlign.left,
+                            style: const TextStyle(
+                                fontSize: 13, color: kHyppeTextPrimary),
+                            cursorColor: kHyppeBurem,
+                            decoration: const InputDecoration(
+                              alignLabelWithHint: false,
+                              isCollapsed: true,
+                              hintText: 'Tambhkan URL',
+                              counterText: '',
+                              border: InputBorder.none,
+                              focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: kHyppeTextLightPrimary)),
+                              enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: kHyppeTextLightPrimary)),
+                              contentPadding:
+                                  EdgeInsets.only(left: 20, bottom: 8),
+                              hintStyle: TextStyle(
+                                  fontSize: 13, color: kHyppeBurem),
+                            ),
+                          ),
+                          const CustomIconWidget(
+                            defaultColor: false,
+                            iconData: "${AssetPath.vectorPath}link.svg",
+                          ),
+                        ],
+                      ),
+                      twelvePx,
+                      Stack(
+                        children: [
+                          TextFormField(
+                            keyboardType: TextInputType.text,
+                            controller: notifier.titleUrlLiveCtrl,
+                            textAlignVertical: TextAlignVertical.top,
+                            textAlign: TextAlign.left,
+                            style: const TextStyle(
+                                fontSize: 13, color: kHyppeTextPrimary),
+                            cursorColor: kHyppeBurem,
+                            buildCounter: (context,
+                                {required currentLength,
+                                required isFocused,
+                                maxLength}) {
+                              return Container(
+                                transform:
+                                    Matrix4.translationValues(40, -30, 0),
+                                child: Text(
+                                  "$currentLength/$maxLength",
+                                  style: const TextStyle(
+                                      fontSize: 13, color: Color(0xffcecece)),
+                                ),
+                              );
+                            },
+                            maxLength: 15,
+                            decoration: const InputDecoration(
+                              alignLabelWithHint: false,
+                              isCollapsed: true,
+                              hintText: 'Sesuaikan teks URL',
+                              border: InputBorder.none,
+                              focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: kHyppeTextLightPrimary)),
+                              enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: kHyppeTextLightPrimary)),
+                              contentPadding: EdgeInsets.only(
+                                  left: 20, bottom: 8, right: 40),
+                              hintStyle:
+                                  TextStyle(fontSize: 13, color: kHyppeBurem),
+                            ),
+                          ),
+                          const CustomIconWidget(
+                            defaultColor: false,
+                            iconData: "${AssetPath.vectorPath}pencil.svg",
+                          ),
+                          const Positioned(
+                            bottom: 0,
+                            child: Text(
+                              "Masukkan URL e-commerce yang ingin dibagikan",
+                              style: TextStyle(
+                                  fontSize: 10, color: Color(0xffcecece)),
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
                   ),
                 ),
                 const Spacer(),
