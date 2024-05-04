@@ -47,10 +47,10 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/screen_full.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/see_all/diary_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/exchangecoins/exchange_coin_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/exchangecoins/pages/finish_page.dart';
-import 'package:hyppe/ui/inner/home/content_v2/exchangecoins/pages/verification_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/FAQ/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/support_ticket/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/my_coupons/my_coupons.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/paymentcoin/payment_page.dart';
@@ -455,8 +455,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const HomeTutorScreen());
       case Routes.streamer:
         return MaterialPageRoute(builder: (_) => const StreamerScreen());
-      case Routes.streameriOS:
-        return MaterialPageRoute(builder: (_) => const StreamerIOSScreen());
+      // case Routes.streameriOS:
+      //   return MaterialPageRoute(builder: (_) => const StreamerIOSScreen());
       case Routes.streamingFeedback:
         return MaterialPageRoute(builder: (_) => StreamingFeedbackScreen(arguments: settings.arguments as SummaryLiveArgument));
       case Routes.listStreamers:
@@ -488,6 +488,9 @@ class Generate {
       
       case Routes.addlink:
         return MaterialPageRoute(builder: (_) => const AddLinkPage(), settings: settings);
+
+      case Routes.mydiscount:
+        return MaterialPageRoute(builder: (_) => const MyCouponsPage(), settings: settings);
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

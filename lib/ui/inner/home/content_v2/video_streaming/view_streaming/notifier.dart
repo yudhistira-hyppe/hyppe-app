@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/live_stream/streaming_model.dart';
@@ -27,6 +29,10 @@ import '../../../../../../core/services/system.dart';
 import '../../../../../../ux/routing.dart';
 import '../../../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'dart:math' as math;
+
+import 'widget/already_reported.dart';
+import 'widget/report_live.dart';
+import 'widget/respon_report_live.dart';
 
 class ViewStreamingNotifier with ChangeNotifier {
   LocalizationModelV2 language = LocalizationModelV2();
@@ -105,7 +111,6 @@ class ViewStreamingNotifier with ChangeNotifier {
   initListStreamers() {
     _loading = true;
     _listStreamers = [];
-    // comment.clear();
     _page = 0;
     stopLoad = false;
     _loadMore = false;
@@ -119,6 +124,87 @@ class ViewStreamingNotifier with ChangeNotifier {
     endLive = false;
     comment = [];
     // notifyListeners();
+  }
+
+  // Engine Agora
+  late RtcEngine engine;
+  RemoteVideoState statusAgora = RemoteVideoState.remoteVideoStateStarting;
+  RemoteVideoStateReason resionAgora = RemoteVideoStateReason.remoteVideoStateReasonNetworkRecovery;
+  int? remoteUid = -1;
+  bool localUserJoined = false;
+
+
+  Future<void> initAgora(LinkStreamModel data) async {
+    // retrieve permissions
+    // await [Permission.microphone, Permission.camera].request();
+
+    //create the engine
+    
+    engine = createAgoraRtcEngine();
+
+    await engine.initialize(const RtcEngineContext(
+      appId: UrlConstants.agoraId,
+      channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
+    ));
+
+    engine.registerEventHandler(
+      RtcEngineEventHandler(
+        onUserStateChanged: (connection, remoteUid, state) {
+          debugPrint("viewer local user ${connection} remote $remoteUid, ${state}");
+        },
+        onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
+          debugPrint("viewer local user ${connection.localUid} joined");
+          localUserJoined = true;
+          notifyListeners();
+        },
+        onUserJoined: (RtcConnection connection, int uid, int elapsed) {
+          debugPrint("viewer remote user $uid joined");
+          remoteUid = uid;
+          isOver = false;
+          notifyListeners();
+        },
+        onRemoteVideoStateChanged: ((connection, uid, state, RemoteVideoStateReason reason, elapsed) {
+          debugPrint("viewer connection $connection, remote user $uid, state ${state.name}, resion ${reason.name}, $elapsed");
+          statusAgora = state;
+          resionAgora = reason;
+          notifyListeners();
+        }),
+        onUserOffline: (RtcConnection connection, int uid,
+            UserOfflineReasonType reason) {
+              destoryPusher();
+          debugPrint("viewer remote user $uid left channel");
+          remoteUid = -1;
+          statusLive = StatusStream.offline;
+          isOver = true;
+          notifyListeners();
+        },
+        onTokenPrivilegeWillExpire: (RtcConnection connection, String token) {
+          debugPrint(
+              '[onTokenPrivilegeWillExpire] connection: ${connection.toJson()}, token: $token');
+        },
+      ),
+    );
+
+    
+    await engine.setClientRole(role: ClientRoleType.clientRoleAudience);
+    
+    await engine.enableAudio();
+    await engine.enableVideo();
+    await engine.startPreview();
+
+    print('====== ${data.tempToken}');
+    print('====== ${data.sId}');
+    try{
+      await engine.joinChannel(
+        token: data.tempToken??'',
+        channelId: data.sId??'',
+        uid: 0,
+        options: const ChannelMediaOptions(),
+      );
+    }catch(_){
+      debugPrint('===== error');
+    }
+    
   }
 
   sendComment(BuildContext context, LinkStreamModel model, String comment) async {
@@ -154,6 +240,7 @@ class ViewStreamingNotifier with ChangeNotifier {
     _socketService.closeSocket(eventLikeStream);
     _socketService.closeSocket(eventCommentDisable);
     _socketService.closeSocket(eventStatusStream);
+    disposeAgora();
     statusLive = StatusStream.offline;
     totLikes = 0;
     totViews = 0;
@@ -441,8 +528,11 @@ class ViewStreamingNotifier with ChangeNotifier {
     var init = await initLiveStream(context, mounted, data);
     if (init) {
       // _socketService.closeSocket();
+      
       await Future.delayed(const Duration(seconds: 1));
+      await initAgora(data);
       print("======== ini socket status ${_socketService.isRunning} =========");
+      
       // if (!_socketService.isRunning) {
       _connectAndListenToSocket(eventComment, data);
       _connectAndListenToSocket(eventLikeStream, data);
@@ -456,6 +546,12 @@ class ViewStreamingNotifier with ChangeNotifier {
       statusLive = StatusStream.offline;
       notifyListeners();
     }
+  }
+
+  Future<void> disposeAgora() async {
+    await engine.leaveChannel();
+    await engine.release();
+    remoteUid = -1;
   }
 
   void _connectAndListenToSocket(String events, LinkStreamModel data) async {
@@ -497,7 +593,7 @@ class ViewStreamingNotifier with ChangeNotifier {
 
   void handleSocket(message, event, LinkStreamModel dataStream) async {
     print("handlesocket ====================");
-    print("handlesocket ==================== $message $event $dataStream");
+    print("handlesocket ==================== $message $event");
     if (event == eventComment) {
       print("handlesocket 222 ==================== $message $event $dataStream");
       var messages = CommentLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
@@ -509,10 +605,7 @@ class ViewStreamingNotifier with ChangeNotifier {
       var messages = CountLikeLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
       String userId = SharedPreference().readStorage(SpKeys.userID);
       if (messages.idStream == dataStream.sId && userId != messages.userId) {
-        // totLikes += messages.likeCount ?? 0;
         totLikes = messages.likeCountTotal ?? 0;
-        print("totalnya ${animationIndexes}");
-        // for (var i = 0; i < (messages.likeCount ?? 0); i++) {
         var run = getRandomDouble(1, 999999999999999);
         animationIndexes.add(run.toInt());
 
@@ -550,6 +643,70 @@ class ViewStreamingNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  int? selectedReportValue;
+  bool alreadyReported = false;
+
+  //Modal List Transaction
+  List<GroupModel> groupsReport = [
+    GroupModel(text: "Aktivitas ilegal", index: 1, selected: false),
+    GroupModel(
+        text: "Hak cipta dan kekayaan intelektual", index: 2, selected: false),
+    GroupModel(text: "Keamanan anak", index: 3, selected: false),
+    GroupModel(
+        text: "Keamanan dan integritas platform", index: 4, selected: false),
+    GroupModel(text: "Kekerasan dan ancaman", index: 5, selected: false),
+    GroupModel(
+        text: "Ketelanjangan dan konten seksual", index: 6, selected: false),
+    GroupModel(text: "Konten berbahaya", index: 7, selected: false),
+    GroupModel(text: "Pelecehan dan penindasan", index: 8, selected: false),
+    GroupModel(
+        text: "Privasi dan informasi pribadi", index: 9, selected: false),
+    GroupModel(text: "Spam dan penipuan", index: 10, selected: false),
+    GroupModel(text: "Ujaran kebencian", index: 11, selected: false),
+  ];
+  LinkStreamModel? reportdata;
+
+  Future<void> reportLive(BuildContext context) async {
+    if (!alreadyReported) {
+      showModalBottomSheet<int>(
+          backgroundColor: Colors.transparent,
+          context: context,
+          isScrollControlled: true,
+          builder: (context) {
+            return const AlreadyReported();
+          }).whenComplete(() {
+        debugPrint('Already Reported');
+      });
+    } else {
+      showModalBottomSheet<int>(
+          backgroundColor: Colors.transparent,
+          context: context,
+          isScrollControlled: true,
+          builder: (context) {
+            return const ReportLive();
+          }).whenComplete(() {
+        selectedReportValue = null;
+        debugPrint('Complete Report Live Streaming');
+      });
+    }
+  }
+
+
+  Future<void> responReportLive(BuildContext context) async {
+    showModalBottomSheet<int>(
+        backgroundColor: Colors.transparent,
+        context: context,
+        isScrollControlled: true,
+        isDismissible: false,
+        builder: (context) {
+          return const ResponsReportLive();
+        }).whenComplete(() {
+      // selectedReportValue = null;
+      debugPrint('Complete Report Live Streaming');
+    });
+  }
+
+
   double getRandomDouble(double min, double max) {
     // Membuat instance dari kelas Random
     final random = math.Random();
@@ -563,4 +720,18 @@ class ViewStreamingNotifier with ChangeNotifier {
 
     return randomValue;
   }
+}
+
+class GroupModel {
+  String text;
+  int index;
+  bool selected;
+  String? startDate;
+  String? endDate;
+  GroupModel(
+      {required this.text,
+      required this.index,
+      required this.selected,
+      this.startDate,
+      this.endDate});
 }

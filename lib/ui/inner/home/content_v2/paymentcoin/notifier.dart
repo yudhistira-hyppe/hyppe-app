@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/models/collection/discount/discountmodel.dart';
 
 class PaymentCoinNotifier with ChangeNotifier {
 
@@ -13,6 +14,13 @@ class PaymentCoinNotifier with ChangeNotifier {
     GroupVAModel(index: 3, text: 'Mandiri Virtual Account', icon: '${AssetPath.pngPath}ic-mandiri.png', selected: false),
     GroupVAModel(index: 4, text: 'BNI Virtual Account', icon: '${AssetPath.pngPath}ic-bni.png', selected: false),
   ];
+
+  DiscountModel? _discount;
+  DiscountModel get discount => _discount!;
+  set discount(DiscountModel val){
+    _discount = val;
+    notifyListeners();
+  }
 
   Future<void> initialPayment() async {
     for (int i = 0; i < groupsVA.length; i++) {

@@ -2,8 +2,11 @@ class LiveSummaryModel {
   int? totalViews;
   int? totalShare;
   int? totalFollower;
+  int? totalGifter;
+  int? totalGift;
   int? totalComment;
   int? totalLike;
+  int? totalCoin;
 
   LiveSummaryModel({this.totalViews, this.totalShare, this.totalFollower, this.totalComment, this.totalLike});
 
@@ -13,5 +16,8 @@ class LiveSummaryModel {
     totalFollower = json['totalFollower'];
     totalComment = json['totalComment'];
     totalLike = json['totalLike'];
+    totalGift = json['totalGift'];
+    totalGifter = json['totalGifter'];
+    totalCoin = json['totalCoin'];
   }
 }

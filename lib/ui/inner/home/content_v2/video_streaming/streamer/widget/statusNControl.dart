@@ -8,10 +8,11 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/iconButton.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
+
+import '../notifier.dart';
 
 class StatusNControl extends StatelessWidget {
   const StatusNControl({super.key});
@@ -38,7 +39,7 @@ class StatusNControl extends StatelessWidget {
             if (notifier.totViews > 0)
               GestureDetector(
                 onTap: () {
-                  ShowBottomSheet.onStreamWatchersStatus(
+                  ShowBottomSheet.onStreamWatchersStatusAgora(
                     context,
                     false,
                     notifier,
@@ -102,18 +103,21 @@ class StatusNControl extends StatelessWidget {
                       notifier.soundMute();
                     }),
                 sixteenPx,
-                IconButtonLive(
-                    widget: Align(
-                      alignment: Alignment.center,
-                      child: const CustomIconWidget(
-                        width: 24,
-                        iconData: "${AssetPath.vectorPath}flip.svg",
-                        defaultColor: false,
+                Visibility(
+                  visible: notifier.flipCameraVisible,
+                  child: IconButtonLive(
+                      widget: const Align(
+                        alignment: Alignment.center,
+                        child: CustomIconWidget(
+                          width: 24,
+                          iconData: "${AssetPath.vectorPath}flip.svg",
+                          defaultColor: false,
+                        ),
                       ),
-                    ),
-                    onPressed: () {
-                      notifier.flipCamera();
-                    }),
+                      onPressed: () {
+                        notifier.flipCamera();
+                      }),
+                ),
               ],
             )
           ],

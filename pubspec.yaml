@@ -154,7 +154,7 @@ dependencies:
   # scroll_snap_list: ^0.9.1
   fluttertoast: ^8.2.4
 
-  
+  ticket_widget: ^1.0.2
 
 #  curl_logger_dio_interceptor: ^0.0.3
 

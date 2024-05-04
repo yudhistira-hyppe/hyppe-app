@@ -132,7 +132,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
     dobController.text = notifierData.user.profile?.dob ?? "";
     mobileController.text = notifierData.user.profile?.mobileNumber ?? "";
     urlLinkController.text = notifierData.user.profile?.urlLink??"";
-    titleLinkController.text = notifierData.user.profile?.urlJudul??"";
+    titleLinkController.text = notifierData.user.profile?.judulLink??"";
   }
 
   DateTime initialDateTime() {
@@ -207,7 +207,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
             dobController.text != notifierData.user.profile?.dob ||
             mobileController.text != notifierData.user.profile?.mobileNumber ||
             urlLinkController.text != notifierData.user.profile?.urlLink ||
-            titleLinkController.text != notifierData.user.profile?.urlJudul) &&
+            titleLinkController.text != notifierData.user.profile?.judulLink) &&
         fullNameController.text.isNotEmpty;
   }
 
@@ -386,7 +386,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
             fullName: fullNameController.text,
             username: userNameController.text,
             urlLink: urlLinkController.text,
-            urlJudul: titleLinkController.text
+            judulLink: titleLinkController.text
           );
 
           SignUpCompleteProfiles _dataPersonalInfo = SignUpCompleteProfiles(
@@ -398,7 +398,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
             gender: genderController.text,
             dateOfBirth: dobController.text,
             urlLink: urlLinkController.text,
-            urlJudul: titleLinkController.text,
+            judulLink: titleLinkController.text,
             // username: userNameController.text,
             langIso: SharedPreference().readStorage(SpKeys.isoCode) ?? 'en',
           );

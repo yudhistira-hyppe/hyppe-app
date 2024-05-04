@@ -1147,5 +1147,15 @@
   "addLink": "Tambahkan Link",
   "deleteLink":"Hapus Link",
   "verifyNow":"Verifikasi Sekarang",
-  "verifyId": "Verifikasi Identitas"
+  "verifyId": "Verifikasi Identitas",
+  "enterLinkLiveStream":"Masukkan URL yang ingin dibagikan",
+  "removeListLive":"Keluarkan",
+  "transactionFee":"Biaya Transaksi",
+  "discountForYou": "Diskon untukmu",
+  "mycoupons":"Kupon Diskon Saya",
+  "mintransaction": "Min transaksi",
+  "validuntilcoupon": "Berlaku hingga ",
+  "detailcoupondisc":"Detail Kupon Diskon",
+  "noInternet":"Hyppe butuh internet  untuk beraksi 🕺🌐",
+  "noInternetLabel":"Cek koneksi Wi-Fi atau kuota datamu   dan coba lagi ya."
 }

@@ -1146,5 +1146,15 @@
   "addLink": "Add Link",
   "deleteLink":"Delete Link",
   "verifyNow":"Verification Now",
-  "verifyId": "Verification Identity"
+  "verifyId": "Verification Identity",
+  "enterLinkLiveStream":"Enter the  link you want to share",
+  "removeListLive":"Remove",
+  "transactionFee":"Transaction Fee",
+  "discountForYou": "Discount For You",
+  "mycoupons":"My Coupons",
+  "mintransaction": "Min. transaction",
+  "validuntilcoupon": "Valid until ",
+  "detailcoupondisc":"Coupon Details",
+  "noInternet":"Hyppe needs the internet to groove 🕺🌐",
+  "noInternetLabel":"Check your Wi-Fi or data and let's get Hyppe groovin' again!"
 }

@@ -25,10 +25,12 @@ class OnLiveStreamStatus extends StatefulWidget {
   final String? idStream;
   final bool isViewer;
   final StreamerNotifier? notifier;
-  const OnLiveStreamStatus({super.key, this.idStream, this.notifier, required this.isViewer});
+  const OnLiveStreamStatus(
+      {super.key, this.idStream, this.notifier, required this.isViewer});
 
   @override
-  State<OnLiveStreamStatus> createState() => _OnLiveStreamStatusState();
+  State<OnLiveStreamStatus> createState() =>
+      _OnLiveStreamStatusState();
 }
 
 class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
@@ -43,7 +45,8 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
       streampro?.getViewer(context, mounted, idStream: widget.idStream);
 
       controller?.addListener(() {
-        streampro?.getMoreViewer(context, mounted, widget.idStream, controller!);
+        streampro?.getMoreViewer(
+            context, mounted, widget.idStream, controller!);
       });
     });
   }
@@ -75,7 +78,8 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+              const CustomIconWidget(
+                  iconData: "${AssetPath.vectorPath}handler.svg"),
               sixteenPx,
               Container(
                 margin: const EdgeInsets.only(
@@ -84,8 +88,13 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                 ),
                 child: CustomTextWidget(
                   textAlign: TextAlign.center,
-                  textToDisplay: (notifier.titleLive.isNotEmpty) ? (notifier.titleLive) : "${isIndo ? language.liveVideo : ''} ${notifier.userName} ${!isIndo ? language.liveVideo : ''}",
-                  textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700),
+                  textToDisplay: (notifier.titleLive.isNotEmpty)
+                      ? (notifier.titleLive)
+                      : "${isIndo ? language.liveVideo : ''} ${notifier.userName} ${!isIndo ? language.liveVideo : ''}",
+                  textStyle: context
+                      .getTextTheme()
+                      .bodyLarge
+                      ?.copyWith(fontWeight: FontWeight.w700),
                 ),
               ),
               tenPx,
@@ -101,7 +110,8 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                 child: CustomTextWidget(
                   textAlign: TextAlign.left,
                   textToDisplay: language.liveHost ?? '',
-                  textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w700, color: kHyppeBurem),
+                  textStyle: context.getTextTheme().bodyLarge?.copyWith(
+                      fontWeight: FontWeight.w700, color: kHyppeBurem),
                 ),
               ),
               sixteenPx,
@@ -112,10 +122,39 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                     right: 16,
                   ),
                   child: ItemAccount(
-                    urlImage: widget.isViewer ? (notifier.dataStream.avatar?.mediaEndpoint ?? '') : (context.read<SelfProfileNotifier>().user.profile?.avatar?.mediaEndpoint) ?? '',
-                    username: widget.isViewer ? (notifier.dataStream.username ?? '') : (context.read<SelfProfileNotifier>().user.profile?.username ?? ''),
-                    name: widget.isViewer ? (notifier.dataStream.fullName ?? '') : (context.read<SelfProfileNotifier>().user.profile?.fullName ?? ''),
-                    email: widget.isViewer ? (notifier.dataStream.email ?? '') : (context.read<SelfProfileNotifier>().user.profile?.email ?? ''),
+                    urlImage: widget.isViewer
+                        ? (notifier.dataStream.avatar?.mediaEndpoint ?? '')
+                        : (context
+                                .read<SelfProfileNotifier>()
+                                .user
+                                .profile
+                                ?.avatar
+                                ?.mediaEndpoint) ??
+                            '',
+                    username: widget.isViewer
+                        ? (notifier.dataStream.username ?? '')
+                        : (context
+                                .read<SelfProfileNotifier>()
+                                .user
+                                .profile
+                                ?.username ??
+                            ''),
+                    name: widget.isViewer
+                        ? (notifier.dataStream.fullName ?? '')
+                        : (context
+                                .read<SelfProfileNotifier>()
+                                .user
+                                .profile
+                                ?.fullName ??
+                            ''),
+                    email: widget.isViewer
+                        ? (notifier.dataStream.email ?? '')
+                        : (context
+                                .read<SelfProfileNotifier>()
+                                .user
+                                .profile
+                                ?.email ??
+                            ''),
                     sId: notifier.dataStream.sId ?? '',
                     isViewer: widget.isViewer,
                     notifier: notifier,
@@ -131,7 +170,7 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                 child: CustomTextWidget(
                   textAlign: TextAlign.left,
                   textToDisplay: language.whosWatching ?? '',
-                  textStyle: context.getTextTheme().bodyText2?.copyWith(
+                  textStyle: context.getTextTheme().bodyLarge?.copyWith(
                         fontWeight: FontWeight.w700,
                       ),
                 ),
@@ -146,7 +185,10 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                     textAlign: TextAlign.left,
                     maxLines: 2,
                     textToDisplay: language.whosWatchingDetail ?? '',
-                    textStyle: context.getTextTheme().bodyText2?.copyWith(color: kHyppeBurem),
+                    textStyle: context
+                        .getTextTheme()
+                        .bodyLarge
+                        ?.copyWith(color: kHyppeBurem),
                   ),
                 ),
               eightPx,
@@ -160,14 +202,21 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                     children: [
                       Expanded(
                         child: notifier.isloadingViewers
-                            ? const SizedBox(height: 10, child: Align(alignment: Alignment.topCenter, child: Padding(padding: EdgeInsets.only(top: 60), child: const CustomLoading())))
+                            ? const SizedBox(
+                                height: 10,
+                                child: Align(
+                                    alignment: Alignment.topCenter,
+                                    child: Padding(
+                                        padding: EdgeInsets.only(top: 60),
+                                        child: CustomLoading())))
                             : ListView.builder(
                                 controller: controller,
                                 itemCount: notifier.dataViewers.length,
                                 itemBuilder: (context, index) {
                                   final watcher = notifier.dataViewers[index];
                                   return ItemAccount(
-                                    urlImage: watcher.avatar?.mediaEndpoint ?? '',
+                                    urlImage:
+                                        watcher.avatar?.mediaEndpoint ?? '',
                                     name: watcher.fullName ?? '',
                                     username: watcher.username ?? '',
                                     isHost: false,
@@ -187,12 +236,19 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                       Visibility(
                         visible: notifier.dataViewers.length > 99,
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12.0, vertical: 16.0),
                           child: CustomTextWidget(
                             textAlign: TextAlign.center,
                             maxLines: 2,
-                            textToDisplay: language.noteShowView99 ?? 'Menampilkan 99 penonton teratas yang peringkatnya diaktifkan',
-                            textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w400, color: kHyppeBurem),
+                            textToDisplay: language.noteShowView99 ??
+                                'Menampilkan 99 penonton teratas yang peringkatnya diaktifkan',
+                            textStyle: context
+                                .getTextTheme()
+                                .bodyMedium
+                                ?.copyWith(
+                                    fontWeight: FontWeight.w400,
+                                    color: kHyppeBurem),
                           ),
                         ),
                       ),
@@ -270,10 +326,18 @@ class _ItemAccountState extends State<ItemAccount> {
               children: [
                 CustomProfileImage(
                   onTap: () async {
-                    if (context.read<SelfProfileNotifier>().user.profile?.username != widget.username) {
+                    if (context
+                            .read<SelfProfileNotifier>()
+                            .user
+                            .profile
+                            ?.username !=
+                        widget.username) {
                       Routing().moveBack();
                       Future.delayed(const Duration(milliseconds: 500), () {
-                        ShowBottomSheet.onWatcherStatus(Routing.navigatorKey.currentContext ?? context, widget.email, widget.sId);
+                        ShowBottomSheet.onWatcherStatus(
+                            Routing.navigatorKey.currentContext ?? context,
+                            widget.email,
+                            widget.sId);
                       });
                     }
                   },
@@ -292,104 +356,127 @@ class _ItemAccountState extends State<ItemAccount> {
                       CustomTextWidget(
                         textAlign: TextAlign.left,
                         textToDisplay: widget.username,
-                        textStyle: context.getTextTheme().bodyText2?.copyWith(
+                        textStyle: context.getTextTheme().bodyMedium?.copyWith(
                               fontWeight: FontWeight.w700,
                             ),
                       ),
                       fourPx,
                       CustomTextWidget(
                         textAlign: TextAlign.left,
-                        textToDisplay: "${widget.name}${widget.isHost ? " • Host" : ''}",
-                        textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w400, color: kHyppeBurem),
+                        textToDisplay:
+                            "${widget.name}${widget.isHost ? " • Host" : ''}",
+                        textStyle: context.getTextTheme().bodySmall?.copyWith(
+                            fontWeight: FontWeight.w400, color: kHyppeBurem),
                       ),
                     ],
                   ),
                 ),
                 if (!widget.isHost) tenPx,
-                if (!widget.isHost && widget.showThreeDot && SharedPreference().readStorage(SpKeys.email) != widget.email)
+                if (!widget.isHost &&
+                    widget.showThreeDot &&
+                    SharedPreference().readStorage(SpKeys.email) !=
+                        widget.email)
                   CustomGesture(
                     margin: EdgeInsets.zero,
                     onTap: () async {
                       Routing().moveBack();
-                      ShowBottomSheet.onWatcherStatus(context, widget.email, widget.idStream ?? '');
+                      ShowBottomSheet.onWatcherStatus(
+                          context, widget.email, widget.idStream ?? '');
                     },
                     child: Container(
                       alignment: Alignment.center,
                       child: const RotationTransition(
                         turns: AlwaysStoppedAnimation(90 / 360),
-                        child: Align(alignment: Alignment.center, child: CustomIconWidget(width: 24, iconData: "${AssetPath.vectorPath}more.svg", color: Colors.black, defaultColor: false)),
+                        child: Align(
+                            alignment: Alignment.center,
+                            child: CustomIconWidget(
+                                width: 24,
+                                iconData: "${AssetPath.vectorPath}more.svg",
+                                color: Colors.black,
+                                defaultColor: false)),
                       ),
                     ),
                   ),
-                // Text("${widget.notifier.statusFollowingViewer}"),
                 if (widget.isHost && widget.isViewer)
                   CustomElevatedButton(
                     width: 100,
                     height: 24,
                     buttonStyle: ButtonStyle(
-                      backgroundColor: (widget.notifier.statusFollowingViewer == StatusFollowing.requested || widget.notifier.statusFollowingViewer == StatusFollowing.following)
+                      backgroundColor: (widget.notifier.statusFollowingViewer ==
+                                  StatusFollowing.requested ||
+                              widget.notifier.statusFollowingViewer ==
+                                  StatusFollowing.following)
                           ? null
-                          // : (widget.notifier.userName == widget.notifier.audienceProfile.username)
-                          //     ? null
-                          : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                          : MaterialStateProperty.all(
+                              Theme.of(context).colorScheme.primary),
                     ),
                     function: widget.notifier.isCheckLoading
                         ? null
                         : () {
-                            if (widget.notifier.statusFollowingViewer == StatusFollowing.none || widget.notifier.statusFollowingViewer == StatusFollowing.rejected) {
-                              widget.notifier.followUserViewer(context, widget.email, idMediaStreaming: widget.sId).then((value) {
-                                widget.notifier.audienceProfileViewer.insight?.followers = widget.notifier.audienceProfileViewer.insight!.followers! + 1;
+                            if (widget.notifier.statusFollowingViewer ==
+                                    StatusFollowing.none ||
+                                widget.notifier.statusFollowingViewer ==
+                                    StatusFollowing.rejected) {
+                              widget.notifier
+                                  .followUserViewer(context, widget.email,
+                                      idMediaStreaming: widget.sId)
+                                  .then((value) {
+                                widget.notifier.audienceProfileViewer.insight
+                                    ?.followers = widget
+                                        .notifier
+                                        .audienceProfileViewer
+                                        .insight!
+                                        .followers! +
+                                    1;
                               });
-                            } else if (widget.notifier.statusFollowingViewer == StatusFollowing.following) {
-                              widget.notifier.followUserViewer(context, widget.email, isUnFollow: true, idMediaStreaming: widget.sId).then((value) {
-                                widget.notifier.audienceProfileViewer.insight?.followers = widget.notifier.audienceProfileViewer.insight!.followers! - 1;
+                            } else if (widget.notifier.statusFollowingViewer ==
+                                StatusFollowing.following) {
+                              widget.notifier
+                                  .followUserViewer(context, widget.email,
+                                      isUnFollow: true,
+                                      idMediaStreaming: widget.sId)
+                                  .then((value) {
+                                widget.notifier.audienceProfileViewer.insight
+                                    ?.followers = widget
+                                        .notifier
+                                        .audienceProfileViewer
+                                        .insight!
+                                        .followers! -
+                                    1;
                               });
                             }
                           },
                     child: widget.notifier.isCheckLoading
                         ? const CustomLoading()
                         : CustomTextWidget(
-                            textToDisplay: widget.notifier.statusFollowingViewer == StatusFollowing.following
-                                ? language.following ?? 'following '
-                                : widget.notifier.statusFollowingViewer == StatusFollowing.requested
-                                    ? language.requested ?? 'requested'
-                                    : language.follow ?? 'follow',
-                            textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
-                                  color: (widget.notifier.statusFollowingViewer == StatusFollowing.requested || widget.notifier.statusFollowingViewer == StatusFollowing.following)
-                                      ? kHyppeGrey
-                                      : kHyppeLightButtonText,
+                            textToDisplay:
+                                widget.notifier.statusFollowingViewer ==
+                                        StatusFollowing.following
+                                    ? language.following ?? 'following '
+                                    : widget.notifier.statusFollowingViewer ==
+                                            StatusFollowing.requested
+                                        ? language.requested ?? 'requested'
+                                        : language.follow ?? 'follow',
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .labelLarge
+                                ?.copyWith(
+                                  color:
+                                      (widget.notifier.statusFollowingViewer ==
+                                                  StatusFollowing.requested ||
+                                              widget.notifier
+                                                      .statusFollowingViewer ==
+                                                  StatusFollowing.following)
+                                          ? kHyppeGrey
+                                          : kHyppeLightButtonText,
                                 ),
                           ),
                   ),
-                // if (!isHost)
-                //   CustomGesture(
-                //     margin: EdgeInsets.zero,
-                //     onTap: () async {
-                //       await ShowGeneralDialog.generalDialog(context,
-                //           titleText: "${language.remove} $username?",
-                //           bodyText: "${language.messageRemoveUser1} $username ${language.messageRemoveUser2}",
-                //           maxLineTitle: 1,
-                //           maxLineBody: 4, functionPrimary: () async {
-                //         Routing().moveBack();
-                //       }, functionSecondary: () {
-                //         Routing().moveBack();
-                //       }, titleButtonPrimary: "${language.remove}", titleButtonSecondary: "${language.cancel}", barrierDismissible: true, isHorizontal: false);
-                //     },
-                //     child: Container(
-                //       width: 86,
-                //       height: 24,
-                //       decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.transparent, border: Border.all(color: kHyppeBurem, width: 1)),
-                //       alignment: Alignment.center,
-                //       child: CustomTextWidget(
-                //         textToDisplay: language.removeUser ?? '',
-                //         textAlign: TextAlign.center,
-                //         textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.black),
-                //       ),
-                //     ),
-                //   ),
               ],
             ),
-            if (widget.length == ((widget.index ?? 0) + 1) && (widget.isloading ?? false)) const CustomLoading(size: 4),
+            if (widget.length == ((widget.index ?? 0) + 1) &&
+                (widget.isloading ?? false))
+              const CustomLoading(size: 4),
           ],
         ),
       ),

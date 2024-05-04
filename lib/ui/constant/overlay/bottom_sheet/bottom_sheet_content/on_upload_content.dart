@@ -310,11 +310,12 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                               //   isHomeScreen = false;
                               // }
                               if (isCreator) {
-                                if (Platform.isAndroid) {
-                                  Routing().moveAndPop(Routes.streamer);
-                                } else if (Platform.isIOS) {
-                                  Routing().moveAndPop(Routes.streameriOS);
-                                }
+                                Routing().moveAndPop(Routes.streamer);
+                                // if (Platform.isAndroid) {
+                                //   Routing().moveAndPop(Routes.streamer);
+                                // } else if (Platform.isIOS) {
+                                //   Routing().moveAndPop(Routes.streameriOS);
+                                // }
                               }
                               // if (tempIsHome) {
                               //   isHomeScreen = true;

@@ -48,7 +48,7 @@ class StreamerScreen extends StatefulWidget {
 
 class _StreamerScreenState extends State<StreamerScreen>
     with TickerProviderStateMixin, WidgetsBindingObserver, RouteAware {
-  bool isloading = true;
+  // bool isloading = true;
   FocusNode commentFocusNode = FocusNode();
   AlivcPusherPreview? pusherPreviewView;
 
@@ -95,27 +95,29 @@ class _StreamerScreenState extends State<StreamerScreen>
       //   width: SizeConfig.screenWidth,
       //   height: SizeConfig.screenHeight,
       // );
-      Future.delayed(const Duration(milliseconds: 1000), () {
-        setState(() {
-          isloading = false;
-        });
-      });
+      // Future.delayed(const Duration(milliseconds: 1000), () {
+      //   setState(() {
+      //     isloading = false;
+      //   });
+      // });
     });
   }
 
   @override
   void dispose() {
     // print("====dispose stremer ===");
+    WidgetsBinding.instance.removeObserver(this);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: SystemUiOverlay.values);
     context.read<StreamerNotifier>().inactivityTimer?.cancel();
+    context.read<StreamerNotifier>().disposeAgora();
     super.dispose();
   }
 
   @override
   void didChangeDependencies() {
-    CustomRouteObserver.routeObserver
-        .subscribe(this, ModalRoute.of(context) as PageRoute);
+    // CustomRouteObserver.routeObserver
+    //     .subscribe(this, ModalRoute.of(context) as PageRoute);
     super.didChangeDependencies();
   }
 
@@ -133,6 +135,11 @@ class _StreamerScreenState extends State<StreamerScreen>
       // Minimize aplication
       print("========= Streamer AppLifecycleState.paused ==========");
       // streampro.pauseLive(context, mounted);
+      final stream = Provider.of<StreamerNotifier>(context, listen: false);
+      if (stream.statusLive == StatusStream.online && stream.isPause == false){
+        stream.isPause = true;
+        stream.pauseLive(context, mounted);
+      }
     }
 
     if (state == AppLifecycleState.detached) {
@@ -145,7 +152,6 @@ class _StreamerScreenState extends State<StreamerScreen>
     final tn = context.read<TranslateNotifierV2>().translate;
     return Consumer<StreamerNotifier>(builder: (_, notifier, __) {
       print('===== ${notifier.isloading}');
-      print('===== ${notifier.isloadingPreview}');
       return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.black,
@@ -165,6 +171,7 @@ class _StreamerScreenState extends State<StreamerScreen>
                             iconData: "${AssetPath.vectorPath}close.svg",
                             defaultColor: false,
                             onPressed: () {
+                              notifier.destoryPusher();
                               Routing().moveBack();
                             },
                           ),

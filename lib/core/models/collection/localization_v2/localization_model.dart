@@ -633,6 +633,7 @@ class LocalizationModelV2 {
   String? vaCopyToClipboard;
   String? expired;
   String? transaction;
+  String? transactionFee;
   String? saldocoins;
   String? topupcoin;
   String? buyhyppecoins;
@@ -705,6 +706,7 @@ class LocalizationModelV2 {
   String? forr;
   String? from;
   String? remove;
+  String? removeListLive;
   String? transactionInProgress;
   String? contentOwnershipRegistration;
   String? byRegisteringYourContent;
@@ -712,6 +714,11 @@ class LocalizationModelV2 {
   String? ownershipSelling;
   String? certificateOwnershipFee;
   String? discount;
+  String? discountForYou;
+  String? detailcoupondisc;
+  String? mycoupons;
+  String? mintransaction;
+  String? validuntilcoupon;
   String? sellContent;
   String? certificateNumber;
   String? choosePaymentMethods;
@@ -1145,6 +1152,9 @@ class LocalizationModelV2 {
   String? addLink;
   String? titleLink;
   String? deleteLink;
+  String? enterLinkLiveStream;
+  String? noInternet;
+  String? noInternetLabel;
   LocalizationModelV2({
     this.login,
     this.logIn,
@@ -1780,6 +1790,7 @@ class LocalizationModelV2 {
     this.vaCopyToClipboard,
     this.expired,
     this.transaction,
+    this.transactionFee,
     this.saldocoins,
     this.topupcoin,
     this.buyhyppecoins,
@@ -1859,6 +1870,11 @@ class LocalizationModelV2 {
     this.ownershipSelling,
     this.certificateOwnershipFee,
     this.discount,
+    this.discountForYou,
+    this.detailcoupondisc,
+    this.mycoupons,
+    this.mintransaction,
+    this.validuntilcoupon,
     this.sellContent,
     this.certificateNumber,
     this.choosePaymentMethods,
@@ -2292,6 +2308,10 @@ class LocalizationModelV2 {
     this.addLink,
     this.titleLink,
     this.deleteLink,
+    this.enterLinkLiveStream,
+    this.removeListLive,
+    this.noInternet,
+    this.noInternetLabel,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2945,6 +2965,7 @@ class LocalizationModelV2 {
     vaCopyToClipboard = json['vaCopyToClipboard'];
     expired = json['expired'];
     transaction = json['transaction'];
+    transactionFee = json['transactionFee'];
     saldocoins = json['saldocoins'];
     topupcoin = json['topupcoin'];
     buyhyppecoins = json['buyhyppecoins'];
@@ -3025,6 +3046,11 @@ class LocalizationModelV2 {
     sellContent = json['sellContent'];
     certificateOwnershipFee = json['certificateOwnershipFee'];
     discount = json['discount'];
+    discountForYou = json['discountForYou'];
+    detailcoupondisc = json['detailcoupondisc'];
+    mycoupons = json['mycoupons'];
+    mintransaction = json['mintransaction'];
+    validuntilcoupon = json['validuntilcoupon'];
     certificateNumber = json['certificateNumber'];
     choosePaymentMethods = json['choosePaymentMethods'];
     retakeIdPicture = json["retakeIdPicture"];
@@ -3459,5 +3485,9 @@ class LocalizationModelV2 {
     addLink = json['addLink'];
     titleLink = json['titleLink'];
     deleteLink = json['deleteLink'];
+    enterLinkLiveStream = json['enterLinkLiveStream'];
+    removeListLive = json['removeListLive'];
+    noInternet = json['noInternet'];
+    noInternetLabel = json['noInternetLabel'];
   }
 }

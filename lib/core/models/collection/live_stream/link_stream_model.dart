@@ -18,6 +18,10 @@ class LinkStreamModel {
   String? fullName;
   String? title;
   String? email;
+  String? token;
+  String? tempToken;
+  String? urlLink;
+  String? textUrl;
 
   LinkStreamModel({
     this.status,
@@ -37,6 +41,10 @@ class LinkStreamModel {
     this.fullName,
     this.title,
     this.email,
+    this.token,
+    this.tempToken,
+    this.urlLink,
+    this.textUrl
   });
 
   LinkStreamModel.fromJson(Map<String, dynamic> json) {
@@ -58,5 +66,9 @@ class LinkStreamModel {
     fullName = json['fullName'];
     title = json['title'];
     email = json['email'];
+    token = json['token'];
+    tempToken = json['tokenAgora'];
+    urlLink = json['urlLink'];
+    textUrl = json['textUrl'];
   }
 }

@@ -7,8 +7,9 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:provider/provider.dart';
+
+import '../notifier.dart';
 
 class PauseLive extends StatelessWidget {
   final StreamerNotifier notifier;
@@ -17,7 +18,7 @@ class PauseLive extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tn = context.read<TranslateNotifierV2>().translate;
-    return Container(
+    return SizedBox(
       // padding: const EdgeInsets.only(bottom: 100),
       height: SizeConfig.screenHeight,
       width: SizeConfig.screenWidth,
@@ -29,7 +30,7 @@ class PauseLive extends StatelessWidget {
             decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
             child: Center(
               child: Padding(
-                padding: EdgeInsets.only(bottom: 120),
+                padding: const EdgeInsets.only(bottom: 120),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -46,7 +47,7 @@ class PauseLive extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       child: TweenAnimationBuilder<Duration>(
                         duration: const Duration(minutes: 5, seconds: 0),
-                        tween: Tween(begin: Duration(minutes: 5, seconds: 0), end: Duration.zero),
+                        tween: Tween(begin: const Duration(minutes: 5, seconds: 0), end: Duration.zero),
                         onEnd: () {
                           context.read<StreamerNotifier>().endLive(context, context.mounted, isBack: false);
                         },
@@ -55,7 +56,7 @@ class PauseLive extends StatelessWidget {
                           final seconds = value.inSeconds % 60;
                           return CustomTextWidget(
                             textToDisplay: '${minutes < 10 ? '0' : ''}$minutes : ${seconds < 10 ? '0' : ''}$seconds',
-                            textStyle: Theme.of(context).textTheme.caption?.copyWith(
+                            textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
                                   color: kHyppeTextPrimary,
                                   fontSize: 60,
                                   fontWeight: FontWeight.w700,
@@ -76,7 +77,7 @@ class PauseLive extends StatelessWidget {
                     CustomTextButton(
                       onPressed: () {
                         if (!notifier.isloadingButton) {
-                          context.read<StreamerNotifier>().resumeLive(context);
+                          context.read<StreamerNotifier>().resumeStreamer();
                         }
                       },
                       style: ButtonStyle(

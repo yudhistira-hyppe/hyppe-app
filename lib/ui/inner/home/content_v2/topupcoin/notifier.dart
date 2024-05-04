@@ -1,8 +1,14 @@
 
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 
 class TopUpCoinNotifier with ChangeNotifier {
-
+  LocalizationModelV2 language = LocalizationModelV2();
+  translate(LocalizationModelV2 translate) {
+    language = translate;
+    notifyListeners();
+  }
+  
   //Modal List Coins
   List<GroupCoinModel> groupsCoins = [
     GroupCoinModel(index: 1, value: 500, valueLabel: 50000, selected: false),
