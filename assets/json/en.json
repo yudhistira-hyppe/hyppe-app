@@ -1156,5 +1156,6 @@
   "validuntilcoupon": "Valid until ",
   "detailcoupondisc":"Coupon Details",
   "noInternet":"Hyppe needs the internet to groove 🕺🌐",
-  "noInternetLabel":"Check your Wi-Fi or data and let's get Hyppe groovin' again!"
+  "noInternetLabel":"Check your Wi-Fi or data and let's get Hyppe groovin' again!",
+  "creator":"Creator"
 }

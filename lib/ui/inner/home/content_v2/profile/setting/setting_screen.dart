@@ -205,6 +205,22 @@ class _SettingScreenState extends State<SettingScreen> {
                   ),
                   sixteenPx,
                   SettingComponent(
+                    headerCaption: notifier.translate.creator??'Kreator',
+                    tiles: [
+                      SettingTile(
+                        caption: 'Gift',
+                        icon: 'union.svg',
+                        onTap: () => Routing().move(Routes.cacheAndDownload),
+                      ),
+                    ],
+                  ),
+                  sixteenPx,
+                  Divider(
+                    thickness: 1,
+                    color: theme.colorScheme.surface,
+                  ),
+                  sixteenPx,
+                  SettingComponent(
                     headerCaption: '${notifier.translate.storage}',
                     tiles: [
                       SettingTile(

@@ -15,7 +15,7 @@ class CardCoinWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width / 3.8,
+      width: MediaQuery.of(context).size.width / 3.5,
       height: MediaQuery.of(context).size.width / 5,
       decoration: BoxDecoration(
         color: kHyppeBurem.withOpacity(.05),

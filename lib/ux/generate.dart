@@ -50,7 +50,7 @@ import 'package:hyppe/ui/inner/home/content_v2/exchangecoins/pages/finish_page.d
 import 'package:hyppe/ui/inner/home/content_v2/help/FAQ/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/support_ticket/screen.dart';
-import 'package:hyppe/ui/inner/home/content_v2/my_coupons/my_coupons.dart';
+import 'package:hyppe/ui/inner/home/content_v2/disccount/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/paymentcoin/payment_page.dart';
@@ -102,7 +102,6 @@ import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/feedback/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/screen.dart';
-import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamerios/screen.dart';
 import 'package:hyppe/ui/inner/home/widget/ads_in_between_full.dart';
 import 'package:hyppe/ui/inner/home/widget/ads_video_in_between_full.dart';
 import 'package:hyppe/ui/inner/home/widget/aliplayer.dart';

@@ -358,7 +358,7 @@ class SelfProfileTop extends StatelessWidget {
                   )
                 : const SizedBox.shrink(),
             tenPx,
-            if (notifier.user.profile!.urlLink != null)
+            if (notifier.user.profile!.urlLink != '')
               GestureDetector(
                 onTap: () async {
                   var uri = notifier.user.profile!.urlLink??'';

@@ -1,19 +1,107 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/bloc/buy/bloc.dart';
+import 'package:hyppe/core/bloc/buy/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/discount/discountmodel.dart';
+import 'package:hyppe/core/models/collection/error/error_model.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/bank_data.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
+import 'package:hyppe/ux/routing.dart';
 
 class PaymentCoinNotifier with ChangeNotifier {
 
-  //Selected VA
-  int selectedva = 0;
+  bool _isLoading = true;
+  bool get isLoading => _isLoading;
+  set isLoading(bool val) {
+    _isLoading = val;
+    notifyListeners();
+  }
 
-  //Modal List Virtual Account
-  List<GroupVAModel> groupsVA = [
-    GroupVAModel(index: 1, text: 'BCA Virtual Account', icon: '${AssetPath.pngPath}ic-bca.png', selected: false),
-    GroupVAModel(index: 2, text: 'BRI Virtual Account', icon: '${AssetPath.pngPath}ic-bri.png', selected: false),
-    GroupVAModel(index: 3, text: 'Mandiri Virtual Account', icon: '${AssetPath.pngPath}ic-mandiri.png', selected: false),
-    GroupVAModel(index: 4, text: 'BNI Virtual Account', icon: '${AssetPath.pngPath}ic-bni.png', selected: false),
-  ];
+  String _bankSelected = '0';
+  String get bankSelected => _bankSelected;
+  set bankSelected(String val) {
+    _bankSelected = val;
+    notifyListeners();
+  }
+
+  List<BankData>? _data;
+  List<BankData>? get data => _data;
+  set data(List<BankData>? value) {
+    _data = value;
+    notifyListeners();
+  }
+
+  //Selected VA
+  String selectedbankdata = '';
+  List<GroupBankData>? _groupdata;
+  List<GroupBankData>? get groupdata => _groupdata;
+  set groupdata(List<GroupBankData>? value) {
+    _groupdata = value;
+    notifyListeners();
+  }
+
+  void initState(BuildContext context) {
+    isLoading = true;
+    notifyListeners();
+    // reviewBuyNotifier = Provider.of<ReviewBuyNotifier>(context, listen: false);
+    _getAllBank(context);
+  }
+
+  void changeSelectedBank(String? selected) {
+    for (int i = 0; i < groupdata!.length; i++) {
+      groupdata![i].selected = false;
+    }
+    groupdata![groupdata!.indexWhere((element) => element.id == selected)].selected = true;
+    notifyListeners();
+  }
+  
+  Future<void> _getAllBank(BuildContext context) async {
+    final notifier = BuyBloc();
+    await notifier.getBank(context);
+    final fetch = notifier.buyFetch;
+    if (fetch.postsState == BuyState.getContentsSuccess) {
+      List<BankData>? res = (fetch.data as List<dynamic>?)?.map((e) => BankData.fromJson(e as Map<String, dynamic>)).toList();
+      data = res;
+
+      List<GroupBankData>? resGroup = (fetch.data as List<dynamic>?)?.map((e) => GroupBankData.fromJSON(e as Map<String, dynamic>)).toList();
+      groupdata = resGroup;
+      isLoading = false;
+      notifyListeners();
+    }else if (fetch.postsState == BuyState.getContentsError) {
+      var errorData = ErrorModel.fromJson(fetch.data??'');
+      _showSnackBar(kHyppeDanger, 'Error', '${errorData.message}');
+      isLoading = false;
+      Future.delayed(const Duration(seconds: 3), () {
+        Routing().moveBack();
+      });
+    }
+  }
+
+  void _showSnackBar(Color color, String message, String desc, {Function? function}) {
+    Routing().showSnackBar(
+      snackBar: SnackBar(
+        margin: EdgeInsets.zero,
+        padding: EdgeInsets.zero,
+        behavior: SnackBarBehavior.floating,
+        content: SafeArea(
+          child: SizedBox(
+            height: 56,
+            child: OnColouredSheet(
+              maxLines: 2,
+              caption: message,
+              subCaption: desc,
+              fromSnackBar: true,
+              iconSvg: "${AssetPath.vectorPath}remove.svg",
+              function: function,
+            ),
+          ),
+        ),
+        backgroundColor: color,
+      ),
+    );
+  }
+  
 
   DiscountModel? _discount;
   DiscountModel get discount => _discount!;
@@ -21,28 +109,4 @@ class PaymentCoinNotifier with ChangeNotifier {
     _discount = val;
     notifyListeners();
   }
-
-  Future<void> initialPayment() async {
-    for (int i = 0; i < groupsVA.length; i++) {
-      groupsVA[i].selected = false;
-    }
-    selectedva = 0;
-    notifyListeners();
-  }
-
-  void changeSelectedva(int? selected) {
-    for (int i = 0; i < groupsVA.length; i++) {
-      groupsVA[i].selected = false;
-    }
-    groupsVA[groupsVA.indexWhere((element) => element.index==selected)].selected = true;
-    notifyListeners();
-  }
-}
-
-class GroupVAModel {
-  int index;
-  String text;
-  String icon;
-  bool selected;
-  GroupVAModel({required this.text, required this.index, required this.selected, required this.icon});
 }

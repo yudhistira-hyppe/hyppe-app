@@ -1155,6 +1155,7 @@ class LocalizationModelV2 {
   String? enterLinkLiveStream;
   String? noInternet;
   String? noInternetLabel;
+  String? creator;
   LocalizationModelV2({
     this.login,
     this.logIn,
@@ -2312,6 +2313,7 @@ class LocalizationModelV2 {
     this.removeListLive,
     this.noInternet,
     this.noInternetLabel,
+    this.creator,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -3489,5 +3491,6 @@ class LocalizationModelV2 {
     removeListLive = json['removeListLive'];
     noInternet = json['noInternet'];
     noInternetLabel = json['noInternetLabel'];
+    creator = json['creator'];
   }
 }

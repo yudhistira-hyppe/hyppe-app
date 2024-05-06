@@ -13,7 +13,7 @@ class DiscountModel {
     this.stock,
     this.audiens,
     this.satuan_diskon,
-    this.min_discount,
+    this.nominal_discount,
     this.min_use_disc,
     this.productID,
     this.productCode,
@@ -22,6 +22,7 @@ class DiscountModel {
     this.endCouponDate,
     this.createdAt,
     this.updatedAt,
+    this.disabled = false,
     this.checked = false,
   });
 
@@ -38,7 +39,7 @@ class DiscountModel {
   int? stock;
   String? audiens;
   String? satuan_diskon;
-  int? min_discount;
+  int? nominal_discount;
   int? min_use_disc;
   String? productID;
   String? productCode;
@@ -47,6 +48,7 @@ class DiscountModel {
   String? endCouponDate;
   String? createdAt;
   String? updatedAt;
+  bool? disabled;
   bool? checked;
 
   factory DiscountModel.fromJson(Map<String, dynamic> json) => DiscountModel(
@@ -63,7 +65,7 @@ class DiscountModel {
         stock: json["stock"]??0,
         audiens: json["audiens"]??'',
         satuan_diskon: json["satuan_diskon"]??'',
-        min_discount: json["min_discount"]??0,
+        nominal_discount: json["nominal_discount"]??0,
         min_use_disc: json["min_use_disc"]??0,
         productID: json["productID"]??'',
         productCode: json["productCode"]??'',
@@ -72,7 +74,8 @@ class DiscountModel {
         endCouponDate: json["endCouponDate"]??'',
         createdAt: json["createdAt"]??'',
         updatedAt: json["updatedAt"]??'',
-        checked: false
+        checked: false,
+        disabled: false
       );
 
   Map<String, dynamic> toJson() => {
@@ -85,9 +88,11 @@ class DiscountModel {
         "last_stock": last_stock,
         "active": active,
         "status": status,
+        "code_package": code_package,
+        "stock": stock,
         "audiens": audiens,
         "satuan_diskon": satuan_diskon,
-        "min_discount": min_discount,
+        "nominal_discount": nominal_discount,
         "min_use_disc": min_use_disc,
         "productID": productID,
         "productCode": productCode,
@@ -96,6 +101,7 @@ class DiscountModel {
         "endCouponDate": endCouponDate,
         "createdAt": createdAt,
         "updatedAt": updatedAt,
-        "checked": checked
+        "checked": checked,
+        "disabled": disabled
       };
 }

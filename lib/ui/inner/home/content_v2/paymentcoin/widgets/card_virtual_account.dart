@@ -34,7 +34,7 @@ class _CardVirtualAccountWidgetState extends State<CardVirtualAccountWidget> {
   Widget makeRadioTiles(BuildContext context) {
     List<Widget> list = [];
     var payNotif = context.read<PaymentCoinNotifier>();
-    for (int i = 0; i < payNotif.groupsVA.length; i++) {
+    for (int i = 0; i < payNotif.data!.length; i++) {
       list.add(Padding(
         padding: const EdgeInsets.symmetric(vertical: 4.0),
         child: Column(
@@ -45,14 +45,13 @@ class _CardVirtualAccountWidgetState extends State<CardVirtualAccountWidget> {
               endIndent: 18,
             ),
             RadioListTile(
-              value: payNotif.groupsVA[i].index,
-              groupValue: payNotif.selectedva,
-              selected: payNotif.groupsVA[i].selected,
+              value: payNotif.data![i].bankcode,
+              groupValue: payNotif.bankSelected,
+              selected: payNotif.bankSelected == payNotif.data![i].bankcode,
               onChanged: (val) {
                 setState(() {
-                  payNotif.selectedva = val??1;
+                  payNotif.bankSelected = val ?? '';
                 });
-                payNotif.changeSelectedva(val);
               },
               activeColor: kHyppePrimary,
               controlAffinity: ListTileControlAffinity.trailing,
@@ -60,15 +59,17 @@ class _CardVirtualAccountWidgetState extends State<CardVirtualAccountWidget> {
                 children: [
                   SizedBox(
                     width: 38,
-                    child: Image.asset(payNotif.groupsVA[i].icon),
+                    child: Image(
+                      image: NetworkImage(payNotif.data![i].bankIcon??''),
+                    ),
                   ),
                   tenPx,
                   Text(
-                    ' ${payNotif.groupsVA[i].text}',
+                    ' ${payNotif.data![i].bankname}',
                     style: TextStyle(
-                        color: payNotif.groupsVA[i].selected ? Colors.black : Colors.grey,
+                        color: payNotif.bankSelected == payNotif.data![i].bankcode ? Colors.black : Colors.grey,
                         fontWeight:
-                            payNotif.groupsVA[i].selected ? FontWeight.bold : FontWeight.normal),
+                            payNotif.bankSelected == payNotif.data![i].bankcode ? FontWeight.bold : FontWeight.normal),
                   ),
                 ],
               ),

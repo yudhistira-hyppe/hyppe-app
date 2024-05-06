@@ -4,6 +4,7 @@ import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/inner/home/content_v2/paymentcoin/notifier.dart';
 import 'package:provider/provider.dart';
 
 class DetailPayWidget extends StatelessWidget {
@@ -23,6 +24,25 @@ class DetailPayWidget extends StatelessWidget {
         children: [
           listTile(lang.price??'Harga', value1),
           listTile(lang.transactionFee?? 'Biaya Transaksi', withdrawalfree),
+          if (context.read<PaymentCoinNotifier>().discount.checked??false)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 18.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('Total Diskon',
+                  style: TextStyle(
+                      color: Colors.grey,
+                      fontWeight: FontWeight.normal),
+                ),
+                Text('- ${System().currencyFormat(amount: context.read<PaymentCoinNotifier>().discount.nominal_discount)}',
+                  style: const TextStyle(
+                      color: Colors.grey,
+                      fontWeight: FontWeight.normal),
+                )
+              ],
+            ),
+          ),
           const Divider(
             thickness: .1,
           ),

@@ -13,14 +13,14 @@ import 'package:hyppe/core/services/system.dart';
 
 import 'state.dart';
 
-class MyCouponsDataBloc {
-  MyCouponsDataFetch _dataFetch = MyCouponsDataFetch(MyCouponsState.init);
-  MyCouponsDataFetch get dataFetch => _dataFetch;
-  setMyCouponsFetch(MyCouponsDataFetch val) => _dataFetch = val;
+class DiscDataBloc {
+  DiscDataFetch _dataFetch = DiscDataFetch(DiscState.init);
+  DiscDataFetch get dataFetch => _dataFetch;
+  setDiscFetch(DiscDataFetch val) => _dataFetch = val;
 
-  Future getMyCoupons(BuildContext context,
+  Future getDisc(BuildContext context,
       {int? page, int? limit, bool? desc}) async {
-    setMyCouponsFetch(MyCouponsDataFetch(MyCouponsState.loading));
+    setDiscFetch(DiscDataFetch(DiscState.loading));
     try {
       Map<String, dynamic> data = {
         'page': page ?? 0,
@@ -35,11 +35,11 @@ class MyCouponsDataBloc {
             context,
             (onResult) {
               if ((onResult.statusCode ?? 300) > HTTP_CODE) {
-                setMyCouponsFetch(
-                    MyCouponsDataFetch(MyCouponsState.getMyCouponsBlocError));
+                setDiscFetch(
+                    DiscDataFetch(DiscState.getDiscBlocError));
               } else {
-                setMyCouponsFetch(
-                  MyCouponsDataFetch(MyCouponsState.getMyCouponsBlocSuccess,
+                setDiscFetch(
+                  DiscDataFetch(DiscState.getDiscBlocSuccess,
                       data: onResult.data['data'] != null
                           ? List.from(onResult.data['data'])
                               .map((e) => DiscountModel.fromJson(e))
@@ -49,8 +49,8 @@ class MyCouponsDataBloc {
               }
             },
             (errorData) {
-              setMyCouponsFetch(
-                  MyCouponsDataFetch(MyCouponsState.getMyCouponsBlocError));
+              setDiscFetch(
+                  DiscDataFetch(DiscState.getDiscBlocError));
               Dio().close(force: true);
             },
             headers: {
@@ -63,19 +63,19 @@ class MyCouponsDataBloc {
             withCheckConnection: true,
           );
         }else{
-          setMyCouponsFetch(
-                MyCouponsDataFetch(MyCouponsState.getNotInternet));
+          setDiscFetch(
+                DiscDataFetch(DiscState.getNotInternet));
           Dio().close(force: true);
         }
       });
       
     } on SocketException catch (_) {
-      setMyCouponsFetch(
-          MyCouponsDataFetch(MyCouponsState.getMyCouponsBlocError));
+      setDiscFetch(
+          DiscDataFetch(DiscState.getDiscBlocError));
       Dio().close(force: true);
     } catch (_) {
-      setMyCouponsFetch(
-          MyCouponsDataFetch(MyCouponsState.getMyCouponsBlocError));
+      setDiscFetch(
+          DiscDataFetch(DiscState.getDiscBlocError));
       Dio().close(force: true);
     }
   }

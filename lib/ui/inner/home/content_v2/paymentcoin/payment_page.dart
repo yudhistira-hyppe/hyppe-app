@@ -2,10 +2,12 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/collection/coins/coinmodel.dart';
 import 'package:hyppe/core/models/collection/discount/discountmodel.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/loading_screen.dart';
 import 'package:hyppe/ui/constant/widget/section_widget.dart';
@@ -13,7 +15,6 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
-import '../topupcoin/notifier.dart';
 import 'notifier.dart';
 import 'widgets/card_virtual_account.dart';
 import 'widgets/detail_pay.dart';
@@ -27,7 +28,7 @@ class PaymentCoinPage extends StatefulWidget {
 
 class _PaymentCoinPageState extends State<PaymentCoinPage> {
   LocalizationModelV2? lang;
-  GroupCoinModel? selectedCoin;
+  CointModel? selectedCoin;
   
   @override
   void initState() {
@@ -36,8 +37,10 @@ class _PaymentCoinPageState extends State<PaymentCoinPage> {
     
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       context.read<PaymentCoinNotifier>().discount = DiscountModel();
-      context.read<PaymentCoinNotifier>().initialPayment();
-      var map = ModalRoute.of(context)!.settings.arguments as GroupCoinModel;
+      var nn = Provider.of<PaymentCoinNotifier>(context, listen: false);
+      nn.initState(context);
+      nn.bankSelected = '0';
+      var map = ModalRoute.of(context)!.settings.arguments as CointModel;
       selectedCoin = map;
     });
     super.initState();
@@ -75,7 +78,9 @@ class _PaymentCoinPageState extends State<PaymentCoinPage> {
                       .titleMedium
                       ?.copyWith(fontWeight: FontWeight.bold),
                 ),
-                const CardVirtualAccountWidget(),
+                notifier.isLoading
+                ? const Center(child: CustomLoading())
+                : const CardVirtualAccountWidget(),
                 SectionWidget(
                   title: lang?.paymentDetails ?? 'Rincian Pembayaran',
                   style: Theme.of(context)
@@ -83,7 +88,7 @@ class _PaymentCoinPageState extends State<PaymentCoinPage> {
                       .titleMedium
                       ?.copyWith(fontWeight: FontWeight.bold),
                 ),
-                DetailPayWidget(value1: selectedCoin?.valueLabel??0),
+                DetailPayWidget(value1: selectedCoin?.price??0),
 
                 GestureDetector(
                   onTap: () => Navigator.pushNamed(context, Routes.mydiscount, arguments: {'routes': Routes.paymentCoins, 'discount': notifier.discount}),
@@ -118,8 +123,8 @@ class _PaymentCoinPageState extends State<PaymentCoinPage> {
           bottomNavigationBar: Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
-              onPressed: notifier.groupsVA.where((e) => e.selected==true).isNotEmpty ? (){
-                debugPrint(notifier.groupsVA.firstWhere((e) => e.selected==true).text);
+              onPressed: notifier.data!.where((element) => element.bankcode!.toLowerCase() == notifier.bankSelected).isNotEmpty ? (){
+                debugPrint(notifier.groupdata!.firstWhere((e) => e.selected==true).bankname);
                 LoadingScreen.show(context, lang?.processing??'Memproses');
                 Future.delayed(const Duration(seconds: 5), () {
                   // 5s over, navigate to a new page

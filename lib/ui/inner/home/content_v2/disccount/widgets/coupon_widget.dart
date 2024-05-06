@@ -22,7 +22,7 @@ class CouponWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: context.read<MyCouponsNotifier>().isView ? null : () => context.read<MyCouponsNotifier>().selectedCoupon(data),
+      onTap: context.read<DiscNotifier>().isView ? null : () => context.read<DiscNotifier>().selectedDisc(data),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -68,10 +68,10 @@ class CouponWidget extends StatelessWidget {
               size: const Size(1, double.infinity),
               painter: DashedLineVerticalPainter()),
           Expanded(child: dataWidget(context)),
-          if (!context.read<MyCouponsNotifier>().isView)
+          if (!context.read<DiscNotifier>().isView)
           IconButton(
-              onPressed: context.read<MyCouponsNotifier>().isView ? null : () => 
-                  context.read<MyCouponsNotifier>().selectedCoupon(data),
+              onPressed: context.read<DiscNotifier>().isView ? null : () => 
+                  context.read<DiscNotifier>().selectedDisc(data),
               icon: data?.checked ?? false
                   ? const Icon(
                       Icons.radio_button_checked,
@@ -102,7 +102,7 @@ class CouponWidget extends StatelessWidget {
             children: [
               CustomTextWidget(textToDisplay: lang?.mintransaction??'Min transaksi ${System().currencyFormat(amount: data?.min_use_disc)}', textStyle: const TextStyle(fontSize: 12.0),),
               GestureDetector(onTap:  () {
-                context.read<MyCouponsNotifier>().showButtomSheetInfo(context, lang!);
+                context.read<DiscNotifier>().showButtomSheetInfo(context, lang!);
               }, child: const Icon(Icons.info_outline, size: 18,))
             ],
           ),

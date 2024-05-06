@@ -1,5 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/bloc/monetization/coin/state.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
@@ -12,6 +13,8 @@ import 'package:provider/provider.dart';
 import 'notifier.dart';
 import 'widgets/card_coin_widget.dart';
 import 'widgets/coin_widget.dart';
+import 'widgets/error_widget.dart';
+import 'widgets/shimmer_widget.dart';
 
 class TopUpCoinPage extends StatefulWidget {
   const TopUpCoinPage({super.key});
@@ -28,7 +31,7 @@ class _TopUpCoinPageState extends State<TopUpCoinPage> {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'Top Up Hyppe Coins');
     lang = context.read<TranslateNotifierV2>().translate;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      context.read<TopUpCoinNotifier>().initialCoin();
+      Future.microtask(() => context.read<TopUpCoinNotifier>().initCoin(context));
     });
     super.initState();
   }
@@ -66,18 +69,27 @@ class _TopUpCoinPageState extends State<TopUpCoinPage> {
                         .titleMedium
                         ?.copyWith(fontWeight: FontWeight.w400),
                   ),
-                  Wrap(
-                    alignment: WrapAlignment.start,
-                    children: widgetGenerate(notifier),
-                  ),
+                  if (notifier.bloc.dataFetch.dataState == CoinState.init ||
+                      notifier.bloc.dataFetch.dataState == CoinState.loading)
+                      Wrap(
+                        alignment: WrapAlignment.start,
+                        children: widgetGenerateLoading(),
+                      )
+                  else if (notifier.bloc.dataFetch.dataState == CoinState.getNotInternet)
+                    Center(child: ErrorCouponsWidget(lang: lang,))
+                  else
+                    Wrap(
+                      alignment: WrapAlignment.start,
+                      children: widgetGenerate(notifier),
+                    ),
                 ],
               ),
             ),
           bottomNavigationBar: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 18.0),
             child: ElevatedButton(
-              onPressed: notifier.groupsCoins.where((e) => e.selected==true).isNotEmpty ? (){
-                Navigator.pushNamed(context, Routes.paymentCoins, arguments: notifier.groupsCoins.firstWhere((e) => e.selected==true));
+              onPressed: notifier.result.where((e) => e.checked==true).isNotEmpty ? (){
+                Navigator.pushNamed(context, Routes.paymentCoins, arguments: notifier.result.firstWhere((e) => e.checked==true));
               }:null,
               style: ElevatedButton.styleFrom(
                   elevation: 0,
@@ -99,19 +111,31 @@ class _TopUpCoinPageState extends State<TopUpCoinPage> {
     );
   }
 
+  List<Widget> widgetGenerateLoading() {
+    List<Widget> widget = [];
+    for (var i = 0; i < 10; i++) {
+      Widget item = const Padding(
+        padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+        child: ContentLoader()
+      );
+      widget.add(item);
+    }
+    return widget;
+  }
+
   List<Widget> widgetGenerate(TopUpCoinNotifier notifier) {
     List<Widget> widget = [];
-    for (var i = 0; i < notifier.groupsCoins.length; i++) {
+    for (var i = 0; i < notifier.result.length; i++) {
       Widget item = Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+        padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 8.0),
         child: GestureDetector(
           onTap: (){
-            notifier.changeSelectedCoin(i+1);
+            notifier.changeSelectedCoin(notifier.result[i].id);
           },
           child: CardCoinWidget(
-            coin: notifier.groupsCoins[i].value,
-            coinlabel: notifier.groupsCoins[i].valueLabel,
-            selected: notifier.groupsCoins[i].selected,
+            coin: notifier.result[i].amount??0,
+            coinlabel: notifier.result[i].price??0,
+            selected: notifier.result[i].checked??false,
           ),
         ),
       );

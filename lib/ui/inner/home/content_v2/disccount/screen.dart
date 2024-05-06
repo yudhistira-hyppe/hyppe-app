@@ -1,6 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:hyppe/core/bloc/monetization/mycoupons/state.dart';
+import 'package:hyppe/core/bloc/monetization/disc/state.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
@@ -27,14 +27,14 @@ class MyCouponsPage extends StatefulWidget {
 class _MyCouponsPageState extends State<MyCouponsPage> {
   LocalizationModelV2? lang;
   final ScrollController scrollController = ScrollController();
-  final MyCouponsNotifier notifier = MyCouponsNotifier();
+  final DiscNotifier notifier = DiscNotifier();
   bool isHideButton = true;
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'kupondiskonsaya');
     lang = context.read<TranslateNotifierV2>().translate;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      notifier.initMyCoupons(context);
+      notifier.initDisc(context);
       Map res = ModalRoute.of(context)!.settings.arguments as Map;
       if (res['routes'] != null){
         notifier.isView = res['routes']== Routes.saldoCoins;
@@ -62,12 +62,12 @@ class _MyCouponsPageState extends State<MyCouponsPage> {
             textToDisplay: lang?.mycoupons ?? 'Kupon diskon saya',
           ),
         ),
-        body: Consumer<MyCouponsNotifier>(builder: (context, notifier, _) {
-          if (notifier.bloc.dataFetch.dataState == MyCouponsState.init ||
-              notifier.bloc.dataFetch.dataState == MyCouponsState.loading) {
+        body: Consumer<DiscNotifier>(builder: (context, notifier, _) {
+          if (notifier.bloc.dataFetch.dataState == DiscState.init ||
+              notifier.bloc.dataFetch.dataState == DiscState.loading) {
             return const ContentLoader();
           } else if (notifier.bloc.dataFetch.dataState ==
-              MyCouponsState.getNotInternet) {
+              DiscState.getNotInternet) {
             return ErrorCouponsWidget(lang: lang,);
           } else {
             return RefreshLoadmore(
@@ -75,7 +75,7 @@ class _MyCouponsPageState extends State<MyCouponsPage> {
                 isLastPage: notifier.isLastPage,
                 noMoreWidget: Container(),
                 onRefresh: () async {
-                  await notifier.initMyCoupons(context);
+                  await notifier.initDisc(context);
                 },
                 onLoadmore: () async {
                   notifier.isLastPage = false;

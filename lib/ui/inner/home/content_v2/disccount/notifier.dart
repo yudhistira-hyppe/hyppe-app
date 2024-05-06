@@ -1,13 +1,13 @@
 
 import 'package:flutter/material.dart';
-import 'package:hyppe/core/bloc/monetization/mycoupons/bloc.dart';
-import 'package:hyppe/core/bloc/monetization/mycoupons/state.dart';
+import 'package:hyppe/core/bloc/monetization/disc/bloc.dart';
+import 'package:hyppe/core/bloc/monetization/disc/state.dart';
 import 'package:hyppe/core/models/collection/discount/discountmodel.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 
 import 'widgets/dialog_info.dart';
 
-class MyCouponsNotifier extends ChangeNotifier {
+class DiscNotifier extends ChangeNotifier {
   
   List<DiscountModel> _result = [];
   List<DiscountModel> get result => _result;
@@ -16,7 +16,7 @@ class MyCouponsNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  final bloc = MyCouponsDataBloc();
+  final bloc = DiscDataBloc();
 
   bool _isView = false;
   bool get isView => _isView;
@@ -41,14 +41,12 @@ class MyCouponsNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> initMyCoupons(BuildContext context) async {
+  Future<void> initDisc(BuildContext context) async {
     try{
-      // if (bloc.dataFetch.dataState == MyCouponsState.loading) return;
-
       page = 0;
 
-      await bloc.getMyCoupons(context, page: page, desc: true);
-      if (bloc.dataFetch.dataState == MyCouponsState.getMyCouponsBlocSuccess && bloc.dataFetch.data.isNotEmpty) {
+      await bloc.getDisc(context, page: page, desc: true);
+      if (bloc.dataFetch.dataState == DiscState.getDiscBlocSuccess && bloc.dataFetch.data.isNotEmpty) {
         result = bloc.dataFetch.data;
         // ignore: use_build_context_synchronously
         Map res = ModalRoute.of(context)!.settings.arguments as Map;
@@ -70,8 +68,8 @@ class MyCouponsNotifier extends ChangeNotifier {
 
       isLoadMore = true;
 
-      await bloc.getMyCoupons(context, page: page, desc: desc);
-      if (bloc.dataFetch.dataState == MyCouponsState.getMyCouponsBlocSuccess && bloc.dataFetch.data.isNotEmpty) {
+      await bloc.getDisc(context, page: page, desc: desc);
+      if (bloc.dataFetch.dataState == DiscState.getDiscBlocSuccess && bloc.dataFetch.data.isNotEmpty) {
         result = [...(result), ...bloc.dataFetch.data];
       } else {
         isLastPage = true;
@@ -81,7 +79,7 @@ class MyCouponsNotifier extends ChangeNotifier {
     }
   }
 
-  Future<void> selectedCoupon(DiscountModel? data) async {
+  Future<void> selectedDisc(DiscountModel? data) async {
     if (data?.checked==false){
       for (var i = 0; i < result.length; i++) {
         result[i].checked = false;
