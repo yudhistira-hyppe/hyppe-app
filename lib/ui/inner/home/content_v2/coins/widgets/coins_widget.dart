@@ -112,26 +112,28 @@ class CoinsWidget extends StatelessWidget {
               ),
               Align(
                 alignment: Alignment.centerRight,
-                child: GestureDetector(
+                child: InkWell(
                   onTap: (){
-                    //Disini Tap Top up coins
                     Navigator.pushNamed(context, Routes.topUpCoins);
                   },
-                  child: Row(
-                    children: [
-                      CustomTextWidget(
-                        textToDisplay: 'Top up Coins',
-                        textStyle: Theme.of(context)
-                            .textTheme
-                            .titleSmall
-                            ?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: kHyppeTextPrimary),
-                        textAlign: TextAlign.start,
-                      ),
-                      fivePx,
-                      const Icon(Icons.arrow_forward_ios, size: 18, color: kHyppeTextPrimary,)
-                    ],
+                  child: SizedBox(
+                    height: kToolbarHeight * .5,
+                    child: Row(
+                      children: [
+                        CustomTextWidget(
+                          textToDisplay: 'Top up Coins',
+                          textStyle: Theme.of(context)
+                              .textTheme
+                              .titleSmall
+                              ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: kHyppeTextPrimary),
+                          textAlign: TextAlign.start,
+                        ),
+                        fivePx,
+                        const Icon(Icons.arrow_forward_ios, size: 18, color: kHyppeTextPrimary,)
+                      ],
+                    ),
                   ),
                 ),
               )
@@ -145,7 +147,7 @@ class CoinsWidget extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                GestureDetector(
+                InkWell(
                   onTap: (){
                     context.handleActionIsGuest(() {
                             context
@@ -156,7 +158,7 @@ class CoinsWidget extends StatelessWidget {
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width * .42,
-                    height: kToolbarHeight,
+                    height: kToolbarHeight * .5,
                     padding: const EdgeInsets.only(right: 12.0),
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -177,13 +179,13 @@ class CoinsWidget extends StatelessWidget {
                     )
                   ),
                 ),
-                GestureDetector(
+                InkWell(
                   onTap: (){
                     Navigator.pushNamed(context, Routes.exchangeCoins);
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width * .42,
-                    height: kToolbarHeight,
+                    height: kToolbarHeight * .5,
                     padding: const EdgeInsets.only(left: 12.0),
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

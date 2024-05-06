@@ -2,8 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/models/collection/live_stream/link_stream_model.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/iconButton.dart';
@@ -15,7 +18,9 @@ import '../notifier.dart';
 
 class FormCommentViewer extends StatefulWidget {
   final FocusNode? commentFocusNode;
-  const FormCommentViewer({super.key, this.commentFocusNode});
+  final LinkStreamModel? data;
+  // final FlutterAliplayer? fAliplayer;
+  const FormCommentViewer({super.key, this.commentFocusNode, this.data});
 
   @override
   State<FormCommentViewer> createState() => _FormCommentViewerState();
@@ -52,13 +57,14 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                   },
                   onFieldSubmitted: (val) {
                     // print(val);
-                    if (Platform.isIOS){
+                    if (Platform.isIOS) {
                       if (notifier.streamerData != null) {
                         setState(() {
                           comment = '';
                         });
-                        if(notifier.commentController.text.isNotOnlySpace()){
-                          notifier.sendComment(context, notifier.streamerData!, notifier.commentController.text);
+                        if (notifier.commentController.text.isNotOnlySpace()) {
+                          notifier.sendComment(context, notifier.streamerData!,
+                              notifier.commentController.text);
                         }
                       }
                     }
@@ -66,57 +72,128 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                   inputFormatters: [LengthLimitingTextInputFormatter(150)],
                   decoration: InputDecoration(
                       counterText: '',
-                      hintText: notifier.isCommentDisable ? tn.commentsAreDisabled : tn.addComment,
+                      hintText: notifier.isCommentDisable
+                          ? tn.commentsAreDisabled
+                          : tn.addComment,
                       isDense: true, // important line
-                      contentPadding: EdgeInsets.fromLTRB(10, 10, widget.commentFocusNode!.hasFocus ? 70 : 10, 10), // control your hints text size
+                      contentPadding: EdgeInsets.fromLTRB(
+                          10,
+                          10,
+                          widget.commentFocusNode!.hasFocus ? 70 : 10,
+                          10), // control your hints text size
                       hintStyle: const TextStyle(color: Colors.white),
                       fillColor: kHyppeTransparent,
                       filled: true,
-                      border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(25.0)), borderSide: BorderSide.none),
-                      enabledBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(25.0)), borderSide: BorderSide.none),
-                      focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(25.0)), borderSide: BorderSide.none)),
+                      border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                          borderSide: BorderSide.none),
+                      enabledBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                          borderSide: BorderSide.none),
+                      focusedBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                          borderSide: BorderSide.none)),
                 ),
                 !widget.commentFocusNode!.hasFocus
                     ? Container()
                     : comment == ''
                         ? Container()
-                        : comment.trim().isEmpty ? const SizedBox.shrink(): Positioned.fill(
-                            top: 0,
-                            child: Align(
-                                alignment: Alignment.centerRight,
-                                child: Container(
-                                  height: 24,
-                                  width: 75,
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: CustomTextButton(
-                                      onPressed: () {
-                                        if (notifier.streamerData != null) {
-                                          setState(() {
-                                            comment = '';
-                                          });
-                                          if(notifier.commentController.text.isNotOnlySpace()){
-                                            notifier.sendComment(context, notifier.streamerData!, notifier.commentController.text);
-                                          }
-                                        }
-                                      },
-                                      style: ButtonStyle(
-                                          visualDensity: VisualDensity.comfortable,
-                                          backgroundColor: MaterialStateProperty.all(kHyppePrimary),
-                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(18.0),
-                                            ),
+                        : comment.trim().isEmpty
+                            ? const SizedBox.shrink()
+                            : Positioned.fill(
+                                top: 0,
+                                child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Container(
+                                      height: 24,
+                                      width: 75,
+                                      padding:
+                                          const EdgeInsets.only(right: 8.0),
+                                      child: CustomTextButton(
+                                          onPressed: () {
+                                            if (notifier.streamerData != null) {
+                                              setState(() {
+                                                comment = '';
+                                              });
+                                              if (notifier
+                                                  .commentController.text
+                                                  .isNotOnlySpace()) {
+                                                notifier.sendComment(
+                                                    context,
+                                                    notifier.streamerData!,
+                                                    notifier.commentController
+                                                        .text);
+                                              }
+                                            }
+                                          },
+                                          style: ButtonStyle(
+                                              visualDensity:
+                                                  VisualDensity.comfortable,
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      kHyppePrimary),
+                                              shape: MaterialStateProperty.all<
+                                                  RoundedRectangleBorder>(
+                                                RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          18.0),
+                                                ),
+                                              )),
+                                          child: Text(
+                                            tn.send ?? '',
+                                            style: const TextStyle(
+                                                color: kHyppeTextPrimary),
                                           )),
-                                      child: Text(
-                                        tn.send ?? '',
-                                        style: TextStyle(color: kHyppeTextPrimary),
-                                      )),
-                                )),
-                          )
+                                    )),
+                              )
               ],
             ),
           ),
 
+          widget.commentFocusNode!.hasFocus
+              ? Container()
+              : GestureDetector(
+                onTap: () {
+                  // notifier.reportfAliplayer = widget.fAliplayer;
+                  notifier.reportdata = widget.data;
+                  print('data ===== ${widget.data}');
+                  ShowBottomSheet.onViewerOptions(context, notifier);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: CircleAvatar(
+                      radius: 18,
+                      backgroundColor: Colors.black.withOpacity(.3),
+                      child: const Center(
+                        child: Icon(Icons.more_horiz, color: Colors.white,)
+                      ),
+                    ),
+                ),
+              ),
+
+          widget.commentFocusNode!.hasFocus
+              ? Container()
+              : GestureDetector(
+                onTap: (){
+                  print('Gesture Detector Share');
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: CircleAvatar(
+                      radius: 18,
+                      backgroundColor: Colors.black.withOpacity(.3),
+                      child: const Center(
+                        child: CustomIconWidget(
+                            iconData: "${AssetPath.vectorPath}share2.svg",
+                            color: Colors.white,
+                            defaultColor: false,
+                          ),
+                      ),
+                    ),
+                ),
+              ),
+              
           widget.commentFocusNode!.hasFocus
               ? Container()
               : Padding(
@@ -125,7 +202,8 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                       widget: Align(
                         alignment: Alignment.center,
                         child: CustomIconWidget(
-                          iconData: "${AssetPath.vectorPath}${notifier.isClicked ? 'ic_like_red.svg' : 'ic_like_stroke.svg'}",
+                          iconData:
+                              "${AssetPath.vectorPath}${notifier.isClicked ? 'ic_like_red.svg' : 'ic_like_stroke.svg'}",
                           color: notifier.isClicked ? null : Colors.white,
                           defaultColor: false,
                           height: 24,

@@ -86,7 +86,7 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                 child: CustomTextWidget(
                   textAlign: TextAlign.center,
                   textToDisplay: (notifier.titleLive.isNotEmpty) ? (notifier.titleLive) : "${isIndo ? language.liveVideo : ''} ${notifier.userName} ${!isIndo ? language.liveVideo : ''}",
-                  textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700),
+                  textStyle: context.getTextTheme().bodyLarge?.copyWith(fontWeight: FontWeight.w700),
                 ),
               ),
               tenPx,
@@ -102,7 +102,7 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                 child: CustomTextWidget(
                   textAlign: TextAlign.left,
                   textToDisplay: language.liveHost ?? '',
-                  textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w700, color: kHyppeBurem),
+                  textStyle: context.getTextTheme().bodyLarge?.copyWith(fontWeight: FontWeight.w700, color: kHyppeBurem),
                 ),
               ),
               sixteenPx,
@@ -132,7 +132,7 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                 child: CustomTextWidget(
                   textAlign: TextAlign.left,
                   textToDisplay: language.whosWatching ?? '',
-                  textStyle: context.getTextTheme().bodyText2?.copyWith(
+                  textStyle: context.getTextTheme().bodyLarge?.copyWith(
                         fontWeight: FontWeight.w700,
                       ),
                 ),
@@ -147,7 +147,7 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                     textAlign: TextAlign.left,
                     maxLines: 2,
                     textToDisplay: language.whosWatchingDetail ?? '',
-                    textStyle: context.getTextTheme().bodyText2?.copyWith(color: kHyppeBurem),
+                    textStyle: context.getTextTheme().bodyLarge?.copyWith(color: kHyppeBurem),
                   ),
                 ),
               eightPx,
@@ -161,7 +161,7 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                     children: [
                       Expanded(
                         child: notifier.isloadingViewers
-                            ? const SizedBox(height: 10, child: Align(alignment: Alignment.topCenter, child: Padding(padding: EdgeInsets.only(top: 60), child: const CustomLoading())))
+                            ? const SizedBox(height: 10, child: Align(alignment: Alignment.topCenter, child: Padding(padding: EdgeInsets.only(top: 60), child: CustomLoading())))
                             : ListView.builder(
                                 controller: controller,
                                 itemCount: notifier.dataViewers.length,
@@ -193,7 +193,7 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                             textAlign: TextAlign.center,
                             maxLines: 2,
                             textToDisplay: language.noteShowView99 ?? 'Menampilkan 99 penonton teratas yang peringkatnya diaktifkan',
-                            textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w400, color: kHyppeBurem),
+                            textStyle: context.getTextTheme().bodyMedium?.copyWith(fontWeight: FontWeight.w400, color: kHyppeBurem),
                           ),
                         ),
                       ),
@@ -293,7 +293,7 @@ class _ItemAccountState extends State<ItemAccount> {
                       CustomTextWidget(
                         textAlign: TextAlign.left,
                         textToDisplay: widget.username,
-                        textStyle: context.getTextTheme().bodyText2?.copyWith(
+                        textStyle: context.getTextTheme().bodyMedium?.copyWith(
                               fontWeight: FontWeight.w700,
                             ),
                       ),
@@ -301,55 +301,27 @@ class _ItemAccountState extends State<ItemAccount> {
                       CustomTextWidget(
                         textAlign: TextAlign.left,
                         textToDisplay: "${widget.name}${widget.isHost ? " • Host" : ''}",
-                        textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w400, color: kHyppeBurem),
+                        textStyle: context.getTextTheme().bodySmall?.copyWith(fontWeight: FontWeight.w400, color: kHyppeBurem),
                       ),
                     ],
                   ),
                 ),
                 if (!widget.isHost) tenPx,
-                // if (!widget.isHost && widget.showThreeDot && SharedPreference().readStorage(SpKeys.email) != widget.email)
-                //   CustomGesture(
-                //     margin: EdgeInsets.zero,
-                //     onTap: () async {
-                //       Routing().moveBack();
-                //       ShowBottomSheet.onWatcherStatus(context, widget.email, widget.idStream ?? '');
-                //     },
-                //     child: Container(
-                //       alignment: Alignment.center,
-                //       child: const RotationTransition(
-                //         turns: AlwaysStoppedAnimation(90 / 360),
-                //         child: Align(alignment: Alignment.center, child: CustomIconWidget(width: 24, iconData: "${AssetPath.vectorPath}more.svg", color: Colors.black, defaultColor: false)),
-                //       ),
-                //     ),
-                //   ),
                 if (!widget.isHost && widget.showThreeDot && SharedPreference().readStorage(SpKeys.email) != widget.email)
-                  GestureDetector(
-                    onTap: () {
-                      ShowGeneralDialog.generalDialog(
-                        _,
-                        functionPrimary: () {},
-                        barrierDismissible: true,
-                        titleText: 'Remove kevinsaputra?',
-                        bodyText: 'hahaha ahaha ha a',
-                        functionSecondary: () {
-                          Routing().moveBack();
-                        },
-                        titleButtonPrimary: 'Remove',
-                        titleButtonSecondary: 'Cance',
-                        isHorizontal: false,
-                      );
+                  CustomGesture(
+                    margin: EdgeInsets.zero,
+                    onTap: () async {
+                      Routing().moveBack();
+                      ShowBottomSheet.onWatcherStatus(context, widget.email, widget.idStream ?? '');
                     },
                     child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-                      decoration: BoxDecoration(border: Border.all(color: kHyppeBorderTab), borderRadius: BorderRadius.circular(8)),
-                      child: Text(
-                        language.removeUser ?? '',
-                        style: const TextStyle(fontWeight: FontWeight.w700),
+                      alignment: Alignment.center,
+                      child: const RotationTransition(
+                        turns: AlwaysStoppedAnimation(90 / 360),
+                        child: Align(alignment: Alignment.center, child: CustomIconWidget(width: 24, iconData: "${AssetPath.vectorPath}more.svg", color: Colors.black, defaultColor: false)),
                       ),
                     ),
                   ),
-
-                // Text("${widget.notifier.statusFollowingViewer}"),
                 if (widget.isHost && widget.isViewer)
                   CustomElevatedButton(
                     width: 100,
@@ -357,8 +329,6 @@ class _ItemAccountState extends State<ItemAccount> {
                     buttonStyle: ButtonStyle(
                       backgroundColor: (widget.notifier.statusFollowingViewer == StatusFollowing.requested || widget.notifier.statusFollowingViewer == StatusFollowing.following)
                           ? null
-                          // : (widget.notifier.userName == widget.notifier.audienceProfile.username)
-                          //     ? null
                           : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                     ),
                     function: widget.notifier.isCheckLoading
@@ -389,32 +359,6 @@ class _ItemAccountState extends State<ItemAccount> {
                                 ),
                           ),
                   ),
-                // if (!isHost)
-                //   CustomGesture(
-                //     margin: EdgeInsets.zero,
-                //     onTap: () async {
-                //       await ShowGeneralDialog.generalDialog(context,
-                //           titleText: "${language.remove} $username?",
-                //           bodyText: "${language.messageRemoveUser1} $username ${language.messageRemoveUser2}",
-                //           maxLineTitle: 1,
-                //           maxLineBody: 4, functionPrimary: () async {
-                //         Routing().moveBack();
-                //       }, functionSecondary: () {
-                //         Routing().moveBack();
-                //       }, titleButtonPrimary: "${language.remove}", titleButtonSecondary: "${language.cancel}", barrierDismissible: true, isHorizontal: false);
-                //     },
-                //     child: Container(
-                //       width: 86,
-                //       height: 24,
-                //       decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.transparent, border: Border.all(color: kHyppeBurem, width: 1)),
-                //       alignment: Alignment.center,
-                //       child: CustomTextWidget(
-                //         textToDisplay: language.removeUser ?? '',
-                //         textAlign: TextAlign.center,
-                //         textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.black),
-                //       ),
-                //     ),
-                //   ),
               ],
             ),
             if (widget.length == ((widget.index ?? 0) + 1) && (widget.isloading ?? false)) const CustomLoading(size: 4),

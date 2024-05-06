@@ -20,7 +20,7 @@ class ViewerComment extends StatelessWidget {
         children: [
           ListCommentViewer(commentFocusNode: commentFocusNode, data: data),
           twentyEightPx,
-          FormCommentViewer(commentFocusNode: commentFocusNode),
+          FormCommentViewer(commentFocusNode: commentFocusNode, data: data,),
         ],
       ),
     );

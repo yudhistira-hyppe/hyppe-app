@@ -31,12 +31,15 @@ class _ExchangeCoinPageState extends State<ExchangeCoinPage> {
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'exchangecoins');
-    lang = context.read<TranslateNotifierV2>().translate;
-    var notif = context.read<ExchangeCoinNotifier>();
-    notif.initialExchange();
-    notif.totalCoin = context.read<TransactionNotifier>().accountBalance?.totalsaldo??0;
-    notif.textController.text = '';
-    notif.initBankAccount(context);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      lang = context.read<TranslateNotifierV2>().translate;
+      var notif = context.read<ExchangeCoinNotifier>();
+      notif.initialExchange();
+      notif.totalCoin = context.read<TransactionNotifier>().accountBalance?.totalsaldo??0;
+      notif.textController.text = '';
+      notif.initBankAccount(context);
+    });
+    
     super.initState();
   }
   

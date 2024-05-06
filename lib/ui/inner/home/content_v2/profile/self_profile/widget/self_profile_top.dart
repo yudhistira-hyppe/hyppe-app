@@ -1,4 +1,5 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/arguments/follower_screen_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -6,6 +7,7 @@ import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
@@ -21,6 +23,7 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../../../constant/widget/custom_desc_content_widget.dart';
 
 class SelfProfileTop extends StatelessWidget {
@@ -354,7 +357,37 @@ class SelfProfileTop extends StatelessWidget {
                     ),
                   )
                 : const SizedBox.shrink(),
-
+            tenPx,
+            if (notifier.user.profile!.urlLink != null)
+              GestureDetector(
+                onTap: () async {
+                  var uri = notifier.user.profile!.urlLink??'';
+                    if (!uri.withHttp()){
+                      uri='https://$uri';
+                    }
+                    if (await canLaunchUrl(Uri.parse(uri))) {
+                        await launchUrl(Uri.parse(uri));
+                      } else {
+                        throw  Fluttertoast.showToast(msg: 'Could not launch $uri');
+                      }
+                },
+                child: SizedBox(
+                  width: SizeConfig.screenWidth,
+                  child: Row(
+                    children: [
+                      const CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}hyperlink.svg",
+                        defaultColor: false,
+                        color: kHyppePrimary,
+                      ),
+                      const SizedBox(width: 12.0,),
+                      (notifier.user.profile!.judulLink != null) 
+                      ? Text(notifier.user.profile!.judulLink??'', style: const TextStyle(color: kHyppePrimary),)
+                      : Text(notifier.user.profile!.urlLink??'', style: const TextStyle(color: kHyppePrimary),)
+                    ],
+                  ),
+                ),
+              ),
             Padding(
                 padding: EdgeInsets.only(top: 12 * SizeConfig.scaleDiagonal),
                 child: Row(

@@ -184,4 +184,5 @@ class Routes {
 
   // ====
   static const String addlink = '/add-link';
+  static const String mydiscount = '/my-discount-page';
 }

@@ -10,6 +10,7 @@ import 'package:hyppe/ui/constant/widget/custom_text_form_field.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:provider/provider.dart';
 
@@ -111,6 +112,10 @@ class _AddLinkPageState extends State<AddLinkPage> {
                     final stream = Provider.of<AccountPreferencesNotifier>(context, listen: false);
                     stream.urlLinkController.text = notifier.linkController.text;
                     stream.titleLinkController.text = notifier.titleController.text;
+                  }else if (notifier.beforeCurrentRoutes == Routes.streamer){
+                    final stream = Provider.of<StreamerNotifier>(context, listen: false);
+                    stream.urlLink = notifier.linkController.text;
+                    stream.textUrl = notifier.titleController.text;
                   }
                   
                   notifier.onWillPop(context);
@@ -136,6 +141,9 @@ class _AddLinkPageState extends State<AddLinkPage> {
                     stream.setDefaultExternalLink(context);
                   }else if (notifier.beforeCurrentRoutes == Routes.selfProfile){
                     final stream = Provider.of<AccountPreferencesNotifier>(context, listen: false);
+                    stream.setDefaultExternalLink(context);
+                  }else if (notifier.beforeCurrentRoutes == Routes.streamer){
+                    final stream = Provider.of<StreamerNotifier>(context, listen: false);
                     stream.setDefaultExternalLink(context);
                   }
                   

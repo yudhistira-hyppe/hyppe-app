@@ -70,6 +70,7 @@ import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/filte
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_5/widget/date_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/notifier.dart';
 
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
@@ -77,8 +78,10 @@ import 'package:showcaseview/showcaseview.dart';
 // import 'package:story_view/story_view.dart';
 import '../../../../core/constants/shared_preference_keys.dart';
 import '../../../../core/services/shared_preference.dart';
+import 'bottom_sheet_content/live_streaming/on_list_gift.dart';
 import 'bottom_sheet_content/live_streaming/on_react_streaming.dart';
 import 'bottom_sheet_content/live_streaming/on_streaming_options.dart';
+import 'bottom_sheet_content/live_streaming/on_viewer_options.dart';
 import 'bottom_sheet_content/on_show_success_ownership_content.dart';
 import 'bottom_sheet_content/on_sign_out.dart';
 import 'bottom_sheet_content/on_something_when_wrong.dart';
@@ -141,6 +144,34 @@ class ShowBottomSheet {
         });
   }
 
+  static onStreamWatchersStatusAgora(
+    context,
+    bool isViewer,
+    StreamerNotifier notifier,
+  ) async {
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      enableDrag: true,
+      isDismissible: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Container(
+            decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
+            height: context.getHeight() * 0.6,
+            child: OnLiveStreamStatus(
+              idStream: notifier.dataStream.sId,
+              isViewer: isViewer,
+              notifier: notifier,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   static onDeleteWatcherComment(
     context,
   ) async {
@@ -182,11 +213,7 @@ class ShowBottomSheet {
         });
   }
 
-  static onWatcherStatus(
-    context,
-    String email,
-    String idMediaStreaming,
-  ) async {
+  static onWatcherStatus(context, String email, String idMediaStreaming, {bool isViewer = false}) async {
     await showModalBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -201,6 +228,7 @@ class ShowBottomSheet {
               height: context.getHeight() * 0.3,
               child: OnWatcherStatus(
                 email: email,
+                isViewer: isViewer,
                 idMediaStreaming: idMediaStreaming,
               ),
             ),
@@ -1915,21 +1943,60 @@ class ShowBottomSheet {
         backgroundColor: Colors.transparent,
         builder: (builder) {
           return DraggableScrollableSheet(
-            maxChildSize: 0.95,
-            initialChildSize: 0.7,
-            builder: (_, scrollController) {
-              return Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(8),
-                    topRight: Radius.circular(8),
+              maxChildSize: 0.95,
+              initialChildSize: 0.7,
+              builder: (_, scrollController) {
+                return Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8),
+                      topRight: Radius.circular(8),
+                    ),
                   ),
-                ),
-                padding: const EdgeInsets.all(0),
-                child: OnShowGiftLiveBottomSheet(scrollController: scrollController),
-              );
-            },
+                  padding: const EdgeInsets.all(0),
+                  child: OnShowGiftLiveBottomSheet(scrollController: scrollController),
+                );
+              });
+        });
+  }
+
+  static onViewerOptions(context, ViewStreamingNotifier notifier) async {
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      enableDrag: true,
+      isDismissible: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Container(
+            decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
+            height: 125,
+            // height: SizeConfig.screenHeight,
+            child: OnViewerOptions(notifier: notifier),
+          ),
+        );
+      },
+    );
+  }
+
+  static onListOfGift(context) async {
+    await showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        enableDrag: true,
+        isDismissible: true,
+        backgroundColor: Colors.transparent,
+        builder: (context) {
+          return Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Container(
+              decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
+              height: context.getHeight() * 0.96,
+              child: const OnListGift(),
+            ),
           );
         });
   }

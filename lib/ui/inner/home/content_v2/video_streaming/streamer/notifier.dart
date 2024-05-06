@@ -106,7 +106,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
 
   // Agora
   int? remoteUid;
-  String? token;
+  String? tempToken;
   String? channel;
   bool localUserJoined = false;
 
@@ -127,6 +127,12 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   String userName = '';
   String _titleLive = '';
   String get titleLive => _titleLive;
+
+  String _urlLink = '';
+  String get urlLink => _urlLink;
+
+  String _textUrl = '';
+  String get textUrl => _textUrl;
   // String pushURL = "rtmp://ingest.hyppe.cloud/Hyppe/hdstream?auth_key=1700732018-0-0-580e7fb4d21585a87315470a335513c1";
 
   ///Status => Offline - Prepare - StandBy - Ready - Online
@@ -150,6 +156,15 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   }
 
   onUpdate() => notifyListeners();
+  set urlLink(String val) {
+    _urlLink = val;
+    notifyListeners();
+  }
+
+  set textUrl(String val) {
+    _textUrl = val;
+    notifyListeners();
+  }
 
   LocalizationModelV2? tn;
   double a = 0;
@@ -190,6 +205,12 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     tn = context.read<TranslateNotifierV2>().translate;
   }
 
+  void setDefaultExternalLink(BuildContext context) {
+    urlLink = '';
+    textUrl = '';
+    notifyListeners();
+  }
+
   Future<bool> requestPermission(BuildContext context) async {
     final isGranted = await System().requestPermission(context, permissions: [Permission.camera, Permission.storage, Permission.microphone]);
     if (isGranted) {
@@ -214,7 +235,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
 
   Future<void> initAgora() async {
     // retrieve permissions
-    // await [Permission.microphone, Permission.camera].request();
+    await [Permission.microphone, Permission.camera].request();
 
     //create the engine
     engine = createAgoraRtcEngine();
@@ -228,6 +249,9 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
 
     engine.registerEventHandler(
       RtcEngineEventHandler(
+        onCameraReady: () {
+          debugPrint("Camera Ready");
+        },
         onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
           debugPrint("local user ${connection.localUid} joined");
           localUserJoined = true;
@@ -238,8 +262,11 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
           remoteUid = remoteUid;
           notifyListeners();
         },
+        onLocalVideoStats: (source, stats) {
+          debugPrint("onLocalVideo State $source stats $stats 2827318481");
+        },
         onRemoteVideoStateChanged: ((connection, remoteUid, state, reason, elapsed) {
-          debugPrint("connection $connection, remote user $remoteUid, state $state, resion $reason, $elapsed");
+          debugPrint("connection $connection, remote user $remoteUid, state ${state.name}, resion $reason, $elapsed");
         }),
         onUserOffline: (RtcConnection connection, int remoteUid, UserOfflineReasonType reason) {
           debugPrint("remote user $remoteUid left channel");
@@ -256,8 +283,14 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     await engine.enableVideo();
     await engine.startPreview();
 
+    isloading = false;
     isloadingPreview = false;
     notifyListeners();
+  }
+
+  Future<void> disposeAgora() async {
+    await engine.leaveChannel();
+    await engine.release();
   }
 
   Future<void> startStreamer(BuildContext context, mounted) async {
@@ -563,7 +596,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     // _alivcLivePusher.stopPush();
     // _alivcLivePusher.stopPreview();
     // _alivcLivePusher.destroy();
-    engine.release();
+    disposeAgora();
 
     WakelockPlus.disable();
     statusLive = StatusStream.offline;
@@ -621,13 +654,15 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
           statusLive = StatusStream.ready;
           notifyListeners();
 
+          print('===TempToken $tempToken');
+          print('===Channel $channel');
           // Agora
-          // await engine.joinChannel(
-          //   token: token,
-          //   channelId: 'testChannel',
-          //   uid: 0,
-          //   options: const ChannelMediaOptions(),
-          // );
+          await engine.joinChannel(
+            token: tempToken ?? '',
+            channelId: channel ?? '',
+            uid: 0,
+            options: const ChannelMediaOptions(),
+          );
 
           Future.delayed(const Duration(seconds: 2), () {
             statusLive = StatusStream.online;
@@ -637,6 +672,30 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
         }
       }
     });
+  }
+
+  // Future<void> pauseStreamer() async {
+  //   await engine.stopPreview();
+  //   engine.muteLocalVideoStream(true);
+  //   engine.muteLocalAudioStream(true);
+  //   mute = true;
+  //   flipCameraVisible = false;
+  //   notifyListeners();
+  // }
+
+  Future<void> resumeStreamer() async {
+    engine.startPreview();
+    engine.muteLocalVideoStream(false);
+    engine.muteLocalAudioStream(false);
+    mute = false;
+    flipCameraVisible = true;
+    isPause = false;
+    notifyListeners();
+  }
+
+  Future<void> kickViewer() async {
+    // engine.setRemoteUserPriority(uid: uid, userPriority: userPriority)
+    notifyListeners();
   }
 
   List<Widget> loveStreamer(AnimationController animationController) {
@@ -693,9 +752,8 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
       await engine.stopPreview();
       engine.muteLocalVideoStream(mute);
       engine.muteLocalAudioStream(mute);
-      // _alivcLivePusher.setMute(true);
-      // _alivcLivePusher.pause();
       totPause++;
+      isPause = true;
       notifyListeners();
     }
   }
@@ -857,15 +915,17 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     if (connect) {
       try {
         final notifier = LiveStreamBloc();
-        Map data = {'title': titleLive};
+        Map data = {'title': titleLive, 'url': urlLink, 'textUrl': textUrl};
 
         if (mounted) {
           await notifier.getLinkStream(context, data, UrlConstants.getLinkStream);
         }
         final fetch = notifier.liveStreamFetch;
         if (fetch.postsState == LiveStreamState.getApiSuccess) {
-          print('datas fetch ${fetch.data}');
           dataStream = LinkStreamModel.fromJson(fetch.data);
+          print('======= fetch.data');
+          tempToken = dataStream.token;
+          channel = dataStream.sId ?? '';
           returnNext = true;
         }
       } catch (e) {

@@ -13,6 +13,7 @@ import 'package:hyppe/ui/inner/home/content_v2/coins/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/coins/widgets/card_coin_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/coins/widgets/custom_listtile.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
+import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
@@ -32,7 +33,9 @@ class _CoinPageState extends State<CoinPage> {
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'saldocoins');
     lang = context.read<TranslateNotifierV2>().translate;
-    context.read<CoinNotifier>().initialCoin();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      context.read<CoinNotifier>().initialCoin();
+    });
     super.initState();
   }
   @override
@@ -79,9 +82,9 @@ class _CoinPageState extends State<CoinPage> {
                       ),
                       CustomListTile(
                         iconData: "${AssetPath.vectorPath}ic-disccount.svg",
-                        title: "Kupon diskon saya",
+                        title: lang?.discountForYou ?? 'Diskon Untukmu',
                         onTap: () {
-                          
+                          Navigator.pushNamed(context, Routes.mydiscount, arguments: {'routes': Routes.saldoCoins});
                         },
                       )
                     ],

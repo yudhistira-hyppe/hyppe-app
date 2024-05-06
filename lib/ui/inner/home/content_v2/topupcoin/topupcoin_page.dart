@@ -27,7 +27,9 @@ class _TopUpCoinPageState extends State<TopUpCoinPage> {
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'Top Up Hyppe Coins');
     lang = context.read<TranslateNotifierV2>().translate;
-    context.read<TopUpCoinNotifier>().initialCoin();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      context.read<TopUpCoinNotifier>().initialCoin();
+    });
     super.initState();
   }
 

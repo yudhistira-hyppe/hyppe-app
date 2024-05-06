@@ -504,3 +504,9 @@ extension DurationExt on Duration {
 
   String detail() => [inHours.remainder(60).toString().padLeft(2, '0'), inMinutes.remainder(60).toString().padLeft(2, '0'), inSeconds.remainder(60).toString().padLeft(2, '0')].join(":");
 }
+
+extension ImageExtension on num {  
+  int cacheSize(BuildContext context) {  
+    return (this * MediaQuery.of(context).devicePixelRatio).round();  
+  }  
+}

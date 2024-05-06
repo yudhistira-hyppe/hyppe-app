@@ -41,7 +41,7 @@ class UserProfileModel {
   bool? following;
   List<Tutorial>? tutorial;
   String? urlLink;
-  String? urlJudul;
+  String? judulLink;
 
   UserProfileModel({
     this.country,
@@ -78,7 +78,7 @@ class UserProfileModel {
     this.following,
     this.tutorial,
     this.urlLink,
-    this.urlJudul,
+    this.judulLink,
   });
 
   UserProfileModel.fromJson(Map<String, dynamic> json) {
@@ -142,7 +142,7 @@ class UserProfileModel {
       });
     }
     urlLink = json['urlLink'] ?? '';
-    urlJudul = json['urlJudul'] ?? '';
+    judulLink = json['judulLink'] ?? '';
   }
 
   Map<String, dynamic> toJson() {

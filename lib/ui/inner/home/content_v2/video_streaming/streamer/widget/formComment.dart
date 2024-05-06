@@ -68,10 +68,6 @@ class FormCommentLive extends StatelessWidget {
                                         });
                                       }
                                     },
-                                    child: Text(
-                                      tn.send ?? '',
-                                      style: TextStyle(color: kHyppeTextPrimary, fontSize: 10),
-                                    ),
                                     style: ButtonStyle(
                                         visualDensity: VisualDensity.comfortable,
                                         padding: MaterialStateProperty.all(EdgeInsets.zero),
@@ -81,6 +77,10 @@ class FormCommentLive extends StatelessWidget {
                                             borderRadius: BorderRadius.circular(18.0),
                                           ),
                                         )),
+                                    child: Text(
+                                      tn.send ?? '',
+                                      style: const TextStyle(color: kHyppeTextPrimary, fontSize: 10),
+                                    ),
                                   )),
                             ),
                           ),

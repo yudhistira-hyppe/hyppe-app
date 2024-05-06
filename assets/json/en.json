@@ -1172,5 +1172,15 @@
   "failedToAddBankAccount": "Failed to Add Bank Account",
   "desc1FailedToAddBankAccount": "Sorry, the bank account owner`s Name doesn`t match the Name on your E-KTP. ",
   "desc2FailedToAddBankAccount": "Please send a picture of your bank account book or a screenshot of your mobile banking.",
-  "takeaPicture": "Take a Picture"
+  "takeaPicture": "Take a Picture",
+  "enterLinkLiveStream": "Enter the  link you want to share",
+  "removeListLive": "Remove",
+  "transactionFee": "Transaction Fee",
+  "discountForYou": "Discount For You",
+  "mycoupons": "My Coupons",
+  "mintransaction": "Min. transaction",
+  "validuntilcoupon": "Valid until ",
+  "detailcoupondisc": "Coupon Details",
+  "noInternet": "Hyppe needs the internet to groove 🕺🌐",
+  "noInternetLabel": "Check your Wi-Fi or data and let's get Hyppe groovin' again!"
 }

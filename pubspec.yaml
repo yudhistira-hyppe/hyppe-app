@@ -155,7 +155,7 @@ dependencies:
   fluttertoast: ^8.2.4
   nb_utils: ^6.0.4
 
-  
+  ticket_widget: ^1.0.2
 
 #  curl_logger_dio_interceptor: ^0.0.3
 

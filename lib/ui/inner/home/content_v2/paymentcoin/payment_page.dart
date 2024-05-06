@@ -2,12 +2,14 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/collection/discount/discountmodel.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/loading_screen.dart';
 import 'package:hyppe/ui/constant/widget/section_widget.dart';
+import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
@@ -31,15 +33,20 @@ class _PaymentCoinPageState extends State<PaymentCoinPage> {
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'methodpaymentscoins');
     lang = context.read<TranslateNotifierV2>().translate;
-    context.read<PaymentCoinNotifier>().initialPayment();
+    
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      context.read<PaymentCoinNotifier>().discount = DiscountModel();
+      context.read<PaymentCoinNotifier>().initialPayment();
+      var map = ModalRoute.of(context)!.settings.arguments as GroupCoinModel;
+      selectedCoin = map;
+    });
     super.initState();
   }
 
   @override
-  void didChangeDependencies() {
-    var map = ModalRoute.of(context)!.settings.arguments as GroupCoinModel;
-    selectedCoin = map;
-    super.didChangeDependencies();
+  void dispose() {
+    
+    super.dispose();
   }
   
   @override
@@ -70,28 +77,39 @@ class _PaymentCoinPageState extends State<PaymentCoinPage> {
                 ),
                 const CardVirtualAccountWidget(),
                 SectionWidget(
-                  title: 'Rincian Pembayaran',
+                  title: lang?.paymentDetails ?? 'Rincian Pembayaran',
                   style: Theme.of(context)
                       .textTheme
                       .titleMedium
                       ?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 DetailPayWidget(value1: selectedCoin?.valueLabel??0),
-                Container(
-                  margin: const EdgeInsets.symmetric(vertical: 12.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(width: .3, color: kHyppeBurem),
-                    borderRadius: BorderRadius.circular(12.0),
-                    color: kHyppeBurem.withOpacity(.03)
-                  ),
-                  child: const ListTile(
-                    minLeadingWidth: 10,
-                    leading: CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}ic-kupon.svg",
-                      defaultColor: false,
+
+                GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, Routes.mydiscount, arguments: {'routes': Routes.paymentCoins, 'discount': notifier.discount}),
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(vertical: 12.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: .3, color: kHyppeBurem),
+                      borderRadius: BorderRadius.circular(12.0),
+                      color: kHyppeBurem.withOpacity(.03)
                     ),
-                    title: Text('Gunakan Kupon Diskon'),
-                    trailing: Icon(Icons.arrow_forward_ios),
+                    child: ListTile(
+                      minLeadingWidth: 10,
+                      leading: const CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}ic-kupon.svg",
+                        defaultColor: false,
+                      ),
+                      title: (notifier.discount.checked??false) ? Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomTextWidget(textToDisplay: notifier.discount.name??''),
+                          CustomTextWidget(textToDisplay: notifier.discount.code_package??'', textStyle: const TextStyle(color: kHyppeBurem, fontWeight: FontWeight.w400),),
+                        ],
+                      ):Text(lang?.discountForYou ?? 'Diskon Untukmu'),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                    ),
                   ),
                 )
               ],
