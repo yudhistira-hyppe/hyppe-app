@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:hyppe/core/bloc/transaction/state.dart';
 import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -152,20 +155,20 @@ class TransactionBloc {
   Future getAccountBalance(BuildContext context, {required Map? params}) async {
     bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
 
-    if(!(isGuest ?? true)){
+    if (!(isGuest ?? true)) {
       var type = FeatureType.other;
       setTransactionFetch(TransactionFetch(TransactionState.loading));
 
       await _repos.reposPost(
         context,
-            (onResult) {
+        (onResult) {
           if ((onResult.statusCode ?? 300) > HTTP_CODE) {
             setTransactionFetch(TransactionFetch(TransactionState.getAccountBalanceError, message: onResult.data['message'], data: onResult.data));
           } else {
             setTransactionFetch(TransactionFetch(TransactionState.getAccountBalanceSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
           }
         },
-            (errorData) {
+        (errorData) {
           setTransactionFetch(TransactionFetch(TransactionState.getAccountBalanceError, data: errorData.error));
         },
         data: params,
@@ -177,7 +180,6 @@ class TransactionBloc {
         errorServiceType: System().getErrorTypeV2(type),
       );
     }
-
   }
 
   Future sendVerificationPin(BuildContext context, {required Map? params}) async {
@@ -290,5 +292,67 @@ class TransactionBloc {
       methodType: MethodType.get,
       errorServiceType: System().getErrorTypeV2(type),
     );
+  }
+
+  Future postAppealBloc(
+    BuildContext context, {
+    String? noRek,
+    String? email,
+    String? bankcode,
+    String? nama,
+    String? language,
+    required List<File>? docFiles,
+  }) async {
+    var type = FeatureType.other;
+
+    FormData formData = FormData.fromMap({
+      "noRek": noRek,
+      "email": email,
+      "bankcode": bankcode,
+      "nama": nama,
+      "language": language,
+    });
+
+    if (docFiles != null) {
+      for (File docFile in docFiles) {
+        formData.files.add(MapEntry(
+            "supportFile",
+            await MultipartFile.fromFile(docFile.path,
+                filename: System().basenameFiles(docFile.path),
+                contentType: MediaType(
+                  System().lookupContentMimeType(docFile.path)?.split('/')[0] ?? '',
+                  System().extensionFiles(docFile.path)?.replaceAll(".", "") ?? "",
+                ))));
+      }
+    }
+
+    print(formData.fields.map((e) => e).join(','));
+
+    setTransactionFetch(TransactionFetch(TransactionState.loading));
+    if (context.mounted) {
+      await _repos.reposPost(
+        context,
+        (onResult) {
+          if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+            setTransactionFetch(TransactionFetch(TransactionState.checkPandingError, message: onResult.data, data: onResult.data));
+          } else {
+            setTransactionFetch(TransactionFetch(TransactionState.checkPandingSuccess, data: onResult.data));
+          }
+        },
+        (errorData) {
+          setTransactionFetch(TransactionFetch(TransactionState.checkPandingError, data: errorData.error));
+        },
+        headers: {
+          "x-auth-token": SharedPreference().readStorage(SpKeys.userToken),
+          "x-auth-user": SharedPreference().readStorage(SpKeys.email),
+        },
+        data: formData,
+        withAlertMessage: false,
+        withCheckConnection: false,
+        host: UrlConstants.appealBank,
+        methodType: MethodType.post,
+        errorServiceType: System().getErrorTypeV2(type),
+      );
+    }
   }
 }

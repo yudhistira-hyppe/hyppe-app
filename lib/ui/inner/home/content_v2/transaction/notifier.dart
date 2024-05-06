@@ -563,12 +563,7 @@ class TransactionNotifier extends ChangeNotifier {
             ShowGeneralDialog.generalDialog(
               context,
               functionPrimary: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CameraAppealBank(),
-                  ),
-                );
+                Routing().moveAndPop(Routes.cameraAppealBank);
               },
               functionSecondary: () {
                 Routing().moveBack();
@@ -1028,6 +1023,36 @@ class TransactionNotifier extends ChangeNotifier {
     } catch (e) {
       isLoading = false;
       ShowGeneralDialog.pickFileErrorAlert(context, language.sorryUnexpectedErrorHasOccurred ?? '');
+    }
+  }
+
+  Future submitAppealBank(BuildContext context) async {
+    bool connect = await System().checkConnections();
+    if (context.mounted) ShowGeneralDialog.loadingKycDialog(context);
+    if (connect) {
+      final notifier = TransactionBloc();
+      final language = context.read<TranslateNotifierV2>().translate;
+      final langIso = SharedPreference().readStorage(SpKeys.isoCode);
+      final email = SharedPreference().readStorage(SpKeys.email);
+
+      if (context.mounted) {
+        await notifier.postAppealBloc(context, docFiles: pickedSupportingDocs, bankcode: bankcode, email: email, language: langIso, nama: accountOwnerName.text, noRek: noBankAccount.text);
+      }
+      final fetch = notifier.transactionFetch;
+
+      if (fetch.postsState == TransactionState.checkPandingSuccess) {
+        Routing().moveAndPop(Routes.successAppealBank);
+      }
+      if (fetch.postsState == TransactionState.checkPandingError) {
+        Routing().moveBack();
+      }
+    } else {
+      if (context.mounted) {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
+          createWithdraw(context, pinController.text);
+        });
+      }
     }
   }
 }

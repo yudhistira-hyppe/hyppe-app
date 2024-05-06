@@ -157,10 +157,7 @@ class _PreviewDocAppealState extends State<PreviewDocAppeal> {
               width: SizeConfig.screenWidth,
               height: 44.0 * SizeConfig.scaleDiagonal,
               function: () {
-                // if (!notifier.isLoading) {
-                // notifier.onSaveSupportedDocument(context);
-                Routing().move(Routes.verificationIDStep6);
-                // }
+                notifier.submitAppealBank(context);
               },
               buttonStyle: ButtonStyle(
                 foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
@@ -182,7 +179,7 @@ class _PreviewDocAppealState extends State<PreviewDocAppeal> {
                   const SizedBox(width: 10),
                   CustomTextWidget(
                     // textToDisplay: notifier.language.upload ?? '',
-                    textToDisplay: language.translate.next ?? '',
+                    textToDisplay: language.translate.upload ?? '',
                     textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                   ),
                 ],

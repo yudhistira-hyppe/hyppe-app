@@ -1183,5 +1183,10 @@
   "validuntilcoupon": "Berlaku hingga ",
   "detailcoupondisc": "Detail Kupon Diskon",
   "noInternet": "Hyppe butuh internet untuk beraksi 🕺🌐",
-  "noInternetLabel": "Cek koneksi Wi-Fi atau kuota datamu  dan coba lagi ya."
+  "noInternetLabel": "Cek koneksi Wi-Fi atau kuota datamu  dan coba lagi ya.",
+  "titleSuccessAppealBank": "Rekening Dalam Proses Verifikasi",
+  "descSuccessAppealBank": "Mohon tunggu rekening bank kamu sedang dalam proses verifikasi. Proses ini memakan waktu estimasi maksimal 3 hari kerja.",
+  "reviewed": "Ditinjau",
+  "approved": "Disetujui",
+  "rejected": "Ditolak"
 }

@@ -34,7 +34,6 @@ class Routes {
   static const String adsBetweenFull = '/ads-between-full';
   static const String adsBetweenVidFull = '/ads-between-vid-full';
 
-
 // Sign up
   static const String signUpPin = '/sign-up-pin';
   static const String signUpWelcome = '/sign-up-welcome';
@@ -124,6 +123,9 @@ class Routes {
   static const String withdrawalSummary = '/withdrawal-summary';
   static const String pinWithdrawal = '/pin-withdrawal';
   static const String successWithdrawal = '/success-withdrawal';
+
+  static const String cameraAppealBank = '/camera-appeal-bank';
+  static const String successAppealBank = '/success-appeal-bank';
 
   //create pin
   static const String pinScreen = '/pin-screen';

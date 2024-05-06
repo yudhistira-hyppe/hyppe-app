@@ -1182,5 +1182,10 @@
   "validuntilcoupon": "Valid until ",
   "detailcoupondisc": "Coupon Details",
   "noInternet": "Hyppe needs the internet to groove 🕺🌐",
-  "noInternetLabel": "Check your Wi-Fi or data and let's get Hyppe groovin' again!"
+  "noInternetLabel": "Check your Wi-Fi or data and let's get Hyppe groovin' again!",
+  "titleSuccessAppealBank": "The bank account is in the process of verification",
+  "descSuccessAppealBank": "Please wait for your bank account to verification process. This process takes time Estimated maximum 3 working days.",
+  "reviewed": "Review",
+  "approved": "Approved",
+  "rejected": "Rejected"
 }

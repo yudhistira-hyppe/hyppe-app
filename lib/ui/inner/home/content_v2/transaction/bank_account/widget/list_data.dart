@@ -2,7 +2,9 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/transaction/bank_account/bank_account_model.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
@@ -23,11 +25,15 @@ class ListDataBankAccount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'ListDataBankAccount');
+    var language = context.read<TranslateNotifierV2>().translate;
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
-          InfoNew(title: textUpTo ?? '', subtitle: textsubtitleUpto??'',),
+          InfoNew(
+            title: textUpTo ?? '',
+            subtitle: textsubtitleUpto ?? '',
+          ),
           RefreshIndicator(
             key: refreshIndicatorKey,
             color: kHyppePrimary,
@@ -82,6 +88,7 @@ class ListDataBankAccount extends StatelessWidget {
                             ),
                           ],
                         ),
+                        if (dataAcccount?[index].status != null) statusWidget(language, dataAcccount?[index].status ?? ''),
                         SizedBox(
                           height: 30,
                           child: CustomTextButton(
@@ -96,7 +103,7 @@ class ListDataBankAccount extends StatelessWidget {
                                     );
                               },
                               style: OutlinedButton.styleFrom(
-                                side: BorderSide(width: 1.0, color: kHyppePrimary),
+                                side: const BorderSide(width: 1.0, color: kHyppePrimary),
                               ),
                               child: CustomTextWidget(
                                 textToDisplay: textRemove ?? '',
@@ -113,6 +120,29 @@ class ListDataBankAccount extends StatelessWidget {
           ),
           // infoMaxAccount(title: textUpTo ?? '')
         ],
+      ),
+    );
+  }
+
+  Widget statusWidget(LocalizationModelV2 language, String status) {
+    var title = '';
+    Color colorsBg = kHyppeRedLight;
+    Color colorsTitle = kHyppeRed;
+    if (status == 'NEW') {
+      title = language.reviewed ?? '';
+    } else if (status == 'reject') {
+      title = language.rejected ?? '';
+    } else {
+      title = language.approved ?? '';
+      colorsBg = kHyppeGreenLight;
+      colorsTitle = kHyppeGreen;
+    }
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(color: colorsBg, borderRadius: BorderRadius.circular(20)),
+      child: CustomTextWidget(
+        textToDisplay: title,
+        textStyle: TextStyle(color: colorsTitle),
       ),
     );
   }

@@ -1181,6 +1181,11 @@ class LocalizationModelV2 {
   String? enterLinkLiveStream;
   String? noInternet;
   String? noInternetLabel;
+  String? titleSuccessAppealBank;
+  String? descSuccessAppealBank;
+  String? rejected;
+  String? approved;
+  String? reviewed;
   LocalizationModelV2({
     this.login,
     this.logIn,
@@ -2354,6 +2359,11 @@ class LocalizationModelV2 {
     this.removeListLive,
     this.noInternet,
     this.noInternetLabel,
+    this.titleSuccessAppealBank,
+    this.descSuccessAppealBank,
+    this.rejected,
+    this.approved,
+    this.reviewed,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -3558,5 +3568,10 @@ class LocalizationModelV2 {
     removeListLive = json['removeListLive'];
     noInternet = json['noInternet'];
     noInternetLabel = json['noInternetLabel'];
+    titleSuccessAppealBank = json['titleSuccessAppealBank'];
+    descSuccessAppealBank = json['descSuccessAppealBank'];
+    rejected = json['rejected'];
+    approved = json['approved'];
+    reviewed = json['reviewed'];
   }
 }

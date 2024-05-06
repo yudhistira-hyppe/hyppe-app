@@ -23,6 +23,8 @@ import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/notifier.dart';
+import 'package:hyppe/ui/inner/home/widget/discount_foryou.dart';
+import 'package:hyppe/ui/inner/home/widget/my_saldo_widget.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/build_auto_complete_user_tag.dart';
@@ -77,12 +79,12 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
       notifier.captionController.text = notifier.hastagChallange;
       notifier.captionController.selection = const TextSelection.collapsed(offset: 0);
       notifier.setDefaultExternalLink(context);
-    }else{
-      notifier.urlLink = widget.arguments.contentData?.urlLink??'';
-      notifier.judulLink = widget.arguments.contentData?.judulLink??'';
+    } else {
+      notifier.urlLink = widget.arguments.contentData?.urlLink ?? '';
+      notifier.judulLink = widget.arguments.contentData?.judulLink ?? '';
     }
     // notifier.initThumbnail();
-    
+
     notifier.getInitialInterest(context);
 
     // Future.microtask(() => context.read<PreUploadContentNotifier>().checkLandingpage(context));
@@ -226,10 +228,13 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                 ? boostWidget(textTheme, notifier)
                                 : Container(),
                             notifier.boostContent != null ? detailBoostContent(notifier) : Container(),
+                            _buildDivider(context),
+                            DiscountForyou(),
                             twentyFourPx,
                             twentyFourPx,
                             twentyFourPx,
                             twentyFourPx,
+                            if (notifier.certified) sixtyFourPx,
                           ],
                         ),
                         const AutoCompleteUserTag(),
@@ -279,56 +284,68 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                             ],
                           ),
                         )
-                      : Material(
-                          color: Theme.of(context).colorScheme.background,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
-                            child: CustomElevatedButton(
-                                width: SizeConfig.screenWidth,
-                                height: 44.0 * SizeConfig.scaleDiagonal,
-                                function: () {
-                                  if (!notifier.updateContent && !prev.isLoadVideo) {
-                                    if (SharedPreference().readStorage(SpKeys.statusVerificationId) != VERIFIED || notifier.featureType == FeatureType.story || widget.arguments.onEdit) {
-                                      notifier.onClickPost(
-                                        context,
-                                        mounted,
-                                        onEdit: widget.arguments.onEdit,
-                                        data: widget.arguments.contentData,
-                                        content: widget.arguments.content,
-                                      );
-                                    } else {
-                                      !notifier.certified
-                                          ? notifier.onShowStatement(context, onCancel: () {
-                                              notifier.onClickPost(
-                                                context,
-                                                mounted,
-                                                onEdit: widget.arguments.onEdit,
-                                                data: widget.arguments.contentData,
-                                                content: widget.arguments.content,
-                                              );
-                                            })
-                                          : notifier.onClickPost(
-                                              context,
-                                              mounted,
-                                              onEdit: widget.arguments.onEdit,
-                                              data: widget.arguments.contentData,
-                                              content: widget.arguments.content,
-                                            );
-                                    }
-                                  }
-                                },
-                                buttonStyle: ButtonStyle(
-                                  foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                                  shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                                  overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                                ),
-                                child: ((widget.arguments.onEdit && notifier.updateContent) || prev.isLoadVideo)
-                                    ? const CustomLoading()
-                                    : CustomTextWidget(
-                                        textToDisplay: widget.arguments.onEdit ? notifier.language.save ?? 'save' : notifier.language.confirm ?? 'confirm',
-                                        textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
-                                      )),
+                      : Container(
+                          decoration: const BoxDecoration(
+                              color: Color(0xfffbfbfb),
+                              border: Border(
+                                  top: BorderSide(
+                                color: Color(0xfff5f5f5),
+                              ))),
+                          // color: Theme.of(context).colorScheme.background,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (notifier.certified) MySaldoWidget(),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                                child: CustomElevatedButton(
+                                    width: SizeConfig.screenWidth,
+                                    height: 44.0 * SizeConfig.scaleDiagonal,
+                                    function: () {
+                                      if (!notifier.updateContent && !prev.isLoadVideo) {
+                                        if (SharedPreference().readStorage(SpKeys.statusVerificationId) != VERIFIED || notifier.featureType == FeatureType.story || widget.arguments.onEdit) {
+                                          notifier.onClickPost(
+                                            context,
+                                            mounted,
+                                            onEdit: widget.arguments.onEdit,
+                                            data: widget.arguments.contentData,
+                                            content: widget.arguments.content,
+                                          );
+                                        } else {
+                                          !notifier.certified
+                                              ? notifier.onShowStatement(context, onCancel: () {
+                                                  notifier.onClickPost(
+                                                    context,
+                                                    mounted,
+                                                    onEdit: widget.arguments.onEdit,
+                                                    data: widget.arguments.contentData,
+                                                    content: widget.arguments.content,
+                                                  );
+                                                })
+                                              : notifier.onClickPost(
+                                                  context,
+                                                  mounted,
+                                                  onEdit: widget.arguments.onEdit,
+                                                  data: widget.arguments.contentData,
+                                                  content: widget.arguments.content,
+                                                );
+                                        }
+                                      }
+                                    },
+                                    buttonStyle: ButtonStyle(
+                                      foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                      shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                      overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                      backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                    ),
+                                    child: ((widget.arguments.onEdit && notifier.updateContent) || prev.isLoadVideo)
+                                        ? const CustomLoading()
+                                        : CustomTextWidget(
+                                            textToDisplay: widget.arguments.onEdit ? notifier.language.save ?? 'save' : notifier.language.confirm ?? 'confirm',
+                                            textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                                          )),
+                              ),
+                            ],
                           ),
                         ),
                 ),
@@ -1042,11 +1059,14 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
       ),
       child: Column(
         children: [
-          detailText(notifier.language.certificateOwnershipFee, 'Rp 15.000'),
+          // detailText(notifier.language.certificateOwnershipFee, 'Rp 15.000'),
+          detailText('Pendaftaran Kepemilikan', 'Ya'),
           sixteenPx,
-          detailText(notifier.language.discount, 'Rp 15.000'),
+          detailText('Biaya Pendaftaran Kepemilikan', '150 Coins', text3: ' 0 Coins'),
+          // detailText(notifier.language.discount, 'Rp 15.000'),
           sixteenPx,
-          detailText(notifier.language.totalPrice, 'Rp 0'),
+          // detailText(notifier.language.totalPrice, 'Rp 0'),
+          detailText('Total Biaya', '0', withIcon: true),
           notifier.toSell
               ? const Divider(
                   height: 30,
@@ -1106,10 +1126,44 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
     );
   }
 
-  Widget detailText(text1, text2) {
+  Widget detailText(text1, text2, {String? text3, bool? withIcon}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [CustomTextWidget(textToDisplay: text1), CustomTextWidget(textToDisplay: text2)],
+      children: [
+        CustomTextWidget(textToDisplay: text1),
+        if (text3 == null)
+          Row(
+            children: [
+              if (withIcon ?? false)
+                const Padding(
+                  padding: EdgeInsets.only(right: 4.0),
+                  child: CustomIconWidget(
+                    iconData: '${AssetPath.vectorPath}ic-coin.svg',
+                    defaultColor: false,
+                    height: 16,
+                  ),
+                ),
+              CustomTextWidget(textToDisplay: text2),
+            ],
+          ),
+        if (text3 != null)
+          Text.rich(
+            TextSpan(
+              text: text2,
+              style: const TextStyle(
+                decoration: TextDecoration.lineThrough,
+              ),
+              children: <TextSpan>[
+                TextSpan(
+                  text: text3,
+                  style: const TextStyle(
+                    decoration: TextDecoration.none,
+                  ),
+                ),
+              ],
+            ),
+          )
+      ],
     );
   }
 
@@ -1138,9 +1192,9 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
     if (notifier.isEdit) {
       return GestureDetector(
         onTap: () {
-          if (notifier.urlLink != ''){
-            Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent, 'urlLink': notifier.urlLink, 'judulLink':notifier.judulLink});
-          }else{
+          if (notifier.urlLink != '') {
+            Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent, 'urlLink': notifier.urlLink, 'judulLink': notifier.judulLink});
+          } else {
             Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent});
           }
         },
@@ -1159,7 +1213,11 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                     alignment: Alignment.centerLeft,
                     child: CustomTextWidget(
                       maxLines: 1,
-                      textToDisplay: notifier.judulLink == '' ? notifier.urlLink == '' ? notifier.language.addLink ?? 'Tambahkan link' : notifier.urlLink : notifier.judulLink,
+                      textToDisplay: notifier.judulLink == ''
+                          ? notifier.urlLink == ''
+                              ? notifier.language.addLink ?? 'Tambahkan link'
+                              : notifier.urlLink
+                          : notifier.judulLink,
                       textStyle: const TextStyle(color: kHyppeTextLightPrimary, fontSize: 14, fontWeight: FontWeight.w700),
                     ),
                   ),
@@ -1172,7 +1230,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
           ],
         ),
       );
-    }else{
+    } else {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -1180,7 +1238,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
           notifier.urlLink != ''
               ? InkWell(
                   onTap: () async {
-                    Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent, 'urlLink': notifier.urlLink, 'judulLink':notifier.judulLink});
+                    Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent, 'urlLink': notifier.urlLink, 'judulLink': notifier.judulLink});
                   },
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
@@ -1207,10 +1265,10 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                     if (!notifier.certified || statusKyc != VERIFIED) {
                       System().actionReqiredIdCard(context, action: () {
                         // notifier.navigateToOwnership(context);
-                        Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent });
+                        Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent});
                       });
                     } else {
-                      Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent });
+                      Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent});
                       // notifier.navigateToOwnership(context);
                     }
                   },

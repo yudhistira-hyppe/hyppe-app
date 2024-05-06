@@ -19,6 +19,7 @@ class BankAccount {
   String? noRek;
   String? nama;
   String? bankName;
+  String? status;
   String? bankCode;
   bool? statusInquiry;
 
@@ -29,6 +30,7 @@ class BankAccount {
     noRek = json['noRek'];
     nama = json['nama'];
     bankName = json['bankname'];
+    status = json['status'];
     bankCode = json['bankcode'];
     statusInquiry = json['statusInquiry'];
   }

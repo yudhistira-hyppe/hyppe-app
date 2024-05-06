@@ -72,12 +72,14 @@ import 'package:hyppe/ui/inner/home/content_v2/referral/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/review_buy/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/player/story_player.dart';
 import 'package:hyppe/ui/inner/home/content_v2/topupcoin/topupcoin_page.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/add_bank_account/camera_appeal_bank.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/add_bank_account/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/bank_account/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/detail_transaction/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/transaction_inprogress/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/success_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/withdrawal/pin_withdrawal/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/withdrawal/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/withdrawal/success_withdraw/screen.dart';
@@ -390,6 +392,11 @@ class Generate {
       case Routes.successWithdrawal:
         return MaterialPageRoute(builder: (_) => const SuccessWithdrawScreen());
 
+      case Routes.cameraAppealBank:
+        return MaterialPageRoute(builder: (_) => const CameraAppealBank());
+      case Routes.successAppealBank:
+        return MaterialPageRoute(builder: (_) => const SuccessPageTransaction());
+
       case Routes.pinScreen:
         return MaterialPageRoute(builder: (_) => const PinScreen());
 
@@ -495,7 +502,7 @@ class Generate {
       // return MaterialPageRoute(builder: (_) => const VerificationPinPage(), settings: settings);
       case Routes.finishTrxPage:
         return MaterialPageRoute(builder: (_) => const FinishTrxPage(), settings: settings);
-      
+
       case Routes.addlink:
         return MaterialPageRoute(builder: (_) => const AddLinkPage(), settings: settings);
 
