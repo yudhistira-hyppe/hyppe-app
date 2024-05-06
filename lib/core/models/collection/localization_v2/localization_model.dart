@@ -1167,6 +1167,10 @@ class LocalizationModelV2 {
   String? addLink;
   String? titleLink;
   String? deleteLink;
+  String? failedToAddBankAccount;
+  String? desc1FailedToAddBankAccount;
+  String? desc2FailedToAddBankAccount;
+  String? takeaPicture;
   LocalizationModelV2({
     this.login,
     this.logIn,
@@ -2326,6 +2330,10 @@ class LocalizationModelV2 {
     this.addLink,
     this.titleLink,
     this.deleteLink,
+    this.failedToAddBankAccount,
+    this.desc1FailedToAddBankAccount,
+    this.desc2FailedToAddBankAccount,
+    this.takeaPicture,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -3516,5 +3524,9 @@ class LocalizationModelV2 {
     addLink = json['addLink'];
     titleLink = json['titleLink'];
     deleteLink = json['deleteLink'];
+    failedToAddBankAccount = json['failedToAddBankAccount'];
+    desc1FailedToAddBankAccount = json['desc1FailedToAddBankAccount'];
+    desc2FailedToAddBankAccount = json['desc2FailedToAddBankAccount'];
+    takeaPicture = json['takeaPicture'];
   }
 }

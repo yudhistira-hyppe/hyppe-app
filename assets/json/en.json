@@ -1168,5 +1168,9 @@
   "addLink": "Add Link",
   "deleteLink": "Delete Link",
   "verifyNow": "Verification Now",
-  "verifyId": "Verification Identity"
+  "verifyId": "Verification Identity",
+  "failedToAddBankAccount": "Failed to Add Bank Account",
+  "desc1FailedToAddBankAccount": "Sorry, the bank account owner`s Name doesn`t match the Name on your E-KTP. ",
+  "desc2FailedToAddBankAccount": "Please send a picture of your bank account book or a screenshot of your mobile banking.",
+  "takeaPicture": "Take a Picture"
 }

@@ -1,13 +1,17 @@
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/button_challange.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:provider/provider.dart';
 
 class OnShowGiftLiveBottomSheet extends StatefulWidget {
@@ -21,6 +25,14 @@ class OnShowGiftLiveBottomSheet extends StatefulWidget {
 class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
   PageController? controller = PageController();
   bool firstTab = true;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<StreamerNotifier>().getGift(context, mounted, 'CLASSIC');
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,14 +52,15 @@ class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
             onPageChanged: (value) {
               firstTab = (value == 0);
               setState(() {});
+              if (value == 1) {
+                context.read<StreamerNotifier>().getGift(context, mounted, 'DELUXE');
+              }
             },
             itemBuilder: (context, index) {
               if (index == 1) {
-                return Container(
-                  color: Colors.red,
-                );
+                return _classic(false);
               }
-              return _classic();
+              return _classic(true);
             },
           )),
           _saldo(),
@@ -56,96 +69,144 @@ class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
     );
   }
 
-  Widget _classic() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: GridView.builder(
-        itemCount: 100,
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        // physics: const NeverScrollableScrollPhysics(),
-        controller: widget.scrollController,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8,
-          childAspectRatio: 1 / 1,
-          crossAxisCount: 3,
-        ),
-        itemBuilder: (context2, index) {
-          return Container(
-            padding: EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Color(0xfffbfbfb),
-              border: Border.all(color: kHyppeBorderTab),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  // width: MediaQuery.of(context2).size.width,
-                  width: 30 * SizeConfig.scaleDiagonal,
-                  height: 30 * SizeConfig.scaleDiagonal,
-                  child: CustomCacheImage(
-                    imageUrl: 'https://ahmadtaslimfuadi07.github.io/jsonlottie/image228.png',
-                    imageBuilder: (_, imageProvider) {
-                      return Container(
-                        alignment: Alignment.topRight,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
-                        ),
-                      );
-                    },
-                    errorWidget: (_, __, ___) {
-                      return Container(
-                        alignment: Alignment.topRight,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(2),
-                          image: const DecorationImage(
-                            fit: BoxFit.contain,
-                            image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                          ),
-                        ),
-                      );
-                    },
-                    emptyWidget: Container(
-                      alignment: Alignment.topRight,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(2),
-                        image: const DecorationImage(
-                          fit: BoxFit.contain,
-                          image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                        ),
+  Widget _classic(bool isClassic) {
+    return Consumer<StreamerNotifier>(
+      builder: (_, sn, __) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: sn.isloadingGift
+              ? Padding(
+                  padding: EdgeInsets.only(left: 16, right: 16, top: 12, bottom: MediaQuery.of(context).viewInsets.bottom + 16),
+                  child: const SizedBox(
+                    height: 100,
+                    width: 100,
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: CustomLoading(
+                        size: 6,
                       ),
                     ),
                   ),
-                ),
-                Text(
-                  "Lemper",
-                  style: TextStyle(color: kHyppeBurem, fontSize: 12),
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CustomIconWidget(
-                      height: 15,
-                      iconData: "${AssetPath.vectorPath}ic-coin.svg",
-                      defaultColor: false,
-                    ),
-                    sixPx,
-                    Text(
-                      '5',
-                      style: TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700),
-                    )
-                  ],
                 )
-              ],
-            ),
-          );
-        },
-      ),
+              : GridView.builder(
+                  itemCount: isClassic ? sn.dataGift.length : sn.dataGiftDeluxe.length,
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  // physics: const NeverScrollableScrollPhysics(),
+                  controller: widget.scrollController,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 8,
+                    childAspectRatio: 1 / 1,
+                    crossAxisCount: 3,
+                  ),
+                  itemBuilder: (context2, index) {
+                    var data = isClassic ? sn.dataGift[index] : sn.dataGiftDeluxe[index];
+                    final mimeType = System().extensionFiles(data.thumbnail ?? '')?.split('/')[0] ?? '';
+                    String type = '';
+                    if (mimeType != '') {
+                      var a = mimeType.split('/');
+                      type = a[0];
+                    }
+
+                    return GestureDetector(
+                      onTap: () {
+                        sn.giftSelect = data;
+                        setState(() {});
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xfffbfbfb),
+                          border: Border.all(color: (sn.giftSelect?.sId ?? '') == data.sId ? kHyppePrimary : kHyppeBorderTab, width: (sn.giftSelect?.sId ?? '') == data.sId ? 2 : 1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            // Text("asd $type"),
+                            type == '.svg'
+                                ? SvgPicture.network(
+                                    data.thumbnail ?? '',
+                                    height: 30 * SizeConfig.scaleDiagonal,
+                                    width: 30 * SizeConfig.scaleDiagonal,
+                                    semanticsLabel: 'A shark?!',
+                                    placeholderBuilder: (BuildContext context) => Container(padding: const EdgeInsets.all(30.0), child: const CircularProgressIndicator()),
+                                  )
+                                // ? SvgPicture.asset(
+                                //     '${AssetPath.vectorPath}test.svg',
+                                //     height: 30,
+                                //     width: 30,
+                                //     semanticsLabel: 'A shark?!',
+                                //     placeholderBuilder: (BuildContext context) => Container(padding: const EdgeInsets.all(30.0), child: const CircularProgressIndicator()),
+                                //   )
+                                : SizedBox(
+                                    // width: MediaQuery.of(context2).size.width,
+                                    width: 30 * SizeConfig.scaleDiagonal,
+                                    height: 30 * SizeConfig.scaleDiagonal,
+                                    child: CustomCacheImage(
+                                      imageUrl: sn.dataGift[index].thumbnail,
+                                      imageBuilder: (_, imageProvider) {
+                                        return Container(
+                                          alignment: Alignment.topRight,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(5),
+                                            image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
+                                          ),
+                                        );
+                                      },
+                                      errorWidget: (_, __, ___) {
+                                        return Container(
+                                          alignment: Alignment.topRight,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(2),
+                                            image: const DecorationImage(
+                                              fit: BoxFit.contain,
+                                              image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      emptyWidget: Container(
+                                        alignment: Alignment.topRight,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(2),
+                                          image: const DecorationImage(
+                                            fit: BoxFit.contain,
+                                            image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                            Text(
+                              "${data.name}",
+                              style: const TextStyle(color: kHyppeBurem, fontSize: 12),
+                            ),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const CustomIconWidget(
+                                  height: 15,
+                                  iconData: "${AssetPath.vectorPath}ic-coin.svg",
+                                  defaultColor: false,
+                                ),
+                                sixPx,
+                                Text(
+                                  '${data.price}',
+                                  style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+        );
+      },
     );
   }
 
@@ -163,7 +224,7 @@ class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
                 if (!firstTab) {
                   controller!.animateToPage(
                     0,
-                    duration: Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
                   );
                   setState(() {
@@ -202,7 +263,7 @@ class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
                 if (firstTab) {
                   controller!.animateToPage(
                     1,
-                    duration: Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
                   );
                   setState(() {

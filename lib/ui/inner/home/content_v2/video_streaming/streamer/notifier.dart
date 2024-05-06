@@ -21,6 +21,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/live_stream/comment_live_model.dart';
+import 'package:hyppe/core/models/collection/live_stream/gift_live_model.dart';
 import 'package:hyppe/core/models/collection/live_stream/link_stream_model.dart';
 import 'package:hyppe/core/models/collection/live_stream/live_summary_model.dart';
 import 'package:hyppe/core/models/collection/live_stream/viewers_live_model.dart';
@@ -77,6 +78,10 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   StatusFollowing statusFollowingViewer = StatusFollowing.none;
   LiveSummaryModel dataSummary = LiveSummaryModel();
 
+  List<GiftLiveModel> dataGift = [];
+  List<GiftLiveModel> dataGiftDeluxe = [];
+  GiftLiveModel? giftSelect;
+
   // late AlivcBase _alivcBase;
   // late AlivcLivePusher _alivcLivePusher;
   // late AlivcLiveBeautyManager _beautyManager;
@@ -91,6 +96,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   bool isCheckLoading = false;
   bool isloadingButton = false;
   bool isloadingUserShare = false;
+  bool isloadingGift = false;
   bool mute = false;
   bool isPause = false;
   bool isCommentDisable = false;
@@ -1471,5 +1477,46 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
         timerBasic?.cancel();
       }
     });
+  }
+
+  Future getGift(BuildContext context, bool mounted, String type, {bool isLoadmore = false}) async {
+    //type = CLASSIC -- DELUXE
+    if (type == 'CLASSIC' && dataGift.isNotEmpty) return;
+    if (type == 'DELUXE' && dataGiftDeluxe.isNotEmpty) return;
+    if (!isLoadmore) isloadingGift = true;
+    notifyListeners();
+    bool connect = await System().checkConnections();
+
+    if (connect) {
+      try {
+        final notifier = LiveStreamBloc();
+        Map data = {"page": 0, "limit": 9999, "descending": true, "type": "GIFT", "status": true, "tipegift": type};
+
+        if (mounted) await notifier.getLinkStream(context, data, UrlConstants.listGift);
+
+        final fetch = notifier.liveStreamFetch;
+        if (fetch.postsState == LiveStreamState.getApiSuccess) {
+          if (type == 'CLASSIC') {
+            if (!isLoadmore) dataGift = [];
+            fetch.data.forEach((v) => dataGift.add(GiftLiveModel.fromJson(v)));
+          } else {
+            if (!isLoadmore) dataGiftDeluxe = [];
+            fetch.data.forEach((v) => dataGiftDeluxe.add(GiftLiveModel.fromJson(v)));
+          }
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+
+      notifyListeners();
+    } else {
+      if (context.mounted) {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
+        });
+      }
+    }
+    isloadingGift = false;
+    notifyListeners();
   }
 }

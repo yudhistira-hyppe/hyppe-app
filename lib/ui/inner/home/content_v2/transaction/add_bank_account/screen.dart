@@ -54,19 +54,21 @@ class AddBankAccount extends StatelessWidget {
                     // notifier.email = v;
                   },
                   inputDecoration: InputDecoration(
-                    contentPadding: const EdgeInsets.all(0),
-                    labelText: notifier2.translate.bankName,
-                    labelStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.secondary, fontSize: 13),
-                    prefixIconConstraints: BoxConstraints(minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth())),
-                    border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
-                    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
-                    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary)),
-                    errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.error)),
-                    suffixIcon: Transform.rotate(
-                      angle: 90 * pi / 180,
-                      child: const Icon(Icons.arrow_forward_ios, size: 18,),
-                    )
-                  ),
+                      contentPadding: const EdgeInsets.all(0),
+                      labelText: notifier2.translate.bankName,
+                      labelStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.secondary, fontSize: 13),
+                      prefixIconConstraints: BoxConstraints(minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth())),
+                      border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
+                      enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
+                      focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary)),
+                      errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.error)),
+                      suffixIcon: Transform.rotate(
+                        angle: 90 * pi / 180,
+                        child: const Icon(
+                          Icons.arrow_forward_ios,
+                          size: 18,
+                        ),
+                      )),
                   readOnly: true,
                   onTap: () => notifier.showButtomSheetAllBankList(context, notifier2.translate, true),
                 ),
@@ -107,8 +109,7 @@ class AddBankAccount extends StatelessWidget {
                   inputDecoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(0),
                     labelText: notifier2.translate.accountRekName,
-                    labelStyle:
-                        Theme.of(context).textTheme.bodyText1?.copyWith(color: notifier.messageAddBankError != '' ? kHyppeDanger : Theme.of(context).colorScheme.secondary, fontSize: 13),
+                    labelStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: notifier.messageAddBankError != '' ? kHyppeDanger : Theme.of(context).colorScheme.secondary, fontSize: 13),
                     prefixIconConstraints: BoxConstraints(minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth())),
                     border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
                     enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
@@ -139,8 +140,8 @@ class AddBankAccount extends StatelessWidget {
                       const Icon(Icons.info_outline),
                       fourteenPx,
                       SizedBox(
-                        width: MediaQuery.of(context).size.width * .85,
-                        child: const Text('Dengan melakukan klik tombol dibawah, kamu telah menyetujui Syarat & Ketentuan serta Kebijakan Privasi untuk menambahkan rekening.'))
+                          width: MediaQuery.of(context).size.width * .85,
+                          child: const Text('Dengan melakukan klik tombol dibawah, kamu telah menyetujui Syarat & Ketentuan serta Kebijakan Privasi untuk menambahkan rekening.'))
                     ],
                   ),
                   twentyPx,

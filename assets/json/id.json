@@ -748,7 +748,7 @@
   "confirmIdNotice": "Proses verifikasi ini hanya dapat dilakukan satu kali, pastikan data sesuai dengan ID kamu.",
   "uploadSupportDoc": "Unggah Dokumen Pendukung",
   "continueSelfie": "Lanjut Selfie",
-  "supportDoc": "Unggah Dokumen Pendukung",
+  "supportDoc": "Dokumen Pendukung",
   "supportDocNotice1": "Kamu dapat mengunggah dokumen pendukung seperti, Kartu Keluarga, Passport, dan SIM yang dikeluarkan secara sah oleh negara",
   "supportDocNotice2": "Pastikan nama lengkap kamu tercantum di kartu keluarga yang kamu unggah",
   "supportDocNotice3": "Pastikan nama dan NIK pada kartu keluarga dapat terbaca dengan jelas dan sesuai dengan KTP yang telah kamu unggah sebelumnya",
@@ -1169,5 +1169,9 @@
   "addLink": "Tambahkan Link",
   "deleteLink": "Hapus Link",
   "verifyNow": "Verifikasi Sekarang",
-  "verifyId": "Verifikasi Identitas"
+  "verifyId": "Verifikasi Identitas",
+  "failedToAddBankAccount": "Penambahan Gagal",
+  "desc1FailedToAddBankAccount": "Maaf, nama pemilik rekening yang kamu masukan tidak sesuai dengan nama pada E-KTP. ",
+  "desc2FailedToAddBankAccount": "Kamu bisa mempermudah proses penambahan rekening Bank dengan mengirimkan foto buku tabungan atau screenshot mobile Bankingmu.",
+  "takeaPicture": "Ambil Foto"
 }
