@@ -16,6 +16,7 @@ import 'package:hyppe/core/bloc/user_v2/bloc.dart';
 import 'package:hyppe/core/bloc/user_v2/state.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/config/url_constants.dart';
+import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -37,6 +38,8 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/item.dart';
 import 'package:hyppe/ux/path.dart';
@@ -57,6 +60,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   static const String eventViewStream = 'VIEW_STREAM';
   static const String eventLikeStream = 'LIKE_STREAM';
   static const String eventCommentDisable = 'COMMENT_STREAM_DISABLED';
+  static const String eventKickUser = 'KICK_USER_STREAM';
 
   final _socketService = SocketLiveService();
 
@@ -235,7 +239,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
 
   Future<void> initAgora() async {
     // retrieve permissions
-    await [Permission.microphone, Permission.camera].request();
+    // await [Permission.microphone, Permission.camera].request();
 
     //create the engine
     engine = createAgoraRtcEngine();
@@ -693,11 +697,6 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
-  Future<void> kickViewer() async {
-    // engine.setRemoteUserPriority(uid: uid, userPriority: userPriority)
-    notifyListeners();
-  }
-
   List<Widget> loveStreamer(AnimationController animationController) {
     // print('isPreventedEmoji: $isPreventedEmoji');
     final animatedOpacity = Tween<double>(
@@ -906,6 +905,69 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
       }
     }
     // return returnNext;
+  }
+
+  Future kickUser(BuildContext context, bool mounted, String userId, String username) async {
+    Map data = {"_id": dataStream.sId, "userId": userId, "type": "KICK"};
+    await updateStream(context, mounted, data).then((value) {
+      if (value == 'Update stream succesfully') {
+        Routing().moveBack();
+        // if (context.mounted) {
+        tn = context.read<TranslateNotifierV2>().translate;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            margin: const EdgeInsets.only(bottom: 60, left: 16, right: 16),
+            backgroundColor: kHyppeTextLightPrimary,
+            content: Row(
+              children: [
+                const CustomIconWidget(
+                  iconData: "${AssetPath.vectorPath}info-icon.svg",
+                  defaultColor: false,
+                  color: Colors.white,
+                ),
+                sixPx,
+                Text("${tn?.infoKick1} $username ${tn?.infoKick2}", style: const TextStyle(color: Colors.white)),
+              ],
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+        // }
+      }
+    });
+  }
+
+  Future updateStream(BuildContext context, mounted, Map data) async {
+    var dataReturn;
+    bool connect = await System().checkConnections();
+    if (connect) {
+      try {
+        print(data);
+        final notifier = LiveStreamBloc();
+
+        await notifier.getLinkStream(context, data, UrlConstants.updateStream);
+
+        final fetch = notifier.liveStreamFetch;
+        if (fetch.postsState == LiveStreamState.getApiSuccess) {
+          dataReturn = fetch.data;
+          dataReturn ??= 'Update stream succesfully';
+          notifyListeners();
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+
+      notifyListeners();
+    } else {
+      // returnNext = false;
+      if (context.mounted) {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
+          initLiveStream(context, mounted);
+        });
+      }
+    }
+    return dataReturn;
   }
 
   Future initLiveStream(BuildContext context, mounted) async {
@@ -1218,7 +1280,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     if (connect) {
       try {
         final notifier = LiveStreamBloc();
-        Map data = {"_id": dataStream.sId, "messages": commentCtrl.text, "type": "COMMENT"};
+        Map data = {"_id": dataStream.sId, "messages": commentCtrl.text, "type": "COMMENT", "commentType": "MESSAGGES"};
         if (mounted) {
           await notifier.getLinkStream(context, data, UrlConstants.updateStream);
         }
@@ -1373,14 +1435,54 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
-  void insertPinComment(CommentLiveModel data) {
+  void insertPinComment(BuildContext context, bool mounted, CommentLiveModel data) async {
+    if (pinComment != null) {
+      comment.insert(0, pinComment ?? CommentLiveModel());
+    }
     pinComment = data;
-    comment.removeWhere((element) => element.sId == data.sId);
+    comment.removeWhere((element) => element.idComment == data.idComment);
+    Map param = {
+      "_id": dataStream.sId,
+      "idComment": data.idComment,
+      "pinned": true, //true/false
+      "type": "COMMENT_PINNED"
+    };
+    updateStream(context, mounted, param).then((value) {});
     notifyListeners();
   }
 
-  void removePinComment() async {
+  Future removePinComment(BuildContext context, bool mounted) async {
     comment.insert(0, pinComment ?? CommentLiveModel());
+    Map param = {
+      "_id": dataStream.sId,
+      "idComment": pinComment?.idComment,
+      "pinned": false, //true/false
+      "type": "COMMENT_PINNED"
+    };
+    updateStream(context, mounted, param).then((value) {});
+    pinComment = null;
+    notifyListeners();
+  }
+
+  void removeComment(BuildContext context, bool mounted, String idComment) async {
+    Map param = {"_id": dataStream.sId, "idComment": idComment, "type": "COMMENT_DELETE"};
+    updateStream(context, mounted, param).then((value) {});
+    comment.removeWhere((element) => element.idComment == idComment);
+    notifyListeners();
+    Routing().moveBack();
+  }
+
+  Future deletePinComment(BuildContext context, bool mounted) async {
+    comment.insert(0, pinComment ?? CommentLiveModel());
+    Map param = {
+      "_id": dataStream.sId,
+      "idComment": pinComment?.idComment,
+      "pinned": false, //true/false
+      "type": "COMMENT_PINNED"
+    };
+    await updateStream(context, mounted, param).then((value) {});
+    Map param2 = {"_id": dataStream.sId, "idComment": pinComment?.idComment, "type": "COMMENT_DELETE"};
+    updateStream(context, mounted, param2).then((value) {});
     pinComment = null;
     notifyListeners();
   }

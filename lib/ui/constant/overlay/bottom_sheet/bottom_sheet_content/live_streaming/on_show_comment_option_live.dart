@@ -54,11 +54,16 @@ class _OnShowCommentOptionLiveBottomSheetState extends State<OnShowCommentOption
             style: const TextStyle(color: kHyppeBurem, fontSize: 12),
           ),
           sixteenPx,
-          Container(
-            padding: const EdgeInsets.all(16),
-            child: Text(
-              language.deleteComment?.replaceAll('?', '') ?? '',
-              style: const TextStyle(color: Colors.red),
+          GestureDetector(
+            onTap: () {
+              notifier.removeComment(context, mounted, widget.dataComment.idComment ?? '');
+            },
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                language.deleteComment?.replaceAll('?', '') ?? '',
+                style: const TextStyle(color: Colors.red),
+              ),
             ),
           ),
           const Padding(
@@ -70,18 +75,17 @@ class _OnShowCommentOptionLiveBottomSheetState extends State<OnShowCommentOption
           ),
           GestureDetector(
             onTap: () {
-              if (widget.isReady ?? false) {
-                notifier.removePinComment();
-              } else {
-                notifier.insertPinComment(widget.dataComment);
-              }
+              // if (notifier.pinComment == null) {
+              notifier.insertPinComment(context, mounted, widget.dataComment);
               Routing().moveBack();
+              // }
             },
             child: Container(
               padding: const EdgeInsets.all(16),
               child: Text(
-                (widget.isReady ?? false) ? language.unpinComment?.replaceAll('?', '') ?? '' : language.pinComment?.replaceAll('?', '') ?? '',
-                // style: TextStyle(),
+                language.pinComment?.replaceAll('?', '') ?? '',
+                // (notifier.pinComment != null) ? language.unpinComment?.replaceAll('?', '') ?? '' : language.pinComment?.replaceAll('?', '') ?? '',
+                // style: TextStyle(color: (notifier.pinComment != null) ? kHyppeBurem : kHyppeTextLightPrimary),
               ),
             ),
           ),

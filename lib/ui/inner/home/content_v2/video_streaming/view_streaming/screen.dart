@@ -29,8 +29,7 @@ class ViewStreamingScreen extends StatefulWidget {
   State<ViewStreamingScreen> createState() => _ViewStreamingScreenState();
 }
 
-class _ViewStreamingScreenState extends State<ViewStreamingScreen>
-    with WidgetsBindingObserver, TickerProviderStateMixin {
+class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsBindingObserver, TickerProviderStateMixin {
   FocusNode commentFocusNode = FocusNode();
 
   final debouncer = Debouncer(milliseconds: 2000);
@@ -42,18 +41,15 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
   @override
   void initState() {
     super.initState();
-    final notifier = (Routing.navigatorKey.currentContext ?? context)
-        .read<ViewStreamingNotifier>();
+    final notifier = (Routing.navigatorKey.currentContext ?? context).read<ViewStreamingNotifier>();
     notifier.initViewStreaming(widget.args.data);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       commentFocusNode.addListener(() {
         debugPrint("Has focus: ${commentFocusNode.hasFocus}");
       });
-      await notifier.startViewStreaming(
-          Routing.navigatorKey.currentContext ?? context,
-          mounted,
-          widget.args.data);
+      await notifier.requestPermission(context);
+      await notifier.startViewStreaming(Routing.navigatorKey.currentContext ?? context, mounted, widget.args.data);
 
       if (!mounted) return;
 
@@ -66,8 +62,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
 
   @override
   void dispose() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-        overlays: SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
     WakelockPlus.disable();
     SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
     context.read<ViewStreamingNotifier>().disposeAgora();
@@ -129,8 +124,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
                         onDoubleTap: () {
                           notifier.likeAddTapScreen();
                           _debouncer.run(() {
-                            notifier.sendLikeTapScreen(
-                                context, notifier.streamerData!);
+                            notifier.sendLikeTapScreen(context, notifier.streamerData!);
                           });
                         },
                         child: Container(
@@ -142,8 +136,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
                                   controller: VideoViewController.remote(
                                     rtcEngine: notifier.engine,
                                     canvas: VideoCanvas(uid: notifier.remoteUid),
-                                    connection: RtcConnection(
-                                        channelId: widget.args.data.sId ?? ''),
+                                    connection: RtcConnection(channelId: widget.args.data.sId ?? ''),
                                   ),
                                 )
                               : const Align(
@@ -152,9 +145,8 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
                                 ),
                         ),
                       ),
-                      if ((notifier.statusAgora ==
-                              RemoteVideoState.remoteVideoStateStopped || notifier.statusAgora ==
-                              RemoteVideoState.remoteVideoStateStopped) && (notifier.resionAgora == RemoteVideoStateReason.remoteVideoStateReasonRemoteMuted || notifier.resionAgora == RemoteVideoStateReason.remoteVideoStateReasonSdkInBackground))
+                      if ((notifier.statusAgora == RemoteVideoState.remoteVideoStateStopped || notifier.statusAgora == RemoteVideoState.remoteVideoStateStopped) &&
+                          (notifier.resionAgora == RemoteVideoStateReason.remoteVideoStateReasonRemoteMuted || notifier.resionAgora == RemoteVideoStateReason.remoteVideoStateReasonSdkInBackground))
                         PauseLiveView(data: widget.args.data),
 
                       Positioned.fill(

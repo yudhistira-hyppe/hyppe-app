@@ -213,9 +213,9 @@ class ShowBottomSheet {
         });
   }
 
-  static onWatcherStatus(context, String email, String idMediaStreaming, {bool isViewer = false}) async {
+  static onWatcherStatus(contextAsal, String email, String idMediaStreaming, {bool isViewer = false}) async {
     await showModalBottomSheet(
-        context: context,
+        context: contextAsal,
         isScrollControlled: true,
         enableDrag: true,
         isDismissible: true,
@@ -227,6 +227,7 @@ class ShowBottomSheet {
               decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
               height: context.getHeight() * 0.3,
               child: OnWatcherStatus(
+                contextAsal: contextAsal,
                 email: email,
                 isViewer: isViewer,
                 idMediaStreaming: idMediaStreaming,

@@ -9,22 +9,22 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/notifier.dart';
 import 'package:provider/provider.dart';
 
-class PinCommenmt extends StatelessWidget {
-  const PinCommenmt({super.key});
+class PinCommenmtViewer extends StatelessWidget {
+  const PinCommenmtViewer({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<StreamerNotifier>(
+    return Consumer<ViewStreamingNotifier>(
       builder: (_, notifier, __) {
         final tn = context.read<TranslateNotifierV2>().translate;
         return notifier.pinComment == null
             ? Container()
             : GestureDetector(
                 onLongPress: () {
-                  ShowBottomSheet().onShowCommentOptionLive(context, notifier.pinComment ?? CommentLiveModel(), isReady: true);
+                  // ShowBottomSheet().onShowCommentOptionLive(context, notifier.pinComment ?? CommentLiveModel(), isReady: true);
                 },
                 child: Container(
                   color: Colors.transparent,
@@ -66,19 +66,11 @@ class PinCommenmt extends StatelessWidget {
                               ),
                               Text(
                                 notifier.pinComment?.messages ?? '',
-                                style: TextStyle(color: kHyppeTextPrimary),
+                                style: const TextStyle(color: kHyppeTextPrimary),
                               ),
                             ],
                           ),
                         ),
-                        IconButton(
-                          onPressed: () {
-                            notifier.removePinComment(context, context.mounted);
-                          },
-                          padding: EdgeInsets.zero,
-                          icon: Icon(Icons.close),
-                          color: Colors.white,
-                        )
                       ],
                     ),
                   ),

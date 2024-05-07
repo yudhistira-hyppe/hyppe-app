@@ -10,6 +10,7 @@ import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
 import 'package:hyppe/core/services/socket_live_service.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -50,12 +51,16 @@ class ViewStreamingNotifier with ChangeNotifier {
   static const String eventLikeStream = 'LIKE_STREAM';
   static const String eventCommentDisable = 'COMMENT_STREAM_DISABLED';
   static const String eventStatusStream = 'STATUS_STREAM';
+  static const String eventKickUser = 'KICK_USER_STREAM';
+  static const String eventCommentPin = 'COMMENT_PINNED_STREAM_SINGLE';
+  static const String eventCommentDelete = 'COMMENT_DELETE_STREAM_SINGLE';
 
   String userName = '';
   String? _currentUserId = SharedPreference().readStorage(SpKeys.userID);
   String get currentUserId => _currentUserId ?? '';
 
   StreamingModel dataStreaming = StreamingModel();
+  CommentLiveModel? pinComment;
 
   ///Status => Offline - Prepare - StandBy - Ready - Online
   StatusStream statusLive = StatusStream.offline;
@@ -123,7 +128,8 @@ class ViewStreamingNotifier with ChangeNotifier {
     isOver = false;
     endLive = false;
     comment = [];
-    // notifyListeners();
+    pinComment = null;
+    notifyListeners();
   }
 
   // Engine Agora
@@ -133,13 +139,22 @@ class ViewStreamingNotifier with ChangeNotifier {
   int? remoteUid = -1;
   bool localUserJoined = false;
 
+  Future<bool> requestPermission(BuildContext context) async {
+    final isGranted = await System().requestPermission(context, permissions: [Permission.camera, Permission.storage, Permission.microphone]);
+    if (isGranted) {
+      return isGranted;
+    } else {
+      await System().requestPermission(context, permissions: [Permission.camera, Permission.storage, Permission.microphone]);
+      return true;
+    }
+  }
 
   Future<void> initAgora(LinkStreamModel data) async {
     // retrieve permissions
     // await [Permission.microphone, Permission.camera].request();
 
     //create the engine
-    
+
     engine = createAgoraRtcEngine();
 
     await engine.initialize(const RtcEngineContext(
@@ -169,9 +184,8 @@ class ViewStreamingNotifier with ChangeNotifier {
           resionAgora = reason;
           notifyListeners();
         }),
-        onUserOffline: (RtcConnection connection, int uid,
-            UserOfflineReasonType reason) {
-              destoryPusher();
+        onUserOffline: (RtcConnection connection, int uid, UserOfflineReasonType reason) {
+          destoryPusher();
           debugPrint("viewer remote user $uid left channel");
           remoteUid = -1;
           statusLive = StatusStream.offline;
@@ -179,32 +193,29 @@ class ViewStreamingNotifier with ChangeNotifier {
           notifyListeners();
         },
         onTokenPrivilegeWillExpire: (RtcConnection connection, String token) {
-          debugPrint(
-              '[onTokenPrivilegeWillExpire] connection: ${connection.toJson()}, token: $token');
+          debugPrint('[onTokenPrivilegeWillExpire] connection: ${connection.toJson()}, token: $token');
         },
       ),
     );
 
-    
     await engine.setClientRole(role: ClientRoleType.clientRoleAudience);
-    
+
     await engine.enableAudio();
     await engine.enableVideo();
     await engine.startPreview();
 
     print('====== ${data.tempToken}');
     print('====== ${data.sId}');
-    try{
+    try {
       await engine.joinChannel(
-        token: data.tempToken??'',
-        channelId: data.sId??'',
+        token: data.tempToken ?? '',
+        channelId: data.sId ?? '',
         uid: 0,
         options: const ChannelMediaOptions(),
       );
-    }catch(_){
+    } catch (_) {
       debugPrint('===== error');
     }
-    
   }
 
   sendComment(BuildContext context, LinkStreamModel model, String comment) async {
@@ -212,7 +223,7 @@ class ViewStreamingNotifier with ChangeNotifier {
     if (connect) {
       try {
         final notifier = LiveStreamBloc();
-        Map data = {"_id": model.sId, "messages": comment, "type": "COMMENT"};
+        Map data = {"_id": model.sId, "messages": comment, "type": "COMMENT", "commentType": "MESSAGGES"};
         await notifier.getLinkStream(Routing.navigatorKey.currentContext ?? context, data, UrlConstants.updateStream);
         // final fetch = notifier.liveStreamFetch;
         // if (fetch.postsState == LiveStreamState.getApiSuccess) {
@@ -240,6 +251,9 @@ class ViewStreamingNotifier with ChangeNotifier {
     _socketService.closeSocket(eventLikeStream);
     _socketService.closeSocket(eventCommentDisable);
     _socketService.closeSocket(eventStatusStream);
+    _socketService.closeSocket(eventKickUser);
+    _socketService.closeSocket(eventCommentPin);
+    _socketService.closeSocket(eventCommentDelete);
     disposeAgora();
     statusLive = StatusStream.offline;
     totLikes = 0;
@@ -528,17 +542,20 @@ class ViewStreamingNotifier with ChangeNotifier {
     var init = await initLiveStream(context, mounted, data);
     if (init) {
       // _socketService.closeSocket();
-      
+
       await Future.delayed(const Duration(seconds: 1));
       await initAgora(data);
       print("======== ini socket status ${_socketService.isRunning} =========");
-      
+
       // if (!_socketService.isRunning) {
       _connectAndListenToSocket(eventComment, data);
       _connectAndListenToSocket(eventLikeStream, data);
       _connectAndListenToSocket(eventViewStream, data);
       _connectAndListenToSocket(eventStatusStream, data);
       _connectAndListenToSocket(eventCommentDisable, data);
+      _connectAndListenToSocket(eventKickUser, data);
+      _connectAndListenToSocket(eventCommentPin, data);
+      _connectAndListenToSocket(eventCommentDelete, data);
       // }
 
       // _alivcLivePusher.startPushWithURL(pushURL);
@@ -592,8 +609,6 @@ class ViewStreamingNotifier with ChangeNotifier {
   }
 
   void handleSocket(message, event, LinkStreamModel dataStream) async {
-    print("handlesocket ====================");
-    print("handlesocket ==================== $message $event");
     if (event == eventComment) {
       print("handlesocket 222 ==================== $message $event $dataStream");
       var messages = CommentLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
@@ -638,7 +653,51 @@ class ViewStreamingNotifier with ChangeNotifier {
       if (messages.idStream == dataStream.sId) {
         isCommentDisable = messages.comment ?? false;
       }
+    } else if (event == eventKickUser) {
+      var data = json.decode('$message');
+      if (data['data']['email'] == SharedPreference().readStorage(SpKeys.email)) {
+        isOver = true;
+      }
+    } else if (event == eventCommentPin) {
+      CommentLiveModel messages = CommentLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
+      if (messages.idStream == dataStream.sId) {
+        if (messages.pinned ?? false) {
+          insertPinComment(messages.idComment ?? '');
+        } else {
+          removePinComment();
+        }
+      }
+    } else if (event == eventCommentDelete) {
+      CommentLiveModel messages = CommentLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
+      if (messages.idStream == dataStream.sId) {
+        removeComment(messages.idComment ?? '');
+      }
     }
+
+    notifyListeners();
+  }
+
+  void insertPinComment(String idComment) async {
+    if (pinComment != null) {
+      comment.insert(0, pinComment ?? CommentLiveModel());
+    }
+    for (var e in comment) {
+      if (e.idComment == idComment) {
+        pinComment = e;
+      }
+    }
+    comment.removeWhere((element) => element.idComment == idComment);
+    notifyListeners();
+  }
+
+  void removePinComment() async {
+    comment.insert(0, pinComment ?? CommentLiveModel());
+    pinComment = null;
+    notifyListeners();
+  }
+
+  void removeComment(String idComment) async {
+    comment.removeWhere((element) => element.idComment == idComment);
 
     notifyListeners();
   }
@@ -649,25 +708,21 @@ class ViewStreamingNotifier with ChangeNotifier {
   //Modal List Transaction
   List<GroupModel> groupsReport = [
     GroupModel(text: "Aktivitas ilegal", index: 1, selected: false),
-    GroupModel(
-        text: "Hak cipta dan kekayaan intelektual", index: 2, selected: false),
+    GroupModel(text: "Hak cipta dan kekayaan intelektual", index: 2, selected: false),
     GroupModel(text: "Keamanan anak", index: 3, selected: false),
-    GroupModel(
-        text: "Keamanan dan integritas platform", index: 4, selected: false),
+    GroupModel(text: "Keamanan dan integritas platform", index: 4, selected: false),
     GroupModel(text: "Kekerasan dan ancaman", index: 5, selected: false),
-    GroupModel(
-        text: "Ketelanjangan dan konten seksual", index: 6, selected: false),
+    GroupModel(text: "Ketelanjangan dan konten seksual", index: 6, selected: false),
     GroupModel(text: "Konten berbahaya", index: 7, selected: false),
     GroupModel(text: "Pelecehan dan penindasan", index: 8, selected: false),
-    GroupModel(
-        text: "Privasi dan informasi pribadi", index: 9, selected: false),
+    GroupModel(text: "Privasi dan informasi pribadi", index: 9, selected: false),
     GroupModel(text: "Spam dan penipuan", index: 10, selected: false),
     GroupModel(text: "Ujaran kebencian", index: 11, selected: false),
   ];
   LinkStreamModel? reportdata;
 
   Future<void> reportLive(BuildContext context) async {
-    if (!alreadyReported) {
+    if (alreadyReported) {
       showModalBottomSheet<int>(
           backgroundColor: Colors.transparent,
           context: context,
@@ -691,7 +746,6 @@ class ViewStreamingNotifier with ChangeNotifier {
     }
   }
 
-
   Future<void> responReportLive(BuildContext context) async {
     showModalBottomSheet<int>(
         backgroundColor: Colors.transparent,
@@ -705,7 +759,6 @@ class ViewStreamingNotifier with ChangeNotifier {
       debugPrint('Complete Report Live Streaming');
     });
   }
-
 
   double getRandomDouble(double min, double max) {
     // Membuat instance dari kelas Random
@@ -728,10 +781,5 @@ class GroupModel {
   bool selected;
   String? startDate;
   String? endDate;
-  GroupModel(
-      {required this.text,
-      required this.index,
-      required this.selected,
-      this.startDate,
-      this.endDate});
+  GroupModel({required this.text, required this.index, required this.selected, this.startDate, this.endDate});
 }

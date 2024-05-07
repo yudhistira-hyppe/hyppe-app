@@ -1188,5 +1188,7 @@
   "descSuccessAppealBank": "Mohon tunggu rekening bank kamu sedang dalam proses verifikasi. Proses ini memakan waktu estimasi maksimal 3 hari kerja.",
   "reviewed": "Ditinjau",
   "approved": "Disetujui",
-  "rejected": "Ditolak"
+  "rejected": "Ditolak",
+  "infoKick1": "Kamu menghapus",
+  "infoKick2": "dari siaran LIVE"
 }

@@ -9,8 +9,21 @@ class CommentLiveModel {
   Avatar? avatar;
   String? idStream;
   String? messages;
+  String? idComment;
+  bool? pinned;
 
-  CommentLiveModel({this.sId, this.email, this.fullName, this.userAuth, this.username, this.avatar, this.idStream, this.messages});
+  CommentLiveModel({
+    this.sId,
+    this.email,
+    this.fullName,
+    this.userAuth,
+    this.username,
+    this.avatar,
+    this.idStream,
+    this.messages,
+    this.idComment,
+    this.pinned,
+  });
 
   CommentLiveModel.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -21,6 +34,8 @@ class CommentLiveModel {
     avatar = json['avatar'] != null ? Avatar.fromJson(json['avatar']) : null;
     idStream = json['idStream'];
     messages = json['messages'];
+    idComment = json['idComment'];
+    pinned = json['pinned'] ?? false;
   }
 }
 

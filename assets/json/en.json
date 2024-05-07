@@ -1187,5 +1187,7 @@
   "descSuccessAppealBank": "Please wait for your bank account to verification process. This process takes time Estimated maximum 3 working days.",
   "reviewed": "Review",
   "approved": "Approved",
-  "rejected": "Rejected"
+  "rejected": "Rejected",
+  "infoKick1": "You removed",
+  "infoKick2": "from your LIVE studio"
 }
