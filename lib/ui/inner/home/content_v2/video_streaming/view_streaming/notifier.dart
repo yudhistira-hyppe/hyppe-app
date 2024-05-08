@@ -363,6 +363,12 @@ class ViewStreamingNotifier with ChangeNotifier {
           fetch.data.forEach((v) => tempList.add(LinkStreamModel.fromJson(v)));
           if (tempList.isNotEmpty) {
             listStreamers.addAll(tempList);
+            if (groupsReport.isEmpty && listStreamers.isNotEmpty && (listStreamers[0].settingsRemackReport?.isNotEmpty ?? [].isNotEmpty)) {
+              for (var i = 0; i < (listStreamers[0].settingsRemackReport?.length ?? 0); i++) {
+                var data = listStreamers[0].settingsRemackReport?[i];
+                groupsReport.add(GroupModel(text: data ?? '', index: i, selected: false));
+              }
+            }
           } else {
             if (!isReload) {
               stopLoad = true;
@@ -442,6 +448,9 @@ class ViewStreamingNotifier with ChangeNotifier {
           isCommentDisable = dataStreaming.commentDisabled ?? false;
           totViews = dataStreaming.viewCountActive ?? 0;
           returnNext = true;
+          if (dataStreaming.comment != null) {
+            pinComment = dataStreaming.comment?[0];
+          }
           comment.insert(
             0,
             CommentLiveModel(
@@ -707,17 +716,17 @@ class ViewStreamingNotifier with ChangeNotifier {
 
   //Modal List Transaction
   List<GroupModel> groupsReport = [
-    GroupModel(text: "Aktivitas ilegal", index: 1, selected: false),
-    GroupModel(text: "Hak cipta dan kekayaan intelektual", index: 2, selected: false),
-    GroupModel(text: "Keamanan anak", index: 3, selected: false),
-    GroupModel(text: "Keamanan dan integritas platform", index: 4, selected: false),
-    GroupModel(text: "Kekerasan dan ancaman", index: 5, selected: false),
-    GroupModel(text: "Ketelanjangan dan konten seksual", index: 6, selected: false),
-    GroupModel(text: "Konten berbahaya", index: 7, selected: false),
-    GroupModel(text: "Pelecehan dan penindasan", index: 8, selected: false),
-    GroupModel(text: "Privasi dan informasi pribadi", index: 9, selected: false),
-    GroupModel(text: "Spam dan penipuan", index: 10, selected: false),
-    GroupModel(text: "Ujaran kebencian", index: 11, selected: false),
+    // GroupModel(text: "Aktivitas ilegal", index: 1, selected: false),
+    // GroupModel(text: "Hak cipta dan kekayaan intelektual", index: 2, selected: false),
+    // GroupModel(text: "Keamanan anak", index: 3, selected: false),
+    // GroupModel(text: "Keamanan dan integritas platform", index: 4, selected: false),
+    // GroupModel(text: "Kekerasan dan ancaman", index: 5, selected: false),
+    // GroupModel(text: "Ketelanjangan dan konten seksual", index: 6, selected: false),
+    // GroupModel(text: "Konten berbahaya", index: 7, selected: false),
+    // GroupModel(text: "Pelecehan dan penindasan", index: 8, selected: false),
+    // GroupModel(text: "Privasi dan informasi pribadi", index: 9, selected: false),
+    // GroupModel(text: "Spam dan penipuan", index: 10, selected: false),
+    // GroupModel(text: "Ujaran kebencian", index: 11, selected: false),
   ];
   LinkStreamModel? reportdata;
 

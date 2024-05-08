@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -14,10 +16,11 @@ class ListCommentLive extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var translate = context.read<TranslateNotifierV2>().translate;
     return Consumer<StreamerNotifier>(
       builder: (_, notifier, __) => SizedBox(
         height: SizeConfig.screenHeight! * (commentFocusNode!.hasFocus ? 0.15 : 0.3),
-        width: SizeConfig.screenWidth! * 0.7,
+        width: SizeConfig.screenWidth! * 0.9,
         child: notifier.isCommentDisable
             ? Container()
             : ListView.builder(
@@ -25,6 +28,16 @@ class ListCommentLive extends StatelessWidget {
                 shrinkWrap: true,
                 itemCount: notifier.comment.length,
                 itemBuilder: (context, index) {
+                  var data = notifier.comment[index];
+                  String type = '';
+                  if (data.commentType == 'GIFT') {
+                    final mimeType = System().extensionFiles(data.urlGiftThum ?? '')?.split('/')[0] ?? '';
+                    if (mimeType != '') {
+                      var a = mimeType.split('/');
+                      type = a[0];
+                    }
+                  }
+
                   return GestureDetector(
                     onLongPress: () {
                       ShowBottomSheet().onShowCommentOptionLive(context, notifier.comment[index]);
@@ -34,7 +47,8 @@ class ListCommentLive extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 8),
                         child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             GestureDetector(
                               onTap: () {
@@ -57,27 +71,53 @@ class ListCommentLive extends StatelessWidget {
                             ),
                             twelvePx,
                             Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text.rich(TextSpan(text: notifier.comment[index].username ?? '', style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700), children: [
-                                    if (notifier.comment[index].messages == 'joined')
-                                      const TextSpan(
-                                        text: ' joined',
-                                        style: TextStyle(color: kHyppeTextPrimary, fontWeight: FontWeight.w700),
-                                      )
-                                  ])),
-                                  // Text(
-                                  //   notifier.comment[index].username ?? '',
-                                  //   style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700),
-                                  // ),
-                                  if (notifier.comment[index].messages != 'joined')
-                                    Text(
-                                      notifier.comment[index].messages ?? '',
-                                      style: const TextStyle(color: kHyppeTextPrimary),
+                              child: notifier.comment[index].commentType == 'MESSAGGES'
+                                  ? Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text.rich(TextSpan(text: notifier.comment[index].username ?? '', style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700), children: [
+                                          if (notifier.comment[index].messages == 'joined')
+                                            const TextSpan(
+                                              text: ' joined',
+                                              style: TextStyle(color: kHyppeTextPrimary, fontWeight: FontWeight.w700),
+                                            ),
+                                        ])),
+
+                                        // Text(
+                                        //   notifier.comment[index].username ?? '',
+                                        //   style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700),
+                                        // ),
+                                        if (notifier.comment[index].messages != 'joined')
+                                          Text(
+                                            notifier.comment[index].messages ?? '',
+                                            style: const TextStyle(color: kHyppeTextPrimary),
+                                          ),
+                                      ],
+                                    )
+                                  : Row(
+                                      children: [
+                                        Text.rich(TextSpan(text: notifier.comment[index].username ?? '', style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700), children: [
+                                          TextSpan(
+                                            text: " ${translate.sent} ${notifier.comment[index].messages}",
+                                            style: const TextStyle(color: kHyppeTextPrimary, fontWeight: FontWeight.w700),
+                                          ),
+                                        ])),
+                                        type == '.svg'
+                                            ? SvgPicture.network(
+                                                data.urlGiftThum ?? '',
+                                                height: 20 * SizeConfig.scaleDiagonal,
+                                                width: 20 * SizeConfig.scaleDiagonal,
+                                                semanticsLabel: 'A shark?!',
+                                                placeholderBuilder: (BuildContext context) => Container(padding: const EdgeInsets.all(30.0), child: const CircularProgressIndicator()),
+                                              )
+                                            : Container(
+                                                margin: const EdgeInsets.only(left: 16),
+                                                width: 20 * SizeConfig.scaleDiagonal,
+                                                height: 20 * SizeConfig.scaleDiagonal,
+                                                decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(data.urlGiftThum ?? ''))),
+                                              )
+                                      ],
                                     ),
-                                ],
-                              ),
                             )
                           ],
                         ),

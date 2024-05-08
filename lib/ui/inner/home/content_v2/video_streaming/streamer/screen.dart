@@ -229,8 +229,8 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
                                     : notifier.statusLive == StatusStream.ready
                                         ? prepare(titile: notifier.tn?.liveVideoHasStarted ?? '')
                                         : Container(),
-                    if (notifier.isPause) PauseLive(notifier: notifier),
                     if (notifier.statusLive == StatusStream.ready || notifier.statusLive == StatusStream.online) StreamerWidget(commentFocusNode: commentFocusNode),
+                    if (notifier.isPause) PauseLive(notifier: notifier),
                     // StreamerWidget(commentFocusNode: commentFocusNode),
                     // Align(
                     //   alignment: Alignment.center,

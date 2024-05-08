@@ -1189,5 +1189,6 @@
   "approved": "Approved",
   "rejected": "Rejected",
   "infoKick1": "You removed",
-  "infoKick2": "from your LIVE studio"
+  "infoKick2": "from your LIVE studio",
+  "sent": "sent"
 }

@@ -142,7 +142,10 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   ///Status => Offline - Prepare - StandBy - Ready - Online
   StatusStream statusLive = StatusStream.offline;
 
-  List giftBasic = [];
+  List<CommentLiveModel> giftBasic = [];
+  List<CommentLiveModel> giftBasicTemp = [];
+  List<CommentLiveModel> giftDelux = [];
+  List<CommentLiveModel> giftDeluxTemp = [];
   List<Item> _items = <Item>[];
   List<Item> get items => _items;
 
@@ -1379,13 +1382,21 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     if (event == eventComment) {
       var messages = CommentLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
       if (messages.idStream == dataStream.sId) {
-        comment.insert(0, messages);
-        giftBasic.insert(0, messages.sId);
-        // startTimerBasic();
-
-        if (timerBasic?.isActive ?? false) {
+        if (messages.commentType == 'MESSAGGES') {
+          comment.insert(0, messages);
         } else {
-          startTimerBasic();
+          if (messages.urlGift != null) {
+          } else {
+            if (giftBasic.length <= 2) {
+              giftBasic.add(messages);
+            } else {
+              giftBasicTemp.add(messages);
+            }
+            if (timerBasic?.isActive ?? false) {
+            } else {
+              startTimerBasic();
+            }
+          }
         }
       }
     } else if (event == eventLikeStream) {
@@ -1473,7 +1484,6 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   }
 
   Future deletePinComment(BuildContext context, bool mounted) async {
-    comment.insert(0, pinComment ?? CommentLiveModel());
     Map param = {
       "_id": dataStream.sId,
       "idComment": pinComment?.idComment,
@@ -1482,9 +1492,26 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     };
     await updateStream(context, mounted, param).then((value) {});
     Map param2 = {"_id": dataStream.sId, "idComment": pinComment?.idComment, "type": "COMMENT_DELETE"};
+    // ignore: use_build_context_synchronously
     updateStream(context, mounted, param2).then((value) {});
     pinComment = null;
     notifyListeners();
+    Routing().moveBack();
+  }
+
+  void sendGift(BuildContext context, bool mounted, String idGift, String urlGiftThumb, String title, {String? urlGift}) async {
+    Map param = {
+      "_id": dataStream.sId,
+      "commentType": "GIFT",
+      "type": "COMMENT",
+      "idGift": idGift,
+      "urlGiftThum": urlGiftThumb,
+      "messages": title,
+    };
+
+    if (urlGift != null) param['urlGift'] = urlGift;
+    updateStream(context, mounted, param).then((value) {});
+    Routing().moveBack();
   }
 
   Future getUserShare(BuildContext context, bool mounted, {bool isLoadmore = false}) async {
@@ -1633,7 +1660,13 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
       print("=== ${giftBasic.isNotEmpty}");
       if (giftBasic.isNotEmpty) {
         print("===================================haous========================");
+        comment.insert(0, giftBasic[0]);
         giftBasic.removeAt(0);
+        if (giftBasicTemp.isNotEmpty && giftBasic.length <= 2) {
+          giftBasic.add(giftBasicTemp[0]);
+          giftBasicTemp.removeAt(0);
+        }
+
         notifyListeners();
       } else {
         timerBasic?.cancel();

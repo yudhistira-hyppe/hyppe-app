@@ -1190,5 +1190,6 @@
   "approved": "Disetujui",
   "rejected": "Ditolak",
   "infoKick1": "Kamu menghapus",
-  "infoKick2": "dari siaran LIVE"
+  "infoKick2": "dari siaran LIVE",
+  "sent": "mengirim"
 }

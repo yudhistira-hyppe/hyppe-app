@@ -1183,6 +1183,7 @@ class LocalizationModelV2 {
   String? noInternetLabel;
   String? titleSuccessAppealBank;
   String? descSuccessAppealBank;
+  String? sent;
   String? infoKick1;
   String? infoKick2;
   String? rejected;
@@ -2363,6 +2364,7 @@ class LocalizationModelV2 {
     this.noInternetLabel,
     this.titleSuccessAppealBank,
     this.descSuccessAppealBank,
+    this.sent,
     this.infoKick1,
     this.infoKick2,
     this.rejected,
@@ -3574,6 +3576,7 @@ class LocalizationModelV2 {
     noInternetLabel = json['noInternetLabel'];
     titleSuccessAppealBank = json['titleSuccessAppealBank'];
     descSuccessAppealBank = json['descSuccessAppealBank'];
+    sent = json['sent'];
     infoKick1 = json['infoKick1'];
     infoKick2 = json['infoKick2'];
     rejected = json['rejected'];

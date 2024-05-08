@@ -340,7 +340,7 @@ class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
                   )
                 ],
               ),
-              Spacer(),
+              const Spacer(),
               Container(
                 padding: EdgeInsets.only(top: 6, bottom: 6, left: 16, right: 12),
                 decoration: BoxDecoration(color: kHyppeTextLightPrimary, borderRadius: BorderRadius.circular(16)),
@@ -361,9 +361,16 @@ class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
             ],
           ),
           twelvePx,
-          ButtonChallangeWidget(
-            bgColor: kHyppePrimary,
-            text: trans.send,
+          Consumer<StreamerNotifier>(
+            builder: (_, sn, __) {
+              return ButtonChallangeWidget(
+                function: () {
+                  sn.sendGift(context, mounted, sn.giftSelect?.sId ?? '', sn.giftSelect?.thumbnail ?? '', sn.giftSelect?.name ?? '', urlGift: sn.giftSelect?.animation);
+                },
+                bgColor: kHyppePrimary,
+                text: trans.send,
+              );
+            },
           )
         ],
       ),

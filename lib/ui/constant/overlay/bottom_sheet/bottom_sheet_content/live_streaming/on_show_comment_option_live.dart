@@ -56,7 +56,11 @@ class _OnShowCommentOptionLiveBottomSheetState extends State<OnShowCommentOption
           sixteenPx,
           GestureDetector(
             onTap: () {
-              notifier.removeComment(context, mounted, widget.dataComment.idComment ?? '');
+              if (widget.isReady ?? false) {
+                notifier.deletePinComment(context, mounted);
+              } else {
+                notifier.removeComment(context, mounted, widget.dataComment.idComment ?? '');
+              }
             },
             child: Container(
               padding: const EdgeInsets.all(16),
@@ -75,16 +79,18 @@ class _OnShowCommentOptionLiveBottomSheetState extends State<OnShowCommentOption
           ),
           GestureDetector(
             onTap: () {
-              // if (notifier.pinComment == null) {
-              notifier.insertPinComment(context, mounted, widget.dataComment);
-              Routing().moveBack();
-              // }
+              if (widget.isReady ?? false) {
+                notifier.removePinComment(context, mounted);
+                Routing().moveBack();
+              } else {
+                notifier.insertPinComment(context, mounted, widget.dataComment);
+                Routing().moveBack();
+              }
             },
             child: Container(
               padding: const EdgeInsets.all(16),
               child: Text(
-                language.pinComment?.replaceAll('?', '') ?? '',
-                // (notifier.pinComment != null) ? language.unpinComment?.replaceAll('?', '') ?? '' : language.pinComment?.replaceAll('?', '') ?? '',
+                (widget.isReady ?? false) ? language.unpinComment?.replaceAll('?', '') ?? '' : language.pinComment?.replaceAll('?', '') ?? '',
                 // style: TextStyle(color: (notifier.pinComment != null) ? kHyppeBurem : kHyppeTextLightPrimary),
               ),
             ),

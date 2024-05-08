@@ -1,3 +1,5 @@
+import 'package:hyppe/core/models/collection/live_stream/comment_live_model.dart';
+
 class StreamingModel {
   String? sId;
   String? title;
@@ -14,24 +16,25 @@ class StreamingModel {
   int? viewCountActive;
   String? urlLink;
   String? textUrl;
+  List<CommentLiveModel>? comment;
 
-  StreamingModel({
-    this.sId,
-    this.title,
-    this.userId,
-    this.expireTime,
-    this.startLive,
-    this.status,
-    this.urlStream,
-    this.urlIngest,
-    this.createAt,
-    this.endLive,
-    this.pause,
-    this.commentDisabled,
-    this.viewCountActive,
-    this.urlLink,
-    this.textUrl
-  });
+  StreamingModel(
+      {this.sId,
+      this.title,
+      this.userId,
+      this.expireTime,
+      this.startLive,
+      this.status,
+      this.urlStream,
+      this.urlIngest,
+      this.createAt,
+      this.endLive,
+      this.pause,
+      this.commentDisabled,
+      this.viewCountActive,
+      this.urlLink,
+      this.comment,
+      this.textUrl});
 
   StreamingModel.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -49,5 +52,11 @@ class StreamingModel {
     viewCountActive = json['viewCountActive'] ?? 0;
     urlLink = json['urlLink'];
     textUrl = json['textUrl'];
+    if (json['comment'] != null) {
+      comment = <CommentLiveModel>[];
+      json['comment'].forEach((v) {
+        comment!.add(CommentLiveModel.fromJson(v));
+      });
+    }
   }
 }

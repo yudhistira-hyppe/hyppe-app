@@ -80,10 +80,13 @@ class OnShowEffect extends StatelessWidget {
     var filePath = '${notifier.effectPath}${Platform.pathSeparator}${effect.fileAssetName}';
     return InkWell(
       onTap: () {
-        if(notifier.selectedEffect == effect){
+        print("-=-=-=-=-= effect ${notifier.selectedEffect} -- $effect");
+        if (notifier.selectedEffect == effect) {
+          print('1');
           notifier.selectedEffect = null;
           notifier.notUseEffect(context);
-        }else{
+        } else {
+          print('2');
           notifier.selectedEffect = effect;
           notifier.setDeepAREffect(context, effect);
         }
@@ -123,11 +126,7 @@ class OnShowEffect extends StatelessWidget {
                                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                                       // color: snapshot.data == true ? null : Colors.black45,
                                       // backgroundBlendMode: snapshot.data == true ? null : BlendMode.darken,
-                                      image: DecorationImage(
-                                        fit: BoxFit.fill,
-                                        image: imageProvider,
-                                        opacity: snapshot.data == true ? 1.0 : 0.5
-                                      ),
+                                      image: DecorationImage(fit: BoxFit.fill, image: imageProvider, opacity: snapshot.data == true ? 1.0 : 0.5),
                                     ),
                                   );
                                 },

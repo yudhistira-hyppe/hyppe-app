@@ -149,7 +149,6 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (fAliplayer == null && fAliplayer?.getPlayerName().toString() != 'VideoLandingpage') {
-        fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'VideoLandingpage');
         initAlipayer();
       }
       //scroll
@@ -170,6 +169,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   }
 
   initAlipayer() {
+    fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'VideoLandingpage');
     globalAliPlayer = fAliplayer;
     vidConfig();
     fAliplayer?.pause();
@@ -786,6 +786,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
     isPrepare = false;
     fAliplayer?.stop();
+    // fAliplayer?.destroy();
+    // await initAlipayer();
     fAliplayer?.clearScreen();
 
     setState(() {

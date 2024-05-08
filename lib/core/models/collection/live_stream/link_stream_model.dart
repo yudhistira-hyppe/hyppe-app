@@ -22,6 +22,7 @@ class LinkStreamModel {
   String? tempToken;
   String? urlLink;
   String? textUrl;
+  List<String>? settingsRemackReport;
 
   LinkStreamModel({
     this.status,
@@ -44,7 +45,8 @@ class LinkStreamModel {
     this.token,
     this.tempToken,
     this.urlLink,
-    this.textUrl
+    this.textUrl,
+    this.settingsRemackReport,
   });
 
   LinkStreamModel.fromJson(Map<String, dynamic> json) {
@@ -70,5 +72,8 @@ class LinkStreamModel {
     tempToken = json['tokenAgora'];
     urlLink = json['urlLink'];
     textUrl = json['textUrl'];
+    if (json['settingsRemackReport'] != null) {
+      settingsRemackReport = json['settingsRemackReport'].cast<String>();
+    }
   }
 }
