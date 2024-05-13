@@ -110,6 +110,7 @@ class _RefreshLoadmoreState extends State<RefreshLoadmore> {
 
     return RefreshIndicator(
       color: widget.color ?? Colors.blue,
+      strokeWidth: 2.0,
       key: _refreshIndicatorKey,
       onRefresh: () async {
         if (_isLoading) return;

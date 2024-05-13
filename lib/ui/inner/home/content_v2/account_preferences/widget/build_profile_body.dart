@@ -159,15 +159,7 @@ class BuildProfileBody extends StatelessWidget {
             ),
           )),
       readOnly: true,
-      onTap: () => Navigator.pushNamed(context, Routes.addlink, arguments: {
-        'routes': Routes.selfProfile,
-        'urlLink': notifier.urlLinkController.text.isEmpty
-            ? null
-            : notifier.urlLinkController.text,
-        'judulLink': notifier.titleLinkController.text.isEmpty
-            ? null
-            : notifier.titleLinkController.text
-      }),
+      onTap: () => notifier.validateUserUrl(context)
     );
   }
 
@@ -209,15 +201,7 @@ class BuildProfileBody extends StatelessWidget {
             ),
           )),
       readOnly: true,
-      onTap: () => Navigator.pushNamed(context, Routes.addlink, arguments: {
-        'routes': Routes.selfProfile,
-        'urlLink': notifier.urlLinkController.text.isEmpty
-            ? null
-            : notifier.urlLinkController.text,
-        'judulLink': notifier.titleLinkController.text.isEmpty
-            ? null
-            : notifier.titleLinkController.text
-      }),
+      onTap: () => notifier.validateUserUrl(context)
     );
   }
 }

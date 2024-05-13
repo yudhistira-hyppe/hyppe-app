@@ -27,6 +27,8 @@ import 'bank_account/widget/bank_account.dart';
 import 'widget/dialog_date.dart';
 
 class TransactionNotifier extends ChangeNotifier {
+  Map _param = {};
+
   int _skip = 0;
   int get skip => _skip;
   int _limit = 5;
@@ -144,6 +146,18 @@ class TransactionNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  void loadpickType() {
+    for (var i = 0; i < selectedFiltersValue.length; i++) {
+      print(selectedFiltersValue[i]);
+      int idx = filterList.indexWhere((e) => e.text == selectedFiltersValue[i]);
+      // print(idx);
+      if (idx != -1){
+        filterList[idx].selected = true;
+      }
+    }
+    notifyListeners();
+  }
+
   void changeSelectedDate() {
     for (int i = 0; i < filterDate.length; i++) {
       filterDate[i].selected = false;
@@ -162,6 +176,13 @@ class TransactionNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool _selectedTransaksi = false;
+  bool get selectedTransaksi => _selectedTransaksi;
+  set selectedTransaksi(bool val){
+    _selectedTransaksi = val;
+    notifyListeners();
+  }
+
   void showButtomSheetFilters(BuildContext context) {
     getTypeFilter(context);
     showModalBottomSheet<int>(
@@ -171,7 +192,15 @@ class TransactionNotifier extends ChangeNotifier {
         builder: (context) {
           return const DialogFilters();
         }
-    );
+    ).whenComplete(() {
+      if (!selectedTransaksi){
+        selectedFiltersValue.clear();
+        selectedFiltersLabel = 'Semua Transaksi';
+        isLoading = true;
+        notifyListeners();
+        Future.microtask(() => initTransactionHistory(context));
+      }
+    });
   }
 
   void showButtomSheetDate(BuildContext context) {
@@ -189,6 +218,7 @@ class TransactionNotifier extends ChangeNotifier {
     for (var i = 0; i < filterDate.length; i++) {
       filterDate[i].selected = false;
     }
+    selectedTransaksi = false;
     selectedDateValue = 1;
     filterDate[0].selected = true;
     selectedFiltersValue.clear();
@@ -392,6 +422,99 @@ class TransactionNotifier extends ChangeNotifier {
     }
   }
 
+  void filter(BuildContext context) {
+    DateTime dateToday = DateTime.now();
+    String date = dateToday.toString().substring(0, 10);
+    _param={};
+    for (var i = 0; i < filterDate.length; i++) {
+      if (filterDate[i].selected == true){
+        if (filterDate[i].index == 2){
+          var start = DateTime(dateToday.year, dateToday.month, dateToday.day - 7);
+          final newStartDate = start.toString().substring(0, 10);
+          _param.addAll({"startdate": newStartDate, "enddate": date});
+        }
+        if (filterDate[i].index == 3){
+          var startDate = DateTime(dateToday.year, dateToday.month, dateToday.day - 30);
+          final newStartDate = startDate.toString().substring(0, 10);
+          _param.addAll({"startdate": newStartDate, "enddate": date});
+        }
+      }
+    }
+
+    for (var i = 0; i < filterList.length; i++) {
+      if (filterList[i].index == 1){
+        _param.addAll({"buy": filterList[i].selected});
+      }
+      if (filterList[i].index == 2){
+        _param.addAll({"sell": filterList[i].selected});
+      }
+      if (filterList[i].index == 3){
+        _param.addAll({"withdrawal": filterList[i].selected});
+      }
+      if (filterList[i].index == 4){
+        _param.addAll({"boost": filterList[i].selected});
+      }
+      if (filterList[i].index == 5){
+        _param.addAll({"rewards": filterList[i].selected});
+      }
+      if (filterList[i].index == 6){
+        _param.addAll({"voucher": filterList[i].selected});
+      }
+    }
+    print(_param);
+
+    final email = SharedPreference().readStorage(SpKeys.email);
+    _skip = 0;
+    _param.addAll({"skip": _skip, "limit": _limit, "email": email});
+    dataAllTransaction = [];
+    getAllTransaction(context, param2: _param, fromNewFilter: true);
+    
+  }
+
+  Future getAllTransaction(BuildContext context, {Map? param2, bool loading = true, bool fromNewFilter = false}) async {
+    if (loading) isLoading = true;
+    bool connect = await System().checkConnections();
+    try {
+      if (connect) {
+        final email = SharedPreference().readStorage(SpKeys.email);
+        DateTime dateToday = DateTime.now();
+        String date = dateToday.toString().substring(0, 10);
+        final param = {
+          "email": email,
+          "sell": false,
+          "buy": false,
+          "withdrawal": false,
+          "boost": false,
+          "rewards": false,
+          "startdate": "2020-08-12",
+          "enddate": date,
+          "skip": _skip,
+          "limit": _limit,
+        };
+        final notifier = TransactionBloc();
+        await notifier.getHistoryTransaction(context, params: param2 ?? param);
+        final fetch = notifier.transactionFetch;
+
+        if (fetch.postsState == TransactionState.getHistorySuccess) {
+          if (fromNewFilter) dataTransaction = [];
+          fetch.data['data'].forEach((v) => dataTransaction?.add(TransactionHistoryModel.fromJSON(v)));
+        }
+
+        if (fetch.postsState == TransactionState.getHistoryError) {
+          if (fetch.data != null) {
+            ShowBottomSheet().onShowColouredSheet(context, fetch.message, color: Theme.of(context).colorScheme.error);
+          }
+        }
+      } else {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
+        });
+      }
+      isLoading = false;
+      notifyListeners();
+    } catch (e) {}
+  }
+  
   Future initTransactionHistoryInProgress(BuildContext context) async {
     if (dataTransactionInProgress?.isEmpty ?? false) isLoadingInProgress = true;
 

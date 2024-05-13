@@ -19,13 +19,12 @@ class CoinDataBloc {
   setCoinFetch(CoinDataFetch val) => _dataFetch = val;
 
   Future getCoin(BuildContext context,
-      {int? page, int? limit, bool? desc}) async {
+      {int? page, int? limit}) async {
     setCoinFetch(CoinDataFetch(CoinState.loading));
     try {
       Map<String, dynamic> data = {
         'page': page ?? 0,
         'limit': limit ?? 20,
-        'descending': desc ?? true,
         'type': 'COIN'
       };
       String email = SharedPreference().readStorage(SpKeys.email);

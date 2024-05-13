@@ -472,5 +472,12 @@ class UrlConstants {
   static const String listLiveStreaming = "$liveStramRoute/list";
 
   //Monetization
-  static const String listmonetization = "$monetizationRoute/list";
+  static const String listmonetization = "$monetizationRoute/listActive";
+  static const String discmonetization = "$monetizationRoute/list/discount";
+  static const String coinpurchasedetail = "$transactionRoute/coinpurchasedetail";
+  static const String transactioncoin = "$transactionRoute/new";
+  static const String checkposting = "$postsRoute/check-post";
+  static const String activationgift = "$userRoute/updatestatusgift";
+  static const String historyordercoin = "$transactionRoute/coinorderhistory";
+
 }

@@ -22,8 +22,9 @@ class DiscountModel {
     this.endCouponDate,
     this.createdAt,
     this.updatedAt,
-    this.disabled = false,
     this.checked = false,
+    this.available,
+    this.available_to_choose,
   });
 
   String? id;
@@ -48,8 +49,9 @@ class DiscountModel {
   String? endCouponDate;
   String? createdAt;
   String? updatedAt;
-  bool? disabled;
   bool? checked;
+  bool? available;
+  bool? available_to_choose;
 
   factory DiscountModel.fromJson(Map<String, dynamic> json) => DiscountModel(
         id: json["_id"],
@@ -75,7 +77,8 @@ class DiscountModel {
         createdAt: json["createdAt"]??'',
         updatedAt: json["updatedAt"]??'',
         checked: false,
-        disabled: false
+        available: json["available"]??false,
+        available_to_choose: json["available_to_choose"]??false,
       );
 
   Map<String, dynamic> toJson() => {
@@ -102,6 +105,7 @@ class DiscountModel {
         "createdAt": createdAt,
         "updatedAt": updatedAt,
         "checked": checked,
-        "disabled": disabled
+        "available": available,
+        "available_to_choose": available_to_choose,
       };
 }

@@ -67,6 +67,7 @@ class _DialogDateState extends State<DialogDate> {
                         onPressed: () {
                           Navigator.pop(context);
                           context.read<TransactionNotifier>().changeSelectedDate();
+                          Future.microtask(() => context.read<TransactionNotifier>().filter(context));
                         },
                         style: ElevatedButton.styleFrom(
                           elevation: 0,

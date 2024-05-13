@@ -316,6 +316,7 @@ class MainNotifier with ChangeNotifier {
 
   setPageIndex(int index) {
     _pageIndex = index;
+    notifyListeners();
   }
 
   Future onShowPostContent(BuildContext context) async {

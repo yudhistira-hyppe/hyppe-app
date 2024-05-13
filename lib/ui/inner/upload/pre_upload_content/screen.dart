@@ -1137,13 +1137,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
   Widget _externalLink(BuildContext context, PreUploadContentNotifier notifier) {
     if (notifier.isEdit) {
       return GestureDetector(
-        onTap: () {
-          if (notifier.urlLink != ''){
-            Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent, 'urlLink': notifier.urlLink, 'judulLink':notifier.judulLink});
-          }else{
-            Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent});
-          }
-        },
+        onTap: () => notifier.validateUserUrl(context),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,

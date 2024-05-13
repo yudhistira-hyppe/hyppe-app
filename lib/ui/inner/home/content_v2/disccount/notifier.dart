@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/bloc/monetization/disc/bloc.dart';
 import 'package:hyppe/core/bloc/monetization/disc/state.dart';
 import 'package:hyppe/core/models/collection/discount/discountmodel.dart';
@@ -18,6 +19,20 @@ class DiscNotifier extends ChangeNotifier {
 
   final bloc = DiscDataBloc();
 
+  int _totalPayment=0;
+  int get totalPayment => _totalPayment;
+  set totalPayment(int val){
+    _totalPayment = val;
+    notifyListeners();
+  }
+
+  String _productType = '';
+  String get productType => _productType;
+  set productType(String val){
+    _productType = val;
+    notifyListeners();
+  }
+
   bool _isView = false;
   bool get isView => _isView;
   set isView(bool val){
@@ -25,7 +40,7 @@ class DiscNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  int _page = 1;
+  int _page = 0;
   int get page => _page;
   set page(int val){
     _page = val;
@@ -45,7 +60,7 @@ class DiscNotifier extends ChangeNotifier {
     try{
       page = 0;
 
-      await bloc.getDisc(context, page: page, desc: true);
+      await bloc.getDisc(context, page: page, productType: productType);
       if (bloc.dataFetch.dataState == DiscState.getDiscBlocSuccess && bloc.dataFetch.data.isNotEmpty) {
         result = bloc.dataFetch.data;
         // ignore: use_build_context_synchronously
@@ -62,18 +77,16 @@ class DiscNotifier extends ChangeNotifier {
     }
   }
 
-  Future<void> loadMore(BuildContext context, {int? page, bool desc = true}) async {
+  Future<void> loadMore(BuildContext context) async {
     try{
-      if (isLoadMore) return;
-
-      isLoadMore = true;
-
-      await bloc.getDisc(context, page: page, desc: desc);
+      await bloc.getDisc(context, page: page, productType: productType);
       if (bloc.dataFetch.dataState == DiscState.getDiscBlocSuccess && bloc.dataFetch.data.isNotEmpty) {
-        result = [...(result), ...bloc.dataFetch.data];
+        result.addAll(bloc.dataFetch.data);
       } else {
         isLastPage = true;
+        Fluttertoast.showToast(msg: 'Already on the last ');
       }
+      
     }catch(_){
       debugPrint(_.toString());
     }
@@ -85,9 +98,8 @@ class DiscNotifier extends ChangeNotifier {
         result[i].checked = false;
       }
       data?.checked = true;
+      notifyListeners();
     }
-    
-    notifyListeners();
   }
 
   void showButtomSheetInfo(BuildContext context, LocalizationModelV2 lang) {

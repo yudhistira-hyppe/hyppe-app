@@ -27,14 +27,13 @@ class MyCouponsPage extends StatefulWidget {
 class _MyCouponsPageState extends State<MyCouponsPage> {
   LocalizationModelV2? lang;
   final ScrollController scrollController = ScrollController();
-  final DiscNotifier notifier = DiscNotifier();
   bool isHideButton = true;
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'kupondiskonsaya');
     lang = context.read<TranslateNotifierV2>().translate;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      notifier.initDisc(context);
+      var notifier =  Provider.of<DiscNotifier>(context, listen: false);
       Map res = ModalRoute.of(context)!.settings.arguments as Map;
       if (res['routes'] != null){
         notifier.isView = res['routes']== Routes.saldoCoins;
@@ -42,16 +41,32 @@ class _MyCouponsPageState extends State<MyCouponsPage> {
           isHideButton = notifier.isView;
         });
       }
+
+      if (res['productType'] != null){
+        notifier.productType = res['productType'];
+      }else{
+        notifier.productType = '';
+      }
       
+      if (res['totalPayment'] != null){
+        notifier.totalPayment = res['totalPayment'];
+      }
+
+      notifier.initDisc(context);
+
     });
     super.initState();
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => notifier,
-      child: Scaffold(
+    return Consumer<DiscNotifier>(
+      builder: (context, notifier, _) => Scaffold(
         appBar: AppBar(
           titleSpacing: 0,
           leading: IconButton(
@@ -63,8 +78,8 @@ class _MyCouponsPageState extends State<MyCouponsPage> {
           ),
         ),
         body: Consumer<DiscNotifier>(builder: (context, notifier, _) {
-          if (notifier.bloc.dataFetch.dataState == DiscState.init ||
-              notifier.bloc.dataFetch.dataState == DiscState.loading) {
+          if ((notifier.bloc.dataFetch.dataState == DiscState.init ||
+              notifier.bloc.dataFetch.dataState == DiscState.loading) && !notifier.isLoadMore) {
             return const ContentLoader();
           } else if (notifier.bloc.dataFetch.dataState ==
               DiscState.getNotInternet) {
@@ -78,8 +93,12 @@ class _MyCouponsPageState extends State<MyCouponsPage> {
                   await notifier.initDisc(context);
                 },
                 onLoadmore: () async {
-                  notifier.isLastPage = false;
-                  await notifier.loadMore(context);
+                  if (!notifier.isLastPage){
+                    notifier.isLastPage = false;
+                    notifier.isLoadMore = true;
+                    notifier.page++;
+                    Future.microtask(() => notifier.loadMore(context));
+                  }
                 },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,11 +130,13 @@ class _MyCouponsPageState extends State<MyCouponsPage> {
                       ),
                       child: TicketWidget(
                         width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height / 6,
+                        height: MediaQuery.of(context).size.height / 6.5,
                         isCornerRounded: true,
                         padding: const EdgeInsets.all(12),
                         child: CouponWidget(
-                            data: notifier.result[index - 1], lang: lang),
+                            data: notifier.result[index -1 ], lang: lang,
+                            allenable: notifier.productType == '',
+                            ),
                       ),
                     );
                     }
@@ -130,12 +151,14 @@ class _MyCouponsPageState extends State<MyCouponsPage> {
           margin: const EdgeInsets.symmetric(vertical: 22, horizontal: 18.0),
           height: kToolbarHeight,
           child: ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
+              Navigator.pop(context);
               Map res = ModalRoute.of(context)!.settings.arguments as Map;
               if (res['routes'] != null){
                 context.read<PaymentCoinNotifier>().discount = notifier.result.firstWhere((element) => element.checked == true);
+                await context.read<PaymentCoinNotifier>().initCoinPurchaseDetail(context);
               }
-              Navigator.pop(context);
+              
             },
             style: ElevatedButton.styleFrom(
               elevation: 0,

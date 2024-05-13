@@ -19,15 +19,23 @@ class DiscDataBloc {
   setDiscFetch(DiscDataFetch val) => _dataFetch = val;
 
   Future getDisc(BuildContext context,
-      {int? page, int? limit, bool? desc}) async {
+      {int? page, int? limit, String? productType}) async {
     setDiscFetch(DiscDataFetch(DiscState.loading));
     try {
-      Map<String, dynamic> data = {
-        'page': page ?? 0,
-        'limit': limit ?? 10,
-        'descending': desc ?? true,
-        'type': 'DISCOUNT'
-      };
+      Map<String, dynamic> data;
+      if (productType == null || productType == ''){
+        data = {
+          'page': page ?? 0,
+          'limit': limit ?? 10
+        };
+      }else{
+        data = {
+          'page': page ?? 0,
+          'limit': limit ?? 10,
+          'productType': [productType]
+        };
+      }
+      
       String email = SharedPreference().readStorage(SpKeys.email);
       await System().checkConnections().then((value) async {
         if (value){
@@ -57,7 +65,7 @@ class DiscDataBloc {
               'x-auth-user': email,
             },
             data: data,
-            host: UrlConstants.listmonetization,
+            host: UrlConstants.discmonetization,
             methodType: MethodType.post,
             withAlertMessage: false,
             withCheckConnection: true,

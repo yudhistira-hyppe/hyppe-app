@@ -41,7 +41,7 @@ class TopUpCoinNotifier with ChangeNotifier {
     try{
       page = 0;
 
-      await bloc.getCoin(context, page: page, desc: true);
+      await bloc.getCoin(context, page: page);
       if (bloc.dataFetch.dataState == CoinState.getCoinBlocSuccess && bloc.dataFetch.data.isNotEmpty) {
         result = bloc.dataFetch.data;
         // result.sort((a, b) => a.amount!.compareTo(b.amount!));
@@ -59,7 +59,7 @@ class TopUpCoinNotifier with ChangeNotifier {
 
       isLoadMore = true;
 
-      await bloc.getCoin(context, page: page, desc: desc);
+      await bloc.getCoin(context, page: page);
       if (bloc.dataFetch.dataState == CoinState.getCoinBlocSuccess && bloc.dataFetch.data.isNotEmpty) {
         result = [...(result), ...bloc.dataFetch.data];
       } else {

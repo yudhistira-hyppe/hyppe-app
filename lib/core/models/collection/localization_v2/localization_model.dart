@@ -1156,6 +1156,13 @@ class LocalizationModelV2 {
   String? noInternet;
   String? noInternetLabel;
   String? creator;
+  String? awaitingpayment;
+  String? paymentdeadline;
+  String? infopaymentcoin;
+  String? copyvirtualaccount;
+  String? contentgift;
+  String? requiredgift;
+  String? yourorder;
   LocalizationModelV2({
     this.login,
     this.logIn,
@@ -2314,6 +2321,13 @@ class LocalizationModelV2 {
     this.noInternet,
     this.noInternetLabel,
     this.creator,
+    this.awaitingpayment,
+    this.paymentdeadline,
+    this.infopaymentcoin,
+    this.copyvirtualaccount,
+    this.contentgift,
+    this.requiredgift,
+    this.yourorder
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -3492,5 +3506,12 @@ class LocalizationModelV2 {
     noInternet = json['noInternet'];
     noInternetLabel = json['noInternetLabel'];
     creator = json['creator'];
+    awaitingpayment = json['awaitingpayment'];
+    paymentdeadline = json['paymentdeadline'];
+    infopaymentcoin = json['infopaymentcoin'];
+    copyvirtualaccount = json['copyvirtualaccount'];
+    contentgift = json['contentgift'];
+    requiredgift = json['requiredgift'];
+    yourorder = json['yourorder'];
   }
 }

@@ -3,6 +3,8 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/paymentcoin/notifier.dart';
 import 'package:provider/provider.dart';
+import 'package:transparent_image/transparent_image.dart';
+
 
 class CardVirtualAccountWidget extends StatefulWidget {
   const CardVirtualAccountWidget({super.key});
@@ -59,9 +61,13 @@ class _CardVirtualAccountWidgetState extends State<CardVirtualAccountWidget> {
                 children: [
                   SizedBox(
                     width: 38,
-                    child: Image(
-                      image: NetworkImage(payNotif.data![i].bankIcon??''),
-                    ),
+                    child: FadeInImage.memoryNetwork(
+                      image: payNotif.data![i].bankIcon??'',
+                      placeholder: kTransparentImage,
+                      imageErrorBuilder: (context, error, stackTrace) {
+                        return const Icon(Icons.image_outlined, size: 42,);
+                      },
+                    )
                   ),
                   tenPx,
                   Text(

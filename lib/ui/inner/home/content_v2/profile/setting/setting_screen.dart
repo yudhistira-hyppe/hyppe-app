@@ -210,7 +210,11 @@ class _SettingScreenState extends State<SettingScreen> {
                       SettingTile(
                         caption: 'Gift',
                         icon: 'union.svg',
-                        onTap: () => Routing().move(Routes.cacheAndDownload),
+                        onTap: () {
+                          context.handleActionIsGuest(() {
+                            context.read<SettingNotifier>().validateUserGif(context, notifier);
+                          });
+                        },
                       ),
                     ],
                   ),

@@ -1158,5 +1158,12 @@
   "detailcoupondisc":"Detail Kupon Diskon",
   "noInternet":"Hyppe butuh internet  untuk beraksi 🕺🌐",
   "noInternetLabel":"Cek koneksi Wi-Fi atau kuota datamu   dan coba lagi ya.",
-  "creator":"Kreator"
+  "creator":"Kreator",
+  "awaitingpayment":"Menunggu Pembayaran",
+  "paymentdeadline":"Batas Pembayaran",
+  "infopaymentcoin":"Tidak disarankan transfer virtual account dari bank selain yang dipilih",
+  "copyvirtualaccount":"Nomor virtual account berhasil disalin",
+  "contentgift":"Kontent Gift",
+  "requiredgift":"Syarat Menerima Gift",
+  "yourorder":"Pesanan Kamu"
 }

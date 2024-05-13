@@ -69,16 +69,20 @@ class DialogInfoWidget extends StatelessWidget {
   Widget listText(BuildContext context,{int number = 1, String label = ''}) {
     return Flexible(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 1.0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            CustomTextWidget(textToDisplay: '$number. '),
+            CustomTextWidget(textToDisplay: '$number.  '),
             SizedBox(
               width: MediaQuery.of(context).size.width * .9,
-              child: Text(' $label')),
+              child: Text(
+                label,
+                maxLines: 5,
+              ),
+            ),
           ],
         ),
       ),

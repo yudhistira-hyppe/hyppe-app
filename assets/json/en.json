@@ -1157,5 +1157,12 @@
   "detailcoupondisc":"Coupon Details",
   "noInternet":"Hyppe needs the internet to groove 🕺🌐",
   "noInternetLabel":"Check your Wi-Fi or data and let's get Hyppe groovin' again!",
-  "creator":"Creator"
+  "creator":"Creator",
+  "awaitingpayment":"Awaiting Payment",
+  "paymentdeadline":"Payment Deadline",
+  "infopaymentcoin":"Virtual Account transfers from banks other than those selected are not recommended.",
+  "copyvirtualaccount":"Virtual account number copied!",
+  "contentgift":"Content Gift Settings",
+  "requiredgift":"Gift Eligibility Requirements:",
+  "yourorder":"Your Order"
 }

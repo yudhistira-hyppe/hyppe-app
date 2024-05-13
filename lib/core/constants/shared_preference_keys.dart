@@ -26,6 +26,7 @@ class SpKeys {
   static const String countAds = 'countAds';
   static const String setPin = 'setPin';
   static const String statusVerificationId = 'statusVerificationId';
+  static const String statusGiftActivation = 'statusGiftActivation';
 
   static const String referralFrom = 'referralFrom';
   static const String brand = 'brand';

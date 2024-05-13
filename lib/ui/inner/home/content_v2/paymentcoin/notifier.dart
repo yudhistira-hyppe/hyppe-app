@@ -1,16 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/bloc/buy/bloc.dart';
 import 'package:hyppe/core/bloc/buy/state.dart';
+import 'package:hyppe/core/bloc/monetization/transaction/bloc.dart';
+import 'package:hyppe/core/bloc/monetization/transaction/state.dart';
+import 'package:hyppe/core/bloc/transaction/coinpurcasedetail/bloc.dart';
+import 'package:hyppe/core/bloc/transaction/coinpurcasedetail/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/collection/coins/coinmodel.dart';
 import 'package:hyppe/core/models/collection/discount/discountmodel.dart';
 import 'package:hyppe/core/models/collection/error/error_model.dart';
+import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/bank_data.dart';
+import 'package:hyppe/core/models/collection/transaction/coinpurchasedetail.dart';
+import 'package:hyppe/core/models/collection/transaction/transactioncoin.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
 import 'package:hyppe/ux/routing.dart';
 
 class PaymentCoinNotifier with ChangeNotifier {
-
+  LocalizationModelV2 language = LocalizationModelV2();
+  translate(LocalizationModelV2 translate) {
+    language = translate;
+    notifyListeners();
+  }
+  
+  CointModel selectedCoin = CointModel();
+  
   bool _isLoading = true;
   bool get isLoading => _isLoading;
   set isLoading(bool val) {
@@ -41,11 +57,38 @@ class PaymentCoinNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  final bloc = CoinPurchaseDetailDataBloc();
+  bool _isLoadingDetail = true;
+  bool get isLoadingDetail => _isLoadingDetail;
+  set isLoadingDetail(bool val) {
+    _isLoadingDetail = val;
+    notifyListeners();
+  }
+  CointPurchaseDetailModel _cointPurchaseDetail = CointPurchaseDetailModel();
+  CointPurchaseDetailModel get cointPurchaseDetail => _cointPurchaseDetail;
+  set cointPurchaseDetail(CointPurchaseDetailModel value) {
+    _cointPurchaseDetail = value;
+    notifyListeners();
+  }
+
   void initState(BuildContext context) {
     isLoading = true;
     notifyListeners();
-    // reviewBuyNotifier = Provider.of<ReviewBuyNotifier>(context, listen: false);
     _getAllBank(context);
+  }
+
+  Future<void> initCoinPurchaseDetail(BuildContext context) async {
+    try{
+      _isLoadingDetail = true;
+      await bloc.getCoinPurchaseDetail(context, price: selectedCoin.price, discountId: discount.id);
+      if (bloc.dataFetch.dataState == CoinPurchaseDetailState.getCoinPurchaseDetailBlocSuccess) {
+        cointPurchaseDetail = bloc.dataFetch.data;
+      }
+      _isLoadingDetail = false;
+    }catch(_){
+      _isLoadingDetail = false;
+      debugPrint(_.toString());
+    }
   }
 
   void changeSelectedBank(String? selected) {
@@ -103,10 +146,47 @@ class PaymentCoinNotifier with ChangeNotifier {
   }
   
 
-  DiscountModel? _discount;
-  DiscountModel get discount => _discount!;
+  DiscountModel _discount = DiscountModel();
+  DiscountModel get discount => _discount;
   set discount(DiscountModel val){
     _discount = val;
     notifyListeners();
+  }
+
+
+  final blocPayNow = TransactionCoinBloc();
+  bool _isLoadingPayNow = false;
+  bool get isLoadingPayNow => _isLoadingPayNow;
+  set isLoadingPayNow(bool val) {
+    _isLoadingPayNow = val;
+    notifyListeners();
+  }
+
+
+  TransactionCoinModel _transactionCoinDetail = TransactionCoinModel();
+  TransactionCoinModel get transactionCoinDetail => _transactionCoinDetail;
+  set transactionCoinDetail(TransactionCoinModel value) {
+    _transactionCoinDetail = value;
+    notifyListeners();
+  }
+
+  Future<void> payNow(BuildContext context) async {
+    try{
+      isLoadingPayNow = true;
+      CoinTransModel coin = CoinTransModel(id: selectedCoin.id, price: selectedCoin.price, jmlcoin: selectedCoin.amount, qty: 1, totalAmount: 1 * (selectedCoin.price??0));
+      await blocPayNow.postPayNow(context, coin: coin, bankcode: bankSelected, discId: discount.id??'', paymentmethod: 'VA', productCode: 'CN', type: 'COIN');
+      if (blocPayNow.dataFetch.dataState == TransactionCoinState.getcBlocSuccess) {
+        print('success data ${blocPayNow.dataFetch.data}');
+        transactionCoinDetail = blocPayNow.dataFetch.data;
+        isLoadingPayNow = false;
+      }else if (blocPayNow.dataFetch.dataState == TransactionCoinState.getNotInternet){
+        Fluttertoast.showToast(msg: language.noInternetConnection??'');
+        isLoadingPayNow = false;
+      }
+      isLoadingPayNow = false;
+    }catch(_){
+      isLoadingPayNow = false;
+      debugPrint(_.toString());
+    }
   }
 }

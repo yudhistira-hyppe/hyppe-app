@@ -101,7 +101,6 @@ class CoinNotifier with ChangeNotifier {
         notifyListeners();
       }
     }
-    
   }
 
   void resetSelected(){
