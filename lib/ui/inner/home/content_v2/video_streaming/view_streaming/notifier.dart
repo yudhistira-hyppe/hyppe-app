@@ -224,6 +224,7 @@ class ViewStreamingNotifier with ChangeNotifier {
       try {
         final notifier = LiveStreamBloc();
         Map data = {"_id": model.sId, "messages": comment, "type": "COMMENT", "commentType": "MESSAGGES"};
+        commentController.clear();
         await notifier.getLinkStream(Routing.navigatorKey.currentContext ?? context, data, UrlConstants.updateStream);
         // final fetch = notifier.liveStreamFetch;
         // if (fetch.postsState == LiveStreamState.getApiSuccess) {
@@ -233,7 +234,6 @@ class ViewStreamingNotifier with ChangeNotifier {
       } catch (e) {
         debugPrint(e.toString());
       }
-      commentController.clear();
     } else {
       if (context.mounted) {
         ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
@@ -363,12 +363,6 @@ class ViewStreamingNotifier with ChangeNotifier {
           fetch.data.forEach((v) => tempList.add(LinkStreamModel.fromJson(v)));
           if (tempList.isNotEmpty) {
             listStreamers.addAll(tempList);
-            if (groupsReport.isEmpty && listStreamers.isNotEmpty && (listStreamers[0].settingsRemackReport?.isNotEmpty ?? [].isNotEmpty)) {
-              for (var i = 0; i < (listStreamers[0].settingsRemackReport?.length ?? 0); i++) {
-                var data = listStreamers[0].settingsRemackReport?[i];
-                groupsReport.add(GroupModel(text: data ?? '', index: i, selected: false));
-              }
-            }
           } else {
             if (!isReload) {
               stopLoad = true;
@@ -460,6 +454,12 @@ class ViewStreamingNotifier with ChangeNotifier {
               username: context.read<SelfProfileNotifier>().user.profile?.username,
             ),
           );
+          if (groupsReport.isEmpty && listStreamers.isNotEmpty && (listStreamers[0].settingsRemackReport?.isNotEmpty ?? [].isNotEmpty)) {
+            for (var i = 0; i < (dataStreaming.reportRemark?.length ?? 0); i++) {
+              var data = dataStreaming.reportRemark?[i];
+              groupsReport.add(GroupModel(text: data ?? '', index: i, selected: false));
+            }
+          }
         }
       } catch (e) {
         debugPrint(e.toString());

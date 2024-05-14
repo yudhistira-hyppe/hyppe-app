@@ -139,29 +139,31 @@ class TitleViewLive extends StatelessWidget {
           ],
         ),
         twelvePx,
-        GestureDetector(
-          onTap: () async {
-            var uri = data.urlLink??'';
-            if (!uri.withHttp()){
-              uri='https://$uri';
-            }
-            if (await canLaunchUrl(Uri.parse(uri))) {
+        if (data.urlLink != null && data.urlLink != '')
+          GestureDetector(
+            onTap: () async {
+              var uri = data.urlLink ?? '';
+              if (!uri.withHttp()) {
+                uri = 'https://$uri';
+              }
+              if (await canLaunchUrl(Uri.parse(uri))) {
                 await launchUrl(Uri.parse(uri));
               } else {
-                throw  Fluttertoast.showToast(msg: 'Could not launch $uri');
+                throw Fluttertoast.showToast(msg: 'Could not launch $uri');
               }
-          },
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: Colors.black.withOpacity(0.4),
-            ),
-            child: Text(data.textUrl??data.urlLink??'Klik disini ya!', 
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Colors.black.withOpacity(0.4),
+              ),
+              child: Text(
+                data.textUrl ?? data.urlLink ?? 'Klik disini ya!',
+                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
             ),
           ),
-        ),
       ],
     );
   }

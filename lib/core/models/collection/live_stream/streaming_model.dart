@@ -17,24 +17,27 @@ class StreamingModel {
   String? urlLink;
   String? textUrl;
   List<CommentLiveModel>? comment;
+  List<String>? reportRemark;
 
-  StreamingModel(
-      {this.sId,
-      this.title,
-      this.userId,
-      this.expireTime,
-      this.startLive,
-      this.status,
-      this.urlStream,
-      this.urlIngest,
-      this.createAt,
-      this.endLive,
-      this.pause,
-      this.commentDisabled,
-      this.viewCountActive,
-      this.urlLink,
-      this.comment,
-      this.textUrl});
+  StreamingModel({
+    this.sId,
+    this.title,
+    this.userId,
+    this.expireTime,
+    this.startLive,
+    this.status,
+    this.urlStream,
+    this.urlIngest,
+    this.createAt,
+    this.endLive,
+    this.pause,
+    this.commentDisabled,
+    this.viewCountActive,
+    this.urlLink,
+    this.comment,
+    this.textUrl,
+    this.reportRemark,
+  });
 
   StreamingModel.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -57,6 +60,9 @@ class StreamingModel {
       json['comment'].forEach((v) {
         comment!.add(CommentLiveModel.fromJson(v));
       });
+    }
+    if (json['reportRemark'] != null) {
+      reportRemark = json['reportRemark'].cast<String>();
     }
   }
 }

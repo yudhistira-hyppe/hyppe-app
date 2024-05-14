@@ -2,7 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>Audit Esteh Indonesia.ipa</key>
+	<key>esteh_kebun.ipa</key>
 	<array>
 		<dict>
 			<key>architectures</key>
@@ -10,7 +10,7 @@
 				<string>arm64</string>
 			</array>
 			<key>buildNumber</key>
-			<string>1</string>
+			<string>2</string>
 			<key>certificate</key>
 			<dict>
 				<key>SHA1</key>
@@ -151,34 +151,6 @@
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
 					<key>name</key>
-					<string>FMDB.framework</string>
-					<key>team</key>
-					<dict>
-						<key>id</key>
-						<string>2QQ2WBPS3P</string>
-						<key>name</key>
-						<string>PT Esteh Indonesia Makmur</string>
-					</dict>
-					<key>versionNumber</key>
-					<string>2.7.9</string>
-				</dict>
-				<dict>
-					<key>architectures</key>
-					<array>
-						<string>arm64</string>
-					</array>
-					<key>buildNumber</key>
-					<string>1</string>
-					<key>certificate</key>
-					<dict>
-						<key>SHA1</key>
-						<string>4C71D66D8E8A073170D9D310B4C5ED3BD21DBFDA</string>
-						<key>dateExpires</key>
-						<string>04/09/24</string>
-						<key>type</key>
-						<string>Cloud Managed Apple Distribution</string>
-					</dict>
-					<key>name</key>
 					<string>FirebaseCore.framework</string>
 					<key>team</key>
 					<dict>
@@ -207,34 +179,6 @@
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
 					<key>name</key>
-					<string>FirebaseCoreExtension.framework</string>
-					<key>team</key>
-					<dict>
-						<key>id</key>
-						<string>2QQ2WBPS3P</string>
-						<key>name</key>
-						<string>PT Esteh Indonesia Makmur</string>
-					</dict>
-					<key>versionNumber</key>
-					<string>10.21.0</string>
-				</dict>
-				<dict>
-					<key>architectures</key>
-					<array>
-						<string>arm64</string>
-					</array>
-					<key>buildNumber</key>
-					<string>1</string>
-					<key>certificate</key>
-					<dict>
-						<key>SHA1</key>
-						<string>4C71D66D8E8A073170D9D310B4C5ED3BD21DBFDA</string>
-						<key>dateExpires</key>
-						<string>04/09/24</string>
-						<key>type</key>
-						<string>Cloud Managed Apple Distribution</string>
-					</dict>
-					<key>name</key>
 					<string>FirebaseCoreInternal.framework</string>
 					<key>team</key>
 					<dict>
@@ -245,34 +189,6 @@
 					</dict>
 					<key>versionNumber</key>
 					<string>10.21.0</string>
-				</dict>
-				<dict>
-					<key>architectures</key>
-					<array>
-						<string>arm64</string>
-					</array>
-					<key>buildNumber</key>
-					<string>1</string>
-					<key>certificate</key>
-					<dict>
-						<key>SHA1</key>
-						<string>4C71D66D8E8A073170D9D310B4C5ED3BD21DBFDA</string>
-						<key>dateExpires</key>
-						<string>04/09/24</string>
-						<key>type</key>
-						<string>Cloud Managed Apple Distribution</string>
-					</dict>
-					<key>name</key>
-					<string>FirebaseCrashlytics.framework</string>
-					<key>team</key>
-					<dict>
-						<key>id</key>
-						<string>2QQ2WBPS3P</string>
-						<key>name</key>
-						<string>PT Esteh Indonesia Makmur</string>
-					</dict>
-					<key>versionNumber</key>
-					<string>10.18.0</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -329,34 +245,6 @@
 					</dict>
 					<key>versionNumber</key>
 					<string>10.18.0</string>
-				</dict>
-				<dict>
-					<key>architectures</key>
-					<array>
-						<string>arm64</string>
-					</array>
-					<key>buildNumber</key>
-					<string>1</string>
-					<key>certificate</key>
-					<dict>
-						<key>SHA1</key>
-						<string>4C71D66D8E8A073170D9D310B4C5ED3BD21DBFDA</string>
-						<key>dateExpires</key>
-						<string>04/09/24</string>
-						<key>type</key>
-						<string>Cloud Managed Apple Distribution</string>
-					</dict>
-					<key>name</key>
-					<string>FirebaseSessions.framework</string>
-					<key>team</key>
-					<dict>
-						<key>id</key>
-						<string>2QQ2WBPS3P</string>
-						<key>name</key>
-						<string>PT Esteh Indonesia Makmur</string>
-					</dict>
-					<key>versionNumber</key>
-					<string>10.21.0</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -441,34 +329,6 @@
 					</dict>
 					<key>versionNumber</key>
 					<string>7.12.0</string>
-				</dict>
-				<dict>
-					<key>architectures</key>
-					<array>
-						<string>arm64</string>
-					</array>
-					<key>buildNumber</key>
-					<string>1</string>
-					<key>certificate</key>
-					<dict>
-						<key>SHA1</key>
-						<string>4C71D66D8E8A073170D9D310B4C5ED3BD21DBFDA</string>
-						<key>dateExpires</key>
-						<string>04/09/24</string>
-						<key>type</key>
-						<string>Cloud Managed Apple Distribution</string>
-					</dict>
-					<key>name</key>
-					<string>Promises.framework</string>
-					<key>team</key>
-					<dict>
-						<key>id</key>
-						<string>2QQ2WBPS3P</string>
-						<key>name</key>
-						<string>PT Esteh Indonesia Makmur</string>
-					</dict>
-					<key>versionNumber</key>
-					<string>2.4.0</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -1202,7 +1062,9 @@
 			<key>entitlements</key>
 			<dict>
 				<key>application-identifier</key>
-				<string>2QQ2WBPS3P.com.esteh.audit</string>
+				<string>2QQ2WBPS3P.com.esteh.kebun</string>
+				<key>aps-environment</key>
+				<string>production</string>
 				<key>com.apple.developer.team-identifier</key>
 				<string>2QQ2WBPS3P</string>
 				<key>get-task-allow</key>
@@ -1213,11 +1075,11 @@
 			<key>profile</key>
 			<dict>
 				<key>UUID</key>
-				<string>2261736b-ae7a-4254-81cc-9ffefb3be364</string>
+				<string>2860d3ea-8ec3-4b49-82e9-7cbc72fbc7f0</string>
 				<key>dateExpires</key>
 				<string>19/04/25</string>
 				<key>name</key>
-				<string>iOS Team Ad Hoc Provisioning Profile: com.esteh.audit</string>
+				<string>iOS Team Ad Hoc Provisioning Profile: com.esteh.kebun</string>
 			</dict>
 			<key>team</key>
 			<dict>

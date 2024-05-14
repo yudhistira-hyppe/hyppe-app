@@ -50,7 +50,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
       });
       await notifier.requestPermission(context);
       await notifier.startViewStreaming(Routing.navigatorKey.currentContext ?? context, mounted, widget.args.data);
-
+      WakelockPlus.enable();
       if (!mounted) return;
 
       // await notifier.initAgora(context, mounted, widget.args.data);

@@ -3,7 +3,6 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_gesture.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -274,7 +273,7 @@ class _ItemAccountState extends State<ItemAccount> {
                     if (context.read<SelfProfileNotifier>().user.profile?.username != widget.username) {
                       Routing().moveBack();
                       Future.delayed(const Duration(milliseconds: 500), () {
-                        ShowBottomSheet.onWatcherStatus(Routing.navigatorKey.currentContext ?? context, widget.email, widget.sId);
+                        ShowBottomSheet.onWatcherStatus(Routing.navigatorKey.currentContext ?? context, widget.email, widget.sId, isViewer: widget.isViewer);
                       });
                     }
                   },
@@ -312,7 +311,7 @@ class _ItemAccountState extends State<ItemAccount> {
                     margin: EdgeInsets.zero,
                     onTap: () async {
                       Routing().moveBack();
-                      ShowBottomSheet.onWatcherStatus(context, widget.email, widget.idStream ?? '');
+                      ShowBottomSheet.onWatcherStatus(context, widget.email, widget.idStream ?? '', isViewer: widget.isViewer);
                     },
                     child: Container(
                       alignment: Alignment.center,

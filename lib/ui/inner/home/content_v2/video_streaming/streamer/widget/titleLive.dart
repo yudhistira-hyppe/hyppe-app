@@ -81,31 +81,34 @@ class TitleLive extends StatelessWidget {
                 )
               ],
             ),
-            sixtyFourPx,
-            GestureDetector(
-              onTap: () async {
-                var uri = notifier.dataStream.urlLink ?? '';
-                if (!uri.withHttp()) {
-                  uri = 'https://$uri';
-                }
-                if (await canLaunchUrl(Uri.parse(uri))) {
-                  await launchUrl(Uri.parse(uri));
-                } else {
-                  throw Fluttertoast.showToast(msg: 'Could not launch $uri');
-                }
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: Colors.black.withOpacity(0.4),
-                ),
-                child: Text(
-                  notifier.dataStream.textUrl ?? notifier.dataStream.urlLink ?? 'Klik disini ya!',
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            sixteenPx,
+            if (notifier.urlLink != '')
+              GestureDetector(
+                onTap: () async {
+                  var uri = notifier.urlLink;
+                  // var uri = notifier.dataStream.urlLink ?? '';
+                  if (!uri.withHttp()) {
+                    uri = 'https://$uri';
+                  }
+                  if (await canLaunchUrl(Uri.parse(uri))) {
+                    await launchUrl(Uri.parse(uri));
+                  } else {
+                    throw Fluttertoast.showToast(msg: 'Could not launch $uri');
+                  }
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.black.withOpacity(0.4),
+                  ),
+                  child: Text(
+                    notifier.textUrl,
+                    // notifier.dataStream.textUrl ?? notifier.dataStream.urlLink ?? 'Klik disini ya!',
+                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
-            ),
           ],
         ),
       ),

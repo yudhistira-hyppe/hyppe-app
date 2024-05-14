@@ -626,6 +626,8 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     isCommentDisable = false;
     flipCameraVisible = true;
     titleLiveCtrl.clear();
+    urlLink = '';
+    textUrl = '';
     userName = '';
     _titleLive = '';
     statusLive = StatusStream.offline;
@@ -1283,13 +1285,13 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     if (connect) {
       try {
         final notifier = LiveStreamBloc();
+        commentCtrl.clear();
         Map data = {"_id": dataStream.sId, "messages": commentCtrl.text, "type": "COMMENT", "commentType": "MESSAGGES"};
         if (mounted) {
           await notifier.getLinkStream(context, data, UrlConstants.updateStream);
         }
         final fetch = notifier.liveStreamFetch;
         if (fetch.postsState == LiveStreamState.getApiSuccess) {
-          commentCtrl.text = '';
           notifyListeners();
         }
       } catch (e) {
