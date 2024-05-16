@@ -17,7 +17,7 @@ class _DialogTransState extends State<DialogTrans> {
     return DraggableScrollableSheet(
       expand: false,
       maxChildSize: .9,
-      initialChildSize: .4,
+      initialChildSize: .55,
       builder: (_, controller) {
         return Container(
           clipBehavior: Clip.antiAlias,
@@ -47,7 +47,7 @@ class _DialogTransState extends State<DialogTrans> {
               ),
               Center(
                 child: Text(
-                  'Jenis Transaksi',
+                  'Aktivitas Hyppe Coins',
                   style: Theme.of(context)
                         .textTheme
                         .titleLarge

@@ -186,6 +186,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       context.handleActionIsGuest(() {
                         context.read<SettingNotifier>().validateUser(context, notifier);
                       });
+                      // Routing().move(Routes.transaction);
                     },
                     caption: '${notifier.translate.transaction}',
                     keyGLobal: keyTransaction,

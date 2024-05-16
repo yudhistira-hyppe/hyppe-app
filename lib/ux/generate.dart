@@ -57,7 +57,6 @@ import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/screen.da
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_waiting/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/paymentcoin/payment_page.dart';
-import 'package:hyppe/ui/inner/home/content_v2/paymentcoin/testing.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/fullscreen/pic_fullscreen_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/widget/picscroll_fullscreen_page.dart';

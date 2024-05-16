@@ -1,6 +1,5 @@
 
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/bloc/monetization/historyordercoin/bloc.dart';
 import 'package:hyppe/core/bloc/monetization/historyordercoin/state.dart';
 import 'package:hyppe/core/models/collection/coins/history_order_coin.dart';
@@ -76,7 +75,6 @@ class HistoryOrderCoinNotifier with ChangeNotifier {
       
       DateTime dateToday = DateTime.now();
       String date = dateToday.toString().substring(0, 10);
-
       int groupDate = groupsDate.firstWhere((element) => element.selected == true).index;
       switch (groupDate) {
         case 2:
@@ -93,8 +91,6 @@ class HistoryOrderCoinNotifier with ChangeNotifier {
           break;
         case 4:
             var res = groupsDate.firstWhere((element) => element.selected == true);
-            print('====== ${DateFormat('yyyy-MM-dd').format(DateTime.parse(res.startDate??''))}');
-            print(res.endDate);
             final newStartDate = DateFormat('yyyy-MM-dd').format(DateTime.parse(res.startDate??''));
             final enddate = DateFormat('yyyy-MM-dd').format(DateTime.parse(res.endDate??''));
             if (!mounted) return;
@@ -103,13 +99,16 @@ class HistoryOrderCoinNotifier with ChangeNotifier {
         default:
           if (!mounted) return;
           await bloc.getHistoryOrderCoin(context, page: page);
+          break;
       }
       
       if (bloc.dataFetch.dataState == HistoryOrderCoinState.getBlocSuccess && bloc.dataFetch.data.isNotEmpty) {
         result = bloc.dataFetch.data;
+        isLastPage = false;
       } else {
         isLastPage = true;
       }
+      notifyListeners();
     }catch(_){
       debugPrint(_.toString());
     }
@@ -119,7 +118,7 @@ class HistoryOrderCoinNotifier with ChangeNotifier {
     try{
       DateTime dateToday = DateTime.now();
       String date = dateToday.toString().substring(0, 10);
-
+      page = page+1;
       int groupDate = groupsDate.firstWhere((element) => element.selected == true).index;
       switch (groupDate) {
         case 2:
@@ -144,14 +143,15 @@ class HistoryOrderCoinNotifier with ChangeNotifier {
         default:
           if (!mounted) return;
           await bloc.getHistoryOrderCoin(context, page: page);
+          break;
       }
       if (bloc.dataFetch.dataState == HistoryOrderCoinState.getBlocSuccess && bloc.dataFetch.data.isNotEmpty) {
         result.addAll(bloc.dataFetch.data);
       } else {
         isLastPage = true;
-        Fluttertoast.showToast(msg: 'Already on the last ');
+        page = page-1;
+        // Fluttertoast.showToast(msg: 'Already on the last ');
       }
-      
     }catch(_){
       debugPrint(_.toString());
     }

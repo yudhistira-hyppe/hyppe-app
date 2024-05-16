@@ -3,9 +3,6 @@ PODS:
     - AgoraIrisRTC_iOS (= 4.3.0-build.2)
     - AgoraRtcEngine_iOS (= 4.3.0)
     - Flutter
-  - agora_rtm (1.5.9):
-    - AgoraRtm_iOS (= 1.5.1)
-    - Flutter
   - AgoraIrisRTC_iOS (4.3.0-build.2)
   - AgoraRtcEngine_iOS (4.3.0):
     - AgoraRtcEngine_iOS/AIAEC (= 4.3.0)
@@ -38,7 +35,6 @@ PODS:
   - AgoraRtcEngine_iOS/VideoCodecEnc (4.3.0)
   - AgoraRtcEngine_iOS/VirtualBackground (4.3.0)
   - AgoraRtcEngine_iOS/VQA (4.3.0)
-  - AgoraRtm_iOS (1.5.1)
   - AlivcLivePusher_Interactive (6.1.0):
     - AlivcLivePusher_Interactive/AlivcLivePusher (= 6.1.0)
   - AlivcLivePusher_Interactive/AlivcLivePusher (6.1.0)
@@ -433,7 +429,6 @@ PODS:
 
 DEPENDENCIES:
   - agora_rtc_engine (from `.symlinks/plugins/agora_rtc_engine/ios`)
-  - agora_rtm (from `.symlinks/plugins/agora_rtm/ios`)
   - audio_session (from `.symlinks/plugins/audio_session/ios`)
   - audioplayers_darwin (from `.symlinks/plugins/audioplayers_darwin/ios`)
   - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
@@ -490,7 +485,6 @@ SPEC REPOS:
   trunk:
     - AgoraIrisRTC_iOS
     - AgoraRtcEngine_iOS
-    - AgoraRtm_iOS
     - AlivcLivePusher_Interactive
     - AppAuth
     - DKImagePickerController
@@ -536,8 +530,6 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   agora_rtc_engine:
     :path: ".symlinks/plugins/agora_rtc_engine/ios"
-  agora_rtm:
-    :path: ".symlinks/plugins/agora_rtm/ios"
   audio_session:
     :path: ".symlinks/plugins/audio_session/ios"
   audioplayers_darwin:
@@ -641,10 +633,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   agora_rtc_engine: f737aeb9ac7fdfcfda875d0d0125eedaa09602f9
-  agora_rtm: 51b5cef21d9d664563b9a420f2c59531b1ad3e4c
   AgoraIrisRTC_iOS: 2caf892fa827777fe43b6ac7d12e9b42579eb865
   AgoraRtcEngine_iOS: 267c0980c1fb97e056d05b850f8629b05b6e467a
-  AgoraRtm_iOS: 595a9fa33a409831e6183396ea8f8bc563918403
   AlivcLivePusher_Interactive: b692d3aab33c036654050a8ae1dd7ffffa0e5200
   AppAuth: 501c04eda8a8d11f179dbe8637b7a91bb7e5d2fa
   audio_session: 4f3e461722055d21515cf3261b64c973c062f345

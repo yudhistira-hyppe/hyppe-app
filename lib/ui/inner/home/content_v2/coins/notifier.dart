@@ -23,9 +23,11 @@ class CoinNotifier with ChangeNotifier {
 
   //Modal List Transaction
   List<GroupModel> groupsTrans = [
-    GroupModel(text: "Semua", index: 1, selected: true),
-    GroupModel(text: "Beli Coins", index: 2, selected: false),
-    GroupModel(text: "Penarikan Saldo", index: 3, selected: false),
+    GroupModel(text: "Semua Aktifitas", index: 1, selected: true),
+    GroupModel(text: "Coins Ditambahkan", index: 2, selected: false),
+    GroupModel(text: "Coin Digunakan", index: 3, selected: false),
+    GroupModel(text: "Coins Ditukar", index: 4, selected: false),
+    GroupModel(text: "Coins Dikembalikan", index: 5, selected: false),
   ];
 
   //Modal List Date

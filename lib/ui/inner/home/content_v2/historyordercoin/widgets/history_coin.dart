@@ -16,16 +16,21 @@ class HistoryCoinWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color? titleColor;
+    String? textTitle;
     switch (data.status) {
       case 'Cancel':
         titleColor = kHyppeRed;
+        textTitle = lang!.localeDatetime == 'id' ? 'Batal' : 'Cancel';
         break;
-      case 'Pending':
-        titleColor = kHyppeRed;
+      case 'WAITING_PAYMENT':
+        titleColor = kHyppeGreen;
+        textTitle = lang!.localeDatetime == 'id' ? 'Menunggu Pembayaran' : 'Awaing Payment';
         break;
       default:
         titleColor = kHyppeGreen;
+        textTitle = lang!.localeDatetime == 'id' ? 'Berhasil' : 'Success';
     }
+
 
     return Container(
       height: SizeConfig.screenHeight! * .25,
@@ -68,7 +73,7 @@ class HistoryCoinWidget extends StatelessWidget {
                     borderRadius: BorderRadius.circular(18.0)),
                 padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
                 child: CustomTextWidget(
-                    textToDisplay: data.status??'',
+                    textToDisplay: textTitle??'',
                     textStyle: TextStyle(color: titleColor),
                   ),
               )

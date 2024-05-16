@@ -36,17 +36,43 @@ class _HistoryOrderCoinScreenState extends State<HistoryOrderCoinScreen> {
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'history_order_coin');
     lang = context.read<TranslateNotifierV2>().translate;
-    
+    var notifier =
+          Provider.of<HistoryOrderCoinNotifier>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       initializeDateFormatting('id', null);
-      var notifier = Provider.of<HistoryOrderCoinNotifier>(context, listen: false);
       notifier.getTypeFilter(context);
       notifier.initHistory(context, mounted);
+      notifier.page = 0;
+    });
+    scrollController.addListener(() async {
+      if (scrollController.position.pixels >=
+          scrollController.position.maxScrollExtent) {
+        if (notifier.isLoadMore) {
+          return;
+        }
 
+        if (mounted) {
+          notifier.isLoadMore = true;
+        }
+
+        if (!notifier.isLastPage && notifier.isLoadMore) {
+          await notifier.loadMore(context, mounted);
+        }
+
+        if (mounted) {
+          notifier.isLoadMore = false;
+        }
+      }
     });
     super.initState();
   }
-  
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -62,94 +88,99 @@ class _HistoryOrderCoinScreenState extends State<HistoryOrderCoinScreen> {
         ),
         actions: [
           IconButton(
-          onPressed: () {
-            Fluttertoast.showToast(msg: 'Feature not yet available');
-          },
-          icon: const Icon(Icons.info_outline_rounded))
+              onPressed: () {
+                Fluttertoast.showToast(msg: 'Feature not yet available');
+              },
+              icon: const Icon(Icons.info_outline_rounded))
         ],
       ),
       body: Consumer<HistoryOrderCoinNotifier>(builder: (context, notifier, _) {
-        print('===== ${notifier.bloc.dataFetch.dataState}');
-      if ((notifier.bloc.dataFetch.dataState == HistoryOrderCoinState.init ||
-          notifier.bloc.dataFetch.dataState == HistoryOrderCoinState.loading) && !notifier.isLoadMore) {
-        return const ContentLoader();
-      } else {
-        return RefreshLoadmore(
-            color: Colors.purple,
-            scrollController: scrollController,
-            isLastPage: notifier.isLastPage,
-            noMoreWidget: notifier.isLoadMore ? const CustomLoading() : Container(),
+        if ((notifier.bloc.dataFetch.dataState == HistoryOrderCoinState.init ||
+                notifier.bloc.dataFetch.dataState ==
+                    HistoryOrderCoinState.loading) &&
+            !notifier.isLoadMore) {
+          return const ContentLoader();
+        } else {
+          return RefreshIndicator(
             onRefresh: () async {
               notifier.isLoadMore = false;
               notifier.isLastPage = false;
 
               await notifier.initHistory(context, mounted);
             },
-            onLoadmore: () async {
-              if (!notifier.isLastPage){
-                notifier.isLastPage = false;
-                notifier.isLoadMore = true;
-                notifier.page++;
-                Future.microtask(() => notifier.loadMore(context, mounted));
-              }
-            },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 18.0),
               margin: const EdgeInsets.only(bottom: 8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: List.generate(
-                  notifier.result.length + 1,
-                  (index) {
-                    if (index == 0){
-                      return filtersData(notifier);
-                    }
-                    if (notifier.result.isEmpty){
-                      return Container(
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 18.0),
-                          margin: const EdgeInsets.only(bottom: 8.0),
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.max,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const CustomIconWidget(
-                                  iconData: '${AssetPath.vectorPath}icon_no_result.svg',
-                                  width: 160,
-                                  height: 160,
-                                  defaultColor: false,
-                                ),
-                                tenPx,
-                                CustomTextWidget(
-                                  textAlign: TextAlign.center,
-                                  maxLines: 1,
-                                  textToDisplay: lang?.localeDatetime == 'id' ?'Masih sepi, nih':'There\'s no one here',
-                                  textStyle: context.getTextTheme().bodyLarge?.copyWith(
-                                      fontWeight: FontWeight.w700,
-                                      color: context.getColorScheme().onBackground),
-                                ),
-                                eightPx,
-                                CustomTextWidget(
-                                  textAlign: TextAlign.center,
-                                  maxLines: 2,
-                                  textToDisplay: lang?.localeDatetime == 'id' ?'Yuk, mulai miliki penghasilan dari membuat konten dan dukung creator favoritmu!':'Let\'s start earning from creating content and supporting your favorite creators!',
-                                  textStyle: context.getTextTheme().bodyLarge,
-                                ),
-                              ],
-                            ),
+              child: notifier.result.isEmpty
+                ? Container(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: 18.0),
+                    margin: const EdgeInsets.only(bottom: 8.0),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const CustomIconWidget(
+                            iconData:
+                                '${AssetPath.vectorPath}icon_no_result.svg',
+                            width: 160,
+                            height: 160,
+                            defaultColor: false,
                           ),
-                      );
-                    }
-                    return HistoryCoinWidget(data: notifier.result[index - 1], lang: lang,);
+                          tenPx,
+                          CustomTextWidget(
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            textToDisplay: lang?.localeDatetime == 'id'
+                                ? 'Masih sepi, nih'
+                                : 'There\'s no one here',
+                            textStyle: context
+                                .getTextTheme()
+                                .bodyLarge
+                                ?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color: context
+                                        .getColorScheme()
+                                        .onBackground),
+                          ),
+                          eightPx,
+                          CustomTextWidget(
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            textToDisplay: lang?.localeDatetime == 'id'
+                                ? 'Yuk, mulai miliki penghasilan dari membuat konten dan dukung creator favoritmu!'
+                                : 'Let\'s start earning from creating content and supporting your favorite creators!',
+                            textStyle: context.getTextTheme().bodyLarge,
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                : ListView.builder(
+                controller: scrollController,
+                physics: const BouncingScrollPhysics(),
+                itemCount: notifier.isLoadMore ? notifier.result.length+2 : notifier.result.length+1,
+                itemBuilder: (context, index) {
+                  if (notifier.result.length + 1 == index){
+                    return const CustomLoading();
                   }
-                ),
+
+                  if (index == 0) {
+                    return filtersData(notifier);
+                  }
+                  return HistoryCoinWidget(
+                    data: notifier.result[index - 1],
+                    lang: lang,
+                  );
+                },
               ),
             ),
           );
-      }
-    }),
+        }
+      }),
     );
   }
 
@@ -169,17 +200,21 @@ class _HistoryOrderCoinScreenState extends State<HistoryOrderCoinScreen> {
                 margin: const EdgeInsets.only(right: 12.0),
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 decoration: BoxDecoration(
-                  border: Border.all(color: kHyppeBurem, width: .5),
-                  borderRadius: BorderRadius.circular(32.0)
-                ),
+                    border: Border.all(color: kHyppeBurem, width: .5),
+                    borderRadius: BorderRadius.circular(32.0)),
                 child: const Icon(Icons.close),
               ),
             ),
           ),
           SectionDropdownWidget(
-            title: notifier.selectedDateLabel, 
+            title: notifier.selectedDateLabel,
             onTap: () => notifier.showButtomSheetDate(context),
-            isActive: notifier.groupsDate.firstWhere((e) => e.selected==true).index == 1 ? false : true,
+            isActive: notifier.groupsDate
+                        .firstWhere((e) => e.selected == true)
+                        .index ==
+                    1
+                ? false
+                : true,
           ),
         ],
       ),
