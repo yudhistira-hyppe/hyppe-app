@@ -1,3 +1,4 @@
+import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
 import 'package:hyppe/core/models/collection/live_stream/comment_live_model.dart';
 
 class StreamingModel {
@@ -14,10 +15,11 @@ class StreamingModel {
   bool? pause;
   bool? commentDisabled;
   int? viewCountActive;
-  String? urlLink;
+  String? url;
   String? textUrl;
   List<CommentLiveModel>? comment;
   List<String>? reportRemark;
+  User? user;
 
   StreamingModel({
     this.sId,
@@ -33,10 +35,11 @@ class StreamingModel {
     this.pause,
     this.commentDisabled,
     this.viewCountActive,
-    this.urlLink,
+    this.url,
     this.comment,
     this.textUrl,
     this.reportRemark,
+    this.user,
   });
 
   StreamingModel.fromJson(Map<String, dynamic> json) {
@@ -53,7 +56,7 @@ class StreamingModel {
     pause = json['pause'];
     commentDisabled = json['commentDisabled'];
     viewCountActive = json['viewCountActive'] ?? 0;
-    urlLink = json['urlLink'];
+    url = json['url'];
     textUrl = json['textUrl'];
     if (json['comment'] != null) {
       comment = <CommentLiveModel>[];
@@ -64,5 +67,36 @@ class StreamingModel {
     if (json['reportRemark'] != null) {
       reportRemark = json['reportRemark'].cast<String>();
     }
+    user = json['user'] != null ? User.fromJson(json['user']) : null;
+  }
+}
+
+class User {
+  String? sId;
+  String? email;
+  String? fullName;
+  String? username;
+  Avatar? avatar;
+
+  User({this.sId, this.email, this.fullName, this.username, this.avatar});
+
+  User.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    email = json['email'];
+    fullName = json['fullName'];
+    username = json['username'];
+    avatar = json['avatar'] != null ? Avatar.fromJson(json['avatar']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['email'] = email;
+    data['fullName'] = fullName;
+    data['username'] = username;
+    if (avatar != null) {
+      data['avatar'] = avatar!.toJson();
+    }
+    return data;
   }
 }

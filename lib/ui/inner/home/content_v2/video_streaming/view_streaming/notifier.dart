@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
@@ -64,6 +65,11 @@ class ViewStreamingNotifier with ChangeNotifier {
 
   ///Status => Offline - Prepare - StandBy - Ready - Online
   StatusStream statusLive = StatusStream.offline;
+
+  List<CommentLiveModel> giftBasic = [];
+  List<CommentLiveModel> giftBasicTemp = [];
+  List<CommentLiveModel> giftDelux = [];
+  List<CommentLiveModel> giftDeluxTemp = [];
 
   List<ViewersLiveModel> dataViewers = [];
   List<CommentLiveModel> comment = [];
@@ -442,8 +448,14 @@ class ViewStreamingNotifier with ChangeNotifier {
           isCommentDisable = dataStreaming.commentDisabled ?? false;
           totViews = dataStreaming.viewCountActive ?? 0;
           returnNext = true;
-          if (dataStreaming.comment != null) {
+          if (dataStreaming.comment != null && (dataStreaming.comment?.isNotEmpty ?? [].isNotEmpty)) {
             pinComment = dataStreaming.comment?[0];
+          }
+          if (groupsReport.isEmpty && (dataStreaming.reportRemark?.isNotEmpty ?? [].isNotEmpty)) {
+            for (var i = 0; i < (dataStreaming.reportRemark?.length ?? 0); i++) {
+              var data = dataStreaming.reportRemark?[i];
+              groupsReport.add(GroupModel(text: data ?? '', index: i, selected: false));
+            }
           }
           comment.insert(
             0,
@@ -451,15 +463,10 @@ class ViewStreamingNotifier with ChangeNotifier {
               email: SharedPreference().readStorage(SpKeys.email),
               avatar: Avatar(mediaEndpoint: context.read<HomeNotifier>().profileImage),
               messages: 'joined',
+              commentType: 'MESSAGGES',
               username: context.read<SelfProfileNotifier>().user.profile?.username,
             ),
           );
-          if (groupsReport.isEmpty && listStreamers.isNotEmpty && (listStreamers[0].settingsRemackReport?.isNotEmpty ?? [].isNotEmpty)) {
-            for (var i = 0; i < (dataStreaming.reportRemark?.length ?? 0); i++) {
-              var data = dataStreaming.reportRemark?[i];
-              groupsReport.add(GroupModel(text: data ?? '', index: i, selected: false));
-            }
-          }
         }
       } catch (e) {
         debugPrint(e.toString());
@@ -622,7 +629,23 @@ class ViewStreamingNotifier with ChangeNotifier {
       print("handlesocket 222 ==================== $message $event $dataStream");
       var messages = CommentLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
       if (messages.idStream == dataStream.sId) {
-        comment.insert(0, messages);
+        if (messages.commentType == 'MESSAGGES') {
+          comment.insert(0, messages);
+        } else {
+          if (messages.urlGift != null) {
+          } else {
+            if (giftBasic.length <= 2) {
+              giftBasic.add(messages);
+            } else {
+              giftBasicTemp.add(messages);
+            }
+            if (timerBasic?.isActive ?? false) {
+            } else {
+              startTimerBasic();
+            }
+          }
+        }
+
         notifyListeners();
       }
     } else if (event == eventLikeStream) {
@@ -666,6 +689,7 @@ class ViewStreamingNotifier with ChangeNotifier {
       var data = json.decode('$message');
       if (data['data']['email'] == SharedPreference().readStorage(SpKeys.email)) {
         isOver = true;
+        destoryPusher();
       }
     } else if (event == eventCommentPin) {
       CommentLiveModel messages = CommentLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
@@ -755,18 +779,64 @@ class ViewStreamingNotifier with ChangeNotifier {
     }
   }
 
-  Future<void> responReportLive(BuildContext context) async {
-    showModalBottomSheet<int>(
-        backgroundColor: Colors.transparent,
-        context: context,
-        isScrollControlled: true,
-        isDismissible: false,
-        builder: (context) {
-          return const ResponsReportLive();
-        }).whenComplete(() {
-      // selectedReportValue = null;
-      debugPrint('Complete Report Live Streaming');
+  Future<void> sendReportLive(BuildContext context, String message) async {
+    Map param = {"_id": dataStreaming.sId, "messages": message, "type": "REPORT"};
+    await updateStream(context, context.mounted, param).then((value) {
+      if (value != null) {
+        Navigator.pop(context);
+        responReportLive(context);
+      }
     });
+  }
+
+  Future<void> responReportLive(BuildContext context) async {
+    try {
+      showModalBottomSheet<int>(
+          backgroundColor: Colors.transparent,
+          context: context,
+          isScrollControlled: true,
+          isDismissible: false,
+          builder: (context) {
+            return const ResponsReportLive();
+          }).whenComplete(() {
+        // selectedReportValue = null;
+        debugPrint('Complete Report Live Streaming');
+      });
+    } catch (e) {
+      print("error $e");
+    }
+  }
+
+  Future updateStream(BuildContext context, mounted, Map data) async {
+    var dataReturn;
+    bool connect = await System().checkConnections();
+    if (connect) {
+      try {
+        print(data);
+        final notifier = LiveStreamBloc();
+
+        await notifier.getLinkStream(context, data, UrlConstants.updateStream);
+
+        final fetch = notifier.liveStreamFetch;
+        if (fetch.postsState == LiveStreamState.getApiSuccess) {
+          dataReturn = fetch.data;
+          dataReturn ??= 'Update stream succesfully';
+          notifyListeners();
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+
+      notifyListeners();
+    } else {
+      // returnNext = false;
+      if (context.mounted) {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
+        });
+      }
+    }
+    return dataReturn;
   }
 
   double getRandomDouble(double min, double max) {
@@ -781,6 +851,28 @@ class ViewStreamingNotifier with ChangeNotifier {
     randomValue = double.parse(randomValue.toStringAsFixed(4));
 
     return randomValue;
+  }
+
+  Timer? timerBasic;
+
+  void startTimerBasic() {
+    timerBasic = Timer.periodic(const Duration(seconds: 3), (timer) {
+      print("=== ${timer}");
+      print("=== ${giftBasic.isNotEmpty}");
+      if (giftBasic.isNotEmpty) {
+        print("===================================haous========================");
+        comment.insert(0, giftBasic[0]);
+        giftBasic.removeAt(0);
+        if (giftBasicTemp.isNotEmpty && giftBasic.length <= 2) {
+          giftBasic.add(giftBasicTemp[0]);
+          giftBasicTemp.removeAt(0);
+        }
+
+        notifyListeners();
+      } else {
+        timerBasic?.cancel();
+      }
+    });
   }
 }
 

@@ -53,7 +53,11 @@ class ListCommentLive extends StatelessWidget {
                             GestureDetector(
                               onTap: () {
                                 if (notifier.userName != notifier.comment[index].username) {
-                                  ShowBottomSheet.onWatcherStatus(context, notifier.comment[index].email ?? '', notifier.dataStream.sId ?? '');
+                                  ShowBottomSheet.onWatcherStatus(
+                                    context,
+                                    notifier.comment[index].email ?? '',
+                                    notifier.dataStream.sId ?? '',
+                                  );
                                 }
                               },
                               child: CustomProfileImage(

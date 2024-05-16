@@ -57,8 +57,8 @@ class _ReportLiveState extends State<ReportLive> {
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 15.0, bottom: 15.0, left: 16, right: 16),
+                const Padding(
+                  padding: EdgeInsets.only(top: 15.0, bottom: 15.0, left: 16, right: 16),
                   child: Divider(color: kHyppeBgNotSolve, thickness: 1),
                 ),
                 Flexible(
@@ -80,8 +80,7 @@ class _ReportLiveState extends State<ReportLive> {
                             controlAffinity: ListTileControlAffinity.trailing,
                             title: Text(
                               ' ${notifier.groupsReport[i].text}',
-                              style:
-                                  TextStyle(color: notifier.groupsReport[i].selected ? Colors.black : Colors.grey, fontWeight: notifier.groupsReport[i].selected ? FontWeight.bold : FontWeight.normal),
+                              style: TextStyle(color: kHyppeTextLightPrimary, fontWeight: notifier.groupsReport[i].selected ? FontWeight.bold : FontWeight.normal),
                             ),
                           )),
                 ),
@@ -90,9 +89,10 @@ class _ReportLiveState extends State<ReportLive> {
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                     onPressed: notifier.selectedReportValue != null
-                        ? () {
-                            Navigator.pop(context);
-                            notifier.responReportLive(context);
+                        ? () async {
+                            // Navigator.pop(context);
+                            notifier.sendReportLive(context, notifier.groupsReport[notifier.selectedReportValue ?? 0].text);
+
                             // context.read<CoinNotifier>().changeSelectedTransaction();
                           }
                         : null,

@@ -6,6 +6,7 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/live_stream/link_stream_model.dart';
+import 'package:hyppe/core/models/collection/live_stream/streaming_model.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
@@ -22,10 +23,11 @@ import 'package:url_launcher/url_launcher.dart';
 class TitleViewLive extends StatelessWidget {
   final FlutterAliplayer? fAliplayer;
   final LinkStreamModel data;
+  final StreamingModel dataStream;
   final int totLikes;
   final int totViews;
 
-  const TitleViewLive({super.key, required this.data, required this.totLikes, required this.totViews, this.fAliplayer});
+  const TitleViewLive({super.key, required this.data, required this.totLikes, required this.dataStream, required this.totViews, this.fAliplayer});
 
   @override
   Widget build(BuildContext context) {
@@ -139,10 +141,10 @@ class TitleViewLive extends StatelessWidget {
           ],
         ),
         twelvePx,
-        if (data.urlLink != null && data.urlLink != '')
+        if (dataStream.url != null && dataStream.url != '')
           GestureDetector(
             onTap: () async {
-              var uri = data.urlLink ?? '';
+              var uri = dataStream.url ?? '';
               if (!uri.withHttp()) {
                 uri = 'https://$uri';
               }
@@ -159,7 +161,7 @@ class TitleViewLive extends StatelessWidget {
                 color: Colors.black.withOpacity(0.4),
               ),
               child: Text(
-                data.textUrl ?? data.urlLink ?? 'Klik disini ya!',
+                dataStream.textUrl ?? 'Klik disini ya!',
                 style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),

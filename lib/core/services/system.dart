@@ -1306,7 +1306,7 @@ class System {
     }
 
     if (shareImmediately && !copiedToClipboard) {
-      await shareText(dynamicLink: _linkResult.shortUrl.toString(), context: context);
+      await shareText(dynamicLink: "${dynamicLinkData.description} ${_linkResult.shortUrl.toString()}", context: context);
     }
 
     return _linkResult.shortUrl;

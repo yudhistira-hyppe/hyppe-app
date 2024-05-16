@@ -104,7 +104,7 @@ class _OnListWatchersState extends State<OnListWatchers> {
           sixteenPx,
           Flexible(
             child: InkWell(
-              onTap: () => ShowBottomSheet.onWatcherStatus(context, watcher.email ?? '', watcher.sId ?? ''),
+              onTap: () => ShowBottomSheet.onWatcherStatus(context, watcher.email ?? '', watcher.sId ?? '', isViewer: true),
               child: Row(
                 children: [
                   CustomProfileImage(

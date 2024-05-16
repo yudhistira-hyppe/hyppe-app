@@ -586,12 +586,12 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                             ),
                           ),
                         ),
-                      TitleViewLive(
-                        data: widget.args.data,
-                        totLikes: notifier.totLikes,
-                        totViews: notifier.totViews,
-                        fAliplayer: fAliplayer,
-                      ),
+                      // TitleViewLive(
+                      //   data: widget.args.data,
+                      //   totLikes: notifier.totLikes,
+                      //   totViews: notifier.totViews,
+                      //   fAliplayer: fAliplayer,
+                      // ),
                       // Positioned(
                       //   top: 12 + context.getHeightStatusBar(),
                       //   left: 16,

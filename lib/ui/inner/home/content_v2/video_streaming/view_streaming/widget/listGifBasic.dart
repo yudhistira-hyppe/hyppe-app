@@ -7,17 +7,17 @@ import 'package:hyppe/core/models/collection/live_stream/comment_live_model.dart
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/notifier.dart';
 import 'package:provider/provider.dart';
 
-class ListGift extends StatefulWidget {
-  const ListGift({super.key});
+class ListGiftViewer extends StatefulWidget {
+  const ListGiftViewer({super.key});
 
   @override
-  State<ListGift> createState() => _ListGiftState();
+  State<ListGiftViewer> createState() => _ListGiftViewerState();
 }
 
-class _ListGiftState extends State<ListGift> {
+class _ListGiftViewerState extends State<ListGiftViewer> {
   int currentAnimationIndex = 0;
   Timer? _timer;
   Timer? _time2;
@@ -37,7 +37,7 @@ class _ListGiftState extends State<ListGift> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<StreamerNotifier>(
+    return Consumer<ViewStreamingNotifier>(
       builder: (_, notifier, __) {
         return Column(verticalDirection: VerticalDirection.down, children: <Widget>[for (var item in notifier.giftBasic) gift(item)]);
       },

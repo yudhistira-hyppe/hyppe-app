@@ -75,10 +75,10 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
     // var streampro = Provider.of<StreamerNotifier>(context, listen: false);
     if (state == AppLifecycleState.inactive) {
       print("========= Streamer AppLifecycleState.inactive ==========");
-      context.read<ViewStreamingNotifier>().exitStreaming(context, widget.args.data).whenComplete(() async {
-        await context.read<ViewStreamingNotifier>().destoryPusher();
-        Routing().moveBack();
-      });
+      // context.read<ViewStreamingNotifier>().exitStreaming(context, widget.args.data).whenComplete(() async {
+      //   await context.read<ViewStreamingNotifier>().destoryPusher();
+      //   Routing().moveBack();
+      // });
     }
     if (state == AppLifecycleState.resumed) {
       print("========= Streamer AppLifecycleState.resumed ==========");
@@ -231,6 +231,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                         data: widget.args.data,
                         totLikes: notifier.totLikes,
                         totViews: notifier.totViews,
+                        dataStream: notifier.dataStreaming,
                       ),
                       Positioned(
                         bottom: 36,

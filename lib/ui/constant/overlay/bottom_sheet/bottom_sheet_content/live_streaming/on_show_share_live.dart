@@ -24,7 +24,7 @@ class OnShowShareLiveBottomSheet extends StatefulWidget {
 }
 
 class _OnShowShareLiveBottomSheetState extends State<OnShowShareLiveBottomSheet> {
-  FocusNode _focus = FocusNode();
+  final FocusNode _focus = FocusNode();
   final _debouncer = Debouncer(milliseconds: 600);
 
   @override
@@ -71,11 +71,11 @@ class _OnShowShareLiveBottomSheetState extends State<OnShowShareLiveBottomSheet>
                 if (!_focus.hasFocus)
                   GestureDetector(
                     onTap: () async {
-                      await notifier.createLinkStream(context, copiedToClipboard: true, description: 'Link Streame');
+                      await notifier.createLinkStream(context, copiedToClipboard: true, description: 'Link Streamer');
                       Routing().moveBack();
                     },
                     child: _iconButton(
-                      child: CustomIconWidget(height: 23, iconData: "${AssetPath.vectorPath}link.svg", color: kHyppeTextLightPrimary, defaultColor: false),
+                      child: const CustomIconWidget(height: 23, iconData: "${AssetPath.vectorPath}link.svg", color: kHyppeTextLightPrimary, defaultColor: false),
                     ),
                   ),
                 if (!_focus.hasFocus) sixPx,
@@ -86,7 +86,7 @@ class _OnShowShareLiveBottomSheetState extends State<OnShowShareLiveBottomSheet>
                       Routing().moveBack();
                     },
                     child: _iconButton(
-                      child: CustomIconWidget(iconData: "${AssetPath.vectorPath}share2.svg", color: kHyppeTextLightPrimary, defaultColor: false),
+                      child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}share2.svg", color: kHyppeTextLightPrimary, defaultColor: false),
                     ),
                   ),
               ],

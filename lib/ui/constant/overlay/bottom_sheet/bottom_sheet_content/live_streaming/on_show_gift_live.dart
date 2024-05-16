@@ -16,7 +16,8 @@ import 'package:provider/provider.dart';
 
 class OnShowGiftLiveBottomSheet extends StatefulWidget {
   final ScrollController scrollController;
-  const OnShowGiftLiveBottomSheet({Key? key, required this.scrollController}) : super(key: key);
+  final String? idViewStream;
+  const OnShowGiftLiveBottomSheet({Key? key, required this.scrollController, this.idViewStream}) : super(key: key);
 
   @override
   State<OnShowGiftLiveBottomSheet> createState() => _OnShowGiftLiveBottomSheetState();
@@ -182,6 +183,7 @@ class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
                                   ),
                             Text(
                               "${data.name}",
+                              textAlign: TextAlign.center,
                               style: const TextStyle(color: kHyppeBurem, fontSize: 12),
                             ),
                             Row(
@@ -365,7 +367,8 @@ class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
             builder: (_, sn, __) {
               return ButtonChallangeWidget(
                 function: () {
-                  sn.sendGift(context, mounted, sn.giftSelect?.sId ?? '', sn.giftSelect?.thumbnail ?? '', sn.giftSelect?.name ?? '', urlGift: sn.giftSelect?.animation);
+                  sn.sendGift(context, mounted, sn.giftSelect?.sId ?? '', sn.giftSelect?.thumbnail ?? '', sn.giftSelect?.name ?? '',
+                      urlGift: sn.giftSelect?.animation, idViewStream: widget.idViewStream);
                 },
                 bgColor: kHyppePrimary,
                 text: trans.send,

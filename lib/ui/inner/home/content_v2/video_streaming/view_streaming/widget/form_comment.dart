@@ -182,7 +182,7 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                     child: InkWell(
                       splashColor: Colors.black,
                       onTap: () {
-                        ShowBottomSheet().onShowGiftLive(context);
+                        ShowBottomSheet().onShowGiftLive(context, idViewStream: notifier.dataStreaming.sId);
                       },
                       onTapUp: (val) {},
                       customBorder: const CircleBorder(),

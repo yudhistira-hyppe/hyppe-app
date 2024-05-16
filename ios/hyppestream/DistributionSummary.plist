@@ -10,13 +10,13 @@
 				<string>arm64</string>
 			</array>
 			<key>buildNumber</key>
-			<string>108</string>
+			<string>117</string>
 			<key>certificate</key>
 			<dict>
 				<key>SHA1</key>
-				<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+				<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 				<key>dateExpires</key>
-				<string>27/04/24</string>
+				<string>13/05/25</string>
 				<key>type</key>
 				<string>Cloud Managed Apple Distribution</string>
 			</dict>
@@ -32,9 +32,681 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>AgoraAiEchoCancellationExtension.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>0.0.4</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>AgoraAiNoiseSuppressionExtension.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>4.0.1</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>AgoraAudioBeautyExtension.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.0.0</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>AgoraClearVisionExtension.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>5.3.16</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>AgoraContentInspectExtension.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.0.0</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>AgoraFaceCaptureExtension.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.0.0</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>AgoraFaceDetectionExtension.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>3.0.0</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>AgoraLipSyncExtension.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.0.0</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>AgoraReplayKitExtension.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.0.0</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>AgoraRtcKit.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>4.3.1</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>4.3.1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>AgoraRtcWrapper.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>4.3.1</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>AgoraSoundTouch.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>2.0.16</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>AgoraSpatialAudioExtension.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.0.0</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>AgoraVideoAv1DecoderExtension.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.0.0</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>AgoraVideoAv1EncoderExtension.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.0.0</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>AgoraVideoDecoderExtension.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.0.0</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>AgoraVideoEncoderExtension.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.0.0</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>AgoraVideoQualityAnalyzerExtension.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.0.0</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>AgoraVideoSegmentationExtension.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.2.0</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>Agorafdkaac.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.0.0</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>Agoraffmpeg.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>4.3.1</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>AliRTCSdk.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.0</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>AlivcLibReplayKitExt.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.0</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1.0</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>AlivcLivePusher.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.0</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -60,9 +732,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -88,9 +760,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -116,9 +788,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -132,7 +804,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>1.6.2</string>
+					<string>1.7.5</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -144,37 +816,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
-						<key>type</key>
-						<string>Cloud Managed Apple Distribution</string>
-					</dict>
-					<key>name</key>
-					<string>Cache.framework</string>
-					<key>team</key>
-					<dict>
-						<key>id</key>
-						<string>Z4489DNPPA</string>
-						<key>name</key>
-						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
-					</dict>
-					<key>versionNumber</key>
-					<string>6.0.0</string>
-				</dict>
-				<dict>
-					<key>architectures</key>
-					<array>
-						<string>arm64</string>
-					</array>
-					<key>buildNumber</key>
-					<string>1</string>
-					<key>certificate</key>
-					<dict>
-						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
-						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -188,7 +832,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>4.3.4</string>
+					<string>4.3.9</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -200,9 +844,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -216,7 +860,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>0.0.17</string>
+					<string>0.0.19</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -228,9 +872,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -256,9 +900,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -272,7 +916,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>2.2.0</string>
+					<string>2.4.0</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -284,9 +928,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -300,7 +944,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>2.7.5</string>
+					<string>2.7.10</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -312,9 +956,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -340,9 +984,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -368,9 +1012,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -396,9 +1040,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -424,9 +1068,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -452,9 +1096,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -480,9 +1124,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -508,9 +1152,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -536,9 +1180,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -564,37 +1208,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
-						<key>type</key>
-						<string>Cloud Managed Apple Distribution</string>
-					</dict>
-					<key>name</key>
-					<string>GCDWebServer.framework</string>
-					<key>team</key>
-					<dict>
-						<key>id</key>
-						<string>Z4489DNPPA</string>
-						<key>name</key>
-						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
-					</dict>
-					<key>versionNumber</key>
-					<string>3.5.4</string>
-				</dict>
-				<dict>
-					<key>architectures</key>
-					<array>
-						<string>arm64</string>
-					</array>
-					<key>buildNumber</key>
-					<string>1</string>
-					<key>certificate</key>
-					<dict>
-						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
-						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -608,7 +1224,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>1.3.1</string>
+					<string>2.0.0</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -620,9 +1236,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -648,9 +1264,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -664,7 +1280,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>9.2.3</string>
+					<string>9.4.1</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -676,9 +1292,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -692,7 +1308,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>6.2.4</string>
+					<string>7.0.0</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -704,9 +1320,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -732,9 +1348,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -748,7 +1364,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>7.11.1</string>
+					<string>7.13.3</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -760,37 +1376,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
-						<key>type</key>
-						<string>Cloud Managed Apple Distribution</string>
-					</dict>
-					<key>name</key>
-					<string>HLSCachingReverseProxyServer.framework</string>
-					<key>team</key>
-					<dict>
-						<key>id</key>
-						<string>Z4489DNPPA</string>
-						<key>name</key>
-						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
-					</dict>
-					<key>versionNumber</key>
-					<string>0.1.0</string>
-				</dict>
-				<dict>
-					<key>architectures</key>
-					<array>
-						<string>arm64</string>
-					</array>
-					<key>buildNumber</key>
-					<string>1</string>
-					<key>certificate</key>
-					<dict>
-						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
-						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -816,9 +1404,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -840,18 +1428,18 @@
 						<string>arm64</string>
 					</array>
 					<key>buildNumber</key>
-					<string>1</string>
+					<string>1.0</string>
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
 					<key>name</key>
-					<string>PINCache.framework</string>
+					<string>PluginOpus.framework</string>
 					<key>team</key>
 					<dict>
 						<key>id</key>
@@ -860,7 +1448,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>3.0.3</string>
+					<string>1.0</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -872,37 +1460,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
-						<key>type</key>
-						<string>Cloud Managed Apple Distribution</string>
-					</dict>
-					<key>name</key>
-					<string>PINOperation.framework</string>
-					<key>team</key>
-					<dict>
-						<key>id</key>
-						<string>Z4489DNPPA</string>
-						<key>name</key>
-						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
-					</dict>
-					<key>versionNumber</key>
-					<string>1.2.2</string>
-				</dict>
-				<dict>
-					<key>architectures</key>
-					<array>
-						<string>arm64</string>
-					</array>
-					<key>buildNumber</key>
-					<string>1</string>
-					<key>certificate</key>
-					<dict>
-						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
-						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -916,7 +1476,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>3.23.0</string>
+					<string>3.26.1</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -928,9 +1488,37 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>Reachability.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>5.2.2</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -944,7 +1532,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>5.15.7</string>
+					<string>5.19.2</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -956,9 +1544,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -972,7 +1560,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>0.11.0</string>
+					<string>0.14.6</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -984,9 +1572,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1000,7 +1588,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>1.3.0</string>
+					<string>1.3.1</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -1012,9 +1600,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1028,7 +1616,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>5.4.4</string>
+					<string>5.4.5</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -1040,9 +1628,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1068,9 +1656,65 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>Toast.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>4.1.1</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>agora_rtc_engine.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>6.3.1</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1096,9 +1740,93 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>alivcffmpeg_lite.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.0</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>aosl.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.0.4</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>audio_session.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>0.0.1</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1124,37 +1852,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
-						<key>type</key>
-						<string>Cloud Managed Apple Distribution</string>
-					</dict>
-					<key>name</key>
-					<string>better_player.framework</string>
-					<key>team</key>
-					<dict>
-						<key>id</key>
-						<string>Z4489DNPPA</string>
-						<key>name</key>
-						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
-					</dict>
-					<key>versionNumber</key>
-					<string>0.0.1</string>
-				</dict>
-				<dict>
-					<key>architectures</key>
-					<array>
-						<string>arm64</string>
-					</array>
-					<key>buildNumber</key>
-					<string>1</string>
-					<key>certificate</key>
-					<dict>
-						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
-						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1180,9 +1880,37 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>connectivity_plus.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>0.0.1</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1208,9 +1936,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1232,13 +1960,13 @@
 						<string>arm64</string>
 					</array>
 					<key>buildNumber</key>
-					<string>5.1</string>
+					<string>6.0</string>
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1252,7 +1980,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>5.1</string>
+					<string>6.0</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -1264,9 +1992,37 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>fhoto_editor.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>0.0.1</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1292,9 +2048,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1320,14 +2076,14 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
 					<key>name</key>
-					<string>flutter_image_compress.framework</string>
+					<string>flutter_image_compress_common.framework</string>
 					<key>team</key>
 					<dict>
 						<key>id</key>
@@ -1348,9 +2104,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1376,9 +2132,37 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>flutter_livepush_plugin.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>6.1.0</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1404,9 +2188,37 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>flutter_sharing_intent.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>0.0.1</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1432,9 +2244,65 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>fluttertoast.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>0.0.2</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>heif_converter.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.0.0</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1460,9 +2328,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1484,13 +2352,69 @@
 						<string>arm64</string>
 					</array>
 					<key>buildNumber</key>
-					<string>59.37.100</string>
+					<string>1</string>
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>iris_method_channel.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>0.0.1</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>just_audio.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>0.0.1</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>60.3.100</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1504,7 +2428,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>59.37.100</string>
+					<string>60.3.100</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -1512,13 +2436,13 @@
 						<string>arm64</string>
 					</array>
 					<key>buildNumber</key>
-					<string>59.7.100</string>
+					<string>60.1.100</string>
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1532,7 +2456,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>59.7.100</string>
+					<string>60.1.100</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -1540,13 +2464,13 @@
 						<string>arm64</string>
 					</array>
 					<key>buildNumber</key>
-					<string>8.44.100</string>
+					<string>9.3.100</string>
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1560,7 +2484,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>8.44.100</string>
+					<string>9.3.100</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -1568,13 +2492,13 @@
 						<string>arm64</string>
 					</array>
 					<key>buildNumber</key>
-					<string>59.27.100</string>
+					<string>60.3.100</string>
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1588,7 +2512,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>59.27.100</string>
+					<string>60.3.100</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -1596,13 +2520,13 @@
 						<string>arm64</string>
 					</array>
 					<key>buildNumber</key>
-					<string>57.28.100</string>
+					<string>58.2.100</string>
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1616,7 +2540,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>57.28.100</string>
+					<string>58.2.100</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -1624,13 +2548,13 @@
 						<string>arm64</string>
 					</array>
 					<key>buildNumber</key>
-					<string>4.7.100</string>
+					<string>4.10.100</string>
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1644,7 +2568,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>4.7.100</string>
+					<string>4.10.100</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -1652,13 +2576,13 @@
 						<string>arm64</string>
 					</array>
 					<key>buildNumber</key>
-					<string>6.7.100</string>
+					<string>7.1.100</string>
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1672,7 +2596,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>6.7.100</string>
+					<string>7.1.100</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -1684,9 +2608,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1700,7 +2624,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>1.2.4</string>
+					<string>1.3.2</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -1712,9 +2636,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1740,9 +2664,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1768,9 +2692,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1796,9 +2720,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1812,7 +2736,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>2.30909.0</string>
+					<string>2.30909.1</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -1824,9 +2748,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1852,9 +2776,37 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>nb_utils.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>0.0.1</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1880,9 +2832,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1908,9 +2860,37 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>receive_sharing_intent.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>0.0.1</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1924,7 +2904,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>1.2.0</string>
+					<string>1.2.1</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -1936,9 +2916,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1964,9 +2944,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -1992,9 +2972,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -2020,9 +3000,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -2048,9 +3028,37 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>unique_identifier.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>0.0.1</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -2072,13 +3080,97 @@
 						<string>arm64</string>
 					</array>
 					<key>buildNumber</key>
+					<string>1.3.82</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>video_dec.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.3.82</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1.3.60</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>video_enc.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.3.60</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
 					<string>1</string>
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>video_player_avfoundation.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>0.0.1</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -2104,14 +3196,14 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
 					<key>name</key>
-					<string>wakelock.framework</string>
+					<string>wakelock_plus.framework</string>
 					<key>team</key>
 					<dict>
 						<key>id</key>
@@ -2132,9 +3224,9 @@
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
-						<string>7D526D619A78BB7D864EBC9ACBA6D2293771082F</string>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
 						<key>dateExpires</key>
-						<string>27/04/24</string>
+						<string>13/05/25</string>
 						<key>type</key>
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
@@ -2176,9 +3268,9 @@
 			<key>profile</key>
 			<dict>
 				<key>UUID</key>
-				<string>6fd35b8c-3c4b-439d-a955-acc637cc5b49</string>
+				<string>7a36e1a4-6199-458f-8fd6-1b8a7ad14120</string>
 				<key>dateExpires</key>
-				<string>27/04/24</string>
+				<string>13/05/25</string>
 				<key>name</key>
 				<string>iOS Team Ad Hoc Provisioning Profile: com.hyppe.hyppeapp</string>
 			</dict>
@@ -2190,7 +3282,7 @@
 				<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 			</dict>
 			<key>versionNumber</key>
-			<string>1.5.1</string>
+			<string>1.6.5</string>
 		</dict>
 	</array>
 </dict>

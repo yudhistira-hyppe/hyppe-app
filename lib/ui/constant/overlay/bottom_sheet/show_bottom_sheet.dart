@@ -1937,7 +1937,7 @@ class ShowBottomSheet {
     });
   }
 
-  onShowGiftLive(BuildContext _) {
+  onShowGiftLive(BuildContext _, {String? idViewStream}) {
     showModalBottomSheet(
         isScrollControlled: true,
         context: _,
@@ -1956,7 +1956,7 @@ class ShowBottomSheet {
                     ),
                   ),
                   padding: const EdgeInsets.all(0),
-                  child: OnShowGiftLiveBottomSheet(scrollController: scrollController),
+                  child: OnShowGiftLiveBottomSheet(scrollController: scrollController, idViewStream: idViewStream),
                 );
               });
         });

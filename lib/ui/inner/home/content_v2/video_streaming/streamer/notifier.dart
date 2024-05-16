@@ -42,6 +42,7 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/item.dart';
+import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -1285,8 +1286,9 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     if (connect) {
       try {
         final notifier = LiveStreamBloc();
-        commentCtrl.clear();
+
         Map data = {"_id": dataStream.sId, "messages": commentCtrl.text, "type": "COMMENT", "commentType": "MESSAGGES"};
+        commentCtrl.clear();
         if (mounted) {
           await notifier.getLinkStream(context, data, UrlConstants.updateStream);
         }
@@ -1501,7 +1503,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     Routing().moveBack();
   }
 
-  void sendGift(BuildContext context, bool mounted, String idGift, String urlGiftThumb, String title, {String? urlGift}) async {
+  void sendGift(BuildContext context, bool mounted, String idGift, String urlGiftThumb, String title, {String? urlGift, String? idViewStream}) async {
     Map param = {
       "_id": dataStream.sId,
       "commentType": "GIFT",
@@ -1510,6 +1512,8 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
       "urlGiftThum": urlGiftThumb,
       "messages": title,
     };
+
+    if (idViewStream != null) param['_id'] = idViewStream;
 
     if (urlGift != null) param['urlGift'] = urlGift;
     updateStream(context, mounted, param).then((value) {});
@@ -1630,14 +1634,16 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   }
 
   Future createLinkStream(BuildContext context, {required bool copiedToClipboard, required String description}) async {
+    var profile = context.read<SelfProfileNotifier>().user.profile;
     await createdDynamicLinkMixin(
       context,
       data: DynamicLinkData(
         routes: Routes.viewStreaming,
-        postID: 'asdasd',
-        fullName: 'Username',
-        description: 'descriot',
-        thumb: '',
+        postID: dataStream.sId,
+        fullName: "",
+        description: '${profile?.fullName ?? profile?.username} (${profile?.username}) \n is LIVE ${dataStream.title} \n Office Vlog Check out... \n',
+        // thumb: System().showUserPicture(profileImage),
+        thumb: System().showUserPicture(profile?.avatar?.mediaEndpoint),
       ),
       copiedToClipboard: copiedToClipboard,
     ).then((value) {
