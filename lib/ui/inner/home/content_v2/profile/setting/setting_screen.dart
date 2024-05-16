@@ -186,6 +186,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       context.handleActionIsGuest(() {
                         context.read<SettingNotifier>().validateUser(context, notifier);
                       });
+                      // Routing().move(Routes.transaction);
                     },
                     caption: '${notifier.translate.transaction}',
                     keyGLobal: keyTransaction,
@@ -197,6 +198,26 @@ class _SettingScreenState extends State<SettingScreen> {
                     positionTooltip: TooltipPosition.bottom,
                     positionYplus: -10,
                     indexTutor: indexKey,
+                  ),
+                  sixteenPx,
+                  Divider(
+                    thickness: 1,
+                    color: theme.colorScheme.surface,
+                  ),
+                  sixteenPx,
+                  SettingComponent(
+                    headerCaption: notifier.translate.creator??'Kreator',
+                    tiles: [
+                      SettingTile(
+                        caption: 'Gift',
+                        icon: 'union.svg',
+                        onTap: () {
+                          context.handleActionIsGuest(() {
+                            context.read<SettingNotifier>().validateUserGif(context, notifier);
+                          });
+                        },
+                      ),
+                    ],
                   ),
                   sixteenPx,
                   Divider(

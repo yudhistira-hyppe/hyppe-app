@@ -1181,9 +1181,6 @@
   "mycoupons": "Kupon Diskon Saya",
   "mintransaction": "Min transaksi",
   "validuntilcoupon": "Berlaku hingga ",
-  "detailcoupondisc": "Detail Kupon Diskon",
-  "noInternet": "Hyppe butuh internet untuk beraksi 🕺🌐",
-  "noInternetLabel": "Cek koneksi Wi-Fi atau kuota datamu  dan coba lagi ya.",
   "titleSuccessAppealBank": "Rekening Dalam Proses Verifikasi",
   "descSuccessAppealBank": "Mohon tunggu rekening bank kamu sedang dalam proses verifikasi. Proses ini memakan waktu estimasi maksimal 3 hari kerja.",
   "reviewed": "Ditinjau",
@@ -1191,5 +1188,16 @@
   "rejected": "Ditolak",
   "infoKick1": "Kamu menghapus",
   "infoKick2": "dari siaran LIVE",
-  "sent": "mengirim"
+  "sent": "mengirim",
+  "detailcoupondisc": "Detail Kupon Diskon",
+  "noInternet": "Hyppe butuh internet untuk beraksi 🕺🌐",
+  "noInternetLabel": "Cek koneksi Wi-Fi atau kuota datamu  dan coba lagi ya.",
+  "creator": "Kreator",
+  "awaitingpayment": "Menunggu Pembayaran",
+  "paymentdeadline": "Batas Pembayaran",
+  "infopaymentcoin": "Tidak disarankan transfer virtual account dari bank selain yang dipilih",
+  "copyvirtualaccount": "Nomor virtual account berhasil disalin",
+  "contentgift": "Kontent Gift",
+  "requiredgift": "Syarat Menerima Gift",
+  "yourorder": "Pesanan Kamu"
 }

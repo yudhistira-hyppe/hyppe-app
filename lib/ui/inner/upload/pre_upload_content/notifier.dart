@@ -12,6 +12,7 @@ import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/bloc/utils_v2/bloc.dart';
 import 'package:hyppe/core/bloc/utils_v2/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/error/error_model.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
@@ -1854,6 +1855,22 @@ class PreUploadContentNotifier with ChangeNotifier {
     } catch (e) {
       e.logger();
       checkChallenge = false;
+    }
+  }
+
+  Future validateUserUrl(context) async {
+    final userKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
+
+    if (userKyc != VERIFIED) {
+      return ShowBottomSheet.onShowStatementPin(context, onCancel: () {}, onSave: () {
+        Routing().moveAndPop(Routes.homePageSignInSecurity);
+      }, title: language.verificationYourIDFirst, bodyText: language.toAccessTransactionPageYouNeedToVerificationYourID);
+    }
+
+    if (urlLink != '') {
+      Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent, 'urlLink': urlLink, 'judulLink': judulLink});
+    } else {
+      Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent});
     }
   }
 }

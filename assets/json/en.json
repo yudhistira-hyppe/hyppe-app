@@ -1181,7 +1181,7 @@
   "mintransaction": "Min. transaction",
   "validuntilcoupon": "Valid until ",
   "detailcoupondisc": "Coupon Details",
-  "noInternet": "Hyppe needs the internet to groove 🕺🌐",
+  "noInternet": "Hyppe needs the internetto groove 🕺🌐",
   "noInternetLabel": "Check your Wi-Fi or data and let's get Hyppe groovin' again!",
   "titleSuccessAppealBank": "The bank account is in the process of verification",
   "descSuccessAppealBank": "Please wait for your bank account to verification process. This process takes time Estimated maximum 3 working days.",
@@ -1190,5 +1190,13 @@
   "rejected": "Rejected",
   "infoKick1": "You removed",
   "infoKick2": "from your LIVE studio",
-  "sent": "sent"
+  "sent": "sent",
+  "creator": "Creator",
+  "awaitingpayment": "Awaiting Payment",
+  "paymentdeadline": "Payment Deadline",
+  "infopaymentcoin": "Virtual Account transfers from banks other than those selected are not recommended.",
+  "copyvirtualaccount": "Virtual account number copied!",
+  "contentgift": "Content Gift Settings",
+  "requiredgift": "Gift Eligibility Requirements:",
+  "yourorder": "Your Order"
 }

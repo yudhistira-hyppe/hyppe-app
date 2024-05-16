@@ -9,6 +9,8 @@ import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
+import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../../core/constants/themes/hyppe_colors.dart';
@@ -155,6 +157,7 @@ class MyBalance extends StatelessWidget {
                     .read<SettingNotifier>()
                     .validateUserCoins(context, notifier);
               });
+              // Routing().move(Routes.saldoCoins);
             }, icon: const Icon(Icons.arrow_forward_ios))
           ],
         ),

@@ -3,7 +3,7 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-import 'package:hyppe/ui/inner/home/content_v2/my_coupons/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/disccount/notifier.dart';
 import 'package:provider/provider.dart';
 
 class ErrorCouponsWidget extends StatelessWidget {
@@ -19,7 +19,7 @@ class ErrorCouponsWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CustomTextWidget(textToDisplay: lang?.noInternet??'Hyppe needs the internet to groove 🕺🌐', textStyle: const TextStyle(fontWeight: FontWeight.bold)),
+            CustomTextWidget(textToDisplay: lang?.noInternet??'Hyppe needs the internetto groove 🕺🌐', textStyle: const TextStyle(fontWeight: FontWeight.bold)),
             tenPx,
             CustomTextWidget(textToDisplay: lang?.noInternetLabel??'Check your Wi-Fi or data  and let\'s get Hyppe groovin\' again! ',),
             fortyEightPx,
@@ -27,7 +27,7 @@ class ErrorCouponsWidget extends StatelessWidget {
               width: MediaQuery.of(context).size.width / 4,
               child: ElevatedButton(
                 onPressed: () {
-                  context.read<MyCouponsNotifier>().initMyCoupons(context);
+                  context.read<DiscNotifier>().initDisc(context);
                 },
                 style: ElevatedButton.styleFrom(
                   elevation: 0,
@@ -40,7 +40,7 @@ class ErrorCouponsWidget extends StatelessWidget {
                 ),
                 child: Center(
                     child: Text(lang?.retry??'Retry',
-                        textAlign: TextAlign.center, style: TextStyle(color: kHyppePrimary),),
+                        textAlign: TextAlign.center, style: const TextStyle(color: kHyppePrimary),),
                   ),
               ),
             ),

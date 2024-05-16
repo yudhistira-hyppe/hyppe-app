@@ -8,16 +8,20 @@ import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/entities/stories/notifier.dart';
 import 'package:hyppe/ui/constant/entities/web_view/notifier.dart';
 import 'package:hyppe/core/services/overlay_service/overlay_handler.dart';
+import 'package:hyppe/ui/inner/home/content_v2/activation_gift/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/coins/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/disccount/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/exchangecoins/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/support_ticket/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/ticket_history/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/historyordercoin/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/payment_waiting/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/paymentcoin/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/notifier.dart';
@@ -268,6 +272,14 @@ class AppDependencies {
         ChangeNotifierProvider<PaymentCoinNotifier>(create: (context) => PaymentCoinNotifier()),
         ChangeNotifierProvider<ExchangeCoinNotifier>(create: (context) => ExchangeCoinNotifier()),
 
-        ChangeNotifierProvider<ExternalLinkNotifier>(create: (context) => ExternalLinkNotifier())
+        ChangeNotifierProvider<ExternalLinkNotifier>(create: (context) => ExternalLinkNotifier()),
+        ChangeNotifierProvider<PaymentWaitingNotifier>(create: (context) => PaymentWaitingNotifier()),
+
+        //Gift
+        ChangeNotifierProvider<ActivationGiftNotifier>(create: (context) => ActivationGiftNotifier()),
+        //Disc
+        ChangeNotifierProvider<DiscNotifier>(create: (context) => DiscNotifier()),
+        //History Order Coint
+        ChangeNotifierProvider<HistoryOrderCoinNotifier>(create: (context) => HistoryOrderCoinNotifier())
       ];
 }

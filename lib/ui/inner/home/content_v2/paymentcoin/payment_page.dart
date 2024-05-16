@@ -1,11 +1,19 @@
+import 'dart:convert';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hyppe/core/bloc/monetization/transaction/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/collection/coins/coinmodel.dart';
 import 'package:hyppe/core/models/collection/discount/discountmodel.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/bank_data.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/loading_screen.dart';
 import 'package:hyppe/ui/constant/widget/section_widget.dart';
@@ -13,7 +21,6 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
-import '../topupcoin/notifier.dart';
 import 'notifier.dart';
 import 'widgets/card_virtual_account.dart';
 import 'widgets/detail_pay.dart';
@@ -27,18 +34,21 @@ class PaymentCoinPage extends StatefulWidget {
 
 class _PaymentCoinPageState extends State<PaymentCoinPage> {
   LocalizationModelV2? lang;
-  GroupCoinModel? selectedCoin;
+  
   
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'methodpaymentscoins');
     lang = context.read<TranslateNotifierV2>().translate;
-    
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       context.read<PaymentCoinNotifier>().discount = DiscountModel();
-      context.read<PaymentCoinNotifier>().initialPayment();
-      var map = ModalRoute.of(context)!.settings.arguments as GroupCoinModel;
-      selectedCoin = map;
+      var nn = Provider.of<PaymentCoinNotifier>(context, listen: false);
+      nn.translate(lang!);
+      nn.initState(context);
+      nn.bankSelected = '0';
+      var map = ModalRoute.of(context)!.settings.arguments as CointModel;
+      nn.selectedCoin = map;
+      await nn.initCoinPurchaseDetail(context);
     });
     super.initState();
   }
@@ -75,7 +85,9 @@ class _PaymentCoinPageState extends State<PaymentCoinPage> {
                       .titleMedium
                       ?.copyWith(fontWeight: FontWeight.bold),
                 ),
-                const CardVirtualAccountWidget(),
+                notifier.isLoading
+                ? const Center(child: CustomLoading())
+                : const CardVirtualAccountWidget(),
                 SectionWidget(
                   title: lang?.paymentDetails ?? 'Rincian Pembayaran',
                   style: Theme.of(context)
@@ -83,10 +95,9 @@ class _PaymentCoinPageState extends State<PaymentCoinPage> {
                       .titleMedium
                       ?.copyWith(fontWeight: FontWeight.bold),
                 ),
-                DetailPayWidget(value1: selectedCoin?.valueLabel??0),
-
+                const DetailPayWidget(),
                 GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, Routes.mydiscount, arguments: {'routes': Routes.paymentCoins, 'discount': notifier.discount}),
+                  onTap: () => Navigator.pushNamed(context, Routes.mydiscount, arguments: {'routes': Routes.paymentCoins, 'totalPayment': notifier.selectedCoin.price??0, 'discount': notifier.discount, 'productType':'660f7d64c306d245ed2c205d'}),
                   child: Container(
                     margin: const EdgeInsets.symmetric(vertical: 12.0),
                     decoration: BoxDecoration(
@@ -104,7 +115,7 @@ class _PaymentCoinPageState extends State<PaymentCoinPage> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          CustomTextWidget(textToDisplay: notifier.discount.name??''),
+                          CustomTextWidget(textToDisplay: '${lang?.discount} ${System().currencyFormat(amount: notifier.discount.nominal_discount)}'),
                           CustomTextWidget(textToDisplay: notifier.discount.code_package??'', textStyle: const TextStyle(color: kHyppeBurem, fontWeight: FontWeight.w400),),
                         ],
                       ):Text(lang?.discountForYou ?? 'Diskon Untukmu'),
@@ -115,19 +126,31 @@ class _PaymentCoinPageState extends State<PaymentCoinPage> {
               ],
             ),
           ),
-          bottomNavigationBar: Padding(
-            padding: const EdgeInsets.all(8.0),
+          bottomNavigationBar: Container(
+            margin: const EdgeInsets.symmetric(vertical: 22, horizontal: 18.0),
             child: ElevatedButton(
-              onPressed: notifier.groupsVA.where((e) => e.selected==true).isNotEmpty ? (){
-                debugPrint(notifier.groupsVA.firstWhere((e) => e.selected==true).text);
+              onPressed: notifier.data !=null && notifier.data!.where((element) => element.bankcode!.toLowerCase() == notifier.bankSelected.toLowerCase()).isNotEmpty && !notifier.isLoadingPayNow ? () async {
+                
                 LoadingScreen.show(context, lang?.processing??'Memproses');
-                Future.delayed(const Duration(seconds: 5), () {
-                  // 5s over, navigate to a new page
-                  LoadingScreen.hide(context);
+                await notifier.payNow(context);
+                
+                if (!mounted) return;
+                
+                Future.delayed(const Duration(milliseconds: 300),() async {
+                  await LoadingScreen.hide(context);
+                  Future.delayed(const Duration(milliseconds: 200),() {
+                    if (notifier.blocPayNow.dataFetch.dataState == TransactionCoinState.getcBlocSuccess){
+                      BankData bankdata = notifier.data![notifier.data!.indexWhere((e) => e.bankcode == notifier.bankSelected)];
+                      Routing().moveBack();
+                      Navigator.pushReplacementNamed(context, Routes.transactionwaiting, arguments: {'bank':bankdata, 'transaction':notifier.transactionCoinDetail});
+                    }else if(notifier.blocPayNow.dataFetch.dataState == TransactionCoinState.getBlocError){
+                      Fluttertoast.showToast(msg: jsonDecode(notifier.blocPayNow.dataFetch.data.toString())['message']);
+                    }
+                  
+                  });
                 });
-
-                // Navigator.pushNamed(context, Routes.paymentCoins, arguments: notifier.groupsVA.firstWhere((e) => e.selected==true));
-              }:null,
+                
+              } : null,
               style: ElevatedButton.styleFrom(
                   elevation: 0,
                   shape: RoundedRectangleBorder(

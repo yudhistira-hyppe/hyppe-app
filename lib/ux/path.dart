@@ -109,11 +109,15 @@ class Routes {
   static const String topUpCoins = '/topup-coins';
   static const String paymentCoins = '/payment-coins';
   static const String exchangeCoins = '/exchange-coins';
+
   // verification pin
   static const String verificationPinPage = 'verification-pin-page';
   static const String finishTrxPage = 'finish-trx-page';
+
   //transaction
+  static const String testing = '/testing';
   static const String transaction = '/transaction';
+  static const String transactionwaiting = '/transaction-waiting';
   static const String allTransaction = '/all-transaction';
   static const String detailTransaction = '/detail-transaction';
   static const String transactionInProgress = '/transaction-inprogress';
@@ -187,4 +191,9 @@ class Routes {
   // ====
   static const String addlink = '/add-link';
   static const String mydiscount = '/my-discount-page';
+
+  // Content Gift
+  static const String contentgift = 'content-gift';
+
+  static const String historyordercoin = 'history-order-coin';
 }

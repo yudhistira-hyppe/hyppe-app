@@ -3,42 +3,38 @@ PODS:
     - AgoraIrisRTC_iOS (= 4.3.1-build.1)
     - AgoraRtcEngine_iOS (= 4.3.1)
     - Flutter
-  - AgoraIrisRTC_iOS (4.3.1-build.1)
-  - AgoraRtcEngine_iOS (4.3.1):
-    - AgoraRtcEngine_iOS/AIAEC (= 4.3.1)
-    - AgoraRtcEngine_iOS/AINS (= 4.3.1)
-    - AgoraRtcEngine_iOS/AudioBeauty (= 4.3.1)
-    - AgoraRtcEngine_iOS/ClearVision (= 4.3.1)
-    - AgoraRtcEngine_iOS/ContentInspect (= 4.3.1)
-    - AgoraRtcEngine_iOS/FaceCapture (= 4.3.1)
-    - AgoraRtcEngine_iOS/FaceDetection (= 4.3.1)
-    - AgoraRtcEngine_iOS/LipSync (= 4.3.1)
-    - AgoraRtcEngine_iOS/ReplayKit (= 4.3.1)
-    - AgoraRtcEngine_iOS/RtcBasic (= 4.3.1)
-    - AgoraRtcEngine_iOS/SpatialAudio (= 4.3.1)
-    - AgoraRtcEngine_iOS/VideoAv1CodecDec (= 4.3.1)
-    - AgoraRtcEngine_iOS/VideoAv1CodecEnc (= 4.3.1)
-    - AgoraRtcEngine_iOS/VideoCodecDec (= 4.3.1)
-    - AgoraRtcEngine_iOS/VideoCodecEnc (= 4.3.1)
-    - AgoraRtcEngine_iOS/VirtualBackground (= 4.3.1)
-    - AgoraRtcEngine_iOS/VQA (= 4.3.1)
-  - AgoraRtcEngine_iOS/AIAEC (4.3.1)
-  - AgoraRtcEngine_iOS/AINS (4.3.1)
-  - AgoraRtcEngine_iOS/AudioBeauty (4.3.1)
-  - AgoraRtcEngine_iOS/ClearVision (4.3.1)
-  - AgoraRtcEngine_iOS/ContentInspect (4.3.1)
-  - AgoraRtcEngine_iOS/FaceCapture (4.3.1)
-  - AgoraRtcEngine_iOS/FaceDetection (4.3.1)
-  - AgoraRtcEngine_iOS/LipSync (4.3.1)
-  - AgoraRtcEngine_iOS/ReplayKit (4.3.1)
-  - AgoraRtcEngine_iOS/RtcBasic (4.3.1)
-  - AgoraRtcEngine_iOS/SpatialAudio (4.3.1)
-  - AgoraRtcEngine_iOS/VideoAv1CodecDec (4.3.1)
-  - AgoraRtcEngine_iOS/VideoAv1CodecEnc (4.3.1)
-  - AgoraRtcEngine_iOS/VideoCodecDec (4.3.1)
-  - AgoraRtcEngine_iOS/VideoCodecEnc (4.3.1)
-  - AgoraRtcEngine_iOS/VirtualBackground (4.3.1)
-  - AgoraRtcEngine_iOS/VQA (4.3.1)
+  - AgoraIrisRTC_iOS (4.3.0-build.2)
+  - AgoraRtcEngine_iOS (4.3.0):
+    - AgoraRtcEngine_iOS/AIAEC (= 4.3.0)
+    - AgoraRtcEngine_iOS/AINS (= 4.3.0)
+    - AgoraRtcEngine_iOS/AudioBeauty (= 4.3.0)
+    - AgoraRtcEngine_iOS/ClearVision (= 4.3.0)
+    - AgoraRtcEngine_iOS/ContentInspect (= 4.3.0)
+    - AgoraRtcEngine_iOS/FaceCapture (= 4.3.0)
+    - AgoraRtcEngine_iOS/FaceDetection (= 4.3.0)
+    - AgoraRtcEngine_iOS/ReplayKit (= 4.3.0)
+    - AgoraRtcEngine_iOS/RtcBasic (= 4.3.0)
+    - AgoraRtcEngine_iOS/SpatialAudio (= 4.3.0)
+    - AgoraRtcEngine_iOS/VideoAv1CodecDec (= 4.3.0)
+    - AgoraRtcEngine_iOS/VideoCodecDec (= 4.3.0)
+    - AgoraRtcEngine_iOS/VideoCodecEnc (= 4.3.0)
+    - AgoraRtcEngine_iOS/VirtualBackground (= 4.3.0)
+    - AgoraRtcEngine_iOS/VQA (= 4.3.0)
+  - AgoraRtcEngine_iOS/AIAEC (4.3.0)
+  - AgoraRtcEngine_iOS/AINS (4.3.0)
+  - AgoraRtcEngine_iOS/AudioBeauty (4.3.0)
+  - AgoraRtcEngine_iOS/ClearVision (4.3.0)
+  - AgoraRtcEngine_iOS/ContentInspect (4.3.0)
+  - AgoraRtcEngine_iOS/FaceCapture (4.3.0)
+  - AgoraRtcEngine_iOS/FaceDetection (4.3.0)
+  - AgoraRtcEngine_iOS/ReplayKit (4.3.0)
+  - AgoraRtcEngine_iOS/RtcBasic (4.3.0)
+  - AgoraRtcEngine_iOS/SpatialAudio (4.3.0)
+  - AgoraRtcEngine_iOS/VideoAv1CodecDec (4.3.0)
+  - AgoraRtcEngine_iOS/VideoCodecDec (4.3.0)
+  - AgoraRtcEngine_iOS/VideoCodecEnc (4.3.0)
+  - AgoraRtcEngine_iOS/VirtualBackground (4.3.0)
+  - AgoraRtcEngine_iOS/VQA (4.3.0)
   - AlivcLivePusher_Interactive (6.1.0):
     - AlivcLivePusher_Interactive/AlivcLivePusher (= 6.1.0)
   - AlivcLivePusher_Interactive/AlivcLivePusher (6.1.0)
@@ -653,9 +649,15 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
+<<<<<<< HEAD
   agora_rtc_engine: 6753fa324d39ac0e7f65f2b67ea5003a4442e370
   AgoraIrisRTC_iOS: 7710d853202eca4900c2916aefc44abd5a139d4e
   AgoraRtcEngine_iOS: f64be00fdda786bb7edd84ab461c31b7b4c93534
+=======
+  agora_rtc_engine: f737aeb9ac7fdfcfda875d0d0125eedaa09602f9
+  AgoraIrisRTC_iOS: 2caf892fa827777fe43b6ac7d12e9b42579eb865
+  AgoraRtcEngine_iOS: 267c0980c1fb97e056d05b850f8629b05b6e467a
+>>>>>>> 9d30f6357d3782b2b328fc15afd8d4cd9472615c
   AlivcLivePusher_Interactive: b692d3aab33c036654050a8ae1dd7ffffa0e5200
   AppAuth: 501c04eda8a8d11f179dbe8637b7a91bb7e5d2fa
   audio_session: 088d2483ebd1dc43f51d253d4a1c517d9a2e7207

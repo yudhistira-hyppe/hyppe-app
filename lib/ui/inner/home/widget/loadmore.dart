@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 
 class RefreshLoadmore extends StatefulWidget {
   final Future<void> Function()? onRefresh;
@@ -75,7 +76,7 @@ class _RefreshLoadmoreState extends State<RefreshLoadmore> {
   @override
   Widget build(BuildContext context) {
     Widget mainWiget = ListView(
-      physics: const BouncingScrollPhysics(),
+      // physics: const BouncingScrollPhysics(),÷
       controller: _scrollController,
       children: [
         widget.child,
@@ -110,6 +111,7 @@ class _RefreshLoadmoreState extends State<RefreshLoadmore> {
 
     return RefreshIndicator(
       color: widget.color ?? Colors.blue,
+      strokeWidth: 2.0,
       key: _refreshIndicatorKey,
       onRefresh: () async {
         if (_isLoading) return;
@@ -130,7 +132,7 @@ class LoadingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Center(
-      child: LoadingWidget()
+      child: CustomLoading()
     );
   }
 }

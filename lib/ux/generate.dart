@@ -32,6 +32,7 @@ import 'package:hyppe/ui/constant/page_no_internet_connection.dart';
 import 'package:hyppe/ui/constant/page_not_found.dart';
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/confirm_delete_account/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/delete_account/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/activation_gift/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/cache_and_download/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/achievement/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/collection/screen.dart';
@@ -50,9 +51,11 @@ import 'package:hyppe/ui/inner/home/content_v2/exchangecoins/pages/finish_page.d
 import 'package:hyppe/ui/inner/home/content_v2/help/FAQ/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/support_ticket/screen.dart';
-import 'package:hyppe/ui/inner/home/content_v2/my_coupons/my_coupons.dart';
+import 'package:hyppe/ui/inner/home/content_v2/disccount/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/historyordercoin/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/payment_waiting/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/paymentcoin/payment_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/fullscreen/pic_fullscreen_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/screen.dart';
@@ -107,7 +110,6 @@ import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/feedback/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/screen.dart';
-import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamerios/screen.dart';
 import 'package:hyppe/ui/inner/home/widget/ads_in_between_full.dart';
 import 'package:hyppe/ui/inner/home/widget/ads_video_in_between_full.dart';
 import 'package:hyppe/ui/inner/home/widget/aliplayer.dart';
@@ -508,6 +510,15 @@ class Generate {
 
       case Routes.mydiscount:
         return MaterialPageRoute(builder: (_) => const MyCouponsPage(), settings: settings);
+
+      case Routes.transactionwaiting:
+        return MaterialPageRoute(builder: (_) => const PaymentWaiting(), settings: settings);
+
+      case Routes.contentgift:
+        return MaterialPageRoute(builder: (_) => const ActivationGiftScreen(), settings: settings);
+      
+      case Routes.historyordercoin:
+        return MaterialPageRoute(builder: (_) => const HistoryOrderCoinScreen(), settings: settings);
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

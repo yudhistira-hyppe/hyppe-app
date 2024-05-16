@@ -19,7 +19,7 @@ class _DialogFiltersState extends State<DialogFilters> {
   Widget build(BuildContext context) {
     return Consumer<TransactionNotifier>(builder: (context, notifier, _) {
       return DraggableScrollableSheet(
-          expand: false,
+          expand: true,
           maxChildSize: .9,
           initialChildSize: .5,
           builder: (_, controller) {
@@ -89,7 +89,8 @@ class _DialogFiltersState extends State<DialogFilters> {
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.pop(context);
-                        // context.read<TransactionNotifier>().changeSelectedTransaction();
+                        context.read<TransactionNotifier>().selectedTransaksi = true;
+                        Future.microtask(() => context.read<TransactionNotifier>().filter(context));
                       },
                       style: ElevatedButton.styleFrom(
                           elevation: 0,

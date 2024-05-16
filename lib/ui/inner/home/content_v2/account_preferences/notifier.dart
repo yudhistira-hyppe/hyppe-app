@@ -7,6 +7,7 @@ import 'package:hyppe/core/bloc/utils_v2/bloc.dart';
 import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
@@ -828,5 +829,25 @@ class AccountPreferencesNotifier extends ChangeNotifier {
     }
     isLoading = false;
     notifyListeners();
+  }
+
+  Future validateUserUrl(context) async {
+    final userKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
+
+    if (userKyc != VERIFIED) {
+      return ShowBottomSheet.onShowStatementPin(context, onCancel: () {}, onSave: () {
+        Routing().moveAndPop(Routes.homePageSignInSecurity);
+      }, title: language.verificationYourIDFirst, bodyText: language.toAccessTransactionPageYouNeedToVerificationYourID);
+    }
+
+    Navigator.pushNamed(context, Routes.addlink, arguments: {
+      'routes': Routes.selfProfile,
+      'urlLink': urlLinkController.text.isEmpty
+          ? null
+          : urlLinkController.text,
+      'judulLink': titleLinkController.text.isEmpty
+          ? null
+          : titleLinkController.text
+    });
   }
 }

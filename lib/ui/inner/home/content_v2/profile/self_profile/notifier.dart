@@ -300,6 +300,7 @@ class SelfProfileNotifier with ChangeNotifier {
         user.profile?.avatar?.imageKey = SharedPreference().readStorage(SpKeys.uniqueKey);
         // SharedPreference().writeStorage(SpKeys.isLoginSosmed, user.profile?.loginSource);
         SharedPreference().writeStorage(SpKeys.userID, user.profile?.idUser);
+        SharedPreference().writeStorage(SpKeys.statusGiftActivation, user.profile?.giftActivation);
         notifyListeners();
       }
       // user.vids = await vidContentsQuery.reload(context, myContent: true);

@@ -8,7 +8,6 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/debouncer.dart';
 import 'package:hyppe/ux/routing.dart';
 
-import '../topupcoin/notifier.dart';
 import 'widgets/info_dialog.dart';
 import 'widgets/text_info.dart';
 
@@ -148,4 +147,14 @@ class GroupBankAccountModel {
     bankCode = json['bankcode'];
     selected = false;
   }
+}
+
+
+
+class GroupCoinModel {
+  int index;
+  int value;
+  int valueLabel;
+  bool selected;
+  GroupCoinModel({required this.value, required this.index, required this.selected, required this.valueLabel});
 }

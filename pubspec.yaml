@@ -106,7 +106,10 @@ dependencies:
 
   # //Agora
   agora_rtc_engine: ^6.2.6
+<<<<<<< HEAD
   # agora_rtm: ^1.5.9
+=======
+>>>>>>> 9d30f6357d3782b2b328fc15afd8d4cd9472615c
   
   dynamic_widget: # Dynamic widget builder
     git:

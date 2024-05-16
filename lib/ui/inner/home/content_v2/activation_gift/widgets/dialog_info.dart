@@ -13,7 +13,7 @@ class DialogInfoWidget extends StatelessWidget {
     return DraggableScrollableSheet(
       expand: false,
       maxChildSize: .9,
-      initialChildSize: .4,
+      // initialChildSize: .4,
       builder: (_, controller) {
         return Container(
           clipBehavior: Clip.antiAlias,
@@ -43,7 +43,7 @@ class DialogInfoWidget extends StatelessWidget {
               ),
               Center(
                 child: Text(
-                  lang?.detailcoupondisc??'Detail Kupon Diskon',
+                  lang?.requiredgift??'Syarat Menerima Gift',
                   style: Theme.of(context)
                         .textTheme
                         .titleLarge
@@ -53,12 +53,26 @@ class DialogInfoWidget extends StatelessWidget {
               tenPx,
               const Divider(color: kHyppeBurem, thickness: .5,),
               tenPx,
-              listText(context, number: 1, label: 'eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque'),
-              listText(context, number: 2, label: 'fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet massa'),
-              listText(context, number: 3, label: 'vitae tortor condimentum'),
-              listText(context, number: 4, label: 'lacinia quis vel eros donec ac odio tempor orci dapibus ultrices in iaculis nunc sed augue lacus, viverra'),
-              listText(context, number: 5, label: 'vitae congue eu, consequat ac felis donec et odio pellentesque diam volutpat commodo'),
-              listText(context, number: 6, label: 'sed egestas egestas fringilla phasellus faucibus'),
+              listText(context, number: 1, 
+                label: lang!.localeDatetime == 'id' 
+                ? 'Lulus NSFW: Konten tidak boleh mengandung unsur pornografi, kekerasan, atau konten dewasa lainnya yang melanggar Pedoman Komunitas.'
+                : 'NSFW compliance: Content must not contain pornography, violence, or other adult content that violates the Community Guidelines.'),
+              listText(context, number: 2, 
+                label: lang!.localeDatetime == 'id' 
+                ? 'Kepemilikan Konten: Konten harus dibuat sendiri oleh kreator, terdaftar dan memiliki sertifikat content.'
+                : 'Content ownership: Content must be created by the creator themselves, registered and have a content certificate.'),
+              listText(context, number: 3, 
+                label: lang!.localeDatetime == 'id' 
+                ? 'Moderasi Konten: Jika konten dilaporkan dan sedang dalam proses moderasi, maka konten tidak dapat menerima Gift sampai proses selesai.'
+                : 'Content moderation: If content is reported and under moderation, it cannot receive Gifts until the process is complete.'),
+              listText(context, number: 4, 
+                label: lang!.localeDatetime == 'id' 
+                ? 'Status Konten Tidak Dijual: Konten yang sedang dijual di marketplace konten tidak dapat menerima Gift.'
+                : 'Content not for sale: Content that is being sold on the content marketplace cannot receive Gifts.'),
+              listText(context, number: 5, 
+                label: lang!.localeDatetime == 'id' 
+                ? 'Boost Post: Konten yang dipromosikan melalui layanan Boost Post tetap dapat menerima Gift.'
+                : 'Boosted posts: Content promoted through the Boost Post service can still receive Gifts.'),
             ],
           ),
         );
@@ -75,10 +89,14 @@ class DialogInfoWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            CustomTextWidget(textToDisplay: '$number. '),
+            CustomTextWidget(textToDisplay: '$number.  '),
             SizedBox(
               width: MediaQuery.of(context).size.width * .9,
-              child: Text(' $label')),
+              child: Text(
+                label,
+                maxLines: 5,
+              ),
+            ),
           ],
         ),
       ),

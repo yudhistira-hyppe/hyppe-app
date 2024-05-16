@@ -1,13 +1,14 @@
 
 import 'package:flutter/material.dart';
-import 'package:hyppe/core/bloc/monetization/mycoupons/bloc.dart';
-import 'package:hyppe/core/bloc/monetization/mycoupons/state.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hyppe/core/bloc/monetization/disc/bloc.dart';
+import 'package:hyppe/core/bloc/monetization/disc/state.dart';
 import 'package:hyppe/core/models/collection/discount/discountmodel.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 
 import 'widgets/dialog_info.dart';
 
-class MyCouponsNotifier extends ChangeNotifier {
+class DiscNotifier extends ChangeNotifier {
   
   List<DiscountModel> _result = [];
   List<DiscountModel> get result => _result;
@@ -16,7 +17,21 @@ class MyCouponsNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  final bloc = MyCouponsDataBloc();
+  final bloc = DiscDataBloc();
+
+  int _totalPayment=0;
+  int get totalPayment => _totalPayment;
+  set totalPayment(int val){
+    _totalPayment = val;
+    notifyListeners();
+  }
+
+  String _productType = '';
+  String get productType => _productType;
+  set productType(String val){
+    _productType = val;
+    notifyListeners();
+  }
 
   bool _isView = false;
   bool get isView => _isView;
@@ -25,7 +40,7 @@ class MyCouponsNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  int _page = 1;
+  int _page = 0;
   int get page => _page;
   set page(int val){
     _page = val;
@@ -41,14 +56,12 @@ class MyCouponsNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> initMyCoupons(BuildContext context) async {
+  Future<void> initDisc(BuildContext context) async {
     try{
-      // if (bloc.dataFetch.dataState == MyCouponsState.loading) return;
-
       page = 0;
 
-      await bloc.getMyCoupons(context, page: page, desc: true);
-      if (bloc.dataFetch.dataState == MyCouponsState.getMyCouponsBlocSuccess && bloc.dataFetch.data.isNotEmpty) {
+      await bloc.getDisc(context, page: page, productType: productType);
+      if (bloc.dataFetch.dataState == DiscState.getDiscBlocSuccess && bloc.dataFetch.data.isNotEmpty) {
         result = bloc.dataFetch.data;
         // ignore: use_build_context_synchronously
         Map res = ModalRoute.of(context)!.settings.arguments as Map;
@@ -64,32 +77,29 @@ class MyCouponsNotifier extends ChangeNotifier {
     }
   }
 
-  Future<void> loadMore(BuildContext context, {int? page, bool desc = true}) async {
+  Future<void> loadMore(BuildContext context) async {
     try{
-      if (isLoadMore) return;
-
-      isLoadMore = true;
-
-      await bloc.getMyCoupons(context, page: page, desc: desc);
-      if (bloc.dataFetch.dataState == MyCouponsState.getMyCouponsBlocSuccess && bloc.dataFetch.data.isNotEmpty) {
-        result = [...(result), ...bloc.dataFetch.data];
+      await bloc.getDisc(context, page: page, productType: productType);
+      if (bloc.dataFetch.dataState == DiscState.getDiscBlocSuccess && bloc.dataFetch.data.isNotEmpty) {
+        result.addAll(bloc.dataFetch.data);
       } else {
         isLastPage = true;
+        Fluttertoast.showToast(msg: 'Already on the last ');
       }
+      
     }catch(_){
       debugPrint(_.toString());
     }
   }
 
-  Future<void> selectedCoupon(DiscountModel? data) async {
+  Future<void> selectedDisc(DiscountModel? data) async {
     if (data?.checked==false){
       for (var i = 0; i < result.length; i++) {
         result[i].checked = false;
       }
       data?.checked = true;
+      notifyListeners();
     }
-    
-    notifyListeners();
   }
 
   void showButtomSheetInfo(BuildContext context, LocalizationModelV2 lang) {

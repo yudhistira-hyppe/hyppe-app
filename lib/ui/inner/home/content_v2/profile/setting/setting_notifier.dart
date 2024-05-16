@@ -145,6 +145,17 @@ class SettingNotifier extends ChangeNotifier with LoadingNotifier {
     Routing().move(Routes.transaction);
   }
 
+  Future validateUserGif(context, TranslateNotifierV2 language) async {
+    final userKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
+    if (userKyc != VERIFIED) {
+      return ShowBottomSheet.onShowStatementPin(context, onCancel: () {}, onSave: () {
+        Routing().moveAndPop(Routes.homePageSignInSecurity);
+      }, title: language.translate.verificationYourIDFirst, bodyText: language.translate.toAccessTransactionPageYouNeedToVerificationYourID);
+    }
+
+    Routing().move(Routes.contentgift);
+  }
+
   Future validateUserCoins(context, TranslateNotifierV2 language) async {
     final userKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
     if (userKyc != VERIFIED) {
