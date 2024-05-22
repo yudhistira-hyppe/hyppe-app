@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/models/collection/discount/discountmodel.dart';
 import 'package:hyppe/core/models/collection/sticker/sticker_model.dart';
+import 'package:hyppe/core/models/collection/transaction/coinpurchasedetail.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/core/bloc/repos/repos.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
@@ -265,6 +267,8 @@ class PostsBloc {
     int? height,
     String? urlLink,
     String? judulLink,
+    DiscountModel? discount,
+    CointPurchaseDetailModel? cointPurchaseDetail,
     List<StickerModel>? stickers,
   }) async {
     final formData = FormData();
@@ -294,6 +298,14 @@ class PostsBloc {
     formData.fields.add(MapEntry('certified', certified.toString()));
     formData.fields.add(MapEntry('urlLink', urlLink.toString()));
     formData.fields.add(MapEntry('judulLink', judulLink.toString()));
+    if (certified == true){
+      formData.fields.add(MapEntry('transaction_fee', (cointPurchaseDetail?.total_payment??0).toString() ));
+      if (discount != null){
+        formData.fields.add(MapEntry('discount_id', discount.id.toString()));
+        formData.fields.add(MapEntry('discount_fee', discount.nominal_discount.toString()));
+      }
+    }
+
     if (idMusic != null) {
       formData.fields.add(MapEntry('musicId', idMusic));
     }
@@ -426,6 +438,8 @@ class PostsBloc {
       bool? isShared,
       String? urlLink,
       String? judulLink,
+      DiscountModel? discount,
+      CointPurchaseDetailModel? cointPurchaseDetail,
       bool? saleView}) async {
     final email = SharedPreference().readStorage(SpKeys.email);
 
@@ -447,6 +461,13 @@ class PostsBloc {
     formData.fields.add(MapEntry('isShared', isShared.toString()));
     formData.fields.add(MapEntry('urlLink', urlLink.toString()));
     formData.fields.add(MapEntry('judulLink', judulLink.toString()));
+    if (certified == true){
+      formData.fields.add(MapEntry('transaction_fee', (cointPurchaseDetail?.total_payment??0).toString()));
+      if (discount != null){
+        formData.fields.add(MapEntry('discount_id', discount.id.toString()));
+        formData.fields.add(MapEntry('discount_fee', discount.nominal_discount.toString()));
+      }
+    } 
 
     print('hahahahahahahaha');
     print(type);

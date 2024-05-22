@@ -23,6 +23,11 @@ class HistoryOrderCoinNotifier with ChangeNotifier {
   int selectedDateValue = 1;
   String selectedDateLabel = 'Semua Tanggal';
   String tempSelectedDate = DateTime.now().toString();
+  
+
+  void settempSelectedDate(String val){
+    tempSelectedDate = val;
+  }
 
   //TextEdit Date 
   final TextEditingController textStartDateController = TextEditingController();

@@ -7,20 +7,19 @@ import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/status_code.dart';
-import 'package:hyppe/core/models/collection/transaction/coinpurchasedetail.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/buy/buy_data_new.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 
 import 'state.dart';
 
-class CoinPurchaseDetailDataBloc {
-  CoinPurchaseDetailDataFetch _dataFetch = CoinPurchaseDetailDataFetch(CoinPurchaseDetailState.init);
-  CoinPurchaseDetailDataFetch get dataFetch => _dataFetch;
-  setCoinFetch(CoinPurchaseDetailDataFetch val) => _dataFetch = val;
+class BuyDataNewBloc {
+  BuyDataNewFetch _dataFetch = BuyDataNewFetch(BuyDataNewState.init);
+  BuyDataNewFetch get dataFetch => _dataFetch;
+  setBuyDataNewFetch(BuyDataNewFetch val) => _dataFetch = val;
 
-  Future getCoinPurchaseDetail(BuildContext context,
-      {Map? data}) async {
-    setCoinFetch(CoinPurchaseDetailDataFetch(CoinPurchaseDetailState.loading));
+  Future getBuyDataNew(BuildContext context, {Map? data}) async {
+    setBuyDataNewFetch(BuyDataNewFetch(BuyDataNewState.loading));
     try {
       
       String email = SharedPreference().readStorage(SpKeys.email);
@@ -28,21 +27,21 @@ class CoinPurchaseDetailDataBloc {
         context,
         (onResult) {
           if ((onResult.statusCode ?? 300) > HTTP_CODE) {
-            setCoinFetch(
-                CoinPurchaseDetailDataFetch(CoinPurchaseDetailState.getCoinPurchaseDetailBlocError));
+            setBuyDataNewFetch(
+                BuyDataNewFetch(BuyDataNewState.getBlocError));
           } else {
-            setCoinFetch(
-              CoinPurchaseDetailDataFetch(CoinPurchaseDetailState.getCoinPurchaseDetailBlocSuccess,
+            setBuyDataNewFetch(
+              BuyDataNewFetch(BuyDataNewState.getBlocSuccess,
                   data: onResult.data['data'] != null
-                      ? CointPurchaseDetailModel.fromJson(onResult.data['data'])
+                      ? BuyDataNew.fromJson(onResult.data['data'])
                       : null),
             );
           }
         },
         (errorData) {
           ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
-          setCoinFetch(
-              CoinPurchaseDetailDataFetch(CoinPurchaseDetailState.getCoinPurchaseDetailBlocError));
+          setBuyDataNewFetch(
+              BuyDataNewFetch(BuyDataNewState.getBlocError));
           Dio().close(force: true);
         },
         headers: {
@@ -55,12 +54,12 @@ class CoinPurchaseDetailDataBloc {
         withCheckConnection: true,
       );
     } on SocketException catch (_) {
-      setCoinFetch(
-          CoinPurchaseDetailDataFetch(CoinPurchaseDetailState.getCoinPurchaseDetailBlocError));
+      setBuyDataNewFetch(
+          BuyDataNewFetch(BuyDataNewState.getBlocError));
       Dio().close(force: true);
     } catch (_) {
-      setCoinFetch(
-          CoinPurchaseDetailDataFetch(CoinPurchaseDetailState.getCoinPurchaseDetailBlocError));
+      setBuyDataNewFetch(
+          BuyDataNewFetch(BuyDataNewState.getBlocError));
       Dio().close(force: true);
     }
   }

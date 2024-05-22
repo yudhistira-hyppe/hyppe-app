@@ -19,6 +19,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_c
 import 'package:hyppe/ux/routing.dart';
 
 class PaymentCoinNotifier with ChangeNotifier {
+  Map _param = {};
   LocalizationModelV2 language = LocalizationModelV2();
   translate(LocalizationModelV2 translate) {
     language = translate;
@@ -73,6 +74,7 @@ class PaymentCoinNotifier with ChangeNotifier {
 
   void initState(BuildContext context) {
     isLoading = true;
+    _param = {};
     notifyListeners();
     _getAllBank(context);
   }
@@ -80,7 +82,21 @@ class PaymentCoinNotifier with ChangeNotifier {
   Future<void> initCoinPurchaseDetail(BuildContext context) async {
     try{
       _isLoadingDetail = true;
-      await bloc.getCoinPurchaseDetail(context, price: selectedCoin.price, discountId: discount.id);
+      if (discount.id != null){
+        _param.addAll({
+          'price': selectedCoin.price ?? 0,
+          "typeTransaction":'TOPUP',
+          'discount_id': discount.id,
+        });
+      }else{
+        _param.addAll({
+          'price': selectedCoin.price ?? 0,
+          "typeTransaction":'TOPUP',
+        });
+      }
+      
+      
+      await bloc.getCoinPurchaseDetail(context, data: _param);
       if (bloc.dataFetch.dataState == CoinPurchaseDetailState.getCoinPurchaseDetailBlocSuccess) {
         cointPurchaseDetail = bloc.dataFetch.data;
       }

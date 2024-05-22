@@ -479,5 +479,8 @@ class UrlConstants {
   static const String checkposting = "$postsRoute/check-post";
   static const String activationgift = "$userRoute/updatestatusgift";
   static const String historyordercoin = "$transactionRoute/coinorderhistory";
+  static const String saldocoin = "$postBuyContent/balanceds/preview";
+  static const String transactionboostpost = "/api/transactionsv2/createboostpost";
+  static const String boostContentNew = "/api/transactionsv2/boostpostdetail";
 
 }

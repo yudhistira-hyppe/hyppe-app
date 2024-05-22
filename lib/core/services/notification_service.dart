@@ -110,6 +110,8 @@ class NotificationService {
 
           if (data.postType == 'TRANSACTION') {
             Routing().move(Routes.transaction);
+          } else if (data.postType == 'COIN'){
+
           } else if (data.postType == 'CHALLENGE') {
             Routing().move(
               Routes.chalengeDetail,

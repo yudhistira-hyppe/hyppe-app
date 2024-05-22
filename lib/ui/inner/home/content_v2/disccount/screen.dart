@@ -5,7 +5,9 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/review_buy/notifier.dart';
 import 'package:hyppe/ui/inner/home/widget/loadmore.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
@@ -155,8 +157,29 @@ class _MyCouponsPageState extends State<MyCouponsPage> {
               Navigator.pop(context);
               Map res = ModalRoute.of(context)!.settings.arguments as Map;
               if (res['routes'] != null){
-                context.read<PaymentCoinNotifier>().discount = notifier.result.firstWhere((element) => element.checked == true);
-                await context.read<PaymentCoinNotifier>().initCoinPurchaseDetail(context);
+                switch (res['routes'] ) {
+                  case Routes.paymentCoins:
+                    context.read<PaymentCoinNotifier>().discount = notifier.result.firstWhere((element) => element.checked == true);
+                    await context.read<PaymentCoinNotifier>().initCoinPurchaseDetail(context); 
+                    break;
+
+                  case Routes.reviewBuyContent:
+                    if (!mounted) return;
+                    context.read<ReviewBuyNotifier>().discount = notifier.result.firstWhere((element) => element.checked == true);
+                    await context.read<ReviewBuyNotifier>().detailBuyData(context);
+                    break;
+                  
+                  case '${Routes.preUploadContent}ownership':
+                    if (!mounted) return;
+                    context.read<PreUploadContentNotifier>().discountOwnership = notifier.result.firstWhere((element) => element.checked == true);
+                    break;
+                  case '${Routes.preUploadContent}boostpost':
+                    if (!mounted) return;
+                    context.read<PreUploadContentNotifier>().discountBoost = notifier.result.firstWhere((element) => element.checked == true);
+                    break;
+                  default:
+                }
+
               }
               
             },

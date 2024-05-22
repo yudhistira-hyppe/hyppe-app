@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/bloc/monetization/transaction/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/content_discount.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/coins/coinmodel.dart';
 import 'package:hyppe/core/models/collection/discount/discountmodel.dart';
@@ -97,7 +98,7 @@ class _PaymentCoinPageState extends State<PaymentCoinPage> {
                 ),
                 const DetailPayWidget(),
                 GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, Routes.mydiscount, arguments: {'routes': Routes.paymentCoins, 'totalPayment': notifier.selectedCoin.price??0, 'discount': notifier.discount, 'productType':'660f7d64c306d245ed2c205d'}),
+                  onTap: () => Navigator.pushNamed(context, Routes.mydiscount, arguments: {'routes': Routes.paymentCoins, 'totalPayment': notifier.selectedCoin.price??0, 'discount': notifier.discount, 'productType': ContentDiscount.discpaketcoin}),
                   child: Container(
                     margin: const EdgeInsets.symmetric(vertical: 12.0),
                     decoration: BoxDecoration(

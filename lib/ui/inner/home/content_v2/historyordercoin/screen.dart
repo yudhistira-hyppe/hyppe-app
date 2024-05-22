@@ -111,55 +111,7 @@ class _HistoryOrderCoinScreenState extends State<HistoryOrderCoinScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 18.0),
               margin: const EdgeInsets.only(bottom: 8.0),
-              child: notifier.result.isEmpty
-                ? Container(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10.0, horizontal: 18.0),
-                    margin: const EdgeInsets.only(bottom: 8.0),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const CustomIconWidget(
-                            iconData:
-                                '${AssetPath.vectorPath}icon_no_result.svg',
-                            width: 160,
-                            height: 160,
-                            defaultColor: false,
-                          ),
-                          tenPx,
-                          CustomTextWidget(
-                            textAlign: TextAlign.center,
-                            maxLines: 1,
-                            textToDisplay: lang?.localeDatetime == 'id'
-                                ? 'Masih sepi, nih'
-                                : 'There\'s no one here',
-                            textStyle: context
-                                .getTextTheme()
-                                .bodyLarge
-                                ?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    color: context
-                                        .getColorScheme()
-                                        .onBackground),
-                          ),
-                          eightPx,
-                          CustomTextWidget(
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
-                            textToDisplay: lang?.localeDatetime == 'id'
-                                ? 'Yuk, mulai miliki penghasilan dari membuat konten dan dukung creator favoritmu!'
-                                : 'Let\'s start earning from creating content and supporting your favorite creators!',
-                            textStyle: context.getTextTheme().bodyLarge,
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                : ListView.builder(
+              child: ListView.builder(
                 controller: scrollController,
                 physics: const BouncingScrollPhysics(),
                 itemCount: notifier.isLoadMore ? notifier.result.length+2 : notifier.result.length+1,
@@ -170,6 +122,56 @@ class _HistoryOrderCoinScreenState extends State<HistoryOrderCoinScreen> {
 
                   if (index == 0) {
                     return filtersData(notifier);
+                  }
+
+                  if (notifier.result.isEmpty) {
+                    return Container(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 18.0),
+                      margin: const EdgeInsets.only(bottom: 8.0),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const CustomIconWidget(
+                              iconData:
+                                  '${AssetPath.vectorPath}icon_no_result.svg',
+                              width: 160,
+                              height: 160,
+                              defaultColor: false,
+                            ),
+                            tenPx,
+                            CustomTextWidget(
+                              textAlign: TextAlign.center,
+                              maxLines: 1,
+                              textToDisplay: lang?.localeDatetime == 'id'
+                                  ? 'Masih sepi, nih'
+                                  : 'There\'s no one here',
+                              textStyle: context
+                                  .getTextTheme()
+                                  .bodyLarge
+                                  ?.copyWith(
+                                      fontWeight: FontWeight.w700,
+                                      color: context
+                                          .getColorScheme()
+                                          .onBackground),
+                            ),
+                            eightPx,
+                            CustomTextWidget(
+                              textAlign: TextAlign.center,
+                              maxLines: 2,
+                              textToDisplay: lang?.localeDatetime == 'id'
+                                  ? 'Yuk, mulai miliki penghasilan dari membuat konten dan dukung creator favoritmu!'
+                                  : 'Let\'s start earning from creating content and supporting your favorite creators!',
+                              textStyle: context.getTextTheme().bodyLarge,
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
                   }
                   return HistoryCoinWidget(
                     data: notifier.result[index - 1],

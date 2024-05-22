@@ -5,36 +5,36 @@ class BoostContent {
   String? dateBoostStart;
   String? dateBoostEnd;
   int? priceBoost;
-  int? discount;
+  int? priceBankVaCharge;
   int? priceTotal;
 
-  BoostContent({this.typeBoost, this.intervalBoost, this.sessionBoost, this.dateBoostStart, this.dateBoostEnd, this.priceBoost, this.discount, this.priceTotal});
+  BoostContent({this.typeBoost, this.intervalBoost, this.sessionBoost, this.dateBoostStart, this.dateBoostEnd, this.priceBoost, this.priceBankVaCharge, this.priceTotal});
 
   BoostContent.fromJson(Map<String, dynamic> json) {
     typeBoost = json['typeBoost'];
-    intervalBoost = json['interval'] != null ? IntervalBoost.fromJson(json['interval']) : null;
-    sessionBoost = json['session'] != null ? SessionBoost.fromJson(json['session']) : null;
-    dateBoostStart = json['dateStart'];
-    dateBoostEnd = json['dateEnd'];
-    priceBoost = json['price'];
-    discount = json['discount'];
-    priceTotal = json['total'];
+    intervalBoost = json['intervalBoost'] != null ? IntervalBoost.fromJson(json['intervalBoost']) : null;
+    sessionBoost = json['sessionBoost'] != null ? SessionBoost.fromJson(json['sessionBoost']) : null;
+    dateBoostStart = json['dateBoostStart'];
+    dateBoostEnd = json['dateBoostEnd'];
+    priceBoost = json['priceBoost'];
+    priceBankVaCharge = json['priceBankVaCharge'];
+    priceTotal = json['priceTotal'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['typeBoost'] = typeBoost;
     if (intervalBoost != null) {
-      data['interval'] = intervalBoost!.toJson();
+      data['intervalBoost'] = intervalBoost!.toJson();
     }
     if (sessionBoost != null) {
-      data['session'] = sessionBoost!.toJson();
+      data['sessionBoost'] = sessionBoost!.toJson();
     }
-    data['dateStart'] = dateBoostStart;
-    data['dateEnd'] = dateBoostEnd;
-    data['price'] = priceBoost;
-    data['discount'] = discount;
-    data['total'] = priceTotal;
+    data['dateBoostStart'] = dateBoostStart;
+    data['dateBoostEnd'] = dateBoostEnd;
+    data['priceBoost'] = priceBoost;
+    data['priceBankVaCharge'] = priceBankVaCharge;
+    data['priceTotal'] = priceTotal;
     return data;
   }
 }
@@ -55,7 +55,7 @@ class IntervalBoost {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_id'] = sId;
     data['value'] = value;
     data['remark'] = remark;

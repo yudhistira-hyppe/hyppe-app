@@ -390,7 +390,8 @@ class UtilsBlocV2 {
       (errorData) {
         setUtilsFetch(UtilsFetch(UtilsState.getMasterBoostError));
       },
-      host: UrlConstants.boostContent,
+      host: UrlConstants.boostContentNew,
+      // host: UrlConstants.boostContent,
       headers: {
         "x-auth-token": token,
         "x-auth-user": email,

@@ -64,7 +64,7 @@ class _CoinPageState extends State<CoinPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CoinsWidget(accountBalance: System().numberFormat(amount: notifier.accountBalance?.totalsaldo ?? 0)),
+                CoinsWidget(accountBalance: System().numberFormat(amount: notifier.saldoCoin)),
                 thirtySixPx,
                 Container(
                   decoration: BoxDecoration(

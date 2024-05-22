@@ -9,11 +9,14 @@ import 'package:hyppe/app.dart';
 import 'package:hyppe/core/bloc/google_map_place/bloc.dart';
 import 'package:hyppe/core/bloc/google_map_place/state.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
+import 'package:hyppe/core/bloc/transaction/coinpurcasedetail/bloc.dart';
+import 'package:hyppe/core/bloc/transaction/coinpurcasedetail/state.dart';
 import 'package:hyppe/core/bloc/utils_v2/bloc.dart';
 import 'package:hyppe/core/bloc/utils_v2/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/collection/discount/discountmodel.dart';
 import 'package:hyppe/core/models/collection/error/error_model.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/google_map_place/model_google_map_place.dart';
@@ -21,6 +24,7 @@ import 'package:hyppe/core/models/collection/localization_v2/localization_model.
 import 'package:hyppe/core/models/collection/music/music.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/boost_response.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/models/collection/transaction/coinpurchasedetail.dart';
 import 'package:hyppe/core/models/collection/utils/boost/boost_content_model.dart';
 import 'package:hyppe/core/models/collection/utils/boost/boost_master_model.dart';
 import 'package:hyppe/core/models/collection/utils/search_people/search_people.dart';
@@ -383,6 +387,29 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  int _saldoCoin = 0;
+  int get saldoCoin => _saldoCoin;
+  set saldoCoin(int val){
+    _saldoCoin = val;
+    notifyListeners();
+  }
+
+  //Discount Ownership
+  DiscountModel _discountOwnership = DiscountModel();
+  DiscountModel get discountOwnership => _discountOwnership;
+  set discountOwnership(DiscountModel val){
+    _discountOwnership = val;
+    notifyListeners();
+  }
+
+  //Discount Boost Content
+  DiscountModel _discountBoost = DiscountModel();
+  DiscountModel get discountBoost => _discountBoost;
+  set discountBoost(DiscountModel val){
+    _discountBoost = val;
+    notifyListeners();
+  }
+
   initThumbnail() async {
     final isImage = ((fileContent?[0] ?? '').isImageFormat());
     print('My Thumbnail: $isImage');
@@ -712,6 +739,8 @@ class PreUploadContentNotifier with ChangeNotifier {
         isShared: isShared,
         urlLink: urlLink,
         judulLink: judulLink,
+        discount: discountOwnership,
+        cointPurchaseDetail: cointPurchaseDetail,
         rotate: orientation ?? NativeDeviceOrientation.portraitUp,
         location: locationName == language.addLocation ? '' : locationName,
         stickers: previewContentNotifier.stickers,
@@ -829,6 +858,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       urlLink: urlLink,
       judulLink: judulLink,
       location: locationName == language.addLocation ? '' : locationName,
+      discount: discountOwnership
     );
     final fetch = notifier.postsFetch;
 
@@ -1157,11 +1187,54 @@ class PreUploadContentNotifier with ChangeNotifier {
     );
   }
 
+  Map _param = {};
+  bool _isLoadingDetail = true;
+  bool get isLoadingDetail => _isLoadingDetail;
+  set isLoadingDetail(bool val) {
+    _isLoadingDetail = val;
+    notifyListeners();
+  }
+  CointPurchaseDetailModel _cointPurchaseDetail = CointPurchaseDetailModel();
+  CointPurchaseDetailModel get cointPurchaseDetail => _cointPurchaseDetail;
+  set cointPurchaseDetail(CointPurchaseDetailModel value) {
+    _cointPurchaseDetail = value;
+    notifyListeners();
+  }
+
+  Future<void> initCoinPurchaseDetail(BuildContext context) async {
+    final bloc = CoinPurchaseDetailDataBloc();
+    try{
+      _isLoadingDetail = true;
+      if (discountOwnership.id != null){
+        _param.addAll({
+          "typeTransaction":'CONTENT_OWNERSHIP',
+          'discount_id': discountOwnership.id,
+        });
+      }else{
+        _param.addAll({
+          "typeTransaction":'CONTENT_OWNERSHIP',
+        });
+      }
+      
+      
+      await bloc.getCoinPurchaseDetail(context, data: _param);
+      if (bloc.dataFetch.dataState == CoinPurchaseDetailState.getCoinPurchaseDetailBlocSuccess) {
+        cointPurchaseDetail = bloc.dataFetch.data;
+      }
+      _isLoadingDetail = false;
+    }catch(_){
+      _isLoadingDetail = false;
+      debugPrint(_.toString());
+    }
+  }
+
   void onOwnershipEULA(BuildContext context) {
     if (!certified) {
       ShowBottomSheet.onShowOwnerEULA(
         context,
         onSave: () {
+          //
+          initCoinPurchaseDetail(context);
           Routing().moveBack();
           certified = !certified;
         },
@@ -1217,6 +1290,7 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   Future getInitialInterest(BuildContext context) async {
     _interestList.clear();
+    _param = {};
     if (_interestList.isEmpty) {
       final notifier = UtilsBlocV2();
       await notifier.getInterestBloc(context);
@@ -1504,10 +1578,28 @@ class PreUploadContentNotifier with ChangeNotifier {
     }
   }
 
+  bool _isWarning = false;
+  bool get isWarning => _isWarning;
+  set isWarning(bool val) {
+    _isWarning = val;
+    notifyListeners();
+  }
+
+  void checkValidasi() {
+    final harga = num.parse(priceController.text.replaceAll(',', '').replaceAll('.', ''));
+    if (harga % 10 == 0){
+        isWarning = false;
+    }else{
+      isWarning = true;
+    }
+   
+    notifyListeners();
+  }
+
   Future submitOwnership(BuildContext context, {bool withAlert = false}) async {
     if (priceController.text != '') {
       final harga = num.parse(priceController.text.replaceAll(',', '').replaceAll('.', ''));
-      if (harga < 50000) {
+      if (harga < 9) {
         if (withAlert) {
           return ShowBottomSheet().onShowColouredSheet(context, language.minimumPrice ?? '', color: kHyppeDanger, iconSvg: "${AssetPath.vectorPath}remove.svg");
         } else {
@@ -1517,16 +1609,16 @@ class PreUploadContentNotifier with ChangeNotifier {
           priceController.clear();
         }
       }
-      if (harga > 50000000) {
-        if (withAlert) {
-          return ShowBottomSheet().onShowColouredSheet(context, language.maximumPrice ?? '', color: kHyppeDanger, iconSvg: "${AssetPath.vectorPath}remove.svg");
-        } else {
-          toSell = false;
-          includeTotalViews = false;
-          includeTotalLikes = false;
-          priceController.clear();
-        }
-      }
+      // if (harga > 500000) {
+      //   if (withAlert) {
+      //     return ShowBottomSheet().onShowColouredSheet(context, language.maximumPrice ?? '', color: kHyppeDanger, iconSvg: "${AssetPath.vectorPath}remove.svg");
+      //   } else {
+      //     toSell = false;
+      //     includeTotalViews = false;
+      //     includeTotalLikes = false;
+      //     priceController.clear();
+      //   }
+      // }
     }
 
     if (toSell && priceController.text == '') {
