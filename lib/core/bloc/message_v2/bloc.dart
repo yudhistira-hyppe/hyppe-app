@@ -99,6 +99,9 @@ class MessageBlocV2 {
     formData.fields.add(MapEntry('receiverParty', disqusArgument.receiverParty));
     formData.fields.add(MapEntry('postType', _system.validatePostTypeV2(disqusArgument.postType)));
     formData.fields.add(MapEntry('eventType', _system.convertMessageEventTypeToString(disqusArgument.discussEventType)));
+    if (disqusArgument.streamID != null) {
+      formData.fields.add(MapEntry('streamID', disqusArgument.streamID ?? ''));
+    }
     print('create dm');
     print(formData.fields);
 

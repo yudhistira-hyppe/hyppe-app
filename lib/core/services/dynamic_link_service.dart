@@ -331,7 +331,7 @@ class DynamicLinkService {
               isFromSplash = false;
               _routing.moveAndRemoveUntil(Routes.lobby, Routes.lobby);
               Future.delayed(const Duration(seconds: 2), () async {
-                await _routing.move(path, argument: ViewStreamingArgument(data: LinkStreamModel(sId: deepLink.queryParameters['postID'])));
+                await _routing.move(Routes.viewStreaming, argument: ViewStreamingArgument(data: LinkStreamModel(sId: deepLink.queryParameters['postID'])));
               });
 
               break;

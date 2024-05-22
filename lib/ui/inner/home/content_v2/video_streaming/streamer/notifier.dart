@@ -24,6 +24,7 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/live_stream/comment_live_model.dart';
 import 'package:hyppe/core/models/collection/live_stream/gift_live_model.dart';
 import 'package:hyppe/core/models/collection/live_stream/link_stream_model.dart';
+import 'package:hyppe/core/models/collection/live_stream/list_user_gift_model.dart';
 import 'package:hyppe/core/models/collection/live_stream/live_summary_model.dart';
 import 'package:hyppe/core/models/collection/live_stream/viewers_live_model.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
@@ -155,6 +156,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   List<int> animationIndexes = [];
   List<SearchPeolpleData> listShareUser = [];
   List<SearchPeolpleData> shareUsers = [];
+  List<ListGiftModel> dataUserGift = [];
 
   CommentLiveModel? pinComment;
 
@@ -1388,8 +1390,19 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
       if (messages.idStream == dataStream.sId) {
         if (messages.commentType == 'MESSAGGES') {
           comment.insert(0, messages);
-        } else {
+        } else if (messages.commentType == 'GIFT') {
           if (messages.urlGift != null) {
+            print("=====ada json");
+            if (giftDelux.isEmpty) {
+              // messages.urlGift = 'https://be-staging.oss-ap-southeast-5.aliyuncs.com/images/gift/66471897d975922b87c91578_3d.json';
+              giftDelux.add(messages);
+            } else {
+              giftDeluxTemp.add(messages);
+            }
+            if (timerDeluxe?.isActive ?? false) {
+            } else {
+              startTimerDelux();
+            }
           } else {
             if (giftBasic.length <= 2) {
               giftBasic.add(messages);
@@ -1408,7 +1421,6 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
       if (messages.idStream == dataStream.sId) {
         // totLikes += messages.likeCount ?? 0;
         totLikes = messages.likeCountTotal ?? 0;
-        print("totalnya ${animationIndexes}");
         // for (var i = 0; i < (messages.likeCount ?? 0); i++) {
         var run = getRandomDouble(1, 999999999999999);
         animationIndexes.add(run.toInt());
@@ -1589,6 +1601,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
+  //send share DM DIRECT MESSAGE
   Future sendShareMassage(BuildContext context) async {
     Routing().moveBack();
     for (var i = 0; i < shareUsers.length; i++) {
@@ -1597,19 +1610,19 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
 
     ScaffoldMessengerState().hideCurrentSnackBar();
     messageShareCtrl.clear();
-    if (context.mounted) {
-      tn = context.read<TranslateNotifierV2>().translate;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        margin: const EdgeInsets.only(bottom: 60, left: 16, right: 16),
-        backgroundColor: kHyppeTextLightPrimary,
-        content: Text(tn?.sentSuccessfully ?? '', style: const TextStyle(color: Colors.white)),
-        behavior: SnackBarBehavior.floating,
-      ));
-    }
+    // if (context.mounted) {
+    tn = context.read<TranslateNotifierV2>().translate;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      margin: const EdgeInsets.only(bottom: 60, left: 16, right: 16),
+      backgroundColor: kHyppeTextLightPrimary,
+      content: Text(tn?.sentSuccessfully ?? '', style: const TextStyle(color: Colors.white)),
+      behavior: SnackBarBehavior.floating,
+    ));
+    // }
   }
 
   Future sendMessageDirect(BuildContext context, String recipientEmail) async {
-    if (messageShareCtrl.text.trim().isEmpty) return;
+    // if (messageShareCtrl.text.trim().isEmpty) return;
 
     try {
       messageShareCtrl.text.logger();
@@ -1619,7 +1632,9 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
       final param = DiscussArgument(
         email: emailSender,
         receiverParty: recipientEmail,
-      )..txtMessages = message;
+      )
+        ..txtMessages = message == '' ? "text_kosong" : message
+        ..streamID = dataStream.sId;
 
       final notifier = MessageBlocV2();
       await notifier.createDiscussionBloc(context, disqusArgument: param);
@@ -1641,7 +1656,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
         routes: Routes.viewStreaming,
         postID: dataStream.sId,
         fullName: "",
-        description: '${profile?.fullName ?? profile?.username} (${profile?.username}) \n is LIVE ${dataStream.title} \n Office Vlog Check out... \n',
+        description: '${profile?.fullName ?? profile?.username} (${profile?.username}) \n is LIVE ${dataStream.title}',
         // thumb: System().showUserPicture(profileImage),
         thumb: System().showUserPicture(profile?.avatar?.mediaEndpoint),
       ),
@@ -1682,10 +1697,28 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     });
   }
 
+  Timer? timerDeluxe;
+  void startTimerDelux() {
+    timerDeluxe = Timer.periodic(const Duration(seconds: 5), (timer) {
+      if (giftDelux.isNotEmpty) {
+        comment.insert(0, giftDelux[0]); //masukin ke comment
+        giftDelux.removeAt(0); //hapus gift deluxe
+        if (giftDeluxTemp.isNotEmpty) {
+          giftDelux.add(giftDeluxTemp[0]);
+          giftDeluxTemp.removeAt(0);
+        }
+
+        notifyListeners();
+      } else {
+        timerDeluxe?.cancel();
+      }
+    });
+  }
+
   Future getGift(BuildContext context, bool mounted, String type, {bool isLoadmore = false}) async {
     //type = CLASSIC -- DELUXE
-    if (type == 'CLASSIC' && dataGift.isNotEmpty) return;
-    if (type == 'DELUXE' && dataGiftDeluxe.isNotEmpty) return;
+    // if (type == 'CLASSIC' && dataGift.isNotEmpty) return;
+    // if (type == 'DELUXE' && dataGiftDeluxe.isNotEmpty) return;
     if (!isLoadmore) isloadingGift = true;
     notifyListeners();
     bool connect = await System().checkConnections();
@@ -1693,9 +1726,9 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     if (connect) {
       try {
         final notifier = LiveStreamBloc();
-        Map data = {"page": 0, "limit": 9999, "descending": true, "type": "GIFT", "status": true, "tipegift": type};
+        Map data = {"page": 0, "limit": 9999, "descending": true, "type": "GIFT", "typeGift": type};
 
-        if (mounted) await notifier.getLinkStream(context, data, UrlConstants.listGift);
+        if (mounted) await notifier.getLinkStream(context, data, UrlConstants.listmonetization);
 
         final fetch = notifier.liveStreamFetch;
         if (fetch.postsState == LiveStreamState.getApiSuccess) {
@@ -1720,6 +1753,41 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
       }
     }
     isloadingGift = false;
+    notifyListeners();
+  }
+
+  Future getListGift(BuildContext context, mounted) async {
+    if (pageViewers == 0) isloadingViewers = true;
+    notifyListeners();
+    bool connect = await System().checkConnections();
+    if (connect) {
+      try {
+        final notifier = LiveStreamBloc();
+        Map data = {
+          "_id": dataStream.sId,
+        };
+
+        if (mounted) {
+          await notifier.getLinkStream(context, data, UrlConstants.listGift);
+        }
+        final fetch = notifier.liveStreamFetch;
+        if (fetch.postsState == LiveStreamState.getApiSuccess) {
+          fetch.data.forEach((v) => dataUserGift.add(ListGiftModel.fromJson(v)));
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+
+      notifyListeners();
+    } else {
+      if (context.mounted) {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
+          initLiveStream(context, mounted);
+        });
+      }
+    }
+    isloadingViewers = false;
     notifyListeners();
   }
 }

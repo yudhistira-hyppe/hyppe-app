@@ -17,6 +17,7 @@ class StreamingModel {
   int? viewCountActive;
   String? url;
   String? textUrl;
+  String? tokenAgora;
   List<CommentLiveModel>? comment;
   List<String>? reportRemark;
   User? user;
@@ -38,6 +39,7 @@ class StreamingModel {
     this.url,
     this.comment,
     this.textUrl,
+    this.tokenAgora,
     this.reportRemark,
     this.user,
   });
@@ -58,6 +60,7 @@ class StreamingModel {
     viewCountActive = json['viewCountActive'] ?? 0;
     url = json['url'];
     textUrl = json['textUrl'];
+    tokenAgora = json['tokenAgora'];
     if (json['comment'] != null) {
       comment = <CommentLiveModel>[];
       json['comment'].forEach((v) {

@@ -26,7 +26,7 @@ class ListCommentViewer extends StatelessWidget {
     return Consumer<ViewStreamingNotifier>(
       builder: (context, notifier, __) => SizedBox(
         height: context.getHeight() * (commentFocusNode!.hasFocus ? 0.15 : 0.3),
-        width: SizeConfig.screenWidth! * 0.7,
+        width: SizeConfig.screenWidth! * 0.9,
         child: notifier.isCommentDisable
             ? Container()
             : GestureDetector(
@@ -96,13 +96,10 @@ class ListCommentViewer extends StatelessWidget {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Text.rich(TextSpan(text: notifier.comment[index].username ?? '', style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700), children: [
-                                            if (notifier.comment[index].messages == 'joined')
-                                              const TextSpan(
-                                                text: ' joined',
-                                                style: TextStyle(color: kHyppeTextPrimary, fontWeight: FontWeight.w700),
-                                              )
-                                          ])),
+                                          Text.rich(TextSpan(
+                                            text: notifier.comment[index].username ?? '',
+                                            style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700),
+                                          )),
                                           // Text(
                                           //   notifier.comment[index].username ?? '',
                                           //   style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700),
@@ -114,30 +111,39 @@ class ListCommentViewer extends StatelessWidget {
                                             ),
                                         ],
                                       )
-                                    : Row(
-                                        children: [
-                                          Text.rich(TextSpan(text: notifier.comment[index].username ?? '', style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700), children: [
-                                            TextSpan(
-                                              text: " ${translate.sent} ${notifier.comment[index].messages}",
-                                              style: const TextStyle(color: kHyppeTextPrimary, fontWeight: FontWeight.w700),
-                                            ),
-                                          ])),
-                                          type == '.svg'
-                                              ? SvgPicture.network(
-                                                  data.urlGiftThum ?? '',
-                                                  height: 20 * SizeConfig.scaleDiagonal,
-                                                  width: 20 * SizeConfig.scaleDiagonal,
-                                                  semanticsLabel: 'A shark?!',
-                                                  placeholderBuilder: (BuildContext context) => Container(padding: const EdgeInsets.all(30.0), child: const CircularProgressIndicator()),
-                                                )
-                                              : Container(
-                                                  margin: const EdgeInsets.only(left: 16),
-                                                  width: 20 * SizeConfig.scaleDiagonal,
-                                                  height: 20 * SizeConfig.scaleDiagonal,
-                                                  decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(data.urlGiftThum ?? ''))),
-                                                )
-                                        ],
-                                      ),
+                                    : notifier.comment[index].commentType == 'JOIN'
+                                        ? Text.rich(TextSpan(text: notifier.comment[index].username ?? '', style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700), children: [
+                                            if (notifier.comment[index].messages == 'joined')
+                                              const TextSpan(
+                                                text: ' joined',
+                                                style: TextStyle(color: kHyppeTextPrimary, fontWeight: FontWeight.w700),
+                                              ),
+                                          ]))
+                                        : Row(
+                                            children: [
+                                              Text.rich(
+                                                  TextSpan(text: notifier.comment[index].username ?? '', style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700), children: [
+                                                TextSpan(
+                                                  text: " ${translate.sent} ${notifier.comment[index].messages}",
+                                                  style: const TextStyle(color: kHyppeTextPrimary, fontWeight: FontWeight.w700),
+                                                ),
+                                              ])),
+                                              type == '.svg'
+                                                  ? SvgPicture.network(
+                                                      data.urlGiftThum ?? '',
+                                                      height: 20 * SizeConfig.scaleDiagonal,
+                                                      width: 20 * SizeConfig.scaleDiagonal,
+                                                      semanticsLabel: 'A shark?!',
+                                                      placeholderBuilder: (BuildContext context) => Container(padding: const EdgeInsets.all(30.0), child: const CircularProgressIndicator()),
+                                                    )
+                                                  : Container(
+                                                      margin: const EdgeInsets.only(left: 16),
+                                                      width: 20 * SizeConfig.scaleDiagonal,
+                                                      height: 20 * SizeConfig.scaleDiagonal,
+                                                      decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(data.urlGiftThum ?? ''))),
+                                                    )
+                                            ],
+                                          ),
                               ),
                             ],
                           ),

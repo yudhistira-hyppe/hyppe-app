@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/models/collection/live_stream/list_user_gift_model.dart';
 import 'package:hyppe/core/models/collection/live_stream/viewers_live_model.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/constant/widget/custom_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
@@ -32,8 +35,8 @@ class _OnListGiftState extends State<OnListGift> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // var streampro = Provider.of<StreamerNotifier>(context, listen: false);
-      // streampro.getViewer(context, mounted, end: true);
+      var streampro = Provider.of<StreamerNotifier>(context, listen: false);
+      streampro.getListGift(context, mounted);
     });
   }
 
@@ -75,44 +78,87 @@ class _OnListGiftState extends State<OnListGift> {
                 ],
               ),
             ),
-            // Expanded(
-            //   child: ListView.builder(
-            //       itemCount: notifier.dataViewers.length,
-            //       itemBuilder: (context, index) {
-            //         final watcher = notifier.dataViewers[index];
-            //         return watcherItem(watcher, index, language, notifier);
-            //       }),
-            // ),
+            Expanded(
+              child: ListView.builder(
+                  itemCount: notifier.dataUserGift.length,
+                  itemBuilder: (context, index) {
+                    final watcher = notifier.dataUserGift[index];
+                    return watcherItem(watcher, index, language);
+                  }),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget watcherItem(ViewersLiveModel watcher, int index, LocalizationModelV2 language, StreamerNotifier notifier) {
+  Widget watcherItem(ListGiftModel data, int index, LocalizationModelV2 language) {
+    final mimeType = System().extensionFiles(data.thumbnail ?? '')?.split('/')[0] ?? '';
+    String type = '';
+    if (mimeType != '') {
+      var a = mimeType.split('/');
+      type = a[0];
+    }
+
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          CustomTextWidget(
-            textToDisplay: '${index + 1}',
-            textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-          ),
-          sixteenPx,
           Flexible(
             child: InkWell(
-              onTap: () => ShowBottomSheet.onWatcherStatus(context, watcher.email ?? '', watcher.sId ?? ''),
+              onTap: () => ShowBottomSheet.onWatcherStatus(context, data.email ?? '', data.sId ?? ''),
               child: Row(
                 children: [
-                  CustomProfileImage(
-                    width: 36,
-                    height: 36,
-                    following: true,
-                    imageUrl: System().showUserPicture(watcher.avatar?.mediaEndpoint),
-                  ),
+                  type == '.svg'
+                      ? SvgPicture.network(
+                          data.thumbnail ?? '',
+                          height: 40 * SizeConfig.scaleDiagonal,
+                          width: 40 * SizeConfig.scaleDiagonal,
+                          semanticsLabel: 'A shark?!',
+                          placeholderBuilder: (BuildContext context) => Container(padding: const EdgeInsets.all(30.0), child: const CircularProgressIndicator()),
+                        )
+                      : SizedBox(
+                          // width: MediaQuery.of(context2).size.width,
+                          width: 40 * SizeConfig.scaleDiagonal,
+                          height: 40 * SizeConfig.scaleDiagonal,
+                          child: CustomCacheImage(
+                            imageUrl: data.thumbnail ?? '',
+                            imageBuilder: (_, imageProvider) {
+                              return Container(
+                                alignment: Alignment.topRight,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
+                                ),
+                              );
+                            },
+                            errorWidget: (_, __, ___) {
+                              return Container(
+                                alignment: Alignment.topRight,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(2),
+                                  image: const DecorationImage(
+                                    fit: BoxFit.contain,
+                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                  ),
+                                ),
+                              );
+                            },
+                            emptyWidget: Container(
+                              alignment: Alignment.topRight,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(2),
+                                image: const DecorationImage(
+                                  fit: BoxFit.contain,
+                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                   twelvePx,
                   Expanded(
                     child: Row(
@@ -122,56 +168,38 @@ class _OnListGiftState extends State<OnListGift> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CustomTextWidget(
-                              textAlign: TextAlign.left,
-                              textToDisplay: watcher.username ?? '',
-                              textStyle: context.getTextTheme().bodyText2?.copyWith(
+                            RichText(
+                                text: TextSpan(
+                              text: "${data.count} ",
+                              style: context.getTextTheme().bodyText2?.copyWith(
                                     fontWeight: FontWeight.w700,
+                                    color: kHyppeTextLightPrimary,
                                   ),
-                            ),
-                            fourPx,
-                            CustomTextWidget(
-                              textAlign: TextAlign.left,
-                              textToDisplay: watcher.fullName ?? '',
-                              textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w400, color: kHyppeBurem),
-                            ),
+                              children: [
+                                TextSpan(
+                                  text: "${data.name}",
+                                  style: TextStyle(color: kHyppeBurem),
+                                ),
+                              ],
+                            )),
+                            sixPx,
+                            RichText(
+                                text: TextSpan(
+                              text: "${language.from} ",
+                              style: context.getTextTheme().bodyText2?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color: kHyppeBurem,
+                                  ),
+                              children: [
+                                TextSpan(
+                                  text: "${data.username}",
+                                  style: TextStyle(color: kHyppePrimary),
+                                ),
+                              ],
+                            )),
                           ],
                         ),
                         // Button Follow
-                        CustomElevatedButton(
-                          width: 95,
-                          height: 32 * SizeConfig.scaleDiagonal,
-                          buttonStyle: ButtonStyle(
-                            backgroundColor: (watcher.following ?? false)
-                                ? null
-                                : (notifier.userName == notifier.audienceProfile.username)
-                                    ? null
-                                    : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                          ),
-                          function: notifier.isCheckLoading
-                              ? null
-                              : (notifier.userName == notifier.audienceProfile.username)
-                                  ? null
-                                  : () {
-                                      if (notifier.statusFollowing == StatusFollowing.none || notifier.statusFollowing == StatusFollowing.rejected) {
-                                        notifier.followUser(context, watcher.email, idMediaStreaming: watcher.sId).then((value) {
-                                          watcher.following = true;
-                                        });
-                                      } else if (notifier.statusFollowing == StatusFollowing.following) {
-                                        notifier.followUser(context, watcher.email, isUnFollow: true, idMediaStreaming: watcher.sId).then((value) {
-                                          watcher.following = false;
-                                        });
-                                      }
-                                    },
-                          child: notifier.isCheckLoading
-                              ? const CustomLoading()
-                              : CustomTextWidget(
-                                  textToDisplay: (watcher.following ?? false) ? language.following ?? 'following' : language.follow ?? 'follow',
-                                  textStyle: Theme.of(context).textTheme.labelMedium?.copyWith(
-                                        color: (watcher.following ?? false) ? kHyppeGrey : kHyppeLightButtonText,
-                                      ),
-                                ),
-                        ),
                       ],
                     ),
                   ),

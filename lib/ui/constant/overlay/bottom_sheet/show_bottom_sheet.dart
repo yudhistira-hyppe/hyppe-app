@@ -1908,7 +1908,7 @@ class ShowBottomSheet {
     );
   }
 
-  onShowShareLive(BuildContext _) {
+  onShowShareLive(BuildContext _, {bool isViewer = false}) {
     showModalBottomSheet(
         isScrollControlled: true,
         context: _,
@@ -1928,7 +1928,7 @@ class ShowBottomSheet {
                   ),
                 ),
                 padding: const EdgeInsets.all(0),
-                child: OnShowShareLiveBottomSheet(scrollController: scrollController),
+                child: OnShowShareLiveBottomSheet(scrollController: scrollController, isViewer: isViewer),
               );
             },
           );

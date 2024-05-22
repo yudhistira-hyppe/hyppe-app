@@ -5,6 +5,7 @@ import 'package:flutter_livepush_plugin/live_push_config.dart';
 import 'package:flutter_livepush_plugin/live_pusher.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -296,33 +297,33 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                         )
                       : Container(),
                   // Text('hahaha ${isCreator}'),
-                  widget.isLive
-                      ? menu(
-                          isCreators: isCreator,
-                          title: "HyppeLive",
-                          subTitle: notifier.language.itstimetoLIVEandinteract ?? '',
-                          icon: "${AssetPath.vectorPath}hyppeLive.svg",
-                          function: () async {
-                            if (newUser == "FALSE") {
-                              // context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
-                              // final tempIsHome = isHomeScreen;
-                              // if (tempIsHome) {
-                              //   isHomeScreen = false;
-                              // }
-                              if (isCreator) {
-                                Routing().moveAndPop(Routes.streamer);
-                                // if (Platform.isAndroid) {
-                                //   Routing().moveAndPop(Routes.streamer);
-                                // } else if (Platform.isIOS) {
-                                //   Routing().moveAndPop(Routes.streameriOS);
-                                // }
-                              }
-                              // if (tempIsHome) {
-                              //   isHomeScreen = true;
-                              // }
-                            }
-                          })
-                      : Container(),
+
+                  menu(
+                      isCreators: SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED,
+                      title: "HyppeLive",
+                      subTitle: notifier.language.itstimetoLIVEandinteract ?? '',
+                      icon: "${AssetPath.vectorPath}hyppeLive.svg",
+                      function: () async {
+                        if (newUser == "FALSE") {
+                          // context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
+                          // final tempIsHome = isHomeScreen;
+                          // if (tempIsHome) {
+                          //   isHomeScreen = false;
+                          // }
+                          if (SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED) {
+                            Routing().moveAndPop(Routes.streamer);
+                            // if (Platform.isAndroid) {
+                            //   Routing().moveAndPop(Routes.streamer);
+                            // } else if (Platform.isIOS) {
+                            //   Routing().moveAndPop(Routes.streameriOS);
+                            // }
+                          }
+                          // if (tempIsHome) {
+                          //   isHomeScreen = true;
+                          // }
+                        }
+                      }),
+
                   thirtyTwoPx,
                 ],
               ),

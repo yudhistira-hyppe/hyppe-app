@@ -1163,9 +1163,9 @@
   "ballance": "Saldo",
   "toBeUsed": "Saldo yang akan digunakan",
   "pinned": "Disematkan",
-  "unpinComment": "Lepas Stematan Komentar",
+  "unpinComment": "Lepas Sematkan Komentar",
   "sentSuccessfully": "Berhasil dikirim",
-  "titleLink": "Judul Link",
+  "titleLink": "Kustom Link Teks",
   "addLink": "Tambahkan Link",
   "failedToAddBankAccount": "Penambahan Gagal",
   "desc1FailedToAddBankAccount": "Maaf, nama pemilik rekening yang kamu masukan tidak sesuai dengan nama pada E-KTP. ",
@@ -1199,5 +1199,6 @@
   "copyvirtualaccount": "Nomor virtual account berhasil disalin",
   "contentgift": "Kontent Gift",
   "requiredgift": "Syarat Menerima Gift",
-  "yourorder": "Pesanan Kamu"
+  "yourorder": "Pesanan Kamu",
+  "emptyGift": "Stok Gift akan hadir sebentar lagi, ditunggu ya✨"
 }

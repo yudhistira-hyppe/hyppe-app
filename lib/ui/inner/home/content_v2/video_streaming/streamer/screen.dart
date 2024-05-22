@@ -18,6 +18,7 @@ import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/b
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/love_lottie.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/pauseLive.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/streamer.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/gift_deluxe.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
@@ -230,6 +231,7 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
                                         : Container(),
                     if (notifier.isPause) PauseLive(notifier: notifier),
                     if (notifier.statusLive == StatusStream.ready || notifier.statusLive == StatusStream.online) StreamerWidget(commentFocusNode: commentFocusNode),
+                    if (notifier.statusLive == StatusStream.ready || notifier.statusLive == StatusStream.online) const GiftDeluxe(),
                     // StreamerWidget(commentFocusNode: commentFocusNode),
                     // Align(
                     //   alignment: Alignment.center,

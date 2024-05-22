@@ -23,8 +23,7 @@ class StreamingFeedbackScreen extends StatefulWidget {
   const StreamingFeedbackScreen({super.key, this.arguments});
 
   @override
-  State<StreamingFeedbackScreen> createState() =>
-      _StreamingFeedbackScreenState();
+  State<StreamingFeedbackScreen> createState() => _StreamingFeedbackScreenState();
 }
 
 class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
@@ -34,7 +33,7 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final stream = Provider.of<StreamingFeedbackNotifier>(context, listen: false);
-      if (widget.arguments!.blockLive??false){
+      if (widget.arguments!.blockLive ?? false) {
         openBlockComponent(stream);
       }
     });
@@ -65,10 +64,8 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                 ),
                 twentyPx,
                 CustomTextWidget(
-                  textToDisplay:
-                      language.liveVideoHasEnded ?? 'LIVE telah berakhir',
-                  textStyle: const TextStyle(
-                      fontSize: 14, fontWeight: FontWeight.bold),
+                  textToDisplay: language.liveVideoHasEnded ?? 'LIVE telah berakhir',
+                  textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                 ),
                 eightPx,
                 CustomTextWidget(
@@ -79,8 +76,7 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                 twentyPx,
                 Container(
                   width: double.infinity,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                   decoration: BoxDecoration(
                     border: Border.all(color: kHyppeBorderTab),
                     borderRadius: BorderRadius.circular(3),
@@ -90,8 +86,7 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                     children: [
                       CustomTextWidget(
                         textToDisplay: language.engagement ?? 'Keterlibatan',
-                        textStyle: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       sixteenPx,
                       Row(
@@ -101,44 +96,25 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              itemStatus(
-                                  language.totalViewers ?? 'Jumlah Penonton',
-                                  (widget.arguments?.data.totalViews ?? 0)
-                                      .toString()),
+                              itemStatus(language.totalViewers ?? 'Jumlah Penonton', (widget.arguments?.data.totalViews ?? 0).toString()),
                               twentyPx,
-                              itemStatus(
-                                  language.totalPemberiGift ??
-                                      'Total Pemberi Gift',
-                                  (widget.arguments?.data.totalGift ?? 0)
-                                      .toString()),
+                              itemStatus(language.totalPemberiGift ?? 'Total Pemberi Gift', (widget.arguments?.data.totalUserGift ?? 0).toString()),
                             ],
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              itemStatus(
-                                  language.totalShares ?? 'Jumlah Membagikan',
-                                  (widget.arguments?.data.totalShare ?? 0)
-                                      .toString()),
+                              itemStatus(language.totalShares ?? 'Jumlah Membagikan', (widget.arguments?.data.totalShare ?? 0).toString()),
                               twentyPx,
-                              itemStatus(
-                                  language.totalGift ?? 'Total Gift',
-                                  (widget.arguments?.data.totalGifter ?? 0)
-                                      .toString()),
+                              itemStatus(language.totalGift ?? 'Total Gift', (widget.arguments?.data.totalGift ?? 0).toString()),
                             ],
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              itemStatus(
-                                  language.newFollowers ?? 'Pengikut Baru',
-                                  (widget.arguments?.data.totalFollower ?? 0)
-                                      .toString()),
+                              itemStatus(language.newFollowers ?? 'Pengikut Baru', (widget.arguments?.data.totalFollower ?? 0).toString()),
                               twentyPx,
-                              itemStatus(
-                                  language.totalComments ?? 'Jumlah Komentar',
-                                  (widget.arguments?.data.totalComment ?? 0)
-                                      .toString()),
+                              itemStatus(language.totalComments ?? 'Jumlah Komentar', (widget.arguments?.data.totalComment ?? 0).toString()),
                             ],
                           ),
                         ],
@@ -146,16 +122,14 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      itemStatus(language.totalLikes ?? 'Jumlah Suka',
-                          (widget.arguments?.data.totalLike ?? 0).toString()),
+                      itemStatus(language.totalLikes ?? 'Jumlah Suka', (widget.arguments?.data.totalLike ?? 0).toString()),
                     ],
                   ),
                 ),
                 twelvePx,
                 Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 12, horizontal: 12),
+                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                     decoration: BoxDecoration(
                       border: Border.all(color: kHyppeBorderTab),
                       borderRadius: BorderRadius.circular(3),
@@ -165,8 +139,7 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                       children: [
                         CustomTextWidget(
                           textToDisplay: language.income ?? 'Pendapatan',
-                          textStyle: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(
                           height: 12.0,
@@ -184,11 +157,8 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                                 width: 12.0,
                               ),
                               CustomTextWidget(
-                                textToDisplay:
-                                    (widget.arguments?.data.totalCoin ?? 0)
-                                        .toString(),
-                                textStyle: const TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                                textToDisplay: (widget.arguments?.data.totalIncome ?? 0).toString(),
+                                textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
@@ -196,10 +166,8 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                         Align(
                           alignment: Alignment.center,
                           child: CustomTextWidget(
-                            textToDisplay: language.totalIncomeLive ??
-                                'Total Pendapatan LIVE',
-                            textStyle: const TextStyle(
-                                fontSize: 12, color: kHyppeBurem),
+                            textToDisplay: language.totalIncomeLive ?? 'Total Pendapatan LIVE',
+                            textStyle: const TextStyle(fontSize: 12, color: kHyppeBurem),
                           ),
                         ),
                       ],
@@ -207,8 +175,7 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                 twelvePx,
                 Container(
                   width: double.infinity,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                   decoration: BoxDecoration(
                     border: Border.all(color: kHyppeBorderTab),
                     borderRadius: BorderRadius.circular(3),
@@ -219,33 +186,26 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                     onTap: () {
                       ShowBottomSheet.onListOfWatcher(context);
                     },
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CustomTextWidget(
-                            textToDisplay:
-                                language.viewerList ?? 'Daftar Penonton',
-                            textStyle: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                          CustomTextWidget(
-                            textToDisplay:
-                                (widget.arguments?.data.totalViews ?? 0)
-                                    .toString(),
-                            textStyle: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: context.getColorScheme().primary,
-                            ),
-                          ),
-                        ]),
+                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                      CustomTextWidget(
+                        textToDisplay: language.viewerList ?? 'Daftar Penonton',
+                        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      CustomTextWidget(
+                        textToDisplay: (widget.arguments?.data.totalViews ?? 0).toString(),
+                        textStyle: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: context.getColorScheme().primary,
+                        ),
+                      ),
+                    ]),
                   ),
                 ),
                 twelvePx,
                 Container(
                   width: double.infinity,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                   decoration: BoxDecoration(
                     border: Border.all(color: kHyppeBorderTab),
                     borderRadius: BorderRadius.circular(3),
@@ -256,33 +216,26 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                     onTap: () {
                       ShowBottomSheet.onListOfGift(context);
                     },
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CustomTextWidget(
-                            textToDisplay:
-                                language.giftList ?? 'Hadiah yang Diterima',
-                            textStyle: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                          CustomTextWidget(
-                            textToDisplay:
-                                (widget.arguments?.data.totalGifter ?? 0)
-                                    .toString(),
-                            textStyle: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: context.getColorScheme().primary,
-                            ),
-                          ),
-                        ]),
+                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                      CustomTextWidget(
+                        textToDisplay: language.giftList ?? 'Hadiah yang Diterima',
+                        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      CustomTextWidget(
+                        textToDisplay: (widget.arguments?.data.totalGift ?? 0).toString(),
+                        textStyle: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: context.getColorScheme().primary,
+                        ),
+                      ),
+                    ]),
                   ),
                 ),
                 twelvePx,
                 Container(
                   width: double.infinity,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                   decoration: BoxDecoration(
                     border: Border.all(color: kHyppeBorderTab),
                     borderRadius: BorderRadius.circular(3),
@@ -291,10 +244,8 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomTextWidget(
-                        textToDisplay: language.howWasYourLiveExperience ??
-                            'Bagaimana pengalaman siaran LIVE-mu?',
-                        textStyle: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                        textToDisplay: language.howWasYourLiveExperience ?? 'Bagaimana pengalaman siaran LIVE-mu?',
+                        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       twentyPx,
                       reactChosen != null
@@ -312,14 +263,12 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                                               : '${AssetPath.vectorPath}good_active.svg'),
                                   eightPx,
                                   CustomTextWidget(
-                                    textToDisplay:
-                                        reactChosen == ReactStream.bad
-                                            ? (language.poor ?? 'Buruk')
-                                            : reactChosen == ReactStream.neutral
-                                                ? (language.neutral ?? 'Netral')
-                                                : (language.good ?? 'Baik'),
-                                    textStyle: const TextStyle(
-                                        fontSize: 12, color: kHyppeBurem),
+                                    textToDisplay: reactChosen == ReactStream.bad
+                                        ? (language.poor ?? 'Buruk')
+                                        : reactChosen == ReactStream.neutral
+                                            ? (language.neutral ?? 'Netral')
+                                            : (language.good ?? 'Baik'),
+                                    textStyle: const TextStyle(fontSize: 12, color: kHyppeBurem),
                                   ),
                                 ],
                               ),
@@ -329,33 +278,24 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                               children: [
                                 ReactStreamItem(
                                     onTap: () async {
-                                      reactChosen = await ShowBottomSheet()
-                                          .onReactStreaming(
-                                              context, ReactStream.bad, 1);
+                                      reactChosen = await ShowBottomSheet().onReactStreaming(context, ReactStream.bad, 1);
                                       setState(() {});
                                     },
-                                    svg:
-                                        '${AssetPath.vectorPath}bad_outline.svg',
+                                    svg: '${AssetPath.vectorPath}bad_outline.svg',
                                     desc: (language.poor ?? 'Buruk')),
                                 ReactStreamItem(
                                     onTap: () async {
-                                      reactChosen = await ShowBottomSheet()
-                                          .onReactStreaming(
-                                              context, ReactStream.neutral, 2);
+                                      reactChosen = await ShowBottomSheet().onReactStreaming(context, ReactStream.neutral, 2);
                                       setState(() {});
                                     },
-                                    svg:
-                                        '${AssetPath.vectorPath}neutral_outline.svg',
+                                    svg: '${AssetPath.vectorPath}neutral_outline.svg',
                                     desc: (language.neutral ?? 'Netral')),
                                 ReactStreamItem(
                                     onTap: () async {
-                                      reactChosen = await ShowBottomSheet()
-                                          .onReactStreaming(
-                                              context, ReactStream.good, 3);
+                                      reactChosen = await ShowBottomSheet().onReactStreaming(context, ReactStream.good, 3);
                                       setState(() {});
                                     },
-                                    svg:
-                                        '${AssetPath.vectorPath}good_outline.svg',
+                                    svg: '${AssetPath.vectorPath}good_outline.svg',
                                     desc: (language.good ?? 'Baik'))
                               ],
                             )
@@ -397,8 +337,7 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
           height: MediaQuery.of(context).size.height * .3,
           padding: const EdgeInsets.all(0),
           child: Dialog(
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10))),
+            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
             child: Container(
               padding: const EdgeInsets.all(15),
               height: MediaQuery.of(context).size.height * .3,
@@ -412,52 +351,40 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                   ),
                   Text(
                     language.labelBlockLive2 ?? 'Siaran LIVE dihentikan',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold
-                    ),
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                   twelvePx,
                   Center(
                     child: RichText(
                       textAlign: TextAlign.center,
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: language.labelBlockLive3 ?? 'Siaran LIVE telah dihentikan oleh sistem karena melanggar ',
-                            style: const TextStyle(
-                              color: kHyppeBurem
-                            )
-                          ),
-                          TextSpan(
-                            text: language.communityguidelines ?? 'Pedoman Komunitas Hyppe.',
-                            style: const TextStyle(
-                              color: kHyppePrimary,
-                              fontWeight: FontWeight.bold
-                            ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () { launchUrl(Uri.parse('https://hyppe.id/en/privacy-policy'));
+                      text: TextSpan(children: [
+                        TextSpan(text: language.labelBlockLive3 ?? 'Siaran LIVE telah dihentikan oleh sistem karena melanggar ', style: const TextStyle(color: kHyppeBurem)),
+                        TextSpan(
+                          text: language.communityguidelines ?? 'Pedoman Komunitas Hyppe.',
+                          style: const TextStyle(color: kHyppePrimary, fontWeight: FontWeight.bold),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              launchUrl(Uri.parse('https://hyppe.id/en/privacy-policy'));
                             },
-                          )
-                        ]
-                      ),
+                        )
+                      ]),
                     ),
                   ),
                   sixteenPx,
-                    CustomTextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 48),
-                        child: Text(
-                          'OK',
-                          style: TextStyle(
-                            color: kHyppePrimary,
-                            fontSize: 16,
-                          ),
+                  CustomTextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 48),
+                      child: Text(
+                        'OK',
+                        style: TextStyle(
+                          color: kHyppePrimary,
+                          fontSize: 16,
                         ),
                       ),
                     ),
+                  ),
                 ],
               ),
             ),

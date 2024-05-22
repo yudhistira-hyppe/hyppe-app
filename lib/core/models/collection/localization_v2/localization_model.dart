@@ -1197,6 +1197,7 @@ class LocalizationModelV2 {
   String? contentgift;
   String? requiredgift;
   String? yourorder;
+  String? emptyGift;
   LocalizationModelV2(
       {this.login,
       this.logIn,
@@ -2385,7 +2386,8 @@ class LocalizationModelV2 {
       this.copyvirtualaccount,
       this.contentgift,
       this.requiredgift,
-      this.yourorder});
+      this.yourorder,
+      this.emptyGift,});
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
     login = json['login'];
@@ -3605,5 +3607,6 @@ class LocalizationModelV2 {
     contentgift = json['contentgift'];
     requiredgift = json['requiredgift'];
     yourorder = json['yourorder'];
+    emptyGift = json['emptyGift'];
   }
 }

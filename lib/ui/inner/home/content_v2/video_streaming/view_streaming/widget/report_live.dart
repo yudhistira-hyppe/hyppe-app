@@ -92,7 +92,6 @@ class _ReportLiveState extends State<ReportLive> {
                         ? () async {
                             // Navigator.pop(context);
                             notifier.sendReportLive(context, notifier.groupsReport[notifier.selectedReportValue ?? 0].text);
-
                             // context.read<CoinNotifier>().changeSelectedTransaction();
                           }
                         : null,

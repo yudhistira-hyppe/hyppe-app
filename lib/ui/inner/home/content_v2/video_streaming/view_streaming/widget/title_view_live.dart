@@ -57,15 +57,15 @@ class TitleViewLive extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                ShowBottomSheet.onWatcherStatus(context, data.email ?? '', data.sId ?? '', isViewer: true);
+                ShowBottomSheet.onWatcherStatus(context, dataStream.user?.email ?? '', dataStream.sId ?? '', isViewer: true);
               },
               child: CustomProfileImage(
-                cacheKey: data.avatar?.imageKey,
+                cacheKey: '',
                 following: true,
                 forStory: false,
                 width: 36 * SizeConfig.scaleDiagonal,
                 height: 36 * SizeConfig.scaleDiagonal,
-                imageUrl: System().showUserPicture(data.avatar?.mediaEndpoint ?? ''),
+                imageUrl: System().showUserPicture(dataStream.user?.avatar?.mediaEndpoint ?? ''),
                 // badge: notifier.user.profile?.urluserBadge,
                 allwaysUseBadgePadding: false,
               ),
@@ -98,9 +98,18 @@ class TitleViewLive extends StatelessWidget {
               onTap: () {
                 // ShowBottomSheet.onStreamWatchersStatus(context, notifier);
                 final ref = context.read<StreamerNotifier>();
-                ref.dataStream = data;
-                ref.titleLive = data.title ?? '';
-                ref.userName = data.username ?? '';
+
+                var data2 = LinkStreamModel(
+                  title: dataStream.title,
+                  avatar: dataStream.user?.avatar,
+                  email: dataStream.user?.email,
+                  username: dataStream.user?.username,
+                  sId: dataStream.sId,
+                );
+
+                ref.dataStream = data.username != null ? data : data2;
+                ref.titleLive = data.title ?? (dataStream.title ?? '');
+                ref.userName = data.username ?? (dataStream.user?.username ?? '');
                 ShowBottomSheet.onStreamWatchersStatus(context, true, ref);
               },
               child: Row(
@@ -113,7 +122,7 @@ class TitleViewLive extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          (data.title?.isNotEmpty ?? false) ? (data.title ?? '') : (data.username ?? ''),
+                          (dataStream.title?.isNotEmpty ?? false) ? (dataStream.title ?? '') : (dataStream.user?.username ?? ''),
                           style: const TextStyle(
                             color: kHyppeTextPrimary,
                             fontWeight: FontWeight.w700,

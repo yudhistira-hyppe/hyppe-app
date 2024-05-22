@@ -5,6 +5,7 @@ import 'package:hyppe/core/arguments/view_streaming_argument.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/love_lottie.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/gift_deluxe.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/love_lottie.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/over_live_streaming.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/pauseLive.dart';
@@ -201,6 +202,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                           ),
                         ),
                       ),
+                      const Positioned.fill(child: GiftDeluxe()),
                       //Buffering
                       if (notifier.resionAgora == RemoteVideoStateReason.remoteVideoStateReasonNetworkCongestion)
                         const Positioned.fill(

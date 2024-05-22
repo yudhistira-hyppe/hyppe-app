@@ -1164,7 +1164,7 @@
   "pinned": "Pinned",
   "unpinComment": "Unpin Comment",
   "sentSuccessfully": "Sent successfully",
-  "titleLink": "Title Link",
+  "titleLink": "Customize Link Text",
   "addLink": "Add Link",
   "deleteLink": "Delete Link",
   "verifyNow": "Verification Now",
@@ -1198,5 +1198,6 @@
   "copyvirtualaccount": "Virtual account number copied!",
   "contentgift": "Content Gift Settings",
   "requiredgift": "Gift Eligibility Requirements:",
-  "yourorder": "Your Order"
+  "yourorder": "Your Order",
+  "emptyGift": "Gift stock will be available shortly, stay tuned! ✨"
 }

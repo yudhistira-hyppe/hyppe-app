@@ -12,12 +12,14 @@ import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/button_challange.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class OnShowShareLiveBottomSheet extends StatefulWidget {
   final ScrollController scrollController;
-  const OnShowShareLiveBottomSheet({Key? key, required this.scrollController}) : super(key: key);
+  final bool isViewer;
+  const OnShowShareLiveBottomSheet({Key? key, required this.scrollController, this.isViewer = false}) : super(key: key);
 
   @override
   State<OnShowShareLiveBottomSheet> createState() => _OnShowShareLiveBottomSheetState();
@@ -71,7 +73,11 @@ class _OnShowShareLiveBottomSheetState extends State<OnShowShareLiveBottomSheet>
                 if (!_focus.hasFocus)
                   GestureDetector(
                     onTap: () async {
-                      await notifier.createLinkStream(context, copiedToClipboard: true, description: 'Link Streamer');
+                      if (widget.isViewer) {
+                        await context.read<ViewStreamingNotifier>().createLinkStream(context, copiedToClipboard: true, description: 'Link Streamer');
+                      } else {
+                        await notifier.createLinkStream(context, copiedToClipboard: true, description: 'Link Streamer');
+                      }
                       Routing().moveBack();
                     },
                     child: _iconButton(
@@ -82,7 +88,11 @@ class _OnShowShareLiveBottomSheetState extends State<OnShowShareLiveBottomSheet>
                 if (!_focus.hasFocus)
                   GestureDetector(
                     onTap: () async {
-                      await notifier.createLinkStream(context, copiedToClipboard: false, description: 'Link Streame');
+                      if (widget.isViewer) {
+                        await context.read<ViewStreamingNotifier>().createLinkStream(context, copiedToClipboard: false, description: 'Link Streamer');
+                      } else {
+                        await notifier.createLinkStream(context, copiedToClipboard: false, description: 'Link Streame');
+                      }
                       Routing().moveBack();
                     },
                     child: _iconButton(

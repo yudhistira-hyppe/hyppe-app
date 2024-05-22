@@ -71,8 +71,10 @@ class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
   }
 
   Widget _classic(bool isClassic) {
+    var trans = context.read<TranslateNotifierV2>().translate;
     return Consumer<StreamerNotifier>(
       builder: (_, sn, __) {
+        var data = isClassic ? sn.dataGift : sn.dataGiftDeluxe;
         return Padding(
           padding: const EdgeInsets.all(16.0),
           child: sn.isloadingGift
@@ -89,124 +91,137 @@ class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
                     ),
                   ),
                 )
-              : GridView.builder(
-                  itemCount: isClassic ? sn.dataGift.length : sn.dataGiftDeluxe.length,
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  // physics: const NeverScrollableScrollPhysics(),
-                  controller: widget.scrollController,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                    childAspectRatio: 1 / 1,
-                    crossAxisCount: 3,
-                  ),
-                  itemBuilder: (context2, index) {
-                    var data = isClassic ? sn.dataGift[index] : sn.dataGiftDeluxe[index];
-                    final mimeType = System().extensionFiles(data.thumbnail ?? '')?.split('/')[0] ?? '';
-                    String type = '';
-                    if (mimeType != '') {
-                      var a = mimeType.split('/');
-                      type = a[0];
-                    }
-
-                    return GestureDetector(
-                      onTap: () {
-                        sn.giftSelect = data;
-                        setState(() {});
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: const Color(0xfffbfbfb),
-                          border: Border.all(color: (sn.giftSelect?.sId ?? '') == data.sId ? kHyppePrimary : kHyppeBorderTab, width: (sn.giftSelect?.sId ?? '') == data.sId ? 2 : 1),
-                          borderRadius: BorderRadius.circular(8),
+              : data.isEmpty
+                  ? Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Text(
+                          trans.emptyGift ?? 'Gift stock will be available shortly, stay tuned! ✨',
+                          style: const TextStyle(color: kHyppeBurem),
                         ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            // Text("asd $type"),
-                            type == '.svg'
-                                ? SvgPicture.network(
-                                    data.thumbnail ?? '',
-                                    height: 30 * SizeConfig.scaleDiagonal,
-                                    width: 30 * SizeConfig.scaleDiagonal,
-                                    semanticsLabel: 'A shark?!',
-                                    placeholderBuilder: (BuildContext context) => Container(padding: const EdgeInsets.all(30.0), child: const CircularProgressIndicator()),
-                                  )
-                                // ? SvgPicture.asset(
-                                //     '${AssetPath.vectorPath}test.svg',
-                                //     height: 30,
-                                //     width: 30,
-                                //     semanticsLabel: 'A shark?!',
-                                //     placeholderBuilder: (BuildContext context) => Container(padding: const EdgeInsets.all(30.0), child: const CircularProgressIndicator()),
-                                //   )
-                                : SizedBox(
-                                    // width: MediaQuery.of(context2).size.width,
-                                    width: 30 * SizeConfig.scaleDiagonal,
-                                    height: 30 * SizeConfig.scaleDiagonal,
-                                    child: CustomCacheImage(
-                                      imageUrl: sn.dataGift[index].thumbnail,
-                                      imageBuilder: (_, imageProvider) {
-                                        return Container(
-                                          alignment: Alignment.topRight,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(5),
-                                            image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
-                                          ),
-                                        );
-                                      },
-                                      errorWidget: (_, __, ___) {
-                                        return Container(
-                                          alignment: Alignment.topRight,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(2),
-                                            image: const DecorationImage(
-                                              fit: BoxFit.contain,
-                                              image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                      ),
+                    )
+                  : GridView.builder(
+                      itemCount: isClassic ? sn.dataGift.length : sn.dataGiftDeluxe.length,
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      // physics: const NeverScrollableScrollPhysics(),
+                      controller: widget.scrollController,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisSpacing: 8,
+                        mainAxisSpacing: 8,
+                        childAspectRatio: 1 / 1,
+                        crossAxisCount: 3,
+                      ),
+                      itemBuilder: (context2, index) {
+                        var data = isClassic ? sn.dataGift[index] : sn.dataGiftDeluxe[index];
+                        final mimeType = System().extensionFiles(data.thumbnail ?? '')?.split('/')[0] ?? '';
+                        String type = '';
+                        if (mimeType != '') {
+                          var a = mimeType.split('/');
+                          type = a[0];
+                        }
+
+                        return GestureDetector(
+                          onTap: () {
+                            sn.giftSelect = data;
+                            setState(() {});
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: const Color(0xfffbfbfb),
+                              border: Border.all(color: (sn.giftSelect?.sId ?? '') == data.sId ? kHyppePrimary : kHyppeBorderTab, width: (sn.giftSelect?.sId ?? '') == data.sId ? 2 : 1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                // Text("asd $type"),
+                                // CustomIconWidget(iconData: iconData)
+                                type == '.svg'
+                                    ? SvgPicture.network(
+                                        data.thumbnail ?? '',
+                                        // 'https://www.svgrepo.com/show/1615/nurse.svg',
+                                        height: 30 * SizeConfig.scaleDiagonal,
+                                        width: 30 * SizeConfig.scaleDiagonal,
+                                        // semanticsLabel: 'A shark?!',
+                                        // color: false,
+                                        placeholderBuilder: (BuildContext context) => Container(padding: const EdgeInsets.all(30.0), child: const CircularProgressIndicator()),
+                                      )
+                                    // ? SvgPicture.asset(
+                                    //     '${AssetPath.vectorPath}test.svg',
+                                    //     height: 30,
+                                    //     width: 30,
+                                    //     semanticsLabel: 'A shark?!',
+                                    //     placeholderBuilder: (BuildContext context) => Container(padding: const EdgeInsets.all(30.0), child: const CircularProgressIndicator()),
+                                    //   )
+                                    : SizedBox(
+                                        // width: MediaQuery.of(context2).size.width,
+                                        width: 30 * SizeConfig.scaleDiagonal,
+                                        height: 30 * SizeConfig.scaleDiagonal,
+                                        child: CustomCacheImage(
+                                          imageUrl: data.thumbnail ?? '',
+                                          imageBuilder: (_, imageProvider) {
+                                            return Container(
+                                              alignment: Alignment.topRight,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(5),
+                                                image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
+                                              ),
+                                            );
+                                          },
+                                          errorWidget: (_, __, ___) {
+                                            return Container(
+                                              alignment: Alignment.topRight,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(2),
+                                                image: const DecorationImage(
+                                                  fit: BoxFit.contain,
+                                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          emptyWidget: Container(
+                                            alignment: Alignment.topRight,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(2),
+                                              image: const DecorationImage(
+                                                fit: BoxFit.contain,
+                                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                      },
-                                      emptyWidget: Container(
-                                        alignment: Alignment.topRight,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(2),
-                                          image: const DecorationImage(
-                                            fit: BoxFit.contain,
-                                            image: AssetImage('${AssetPath.pngPath}content-error.png'),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                            Text(
-                              "${data.name}",
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(color: kHyppeBurem, fontSize: 12),
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const CustomIconWidget(
-                                  height: 15,
-                                  iconData: "${AssetPath.vectorPath}ic-coin.svg",
-                                  defaultColor: false,
-                                ),
-                                sixPx,
                                 Text(
-                                  '${data.price}',
-                                  style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700),
+                                  "${data.name}",
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(color: kHyppeBurem, fontSize: 12),
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const CustomIconWidget(
+                                      height: 15,
+                                      iconData: "${AssetPath.vectorPath}ic-coin.svg",
+                                      defaultColor: false,
+                                    ),
+                                    sixPx,
+                                    Text(
+                                      '${data.price}',
+                                      style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700),
+                                    )
+                                  ],
                                 )
                               ],
-                            )
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
         );
       },
     );

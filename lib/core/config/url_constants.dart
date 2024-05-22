@@ -472,9 +472,10 @@ class UrlConstants {
   static const String viewrStream = "$liveStramRoute/view";
   static const String feedbackStream = "$liveStramRoute/feedback";
   static const String listLiveStreaming = "$liveStramRoute/list";
+  static const String listGift = "$liveStramRoute/gift"; //list hadiah yg diterima streamer
 
   //List Gift
-  static const String listGift = "$monetization/list";
+  // static const String listGift = "$monetization/list";
 
   //Appeal Bank
   static const String appealBank = "$userbankaccountsRoute/v3";

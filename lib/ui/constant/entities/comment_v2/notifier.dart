@@ -46,7 +46,7 @@ class CommentNotifierV2 with ChangeNotifier {
   String _temporarySearch = '';
   String get temporarySearch => _temporarySearch;
 
-  CommentDataQuery commentQuery = CommentDataQuery()..limit = 25;
+  CommentDataQuery commentQuery = CommentDataQuery()..limit = 10;
 
   int get itemCount => _commentData == null
       ? 1

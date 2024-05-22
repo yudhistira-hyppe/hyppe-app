@@ -151,8 +151,7 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
               ? Container()
               : GestureDetector(
                   onTap: () {
-                    print('Gesture Detector Share');
-                    ShowBottomSheet().onShowShareLive(context);
+                    ShowBottomSheet().onShowShareLive(context, isViewer: true);
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8.0),

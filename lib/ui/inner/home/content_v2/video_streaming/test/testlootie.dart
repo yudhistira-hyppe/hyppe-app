@@ -13,6 +13,7 @@ class TestLootie extends StatefulWidget {
 
 class _TestLootieState extends State<TestLootie> {
   List<String> animationPaths = [
+    // 'http://be-staging.oss-ap-southeast-5.aliyuncs.com/images/gift/66471897d975922b87c91578_3d.json',
     'https://ahmadtaslimfuadi07.github.io/jsonlottie/Ketapel.json',
     'https://ahmadtaslimfuadi07.github.io/jsonlottie/meditation.json',
     'https://ahmadtaslimfuadi07.github.io/jsonlottie/success.json',
@@ -29,8 +30,8 @@ class _TestLootieState extends State<TestLootie> {
   @override
   void initState() {
     super.initState();
-    _startTimer();
-    _addArray();
+    // _startTimer();
+    // _addArray();
   }
 
   @override
@@ -111,11 +112,17 @@ class _TestLootieState extends State<TestLootie> {
                           color: Colors.blue,
                         )
                       : Lottie.network(
-                          animationPaths[currentAnimationIndex],
+                          // animationPaths[currentAnimationIndex],
+                          'https://be-staging.oss-ap-southeast-5.aliyuncs.com/images/gift/66471897d975922b87c91578_3d.json',
+                          // 'https://ahmadtaslimfuadi07.github.io/jsonlottie/Ketapel.json',
                           repeat: true,
                           width: SizeConfig.screenWidth,
                           height: SizeConfig.screenHeight,
                           fit: BoxFit.fill,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Text("eror $error --==== $stackTrace");
+                          },
+                          onLoaded: (p0) {},
                         ),
                 ),
               ),

@@ -27,6 +27,8 @@ class DiscussArgument {
 
   List<dynamic> tagComment = [];
 
+  String? streamID;
+
   DiscussArgument({
     required this.email,
     required this.receiverParty,
@@ -47,6 +49,7 @@ class DiscussArgument {
       'postType': postType.toString(),
       'messageEventType': discussEventType.toString(),
       'tagComment': tagComment,
+      'streamID': streamID,
     };
   }
 }

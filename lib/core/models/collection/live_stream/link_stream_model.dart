@@ -1,4 +1,4 @@
-import '../user_v2/profile/user_profile_avatar_model.dart';
+import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
 
 class LinkStreamModel {
   bool? status;
@@ -9,7 +9,7 @@ class LinkStreamModel {
   String? urlIngest;
   String? createAt;
   String? sId;
-  UserProfileAvatarModel? avatar;
+  Avatar? avatar;
   int? interest;
   int? totalView;
   int? totalLike;
@@ -58,7 +58,7 @@ class LinkStreamModel {
     urlIngest = json['urlIngest'];
     createAt = json['createAt'];
     sId = json['_id'];
-    avatar = json['avatar'] != null ? UserProfileAvatarModel.fromJson(json['avatar']) : null;
+    avatar = json['avatar'] != null ? Avatar.fromJson(json['avatar']) : null;
 
     interest = json['interest'];
     totalView = json['totalView'];

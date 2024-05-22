@@ -5,12 +5,16 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/live_stream/streaming_model.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
+import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
 import 'package:hyppe/core/services/socket_live_service.dart';
+import 'package:hyppe/ui/constant/entities/general_mixin/general_mixin.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
+import 'package:hyppe/ux/path.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
@@ -31,12 +35,11 @@ import '../../../../../../core/services/system.dart';
 import '../../../../../../ux/routing.dart';
 import '../../../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'dart:math' as math;
-
 import 'widget/already_reported.dart';
 import 'widget/report_live.dart';
 import 'widget/respon_report_live.dart';
 
-class ViewStreamingNotifier with ChangeNotifier {
+class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
   LocalizationModelV2 language = LocalizationModelV2();
   translate(LocalizationModelV2 translate) {
     language = translate;
@@ -210,12 +213,12 @@ class ViewStreamingNotifier with ChangeNotifier {
     await engine.enableVideo();
     await engine.startPreview();
 
-    print('====== ${data.tempToken}');
-    print('====== ${data.sId}');
+    print('====== ${data.tempToken} ${dataStreaming.tokenAgora}');
+    print('====== ${data.sId} ${dataStreaming.sId}');
     try {
       await engine.joinChannel(
-        token: data.tempToken ?? '',
-        channelId: data.sId ?? '',
+        token: data.tempToken ?? (dataStreaming.tokenAgora ?? ''),
+        channelId: data.sId ?? (dataStreaming.sId ?? ''),
         uid: 0,
         options: const ChannelMediaOptions(),
       );
@@ -463,7 +466,7 @@ class ViewStreamingNotifier with ChangeNotifier {
               email: SharedPreference().readStorage(SpKeys.email),
               avatar: Avatar(mediaEndpoint: context.read<HomeNotifier>().profileImage),
               messages: 'joined',
-              commentType: 'MESSAGGES',
+              commentType: 'JOIN',
               username: context.read<SelfProfileNotifier>().user.profile?.username,
             ),
           );
@@ -556,7 +559,7 @@ class ViewStreamingNotifier with ChangeNotifier {
   Future<void> startViewStreaming(BuildContext context, mounted, LinkStreamModel data) async {
     // notifyListeners();
     var init = await initLiveStream(context, mounted, data);
-    if (init) {
+    if (init && (dataStreaming.status ?? false)) {
       // _socketService.closeSocket();
 
       await Future.delayed(const Duration(seconds: 1));
@@ -577,6 +580,7 @@ class ViewStreamingNotifier with ChangeNotifier {
       // _alivcLivePusher.startPushWithURL(pushURL);
     } else {
       statusLive = StatusStream.offline;
+      isOver = true;
       notifyListeners();
     }
   }
@@ -633,6 +637,15 @@ class ViewStreamingNotifier with ChangeNotifier {
           comment.insert(0, messages);
         } else {
           if (messages.urlGift != null) {
+            if (giftDelux.isEmpty) {
+              giftDelux.add(messages);
+            } else {
+              giftDeluxTemp.add(messages);
+            }
+            if (timerDeluxe?.isActive ?? false) {
+            } else {
+              startTimerDelux();
+            }
           } else {
             if (giftBasic.length <= 2) {
               giftBasic.add(messages);
@@ -871,6 +884,50 @@ class ViewStreamingNotifier with ChangeNotifier {
         notifyListeners();
       } else {
         timerBasic?.cancel();
+      }
+    });
+  }
+
+  Timer? timerDeluxe;
+  void startTimerDelux() {
+    timerDeluxe = Timer.periodic(const Duration(seconds: 5), (timer) {
+      if (giftDelux.isNotEmpty) {
+        comment.insert(0, giftDelux[0]); //masukin ke comment
+        giftDelux.removeAt(0); //hapus gift deluxe
+        if (giftDeluxTemp.isNotEmpty) {
+          giftDelux.add(giftDeluxTemp[0]);
+          giftDeluxTemp.removeAt(0);
+        }
+
+        notifyListeners();
+      } else {
+        timerDeluxe?.cancel();
+      }
+    });
+  }
+
+  Future createLinkStream(BuildContext context, {required bool copiedToClipboard, required String description}) async {
+    await createdDynamicLinkMixin(
+      context,
+      data: DynamicLinkData(
+        routes: Routes.viewStreaming,
+        postID: dataStreaming.sId,
+        fullName: "",
+        description: '${dataStreaming.user?.fullName ?? dataStreaming.user?.username} (${dataStreaming.user?.username}) \n is LIVE ${dataStreaming.title} \n Office Vlog Check out... \n',
+        // thumb: System().showUserPicture(profileImage),
+        thumb: System().showUserPicture(dataStreaming.user?.avatar?.mediaEndpoint),
+      ),
+      copiedToClipboard: copiedToClipboard,
+    ).then((value) {
+      if (value) {
+        if (copiedToClipboard && context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            margin: EdgeInsets.only(bottom: 60, left: 16, right: 16),
+            backgroundColor: kHyppeTextLightPrimary,
+            content: Text('Link Copied', style: TextStyle(color: Colors.white)),
+            behavior: SnackBarBehavior.floating,
+          ));
+        }
       }
     });
   }

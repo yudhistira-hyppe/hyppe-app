@@ -283,12 +283,15 @@ class BeforeLive extends StatelessWidget {
                                   children: [
                                     Text(
                                       notifier.urlLink,
-                                      style: TextStyle(color: kHyppeBurem),
+                                      style: const TextStyle(color: kHyppeTextPrimary),
                                     ),
                                     if (notifier.textUrl != '')
-                                      Text(
-                                        notifier.textUrl,
-                                        style: TextStyle(color: kHyppeBurem, fontWeight: FontWeight.bold),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 8),
+                                        child: Text(
+                                          notifier.textUrl,
+                                          style: const TextStyle(color: kHyppeTextPrimary, fontWeight: FontWeight.bold),
+                                        ),
                                       ),
                                   ],
                                 )),

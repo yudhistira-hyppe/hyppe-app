@@ -2,13 +2,21 @@ class LiveSummaryModel {
   int? totalViews;
   int? totalShare;
   int? totalFollower;
-  int? totalGifter;
+  int? totalUserGift;
   int? totalGift;
   int? totalComment;
   int? totalLike;
+  int? totalIncome;
   int? totalCoin;
 
-  LiveSummaryModel({this.totalViews, this.totalShare, this.totalFollower, this.totalComment, this.totalLike});
+  LiveSummaryModel({
+    this.totalViews,
+    this.totalShare,
+    this.totalFollower,
+    this.totalComment,
+    this.totalLike,
+    this.totalIncome,
+  });
 
   LiveSummaryModel.fromJson(Map<String, dynamic> json) {
     totalViews = json['totalViews'];
@@ -16,8 +24,9 @@ class LiveSummaryModel {
     totalFollower = json['totalFollower'];
     totalComment = json['totalComment'];
     totalLike = json['totalLike'];
+    totalIncome = json['totalIncome'];
     totalGift = json['totalGift'];
-    totalGifter = json['totalGifter'];
+    totalUserGift = json['totalUserGift'];
     totalCoin = json['totalCoin'];
   }
 }
