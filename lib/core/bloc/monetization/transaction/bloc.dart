@@ -8,7 +8,6 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/status_code.dart';
 import 'package:hyppe/core/models/collection/transaction/transactioncoin.dart';
-import 'package:hyppe/core/response/generic_response.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 
@@ -20,32 +19,9 @@ class TransactionCoinBloc {
   setDiscFetch(TransactionCoinFetch val) => _dataFetch = val;
 
   Future postPayNow(BuildContext context,
-      {CoinTransModel? coin, String? discId, String? bankcode, String? type, String? paymentmethod, String? productCode}) async {
+      {Map? data}) async {
     setDiscFetch(TransactionCoinFetch(TransactionCoinState.loading));
     try {
-      
-      Map<String, dynamic> data={};
-      if (discId == ''){
-        data = {
-          "postid": [coin!.toJson()],
-          // "idDiscount":discId,
-          "bankcode": bankcode,
-          "type": type,
-          "paymentmethod": paymentmethod,
-          "productCode": productCode,
-          "platform":"APP"
-        };
-      }else{
-        data = {
-        "postid": [coin!.toJson()],
-        "idDiscount":discId,
-        "bankcode": bankcode,
-        "type": type,
-        "paymentmethod": paymentmethod,
-        "productCode": productCode,
-        "platform":"APP"
-      };
-      }
       String email = SharedPreference().readStorage(SpKeys.email);
       await System().checkConnections().then((value) async {
         if (value){
@@ -54,13 +30,11 @@ class TransactionCoinBloc {
             (onResult) {
               if ((onResult.statusCode ?? 300) > HTTP_CODE) {
                 setDiscFetch(
-                    TransactionCoinFetch(TransactionCoinState.getBlocError, data: onResult));
+                    TransactionCoinFetch(TransactionCoinState.getBlocError, data: onResult.data));
               } else {
                 setDiscFetch(
                   TransactionCoinFetch(TransactionCoinState.getcBlocSuccess,
-                      data: onResult.data['data'] != null
-                          ? TransactionCoinModel.fromJson(onResult.data['data'])
-                          : null),
+                      data: onResult.data['data']),
                 );
               }
             },

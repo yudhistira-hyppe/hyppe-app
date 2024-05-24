@@ -20,6 +20,7 @@ import 'package:hyppe/ux/routing.dart';
 
 class PaymentCoinNotifier with ChangeNotifier {
   Map _param = {};
+  Map _paramTransaction={};
   LocalizationModelV2 language = LocalizationModelV2();
   translate(LocalizationModelV2 translate) {
     language = translate;
@@ -75,6 +76,7 @@ class PaymentCoinNotifier with ChangeNotifier {
   void initState(BuildContext context) {
     isLoading = true;
     _param = {};
+    _paramTransaction = {};
     notifyListeners();
     _getAllBank(context);
   }
@@ -179,6 +181,7 @@ class PaymentCoinNotifier with ChangeNotifier {
   }
 
 
+  
   TransactionCoinModel _transactionCoinDetail = TransactionCoinModel();
   TransactionCoinModel get transactionCoinDetail => _transactionCoinDetail;
   set transactionCoinDetail(TransactionCoinModel value) {
@@ -186,14 +189,34 @@ class PaymentCoinNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+
   Future<void> payNow(BuildContext context) async {
     try{
       isLoadingPayNow = true;
       CoinTransModel coin = CoinTransModel(id: selectedCoin.id, price: selectedCoin.price, jmlcoin: selectedCoin.amount, qty: 1, totalAmount: 1 * (selectedCoin.price??0));
-      await blocPayNow.postPayNow(context, coin: coin, bankcode: bankSelected, discId: discount.id??'', paymentmethod: 'VA', productCode: 'CN', type: 'COIN');
+      if (discount.checked??false){
+        _paramTransaction.addAll({
+          "postid": [coin.toJson()],
+          "idDiscount":discount.id,
+          "bankcode": bankSelected,
+          "type": 'COIN',
+          "paymentmethod": 'VA',
+          "productCode": 'CN',
+          "platform":"APP"
+        });
+      }else{
+        _paramTransaction.addAll({
+          "postid": [coin.toJson()],
+          "bankcode": bankSelected,
+          "type": 'COIN',
+          "paymentmethod": 'VA',
+          "productCode": 'CN',
+          "platform":"APP"
+        });
+      }
+      await blocPayNow.postPayNow(context, data: _paramTransaction);
       if (blocPayNow.dataFetch.dataState == TransactionCoinState.getcBlocSuccess) {
-        print('success data ${blocPayNow.dataFetch.data}');
-        transactionCoinDetail = blocPayNow.dataFetch.data;
+        transactionCoinDetail = TransactionCoinModel.fromJson(blocPayNow.dataFetch.data);
         isLoadingPayNow = false;
       }else if (blocPayNow.dataFetch.dataState == TransactionCoinState.getNotInternet){
         Fluttertoast.showToast(msg: language.noInternetConnection??'');

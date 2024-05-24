@@ -18,14 +18,14 @@ class SaldoCoinNotifier with ChangeNotifier {
   int get transactionCoin => _transactionCoin;
   set transactionCoin(int val){
     _transactionCoin = val;
-    notifyListeners();
+    // notifyListeners();
   }
 
   bool _visibilityTransaction = false;
   bool get visibilityTransaction => _visibilityTransaction;
   set visibilityTransaction(bool val){
     _visibilityTransaction = val;
-    notifyListeners();
+    // notifyListeners();
   }
 
   
@@ -36,26 +36,25 @@ class SaldoCoinNotifier with ChangeNotifier {
       if (bloc.dataFetch.dataState == SaldoCoinState.getBlocSuccess) {
         saldoCoin = bloc.dataFetch.data??0;
       }
-      await checkSaldoCoin().then((value) {
-        visibilityTransaction = value;
-        notifyListeners();
-      });
+      await checkSaldoCoin();
       
     }catch(_){
       debugPrint(_.toString());
     }
   }
 
-  Future<bool> checkSaldoCoin() async {
+  Future<void> checkSaldoCoin() async {
     try{
       int check = saldoCoin - transactionCoin;
-      if (check >= 0){
-        return true;
+      print('========== $saldoCoin $transactionCoin $check');
+      if (transactionCoin < saldoCoin){
+        visibilityTransaction = true;
       }else{
-        return false;
+        visibilityTransaction = false;
       }
+      // notifyListeners();
     }catch(_){
-      return false;
+      visibilityTransaction = false;
     }
   }
 }

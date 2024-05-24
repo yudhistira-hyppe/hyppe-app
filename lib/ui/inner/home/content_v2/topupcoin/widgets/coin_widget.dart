@@ -64,7 +64,7 @@ class CoinWidget extends StatelessWidget {
                                     ),
                                   ),
                                   CustomTextWidget(
-                                    textToDisplay: System().numberFormat(amount: value.accountBalance?.totalsaldo ?? 0),
+                                    textToDisplay: System().numberFormat(amount: value.saldoCoin),
                                     textStyle: Theme.of(context)
                                         .textTheme
                                         .titleMedium

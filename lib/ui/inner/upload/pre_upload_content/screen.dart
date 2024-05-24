@@ -60,7 +60,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
   int indexKeyOwn = 0;
   int indexKeyBoost = 0;
 
-  bool buttonactive = false;
+  final ValueNotifier<bool> buttonactive = ValueNotifier<bool>(false);
 
   Timer? timeHandle;
 
@@ -72,7 +72,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
   @override
   void initState() {
     // final _notifier = context.read<PreUploadContentNotifier>();
-    buttonactive = false;
+    buttonactive.value = false;
     MyAudioService.instance.stop();
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     mn = Provider.of<MainNotifier>(context, listen: false);
@@ -88,6 +88,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
     }else{
       notifier.urlLink = widget.arguments.contentData?.urlLink??'';
       notifier.judulLink = widget.arguments.contentData?.judulLink??'';
+      notifier.initCoinOwnershipDetail(context);
     }
     // notifier.initThumbnail();
     
@@ -226,37 +227,41 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                             notifier.featureType != FeatureType.story ? ownershipSellingWidget(textTheme, notifier) : const SizedBox(),
                             notifier.certified ? detailTotalPrice(notifier) : Container(),
                             if(!widget.arguments.onEdit && notifier.certified)
-                            GestureDetector(
-                              // onTap: notifier.saldoCoin < 150 
-                               onTap: () async {
-                                    await Navigator.pushNamed(context, Routes.mydiscount, arguments: {'routes': '${Routes.preUploadContent}ownership', 'totalPayment': 150, 'discount': notifier.discountOwnership, 'productType': ContentDiscount.disccontentownership});
-                                    if (!mounted) return;
-                                    await notifier.initCoinPurchaseDetail(context);
-                                },
-                              child: Container(
-                                margin: const EdgeInsets.symmetric(vertical: 12.0),
-                                decoration: BoxDecoration(
-                                  border: Border.all(width: .3, color: kHyppeBurem),
-                                  borderRadius: BorderRadius.circular(12.0),
-                                  color: kHyppeBurem.withOpacity(.03)
-                                ),
-                                child: ListTile(
-                                  minLeadingWidth: 10,
-                                  leading: CustomIconWidget(
-                                    iconData: "${AssetPath.vectorPath}ic-kupon.svg",
-                                    defaultColor:  notifier.saldoCoin < 150 ? false : true,
+                            ValueListenableBuilder(
+                              valueListenable: buttonactive,
+                              builder: (context, value, _) {
+                                return GestureDetector(
+                                   onTap: notifier.saldoCoin < (notifier.cointPurchaseDetail.price??0) ? () async {
+                                        await Navigator.pushNamed(context, Routes.mydiscount, arguments: {'routes': '${Routes.preUploadContent}ownership', 'totalPayment': 150, 'discount': notifier.discountOwnership, 'productType': ContentDiscount.disccontentownership});
+                                        if (!mounted) return;
+                                        await notifier.initCoinOwnershipDetail(context);
+                                    }:null,
+                                  child: Container(
+                                    margin: const EdgeInsets.symmetric(vertical: 12.0),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(width: .3, color: kHyppeBurem),
+                                      borderRadius: BorderRadius.circular(12.0),
+                                      color: kHyppeBurem.withOpacity(.03)
+                                    ),
+                                    child: ListTile(
+                                      minLeadingWidth: 10,
+                                      leading: CustomIconWidget(
+                                        iconData: "${AssetPath.vectorPath}ic-kupon.svg",
+                                        defaultColor:  notifier.saldoCoin < (notifier.cointPurchaseDetail.price??0)  ? false : true,
+                                      ),
+                                      title: (notifier.discountOwnership.checked??false) ? Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          CustomTextWidget(textToDisplay: '${notifier.language.discount} ${System().currencyFormat(amount: notifier.discountOwnership.nominal_discount)}'),
+                                          CustomTextWidget(textToDisplay: notifier.discountOwnership.code_package??'', textStyle: const TextStyle(color: kHyppeBurem, fontWeight: FontWeight.w400),),
+                                        ],
+                                      ): Text(notifier.language.discountForYou ?? 'Diskon Untukmu', style: TextStyle(color: notifier.saldoCoin < (notifier.cointPurchaseDetail.price??0) ? kHyppeBackground : kHyppeBurem.withOpacity(.3)),),
+                                      trailing: Icon(Icons.arrow_forward_ios, color: notifier.saldoCoin < (notifier.cointPurchaseDetail.price??0) ? kHyppeBackground : kHyppeBurem.withOpacity(.3),),
+                                    ),
                                   ),
-                                  title: (notifier.discountOwnership.checked??false) ? Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      CustomTextWidget(textToDisplay: '${notifier.language.discount} ${System().currencyFormat(amount: notifier.discountOwnership.nominal_discount)}'),
-                                      CustomTextWidget(textToDisplay: notifier.discountOwnership.code_package??'', textStyle: const TextStyle(color: kHyppeBurem, fontWeight: FontWeight.w400),),
-                                    ],
-                                  ): Text(notifier.language.discountForYou ?? 'Diskon Untukmu', style: TextStyle(color: notifier.saldoCoin < 150 ? kHyppeBackground : kHyppeBurem.withOpacity(.3)),),
-                                  trailing: Icon(Icons.arrow_forward_ios, color: notifier.saldoCoin < 150 ? kHyppeBackground : kHyppeBurem.withOpacity(.3),),
-                                ),
-                              ),
+                                );
+                              }
                             ),
                             SizedBox(height: 20 * SizeConfig.scaleDiagonal),
                             widget.arguments.onEdit &&
@@ -296,6 +301,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                               transactionCoin:  notifier.cointPurchaseDetail.total_payment??0,
                               isChecking: (bool val, int saldoCoin){
                                 notifier.saldoCoin = saldoCoin;
+                                buttonactive.value = val;
                               },
                             ),
                           ),
@@ -326,34 +332,34 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                         opacity: notifier.isLoading ? 0.0 : 1.0,
                                           duration: const Duration(seconds: 2),
                                           child: SaldoCoinWidget(
-                                          transactionCoin: notifier.isEdit && notifier.certified && notifier.ownershipEULA 
-                                            ? (notifier.boostContent?.priceTotal??0) - (notifier.discountBoost.nominal_discount??0) < 0 ? 0 : (notifier.boostContent?.priceTotal??0) - (notifier.discountBoost.nominal_discount??0)
-                                            : (notifier.certified ? 150 : 0) + ((notifier.boostContent?.priceTotal??0) - (notifier.discountBoost.nominal_discount??0) < 0 ? 0 : (notifier.boostContent?.priceTotal??0) - (notifier.discountBoost.nominal_discount??0)),
+                                          transactionCoin: notifier.boostContent?.priceTotal??0,
                                           isChecking: (bool val, int saldoCoin){
                                             notifier.saldoCoin = saldoCoin;
-                                            buttonactive = val;
-                                            setState(() { });
+                                            buttonactive.value = val;
                                           },
                                         ),
                                       ),
                                   ),
-                                  ElevatedButton(
-                                    onPressed: buttonactive 
-                                    ? () {
-                                      print('disini');
-                                    }
-                                    : null,
-                                    style: ElevatedButton.styleFrom(
-                                        elevation: 0,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8.0),
+                                  ValueListenableBuilder(
+                                    valueListenable: buttonactive, 
+                                    builder: (context, value, _) => ElevatedButton(
+                                      onPressed: buttonactive.value 
+                                      ? () {
+                                        notifier.paymentBoostPost(context);
+                                      }
+                                      : null,
+                                      style: ElevatedButton.styleFrom(
+                                          elevation: 0,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8.0),
+                                          ),
+                                          backgroundColor: kHyppePrimary),
+                                      child: SizedBox(
+                                        width: 375.0 * SizeConfig.scaleDiagonal,
+                                        height: 44.0 * SizeConfig.scaleDiagonal,
+                                        child: Center(
+                                          child: Text(notifier.language.localeDatetime =='id' ? 'Bayar & Simpan' : 'Pay Now', textAlign: TextAlign.center),
                                         ),
-                                        backgroundColor: kHyppePrimary),
-                                    child: SizedBox(
-                                      width: 375.0 * SizeConfig.scaleDiagonal,
-                                      height: 44.0 * SizeConfig.scaleDiagonal,
-                                      child: Center(
-                                        child: Text(notifier.language.localeDatetime =='id' ? 'Bayar & Simpan' : 'Pay Now', textAlign: TextAlign.center),
                                       ),
                                     ),
                                   ),
@@ -385,10 +391,12 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                 child: Column(
                                   children: [
                                     eightPx,
-                                    CustomElevatedButton(
+                                    ValueListenableBuilder(
+                                      valueListenable: buttonactive, 
+                                      builder: (context, value, _) => CustomElevatedButton(
                                         width: SizeConfig.screenWidth,
                                         height: 44.0 * SizeConfig.scaleDiagonal,
-                                        function: () {
+                                        function: value ? () {
                                           if (!notifier.updateContent && !prev.isLoadVideo) {
                                             if (SharedPreference().readStorage(SpKeys.statusVerificationId) != VERIFIED || notifier.featureType == FeatureType.story || widget.arguments.onEdit) {
                                               notifier.onClickPost(
@@ -418,6 +426,10 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                                     );
                                             }
                                           }
+                                        }:()async {
+                                          await Navigator.pushNamed(context, Routes.mydiscount, arguments: {'routes': '${Routes.preUploadContent}ownership', 'totalPayment': 150, 'discount': notifier.discountOwnership, 'productType': ContentDiscount.disccontentownership});
+                                          if (!mounted) return;
+                                          await notifier.initCoinOwnershipDetail(context);
                                         },
                                         buttonStyle: ButtonStyle(
                                           foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
@@ -431,6 +443,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                                 textToDisplay: widget.arguments.onEdit ? notifier.language.save ?? 'save' : notifier.language.confirm ?? 'confirm',
                                                 textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                                               )),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -1150,7 +1163,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
         children: [
           detailText(notifier.language.localeDatetime == 'id' ? 'Pendaftaran Kepemilikan' : 'Ownership Registration', notifier.language.localeDatetime == 'id' ? 'Ya': 'Yes'),
           sixteenPx,
-          detailText(notifier.language.localeDatetime == 'id' ? 'Biaya Pendaftaran Kepemilikan' : 'Certificate Ownership Fee', '${System().numberFormat(amount: notifier.cointPurchaseDetail.price)} Coins'),
+          detailText(notifier.language.localeDatetime == 'id' ? 'Biaya Pendaftaran Kepemilikan' : 'Certificate Ownership Fee', '${System().numberFormat(amount: notifier.cointPurchaseDetail.price??0)} Coins'),
           
           if (notifier.discountOwnership.checked??false)
             Column(
@@ -1161,7 +1174,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
             ),
             
           sixteenPx,
-          detailText(notifier.language.localeDatetime == 'id' ? 'Total Biaya' :'Total Price', System().numberFormat(amount: notifier.cointPurchaseDetail.total_payment), showicon: true),
+          detailText(notifier.language.localeDatetime == 'id' ? 'Total Biaya' :'Total Price', System().numberFormat(amount: notifier.cointPurchaseDetail.total_payment??0), showicon: true),
           notifier.toSell
               ? const Divider(
                   height: 30,

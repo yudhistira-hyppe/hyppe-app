@@ -176,6 +176,7 @@ class _MyCouponsPageState extends State<MyCouponsPage> {
                   case '${Routes.preUploadContent}boostpost':
                     if (!mounted) return;
                     context.read<PreUploadContentNotifier>().discountBoost = notifier.result.firstWhere((element) => element.checked == true);
+                    await context.read<PreUploadContentNotifier>().boostButton(context, isDisc: true);
                     break;
                   default:
                 }

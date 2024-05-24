@@ -36,6 +36,7 @@ import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/topupcoin/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/filter/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction_coin_detail/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/notifier.dart';
@@ -284,6 +285,8 @@ class AppDependencies {
         ChangeNotifierProvider<HistoryOrderCoinNotifier>(create: (context) => HistoryOrderCoinNotifier()),
         //SaldoCoin
         ChangeNotifierProvider<SaldoCoinNotifier>(create: (context) => SaldoCoinNotifier()),
+
+        ChangeNotifierProvider<TransactionCoinDetailNotifier>(create: (context) => TransactionCoinDetailNotifier()),
 
       ];
 }

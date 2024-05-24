@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyppe/core/arguments/transaction_argument.dart';
 import 'package:hyppe/app.dart';
+import 'package:hyppe/core/bloc/boost/bloc.dart';
+import 'package:hyppe/core/bloc/boost/state.dart';
 import 'package:hyppe/core/bloc/google_map_place/bloc.dart';
 import 'package:hyppe/core/bloc/google_map_place/state.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
@@ -61,6 +63,7 @@ import 'package:path_provider/path_provider.dart' as path;
 import '../../../../core/bloc/challange/bloc.dart';
 import '../../../../core/bloc/challange/state.dart';
 import '../../../../core/models/collection/search/search_content.dart';
+import 'boostpost_pay/screen.dart';
 
 class PreUploadContentNotifier with ChangeNotifier {
   final eventService = EventService();
@@ -858,7 +861,8 @@ class PreUploadContentNotifier with ChangeNotifier {
       urlLink: urlLink,
       judulLink: judulLink,
       location: locationName == language.addLocation ? '' : locationName,
-      discount: discountOwnership
+      discount: discountOwnership,
+      cointPurchaseDetail: cointPurchaseDetail,
     );
     final fetch = notifier.postsFetch;
 
@@ -1201,7 +1205,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> initCoinPurchaseDetail(BuildContext context) async {
+  Future<void> initCoinOwnershipDetail(BuildContext context) async {
     final bloc = CoinPurchaseDetailDataBloc();
     try{
       _isLoadingDetail = true;
@@ -1234,7 +1238,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         context,
         onSave: () {
           //
-          initCoinPurchaseDetail(context);
+          initCoinOwnershipDetail(context);
           Routing().moveBack();
           certified = !certified;
         },
@@ -1775,7 +1779,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     }
   }
 
-  Future boostButton(BuildContext context) async {
+  Future boostButton(BuildContext context, {bool isDisc = false}) async {
     bool connect = await System().checkConnections();
     if (connect) {
       _isLoading = true;
@@ -1785,6 +1789,9 @@ class PreUploadContentNotifier with ChangeNotifier {
         "dateEnd": _tmpfinsihDate.toString().substring(0, 10),
         "type": _tmpBoost,
       };
+      if (discountBoost.checked??false){
+        data['discount'] = discountBoost.nominal_discount??0;
+      }
       if (_tmpBoost == 'manual') {
         data['interval'] = _tmpBoostIntervalId;
         data['session'] = _tmpBoostTimeId;
@@ -1797,7 +1804,10 @@ class PreUploadContentNotifier with ChangeNotifier {
         _boostContent = BoostContent.fromJson(fetch.data);
         _privacyTitle = language.public ?? 'PUBLIC';
         privacyValue = 'PUBLIC';
-        exitBoostPage();
+        if (!isDisc){
+          Routing().moveBack();
+        }
+        // exitBoostPage();
         _isLoading = false;
         notifyListeners();
       } else if (fetch.utilsState == UtilsState.getMasterBoostError) {
@@ -1826,6 +1836,85 @@ class PreUploadContentNotifier with ChangeNotifier {
         color: Theme.of(context).colorScheme.error,
         maxLines: 2,
       );
+    }
+  }
+
+  Future paymentBoostPost(context) async {
+    if (_validateDescription() && _validateCategory()) {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+      Routing().move(Routes.pinboostpost);
+    } else {
+      ShowBottomSheet().onShowColouredSheet(
+        context,
+        _validateDescription() ? language.categoryCanOnlyWithMin1Characters ?? '' : language.descriptionCanOnlyWithMin5Characters ?? '',
+        color: Theme.of(context).colorScheme.error,
+        maxLines: 2,
+      );
+    }
+  }
+
+  TextEditingController pinController = TextEditingController();
+  String _errorPinWithdrawMsg = '';
+  String get errorPinWithdrawMsg => _errorPinWithdrawMsg;
+  set errorPinWithdrawMsg(String val) {
+    _errorPinWithdrawMsg = val;
+    notifyListeners();
+  }
+  Map _params = {};
+
+  Future createBoostpost(BuildContext context) async {
+    _createBoostpost(context);
+  }
+  Future _createBoostpost(BuildContext context) async {
+    _params = {};
+    try{
+      bool connect = await System().checkConnections();
+      
+      ShowGeneralDialog.loadingDialog(context);
+      _params.addAll({
+        "pin":pinController.text,
+        "platform":"APP",
+        "coin": boostContent?.priceBoost??0,
+        "postId": editData?.postID ?? '',
+        "dateStart": boostContent!.dateBoostStart,
+        "dateEnd": boostContent!.dateBoostEnd,
+        "type": boostContent!.typeBoost,
+        "session": boostContent!.sessionBoost?.toJson(),
+        "interval": boostContent!.intervalBoost?.toJson()
+      });
+      if (discountBoost.checked??false){
+        _params.addAll({
+          "discountCoin":discountBoost.nominal_discount,
+          "idVoucher":[discountBoost.id]
+        });
+      }
+      if (connect){
+        final bloc = BoostPostContentDataBloc();
+        await bloc.createBoostPostContent(context, data: _params);
+        final fetch = bloc.dataFetch;
+
+        if (fetch.dataState == BoostPostContentState.getBlocSuccess) {
+          _onExit();
+          Navigator.push(context, MaterialPageRoute(builder: (context) => BoostpostScreen(dataBoostpost: fetch.data, lang: language,)));
+          pinController.clear();
+          _errorPinWithdrawMsg = '';
+        }
+        if (fetch.dataState == BoostPostContentState.getBlocError) {
+          Routing().moveBack();
+          // notifyListeners();
+          if (fetch.data != null) {
+              ShowBottomSheet().onShowColouredSheet(context, fetch.data['message'], color: Theme.of(context).colorScheme.error);
+          }
+        }
+      }else{
+        // ignore: use_build_context_synchronously
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
+          createBoostpost(context);
+        });
+      }
+    }catch(e){
+      debugPrint(e.toString());
     }
   }
 

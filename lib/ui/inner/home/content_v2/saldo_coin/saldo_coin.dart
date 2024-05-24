@@ -20,14 +20,13 @@ class SaldoCoinWidget extends StatefulWidget {
 }
 
 class _SaldoCoinWidgetState extends State<SaldoCoinWidget> {
-
+  late SaldoCoinNotifier notifier;
   @override
   void initState() {
     super.initState();
-    var notifier = Provider.of<SaldoCoinNotifier>(context, listen: false);
+    notifier = Provider.of<SaldoCoinNotifier>(context, listen: false);
     
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      
       notifier.initSaldo(context);
       notifier.transactionCoin = widget.transactionCoin;
       widget.isChecking!(notifier.visibilityTransaction, notifier.saldoCoin);
@@ -37,9 +36,10 @@ class _SaldoCoinWidgetState extends State<SaldoCoinWidget> {
   @override
   void didUpdateWidget(SaldoCoinWidget oldWidget) {
     if (oldWidget.transactionCoin != widget.transactionCoin) {
-      var notifier = Provider.of<SaldoCoinNotifier>(context, listen: false);
       notifier.transactionCoin = widget.transactionCoin;
+      notifier.checkSaldoCoin();
     }
+    widget.isChecking!(notifier.visibilityTransaction, notifier.saldoCoin);
     super.didUpdateWidget(oldWidget);
   } 
   @override
@@ -81,7 +81,7 @@ class _SaldoCoinWidgetState extends State<SaldoCoinWidget> {
                         ]),
                       ),
                       Visibility(
-                        visible: !notifier.visibilityTransaction,
+                        visible: widget.transactionCoin > notifier.saldoCoin,
                         child: Padding(
                           padding: const EdgeInsets.only(top: 8.0),
                           child: RichText(

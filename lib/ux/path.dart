@@ -152,6 +152,11 @@ class Routes {
   static const String boostPaymentSummary = '/boost-payment-summary';
   static const String boostList = '/boost-list';
 
+  static const String pinboostpost = '/pin-boostpost';
+  static const String pinbuycontent = '/pin-buycontent';
+
+  static const String transactioncoindetail = '/transaction-coin-detail';
+
   static const String aliTest = '/ali-test';
   static const String message = '/message';
 
