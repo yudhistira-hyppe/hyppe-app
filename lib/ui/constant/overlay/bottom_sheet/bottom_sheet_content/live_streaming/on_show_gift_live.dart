@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/button_challange.dart';
-import 'package:hyppe/ui/inner/home/content_v2/payment_method/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/saldo_coin/saldo_coin.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:provider/provider.dart';
 
@@ -26,6 +26,7 @@ class OnShowGiftLiveBottomSheet extends StatefulWidget {
 class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
   PageController? controller = PageController();
   bool firstTab = true;
+  bool buttonactive = false;
 
   @override
   void initState() {
@@ -37,7 +38,8 @@ class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<PaymentMethodNotifier>(
+    var trans = context.read<TranslateNotifierV2>().translate;
+    return Consumer<StreamerNotifier>(
       builder: (context, notifier, __) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -64,7 +66,33 @@ class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
               return _classic(true);
             },
           )),
-          _saldo(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+            child: SaldoCoinWidget(
+              transactionCoin: notifier.giftSelect?.price ?? 0,
+              isChecking: (bool val, int saldoCoin) {
+                buttonactive = val;
+                setState(() {});
+              },
+            ),
+          ),
+          Consumer<StreamerNotifier>(
+            builder: (_, sn, __) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                child: ButtonChallangeWidget(
+                  function: () {
+                    if (buttonactive) {
+                      sn.sendGift(context, mounted, sn.giftSelect?.sId ?? '', sn.giftSelect?.thumbnail ?? '', sn.giftSelect?.name ?? '',
+                          urlGift: sn.giftSelect?.animation, idViewStream: widget.idViewStream);
+                    }
+                  },
+                  bgColor: !buttonactive ? kHyppeDisabled : kHyppePrimary,
+                  text: trans.send,
+                ),
+              );
+            },
+          )
         ],
       ),
     );
@@ -74,7 +102,7 @@ class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
     var trans = context.read<TranslateNotifierV2>().translate;
     return Consumer<StreamerNotifier>(
       builder: (_, sn, __) {
-        var data = isClassic ? sn.dataGift : sn.dataGiftDeluxe;
+        var firstData = isClassic ? sn.dataGift : sn.dataGiftDeluxe;
         return Padding(
           padding: const EdgeInsets.all(16.0),
           child: sn.isloadingGift
@@ -91,7 +119,7 @@ class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
                     ),
                   ),
                 )
-              : data.isEmpty
+              : firstData.isEmpty
                   ? Center(
                       child: Padding(
                         padding: const EdgeInsets.all(16),
@@ -144,8 +172,9 @@ class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
                                     ? SvgPicture.network(
                                         data.thumbnail ?? '',
                                         // 'https://www.svgrepo.com/show/1615/nurse.svg',
-                                        height: 30 * SizeConfig.scaleDiagonal,
-                                        width: 30 * SizeConfig.scaleDiagonal,
+                                        height: 40 * SizeConfig.scaleDiagonal,
+                                        // width: 30 * SizeConfig.scaleDiagonal,
+                                        fit: BoxFit.cover,
                                         // semanticsLabel: 'A shark?!',
                                         // color: false,
                                         placeholderBuilder: (BuildContext context) => Container(padding: const EdgeInsets.all(30.0), child: const CircularProgressIndicator()),
@@ -313,83 +342,6 @@ class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
               ),
             ),
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _saldo() {
-    var trans = context.read<TranslateNotifierV2>().translate;
-    return Container(
-      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 20),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              const CustomIconWidget(
-                height: 20,
-                iconData: "${AssetPath.vectorPath}ic-coin.svg",
-                defaultColor: false,
-              ),
-              sixPx,
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '${trans.ballance}: 200',
-                    style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700),
-                  ),
-                  sixPx,
-                  RichText(
-                    text: TextSpan(
-                      text: '${trans.toBeUsed} : ',
-                      style: const TextStyle(
-                        color: kHyppeBurem,
-                        fontSize: 12,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: '50 Coins',
-                          style: TextStyle(color: kHyppeTextLightPrimary, fontSize: 12, fontWeight: FontWeight.w700),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-              const Spacer(),
-              Container(
-                padding: EdgeInsets.only(top: 6, bottom: 6, left: 16, right: 12),
-                decoration: BoxDecoration(color: kHyppeTextLightPrimary, borderRadius: BorderRadius.circular(16)),
-                child: Row(
-                  children: [
-                    Text(
-                      'Top Up',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}arrow_right.svg",
-                      defaultColor: false,
-                      color: Colors.white,
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
-          twelvePx,
-          Consumer<StreamerNotifier>(
-            builder: (_, sn, __) {
-              return ButtonChallangeWidget(
-                function: () {
-                  sn.sendGift(context, mounted, sn.giftSelect?.sId ?? '', sn.giftSelect?.thumbnail ?? '', sn.giftSelect?.name ?? '',
-                      urlGift: sn.giftSelect?.animation, idViewStream: widget.idViewStream);
-                },
-                bgColor: kHyppePrimary,
-                text: trans.send,
-              );
-            },
-          )
         ],
       ),
     );

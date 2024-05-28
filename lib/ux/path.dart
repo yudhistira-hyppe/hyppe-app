@@ -187,6 +187,9 @@ class Routes {
   static const String streamingFeedback = '/streaming-feedback';
   static const String listStreamers = '/list-streamers';
   static const String viewStreaming = '/view-streaming';
+  static const String pelanggaranDetailtreaming = '/pelanggaran-detail';
+  static const String appealLiveSuccess = '/appeal-live-success';
+
 
   // ====
   static const String addlink = '/add-link';

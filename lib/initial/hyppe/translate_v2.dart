@@ -26,6 +26,7 @@ import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/feedback/notifier.dart';
 
 import 'package:hyppe/ui/inner/notification/notifier.dart';
+import 'package:hyppe/ui/inner/upload/link/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
@@ -91,7 +92,7 @@ class TranslateNotifierV2 with ChangeNotifier {
 
   List<TicketModel> _onProgressTickets = [];
   List<TicketModel> get onProgressTicket => _onProgressTickets;
-  set onProgressTicket(List<TicketModel> values){
+  set onProgressTicket(List<TicketModel> values) {
     _onProgressTickets = values;
     notifyListeners();
   }
@@ -132,15 +133,15 @@ class TranslateNotifierV2 with ChangeNotifier {
     }
   }
 
-  Future getOnProgressTickets(BuildContext context) async{
+  Future getOnProgressTickets(BuildContext context) async {
     final idUser = SharedPreference().readStorage(SpKeys.userID);
-    try{
+    try {
       final bloc = SupportTicketBloc();
       await bloc.getTicketHistories(context, TicketArgument(page: 0, limit: 10, descending: true, iduser: idUser, close: false));
       final fetch = bloc.supportTicketFetch;
 
       onProgressTicket = (fetch.data as List<dynamic>?)?.map((e) => TicketModel.fromJson(e as Map<String, dynamic>)).toList() ?? [];
-    }catch(e){
+    } catch (e) {
       'TicketsDataQuery Reload Error : $e'.logger();
     }
   }
@@ -162,8 +163,6 @@ class TranslateNotifierV2 with ChangeNotifier {
       }
     }
   }
-
-
 
   Future loadLanguage({int? index}) async {
     late String langIso;
@@ -199,7 +198,7 @@ class TranslateNotifierV2 with ChangeNotifier {
   }
 
   Future initTranslate(BuildContext context, {int? index, Function(dynamic)? onError}) async {
-    try{
+    try {
       print('kesini translate');
       await loadLanguage(index: index);
 
@@ -242,6 +241,7 @@ class TranslateNotifierV2 with ChangeNotifier {
       context.read<DetailTicketNotifier>().translate(translate);
       context.read<VidDetailNotifier>().translate(translate);
       context.read<PinAccountNotifier>().translate(translate);
+      context.read<ExternalLinkNotifier>().translate(translate);
       // await context.read<TransactionNotifier>().translate(translate);
       // await context.read<PinAccountNotifier>().translate(translate);
 
@@ -259,12 +259,11 @@ class TranslateNotifierV2 with ChangeNotifier {
       await notifier.updateLanguages(context, lang: lang);
       final fetch = notifier.utilsFetch;
       if (fetch.utilsState == UtilsState.updateLangSuccess) {}
-    }catch(e){
+    } catch (e) {
       'initTranslate error: $e'.logger();
-      if(onError != null){
-       onError(e);
+      if (onError != null) {
+        onError(e);
       }
     }
-
   }
 }

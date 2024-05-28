@@ -169,39 +169,38 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                   ),
                 ),
 
-          widget.commentFocusNode!.hasFocus
-              ? Container()
-              : Container(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  child: Material(
-                    shape: const CircleBorder(),
-                    child: InkWell(
-                      splashColor: Colors.black,
-                      onTap: () {
-                        ShowBottomSheet().onShowGiftLive(context, idViewStream: notifier.dataStreaming.sId);
-                      },
-                      onTapUp: (val) {},
-                      customBorder: const CircleBorder(),
-                      child: Ink(
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(
-                            colors: [Color(0xff7552C0), Color(0xffAB22AF)],
-                            stops: [0.25, 0.75],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                          ),
-                        ),
-                        height: 38,
-                        width: 38,
-                        child: Image.asset("${AssetPath.pngPath}gift.png"),
+          if (!widget.commentFocusNode!.hasFocus && (notifier.dataStreaming.user?.giftActivation ?? false))
+            Container(
+              padding: const EdgeInsets.only(left: 8.0),
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+              ),
+              child: Material(
+                shape: const CircleBorder(),
+                child: InkWell(
+                  splashColor: Colors.black,
+                  onTap: () {
+                    ShowBottomSheet().onShowGiftLive(context, idViewStream: notifier.dataStreaming.sId);
+                  },
+                  onTapUp: (val) {},
+                  customBorder: const CircleBorder(),
+                  child: Ink(
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                        colors: [Color(0xff7552C0), Color(0xffAB22AF)],
+                        stops: [0.25, 0.75],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
                       ),
                     ),
+                    height: 38,
+                    width: 38,
+                    child: Image.asset("${AssetPath.pngPath}gift.png"),
                   ),
                 ),
+              ),
+            ),
           widget.commentFocusNode!.hasFocus
               ? Container()
               : Padding(

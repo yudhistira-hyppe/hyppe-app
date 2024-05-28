@@ -25,7 +25,8 @@ class LiveStreamBloc {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setTransactionFetch(LiveStreamFetch(LiveStreamState.getApiError, message: onResult.data['message'], data: onResult.data));
         } else {
-          setTransactionFetch(LiveStreamFetch(LiveStreamState.getApiSuccess, message: onResult.data['message'], data: GenericResponse.fromJson(onResult.data).responseData));
+          setTransactionFetch(LiveStreamFetch(LiveStreamState.getApiSuccess,
+              statusStream: onResult.data['statusStream'], message: onResult.data['message'], data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
       (errorData) {
@@ -39,6 +40,34 @@ class LiveStreamBloc {
       withCheckConnection: false,
       host: url,
       methodType: MethodType.post,
+      errorServiceType: System().getErrorTypeV2(type),
+    );
+  }
+
+  Future getStream(BuildContext context, String url) async {
+    var type = FeatureType.other;
+    setTransactionFetch(LiveStreamFetch(LiveStreamState.loading));
+    await _repos.reposPost(
+      context,
+      (onResult) {
+        print(onResult.statusCode);
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+          setTransactionFetch(LiveStreamFetch(LiveStreamState.getApiError, message: onResult.data['message'], data: onResult.data));
+        } else {
+          setTransactionFetch(LiveStreamFetch(LiveStreamState.getApiSuccess,
+              statusStream: onResult.data['statusStream'], message: onResult.data['message'], data: GenericResponse.fromJson(onResult.data).responseData));
+        }
+      },
+      (errorData) {
+        setTransactionFetch(LiveStreamFetch(LiveStreamState.getApiError, data: errorData.error));
+      },
+      headers: {
+        'x-auth-user': SharedPreference().readStorage(SpKeys.email),
+      },
+      withAlertMessage: true,
+      withCheckConnection: false,
+      host: url,
+      methodType: MethodType.get,
       errorServiceType: System().getErrorTypeV2(type),
     );
   }

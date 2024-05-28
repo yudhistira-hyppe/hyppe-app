@@ -218,6 +218,7 @@ class OwnershipSellingScreen extends StatelessWidget {
                                         } else {
                                           notifier.priceIsFilled = false;
                                         }
+                                        notifier.checkValidasi();
                                       },
                                       keyboardAppearance: Brightness.dark,
                                       cursorColor: const Color(0xff8A3181),
@@ -236,12 +237,17 @@ class OwnershipSellingScreen extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 18, left: 10),
-                                    child: Text(
-                                      notifier.language.rp ?? 'Rp',
-                                      style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
+                                  const Padding(
+                                    padding: EdgeInsets.only(bottom: 18, left: 10),
+                                    child: CustomIconWidget(
+                                      iconData: "${AssetPath.vectorPath}ic-coin.svg",
+                                      height: 18,
+                                      defaultColor: false,
                                     ),
+                                    // Text(
+                                    //   notifier.language.rp ?? 'Rp',
+                                    //   style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
+                                    // ),
                                   ),
                                   Positioned(
                                     right: 4,
@@ -250,7 +256,7 @@ class OwnershipSellingScreen extends StatelessWidget {
                                       onTap: () => FocusScope.of(context).unfocus(),
                                       child: Container(
                                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: notifier.priceController.text != '' ? kHyppePrimary : kHyppeDisabled),
-                                        padding: const EdgeInsets.all(8),
+                                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                                         child: Text(
                                           notifier.language.setPrice ?? '',
                                           style: Theme.of(context).textTheme.caption?.copyWith(color: notifier.priceController.text != '' ? kHyppeLightButtonText : kHyppeSecondary),
@@ -261,10 +267,10 @@ class OwnershipSellingScreen extends StatelessWidget {
                                 ],
                               )
                             : Container(),
-                        notifier.toSell && notifier.priceController.text == ''
+                        notifier.toSell && notifier.isWarning && notifier.priceController.text != ''
                             ? CustomTextWidget(
                                 textAlign: TextAlign.start,
-                                textToDisplay: notifier.language.mustFilledFirst ?? '',
+                                textToDisplay: notifier.language.localeDatetime == 'id' ? 'Wajib diisi dengan harga kelipatan = 10 (contoh 10, 20,...dst)' : 'Price must be a multiple of 10 (e.g., 10, 20, etc.)',
                                 textStyle: const TextStyle(color: kHyppeDanger),
                               )
                             : Container()

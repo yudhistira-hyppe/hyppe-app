@@ -32,6 +32,7 @@ class _OnShowShareLiveBottomSheetState extends State<OnShowShareLiveBottomSheet>
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<StreamerNotifier>().searchUserCtrl.clear();
       context.read<StreamerNotifier>().getUserShare(context, mounted);
     });
     super.initState();
@@ -131,7 +132,7 @@ class _OnShowShareLiveBottomSheetState extends State<OnShowShareLiveBottomSheet>
                     padding: EdgeInsets.only(left: 16, right: 16, top: 12, bottom: MediaQuery.of(context).viewInsets.bottom + 16),
                     child: ButtonChallangeWidget(
                       function: () {
-                        notifier.sendShareMassage(context);
+                        notifier.sendShareMassage(context, isViewer: widget.isViewer);
                       },
                       text: 'Kirim Secara Terpisah',
                       bgColor: kHyppePrimary,
@@ -275,7 +276,20 @@ class _OnShowShareLiveBottomSheetState extends State<OnShowShareLiveBottomSheet>
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(data.username ?? '', style: const TextStyle(fontSize: 16, color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700)),
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Text(data.username ?? '', style: const TextStyle(fontSize: 16, color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700)),
+                                        if (data.isVerified ?? false)
+                                          const Padding(
+                                            padding: EdgeInsets.only(left: 3.0),
+                                            child: CustomIconWidget(
+                                              iconData: "${AssetPath.vectorPath}ic_verified.svg",
+                                              defaultColor: false,
+                                            ),
+                                          ),
+                                      ],
+                                    ),
                                     Text(
                                       data.fullName ?? '',
                                       style: const TextStyle(color: Color(0xff9b9b9b)),

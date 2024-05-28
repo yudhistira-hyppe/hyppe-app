@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_desc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_form_field.dart';
@@ -12,6 +13,7 @@ import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 import '../pre_upload_content/notifier.dart';
@@ -134,18 +136,34 @@ class _AddLinkPageState extends State<AddLinkPage> {
                 if (notifier.isEdited)
                   TextButton(
                       onPressed: () {
+                        print(notifier.beforeCurrentRoutes);
                         if (notifier.beforeCurrentRoutes == Routes.preUploadContent) {
                           final stream = Provider.of<PreUploadContentNotifier>(context, listen: false);
                           stream.setDefaultExternalLink(context);
+                          notifier.onWillPop(context);
                         } else if (notifier.beforeCurrentRoutes == Routes.selfProfile) {
                           final stream = Provider.of<AccountPreferencesNotifier>(context, listen: false);
                           stream.setDefaultExternalLink(context);
+                          notifier.onWillPop(context);
                         } else if (notifier.beforeCurrentRoutes == Routes.streamer) {
                           final stream = Provider.of<StreamerNotifier>(context, listen: false);
-                          stream.setDefaultExternalLink(context);
+                          ShowGeneralDialog.generalDialog(
+                            _,
+                            titleText: notifier.language.localeDatetime == 'id' ? 'Hapus Link' : 'Delete Link',
+                            bodyText: notifier.language.localeDatetime == 'id' ? 'Link dapat ditambahkan kembali jika dihapus' : 'Links can be added again if removed',
+                            titleButtonPrimary: notifier.language.remove,
+                            titleButtonSecondary: notifier.language.cancel,
+                            functionPrimary: () {
+                              stream.setDefaultExternalLink(context);
+                              notifier.onWillPop(context);
+                            },
+                            functionSecondary: () {
+                              Routing().moveBack();
+                            },
+                            isHorizontal: false,
+                            barrierDismissible: true,
+                          );
                         }
-
-                        notifier.onWillPop(context);
                       },
                       child: Text(
                         notifier.language.deleteLink ?? 'Hapus Link',

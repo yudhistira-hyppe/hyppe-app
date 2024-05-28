@@ -31,6 +31,7 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/setting/setting_notifier.
 import 'package:hyppe/ui/inner/home/content_v2/profile_completion/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/review_buy/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/saldo_coin/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/topupcoin/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/filter/notifier.dart';
@@ -40,6 +41,7 @@ import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/fullscreen/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/appeal/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/feedback/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 // import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamerios/notifier.dart';
@@ -265,6 +267,7 @@ class AppDependencies {
         // ChangeNotifierProvider<StreameriOSNotifier>(create: (context) => StreameriOSNotifier()),
         ChangeNotifierProvider<StreamingFeedbackNotifier>(create: (context) => StreamingFeedbackNotifier()),
         ChangeNotifierProvider<ViewStreamingNotifier>(create: (context) => ViewStreamingNotifier()),
+        ChangeNotifierProvider<AppealStreamNotifier>(create: (context) => AppealStreamNotifier()),
 
         //Coins
         ChangeNotifierProvider<CoinNotifier>(create: (context) => CoinNotifier()),
@@ -280,6 +283,8 @@ class AppDependencies {
         //Disc
         ChangeNotifierProvider<DiscNotifier>(create: (context) => DiscNotifier()),
         //History Order Coint
-        ChangeNotifierProvider<HistoryOrderCoinNotifier>(create: (context) => HistoryOrderCoinNotifier())
+        ChangeNotifierProvider<HistoryOrderCoinNotifier>(create: (context) => HistoryOrderCoinNotifier()),
+        //SaldoCoin
+        ChangeNotifierProvider<SaldoCoinNotifier>(create: (context) => SaldoCoinNotifier()),
       ];
 }

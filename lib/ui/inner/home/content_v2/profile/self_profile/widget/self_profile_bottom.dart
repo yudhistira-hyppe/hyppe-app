@@ -33,17 +33,17 @@ class _SelfProfileBottomState extends State<SelfProfileBottom> {
         children: [
           Column(
             children: [
-              GestureDetector(
-                  onTap: () {
-                    // Routing().move(Routes.verificationSupportSuccess);
-                    Routing().move(Routes.streamer);
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) => TestLootie(),
-                    //     ));
-                  },
-                  child: Text("hahaha")),
+              // GestureDetector(
+              //     onTap: () {
+              //       // Routing().move(Routes.verificationSupportSuccess);
+              //       Routing().move(Routes.streamer);
+              //       // Navigator.push(
+              //       //     context,
+              //       //     MaterialPageRoute(
+              //       //       builder: (context) => TestLootie(),
+              //       //     ));
+              //     },
+              //     child: Text("hahaha")),
               CustomTextButton(
                 child: Row(
                   children: [

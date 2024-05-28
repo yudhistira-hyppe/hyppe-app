@@ -1913,8 +1913,10 @@ class ShowBottomSheet {
         isScrollControlled: true,
         context: _,
         backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
+        isDismissible: true,
         builder: (builder) {
           return DraggableScrollableSheet(
+            expand: false,
             maxChildSize: 0.8,
             minChildSize: 0.4,
             initialChildSize: 0.7,
@@ -1922,7 +1924,7 @@ class ShowBottomSheet {
               return Container(
                 decoration: const BoxDecoration(
                   color: Colors.white,
-                  borderRadius: const BorderRadius.only(
+                  borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(8),
                     topRight: Radius.circular(8),
                   ),
@@ -1942,8 +1944,10 @@ class ShowBottomSheet {
         isScrollControlled: true,
         context: _,
         backgroundColor: Colors.transparent,
+        isDismissible: true,
         builder: (builder) {
           return DraggableScrollableSheet(
+              expand: false,
               maxChildSize: 0.95,
               initialChildSize: 0.7,
               builder: (_, scrollController) {

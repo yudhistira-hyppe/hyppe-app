@@ -67,7 +67,7 @@ class DialogDatePicker extends StatelessWidget {
                           dateOrder: DatePickerDateOrder.dmy,
                           mode: CupertinoDatePickerMode.date,
                           onDateTimeChanged: (DateTime v) {
-                            context.read<HistoryOrderCoinNotifier>().tempSelectedDate = v.toString();
+                            context.read<HistoryOrderCoinNotifier>().settempSelectedDate(v.toString());
                           },
                     ),
                   ),

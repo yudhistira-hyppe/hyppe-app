@@ -39,24 +39,30 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
 
   bool isMute = false;
 
+  bool loading = true;
+  ViewStreamingNotifier? notifier;
+
   @override
   void initState() {
-    super.initState();
-    final notifier = (Routing.navigatorKey.currentContext ?? context).read<ViewStreamingNotifier>();
-    notifier.initViewStreaming(widget.args.data);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+    super.initState();
+    notifier = (Routing.navigatorKey.currentContext ?? context).read<ViewStreamingNotifier>();
+    notifier?.initViewStreaming(widget.args.data);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      loading = false;
+      setState(() {});
       commentFocusNode.addListener(() {
         debugPrint("Has focus: ${commentFocusNode.hasFocus}");
       });
-      await notifier.requestPermission(context);
-      await notifier.startViewStreaming(Routing.navigatorKey.currentContext ?? context, mounted, widget.args.data);
+      await notifier?.requestPermission(context);
+      await notifier?.startViewStreaming(Routing.navigatorKey.currentContext ?? context, mounted, widget.args.data);
       WakelockPlus.enable();
       if (!mounted) return;
 
       // await notifier.initAgora(context, mounted, widget.args.data);
       SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
       WidgetsBinding.instance.addObserver(this);
+      loading = false;
       setState(() {});
     });
   }
@@ -82,12 +88,15 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
       // });
     }
     if (state == AppLifecycleState.resumed) {
+      notifier?.engine.muteAllRemoteAudioStreams(false);
       print("========= Streamer AppLifecycleState.resumed ==========");
     }
 
     if (state == AppLifecycleState.paused) {
       // Minimize aplication
       print("========= Streamer AppLifecycleState.paused ==========");
+      notifier?.engine.muteAllRemoteAudioStreams(true);
+
       // streampro.pauseLive(context, mounted);
     }
 
@@ -105,7 +114,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
         body: WillPopScope(
           child: SizedBox(
             width: SizeConfig.screenWidth,
-            height: SizeConfig.screenHeight,
+            height: MediaQuery.of(context).size.height,
             child: notifier.isOver
                 ? OverLiveStreaming(
                     data: widget.args.data,
@@ -133,11 +142,17 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                           width: SizeConfig.screenWidth,
                           height: SizeConfig.screenHeight,
                           child: notifier.remoteUid != -1
-                              ? AgoraVideoView(
-                                  controller: VideoViewController.remote(
-                                    rtcEngine: notifier.engine,
-                                    canvas: VideoCanvas(uid: notifier.remoteUid),
-                                    connection: RtcConnection(channelId: widget.args.data.sId ?? ''),
+                              ? AspectRatio(
+                                  aspectRatio: MediaQuery.of(context).devicePixelRatio,
+                                  child: AgoraVideoView(
+                                    controller: VideoViewController.remote(
+                                      rtcEngine: notifier.engine,
+                                      canvas: VideoCanvas(
+                                        uid: notifier.remoteUid,
+                                        renderMode: RenderModeType.renderModeHidden,
+                                      ),
+                                      connection: RtcConnection(channelId: widget.args.data.sId ?? ''),
+                                    ),
                                   ),
                                 )
                               : const Align(
@@ -202,6 +217,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                           ),
                         ),
                       ),
+
                       const Positioned.fill(child: GiftDeluxe()),
                       //Buffering
                       if (notifier.resionAgora == RemoteVideoStateReason.remoteVideoStateReasonNetworkCongestion)
@@ -228,6 +244,15 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                             ),
                           ),
                         ),
+                      // Positioned(
+                      //   top: 100,
+                      //   left: 100,
+                      //   child: GestureDetector(
+                      //       onTap: () {
+                      //         print("disini");
+                      //       },
+                      //       child: Container(color: Colors.red, width: 100, height: 100, child: Align(alignment: Alignment.center, child: Text('${MediaQuery.of(context).size.height} ')))),
+                      // ),
 
                       TitleViewLive(
                         data: widget.args.data,
@@ -248,11 +273,12 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                   ),
           ),
           onWillPop: () async {
+            SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
             context.read<ViewStreamingNotifier>().exitStreaming(context, widget.args.data).whenComplete(() async {
               await context.read<ViewStreamingNotifier>().destoryPusher();
               Routing().moveBack();
             });
-            return true;
+            return false;
           },
         ),
       );

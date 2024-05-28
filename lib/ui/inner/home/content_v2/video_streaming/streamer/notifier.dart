@@ -21,6 +21,7 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/models/collection/live_stream/banned_stream_model.dart';
 import 'package:hyppe/core/models/collection/live_stream/comment_live_model.dart';
 import 'package:hyppe/core/models/collection/live_stream/gift_live_model.dart';
 import 'package:hyppe/core/models/collection/live_stream/link_stream_model.dart';
@@ -43,6 +44,7 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/item.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -61,8 +63,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   static const String eventComment = 'COMMENT_STREAM_SINGLE';
   static const String eventViewStream = 'VIEW_STREAM';
   static const String eventLikeStream = 'LIKE_STREAM';
-  static const String eventCommentDisable = 'COMMENT_STREAM_DISABLED';
-  static const String eventKickUser = 'KICK_USER_STREAM';
+  static const String eventStatusStream = 'STATUS_STREAM';
 
   final _socketService = SocketLiveService();
 
@@ -76,6 +77,9 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   int pageNumberUserShare = 0;
   int limitNumberUserShare = 15;
 
+  Duration timeCountdownReported = const Duration(seconds: 30);
+
+  BannedStreamModel? dataBanned;
   LinkStreamModel dataStream = LinkStreamModel();
   UserProfileModel audienceProfile = UserProfileModel();
   UserProfileModel audienceProfileViewer = UserProfileModel();
@@ -186,6 +190,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   // }
 
   Future<void> init(BuildContext context, mounted, {bool forConfig = false}) async {
+    dataBanned = null;
     print("-------- init stream $forConfig ---------");
     isloading = true;
 
@@ -207,7 +212,12 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     //   await _onListen(context, mounted);
     // }
 
-    await initAgora();
+    await checkBeforeLive(context, mounted).then((value) async {
+      if (dataBanned != null) {
+        // statusLive = StatusStream.banned;
+      }
+      await initAgora();
+    });
 
     // notifyListeners();
 
@@ -587,10 +597,12 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
         _socketService.closeSocket(eventComment);
         _socketService.closeSocket(eventLikeStream);
         _socketService.closeSocket(eventViewStream);
+        _socketService.closeSocket(eventStatusStream);
       }
       _connectAndListenToSocket(eventComment);
       _connectAndListenToSocket(eventLikeStream);
       _connectAndListenToSocket(eventViewStream);
+      _connectAndListenToSocket(eventStatusStream);
 
       // _alivcLivePusher.startPushWithURL(pushURL);
     } else {
@@ -603,6 +615,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     _socketService.closeSocket(eventComment);
     _socketService.closeSocket(eventLikeStream);
     _socketService.closeSocket(eventViewStream);
+    _socketService.closeSocket(eventStatusStream);
     // _alivcLivePusher.stopPush();
     // _alivcLivePusher.stopPreview();
     // _alivcLivePusher.destroy();
@@ -788,7 +801,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     isCancel = true;
     statusLive = StatusStream.offline;
     // _alivcLivePusher.stopPush();
-    engine.release();
+    // engine.release();
     inactivityTimer?.cancel();
     stopStream(context, mounted);
   }
@@ -799,14 +812,14 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
-  Future endLive(BuildContext context, mounted, {bool isBack = true}) async {
+  Future endLive(BuildContext context, mounted, {bool isBack = true, bool blockLive = false}) async {
     if (isBack) Routing().moveBack();
     var dateTimeFinish = DateTime.now();
     Duration duration = dateTimeFinish.difference(dateTimeStart);
     await destoryPusher();
     if (!mounted) return;
     await stopStream(context, mounted);
-    Routing().moveReplacement(Routes.streamingFeedback, argument: SummaryLiveArgument(duration: duration, data: dataSummary));
+    Routing().moveReplacement(Routes.streamingFeedback, argument: SummaryLiveArgument(duration: duration, data: dataSummary, blockLive: blockLive));
   }
 
   int secondsEnd = 0;
@@ -992,11 +1005,15 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
         }
         final fetch = notifier.liveStreamFetch;
         if (fetch.postsState == LiveStreamState.getApiSuccess) {
-          dataStream = LinkStreamModel.fromJson(fetch.data);
-          print('======= fetch.data');
-          tempToken = dataStream.token;
-          channel = dataStream.sId ?? '';
-          returnNext = true;
+          if (fetch.statusStream) {
+            dataStream = LinkStreamModel.fromJson(fetch.data);
+            print('======= fetch.data');
+            tempToken = dataStream.token;
+            channel = dataStream.sId ?? '';
+            returnNext = true;
+          } else {
+            returnNext = false;
+          }
         }
       } catch (e) {
         debugPrint(e.toString());
@@ -1388,7 +1405,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     if (event == eventComment) {
       var messages = CommentLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
       if (messages.idStream == dataStream.sId) {
-        if (messages.commentType == 'MESSAGGES') {
+        if (messages.commentType == 'MESSAGGES' || messages.commentType == 'JOIN') {
           comment.insert(0, messages);
         } else if (messages.commentType == 'GIFT') {
           if (messages.urlGift != null) {
@@ -1433,6 +1450,18 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
       var messages = CountViewLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
       if (messages.idStream == dataStream.sId) {
         totViews = messages.viewCount ?? 0;
+      }
+    } else if (event == eventStatusStream) {
+      var data = json.decode('$message');
+      if (data['data']['idStream'] == dataStream.sId && data['data']['status'] == false) {
+        dataStream.status = false;
+        timeCountdownReported = Duration(seconds: data['data']['countdown'] ?? 30);
+        dataBanned = BannedStreamModel(
+          streamBannedDate: data['data']['datePelanggaran'],
+          streamBannedMax: data['data']['totalPelanggaran'],
+          statusBanned: data['data']['statusBanned'],
+          streamId: dataStream.sId,
+        );
       }
     }
     notifyListeners();
@@ -1533,7 +1562,11 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   }
 
   Future getUserShare(BuildContext context, bool mounted, {bool isLoadmore = false}) async {
-    if (!isLoadmore) isloadingUserShare = true;
+    if (!isLoadmore) {
+      pageNumberUserShare = 0;
+      isloadingUserShare = true;
+    }
+
     notifyListeners();
     bool connect = await System().checkConnections();
 
@@ -1546,7 +1579,9 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
         };
 
         if (searchUserCtrl.text != '') {
+          pageNumberUserShare = 0;
           data["username"] = searchUserCtrl.text;
+          data["pageNumber"] = pageNumberUserShare;
         }
 
         if (mounted) await notifier.getLinkStream(context, data, UrlConstants.userShare);
@@ -1602,10 +1637,10 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   }
 
   //send share DM DIRECT MESSAGE
-  Future sendShareMassage(BuildContext context) async {
+  Future sendShareMassage(BuildContext context, {bool isViewer = false}) async {
     Routing().moveBack();
     for (var i = 0; i < shareUsers.length; i++) {
-      sendMessageDirect(context, shareUsers[i].email ?? '');
+      sendMessageDirect(context, shareUsers[i].email ?? '', isViewer);
     }
 
     ScaffoldMessengerState().hideCurrentSnackBar();
@@ -1621,7 +1656,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     // }
   }
 
-  Future sendMessageDirect(BuildContext context, String recipientEmail) async {
+  Future sendMessageDirect(BuildContext context, String recipientEmail, bool isViewer) async {
     // if (messageShareCtrl.text.trim().isEmpty) return;
 
     try {
@@ -1629,12 +1664,14 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
 
       final message = messageShareCtrl.text;
       final emailSender = SharedPreference().readStorage(SpKeys.email);
+
+      var idStream = isViewer ? context.read<ViewStreamingNotifier>().dataStreaming.sId : dataStream.sId;
       final param = DiscussArgument(
         email: emailSender,
         receiverParty: recipientEmail,
       )
         ..txtMessages = message == '' ? "text_kosong" : message
-        ..streamID = dataStream.sId;
+        ..streamID = idStream;
 
       final notifier = MessageBlocV2();
       await notifier.createDiscussionBloc(context, disqusArgument: param);
@@ -1773,6 +1810,40 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
         final fetch = notifier.liveStreamFetch;
         if (fetch.postsState == LiveStreamState.getApiSuccess) {
           fetch.data.forEach((v) => dataUserGift.add(ListGiftModel.fromJson(v)));
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+
+      notifyListeners();
+    } else {
+      if (context.mounted) {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
+          initLiveStream(context, mounted);
+        });
+      }
+    }
+    isloadingViewers = false;
+    notifyListeners();
+  }
+
+  Future checkBeforeLive(BuildContext context, mounted) async {
+    bool connect = await System().checkConnections();
+    if (connect) {
+      try {
+        final notifier = LiveStreamBloc();
+
+        if (mounted) {
+          await notifier.getStream(context, UrlConstants.checkStream);
+        }
+        final fetch = notifier.liveStreamFetch;
+        if (fetch.postsState == LiveStreamState.getApiSuccess) {
+          print('====---=== status ${fetch.statusStream}');
+          if (fetch.statusStream == false) {
+            statusLive = StatusStream.banned;
+            dataBanned = BannedStreamModel.fromJson(fetch.data);
+          }
         }
       } catch (e) {
         debugPrint(e.toString());

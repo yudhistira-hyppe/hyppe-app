@@ -20,8 +20,9 @@ class StreamerWidget extends StatelessWidget {
         children: [
           const Padding(padding: EdgeInsets.only(bottom: 20), child: ListGift()),
           ListCommentLive(commentFocusNode: commentFocusNode),
+          eightPx,
           const PinCommenmt(),
-          fifteenPx,
+          sixteenPx,
           FormCommentLive(commentFocusNode: commentFocusNode),
         ],
       ),

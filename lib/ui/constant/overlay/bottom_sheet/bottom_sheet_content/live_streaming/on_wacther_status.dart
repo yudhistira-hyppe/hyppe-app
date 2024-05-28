@@ -45,8 +45,8 @@ class _OnWatcherStatusState extends State<OnWatcherStatus> {
   @override
   Widget build(BuildContext context) {
     final language = context.read<TranslateNotifierV2>().translate;
-    return Consumer<StreamerNotifier>(
-      builder: (_, notifier, __) => Container(
+    return Consumer2<StreamerNotifier, ViewStreamingNotifier>(
+      builder: (_, notifier, viewNotifier, __) => Container(
         height: double.infinity,
         width: double.infinity,
         padding: const EdgeInsets.only(left: 16, right: 16, top: 12),
@@ -95,9 +95,11 @@ class _OnWatcherStatusState extends State<OnWatcherStatus> {
                           GestureDetector(
                             onTap: () {
                               // Navigator.pop(context);
+
                               if (widget.isViewer) {
-                                final stream = Provider.of<ViewStreamingNotifier>(context, listen: false);
-                                stream.reportLive(context);
+                                if (notifier.audienceProfile.username == viewNotifier.dataStreaming.user?.username) {
+                                  viewNotifier.reportLive(context);
+                                }
                               } else {
                                 Navigator.pop(context);
                                 ShowGeneralDialog.generalDialog(
@@ -123,11 +125,13 @@ class _OnWatcherStatusState extends State<OnWatcherStatus> {
                             child: Align(
                               alignment: Alignment.center,
                               child: widget.isViewer
-                                  ? CircleAvatar(
-                                      radius: 18,
-                                      backgroundColor: kHyppeBurem.withOpacity(.2),
-                                      child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}flag.svg"),
-                                    )
+                                  ? (notifier.audienceProfile.username == viewNotifier.dataStreaming.user?.username)
+                                      ? CircleAvatar(
+                                          radius: 18,
+                                          backgroundColor: kHyppeBurem.withOpacity(.2),
+                                          child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}flag.svg"),
+                                        )
+                                      : const SizedBox.shrink()
                                   : Container(
                                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                       decoration: BoxDecoration(

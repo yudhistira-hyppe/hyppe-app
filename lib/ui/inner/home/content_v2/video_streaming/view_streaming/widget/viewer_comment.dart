@@ -22,8 +22,9 @@ class ViewerComment extends StatelessWidget {
         children: [
           const Padding(padding: EdgeInsets.only(bottom: 20), child: ListGiftViewer()),
           ListCommentViewer(commentFocusNode: commentFocusNode, data: data),
+          eightPx,
           const PinCommenmtViewer(),
-          twentyEightPx,
+          sixteenPx,
           FormCommentViewer(
             commentFocusNode: commentFocusNode,
             data: data,

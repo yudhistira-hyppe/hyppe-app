@@ -81,6 +81,7 @@ class ShowGeneralDialog {
     bool isHorizontal = true,
     bool? fillColor = true,
     Widget? bodyWidget,
+    Widget? topWidget,
   }) {
     showGeneralDialog(
       //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
@@ -103,6 +104,7 @@ class ShowGeneralDialog {
           isHorizontal: isHorizontal,
           fillColor: fillColor ?? false,
           bodyWidget: bodyWidget,
+          topWidget: topWidget,
         ),
       ),
       transitionBuilder: null,

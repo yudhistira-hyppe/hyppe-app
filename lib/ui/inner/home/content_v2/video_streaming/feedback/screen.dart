@@ -4,12 +4,17 @@ import 'package:hyppe/core/arguments/summary_live_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/models/collection/live_stream/banned_stream_model.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/appeal/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/appeal/pelanggaran_detail.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/feedback/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../../../core/constants/asset_path.dart';
@@ -84,9 +89,14 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CustomTextWidget(
-                        textToDisplay: language.engagement ?? 'Keterlibatan',
-                        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      GestureDetector(
+                        onTap: () {
+                          // openBlockComponent(notifier);
+                        },
+                        child: CustomTextWidget(
+                          textToDisplay: language.engagement ?? 'Keterlibatan',
+                          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
                       ),
                       sixteenPx,
                       Row(
@@ -329,68 +339,114 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
 
   void openBlockComponent(StreamingFeedbackNotifier notifier) {
     final language = notifier.language;
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Container(
-          height: MediaQuery.of(context).size.height * .3,
-          padding: const EdgeInsets.all(0),
-          child: Dialog(
-            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-            child: Container(
-              padding: const EdgeInsets.all(15),
-              height: MediaQuery.of(context).size.height * .3,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const CustomIconWidget(
-                    iconData: "${AssetPath.vectorPath}livewarningdark.svg",
-                    defaultColor: false,
-                  ),
-                  Text(
-                    language.labelBlockLive2 ?? 'Siaran LIVE dihentikan',
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ),
-                  twelvePx,
-                  Center(
-                    child: RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(children: [
-                        TextSpan(text: language.labelBlockLive3 ?? 'Siaran LIVE telah dihentikan oleh sistem karena melanggar ', style: const TextStyle(color: kHyppeBurem)),
-                        TextSpan(
-                          text: language.communityguidelines ?? 'Pedoman Komunitas Hyppe.',
-                          style: const TextStyle(color: kHyppePrimary, fontWeight: FontWeight.bold),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              launchUrl(Uri.parse('https://hyppe.id/en/privacy-policy'));
-                            },
-                        )
-                      ]),
-                    ),
-                  ),
-                  sixteenPx,
-                  CustomTextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 48),
-                      child: Text(
-                        'OK',
-                        style: TextStyle(
-                          color: kHyppePrimary,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+    ShowGeneralDialog.generalDialog(
+      context,
+      titleText: language.labelBlockLive2 ?? 'Siaran LIVE dihentikan',
+      bodyText: language.localeDatetime == 'id'
+          ? 'Akunmu ditangguhkan melakukan LIVE karena telah melakukan pelanggaran berulang. Lihat Detail Pelanggaran untuk mengajukan banding.'
+          : 'Your account has been suspended from LIVE  due to repeated violations. Review violation details to appeal.',
+      functionPrimary: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PelanggaranDetail(
+                data: context.read<StreamerNotifier>().dataBanned ?? BannedStreamModel(),
               ),
-            ),
-          ),
-        );
+            ));
       },
+      functionSecondary: () {
+        Routing().moveBack();
+      },
+      titleButtonPrimary: language.localeDatetime == 'id' ? 'Lihat Detail Pelanggaran' : 'View Violation Details',
+      titleButtonSecondary: language.localeDatetime == 'id' ? 'Mengerti' : 'Got It',
+      topWidget: const Padding(
+        padding: EdgeInsets.only(bottom: 24.0),
+        child: Icon(
+          Icons.warning_amber_rounded,
+          color: kHyppeDanger,
+          size: 50,
+        ),
+      ),
+      isHorizontal: false,
     );
+    // showDialog(
+    //   context: context,
+    //   barrierDismissible: false,
+    //   builder: (BuildContext context) {
+    //     return Container(
+    //       height: MediaQuery.of(context).size.height * .3,
+    //       padding: const EdgeInsets.all(0),
+    //       child: Dialog(
+    //         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+    //         child: Container(
+    //           padding: const EdgeInsets.all(15),
+    //           height: MediaQuery.of(context).size.height * .3,
+    //           child: Column(
+    //             mainAxisAlignment: MainAxisAlignment.center,
+    //             crossAxisAlignment: CrossAxisAlignment.center,
+    //             children: [
+    //               const Icon(
+    //                 Icons.warning_amber_rounded,
+    //                 color: kHyppeDanger,
+    //                 size: 50,
+    //               ),
+    //               twentyFourPx,
+    //               // const CustomIconWidget(
+    //               //   iconData: "${AssetPath.vectorPath}livewarningdark.svg",
+    //               //   defaultColor: false,
+    //               // ),
+    //               Text(
+    //                 language.labelBlockLive2 ?? 'Siaran LIVE dihentikan',
+    //                 style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+    //                 textAlign: TextAlign.center,
+    //               ),
+    //               twelvePx,
+    //               Center(
+    //                 child: Text(
+    //                   language.localeDatetime == 'id'
+    //                       ? 'Akunmu ditangguhkan melakukan LIVE karena telah melakukan pelanggaran berulang. Lihat Detail Pelanggaran untuk mengajukan banding.'
+    //                       : 'Your account has been suspended from LIVE  due to repeated violations. Review violation details to appeal.',
+    //                   style: const TextStyle(color: kHyppeBurem),
+    //                   textAlign: TextAlign.center,
+    //                 ),
+    //               ),
+
+    //               // Center(
+    //               //   child: RichText(
+    //               //     textAlign: TextAlign.center,
+    //               //     text: TextSpan(children: [
+    //               //       TextSpan(text: language.labelBlockLive3 ?? 'Siaran LIVE telah dihentikan oleh sistem karena melanggar ', style: const TextStyle(color: kHyppeBurem)),
+    //               //       TextSpan(
+    //               //         text: language.communityguidelines ?? 'Pedoman Komunitas Hyppe.',
+    //               //         style: const TextStyle(color: kHyppePrimary, fontWeight: FontWeight.bold),
+    //               //         recognizer: TapGestureRecognizer()
+    //               //           ..onTap = () {
+    //               //             launchUrl(Uri.parse('https://hyppe.id/en/privacy-policy'));
+    //               //           },
+    //               //       )
+    //               //     ]),
+    //               //   ),
+    //               // ),
+    //               sixteenPx,
+    //               CustomTextButton(
+    //                 onPressed: () => Navigator.pop(context),
+    //                 child: const Padding(
+    //                   padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 48),
+    //                   child: Text(
+    //                     'OK',
+    //                     style: TextStyle(
+    //                       color: kHyppePrimary,
+    //                       fontSize: 16,
+    //                     ),
+    //                   ),
+    //                 ),
+    //               ),
+    //             ],
+    //           ),
+    //         ),
+    //       ),
+    //     );
+    //   },
+    // );
   }
 }

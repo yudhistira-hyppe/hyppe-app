@@ -5,7 +5,6 @@ import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/live_stream/link_stream_model.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/notifier.dart';
-import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../../core/constants/asset_path.dart';
@@ -135,7 +134,7 @@ class _OverLiveStreamingState extends State<OverLiveStreaming> {
                 ),
                 twelvePx,
                 CustomTextWidget(
-                  textToDisplay: '${widget.notifier.totViewsEnd} ${widget.notifier.language.viewers}',
+                  textToDisplay: '${notifier.totViewsEnd} ${widget.notifier.language.viewers}',
                   textStyle: const TextStyle(fontSize: 14, color: Color(0xffdadada)),
                 ),
                 twelvePx,

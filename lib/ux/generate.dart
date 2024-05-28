@@ -108,6 +108,8 @@ import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/scre
 import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/screen.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/appeal/appeal_succeess_screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/appeal/pelanggaran_detail.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/feedback/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/screen.dart';
 import 'package:hyppe/ui/inner/home/widget/ads_in_between_full.dart';
@@ -485,6 +487,10 @@ class Generate {
             builder: (_) => ViewStreamingScreen(
                   args: settings.arguments as ViewStreamingArgument,
                 ));
+
+      case Routes.appealLiveSuccess:
+        return MaterialPageRoute(builder: (_) => const AppealSuccessStreamingScreen());
+
       case Routes.picFullScreenDetail:
         return CupertinoPageRoute(builder: (_) => PicFullscreenPage(argument: settings.arguments as PicFullscreenArgument));
       case Routes.picScrollFullScreenDetail:
@@ -516,7 +522,7 @@ class Generate {
 
       case Routes.contentgift:
         return MaterialPageRoute(builder: (_) => const ActivationGiftScreen(), settings: settings);
-      
+
       case Routes.historyordercoin:
         return MaterialPageRoute(builder: (_) => const HistoryOrderCoinScreen(), settings: settings);
     }

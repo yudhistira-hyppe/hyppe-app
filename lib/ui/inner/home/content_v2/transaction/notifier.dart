@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/bloc/saldo_coin/bloc.dart';
+import 'package:hyppe/core/bloc/saldo_coin/state.dart';
 import 'package:hyppe/core/bloc/transaction/bloc.dart';
 import 'package:hyppe/core/bloc/transaction/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -37,6 +39,13 @@ class TransactionNotifier extends ChangeNotifier {
   int _skip = 0;
   int get skip => _skip;
   int _limit = 5;
+
+  int _saldoCoin = 0;
+  int get saldoCoin => _saldoCoin;
+  set saldoCoin(int val) {
+    _saldoCoin = val;
+    notifyListeners();
+  }
 
   List<BankAccount>? dataAcccount = [];
   List<TransactionHistoryModel>? dataTransaction = [];
@@ -113,6 +122,20 @@ class TransactionNotifier extends ChangeNotifier {
   int get minuteVa => _minuteVa;
   int _secondVa = 0;
   int get secondVa => _secondVa;
+
+  Future initSaldo(BuildContext context) async {
+    try {
+      final bloc = SaldoCoinDataBloc();
+      await bloc.getSaldoCoin(context);
+      if (bloc.dataFetch.dataState == SaldoCoinState.getBlocSuccess) {
+        saldoCoin = bloc.dataFetch.data ?? 0;
+      } else {
+        saldoCoin = 0;
+      }
+    } catch (_) {
+      debugPrint(_.toString());
+    }
+  }
 
   //Selected Value Transaction
   List selectedFiltersValue = [];

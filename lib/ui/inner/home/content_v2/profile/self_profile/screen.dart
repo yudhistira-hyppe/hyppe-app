@@ -200,7 +200,8 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
                 // onPressed: () => notifier.routing.move(profileSettings),
                 onPressed: () async {
                   notifier.routing.move(Routes.appSettings);
-                  await context.read<TransactionNotifier>().getAccountBalance(context);
+                  // await context.read<TransactionNotifier>().getAccountBalance(context);
+                  await context.read<TransactionNotifier>().initSaldo(context);
                   context.read<TransactionNotifier>().isLoading = false;
                 },
                 icon: const CustomIconWidget(

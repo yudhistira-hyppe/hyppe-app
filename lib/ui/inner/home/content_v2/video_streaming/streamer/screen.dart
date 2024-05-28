@@ -14,7 +14,9 @@ import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/banned_stream.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/beforelive.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/force_stop.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/love_lottie.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/pauseLive.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/streamer.dart';
@@ -228,10 +230,20 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
                                     ? startCounting(notifier.timeReady, notifier, tn)
                                     : notifier.statusLive == StatusStream.ready
                                         ? prepare(titile: notifier.tn?.liveVideoHasStarted ?? '')
-                                        : Container(),
+                                        : notifier.statusLive == StatusStream.banned
+                                            ? const BannedStream()
+                                            : Container(),
+                    // Positioned(
+                    //     top: 300,
+                    //     left: 200,
+                    //     child: Container(
+                    //       height: 100,
+                    //       child: Text("hahah ${notifier.dataStream.status}"),
+                    //     )),
                     if (notifier.isPause) PauseLive(notifier: notifier),
                     if (notifier.statusLive == StatusStream.ready || notifier.statusLive == StatusStream.online) StreamerWidget(commentFocusNode: commentFocusNode),
                     if (notifier.statusLive == StatusStream.ready || notifier.statusLive == StatusStream.online) const GiftDeluxe(),
+                    if ((notifier.statusLive == StatusStream.ready || notifier.statusLive == StatusStream.online) && notifier.dataStream.status == false) const ForceStop(),
                     // StreamerWidget(commentFocusNode: commentFocusNode),
                     // Align(
                     //   alignment: Alignment.center,
@@ -405,11 +417,14 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
         color: Colors.black,
         width: width,
         height: height,
-        child: AgoraVideoView(
-          controller: VideoViewController(
-            rtcEngine: notifier.engine,
-            canvas: const VideoCanvas(
-              uid: 0,
+        child: AspectRatio(
+          aspectRatio: MediaQuery.of(context).devicePixelRatio,
+          child: AgoraVideoView(
+            controller: VideoViewController(
+              rtcEngine: notifier.engine,
+              canvas: const VideoCanvas(
+                uid: 0,
+              ),
             ),
           ),
         ),

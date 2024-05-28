@@ -26,8 +26,19 @@ class SearchPeolpleData {
   String? email;
   UserBadgeModel? urluserBadge;
   bool? isSelected;
+  bool? isVerified;
 
-  SearchPeolpleData({this.id, this.avatar, this.idUserAuth, this.username, this.fullName, this.email, this.urluserBadge, this.isSelected,});
+  SearchPeolpleData({
+    this.id,
+    this.avatar,
+    this.idUserAuth,
+    this.username,
+    this.fullName,
+    this.email,
+    this.urluserBadge,
+    this.isSelected,
+    this.isVerified,
+  });
 
   factory SearchPeolpleData.createPeopleData(Map<String, dynamic> object) => SearchPeolpleData(
         id: object['id'],
@@ -35,6 +46,7 @@ class SearchPeolpleData {
         idUserAuth: object['idUserAuth'],
         username: object['username'],
         fullName: object['fullName'],
+        isVerified: object['isVerified'] ?? false,
         email: object['email'],
         urluserBadge: object['urluserBadge'] != null && object['urluserBadge'].isNotEmpty
             ? object['urluserBadge'] is List
@@ -50,6 +62,7 @@ class SearchPeolpleData {
         username: json['username'],
         fullName: json['fullName'],
         email: json['email'],
+        isVerified: json['isVerified'] ?? false,
         urluserBadge: json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty
             ? json['urluserBadge'] is List
                 ? UserBadgeModel.fromJson(json['urluserBadge'].first)

@@ -38,7 +38,7 @@ enum TypeApiSearch { normal, detailHashTag, detailInterest }
 
 enum AdsType { between, content, popup }
 
-enum StatusStream { offline, prepare, standBy, ready, online }
+enum StatusStream { offline, prepare, standBy, ready, online, banned, onlineReported }
 
 enum ErrorType {
   myStory,

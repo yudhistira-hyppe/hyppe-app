@@ -19,13 +19,10 @@ class CoinPurchaseDetailDataBloc {
   setCoinFetch(CoinPurchaseDetailDataFetch val) => _dataFetch = val;
 
   Future getCoinPurchaseDetail(BuildContext context,
-      {int? price, String? discountId}) async {
+      {Map? data}) async {
     setCoinFetch(CoinPurchaseDetailDataFetch(CoinPurchaseDetailState.loading));
     try {
-      Map<String, dynamic> data = {
-        'price': price ?? 0,
-        'discount_id': discountId,
-      };
+      
       String email = SharedPreference().readStorage(SpKeys.email);
       await Repos().reposPost(
         context,

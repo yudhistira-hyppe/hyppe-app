@@ -75,7 +75,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
   }
 
   Future<void> _initPush() async {
-    if (isCreator) context.read<StreamerNotifier>().init(context, mounted, forConfig: true);
+    // if (isCreator) context.read<StreamerNotifier>().init(context, mounted, forConfig: true);
     // _alivcBase = AlivcBase.init();
     // _alivcBase.registerSDK().then((value) => print(value));
     // _alivcBase.setObserver();
@@ -143,7 +143,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                         onTap: () async {
                           SharedPreference().writeStorage(SpKeys.newUser, "FALSE");
                           // ShowCaseWidget.of(context).next();
-                          context.read<MainNotifier>().isloading = true;
+                          // context.read<MainNotifier>().isloading = true;
                           // unawaited(
                           //   Navigator.of(context, rootNavigator: true).push(
                           //     PageRouteBuilder(

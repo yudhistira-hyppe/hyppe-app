@@ -18,6 +18,7 @@ class GeneralAlertDialog extends StatefulWidget {
   final bool isHorizontal;
   final bool fillColor;
   final Widget? bodyWidget;
+  final Widget? topWidget;
   const GeneralAlertDialog(
       {Key? key,
       this.titleText,
@@ -31,6 +32,7 @@ class GeneralAlertDialog extends StatefulWidget {
       this.isLoading = false,
       this.isHorizontal = true,
       this.bodyWidget,
+      this.topWidget,
       this.fillColor = true})
       : super(key: key);
 
@@ -52,6 +54,7 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
+          widget.topWidget ?? SizedBox.shrink(),
           CustomTextWidget(
             textToDisplay: '${widget.titleText}',
             maxLines: widget.maxLineTitle,

@@ -48,8 +48,8 @@ class _GiftDeluxeState extends State<GiftDeluxe> {
                       : Lottie.network(
                           notifier.giftDelux[0].urlGift ?? '',
                           repeat: true,
-                          width: SizeConfig.screenWidth,
-                          height: SizeConfig.screenHeight,
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height,
                           fit: BoxFit.fill,
                         ),
                 ),

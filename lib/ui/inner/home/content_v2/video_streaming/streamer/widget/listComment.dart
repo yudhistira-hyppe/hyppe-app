@@ -47,7 +47,7 @@ class ListCommentLive extends StatelessWidget {
                     child: Container(
                       color: Colors.transparent,
                       child: Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
+                        padding: const EdgeInsets.only(top: 8),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.start,

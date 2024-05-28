@@ -194,7 +194,7 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
           notifyListeners();
         }),
         onUserOffline: (RtcConnection connection, int uid, UserOfflineReasonType reason) {
-          destoryPusher();
+          // destoryPusher();
           debugPrint("viewer remote user $uid left channel");
           remoteUid = -1;
           statusLive = StatusStream.offline;
@@ -633,9 +633,9 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
       print("handlesocket 222 ==================== $message $event $dataStream");
       var messages = CommentLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
       if (messages.idStream == dataStream.sId) {
-        if (messages.commentType == 'MESSAGGES') {
+        if (messages.commentType == 'MESSAGGES' || messages.commentType == 'JOIN') {
           comment.insert(0, messages);
-        } else {
+        } else if (messages.commentType == 'GIFT') {
           if (messages.urlGift != null) {
             if (giftDelux.isEmpty) {
               giftDelux.add(messages);
@@ -658,7 +658,6 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
             }
           }
         }
-
         notifyListeners();
       }
     } else if (event == eventLikeStream) {
@@ -684,13 +683,14 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
           await Future.delayed(const Duration(milliseconds: 4500));
           dataStreaming.pause = messages.pause;
         } else {
+          totViewsEnd = messages.totalViews ?? 0;
           endLive = true;
           notifyListeners();
-          Fluttertoast.showToast(
-            msg: 'Live Streaming akan segera berakhir',
-            gravity: ToastGravity.CENTER,
-          );
-          totViewsEnd = messages.totalViews ?? 0;
+          // Fluttertoast.showToast(
+          //   msg: 'Live Streaming akan segera berakhir',
+          //   gravity: ToastGravity.CENTER,
+          // );
+          destoryPusher();
         }
       }
     } else if (event == eventCommentDisable) {
@@ -702,6 +702,7 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
       var data = json.decode('$message');
       if (data['data']['email'] == SharedPreference().readStorage(SpKeys.email)) {
         isOver = true;
+        totViewsEnd = data['data']['totalViews'];
         destoryPusher();
       }
     } else if (event == eventCommentPin) {

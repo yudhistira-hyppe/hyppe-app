@@ -79,15 +79,24 @@ class User {
   String? email;
   String? fullName;
   String? username;
+  bool? giftActivation;
   Avatar? avatar;
 
-  User({this.sId, this.email, this.fullName, this.username, this.avatar});
+  User({
+    this.sId,
+    this.email,
+    this.fullName,
+    this.username,
+    this.giftActivation,
+    this.avatar,
+  });
 
   User.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     email = json['email'];
     fullName = json['fullName'];
     username = json['username'];
+    giftActivation = json['GiftActivation'];
     avatar = json['avatar'] != null ? Avatar.fromJson(json['avatar']) : null;
   }
 
