@@ -199,6 +199,7 @@ class PaymentCoinNotifier with ChangeNotifier {
           "postid": [coin.toJson()],
           "idDiscount":discount.id,
           "bankcode": bankSelected,
+          "product_id": selectedCoin.package_id,
           "type": 'COIN',
           "paymentmethod": 'VA',
           "productCode": 'CN',
@@ -208,6 +209,7 @@ class PaymentCoinNotifier with ChangeNotifier {
         _paramTransaction.addAll({
           "postid": [coin.toJson()],
           "bankcode": bankSelected,
+          "product_id": selectedCoin.package_id,
           "type": 'COIN',
           "paymentmethod": 'VA',
           "productCode": 'CN',

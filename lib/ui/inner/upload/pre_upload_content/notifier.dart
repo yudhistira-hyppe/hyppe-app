@@ -1894,6 +1894,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         final fetch = bloc.dataFetch;
 
         if (fetch.dataState == BoostPostContentState.getBlocSuccess) {
+          Routing().moveBack();
           _onExit();
           Navigator.push(context, MaterialPageRoute(builder: (context) => BoostpostScreen(dataBoostpost: fetch.data, lang: language,)));
           pinController.clear();

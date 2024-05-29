@@ -14,7 +14,7 @@ enum SourceFile { internet, local }
 
 enum SearchCategory { vid, diary, pic, account, htags }
 
-enum NotificationCategory { all, like, comment, follower, following, mention, general, transactions, verificationid, adsClick, adsView, challange }
+enum NotificationCategory { all, like, comment, follower, following, mention, general, transactions, verificationid, adsClick, adsView, challange, coin }
 
 enum UserType { verified, notVerified }
 
@@ -84,7 +84,7 @@ enum TransactionType { sell, buy, withdrawal, boost, reward, voucher, disburseme
 
 enum VerifyPageRedirection { toLogin, toHome, toSignUpV2, none }
 
-enum InteractiveEventType { unfollow, following, follower, view, reaction, transactions, verificationid, supportfile, none }
+enum InteractiveEventType { unfollow, following, follower, view, reaction, transactions, verificationid, supportfile, none, coin }
 
 enum InteractiveEvent { initial, accept, request, done, revoke, none }
 

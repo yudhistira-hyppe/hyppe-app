@@ -414,6 +414,8 @@ class System {
         return InteractiveEventType.verificationid;
       case "TRANSACTIONS":
         return InteractiveEventType.transactions;
+      case "TOPUP_COIN":
+        return InteractiveEventType.coin;
       default:
         return InteractiveEventType.none;
     }
@@ -1171,6 +1173,8 @@ class System {
         return 'ADS VIEW';
       case NotificationCategory.challange:
         return 'CHALLENGE';
+      case NotificationCategory.coin:
+        return 'TOPUP_COIN';
     }
   }
 
@@ -1196,6 +1200,8 @@ class System {
         return NotificationCategory.adsView;
       case 'CHALLENGE':
         return NotificationCategory.challange;
+      case 'TOPUP_COIN':
+        return NotificationCategory.coin;
       default:
         return NotificationCategory.all;
     }

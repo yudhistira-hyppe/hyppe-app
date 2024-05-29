@@ -1,11 +1,12 @@
+
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/bloc/monetization/detailtransaction/bloc.dart';
 import 'package:hyppe/core/bloc/monetization/detailtransaction/state.dart';
 import 'package:hyppe/core/models/collection/transaction/transactioncoindetail.dart';
 import 'package:hyppe/ux/routing.dart';
 
-class TransactionCoinDetailNotifier with ChangeNotifier {
-  final Map _param = {};
+class PaymentSuccessCoinNotifier with ChangeNotifier {
+  Map _param = {};
 
   DetailTransactionCoin _transactionDetail = DetailTransactionCoin();
   DetailTransactionCoin get transactionDetail => _transactionDetail;
@@ -13,13 +14,21 @@ class TransactionCoinDetailNotifier with ChangeNotifier {
     _transactionDetail = value;
     notifyListeners();
   }
-
+  
   final bloc = TransactionCoinDetailBloc();
-  Future<void> detailData(BuildContext context,{String? invoiceId}) async {
+  Future<void> detailData(BuildContext context,{Map? map}) async {
+    _param = {};
     try{
-      _param.addAll({
-        'idtransaksi': invoiceId
-      });
+      if (map?['type'] == 'FMC'){
+        _param.addAll({
+          'noinvoice': map?['postId']
+        });
+      }else{
+        _param.addAll({
+          'idtransaksi': map?['postId']
+        });
+      }
+      
 
       await bloc.getTransactionCoinDetail(context, data: _param);
       final fetch = bloc.dataFetch;
@@ -36,5 +45,4 @@ class TransactionCoinDetailNotifier with ChangeNotifier {
       debugPrint(_.toString());
     }
   }
-
 }

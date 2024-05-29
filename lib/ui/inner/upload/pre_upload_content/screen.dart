@@ -60,7 +60,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
   int indexKeyOwn = 0;
   int indexKeyBoost = 0;
 
-  final ValueNotifier<bool> buttonactive = ValueNotifier<bool>(false);
+  final ValueNotifier<bool> buttonactive = ValueNotifier<bool>(true);
 
   Timer? timeHandle;
 
@@ -72,7 +72,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
   @override
   void initState() {
     // final _notifier = context.read<PreUploadContentNotifier>();
-    buttonactive.value = false;
+    buttonactive.value = true;
     MyAudioService.instance.stop();
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     mn = Provider.of<MainNotifier>(context, listen: false);
@@ -336,13 +336,16 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                           isChecking: (bool val, int saldoCoin){
                                             notifier.saldoCoin = saldoCoin;
                                             buttonactive.value = val;
+                                            print('======= Button Active ${buttonactive.value}');
                                           },
                                         ),
                                       ),
                                   ),
                                   ValueListenableBuilder(
                                     valueListenable: buttonactive, 
-                                    builder: (context, value, _) => ElevatedButton(
+                                    builder: (context, value, _) {
+                                      
+                                      return ElevatedButton(
                                       onPressed: buttonactive.value 
                                       ? () {
                                         notifier.paymentBoostPost(context);
@@ -361,7 +364,8 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                           child: Text(notifier.language.localeDatetime =='id' ? 'Bayar & Simpan' : 'Pay Now', textAlign: TextAlign.center),
                                         ),
                                       ),
-                                    ),
+                                    );
+                                    }
                                   ),
                                   // CustomElevatedButton(
                                   //   function: () {

@@ -39,7 +39,10 @@ class _SaldoCoinWidgetState extends State<SaldoCoinWidget> {
       notifier.transactionCoin = widget.transactionCoin;
       notifier.checkSaldoCoin();
     }
-    widget.isChecking!(notifier.visibilityTransaction, notifier.saldoCoin);
+
+    Future.delayed(Duration(milliseconds: 300),(){
+      widget.isChecking!(notifier.visibilityTransaction, notifier.saldoCoin);
+    });
     super.didUpdateWidget(oldWidget);
   } 
   @override

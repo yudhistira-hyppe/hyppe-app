@@ -26,6 +26,7 @@ class DetailTransactionCoin {
   String? description;
   String? bank;
   int? totalamount;
+  String? packageid;
   String? methodename;
   String? bankname;
   String? bankcode;
@@ -59,6 +60,7 @@ class DetailTransactionCoin {
       this.description,
       this.bank,
       this.totalamount,
+      this.packageid,
       this.methodename,
       this.bankname,
       this.bankcode,
@@ -92,6 +94,7 @@ class DetailTransactionCoin {
     description = json['description'];
     bank = json['bank'];
     totalamount = json['totalamount'];
+    packageid = json['product_id'];
     methodename = json['methodename'];
     bankname = json['bankname'];
     bankcode = json['bankcode'];
@@ -127,6 +130,7 @@ class DetailTransactionCoin {
     data['description'] = description;
     data['bank'] = bank;
     data['totalamount'] = totalamount;
+    data['product_id'] = packageid;
     data['methodename'] = methodename;
     data['bankname'] = bankname;
     data['bankcode'] = bankcode;

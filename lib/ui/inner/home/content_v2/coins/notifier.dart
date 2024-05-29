@@ -80,7 +80,7 @@ class CoinNotifier with ChangeNotifier {
     }else{
       if (groupsDate.firstWhere((element) => element.selected == true).index == 4){
         var res = groupsDate.firstWhere((element) => element.selected == true);
-        selectedDateLabel = '${res.startDate} - ${res.endDate}';
+        selectedDateLabel = '${DateFormat('dd/MM/yyy').format(DateTime.parse(res.startDate??''))} - ${DateFormat('dd/MM/yyy').format(DateTime.parse(res.endDate??''))}';
       }else{
         selectedDateLabel = groupsDate.firstWhere((element) => element.selected == true).text;
       }

@@ -12,6 +12,7 @@ import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ux/routing.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -33,6 +34,7 @@ class _TransactionCoinDetailScreenState extends State<TransactionCoinDetailScree
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'TransactionCoinDetail');
     lang = context.read<TranslateNotifierV2>().translate;
+    initializeDateFormatting('id', null);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       notifier = Provider.of<TransactionCoinDetailNotifier>(context, listen: false);
       notifier.detailData(context, invoiceId: widget.invoiceid);
@@ -91,11 +93,12 @@ class _TransactionCoinDetailScreenState extends State<TransactionCoinDetailScree
                               textToDisplay: notifier.transactionDetail.jenisTransaksi??'',
                               textStyle: const TextStyle(fontWeight: FontWeight.bold),
                             ),
+                            fivePx,
                             CustomTextWidget(
                               textToDisplay: DateFormat('dd MMM yyyy, HH:mm', lang?.localeDatetime??'id').format(DateTime.parse(
                             notifier.transactionDetail.updatedAt ??
                                 DateTime.now().toString())),
-                              textStyle: const TextStyle(fontWeight: FontWeight.normal),
+                              textStyle: const TextStyle(fontWeight: FontWeight.normal, color: kHyppeBurem),
                             ),
                           ],
                         ),
@@ -145,6 +148,10 @@ class _TransactionCoinDetailScreenState extends State<TransactionCoinDetailScree
                         detailText(lang?.localeDatetime == 'id' ? 'Jumlah Hyppe Coin' : 'Total Hyppe Coin', '${System().numberFormat(amount: notifier.transactionDetail.totalCoin)} Coins'),
                         const Divider(
                           thickness: .1,
+                        ),
+                        CustomTextWidget(
+                          textToDisplay: lang?.localeDatetime == 'id' ? 'Rincian Pembayaran' : 'Detail Payment',
+                          textStyle: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         sixteenPx,
                         detailText(lang?.localeDatetime == 'id' ? 'Harga Hyppe Coin' : 'Price Hyppe Coin', System().currencyFormat(amount: notifier.transactionDetail.totalPrice)),

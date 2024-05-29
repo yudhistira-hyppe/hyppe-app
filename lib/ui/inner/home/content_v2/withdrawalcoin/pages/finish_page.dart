@@ -5,7 +5,7 @@ import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/inner/home/content_v2/exchangecoins/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/withdrawalcoin/notifier.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -21,7 +21,7 @@ class _FinishTrxPageState extends State<FinishTrxPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: false,
-      body: Consumer<ExchangeCoinNotifier>(builder: (context, notifier, child) {
+      body: Consumer<WithdrawalCoinNotifier>(builder: (context, notifier, child) {
         return SingleChildScrollView(
           child: Column(
             children: [
@@ -75,7 +75,7 @@ class _FinishTrxPageState extends State<FinishTrxPage> {
     );
   }
 
-  Widget _buildDetail(ExchangeCoinNotifier notifier) {
+  Widget _buildDetail(WithdrawalCoinNotifier notifier) {
     TextStyle styleTitle =
         Theme.of(context).textTheme.bodyLarge!.copyWith(color: kHyppeBurem);
 
@@ -203,7 +203,7 @@ class _FinishTrxPageState extends State<FinishTrxPage> {
     );
   }
 
-  Widget _buildTextNominal(ExchangeCoinNotifier notifier) {
+  Widget _buildTextNominal(WithdrawalCoinNotifier notifier) {
     return Column(
       children: [
         fivePx,

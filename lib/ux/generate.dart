@@ -46,8 +46,8 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/player/landing_diary_full.d
 import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/screen_full.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/see_all/diary_see_all_screen.dart';
-import 'package:hyppe/ui/inner/home/content_v2/exchangecoins/exchange_coin_page.dart';
-import 'package:hyppe/ui/inner/home/content_v2/exchangecoins/pages/finish_page.dart';
+import 'package:hyppe/ui/inner/home/content_v2/withdrawalcoin/withdrawal_coin_page.dart';
+import 'package:hyppe/ui/inner/home/content_v2/withdrawalcoin/pages/finish_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/FAQ/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/support_ticket/screen.dart';
@@ -55,6 +55,7 @@ import 'package:hyppe/ui/inner/home/content_v2/disccount/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/historyordercoin/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/payment_success/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_waiting/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/paymentcoin/payment_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/fullscreen/pic_fullscreen_page.dart';
@@ -484,7 +485,7 @@ class Generate {
       case Routes.paymentCoins:
         return MaterialPageRoute(builder: (_) => const PaymentCoinPage(), settings: settings);
       case Routes.exchangeCoins:
-        return MaterialPageRoute(builder: (_) => const ExchangeCoinPage(), settings: settings);
+        return MaterialPageRoute(builder: (_) => const WithdrawalCoinPage(), settings: settings);
 
       // case Routes.verificationPinPage:
       // return MaterialPageRoute(builder: (_) => const VerificationPinPage(), settings: settings);
@@ -512,6 +513,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => PinBuyScreen(mounted: settings.arguments as dynamic), settings: settings);
       case Routes.transactioncoindetail:
         return MaterialPageRoute(builder: (_) => TransactionCoinDetailScreen(invoiceid: settings.arguments as String), settings: settings);
+      case Routes.paymentsuccessdetail:
+        return MaterialPageRoute(builder: (_) => PaymentSuccessScreen(map: settings.arguments as Map), settings: settings);
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

@@ -9,23 +9,22 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 import 'notifier.dart';
 import 'widgets/bank_account_widget.dart';
-import 'widgets/exchange_card_widget.dart';
+import 'widgets/withdrawal_card_widget.dart';
 
-class ExchangeCoinPage extends StatefulWidget {
-  const ExchangeCoinPage({super.key});
+class WithdrawalCoinPage extends StatefulWidget {
+  const WithdrawalCoinPage({super.key});
 
   @override
-  State<ExchangeCoinPage> createState() => _ExchangeCoinPageState();
+  State<WithdrawalCoinPage> createState() => _WithdrawalCoinPageState();
 }
 
-class _ExchangeCoinPageState extends State<ExchangeCoinPage> {
+class _WithdrawalCoinPageState extends State<WithdrawalCoinPage> {
   LocalizationModelV2? lang;
   
   @override
@@ -33,9 +32,10 @@ class _ExchangeCoinPageState extends State<ExchangeCoinPage> {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'exchangecoins');
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       lang = context.read<TranslateNotifierV2>().translate;
-      var notif = context.read<ExchangeCoinNotifier>();
+      var notif = context.read<WithdrawalCoinNotifier>();
+      notif.initSaldo(context);
       notif.initialExchange();
-      notif.totalCoin = context.read<TransactionNotifier>().accountBalance?.totalsaldo??0;
+      // notif.totalCoin = context.read<TransactionNotifier>().accountBalance?.totalsaldo??0;
       notif.textController.text = '';
       notif.initBankAccount(context);
     });
@@ -47,7 +47,7 @@ class _ExchangeCoinPageState extends State<ExchangeCoinPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Consumer<ExchangeCoinNotifier>(
+    return Consumer<WithdrawalCoinNotifier>(
       builder: (context, notifier, child) {
         return Scaffold(
           appBar: AppBar(
@@ -58,7 +58,7 @@ class _ExchangeCoinPageState extends State<ExchangeCoinPage> {
               textToDisplay: '${lang?.exchangeCoin}',
             ),
             actions: [
-              IconButton(onPressed: ()=>context.read<ExchangeCoinNotifier>().showButtomSheetInfo(context), icon: const Icon(Icons.info_outline))
+              IconButton(onPressed: ()=>context.read<WithdrawalCoinNotifier>().showButtomSheetInfo(context, lang: lang), icon: const Icon(Icons.info_outline))
             ],
           ),
           body: GestureDetector(
@@ -71,7 +71,7 @@ class _ExchangeCoinPageState extends State<ExchangeCoinPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ExchangeCardWidget(notif: notifier,),
+                  WithdrawalCardWidget(notif: notifier,),
                   fourteenPx,
                   BankAccountWidget(notif: notifier, lang: lang,)
                 ],

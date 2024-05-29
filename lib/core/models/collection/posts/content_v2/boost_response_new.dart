@@ -1,6 +1,5 @@
 class BoostpostResponseModel {
   String? noinvoice;
-  String? postid;
   String? idusersell;
   String? iduserbuyer;
   String? namaPembeli;
@@ -9,7 +8,7 @@ class BoostpostResponseModel {
   String? paymentmethod;
   String? status;
   String? description;
-  Detail? detail;
+  List<Detail>? detail;
   int? totalamount;
   int? accountbalance;
   String? timestamp;
@@ -17,7 +16,6 @@ class BoostpostResponseModel {
 
   BoostpostResponseModel(
       {this.noinvoice,
-      this.postid,
       this.idusersell,
       this.iduserbuyer,
       this.namaPembeli,
@@ -34,7 +32,6 @@ class BoostpostResponseModel {
 
   BoostpostResponseModel.fromJson(Map<String, dynamic> json) {
     noinvoice = json['noinvoice'];
-    postid = json['postid'];
     idusersell = json['idusersell'];
     iduserbuyer = json['iduserbuyer'];
     namaPembeli = json['NamaPembeli'];
@@ -43,8 +40,12 @@ class BoostpostResponseModel {
     paymentmethod = json['paymentmethod'];
     status = json['status'];
     description = json['description'];
-    detail =
-        json['detail'] != null ? Detail.fromJson(json['detail']) : null;
+    if (json['detail'] != null) {
+      detail = <Detail>[];
+      json['detail'].forEach((v) {
+        detail!.add(Detail.fromJson(v));
+      });
+    }
     totalamount = json['totalamount'];
     accountbalance = json['accountbalance'];
     timestamp = json['timestamp'];
@@ -54,7 +55,6 @@ class BoostpostResponseModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['noinvoice'] = noinvoice;
-    data['postid'] = postid;
     data['idusersell'] = idusersell;
     data['iduserbuyer'] = iduserbuyer;
     data['NamaPembeli'] = namaPembeli;
@@ -64,7 +64,7 @@ class BoostpostResponseModel {
     data['status'] = status;
     data['description'] = description;
     if (detail != null) {
-      data['detail'] = detail!.toJson();
+      data['detail'] = detail!.map((v) => v.toJson()).toList();
     }
     data['totalamount'] = totalamount;
     data['accountbalance'] = accountbalance;
@@ -147,25 +147,22 @@ class Interval {
   String? value;
   String? remark;
   String? type;
-  String? langIso;
 
-  Interval({this.sId, this.value, this.remark, this.type, this.langIso});
+  Interval({this.sId, this.value, this.remark, this.type});
 
   Interval.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     value = json['value'];
     remark = json['remark'];
     type = json['type'];
-    langIso = json['langIso'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['_id'] = sId;
     data['value'] = value;
     data['remark'] = remark;
     data['type'] = type;
-    data['langIso'] = langIso;
     return data;
   }
 }
@@ -176,17 +173,8 @@ class Session {
   String? start;
   String? end;
   String? type;
-  String? nameId;
-  String? langIso;
 
-  Session(
-      {this.sId,
-      this.name,
-      this.start,
-      this.end,
-      this.type,
-      this.nameId,
-      this.langIso});
+  Session({this.sId, this.name, this.start, this.end, this.type});
 
   Session.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -194,19 +182,15 @@ class Session {
     start = json['start'];
     end = json['end'];
     type = json['type'];
-    nameId = json['nameId'];
-    langIso = json['langIso'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['_id'] = sId;
     data['name'] = name;
     data['start'] = start;
     data['end'] = end;
     data['type'] = type;
-    data['nameId'] = nameId;
-    data['langIso'] = langIso;
     return data;
   }
 }

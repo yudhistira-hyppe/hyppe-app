@@ -81,7 +81,7 @@ class BoostpostScreen extends StatelessWidget {
                     sixteenPx,
                     detailText(
                         translate.localeDatetime == 'id' ? 'Tanggal' : 'Date',
-                        DateFormat('dd MMM yyyy', "id").format(DateTime.parse(
+                        DateFormat('dd MMM yyyy', translate.localeDatetime).format(DateTime.parse(
                             dataBoostpost?.timestamp ??
                                 DateTime.now().toString()))),
                     sixteenPx,

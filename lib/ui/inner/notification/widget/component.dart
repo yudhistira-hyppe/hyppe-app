@@ -11,6 +11,7 @@ import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/story_color_validator.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction_coin_detail/screen.dart';
 import 'package:hyppe/ui/inner/notification/notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ux/path.dart';
@@ -88,7 +89,10 @@ class _ComponentState extends State<Component> {
               NotificationCategory.adsClick,
               NotificationCategory.adsView,
             ];
-            if (listTransacation.contains(eventType)) {
+            if (NotificationCategory.coin == System().getNotificationCategory(widget.data?.event ?? '')) {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionCoinDetailScreen(invoiceid: widget.data?.postID??'',)));
+              // Routing().move(Routes.paymentsuccessdetail, argument: {'postId': widget.data?.postID??'', 'type':'Notification'});
+            } else if (listTransacation.contains(eventType)) {
               await Routing().move(Routes.transaction);
             } else if (NotificationCategory.challange == eventType) {
               await Routing().move(Routes.chalengeDetail,

@@ -94,6 +94,7 @@ class _HistoryOrderCoinScreenState extends State<HistoryOrderCoinScreen> {
         ],
       ),
       body: Consumer<HistoryOrderCoinNotifier>(builder: (context, notifier, _) {
+        
         if ((notifier.bloc.dataFetch.dataState == HistoryOrderCoinState.init ||
                 notifier.bloc.dataFetch.dataState ==
                     HistoryOrderCoinState.loading) &&

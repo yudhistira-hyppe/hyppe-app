@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -111,7 +112,7 @@ class NotificationService {
           if (data.postType == 'TRANSACTION') {
             Routing().move(Routes.transaction);
           } else if (data.postType == 'COIN'){
-
+            Routing().move(Routes.paymentsuccessdetail, argument: {'postId':data.postId, 'type':'FCM'});
           } else if (data.postType == 'CHALLENGE') {
             Routing().move(
               Routes.chalengeDetail,

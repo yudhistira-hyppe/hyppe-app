@@ -32,9 +32,10 @@ class HistoryCoinWidget extends StatelessWidget {
         textTitle = lang!.localeDatetime == 'id' ? 'Berhasil' : 'Success';
     }
 
-
     return GestureDetector(
-      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const TransactionCoinDetailScreen(invoiceid: 'INV/MMXXIV/V/XXII/257',))),
+      onTap: () {
+        
+      },
       child: Container(
         height: SizeConfig.screenHeight! * .25,
         width: double.infinity,

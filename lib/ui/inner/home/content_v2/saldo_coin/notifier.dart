@@ -47,12 +47,12 @@ class SaldoCoinNotifier with ChangeNotifier {
     try{
       int check = saldoCoin - transactionCoin;
       print('========== $saldoCoin $transactionCoin $check');
-      if (transactionCoin < saldoCoin){
+      if (check > 0){
         visibilityTransaction = true;
       }else{
         visibilityTransaction = false;
       }
-      // notifyListeners();
+      notifyListeners();
     }catch(_){
       visibilityTransaction = false;
     }
