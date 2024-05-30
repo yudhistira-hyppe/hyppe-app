@@ -3,11 +3,11 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-import 'package:hyppe/ui/inner/home/content_v2/exchangecoins/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/withdrawalcoin/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 
 class BankAccountWidget extends StatefulWidget {
-  final ExchangeCoinNotifier notif;
+  final WithdrawalCoinNotifier notif;
   final LocalizationModelV2? lang;
   const BankAccountWidget({super.key, required this.notif, required this.lang});
 

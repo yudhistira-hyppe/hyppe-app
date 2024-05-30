@@ -102,7 +102,7 @@ class _AddLinkPageState extends State<AddLinkPage> {
             backgroundColor: Colors.transparent,
             actions: [
               TextButton(
-                onPressed: notifier.urlValid
+                onPressed: notifier.urlValid && notifier.titleController.text != ''
                     ? () {
                         if (notifier.beforeCurrentRoutes == Routes.preUploadContent) {
                           final stream = Provider.of<PreUploadContentNotifier>(context, listen: false);
@@ -121,7 +121,7 @@ class _AddLinkPageState extends State<AddLinkPage> {
                         notifier.onWillPop(context);
                       }
                     : null,
-                child: Text(notifier.language.done ?? 'Selesai', style: TextStyle(color: notifier.urlValid ? Colors.black87 : Colors.black45)),
+                child: Text(notifier.language.done ?? 'Selesai', style: TextStyle(color: notifier.urlValid && notifier.titleController.text != '' ? Colors.black87 : Colors.black45)),
               )
             ],
           ),

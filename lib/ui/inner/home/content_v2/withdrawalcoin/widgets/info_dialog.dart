@@ -15,7 +15,7 @@ class InfoDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var result = context.read<ExchangeCoinNotifier>();
+    var result = context.read<WithdrawalCoinNotifier>();
     return DraggableScrollableSheet(
         expand: false,
         maxChildSize: .9,

@@ -18,6 +18,10 @@ class CommentDataQuery extends PaginationQueryInterface {
   String parentID = '';
 
   String txtMessages = '';
+  
+  String giftID = '';
+
+  String gift = '';
 
   List<dynamic> tagComment = [];
 
@@ -107,6 +111,7 @@ class CommentDataQuery extends PaginationQueryInterface {
         ..postID = postID
         ..parentID = parentID
         ..txtMessages = txtMessages
+        ..giftID = giftID
         ..tagComment = tagComment;
 
       final notifier = CommentBloc();

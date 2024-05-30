@@ -22,6 +22,8 @@ class CommentArgument extends DiscussArgument {
     data['parentID'] = parentID;
     data['pageNumber'] = pageNumber;
     data['txtMessages'] = txtMessages;
+    data['giftID'] = giftID;
+    data['gift'] = gift;
     data['postType'] = 'txt_msg';
     data['eventType'] = 'COMMENT';
     return data;

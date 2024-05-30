@@ -12,7 +12,6 @@ import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/section_dropdown_widget.dart';
-import 'package:hyppe/ui/inner/home/widget/loadmore.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
@@ -95,6 +94,7 @@ class _HistoryOrderCoinScreenState extends State<HistoryOrderCoinScreen> {
         ],
       ),
       body: Consumer<HistoryOrderCoinNotifier>(builder: (context, notifier, _) {
+        
         if ((notifier.bloc.dataFetch.dataState == HistoryOrderCoinState.init ||
                 notifier.bloc.dataFetch.dataState ==
                     HistoryOrderCoinState.loading) &&

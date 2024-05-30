@@ -69,6 +69,7 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/filter/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_5/widget/date_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/notifier.dart';
 
@@ -82,6 +83,7 @@ import 'bottom_sheet_content/live_streaming/on_list_gift.dart';
 import 'bottom_sheet_content/live_streaming/on_react_streaming.dart';
 import 'bottom_sheet_content/live_streaming/on_streaming_options.dart';
 import 'bottom_sheet_content/live_streaming/on_viewer_options.dart';
+import 'bottom_sheet_content/on_show_gift_comment.dart';
 import 'bottom_sheet_content/on_show_success_ownership_content.dart';
 import 'bottom_sheet_content/on_sign_out.dart';
 import 'bottom_sheet_content/on_something_when_wrong.dart';
@@ -1961,6 +1963,29 @@ class ShowBottomSheet {
                   ),
                   padding: const EdgeInsets.all(0),
                   child: OnShowGiftLiveBottomSheet(scrollController: scrollController, idViewStream: idViewStream),
+                );
+              });
+        });
+  }
+
+  onShowGiftComment(BuildContext _, {CommentsArgument? argument, List<CommentsLogs>? comments}) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: _,
+        backgroundColor: Colors.transparent,
+        isDismissible: true,
+        builder: (builder) {
+          return DraggableScrollableSheet(
+              expand: false,
+              maxChildSize: 0.95,
+              initialChildSize: 0.7,
+              builder: (_, scrollController) {
+                return Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                  ),
+                  padding: const EdgeInsets.all(0),
+                  child: OnShowGiftCommantBottomSheet(scrollController: scrollController, argument: argument, comments: comments),
                 );
               });
         });

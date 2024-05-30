@@ -40,6 +40,7 @@ class CommentBloc {
       formData.fields.add(MapEntry('postID', argument.postID));
       formData.fields.add(MapEntry('parentID', argument.parentID));
       formData.fields.add(MapEntry('txtMessages', argument.txtMessages));
+      formData.fields.add(MapEntry('giftID', argument.giftID));
       formData.fields.add(MapEntry('isQuery', argument.isQuery.toString()));
       formData.fields.add(MapEntry('postType', _system.validatePostTypeV2(argument.postType)));
       formData.fields.add(MapEntry('eventType', _system.convertMessageEventTypeToString(argument.discussEventType)));

@@ -56,10 +56,10 @@ class _PauseLiveViewState extends State<PauseLiveView> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      "${notifier.dataStreaming.pauseDate} ${notifier.dataStreaming.pauseDate != null}",
-                      style: TextStyle(color: Colors.white),
-                    ),
+                    // Text(
+                    //   "${notifier.dataStreaming.pauseDate} ${notifier.dataStreaming.pauseDate != null}",
+                    //   style: TextStyle(color: Colors.white),
+                    // ),
                     const Text(
                       'Siaran LIVE dijeda',
                       // tn.liveBroadcastIsPausedViewersCannotCurrentlySeeYou ?? 'Siaran LIVE dijeda, penonton saat ini tidak dapat melihatmu',

@@ -12,13 +12,12 @@ import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/textfield.dart';
-import 'package:hyppe/ui/inner/home/content_v2/exchangecoins/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/withdrawalcoin/notifier.dart';
 import 'package:provider/provider.dart';
 
-class ExchangeCardWidget extends StatelessWidget {
-  final ExchangeCoinNotifier notif;
-  const ExchangeCardWidget({super.key, required this.notif});
+class WithdrawalCardWidget extends StatelessWidget {
+  final WithdrawalCoinNotifier notif;
+  const WithdrawalCardWidget({super.key, required this.notif});
 
   @override
   Widget build(BuildContext context) {
@@ -52,8 +51,9 @@ class ExchangeCardWidget extends StatelessWidget {
                       FilteringTextInputFormatter.deny(RegExp("[.]"))
                     ],
                     onChange: (p0) {
+                      print('total coint ${notif.totalCoin}');
                       notif.debouncer.run(() {
-                        if (int.parse(notif.textController.text) > notif.totalCoin){
+                        if (int.parse(notif.textController.text) > notif.totalCoin) {
                           notif.textController.text = '';
                           notif.typingValue = 0;
                           notif.convertCoin();
@@ -81,8 +81,9 @@ class ExchangeCardWidget extends StatelessWidget {
                             backgroundColor: Colors.transparent,
                             shape: const StadiumBorder(side: BorderSide(width: .2, color: kHyppeBurem)),
                             onSelected: (bool value) {
-                              notif.debouncer.run(() {
-                                if (notif.textController.text.isNotEmpty){
+                              // notif.debouncer.run(() {
+                                // if (notif.textController.text.isNotEmpty){
+                                  notif.textController.text = notif.groupsCoins[i].value.toStringAsFixed(0);
                                   if (int.parse(notif.textController.text) > notif.totalCoin){
                                     notif.textController.text = '';
                                     notif.typingValue = 0;
@@ -96,14 +97,15 @@ class ExchangeCardWidget extends StatelessWidget {
                                       notif.convertCoin();
                                       Fluttertoast.showToast(msg: 'Maksimal Tukar Coins ${System().numberFormat(amount: notif.totalCoin)}');
                                     }else{
+                                      notif.textController.text = notif.groupsCoins[i].value.toStringAsFixed(0);
                                       notif.convertCoin();
                                     }
                                   }
-                                }else{
-                                  notif.textController.text = notif.groupsCoins[i].value.toStringAsFixed(0);
-                                  notif.convertCoin();
-                                }
-                              });
+                                // }else{
+                                //   notif.textController.text = notif.groupsCoins[i].value.toStringAsFixed(0);
+                                //   notif.convertCoin();
+                                // }
+                              // });
                             },
                         ),
                       ),
@@ -141,7 +143,7 @@ class ExchangeCardWidget extends StatelessWidget {
   }
 
   Widget saldoCoin(TranslateNotifierV2 lang) {
-    return Consumer<TransactionNotifier>(
+    return Consumer<WithdrawalCoinNotifier>(
       builder: (context, value, child) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -219,7 +221,7 @@ class ExchangeCardWidget extends StatelessWidget {
                               ),
                             ),
                             CustomTextWidget(
-                              textToDisplay: System().numberFormat(amount: value.accountBalance?.totalsaldo ?? 0),
+                              textToDisplay: System().numberFormat(amount: value.totalCoin),
                               textStyle: Theme.of(context)
                                   .textTheme
                                   .titleMedium

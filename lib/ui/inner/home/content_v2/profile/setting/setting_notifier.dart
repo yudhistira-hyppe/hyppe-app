@@ -1,5 +1,3 @@
-import 'package:hyppe/core/bloc/saldo_coin/bloc.dart';
-import 'package:hyppe/core/bloc/saldo_coin/state.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';

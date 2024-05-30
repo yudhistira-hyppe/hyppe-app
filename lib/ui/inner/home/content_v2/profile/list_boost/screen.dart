@@ -13,6 +13,8 @@ import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/widge
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
+import 'widget/boost_card.dart';
+
 class ListBoostScreen extends StatefulWidget {
   const ListBoostScreen({Key? key}) : super(key: key);
 
@@ -51,7 +53,7 @@ class _ListBoostScreenState extends State<ListBoostScreen> {
                     CustomTextWidget(
                       textToDisplay: translate.translate.boostedPostList ?? '',
                       textAlign: TextAlign.start,
-                      textStyle: Theme.of(context).textTheme.subtitle1,
+                      textStyle: Theme.of(context).textTheme.titleMedium,
                     ),
                   ],
                 ),
@@ -74,7 +76,11 @@ class _ListBoostScreenState extends State<ListBoostScreen> {
                       shrinkWrap: false,
                       itemCount: notifier.boostData.length,
                       itemBuilder: (context, index) {
-                        return CardBoost(
+                        // return CardBoost(
+                        //   data: notifier.boostData[index],
+                        //   language: translate.translate,
+                        // );
+                        return BoostCardWidget(
                           data: notifier.boostData[index],
                           language: translate.translate,
                         );

@@ -1,8 +1,11 @@
 
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/bloc/saldo_coin/bloc.dart';
+import 'package:hyppe/core/bloc/saldo_coin/state.dart';
 import 'package:hyppe/core/bloc/transaction/bloc.dart';
 import 'package:hyppe/core/bloc/transaction/state.dart';
 import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/debouncer.dart';
@@ -11,11 +14,11 @@ import 'package:hyppe/ux/routing.dart';
 import 'widgets/info_dialog.dart';
 import 'widgets/text_info.dart';
 
-class ExchangeCoinNotifier with ChangeNotifier {
+class WithdrawalCoinNotifier with ChangeNotifier {
   final TextEditingController textController = TextEditingController();
 
   List<GroupBankAccountModel> dataAcccount = [];
-  int totalCoin = 0;
+  int totalCoin = 10000;
   int typingValue = 0;
   int resultValue = 0;
 
@@ -23,19 +26,14 @@ class ExchangeCoinNotifier with ChangeNotifier {
   bool isLoading = false;
   String selectedBankAccount = '';
 
-  final debouncer = Debouncer(milliseconds: 50);
+  final debouncer = Debouncer(milliseconds: 1000);
   //Modal List Coins
   List<GroupCoinModel> groupsCoins = [
     GroupCoinModel(index: 1, value: 500, valueLabel: 50000, selected: false),
-    GroupCoinModel(index: 2, value: 800, valueLabel: 80000, selected: false),
-    GroupCoinModel(index: 3, value: 1000, valueLabel: 100000, selected: false),
-    GroupCoinModel(index: 4, value: 1300, valueLabel: 130000, selected: false),
-    GroupCoinModel(index: 5, value: 1500, valueLabel: 150000, selected: false),
-    GroupCoinModel(index: 6, value: 2000, valueLabel: 200000, selected: false),
-    GroupCoinModel(index: 7, value: 3000, valueLabel: 300000, selected: false),
-    GroupCoinModel(index: 8, value: 5000, valueLabel: 500000, selected: false),
-    GroupCoinModel(index: 9, value: 8000, valueLabel: 800000, selected: false),
-    GroupCoinModel(index: 10, value: 10000, valueLabel: 1000000, selected: false),
+    GroupCoinModel(index: 2, value: 1000, valueLabel: 100000, selected: false),
+    GroupCoinModel(index: 3, value: 1500, valueLabel: 150000, selected: false),
+    GroupCoinModel(index: 4, value: 2000, valueLabel: 200000, selected: false),
+    GroupCoinModel(index: 5, value: 2500, valueLabel: 250000, selected: false)
   ];
 
   Future<void> initialExchange() async {
@@ -54,6 +52,19 @@ class ExchangeCoinNotifier with ChangeNotifier {
       resultValue = int.parse((typingValue - withdrawalfree - (typingValue * withdrawalfeecoin)).toStringAsFixed(0));
     }
     notifyListeners();
+  }
+
+  Future initSaldo(BuildContext context) async {
+    final bloc = SaldoCoinDataBloc();
+    try{
+      await bloc.getSaldoCoin(context);
+      if (bloc.dataFetch.dataState == SaldoCoinState.getBlocSuccess) {
+        totalCoin = bloc.dataFetch.data??0;
+      }
+      
+    }catch(_){
+      debugPrint(_.toString());
+    }
   }
 
   Future<void> initBankAccount(BuildContext context) async {
@@ -107,13 +118,13 @@ class ExchangeCoinNotifier with ChangeNotifier {
     );
   }
 
-  void showButtomSheetInfo(BuildContext context) {
+  void showButtomSheetInfo(BuildContext context,{LocalizationModelV2? lang}) {
     showModalBottomSheet<int>(
         backgroundColor: Colors.transparent,
         context: context,
         isScrollControlled: true,
         builder: (context) {
-          return const TextInfo();
+          return TextInfo(lang: lang,);
         }
     );
   }

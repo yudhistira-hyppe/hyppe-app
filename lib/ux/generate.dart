@@ -46,8 +46,8 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/player/landing_diary_full.d
 import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/screen_full.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/see_all/diary_see_all_screen.dart';
-import 'package:hyppe/ui/inner/home/content_v2/exchangecoins/exchange_coin_page.dart';
-import 'package:hyppe/ui/inner/home/content_v2/exchangecoins/pages/finish_page.dart';
+import 'package:hyppe/ui/inner/home/content_v2/withdrawalcoin/withdrawal_coin_page.dart';
+import 'package:hyppe/ui/inner/home/content_v2/withdrawalcoin/pages/finish_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/FAQ/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/support_ticket/screen.dart';
@@ -55,6 +55,7 @@ import 'package:hyppe/ui/inner/home/content_v2/disccount/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/historyordercoin/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/payment_success/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_waiting/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/paymentcoin/payment_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/fullscreen/pic_fullscreen_page.dart';
@@ -66,11 +67,13 @@ import 'package:hyppe/ui/inner/home/content_v2/pin/confirm_pin/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/forgot_pin/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/verification/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pin_boostpost/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/list_boost/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile_completion/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/insert_referral.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/list_referral.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/review_buy/pin_buy/screen.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/review_buy/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/player/story_player.dart';
@@ -87,6 +90,7 @@ import 'package:hyppe/ui/inner/home/content_v2/transaction/withdrawal/pin_withdr
 import 'package:hyppe/ui/inner/home/content_v2/transaction/withdrawal/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/withdrawal/success_withdraw/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/withdrawal/summary_withdrawal/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction_coin_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/home_tutorial.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/failed_screen.dart';
@@ -504,7 +508,7 @@ class Generate {
       case Routes.paymentCoins:
         return MaterialPageRoute(builder: (_) => const PaymentCoinPage(), settings: settings);
       case Routes.exchangeCoins:
-        return MaterialPageRoute(builder: (_) => const ExchangeCoinPage(), settings: settings);
+        return MaterialPageRoute(builder: (_) => const WithdrawalCoinPage(), settings: settings);
 
       // case Routes.verificationPinPage:
       // return MaterialPageRoute(builder: (_) => const VerificationPinPage(), settings: settings);
@@ -525,6 +529,15 @@ class Generate {
 
       case Routes.historyordercoin:
         return MaterialPageRoute(builder: (_) => const HistoryOrderCoinScreen(), settings: settings);
+      
+      case Routes.pinboostpost:
+        return MaterialPageRoute(builder: (_) => const PinBoostpostScreen(), settings: settings);
+      case Routes.pinbuycontent:
+        return MaterialPageRoute(builder: (_) => PinBuyScreen(mounted: settings.arguments as dynamic), settings: settings);
+      case Routes.transactioncoindetail:
+        return MaterialPageRoute(builder: (_) => TransactionCoinDetailScreen(invoiceid: settings.arguments as String), settings: settings);
+      case Routes.paymentsuccessdetail:
+        return MaterialPageRoute(builder: (_) => PaymentSuccessScreen(map: settings.arguments as Map), settings: settings);
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

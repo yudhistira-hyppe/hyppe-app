@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/bloc/delete_comment/bloc.dart';
 import 'package:hyppe/core/bloc/delete_comment/state.dart';
+import 'package:hyppe/core/bloc/live_stream/bloc.dart';
+import 'package:hyppe/core/bloc/live_stream/state.dart';
 import 'package:hyppe/core/bloc/utils_v2/bloc.dart';
 import 'package:hyppe/core/bloc/utils_v2/state.dart';
+import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
+import 'package:hyppe/core/models/collection/live_stream/gift_live_model.dart';
 import 'package:hyppe/core/models/collection/utils/search_people/search_people.dart';
 import 'package:hyppe/core/query_request/comment_data_query.dart';
 import 'package:hyppe/core/extension/custom_extension.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/widget/sub_comment_tile.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -25,6 +31,12 @@ class CommentNotifierV2 with ChangeNotifier {
     notifyListeners();
   }
 
+  bool isloadingGift = false;
+  List<GiftLiveModel> dataGift = [];
+  List<GiftLiveModel> dataGiftDeluxe = [];
+  GiftLiveModel? giftSelect;
+
+  
   String? postID;
   String? parentID;
   bool fromFront = true;
@@ -36,6 +48,9 @@ class CommentNotifierV2 with ChangeNotifier {
 
   bool _isShowAutoComplete = false;
   bool get isShowAutoComplete => _isShowAutoComplete;
+
+  bool _isShowGift = false;
+  bool get isShowGift => _isShowGift;
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -88,6 +103,11 @@ class CommentNotifierV2 with ChangeNotifier {
 
   set isShowAutoComplete(bool value) {
     _isShowAutoComplete = value;
+    notifyListeners();
+  }
+
+  set isShowGift(bool value) {
+    _isShowGift = value;
     notifyListeners();
   }
 
@@ -192,6 +212,7 @@ class CommentNotifierV2 with ChangeNotifier {
 
   Future<void> newCommentLocal(CommentsLogs res) async {
     _commentData!.insert(0, res);
+    // print('====== ${res.comment!.toJson()}');
     notifyListeners();
   }
 
@@ -259,6 +280,56 @@ class CommentNotifierV2 with ChangeNotifier {
         onChangeHandler('', context);
         notifyListeners();
       }
+    } catch (e) {
+      'add comments: ERROR: $e'.logger();
+    } finally {
+      parentID = null;
+      loading = false;
+      notifyListeners();
+    }
+  }
+
+  void sendGift(BuildContext context, GiftLiveModel gift, {bool? pageDetail}) async {
+    final _tagRegex = RegExp(r"\B@\w*[a-zA-Z-1-9\.-_!$%^&*()]+\w*", caseSensitive: false);
+
+    List userTagCaption = [];
+    _tagRegex.allMatches(commentController.text).map((z) {
+      userTagCaption.add(z.group(0)?.substring(1));
+    }).toList();
+
+    commentQuery
+      ..postID = postID ?? ''
+      ..parentID = parentID ?? ''
+      ..txtMessages = commentController.text
+      ..giftID = gift.sId??''
+      ..gift = gift.thumbnail??''
+      ..tagComment = userTagCaption;
+
+    try {
+      final _resFuture = commentQuery.addComment(context);
+      final res = await _resFuture;
+      if (res != null) {
+        newCommentLocal(res);
+
+        context.read<HomeNotifier>().addCountComment(
+            context,
+            postID ?? '',
+            true,
+            0,
+            txtMsg: commentController.text,
+            gift: gift.thumbnail,
+            username: res.comment?.senderInfo?.username,
+            parentID: parentID,
+            pageDetail: pageDetail ?? false,
+            email: SharedPreference().readStorage(SpKeys.email),
+          );
+
+        // delete text controller
+        commentController.clear();
+        onChangeHandler('', context);
+        notifyListeners();
+      }
+      Routing().moveBack();
     } catch (e) {
       'add comments: ERROR: $e'.logger();
     } finally {
@@ -465,5 +536,46 @@ class CommentNotifierV2 with ChangeNotifier {
       _routing.moveBack();
       e.logger();
     }
+  }
+
+  Future getGift(BuildContext context, bool mounted, String type, {bool isLoadmore = false}) async {
+    //type = CLASSIC -- DELUXE
+    // if (type == 'CLASSIC' && dataGift.isNotEmpty) return;
+    // if (type == 'DELUXE' && dataGiftDeluxe.isNotEmpty) return;
+    if (!isLoadmore) isloadingGift = true;
+    notifyListeners();
+    bool connect = await System().checkConnections();
+
+    if (connect) {
+      try {
+        final notifier = LiveStreamBloc();
+        Map data = {"page": 0, "limit": 9999, "descending": true, "type": "GIFT", "typeGift": type};
+
+        if (mounted) await notifier.getLinkStream(context, data, UrlConstants.listmonetization);
+
+        final fetch = notifier.liveStreamFetch;
+        if (fetch.postsState == LiveStreamState.getApiSuccess) {
+          if (type == 'CLASSIC') {
+            if (!isLoadmore) dataGift = [];
+            fetch.data.forEach((v) => dataGift.add(GiftLiveModel.fromJson(v)));
+          } else {
+            if (!isLoadmore) dataGiftDeluxe = [];
+            fetch.data.forEach((v) => dataGiftDeluxe.add(GiftLiveModel.fromJson(v)));
+          }
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+
+      notifyListeners();
+    } else {
+      if (context.mounted) {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
+        });
+      }
+    }
+    isloadingGift = false;
+    notifyListeners();
   }
 }

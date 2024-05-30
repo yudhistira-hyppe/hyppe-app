@@ -2,8 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/bloc/monetization/coin/bloc.dart';
 import 'package:hyppe/core/bloc/monetization/coin/state.dart';
+import 'package:hyppe/core/bloc/saldo_coin/state.dart';
 import 'package:hyppe/core/models/collection/coins/coinmodel.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+
+import '../../../../../core/bloc/saldo_coin/bloc.dart';
 
 class TopUpCoinNotifier with ChangeNotifier {
   LocalizationModelV2 language = LocalizationModelV2();
@@ -21,6 +24,26 @@ class TopUpCoinNotifier with ChangeNotifier {
 
   final bloc = CoinDataBloc();
   
+  int _saldoCoin = 0;
+  int get saldoCoin => _saldoCoin;
+  set saldoCoin(int val){
+    _saldoCoin = val;
+    notifyListeners();
+  }
+
+  Future initSaldo(BuildContext context) async {
+    try{
+      final bloc = SaldoCoinDataBloc();
+      await bloc.getSaldoCoin(context);
+      if (bloc.dataFetch.dataState == SaldoCoinState.getBlocSuccess) {
+        saldoCoin = bloc.dataFetch.data??0;
+      }
+      
+    }catch(_){
+      debugPrint(_.toString());
+    }
+  }
+
   int _page = 1;
   int get page => _page;
   set page(int val){
@@ -48,6 +71,8 @@ class TopUpCoinNotifier with ChangeNotifier {
       } else {
         isLastPage = true;
       }
+      
+      await initSaldo(context);
     }catch(_){
       debugPrint(_.toString());
     }

@@ -122,7 +122,7 @@ class _PaymentWaitingState extends State<PaymentWaiting> {
                           final minutes = value.inMinutes;
                           final seconds = value.inSeconds % 60;
                           return CustomTextWidget(
-                            textToDisplay: '00:${minutes < 10 ? '0' : ''}$minutes:${seconds < 10 ? '0' : ''}$seconds',
+                            textToDisplay: '${minutes < 10 ? '0' : ''}$minutes:${seconds < 10 ? '0' : ''}$seconds',
                             textStyle: textTheme.bodyLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
                           );
                         },

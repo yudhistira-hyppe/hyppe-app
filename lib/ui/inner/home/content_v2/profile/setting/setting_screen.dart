@@ -9,6 +9,7 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/setting/widget/my_balance.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:flutter/material.dart';
@@ -81,272 +82,277 @@ class _SettingScreenState extends State<SettingScreen> {
                 textToDisplay: '${notifier.translate.settings}',
               ),
             ),
-            body: SingleChildScrollView(
-              padding: const EdgeInsets.only(top: 24),
-              scrollDirection: Axis.vertical,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // SettingTile(
-                  //   icon: 'transaction-icon.svg',
-                  //   onTap: () {
-                  //     context.handleActionIsGuest(() {
-                  //       context.read<SettingNotifier>().validateUser(context, notifier);
-                  //     });
-                  //   },
-                  //   caption: '${notifier.translate.transaction}',
-                  //   keyGLobal: keyTransaction,
-                  //   descriptionCas: (mn?.tutorialData.isEmpty ?? [].isEmpty)
-                  //       ? ''
-                  //       : notifier.translate.localeDatetime == 'id'
-                  //           ? mn?.tutorialData[indexKey].textID
-                  //           : mn?.tutorialData[indexKey].textEn,
-                  //   positionTooltip: TooltipPosition.bottom,
-                  //   positionYplus: -10,
-                  //   indexTutor: indexKey,
-                  // ),
-                  const Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: MyBalance(),
-                  ),
-                  Divider(
-                    thickness: 1,
-                    color: theme.colorScheme.surface,
-                  ),
-                  sixteenPx,
-                  SettingComponent(
-                    headerCaption: '${notifier.translate.account}',
-                    tiles: [
-                      SettingTile(
-                        icon: 'preferensi-account-icon.svg',
-                        onTap: () {
-                          context.handleActionIsGuest(() {
-                            Routing().move(Routes.accountPreferences);
-                          });
-                        },
-                        caption: '${notifier.translate.accountPreference}',
-                      ),
-                      SettingTile(
-                        icon: 'lock.svg',
-                        onTap: () {
-                          context.handleActionIsGuest(() {
-                            Routing().move(Routes.homePageSignInSecurity);
-                          });
-                        },
-                        caption: '${notifier.translate.signInAndSecurity}',
-                      ),
-                      SettingTile(
-                        onTap: () => Routing().move(Routes.userInterest,
-                            argument: UserInterestScreenArgument(
-                              fromSetting: true,
-                              userInterested: Provider.of<SelfProfileNotifier>(context, listen: false).user.profile?.interest ?? [],
-                            )),
-                        caption: '${notifier.translate.interest}',
-                        icon: 'heart-icon.svg',
-                      ),
-                      // SettingTile(
-                      //   caption: '${notifier.translate.theme}',
-                      //   icon: 'theme-icon.svg',
-                      //   onTap: () => Routing().move(Routes.themeScreen),
-                      // ),
-                      SettingTile(
-                        onTap: () => ShowGeneralDialog.newAccountLanguageDropDown(context),
-                        icon: 'language-icon.svg',
-                        caption: '${notifier.translate.language}',
-                      ),
-                      SettingTile(
-                        onTap: () {
-                          context.handleActionIsGuest(() {
-                            Routing().move(Routes.referralScreen);
-                          });
-                        },
-                        icon: 'person-plus.svg',
-                        caption: '${notifier.translate.referralID}',
-                        keyGLobal: keyReferral,
-                        descriptionCas: (mn?.tutorialData.isEmpty ?? [].isEmpty)
-                            ? ''
-                            : notifier.translate.localeDatetime == 'id'
-                                ? mn?.tutorialData[indexreferral].textID
-                                : mn?.tutorialData[indexreferral].textEn,
-                        positionTooltip: TooltipPosition.top,
-                        positionYplus: 25,
-                        indexTutor: indexreferral,
-                      ),
-                      // SettingTile(
-                      //   onTap: () => Routing().move(Routes.contentPreferences),
-                      //   icon: 'person-plus.svg',
-                      //   caption: '${notifier.translate.referralID}',
-                      // ),
-                    ],
-                  ),
-                  SettingTile(
-                    icon: 'transaction-icon.svg',
-                    onTap: () {
-                      context.handleActionIsGuest(() {
-                        context.read<SettingNotifier>().validateUser(context, notifier);
-                      });
-                      // Routing().move(Routes.transaction);
-                    },
-                    caption: '${notifier.translate.transaction}',
-                    keyGLobal: keyTransaction,
-                    descriptionCas: (mn?.tutorialData.isEmpty ?? [].isEmpty)
-                        ? ''
-                        : notifier.translate.localeDatetime == 'id'
-                            ? mn?.tutorialData[indexKey].textID
-                            : mn?.tutorialData[indexKey].textEn,
-                    positionTooltip: TooltipPosition.bottom,
-                    positionYplus: -10,
-                    indexTutor: indexKey,
-                  ),
-                  sixteenPx,
-                  Divider(
-                    thickness: 1,
-                    color: theme.colorScheme.surface,
-                  ),
-                  sixteenPx,
-                  SettingComponent(
-                    headerCaption: notifier.translate.creator??'Kreator',
-                    tiles: [
-                      SettingTile(
-                        caption: 'Gift',
-                        icon: 'union.svg',
-                        onTap: () {
-                          context.handleActionIsGuest(() {
-                            context.read<SettingNotifier>().validateUserGif(context, notifier);
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  sixteenPx,
-                  Divider(
-                    thickness: 1,
-                    color: theme.colorScheme.surface,
-                  ),
-                  sixteenPx,
-                  SettingComponent(
-                    headerCaption: '${notifier.translate.storage}',
-                    tiles: [
-                      SettingTile(
-                        caption: notifier.translate.cacheAndDownload ?? "",
-                        icon: 'storage-icon.svg',
-                        onTap: () => Routing().move(Routes.cacheAndDownload),
-                      ),
-                    ],
-                  ),
-                  sixteenPx,
-                  Divider(
-                    thickness: 1,
-                    color: theme.colorScheme.surface,
-                  ),
-                  sixteenPx,
-                  SettingComponent(
-                    headerCaption: '${notifier.translate.support}',
-                    tiles: [
-                      SettingTile(
-                        caption: System().capitalizeFirstLetter(notifier.translate.help ?? ""),
-                        icon: 'help-icon.svg',
-                        onTap: () => Routing().move(Routes.help),
-                      ),
-                      SettingTile(
-                        caption: System().capitalizeFirstLetter(notifier.translate.privacyPolicy ?? ""),
-                        icon: 'privacy-police-icon.svg',
-                        onTap: () => Routing().move(Routes.userAgreement),
-                      ),
-                      // SettingTile(
-                      //   icon: 'terms-icon.svg',
-                      //   caption: 'User Agreement',
-                      //   onTap: () => Routing().move(userAgreement),
-                      // ),
-                      // SettingTile(
-                      //   onTap: () {},
-                      //   caption: 'Language',
-                      //   icon: 'language-icon.svg',
-                      // ),
-                    ],
-                  ),
-                  sixteenPx,
-                  Divider(
-                    thickness: 1,
-                    color: theme.colorScheme.surface,
-                  ),
-                  sixteenPx,
-                  System().showWidgetForGuest(
+            body: RefreshIndicator(
+              onRefresh: () async {
+                await context.read<TransactionNotifier>().initSaldo(context);
+              },
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.only(top: 24),
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // SettingTile(
+                    //   icon: 'transaction-icon.svg',
+                    //   onTap: () {
+                    //     context.handleActionIsGuest(() {
+                    //       context.read<SettingNotifier>().validateUser(context, notifier);
+                    //     });
+                    //   },
+                    //   caption: '${notifier.translate.transaction}',
+                    //   keyGLobal: keyTransaction,
+                    //   descriptionCas: (mn?.tutorialData.isEmpty ?? [].isEmpty)
+                    //       ? ''
+                    //       : notifier.translate.localeDatetime == 'id'
+                    //           ? mn?.tutorialData[indexKey].textID
+                    //           : mn?.tutorialData[indexKey].textEn,
+                    //   positionTooltip: TooltipPosition.bottom,
+                    //   positionYplus: -10,
+                    //   indexTutor: indexKey,
+                    // ),
+                    const Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: MyBalance(),
+                    ),
+                    Divider(
+                      thickness: 1,
+                      color: theme.colorScheme.surface,
+                    ),
+                    sixteenPx,
                     SettingComponent(
-                      headerCaption: '${notifier.translate.about}',
+                      headerCaption: '${notifier.translate.account}',
                       tiles: [
                         SettingTile(
-                          icon: 'info-icon.svg',
-                          caption: System().capitalizeFirstLetter(notifier.translate.version ?? ""),
-                          trailing: Selector<SettingNotifier, String>(
-                            builder: (_, value, __) {
-                              return CustomTextWidget(
-                                textToDisplay: value,
-                                textStyle: theme.textTheme.bodyText1,
-                              );
-                            },
-                            selector: (p0, p1) => p1.appPackage ?? '',
-                          ),
+                          icon: 'preferensi-account-icon.svg',
+                          onTap: () {
+                            context.handleActionIsGuest(() {
+                              Routing().move(Routes.accountPreferences);
+                            });
+                          },
+                          caption: '${notifier.translate.accountPreference}',
+                        ),
+                        SettingTile(
+                          icon: 'lock.svg',
+                          onTap: () {
+                            context.handleActionIsGuest(() {
+                              Routing().move(Routes.homePageSignInSecurity);
+                            });
+                          },
+                          caption: '${notifier.translate.signInAndSecurity}',
+                        ),
+                        SettingTile(
+                          onTap: () => Routing().move(Routes.userInterest,
+                              argument: UserInterestScreenArgument(
+                                fromSetting: true,
+                                userInterested: Provider.of<SelfProfileNotifier>(context, listen: false).user.profile?.interest ?? [],
+                              )),
+                          caption: '${notifier.translate.interest}',
+                          icon: 'heart-icon.svg',
+                        ),
+                        // SettingTile(
+                        //   caption: '${notifier.translate.theme}',
+                        //   icon: 'theme-icon.svg',
+                        //   onTap: () => Routing().move(Routes.themeScreen),
+                        // ),
+                        SettingTile(
+                          onTap: () => ShowGeneralDialog.newAccountLanguageDropDown(context),
+                          icon: 'language-icon.svg',
+                          caption: '${notifier.translate.language}',
                         ),
                         SettingTile(
                           onTap: () {
-                            var res = SharedPreference().readStorage(SpKeys.uploadContent) is bool;
-                            if (res) {
-                              var message = "${notifier.translate.contentCreatedProcess}";
-                              ShowBottomSheet().onShowColouredSheet(
-                                Routing.navigatorKey.currentContext ?? context,
-                                message,
-                                color: kHyppeTextSuccess,
-                                maxLines: 2,
-                                onClose: () {
-                                  try {
-                                    if (mounted) context.read<MainNotifier>().scrollController.animateTo(0, duration: const Duration(milliseconds: 1000), curve: Curves.ease);
-                                  } catch (e) {
-                                    print("==-=-=-=-= home  $e");
-                                  }
-                                },
-                              );
-                            } else {
-                              ShowBottomSheet.onShowSignOut(
-                                context,
-                                onSignOut: () {
-                                  SharedPreference().removeValue(SpKeys.uploadContent);
-                                  context.read<SettingNotifier>().logOut(context);
-                                },
-                              );
-                            }
+                            context.handleActionIsGuest(() {
+                              Routing().move(Routes.referralScreen);
+                            });
                           },
-                          icon: 'logout-icon.svg',
-                          caption: '${notifier.translate.logOut}',
+                          icon: 'person-plus.svg',
+                          caption: '${notifier.translate.referralID}',
+                          keyGLobal: keyReferral,
+                          descriptionCas: (mn?.tutorialData.isEmpty ?? [].isEmpty)
+                              ? ''
+                              : notifier.translate.localeDatetime == 'id'
+                                  ? mn?.tutorialData[indexreferral].textID
+                                  : mn?.tutorialData[indexreferral].textEn,
+                          positionTooltip: TooltipPosition.top,
+                          positionYplus: 25,
+                          indexTutor: indexreferral,
+                        ),
+                        // SettingTile(
+                        //   onTap: () => Routing().move(Routes.contentPreferences),
+                        //   icon: 'person-plus.svg',
+                        //   caption: '${notifier.translate.referralID}',
+                        // ),
+                      ],
+                    ),
+                    SettingTile(
+                      icon: 'transaction-icon.svg',
+                      onTap: () {
+                        context.handleActionIsGuest(() {
+                          context.read<SettingNotifier>().validateUser(context, notifier);
+                        });
+                        // Routing().move(Routes.transaction);
+                      },
+                      caption: '${notifier.translate.transaction}',
+                      keyGLobal: keyTransaction,
+                      descriptionCas: (mn?.tutorialData.isEmpty ?? [].isEmpty)
+                          ? ''
+                          : notifier.translate.localeDatetime == 'id'
+                              ? mn?.tutorialData[indexKey].textID
+                              : mn?.tutorialData[indexKey].textEn,
+                      positionTooltip: TooltipPosition.bottom,
+                      positionYplus: -10,
+                      indexTutor: indexKey,
+                    ),
+                    sixteenPx,
+                    Divider(
+                      thickness: 1,
+                      color: theme.colorScheme.surface,
+                    ),
+                    sixteenPx,
+                    SettingComponent(
+                      headerCaption: notifier.translate.creator??'Kreator',
+                      tiles: [
+                        SettingTile(
+                          caption: 'Gift',
+                          icon: 'union.svg',
+                          onTap: () {
+                            context.handleActionIsGuest(() {
+                              context.read<SettingNotifier>().validateUserGif(context, notifier);
+                            });
+                          },
                         ),
                       ],
                     ),
-                    Column(
-                      children: [
-                        SettingComponent(
-                          headerCaption: '${notifier.translate.about}',
-                          tiles: [
-                            SettingTile(
-                              icon: 'info-icon.svg',
-                              caption: System().capitalizeFirstLetter(notifier.translate.version ?? ""),
-                              trailing: Selector<SettingNotifier, String>(
-                                builder: (_, value, __) {
-                                  return CustomTextWidget(
-                                    textToDisplay: value,
-                                    textStyle: theme.textTheme.bodyText1,
-                                  );
-                                },
-                                selector: (p0, p1) => p1.appPackage ?? '',
-                              ),
+                    sixteenPx,
+                    Divider(
+                      thickness: 1,
+                      color: theme.colorScheme.surface,
+                    ),
+                    sixteenPx,
+                    SettingComponent(
+                      headerCaption: '${notifier.translate.storage}',
+                      tiles: [
+                        SettingTile(
+                          caption: notifier.translate.cacheAndDownload ?? "",
+                          icon: 'storage-icon.svg',
+                          onTap: () => Routing().move(Routes.cacheAndDownload),
+                        ),
+                      ],
+                    ),
+                    sixteenPx,
+                    Divider(
+                      thickness: 1,
+                      color: theme.colorScheme.surface,
+                    ),
+                    sixteenPx,
+                    SettingComponent(
+                      headerCaption: '${notifier.translate.support}',
+                      tiles: [
+                        SettingTile(
+                          caption: System().capitalizeFirstLetter(notifier.translate.help ?? ""),
+                          icon: 'help-icon.svg',
+                          onTap: () => Routing().move(Routes.help),
+                        ),
+                        SettingTile(
+                          caption: System().capitalizeFirstLetter(notifier.translate.privacyPolicy ?? ""),
+                          icon: 'privacy-police-icon.svg',
+                          onTap: () => Routing().move(Routes.userAgreement),
+                        ),
+                        // SettingTile(
+                        //   icon: 'terms-icon.svg',
+                        //   caption: 'User Agreement',
+                        //   onTap: () => Routing().move(userAgreement),
+                        // ),
+                        // SettingTile(
+                        //   onTap: () {},
+                        //   caption: 'Language',
+                        //   icon: 'language-icon.svg',
+                        // ),
+                      ],
+                    ),
+                    sixteenPx,
+                    Divider(
+                      thickness: 1,
+                      color: theme.colorScheme.surface,
+                    ),
+                    sixteenPx,
+                    System().showWidgetForGuest(
+                      SettingComponent(
+                        headerCaption: '${notifier.translate.about}',
+                        tiles: [
+                          SettingTile(
+                            icon: 'info-icon.svg',
+                            caption: System().capitalizeFirstLetter(notifier.translate.version ?? ""),
+                            trailing: Selector<SettingNotifier, String>(
+                              builder: (_, value, __) {
+                                return CustomTextWidget(
+                                  textToDisplay: value,
+                                  textStyle: theme.textTheme.bodyText1,
+                                );
+                              },
+                              selector: (p0, p1) => p1.appPackage ?? '',
                             ),
-                          ],
-                        ),
-                        twentyPx
-                      ],
+                          ),
+                          SettingTile(
+                            onTap: () {
+                              var res = SharedPreference().readStorage(SpKeys.uploadContent) is bool;
+                              if (res) {
+                                var message = "${notifier.translate.contentCreatedProcess}";
+                                ShowBottomSheet().onShowColouredSheet(
+                                  Routing.navigatorKey.currentContext ?? context,
+                                  message,
+                                  color: kHyppeTextSuccess,
+                                  maxLines: 2,
+                                  onClose: () {
+                                    try {
+                                      if (mounted) context.read<MainNotifier>().scrollController.animateTo(0, duration: const Duration(milliseconds: 1000), curve: Curves.ease);
+                                    } catch (e) {
+                                      print("==-=-=-=-= home  $e");
+                                    }
+                                  },
+                                );
+                              } else {
+                                ShowBottomSheet.onShowSignOut(
+                                  context,
+                                  onSignOut: () {
+                                    SharedPreference().removeValue(SpKeys.uploadContent);
+                                    context.read<SettingNotifier>().logOut(context);
+                                  },
+                                );
+                              }
+                            },
+                            icon: 'logout-icon.svg',
+                            caption: '${notifier.translate.logOut}',
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          SettingComponent(
+                            headerCaption: '${notifier.translate.about}',
+                            tiles: [
+                              SettingTile(
+                                icon: 'info-icon.svg',
+                                caption: System().capitalizeFirstLetter(notifier.translate.version ?? ""),
+                                trailing: Selector<SettingNotifier, String>(
+                                  builder: (_, value, __) {
+                                    return CustomTextWidget(
+                                      textToDisplay: value,
+                                      textStyle: theme.textTheme.bodyText1,
+                                    );
+                                  },
+                                  selector: (p0, p1) => p1.appPackage ?? '',
+                                ),
+                              ),
+                            ],
+                          ),
+                          twentyPx
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           );

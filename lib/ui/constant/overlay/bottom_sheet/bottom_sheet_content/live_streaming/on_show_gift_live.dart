@@ -77,27 +77,23 @@ class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
               transactionCoin: notifier.giftSelect?.price ?? 0,
               isChecking: (bool val, int saldoCoin) {
                 buttonactive = val;
-                setState(() {});
+                // setState(() {});
               },
             ),
           ),
-          Text("notifier.endLive ${notifier.isOver} ${buttonactive && !notifier.isOver}"),
-          Consumer<StreamerNotifier>(
-            builder: (_, sn, __) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-                child: ButtonChallangeWidget(
-                  function: () {
-                    if (buttonactive && !notifier.isOver) {
-                      sn.sendGift(context, mounted, sn.giftSelect?.sId ?? '', sn.giftSelect?.thumbnail ?? '', sn.giftSelect?.name ?? '',
-                          urlGift: sn.giftSelect?.animation, idViewStream: widget.idViewStream);
-                    }
-                  },
-                  bgColor: buttonactive && !notifier.isOver ? kHyppePrimary : kHyppeDisabled,
-                  text: trans.send,
-                ),
-              );
-            },
+          // Text("notifier.endLive ${notifier.isOver} ${buttonactive && !notifier.isOver}"),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+            child: ButtonChallangeWidget(
+              function: () {
+                if (buttonactive && !notifier.isOver) {
+                  notifier.sendGift(context, mounted, notifier.giftSelect?.sId ?? '', notifier.giftSelect?.thumbnail ?? '', notifier.giftSelect?.name ?? '',
+                      urlGift: notifier.giftSelect?.animation, idViewStream: widget.idViewStream);
+                }
+              },
+              bgColor: buttonactive && !notifier.isOver ? kHyppePrimary : kHyppeDisabled,
+              text: trans.send,
+            ),
           )
         ],
       );

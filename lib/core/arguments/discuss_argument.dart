@@ -13,6 +13,10 @@ class DiscussArgument {
 
   String txtMessages = '';
 
+  String giftID = '';
+
+  String gift = '';
+
   String reactionUri = '';
 
   bool isQuery = false;
@@ -42,6 +46,8 @@ class DiscussArgument {
       'pageNumber': pageNumber,
       'postID': postID,
       'txtMessages': txtMessages,
+      'giftID': giftID,
+      'gift':gift,
       'reactionUri': reactionUri,
       'isQuery': isQuery,
       'withDetail': withDetail,

@@ -14,13 +14,14 @@ import 'package:hyppe/ui/inner/home/content_v2/coins/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/disccount/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/exchangecoins/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/withdrawalcoin/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/support_ticket/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/ticket_history/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/historyordercoin/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/payment_success/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_waiting/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/paymentcoin/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
@@ -36,6 +37,7 @@ import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/topupcoin/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/filter/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction_coin_detail/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/notifier.dart';
@@ -273,7 +275,7 @@ class AppDependencies {
         ChangeNotifierProvider<CoinNotifier>(create: (context) => CoinNotifier()),
         ChangeNotifierProvider<TopUpCoinNotifier>(create: (context) => TopUpCoinNotifier()),
         ChangeNotifierProvider<PaymentCoinNotifier>(create: (context) => PaymentCoinNotifier()),
-        ChangeNotifierProvider<ExchangeCoinNotifier>(create: (context) => ExchangeCoinNotifier()),
+        ChangeNotifierProvider<WithdrawalCoinNotifier>(create: (context) => WithdrawalCoinNotifier()),
 
         ChangeNotifierProvider<ExternalLinkNotifier>(create: (context) => ExternalLinkNotifier()),
         ChangeNotifierProvider<PaymentWaitingNotifier>(create: (context) => PaymentWaitingNotifier()),
@@ -286,5 +288,9 @@ class AppDependencies {
         ChangeNotifierProvider<HistoryOrderCoinNotifier>(create: (context) => HistoryOrderCoinNotifier()),
         //SaldoCoin
         ChangeNotifierProvider<SaldoCoinNotifier>(create: (context) => SaldoCoinNotifier()),
+
+        ChangeNotifierProvider<TransactionCoinDetailNotifier>(create: (context) => TransactionCoinDetailNotifier()),
+        ChangeNotifierProvider<PaymentSuccessCoinNotifier>(create: (context) => PaymentSuccessCoinNotifier()),
+
       ];
 }

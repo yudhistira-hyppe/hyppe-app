@@ -1044,6 +1044,7 @@ class HomeNotifier with ChangeNotifier {
     int totChild, {
     String? username,
     String? txtMsg,
+    String? gift,
     String? parentID,
     int? indexComment,
     bool pageDetail = false,
@@ -1067,7 +1068,7 @@ class HomeNotifier with ChangeNotifier {
     // _updatedData ??= picScroll.pics?.firstWhereOrNull((element) => element.postID == postID);
 
     if (add) {
-      Comment comment = Comment(txtMessages: txtMsg, userComment: UserComment(username: username), sender: email);
+      Comment comment = Comment(txtMessages: txtMsg, gift: gift, userComment: UserComment(username: username), sender: email);
       print("===-=-=-=-=- parentID $parentID");
       print("===-=-=-=-=- parentID ${vid.vidData?[0].description}");
 

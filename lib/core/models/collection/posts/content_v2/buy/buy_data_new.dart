@@ -7,6 +7,7 @@ class BuyDataNew {
     this.like,
     this.view,
     this.price,
+    this.total
   });
 
   String? nomorSertifikat;
@@ -16,6 +17,7 @@ class BuyDataNew {
   bool? like;
   bool? view;
   int? price;
+  int? total;
 
   factory BuyDataNew.fromJson(Map<String, dynamic> json) => BuyDataNew(
         nomorSertifikat: json["nomorSertifikat"],
@@ -25,6 +27,7 @@ class BuyDataNew {
         like: json["like"],
         view: json["view"],
         price: json["price"],
+        total: json["total"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -35,5 +38,6 @@ class BuyDataNew {
         "like": like,
         "view": view,
         "price": price,
+        "total": total,
       };
 }

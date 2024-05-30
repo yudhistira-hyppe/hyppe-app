@@ -1026,6 +1026,23 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
     isloadingGift = false;
     notifyListeners();
   }
+
+  void sendGift(BuildContext context, bool mounted, String idGift, String urlGiftThumb, String title, {String? urlGift, String? idViewStream}) async {
+    Map param = {
+      "_id": dataStreaming.sId,
+      "commentType": "GIFT",
+      "type": "COMMENT",
+      "idGift": idGift,
+      "urlGiftThum": urlGiftThumb,
+      "messages": title,
+    };
+
+    if (idViewStream != null) param['_id'] = idViewStream;
+
+    if (urlGift != null) param['urlGift'] = urlGift;
+    updateStream(context, mounted, param).then((value) {});
+    Routing().moveBack();
+  }
 }
 
 class GroupModel {
