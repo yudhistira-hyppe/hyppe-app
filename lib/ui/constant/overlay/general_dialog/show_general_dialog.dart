@@ -9,6 +9,7 @@ import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/ads_reward_popup.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/banner_pop.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/delete_tag_user_content.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/failed_get_ktp_dialog.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/general_dialog.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/join_challange_pop.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/loading_content.dart';
@@ -31,6 +32,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/win_challange.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_4/loading_kyc.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_5/widget/date_widget.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
@@ -77,6 +80,8 @@ class ShowGeneralDialog {
     bool? barrierDismissible = false,
     bool isHorizontal = true,
     bool? fillColor = true,
+    Widget? bodyWidget,
+    Widget? topWidget,
   }) {
     showGeneralDialog(
       //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
@@ -98,6 +103,57 @@ class ShowGeneralDialog {
           titleButtonSecondary: titleButtonSecondary,
           isHorizontal: isHorizontal,
           fillColor: fillColor ?? false,
+          bodyWidget: bodyWidget,
+          topWidget: topWidget,
+        ),
+      ),
+      transitionBuilder: null,
+      // transitionBuilder: (context, animation, secondaryAnimation, child) {
+      //   animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
+      //   return ScaleTransition(scale: animation, alignment: Alignment.center, child: child);
+      // },
+    );
+  }
+
+  static failedGetKTP(
+    _, {
+    String? titleText,
+    String? bodyText,
+    int? maxLineTitle,
+    int? maxLineBody,
+    required Function functionPrimary,
+    Function? functionSecondary,
+    String? titleButtonPrimary,
+    String? titleButtonSecondary,
+    bool? barrierDismissible = false,
+    bool isHorizontal = true,
+    bool? fillColor = true,
+  }) {
+    showGeneralDialog(
+      //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
+      context: Routing.navigatorKey.currentState!.overlay!.context,
+      barrierLabel: 'Barrier',
+      barrierDismissible: barrierDismissible ?? false,
+      transitionDuration: const Duration(milliseconds: 500),
+      pageBuilder: (context, animation, secondAnimation) => WillPopScope(
+        onWillPop: () async {
+          return false;
+        },
+        child: AlertDialog(
+          // insetPadding: EdgeInsets.only(top: 30),
+          alignment: Alignment.center,
+          content: FailedGetKTPDialog(
+            titleText: titleText,
+            bodyText: bodyText,
+            maxLineTitle: maxLineTitle,
+            maxLineBody: maxLineBody,
+            functionPrimary: functionPrimary,
+            functionSecondary: functionSecondary,
+            titleButtonPrimary: titleButtonPrimary,
+            titleButtonSecondary: titleButtonSecondary,
+            isHorizontal: isHorizontal,
+            fillColor: fillColor ?? false,
+          ),
         ),
       ),
       transitionBuilder: null,
@@ -438,7 +494,31 @@ class ShowGeneralDialog {
       ),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
-        return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
+        return ScaleTransition(scale: animation, alignment: Alignment.center, child: child);
+      },
+    );
+  }
+
+  static Future loadingKycDialog(BuildContext context, {bool? uploadProses}) async {
+    await showGeneralDialog(
+      //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
+      context: Routing.navigatorKey.currentState!.overlay!.context,
+      barrierLabel: 'Barrier',
+      barrierDismissible: false,
+      barrierColor: Colors.transparent,
+
+      transitionDuration: const Duration(milliseconds: 500),
+      pageBuilder: (context, animation, secondAnimation) => WillPopScope(
+        onWillPop: () async => false,
+        child: AlertDialog(
+          backgroundColor: Colors.transparent,
+          content: LoadingKycDialog(uploadProses: uploadProses ?? false),
+          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+        ),
+      ),
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
+        return ScaleTransition(scale: animation, alignment: Alignment.center, child: child);
       },
     );
   }

@@ -8,6 +8,8 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/entities/camera_devices/notifier.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
@@ -62,11 +64,19 @@ class _VerificationIDStep3State extends State<VerificationIDStep3> with AfterFir
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Image(image: AssetImage("assets/png/professional.png")),
-                  ],
+                twentyFourPx,
+                Center(
+                  child: Text(
+                    notifier.language.ektpPhoto ?? 'E-KTP Photo',
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                  ),
+                ),
+                twentyFourPx,
+                const Center(
+                  child: CustomIconWidget(
+                    defaultColor: false,
+                    iconData: "${AssetPath.vectorPath}ektpphoto.svg",
+                  ),
                 ),
                 const SizedBox(
                   height: 16,
@@ -77,11 +87,12 @@ class _VerificationIDStep3State extends State<VerificationIDStep3> with AfterFir
                 unorderedList(notifier.language.uploadIdCardNotice4 ?? ''),
                 unorderedList(notifier.language.uploadIdCardNotice5 ?? ''),
                 unorderedList(notifier.language.uploadIdCardNotice6 ?? ''),
-                unorderedList(notifier.language.uploadIdCardNotice7 ?? ''),
-                unorderedList(notifier.language.uploadIdCardNotice8 ?? ''),
+                // unorderedList(notifier.language.uploadIdCardNotice7 ?? ''),
+                // unorderedList(notifier.language.uploadIdCardNotice8 ?? ''),
                 const SizedBox(
-                  height: 50,
+                  height: 20,
                 ),
+                Text(notifier.language.uploadIdCardNotice8 ?? ''),
               ],
             ),
           ),
@@ -93,15 +104,15 @@ class _VerificationIDStep3State extends State<VerificationIDStep3> with AfterFir
             width: SizeConfig.screenWidth,
             height: 44.0 * SizeConfig.scaleDiagonal,
             function: () => Routing().moveAndPop(Routes.verificationIDStep4),
-            child: CustomTextWidget(
-              textToDisplay: notifier.language.continueStep ?? '',
-              textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
-            ),
             buttonStyle: ButtonStyle(
               foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
               shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
               overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
               backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+            ),
+            child: CustomTextWidget(
+              textToDisplay: notifier.language.openCamera ?? '',
+              textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
             ),
           ),
         ),
@@ -113,7 +124,7 @@ class _VerificationIDStep3State extends State<VerificationIDStep3> with AfterFir
 
   Widget unorderedList(String text) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(bottom: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,

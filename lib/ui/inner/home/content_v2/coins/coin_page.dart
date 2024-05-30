@@ -58,88 +58,93 @@ class _CoinPageState extends State<CoinPage> {
       ),
       body: Consumer2<TransactionNotifier, CoinNotifier>(
         builder: (context, notifier, cointNotif, child) {
-          return SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 12.0),
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CoinsWidget(accountBalance: System().numberFormat(amount: notifier.saldoCoin)),
-                thirtySixPx,
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: kHyppeBurem, width: .5),
-                    borderRadius: BorderRadius.circular(18.0)
+          return RefreshIndicator(
+            onRefresh: () async {
+              await context.read<TransactionNotifier>().initSaldo(context);
+            },
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 12.0),
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CoinsWidget(accountBalance: System().numberFormat(amount: notifier.saldoCoin)),
+                  thirtySixPx,
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: kHyppeBurem, width: .5),
+                      borderRadius: BorderRadius.circular(18.0)
+                    ),
+                    child: Column(
+                      children: [
+                        CustomListTile(
+                          iconData: "${AssetPath.vectorPath}ic-bank.svg",
+                          title: "Tambah Akun Bank",
+                          onTap: () {
+                            notifier.navigateToBankAccount();
+                          },
+                        ),
+                        const Divider(
+                          color: kHyppeBurem,
+                        ),
+                        CustomListTile(
+                          iconData: "${AssetPath.vectorPath}ic-disccount.svg",
+                          title: lang?.discountForYou ?? 'Diskon Untukmu',
+                          onTap: () {
+                            Navigator.pushNamed(context, Routes.mydiscount, arguments: {'routes': Routes.saldoCoins});
+                          },
+                        )
+                      ],
+                    ),
                   ),
-                  child: Column(
-                    children: [
-                      CustomListTile(
-                        iconData: "${AssetPath.vectorPath}ic-bank.svg",
-                        title: "Tambah Akun Bank",
-                        onTap: () {
-                          notifier.navigateToBankAccount();
-                        },
-                      ),
-                      const Divider(
-                        color: kHyppeBurem,
-                      ),
-                      CustomListTile(
-                        iconData: "${AssetPath.vectorPath}ic-disccount.svg",
-                        title: lang?.discountForYou ?? 'Diskon Untukmu',
-                        onTap: () {
-                          Navigator.pushNamed(context, Routes.mydiscount, arguments: {'routes': Routes.saldoCoins});
-                        },
-                      )
-                    ],
+                  SectionWidget(
+                    title: 'Aktivitas Hyppe Coins', 
+                    style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
                   ),
-                ),
-                SectionWidget(
-                  title: 'Aktivitas Hyppe Coins', 
-                  style: Theme.of(context)
-                    .textTheme
-                    .titleMedium
-                    ?.copyWith(fontWeight: FontWeight.bold),
-                ),
-                Container(
-                  height: kToolbarHeight - 8,
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  child: ListView(
-                    physics: const BouncingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      Visibility(
-                        visible: cointNotif.selectedTransValue != 1 || cointNotif.selectedDateValue != 1,
-                        child: GestureDetector(
-                          onTap: () => cointNotif.resetSelected(),
-                          child: Container(
-                            margin: const EdgeInsets.only(right: 12.0),
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: kHyppeBurem, width: .5),
-                              borderRadius: BorderRadius.circular(32.0)
+                  Container(
+                    height: kToolbarHeight - 8,
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: ListView(
+                      physics: const BouncingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        Visibility(
+                          visible: cointNotif.selectedTransValue != 1 || cointNotif.selectedDateValue != 1,
+                          child: GestureDetector(
+                            onTap: () => cointNotif.resetSelected(),
+                            child: Container(
+                              margin: const EdgeInsets.only(right: 12.0),
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: kHyppeBurem, width: .5),
+                                borderRadius: BorderRadius.circular(32.0)
+                              ),
+                              child: const Icon(Icons.close),
                             ),
-                            child: const Icon(Icons.close),
                           ),
                         ),
-                      ),
-                      SectionDropdownWidget(
-                        title: cointNotif.selectedTransLabel, 
-                        onTap: () => cointNotif.showButtomSheetTransaction(context),
-                        isActive: cointNotif.groupsTrans.firstWhere((e) => e.selected==true).index == 1 ? false : true,
-                      ),
-                      SectionDropdownWidget(
-                        title: cointNotif.selectedDateLabel, 
-                        onTap: () => cointNotif.showButtomSheetDate(context),
-                        isActive: cointNotif.groupsDate.firstWhere((e) => e.selected==true).index == 1 ? false : true,
-                      ),
-                    ],
+                        SectionDropdownWidget(
+                          title: cointNotif.selectedTransLabel, 
+                          onTap: () => cointNotif.showButtomSheetTransaction(context),
+                          isActive: cointNotif.groupsTrans.firstWhere((e) => e.selected==true).index == 1 ? false : true,
+                        ),
+                        SectionDropdownWidget(
+                          title: cointNotif.selectedDateLabel, 
+                          onTap: () => cointNotif.showButtomSheetDate(context),
+                          isActive: cointNotif.groupsDate.firstWhere((e) => e.selected==true).index == 1 ? false : true,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Wrap(
-                  alignment: WrapAlignment.center,
-                  children: widgetGenerate(),
-                ),
-              ],
+                  Wrap(
+                    alignment: WrapAlignment.center,
+                    children: widgetGenerate(),
+                  ),
+                ],
+              ),
             ),
           );
         }

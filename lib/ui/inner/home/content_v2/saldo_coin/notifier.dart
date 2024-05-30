@@ -1,40 +1,36 @@
-
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/bloc/saldo_coin/bloc.dart';
 import 'package:hyppe/core/bloc/saldo_coin/state.dart';
 
 class SaldoCoinNotifier with ChangeNotifier {
-
   final bloc = SaldoCoinDataBloc();
 
   int _saldoCoin = 0;
   int get saldoCoin => _saldoCoin;
-  set saldoCoin(int val){
+  set saldoCoin(int val) {
     _saldoCoin = val;
     notifyListeners();
   }
 
   int _transactionCoin = 0;
   int get transactionCoin => _transactionCoin;
-  set transactionCoin(int val){
+  set transactionCoin(int val) {
     _transactionCoin = val;
     // notifyListeners();
   }
 
   bool _visibilityTransaction = false;
   bool get visibilityTransaction => _visibilityTransaction;
-  set visibilityTransaction(bool val){
+  set visibilityTransaction(bool val) {
     _visibilityTransaction = val;
     // notifyListeners();
   }
 
-  
-
   Future initSaldo(BuildContext context) async {
-    try{
+    try {
       await bloc.getSaldoCoin(context);
       if (bloc.dataFetch.dataState == SaldoCoinState.getBlocSuccess) {
-        saldoCoin = bloc.dataFetch.data??0;
+        saldoCoin = bloc.dataFetch.data ?? 0;
       }
       await checkSaldoCoin();
       

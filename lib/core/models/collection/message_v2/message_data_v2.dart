@@ -1,5 +1,6 @@
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/models/collection/common/user_badge_model.dart';
+import 'package:hyppe/core/models/collection/live_stream/streaming_model.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 
@@ -369,8 +370,38 @@ class Medias {
   String? postID;
   bool? apsara;
   String? apsaraId;
+  String? sId;
+  String? title;
+  String? url;
+  String? textUrl;
+  String? userId;
+  User? user;
+  bool? status;
+  int? expireTime;
+  String? createAt;
+  String? tokenAgora;
 
-  Medias({this.createdAt, this.postType, this.description, this.active, this.mediaType, this.mediaThumbEndpoint, this.postID, this.apsara, this.apsaraId});
+  Medias({
+    this.createdAt,
+    this.postType,
+    this.description,
+    this.active,
+    this.mediaType,
+    this.mediaThumbEndpoint,
+    this.postID,
+    this.apsara,
+    this.apsaraId,
+    this.sId,
+    this.title,
+    this.url,
+    this.textUrl,
+    this.userId,
+    this.user,
+    this.status,
+    this.expireTime,
+    this.createAt,
+    this.tokenAgora,
+  });
 
   Medias.fromJson(Map<String, dynamic> json) {
     createdAt = json['createdAt'];
@@ -382,5 +413,16 @@ class Medias {
     postID = json['postID'];
     apsara = json['apsara'];
     apsaraId = json['apsaraId'];
+
+    sId = json['_id'];
+    title = json['title'];
+    url = json['url'];
+    textUrl = json['textUrl'];
+    userId = json['userId'];
+    user = json['user'] != null ? User.fromJson(json['user']) : null;
+    status = json['status'];
+    expireTime = json['expireTime'];
+    createAt = json['createAt'];
+    tokenAgora = json['tokenAgora'];
   }
 }

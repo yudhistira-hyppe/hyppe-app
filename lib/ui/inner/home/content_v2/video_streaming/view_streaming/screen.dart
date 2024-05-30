@@ -5,6 +5,7 @@ import 'package:hyppe/core/arguments/view_streaming_argument.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/love_lottie.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/gift_deluxe.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/love_lottie.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/over_live_streaming.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/pauseLive.dart';
@@ -29,8 +30,7 @@ class ViewStreamingScreen extends StatefulWidget {
   State<ViewStreamingScreen> createState() => _ViewStreamingScreenState();
 }
 
-class _ViewStreamingScreenState extends State<ViewStreamingScreen>
-    with WidgetsBindingObserver, TickerProviderStateMixin {
+class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsBindingObserver, TickerProviderStateMixin {
   FocusNode commentFocusNode = FocusNode();
 
   final debouncer = Debouncer(milliseconds: 2000);
@@ -39,35 +39,37 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
 
   bool isMute = false;
 
+  bool loading = true;
+  ViewStreamingNotifier? notifier;
+
   @override
   void initState() {
-    super.initState();
-    final notifier = (Routing.navigatorKey.currentContext ?? context)
-        .read<ViewStreamingNotifier>();
-    notifier.initViewStreaming(widget.args.data);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+    super.initState();
+    notifier = (Routing.navigatorKey.currentContext ?? context).read<ViewStreamingNotifier>();
+    notifier?.initViewStreaming(widget.args.data);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      loading = false;
+      setState(() {});
       commentFocusNode.addListener(() {
         debugPrint("Has focus: ${commentFocusNode.hasFocus}");
       });
-      await notifier.startViewStreaming(
-          Routing.navigatorKey.currentContext ?? context,
-          mounted,
-          widget.args.data);
-
+      await notifier?.requestPermission(context);
+      await notifier?.startViewStreaming(Routing.navigatorKey.currentContext ?? context, mounted, widget.args.data);
+      WakelockPlus.enable();
       if (!mounted) return;
 
       // await notifier.initAgora(context, mounted, widget.args.data);
       SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
       WidgetsBinding.instance.addObserver(this);
+      loading = false;
       setState(() {});
     });
   }
 
   @override
   void dispose() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-        overlays: SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
     WakelockPlus.disable();
     SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
     context.read<ViewStreamingNotifier>().disposeAgora();
@@ -80,18 +82,21 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
     // var streampro = Provider.of<StreamerNotifier>(context, listen: false);
     if (state == AppLifecycleState.inactive) {
       print("========= Streamer AppLifecycleState.inactive ==========");
-      context.read<ViewStreamingNotifier>().exitStreaming(context, widget.args.data).whenComplete(() async {
-        await context.read<ViewStreamingNotifier>().destoryPusher();
-        Routing().moveBack();
-      });
+      // context.read<ViewStreamingNotifier>().exitStreaming(context, widget.args.data).whenComplete(() async {
+      //   await context.read<ViewStreamingNotifier>().destoryPusher();
+      //   Routing().moveBack();
+      // });
     }
     if (state == AppLifecycleState.resumed) {
+      notifier?.engine.muteAllRemoteAudioStreams(false);
       print("========= Streamer AppLifecycleState.resumed ==========");
     }
 
     if (state == AppLifecycleState.paused) {
       // Minimize aplication
       print("========= Streamer AppLifecycleState.paused ==========");
+      notifier?.engine.muteAllRemoteAudioStreams(true);
+
       // streampro.pauseLive(context, mounted);
     }
 
@@ -109,7 +114,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
         body: WillPopScope(
           child: SizedBox(
             width: SizeConfig.screenWidth,
-            height: SizeConfig.screenHeight,
+            height: MediaQuery.of(context).size.height,
             child: notifier.isOver
                 ? OverLiveStreaming(
                     data: widget.args.data,
@@ -129,8 +134,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
                         onDoubleTap: () {
                           notifier.likeAddTapScreen();
                           _debouncer.run(() {
-                            notifier.sendLikeTapScreen(
-                                context, notifier.streamerData!);
+                            notifier.sendLikeTapScreen(context, notifier.streamerData!);
                           });
                         },
                         child: Container(
@@ -138,12 +142,17 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
                           width: SizeConfig.screenWidth,
                           height: SizeConfig.screenHeight,
                           child: notifier.remoteUid != -1
-                              ? AgoraVideoView(
-                                  controller: VideoViewController.remote(
-                                    rtcEngine: notifier.engine,
-                                    canvas: VideoCanvas(uid: notifier.remoteUid),
-                                    connection: RtcConnection(
-                                        channelId: widget.args.data.sId ?? ''),
+                              ? AspectRatio(
+                                  aspectRatio: MediaQuery.of(context).devicePixelRatio,
+                                  child: AgoraVideoView(
+                                    controller: VideoViewController.remote(
+                                      rtcEngine: notifier.engine,
+                                      canvas: VideoCanvas(
+                                        uid: notifier.remoteUid,
+                                        renderMode: RenderModeType.renderModeHidden,
+                                      ),
+                                      connection: RtcConnection(channelId: widget.args.data.sId ?? ''),
+                                    ),
                                   ),
                                 )
                               : const Align(
@@ -152,9 +161,8 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
                                 ),
                         ),
                       ),
-                      if ((notifier.statusAgora ==
-                              RemoteVideoState.remoteVideoStateStopped || notifier.statusAgora ==
-                              RemoteVideoState.remoteVideoStateStopped) && (notifier.resionAgora == RemoteVideoStateReason.remoteVideoStateReasonRemoteMuted || notifier.resionAgora == RemoteVideoStateReason.remoteVideoStateReasonSdkInBackground))
+                      if ((notifier.statusAgora == RemoteVideoState.remoteVideoStateStopped || notifier.statusAgora == RemoteVideoState.remoteVideoStateStopped) &&
+                          (notifier.resionAgora == RemoteVideoStateReason.remoteVideoStateReasonRemoteMuted || notifier.resionAgora == RemoteVideoStateReason.remoteVideoStateReasonSdkInBackground))
                         PauseLiveView(data: widget.args.data),
 
                       Positioned.fill(
@@ -209,6 +217,8 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
                           ),
                         ),
                       ),
+
+                      const Positioned.fill(child: GiftDeluxe()),
                       //Buffering
                       if (notifier.resionAgora == RemoteVideoStateReason.remoteVideoStateReasonNetworkCongestion)
                         const Positioned.fill(
@@ -234,11 +244,21 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
                             ),
                           ),
                         ),
+                      // Positioned(
+                      //   top: 100,
+                      //   left: 100,
+                      //   child: GestureDetector(
+                      //       onTap: () {
+                      //         print("disini");
+                      //       },
+                      //       child: Container(color: Colors.red, width: 100, height: 100, child: Align(alignment: Alignment.center, child: Text('${MediaQuery.of(context).size.height} ')))),
+                      // ),
 
                       TitleViewLive(
                         data: widget.args.data,
                         totLikes: notifier.totLikes,
                         totViews: notifier.totViews,
+                        dataStream: notifier.dataStreaming,
                       ),
                       Positioned(
                         bottom: 36,
@@ -253,11 +273,12 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
                   ),
           ),
           onWillPop: () async {
+            SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
             context.read<ViewStreamingNotifier>().exitStreaming(context, widget.args.data).whenComplete(() async {
               await context.read<ViewStreamingNotifier>().destoryPusher();
               Routing().moveBack();
             });
-            return true;
+            return false;
           },
         ),
       );

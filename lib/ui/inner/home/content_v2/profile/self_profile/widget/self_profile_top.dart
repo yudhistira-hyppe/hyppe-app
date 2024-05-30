@@ -358,18 +358,18 @@ class SelfProfileTop extends StatelessWidget {
                   )
                 : const SizedBox.shrink(),
             tenPx,
-            if (notifier.user.profile!.urlLink != '')
+            if (notifier.user.profile?.urlLink != '')
               GestureDetector(
                 onTap: () async {
-                  var uri = notifier.user.profile!.urlLink??'';
-                    if (!uri.withHttp()){
-                      uri='https://$uri';
-                    }
-                    if (await canLaunchUrl(Uri.parse(uri))) {
-                        await launchUrl(Uri.parse(uri));
-                      } else {
-                        throw  Fluttertoast.showToast(msg: 'Could not launch $uri');
-                      }
+                  var uri = notifier.user.profile!.urlLink ?? '';
+                  if (!uri.withHttp()) {
+                    uri = 'https://$uri';
+                  }
+                  if (await canLaunchUrl(Uri.parse(uri))) {
+                    await launchUrl(Uri.parse(uri));
+                  } else {
+                    throw Fluttertoast.showToast(msg: 'Could not launch $uri');
+                  }
                 },
                 child: SizedBox(
                   width: SizeConfig.screenWidth,
@@ -380,10 +380,18 @@ class SelfProfileTop extends StatelessWidget {
                         defaultColor: false,
                         color: kHyppePrimary,
                       ),
-                      const SizedBox(width: 12.0,),
-                      (notifier.user.profile!.judulLink != null) 
-                      ? Text(notifier.user.profile!.judulLink??'', style: const TextStyle(color: kHyppePrimary),)
-                      : Text(notifier.user.profile!.urlLink??'', style: const TextStyle(color: kHyppePrimary),)
+                      const SizedBox(
+                        width: 12.0,
+                      ),
+                      (notifier.user.profile!.judulLink != null)
+                          ? Text(
+                              notifier.user.profile!.judulLink ?? '',
+                              style: const TextStyle(color: kHyppePrimary),
+                            )
+                          : Text(
+                              notifier.user.profile!.urlLink ?? '',
+                              style: const TextStyle(color: kHyppePrimary),
+                            )
                     ],
                   ),
                 ),

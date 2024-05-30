@@ -48,8 +48,7 @@ class _ListBankAccountWidgetState extends State<ListBankAccountWidget> {
                       height: 5.0,
                       decoration: BoxDecoration(
                         color: kHyppeBurem.withOpacity(.5),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(2.5)),
+                        borderRadius: const BorderRadius.all(Radius.circular(2.5)),
                       ),
                     ),
                   ),
@@ -60,10 +59,7 @@ class _ListBankAccountWidgetState extends State<ListBankAccountWidget> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       widget.lang.choosebank ?? 'Pilih Bank',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge
-                          ?.copyWith(fontWeight: FontWeight.bold),
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
@@ -81,15 +77,13 @@ class _ListBankAccountWidgetState extends State<ListBankAccountWidget> {
                               physics: const BouncingScrollPhysics(),
                               itemCount: notifier.groupdata?.length,
                               itemBuilder: (context, index) {
-                                return makeRadioTiles(context, notifier,
-                                    notifier.groupdata![index]);
+                                return makeRadioTiles(context, notifier, notifier.groupdata![index]);
                               },
                             );
                     },
                   ),
                 ),
-                Consumer<PaymentMethodNotifier>(
-                    builder: (context, notifier, __) {
+                Consumer<PaymentMethodNotifier>(builder: (context, notifier, __) {
                   return notifier.selectedbankdata == ''
                       ? const SizedBox.shrink()
                       : Column(
@@ -101,26 +95,30 @@ class _ListBankAccountWidgetState extends State<ListBankAccountWidget> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    Navigator.pop(context);
-                                    var res = notifier.groupdata!.firstWhere((e) => e.selected==true);
-                                    BankData data = BankData(id: res.id, atm: res.atm, bankIcon: res.bankIcon, bankcode: res.bankcode, bankname: res.bankname, internetBanking: res.internetBanking, mobileBanking: res.mobileBanking);
+                                    var res = notifier.groupdata!.firstWhere((e) => e.selected == true);
+                                    BankData data = BankData(
+                                        id: res.id,
+                                        atm: res.atm,
+                                        bankIcon: res.bankIcon,
+                                        bankcode: res.bankcode,
+                                        bankname: res.bankname,
+                                        internetBanking: res.internetBanking,
+                                        mobileBanking: res.mobileBanking);
+
+                                    // Navigator.pop(context);
                                     context.read<TransactionNotifier>().bankInsert(data, position: widget.position);
                                   },
                                   style: ElevatedButton.styleFrom(
                                       elevation: 0,
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
+                                        borderRadius: BorderRadius.circular(8.0),
                                       ),
                                       backgroundColor: kHyppePrimary),
                                   child: SizedBox(
                                     width: double.infinity,
                                     height: kToolbarHeight,
                                     child: Center(
-                                      child: Text(
-                                          widget.lang.choosebank ??
-                                              'Pilih Bank',
-                                          textAlign: TextAlign.center),
+                                      child: Text(widget.lang.choosebank ?? 'Pilih Bank', textAlign: TextAlign.center),
                                     ),
                                   ),
                                 ),
@@ -149,8 +147,7 @@ class _ListBankAccountWidgetState extends State<ListBankAccountWidget> {
                                       child: Text(
                                         widget.lang.cancel ?? 'Batal',
                                         textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                            color: kHyppePrimary),
+                                        style: const TextStyle(color: kHyppePrimary),
                                       ),
                                     ),
                                   ),
@@ -166,8 +163,7 @@ class _ListBankAccountWidgetState extends State<ListBankAccountWidget> {
         });
   }
 
-  Widget makeRadioTiles(BuildContext context, PaymentMethodNotifier notifier,
-      GroupBankData data) {
+  Widget makeRadioTiles(BuildContext context, PaymentMethodNotifier notifier, GroupBankData data) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: RadioListTile(
@@ -191,8 +187,7 @@ class _ListBankAccountWidgetState extends State<ListBankAccountWidget> {
                   width: 35,
                   height: 35,
                   decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: imageProvider, fit: BoxFit.contain),
+                    image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
                   ),
                 );
               },
@@ -203,8 +198,7 @@ class _ListBankAccountWidgetState extends State<ListBankAccountWidget> {
                   decoration: const BoxDecoration(
                     image: DecorationImage(
                       fit: BoxFit.contain,
-                      image:
-                          AssetImage('${AssetPath.pngPath}content-error.png'),
+                      image: AssetImage('${AssetPath.pngPath}content-error.png'),
                     ),
                   ),
                 );
@@ -221,11 +215,7 @@ class _ListBankAccountWidgetState extends State<ListBankAccountWidget> {
             tenPx,
             Text(
               ' ${data.bankname ?? ''}',
-              style: TextStyle(
-                  color: data.selected ?? false ? Colors.black : Colors.grey,
-                  fontWeight: data.selected ?? false
-                      ? FontWeight.bold
-                      : FontWeight.normal),
+              style: TextStyle(color: data.selected ?? false ? Colors.black : Colors.grey, fontWeight: data.selected ?? false ? FontWeight.bold : FontWeight.normal),
             ),
           ],
         ),

@@ -140,6 +140,7 @@ class DisqusLogs {
   int? sequenceNumber;
   String? createdAt;
   String? txtMessages;
+  String? gift;
   SenderInfo? senderInfo;
   String? receiver;
   String? sender;
@@ -153,6 +154,7 @@ class DisqusLogs {
     this.sequenceNumber,
     this.createdAt,
     this.txtMessages,
+    this.gift,
     this.senderInfo,
     this.receiver,
     this.sender,
@@ -167,6 +169,7 @@ class DisqusLogs {
     sequenceNumber = json['sequenceNumber'];
     createdAt = json['createdAt'];
     txtMessages = json['txtMessages'];
+    gift = json['gift'];
     senderInfo = json['senderInfo'] != null ? SenderInfo.fromJson(json['senderInfo']) : null;
     receiver = json['receiver'];
     sender = json['sender'];
@@ -188,6 +191,7 @@ class DisqusLogs {
     data['sequenceNumber'] = sequenceNumber;
     data['createdAt'] = createdAt;
     data['txtMessages'] = txtMessages;
+    data['gift'] = gift;
     if (senderInfo != null) {
       data['senderInfo'] = senderInfo?.toJson();
     }

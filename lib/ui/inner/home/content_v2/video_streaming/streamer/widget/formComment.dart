@@ -87,12 +87,17 @@ class FormCommentLive extends StatelessWidget {
               ],
             ),
           ),
-          // commentFocusNode!.hasFocus
-          //     ? Container()
-          //     : Padding(
-          //         padding: const EdgeInsets.only(left: 8.0),
-          //         child: IconButtonLive(widget: const CustomIconWidget(iconData: "${AssetPath.vectorPath}share2.svg", color: Colors.white, defaultColor: false), onPressed: () {}),
-          //       ),
+          commentFocusNode!.hasFocus
+              ? Container()
+              : Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: IconButtonLive(
+                    widget: const CustomIconWidget(iconData: "${AssetPath.vectorPath}share2.svg", color: Colors.white, defaultColor: false),
+                    onPressed: () {
+                      ShowBottomSheet().onShowShareLive(_);
+                    },
+                  ),
+                ),
           commentFocusNode!.hasFocus
               ? Container()
               : Padding(
@@ -106,6 +111,36 @@ class FormCommentLive extends StatelessWidget {
                         ShowBottomSheet.onStreamingOptions(context, notifier);
                       }),
                 ),
+          // Container(
+          //   decoration: const BoxDecoration(
+          //     shape: BoxShape.circle,
+          //   ),
+          //   child: Material(
+          //     shape: const CircleBorder(),
+          //     child: InkWell(
+          //       splashColor: Colors.black,
+          //       onTap: () {
+          //         ShowBottomSheet().onShowGiftLive(_);
+          //       },
+          //       onTapUp: (val) {},
+          //       customBorder: const CircleBorder(),
+          //       child: Ink(
+          //         decoration: const BoxDecoration(
+          //           shape: BoxShape.circle,
+          //           gradient: LinearGradient(
+          //             colors: [Color(0xff7552C0), Color(0xffAB22AF)],
+          //             stops: [0.25, 0.75],
+          //             begin: Alignment.centerLeft,
+          //             end: Alignment.centerRight,
+          //           ),
+          //         ),
+          //         height: 40,
+          //         width: 40,
+          //         child: Image.asset("${AssetPath.pngPath}gift.png"),
+          //       ),
+          //     ),
+          //   ),
+          // )
         ],
       ),
     );

@@ -78,12 +78,14 @@ import 'package:hyppe/ui/inner/home/content_v2/review_buy/pin_buy/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/review_buy/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/player/story_player.dart';
 import 'package:hyppe/ui/inner/home/content_v2/topupcoin/topupcoin_page.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/add_bank_account/camera_appeal_bank.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/add_bank_account/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/bank_account/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/detail_transaction/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/transaction_inprogress/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/success_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/withdrawal/pin_withdrawal/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/withdrawal/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/withdrawal/success_withdraw/screen.dart';
@@ -100,13 +102,18 @@ import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_5/screen.dar
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_6/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_7/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/success_screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/camera_verification.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/eula.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/preview.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/preview_selfie_support.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/success_support.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/screen.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/appeal/appeal_succeess_screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/appeal/pelanggaran_detail.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/feedback/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/screen.dart';
 import 'package:hyppe/ui/inner/home/widget/ads_in_between_full.dart';
@@ -339,6 +346,13 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const VerificationIDFailed());
       case Routes.verificationIDSuccess:
         return MaterialPageRoute(builder: (_) => const VerificationIDSuccess());
+      case Routes.previewSelfieSupport:
+        return MaterialPageRoute(builder: (_) => const PreviewSelfieSupport());
+      case Routes.verificationSupportSuccess:
+        return MaterialPageRoute(builder: (_) => const VerificationSupportSuccess());
+
+      case Routes.verificationCameraSupport:
+        return MaterialPageRoute(builder: (_) => const CameraVerification());
       case Routes.deleteAccount:
         return MaterialPageRoute(builder: (_) => const HyppeDeleteAccoount());
       case Routes.confirmDeleteAccount:
@@ -385,6 +399,11 @@ class Generate {
 
       case Routes.successWithdrawal:
         return MaterialPageRoute(builder: (_) => const SuccessWithdrawScreen());
+
+      case Routes.cameraAppealBank:
+        return MaterialPageRoute(builder: (_) => const CameraAppealBank());
+      case Routes.successAppealBank:
+        return MaterialPageRoute(builder: (_) => const SuccessPageTransaction());
 
       case Routes.pinScreen:
         return MaterialPageRoute(builder: (_) => const PinScreen());
@@ -472,6 +491,10 @@ class Generate {
             builder: (_) => ViewStreamingScreen(
                   args: settings.arguments as ViewStreamingArgument,
                 ));
+
+      case Routes.appealLiveSuccess:
+        return MaterialPageRoute(builder: (_) => const AppealSuccessStreamingScreen());
+
       case Routes.picFullScreenDetail:
         return CupertinoPageRoute(builder: (_) => PicFullscreenPage(argument: settings.arguments as PicFullscreenArgument));
       case Routes.picScrollFullScreenDetail:
@@ -491,7 +514,7 @@ class Generate {
       // return MaterialPageRoute(builder: (_) => const VerificationPinPage(), settings: settings);
       case Routes.finishTrxPage:
         return MaterialPageRoute(builder: (_) => const FinishTrxPage(), settings: settings);
-      
+
       case Routes.addlink:
         return MaterialPageRoute(builder: (_) => const AddLinkPage(), settings: settings);
 
@@ -503,7 +526,7 @@ class Generate {
 
       case Routes.contentgift:
         return MaterialPageRoute(builder: (_) => const ActivationGiftScreen(), settings: settings);
-      
+
       case Routes.historyordercoin:
         return MaterialPageRoute(builder: (_) => const HistoryOrderCoinScreen(), settings: settings);
       

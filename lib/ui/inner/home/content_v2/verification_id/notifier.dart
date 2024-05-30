@@ -81,6 +81,8 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   List<File>? _pickedSupportingDocs = [];
   bool _isLoading = false;
   bool get isLoading => _isLoading;
+  bool proses1 = true;
+  bool activeButtonForm = false;
 
   CameraNotifier cameraNotifier = CameraNotifier();
   CameraDevicesNotifier cameraDevicesNotifier = CameraDevicesNotifier();
@@ -88,6 +90,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   TextEditingController _birtDateController = TextEditingController();
   TextEditingController _birtPlaceController = TextEditingController();
   TextEditingController _genderController = TextEditingController();
+  TextEditingController nikCtrl = TextEditingController();
 
   TextEditingController get realNameController => _realNameController;
   set realNameController(TextEditingController val) {
@@ -110,6 +113,13 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   TextEditingController get genderController => _genderController;
   set genderController(TextEditingController val) {
     _genderController = val;
+    notifyListeners();
+  }
+
+  bool _isSupportDoc = false;
+  bool get isSupportDoc => _isSupportDoc;
+  set isSupportDoc(bool val) {
+    _isSupportDoc = val;
     notifyListeners();
   }
 
@@ -329,6 +339,8 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
     }
 
     if (idCardName == "" || idCardNumber == "") {
+      proses1 = false;
+      notifyListeners();
       final bloc = VerificationIDBloc();
       await bloc.postKtp(context, nama: realName, idCardFile: imagePath);
       final fetch = bloc.postsFetch;
@@ -355,16 +367,29 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
     // } else {
     //   cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
     // }
-    ShowGeneralDialog.loadingDialog(context);
+    proses1 = true;
+    ShowGeneralDialog.loadingKycDialog(context);
+
     cameraNotifier.takePicture(context).then((filePath) async {
       if (filePath != null) {
         imagePath = filePath.path;
         aspectRatio = cameraNotifier.cameraAspectRatio;
         await validateIDCard(context);
-        Routing().moveAndPop(Routes.verificationIDStep5);
+        // Routing().moveAndPop(Routes.verificationIDStep5);
         context.read<CameraNotifier>().flashOff(Routing.navigatorKey.currentContext ?? context);
+        if (idCardName == "" || idCardNumber == "") {
+          ShowGeneralDialog.failedGetKTP(context, functionPrimary: () {});
+        }
       }
     });
+  }
+
+  void toSupportDoc() {
+    idCardName = realNameController.text;
+    isSupportDoc = true;
+    notifyListeners();
+    Routing().moveBack();
+    Routing().moveAndPop(Routes.verificationIDStep5);
   }
 
   void onTakeSelfie(BuildContext context) {
@@ -388,11 +413,12 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
           print("Camera Path => " + imagePath);
         }
 
-
         if (selfieOnSupportDocs) {
+          // notifier.onSaveSupportedDocument(context);
           // onPickSupportedDocument(context, true);
           // pickedSupportingDocs!.add(filePath);
-          Routing().moveAndPop(Routes.verificationIDStep7, argument:(cameraDirection == CameraLensDirection.back));
+          // Routing().moveAndPop(Routes.verificationIDStep7, argument: (cameraDirection == CameraLensDirection.back));
+          Routing().moveAndPop(Routes.previewSelfieSupport);
         } else {
           await postVerificationData(context);
         }
@@ -534,11 +560,34 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
     }
   }
 
+  void takePictSupport(BuildContext context) {
+    CameraDevicesNotifier cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+
+    cameraNotifier.takePicture(context).then((value) async {
+      print("hasil $value");
+      if (value != null) {
+        if (pickedSupportingDocs != null) {
+          if (pickedSupportingDocs!.length < 3) {
+            pickedSupportingDocs!.add(File(value.path));
+            Routing().moveAndPop(Routes.verificationIDStepSupportingDocsPreview);
+          } else {
+            ShowGeneralDialog.pickFileErrorAlert(context, language.max3Images ?? 'Max 3 images');
+            isLoading = false;
+          }
+        }
+      }
+
+      ///////
+    });
+  }
+
   void onSaveSupportedDocument(BuildContext context) async {
     isLoading = true;
     try {
       debugPrint('idCardFile => ' + imagePath);
-      debugPrint('selfieFile => ' + selfiePath);
+      debugPrint('selfieFile => ' + "${pickedSupportingDocs}");
+      ShowGeneralDialog.loadingKycDialog(context);
+
       final bloc = VerificationIDBloc();
       await bloc
           .postVerificationIDWithSupportDocsBloc(
@@ -574,14 +623,15 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
 
         SharedPreference().writeStorage(SpKeys.statusVerificationId, REVIEW);
 
-        bool? _sheetResponse = await ShowBottomSheet().onShowColouredSheet(
-          context,
-          "Success Upload",
-          maxLines: 2,
-        );
-        print('inin $_sheetResponse');
+        // bool? _sheetResponse = await ShowBottomSheet().onShowColouredSheet(
+        //   context,
+        //   "Success Upload",
+        //   maxLines: 2,
+        // );
+        // print('inin $_sheetResponse');
         // if (_sheetResponse) {
-        clearAndMoveToLobby();
+        Routing().move(Routes.verificationSupportSuccess);
+        // clearAndMoveToLobby();
         // }
       } else if (fetch.verificationIDState == VerificationIDState.loading) {
         {
@@ -657,6 +707,15 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
     pickedSupportingDocs = [];
 
     Routing().moveAndPop(Routes.verificationIDStep6);
+  }
+
+  void retryCameraSupport(BuildContext context) {
+    selfiePath = "";
+    pickedSupportingDocs = [];
+    pickedSupportingDocs?.clear();
+    notifyListeners();
+
+    Routing().moveAndPop(Routes.verificationCameraSupport);
   }
 
   void clearAndMoveToLobby() {
@@ -749,6 +808,18 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
     );
   }
 
+  void checkActiveButton() {
+    if (isSupportDoc) {
+      if (nikCtrl.text != '' && genderController.text != '' && birtDateController.text != '' && birtPlaceController.text != '') {
+        activeButtonForm = true;
+        notifyListeners();
+      } else {
+        activeButtonForm = false;
+        notifyListeners();
+      }
+    }
+  }
+
   @override
   void onPauseRecordedVideo(BuildContext context) async {
     if (!(await WakelockPlus.enabled)) {
@@ -777,7 +848,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   void onStopRecordedVideo(BuildContext context) {
     // TODO: implement onStopRecordedVideo
     WakelockPlus.disable();
-"================ disable wakelock 7".logger();
+    "================ disable wakelock 7".logger();
   }
 
   @override

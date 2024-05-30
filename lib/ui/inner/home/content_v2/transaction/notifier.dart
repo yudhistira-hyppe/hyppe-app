@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/bloc/saldo_coin/bloc.dart';
 import 'package:hyppe/core/bloc/saldo_coin/state.dart';
@@ -16,9 +18,12 @@ import 'package:hyppe/core/models/collection/transaction/withdrawal_summary_mode
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/entities/camera_devices/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/add_bank_account/camera_appeal_bank.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/add_bank_account/preview_doc_appeal.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/filter/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/dialog_filters.dart';
 import 'package:hyppe/ux/path.dart';
@@ -37,7 +42,7 @@ class TransactionNotifier extends ChangeNotifier {
 
   int _saldoCoin = 0;
   int get saldoCoin => _saldoCoin;
-  set saldoCoin(int val){
+  set saldoCoin(int val) {
     _saldoCoin = val;
     notifyListeners();
   }
@@ -119,20 +124,19 @@ class TransactionNotifier extends ChangeNotifier {
   int get secondVa => _secondVa;
 
   Future initSaldo(BuildContext context) async {
-    try{
+    try {
       final bloc = SaldoCoinDataBloc();
       await bloc.getSaldoCoin(context);
       if (bloc.dataFetch.dataState == SaldoCoinState.getBlocSuccess) {
-        saldoCoin = bloc.dataFetch.data??0;
-      }else{
+        saldoCoin = bloc.dataFetch.data ?? 0;
+      } else {
         saldoCoin = 0;
       }
-      
-    }catch(_){
+    } catch (_) {
       debugPrint(_.toString());
     }
   }
-  
+
   //Selected Value Transaction
   List selectedFiltersValue = [];
   String selectedFiltersLabel = 'Semua Transaksi';
@@ -141,10 +145,10 @@ class TransactionNotifier extends ChangeNotifier {
   int selectedDateValue = 1;
   String selectedDateLabel = 'Semua Tanggal';
   List<GroupModel> filterDate = [
-      GroupModel(text: "All", index: 1, selected: true),
-      GroupModel(text: "Last 7 Days", index: 2, selected: false),
-      GroupModel(text: "Last 30 Days", index: 3, selected: false),
-    ];
+    GroupModel(text: "All", index: 1, selected: true),
+    GroupModel(text: "Last 7 Days", index: 2, selected: false),
+    GroupModel(text: "Last 30 Days", index: 3, selected: false),
+  ];
 
   void getTypeFilter(BuildContext context) {
     final language = context.read<TranslateNotifierV2>().translate;
@@ -159,12 +163,12 @@ class TransactionNotifier extends ChangeNotifier {
   }
 
   void pickType(int? index) {
-    if (selectedFiltersValue.contains(filterList[index??0].text)) {
-      selectedFiltersValue.removeWhere((v) => v == filterList[index??0].text);
-      filterList[index??0].selected = false;
+    if (selectedFiltersValue.contains(filterList[index ?? 0].text)) {
+      selectedFiltersValue.removeWhere((v) => v == filterList[index ?? 0].text);
+      filterList[index ?? 0].selected = false;
     } else {
-      filterList[index??0].selected = true;
-      selectedFiltersValue.add(filterList[index??0].text);
+      filterList[index ?? 0].selected = true;
+      selectedFiltersValue.add(filterList[index ?? 0].text);
     }
     notifyListeners();
   }
@@ -174,7 +178,7 @@ class TransactionNotifier extends ChangeNotifier {
       print(selectedFiltersValue[i]);
       int idx = filterList.indexWhere((e) => e.text == selectedFiltersValue[i]);
       // print(idx);
-      if (idx != -1){
+      if (idx != -1) {
         filterList[idx].selected = true;
       }
     }
@@ -186,13 +190,13 @@ class TransactionNotifier extends ChangeNotifier {
       filterDate[i].selected = false;
     }
     filterDate[filterDate.indexWhere((element) => element.index == selectedDateValue)].selected = true;
-    if (selectedDateValue == 1){
+    if (selectedDateValue == 1) {
       selectedDateLabel = 'Semua Tanggal';
-    }else{
-      if (filterDate.firstWhere((element) => element.selected == true).index == 4){
+    } else {
+      if (filterDate.firstWhere((element) => element.selected == true).index == 4) {
         var res = filterDate.firstWhere((element) => element.selected == true);
         selectedDateLabel = res.text;
-      }else{
+      } else {
         selectedDateLabel = filterDate.firstWhere((element) => element.selected == true).text;
       }
     }
@@ -201,7 +205,7 @@ class TransactionNotifier extends ChangeNotifier {
 
   bool _selectedTransaksi = false;
   bool get selectedTransaksi => _selectedTransaksi;
-  set selectedTransaksi(bool val){
+  set selectedTransaksi(bool val) {
     _selectedTransaksi = val;
     notifyListeners();
   }
@@ -214,9 +218,8 @@ class TransactionNotifier extends ChangeNotifier {
         isScrollControlled: true,
         builder: (context) {
           return const DialogFilters();
-        }
-    ).whenComplete(() {
-      if (!selectedTransaksi){
+        }).whenComplete(() {
+      if (!selectedTransaksi) {
         selectedFiltersValue.clear();
         selectedFiltersLabel = 'Semua Transaksi';
         isLoading = true;
@@ -233,11 +236,10 @@ class TransactionNotifier extends ChangeNotifier {
         isScrollControlled: true,
         builder: (context) {
           return const DialogDate();
-        }
-    );
+        });
   }
 
-  void resetSelected(){
+  void resetSelected() {
     for (var i = 0; i < filterDate.length; i++) {
       filterDate[i].selected = false;
     }
@@ -374,20 +376,21 @@ class TransactionNotifier extends ChangeNotifier {
         context: context,
         isScrollControlled: true,
         builder: (context) {
-          return ListBankAccountWidget(lang: lang, position: position,);
-        }
-    );
+          return ListBankAccountWidget(
+            lang: lang,
+            position: position,
+          );
+        });
   }
 
   void bankInsert(BankData data, {bool? position}) {
     bankDataSelected = data;
     nameAccount.text = data.bankname ?? '';
     bankcode = data.bankcode;
-    if (!(position??false)){
+    if (!(position ?? false)) {
       Routing().moveBack();
       navigateToAddBankAccount();
     }
-    
   }
 
   Future initTransactionHistory(BuildContext context) async {
@@ -448,15 +451,15 @@ class TransactionNotifier extends ChangeNotifier {
   void filter(BuildContext context) {
     DateTime dateToday = DateTime.now();
     String date = dateToday.toString().substring(0, 10);
-    _param={};
+    _param = {};
     for (var i = 0; i < filterDate.length; i++) {
-      if (filterDate[i].selected == true){
-        if (filterDate[i].index == 2){
+      if (filterDate[i].selected == true) {
+        if (filterDate[i].index == 2) {
           var start = DateTime(dateToday.year, dateToday.month, dateToday.day - 7);
           final newStartDate = start.toString().substring(0, 10);
           _param.addAll({"startdate": newStartDate, "enddate": date});
         }
-        if (filterDate[i].index == 3){
+        if (filterDate[i].index == 3) {
           var startDate = DateTime(dateToday.year, dateToday.month, dateToday.day - 30);
           final newStartDate = startDate.toString().substring(0, 10);
           _param.addAll({"startdate": newStartDate, "enddate": date});
@@ -465,22 +468,22 @@ class TransactionNotifier extends ChangeNotifier {
     }
 
     for (var i = 0; i < filterList.length; i++) {
-      if (filterList[i].index == 1){
+      if (filterList[i].index == 1) {
         _param.addAll({"buy": filterList[i].selected});
       }
-      if (filterList[i].index == 2){
+      if (filterList[i].index == 2) {
         _param.addAll({"sell": filterList[i].selected});
       }
-      if (filterList[i].index == 3){
+      if (filterList[i].index == 3) {
         _param.addAll({"withdrawal": filterList[i].selected});
       }
-      if (filterList[i].index == 4){
+      if (filterList[i].index == 4) {
         _param.addAll({"boost": filterList[i].selected});
       }
-      if (filterList[i].index == 5){
+      if (filterList[i].index == 5) {
         _param.addAll({"rewards": filterList[i].selected});
       }
-      if (filterList[i].index == 6){
+      if (filterList[i].index == 6) {
         _param.addAll({"voucher": filterList[i].selected});
       }
     }
@@ -491,7 +494,6 @@ class TransactionNotifier extends ChangeNotifier {
     _param.addAll({"skip": _skip, "limit": _limit, "email": email});
     dataAllTransaction = [];
     getAllTransaction(context, param2: _param, fromNewFilter: true);
-    
   }
 
   Future getAllTransaction(BuildContext context, {Map? param2, bool loading = true, bool fromNewFilter = false}) async {
@@ -537,7 +539,7 @@ class TransactionNotifier extends ChangeNotifier {
       notifyListeners();
     } catch (e) {}
   }
-  
+
   Future initTransactionHistoryInProgress(BuildContext context) async {
     if (dataTransactionInProgress?.isEmpty ?? false) isLoadingInProgress = true;
 
@@ -695,13 +697,48 @@ class TransactionNotifier extends ChangeNotifier {
       final Map params = {"email": email, "noRek": noBankAccount.text, "bankcode": bankcode, "nama": accountOwnerName.text, "language": langIso};
 
       final notifier = TransactionBloc();
-      await notifier.createBankAccount(context, params: params);
+      if (context.mounted) await notifier.createBankAccount(context, params: params);
       final fetch = notifier.transactionFetch;
 
       if (fetch.postsState == TransactionState.addBankAccontSuccess) {
         if (fetch.data == null) {
           messageAddBankError = fetch.message;
           Routing().moveBack();
+          if (context.mounted) {
+            ShowGeneralDialog.generalDialog(
+              context,
+              functionPrimary: () {
+                Routing().moveAndPop(Routes.cameraAppealBank);
+              },
+              functionSecondary: () {
+                Routing().moveBack();
+              },
+              titleText: language.failedToAddBankAccount,
+              barrierDismissible: true,
+              bodyText: '',
+              titleButtonPrimary: language.uploadSupportDoc,
+              titleButtonSecondary: language.cancel,
+              isHorizontal: false,
+              bodyWidget: Container(
+                margin: EdgeInsets.only(bottom: 16),
+                child: RichText(
+                  text: TextSpan(
+                      text: language.desc1FailedToAddBankAccount,
+                      children: [
+                        TextSpan(
+                            text: language.desc2FailedToAddBankAccount,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                            )),
+                      ],
+                      style: TextStyle(color: kHyppeTextLightPrimary)),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            );
+          }
+
+          // Routing().moveBack();
         } else {
           dataAcccount?.add(BankAccount.fromJSON(fetch.data));
           dataAcccount?.last.bankName = _nameAccount.text;
@@ -1058,6 +1095,110 @@ class TransactionNotifier extends ChangeNotifier {
       });
     }
     return pandingTransaction;
+  }
+
+  List<File>? _pickedSupportingDocs = [];
+  List<File>? get pickedSupportingDocs => _pickedSupportingDocs;
+  set pickedSupportingDocs(List<File>? val) {
+    _pickedSupportingDocs = val;
+    notifyListeners();
+  }
+
+  void takePictSupport(BuildContext context) {
+    CameraDevicesNotifier cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+    final language = context.read<TranslateNotifierV2>().translate;
+    cameraNotifier.takePicture(context).then((value) async {
+      print("hasil $value");
+      if (value != null) {
+        if (pickedSupportingDocs != null) {
+          if (pickedSupportingDocs!.length < 3) {
+            pickedSupportingDocs!.add(File(value.path));
+            // Routing().moveAndPop(Routes.verificationIDStepSupportingDocsPreview);
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const PreviewDocAppeal()));
+          } else {
+            ShowGeneralDialog.pickFileErrorAlert(context, language.max3Images ?? 'Max 3 images');
+            isLoading = false;
+          }
+        }
+      }
+
+      ///////
+    });
+  }
+
+  void onPickSupportedDocument(BuildContext context, mounted) async {
+    isLoading = true;
+    // SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
+    final language = context.read<TranslateNotifierV2>().translate;
+    try {
+      await System().getLocalMedia(featureType: FeatureType.other, context: context).then((value) async {
+        debugPrint('Pick => ' + value.toString());
+        debugPrint('Pick =>  ${value.values.length}');
+        if (pickedSupportingDocs != null) {
+          if (pickedSupportingDocs!.length < 3) {
+            if (value.values.single != null) {
+              // pickedSupportingDocs = value.values.single;
+              for (var element in value.values.single!) {
+                if (pickedSupportingDocs!.length < 3) {
+                  pickedSupportingDocs!.add(element);
+                } else {
+                  ShowGeneralDialog.pickFileErrorAlert(context, language.max3Images ?? 'Max 3 images');
+                }
+              }
+              // fetch.data['data'].forEach((v) => dataAllTransaction?.add(TransactionHistoryModel.fromJSON(v)));
+
+              isLoading = false;
+              if (pickedSupportingDocs?.length == 1) {
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const PreviewDocAppeal()));
+              } else {
+                // Routing().moveBack();
+              }
+            } else {
+              isLoading = false;
+              if (value.keys.single.isNotEmpty) {
+                ShowGeneralDialog.pickFileErrorAlert(context, value.keys.single);
+              }
+            }
+          } else {
+            ShowGeneralDialog.pickFileErrorAlert(context, language.max3Images ?? 'Max 3 images');
+            isLoading = false;
+          }
+        }
+      });
+    } catch (e) {
+      isLoading = false;
+      ShowGeneralDialog.pickFileErrorAlert(context, language.sorryUnexpectedErrorHasOccurred ?? '');
+    }
+  }
+
+  Future submitAppealBank(BuildContext context) async {
+    bool connect = await System().checkConnections();
+    if (context.mounted) ShowGeneralDialog.loadingKycDialog(context);
+    if (connect) {
+      final notifier = TransactionBloc();
+      final language = context.read<TranslateNotifierV2>().translate;
+      final langIso = SharedPreference().readStorage(SpKeys.isoCode);
+      final email = SharedPreference().readStorage(SpKeys.email);
+
+      if (context.mounted) {
+        await notifier.postAppealBloc(context, docFiles: pickedSupportingDocs, bankcode: bankcode, email: email, language: langIso, nama: accountOwnerName.text, noRek: noBankAccount.text);
+      }
+      final fetch = notifier.transactionFetch;
+
+      if (fetch.postsState == TransactionState.checkPandingSuccess) {
+        Routing().moveAndPop(Routes.successAppealBank);
+      }
+      if (fetch.postsState == TransactionState.checkPandingError) {
+        Routing().moveBack();
+      }
+    } else {
+      if (context.mounted) {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
+          createWithdraw(context, pinController.text);
+        });
+      }
+    }
   }
 }
 

@@ -201,7 +201,7 @@ class PaymentCoinNotifier with ChangeNotifier {
           "bankcode": bankSelected,
           "product_id": selectedCoin.package_id,
           "type": 'COIN',
-          "paymentmethod": 'VA',
+          "paymentmethod": 'Virtual Account',
           "productCode": 'CN',
           "platform":"APP"
         });
@@ -211,7 +211,7 @@ class PaymentCoinNotifier with ChangeNotifier {
           "bankcode": bankSelected,
           "product_id": selectedCoin.package_id,
           "type": 'COIN',
-          "paymentmethod": 'VA',
+          "paymentmethod": 'Virtual Account',
           "productCode": 'CN',
           "platform":"APP"
         });

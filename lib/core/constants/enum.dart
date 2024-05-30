@@ -38,7 +38,7 @@ enum TypeApiSearch { normal, detailHashTag, detailInterest }
 
 enum AdsType { between, content, popup }
 
-enum StatusStream { offline, prepare, standBy, ready, online }
+enum StatusStream { offline, prepare, standBy, ready, online, banned, onlineReported }
 
 enum ErrorType {
   myStory,
@@ -84,7 +84,7 @@ enum TransactionType { sell, buy, withdrawal, boost, reward, voucher, disburseme
 
 enum VerifyPageRedirection { toLogin, toHome, toSignUpV2, none }
 
-enum InteractiveEventType { unfollow, following, follower, view, reaction, transactions, verificationid, supportfile, none, coin }
+enum InteractiveEventType { unfollow, following, follower, view, reaction, transactions, verificationid, supportfile, none, coin, live }
 
 enum InteractiveEvent { initial, accept, request, done, revoke, none }
 

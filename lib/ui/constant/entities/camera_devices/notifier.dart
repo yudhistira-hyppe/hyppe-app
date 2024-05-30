@@ -116,7 +116,7 @@ class CameraDevicesNotifier extends LoadingNotifier with ChangeNotifier {
       await disposeCamera();
       notifyListeners();
     }
-    if(camera.isEmpty){
+    if (camera.isEmpty) {
       camera = await availableCameras();
     }
 
@@ -165,7 +165,7 @@ class CameraDevicesNotifier extends LoadingNotifier with ChangeNotifier {
       cameraController = null;
       'Dispose camera success...'.logger();
     } catch (e) {
-      e.logger();
+      "dispose camera error $e".logger();
     }
   }
 
@@ -175,7 +175,7 @@ class CameraDevicesNotifier extends LoadingNotifier with ChangeNotifier {
       if (Platform.isIOS) await _system.getIosInfo().then((value) => _iOSVersion = value.systemVersion);
     } catch (e) {
       'prepareCameraPage error: $e'.logger();
-      if(onError != null){
+      if (onError != null) {
         onError(e);
       }
     }
@@ -244,7 +244,7 @@ class CameraDevicesNotifier extends LoadingNotifier with ChangeNotifier {
     if (!isInitialized) {
       return;
     }
-    if(notifier.featureType == FeatureType.story){
+    if (notifier.featureType == FeatureType.story) {
       await cameraController?.setFlashMode(FlashMode.always);
     }
 
@@ -267,7 +267,7 @@ class CameraDevicesNotifier extends LoadingNotifier with ChangeNotifier {
       return null;
     }
 
-    if(notifier.featureType == FeatureType.story){
+    if (notifier.featureType == FeatureType.story) {
       await cameraController?.setFlashMode(FlashMode.off);
     }
     try {

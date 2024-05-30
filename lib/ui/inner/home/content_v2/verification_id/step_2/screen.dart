@@ -6,6 +6,7 @@ import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
@@ -20,7 +21,7 @@ class VerificationIDStep2 extends StatefulWidget {
 }
 
 class _VerificationIDStep2State extends State<VerificationIDStep2> {
-
+  String nama = '';
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationIDStep2');
@@ -51,13 +52,13 @@ class _VerificationIDStep2State extends State<VerificationIDStep2> {
         body: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomTextWidget(
-                    textToDisplay: notifier.language.realName ?? '',
+                    textToDisplay: notifier.language.fullName ?? '',
                     textStyle: textTheme.titleMedium,
                   ),
                   Container(
@@ -75,6 +76,13 @@ class _VerificationIDStep2State extends State<VerificationIDStep2> {
                       keyboardAppearance: Brightness.light,
                       cursorColor: const Color(0xff8A3181),
                       style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
+                      onChanged: (value) {
+                        print("hahaha $value");
+                        setState(() {
+                          nama = value;
+                        });
+                        print("hahaha $nama");
+                      },
                       decoration: InputDecoration(
                         hintStyle: textTheme.bodyText2,
                         errorBorder: InputBorder.none,
@@ -94,22 +102,27 @@ class _VerificationIDStep2State extends State<VerificationIDStep2> {
                       textToDisplay: notifier.language.reaNameNotice ?? '')
                 ],
               ),
-              Visibility(
-                visible: !keyboardIsOpen,
-                child: CustomElevatedButton(
-                  width: SizeConfig.screenWidth,
-                  height: 44.0 * SizeConfig.scaleDiagonal,
-                  function: () => notifier.submitStep2(context),
-                  child: CustomTextWidget(
-                    textToDisplay: notifier.language.continueStep ?? '',
-                    textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
-                  ),
-                  buttonStyle: ButtonStyle(
-                    foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                    shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                    overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                    backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                  ),
+              twentyFourPx,
+              CustomElevatedButton(
+                width: SizeConfig.screenWidth,
+                height: 44.0 * SizeConfig.scaleDiagonal,
+                function: () => notifier.submitStep2(context),
+                buttonStyle: nama != ''
+                    ? ButtonStyle(
+                        foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                        shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                        overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                        backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                      )
+                    : ButtonStyle(
+                        foregroundColor: MaterialStateProperty.all(const Color(0xFFCECECE)),
+                        shadowColor: MaterialStateProperty.all(const Color(0xFFCECECE)),
+                        overlayColor: MaterialStateProperty.all(const Color(0xFFCECECE)),
+                        backgroundColor: MaterialStateProperty.all(const Color(0xFFCECECE)),
+                      ),
+                child: CustomTextWidget(
+                  textToDisplay: notifier.language.continueStep ?? '',
+                  textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                 ),
               ),
             ],

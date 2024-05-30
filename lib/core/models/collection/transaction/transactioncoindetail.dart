@@ -27,9 +27,14 @@ class DetailTransactionCoin {
   String? bank;
   int? totalamount;
   String? packageid;
+  String? expiredtimeva;
   String? methodename;
   String? bankname;
   String? bankcode;
+  String? bankIcon;
+  String? atm;
+  String? internetBanking;
+  String? mobileBanking;
   String? jenisTransaksi;
 
   DetailTransactionCoin(
@@ -61,9 +66,14 @@ class DetailTransactionCoin {
       this.bank,
       this.totalamount,
       this.packageid,
+      this.expiredtimeva,
       this.methodename,
       this.bankname,
       this.bankcode,
+      this.bankIcon,
+      this.atm,
+      this.mobileBanking,
+      this.internetBanking,
       this.jenisTransaksi});
 
   DetailTransactionCoin.fromJson(Map<String, dynamic> json) {
@@ -95,9 +105,14 @@ class DetailTransactionCoin {
     bank = json['bank'];
     totalamount = json['totalamount'];
     packageid = json['product_id'];
+    expiredtimeva = json['expiredtimeva'];
     methodename = json['methodename'];
     bankname = json['bankname'];
     bankcode = json['bankcode'];
+    bankIcon = json['bankIcon'];
+    atm = json['atm'];
+    internetBanking = json['internetBanking'];
+    mobileBanking = json['mobileBanking'];
     jenisTransaksi = json['jenisTransaksi'];
   }
 
@@ -131,9 +146,14 @@ class DetailTransactionCoin {
     data['bank'] = bank;
     data['totalamount'] = totalamount;
     data['product_id'] = packageid;
+    data['expiredtimeva'] = expiredtimeva;
     data['methodename'] = methodename;
     data['bankname'] = bankname;
     data['bankcode'] = bankcode;
+    data['bankIcon'] = bankIcon;
+    data['atm'] = atm;
+    data['mobileBanking'] = mobileBanking;
+    data['internetBanking'] = internetBanking;
     data['jenisTransaksi'] = jenisTransaksi;
     return data;
   }

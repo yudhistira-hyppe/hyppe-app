@@ -63,8 +63,7 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                           comment = '';
                         });
                         if (notifier.commentController.text.isNotOnlySpace()) {
-                          notifier.sendComment(context, notifier.streamerData!,
-                              notifier.commentController.text);
+                          notifier.sendComment(context, notifier.streamerData!, notifier.commentController.text);
                         }
                       }
                     }
@@ -72,27 +71,15 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                   inputFormatters: [LengthLimitingTextInputFormatter(150)],
                   decoration: InputDecoration(
                       counterText: '',
-                      hintText: notifier.isCommentDisable
-                          ? tn.commentsAreDisabled
-                          : tn.addComment,
+                      hintText: notifier.isCommentDisable ? tn.commentsAreDisabled : tn.addComment,
                       isDense: true, // important line
-                      contentPadding: EdgeInsets.fromLTRB(
-                          10,
-                          10,
-                          widget.commentFocusNode!.hasFocus ? 70 : 10,
-                          10), // control your hints text size
+                      contentPadding: EdgeInsets.fromLTRB(10, 10, widget.commentFocusNode!.hasFocus ? 70 : 10, 10), // control your hints text size
                       hintStyle: const TextStyle(color: Colors.white),
                       fillColor: kHyppeTransparent,
                       filled: true,
-                      border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                          borderSide: BorderSide.none),
-                      enabledBorder: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                          borderSide: BorderSide.none),
-                      focusedBorder: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                          borderSide: BorderSide.none)),
+                      border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(25.0)), borderSide: BorderSide.none),
+                      enabledBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(25.0)), borderSide: BorderSide.none),
+                      focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(25.0)), borderSide: BorderSide.none)),
                 ),
                 !widget.commentFocusNode!.hasFocus
                     ? Container()
@@ -107,43 +94,29 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                                     child: Container(
                                       height: 24,
                                       width: 75,
-                                      padding:
-                                          const EdgeInsets.only(right: 8.0),
+                                      padding: const EdgeInsets.only(right: 8.0),
                                       child: CustomTextButton(
                                           onPressed: () {
                                             if (notifier.streamerData != null) {
                                               setState(() {
                                                 comment = '';
                                               });
-                                              if (notifier
-                                                  .commentController.text
-                                                  .isNotOnlySpace()) {
-                                                notifier.sendComment(
-                                                    context,
-                                                    notifier.streamerData!,
-                                                    notifier.commentController
-                                                        .text);
+                                              if (notifier.commentController.text.isNotOnlySpace()) {
+                                                notifier.sendComment(context, notifier.streamerData!, notifier.commentController.text);
                                               }
                                             }
                                           },
                                           style: ButtonStyle(
-                                              visualDensity:
-                                                  VisualDensity.comfortable,
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      kHyppePrimary),
-                                              shape: MaterialStateProperty.all<
-                                                  RoundedRectangleBorder>(
+                                              visualDensity: VisualDensity.comfortable,
+                                              backgroundColor: MaterialStateProperty.all(kHyppePrimary),
+                                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                                 RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          18.0),
+                                                  borderRadius: BorderRadius.circular(18.0),
                                                 ),
                                               )),
                                           child: Text(
                                             tn.send ?? '',
-                                            style: const TextStyle(
-                                                color: kHyppeTextPrimary),
+                                            style: const TextStyle(color: kHyppeTextPrimary),
                                           )),
                                     )),
                               )
@@ -154,46 +127,80 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
           widget.commentFocusNode!.hasFocus
               ? Container()
               : GestureDetector(
-                onTap: () {
-                  // notifier.reportfAliplayer = widget.fAliplayer;
-                  notifier.reportdata = widget.data;
-                  print('data ===== ${widget.data}');
-                  ShowBottomSheet.onViewerOptions(context, notifier);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: CircleAvatar(
+                  onTap: () {
+                    // notifier.reportfAliplayer = widget.fAliplayer;
+                    notifier.reportdata = widget.data;
+                    print('data ===== ${widget.data}');
+                    ShowBottomSheet.onViewerOptions(context, notifier);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: CircleAvatar(
                       radius: 18,
                       backgroundColor: Colors.black.withOpacity(.3),
                       child: const Center(
-                        child: Icon(Icons.more_horiz, color: Colors.white,)
-                      ),
+                          child: Icon(
+                        Icons.more_horiz,
+                        color: Colors.white,
+                      )),
                     ),
+                  ),
                 ),
-              ),
 
           widget.commentFocusNode!.hasFocus
               ? Container()
               : GestureDetector(
-                onTap: (){
-                  print('Gesture Detector Share');
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: CircleAvatar(
+                  onTap: () {
+                    ShowBottomSheet().onShowShareLive(context, isViewer: true);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: CircleAvatar(
                       radius: 18,
                       backgroundColor: Colors.black.withOpacity(.3),
                       child: const Center(
                         child: CustomIconWidget(
-                            iconData: "${AssetPath.vectorPath}share2.svg",
-                            color: Colors.white,
-                            defaultColor: false,
-                          ),
+                          iconData: "${AssetPath.vectorPath}share2.svg",
+                          color: Colors.white,
+                          defaultColor: false,
+                        ),
                       ),
                     ),
+                  ),
+                ),
+
+          if (!widget.commentFocusNode!.hasFocus && (notifier.dataStreaming.user?.giftActivation ?? false))
+            Container(
+              padding: const EdgeInsets.only(left: 8.0),
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+              ),
+              child: Material(
+                shape: const CircleBorder(),
+                child: InkWell(
+                  splashColor: Colors.black,
+                  onTap: () {
+                    ShowBottomSheet().onShowGiftLive(context, idViewStream: notifier.dataStreaming.sId);
+                  },
+                  onTapUp: (val) {},
+                  customBorder: const CircleBorder(),
+                  child: Ink(
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                        colors: [Color(0xff7552C0), Color(0xffAB22AF)],
+                        stops: [0.25, 0.75],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ),
+                    ),
+                    height: 38,
+                    width: 38,
+                    child: Image.asset("${AssetPath.pngPath}gift.png"),
+                  ),
                 ),
               ),
-              
+            ),
           widget.commentFocusNode!.hasFocus
               ? Container()
               : Padding(
@@ -202,11 +209,10 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                       widget: Align(
                         alignment: Alignment.center,
                         child: CustomIconWidget(
-                          iconData:
-                              "${AssetPath.vectorPath}${notifier.isClicked ? 'ic_like_red.svg' : 'ic_like_stroke.svg'}",
+                          iconData: "${AssetPath.vectorPath}${notifier.isClicked ? 'ic_like_red.svg' : 'ic_like_stroke.svg'}",
                           color: notifier.isClicked ? null : Colors.white,
                           defaultColor: false,
-                          height: 24,
+                          height: 22,
                         ),
                       ),
                       onClicked: (state) {
@@ -220,7 +226,6 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                         // _debouncer.run(() {});
                       }),
                 ),
-
           // commentFocusNode!.hasFocus
           //     ? Container()
           //     : Padding(

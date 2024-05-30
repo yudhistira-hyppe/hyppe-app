@@ -19,6 +19,11 @@ class ContentMessageLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'ContentMessageLayout');
+    var imageContent = (message?.medias.first.apsara ?? false)
+        ? message?.medias.first.mediaThumbEndpoint ?? ''
+        : message?.medias.first.sId != null
+            ? System().showUserPicture(message?.medias.first.user?.avatar?.mediaEndpoint)
+            : System().showUserPicture(message?.medias.first.mediaThumbEndpoint);
     return Hero(
       tag: message.hashCode,
       child: InkWell(
@@ -27,9 +32,6 @@ class ContentMessageLayout extends StatelessWidget {
           // DateTime now = DateTime.parse('2023-02-21 15:11:14');
           DateTime imageDate = DateTime.parse(message?.medias.first.createdAt ?? '2020-01-01');
           var jumlahHari = System().menghitungJumlahHari(imageDate, now);
-          print(imageDate);
-          print(now);
-          print('jumlah hari $jumlahHari');
           if (jumlahHari < 1) {
             Routing().move(
               Routes.imagePreviewScreen,
@@ -56,7 +58,7 @@ class ContentMessageLayout extends StatelessWidget {
                 ),
               );
             },
-            imageUrl: (message?.medias.first.apsara ?? false) ? message?.medias.first.mediaThumbEndpoint ?? '' : System().showUserPicture(message?.medias.first.mediaThumbEndpoint),
+            imageUrl: imageContent,
             emptyWidget: Container(
               height: 50,
               decoration: const BoxDecoration(
@@ -71,4 +73,53 @@ class ContentMessageLayout extends StatelessWidget {
       ),
     );
   }
+  // return  Hero(
+  //   tag: message.hashCode,
+  //   child: InkWell(
+  //     onTap: () {
+  //       DateTime now = DateTime.now();
+  //       // DateTime now = DateTime.parse('2023-02-21 15:11:14');
+  //       DateTime imageDate = DateTime.parse(message?.medias.first.createdAt ?? '2020-01-01');
+  //       var jumlahHari = System().menghitungJumlahHari(imageDate, now);
+  //       if (jumlahHari < 1) {
+  //         Routing().move(
+  //           Routes.imagePreviewScreen,
+  //           argument: ImagePreviewArgument(
+  //             heroTag: message.hashCode,
+  //             sourceImage: ((message?.medias.first.apsara ?? false) ? message?.medias.first.mediaThumbEndpoint ?? '' : System().showUserPicture(message?.medias.first.mediaThumbEndpoint)) ?? '',
+  //           ),
+  //         );
+  //       }
+  //     },
+  //     child: ClipRRect(
+  //       borderRadius: BorderRadius.circular(12),
+  //       child: CustomCacheImage(
+  //         imageBuilder: (context, imageProvider) {
+  //           return Container(
+  //             height: 226,
+  //             width: 260,
+  //             decoration: BoxDecoration(
+  //               borderRadius: BorderRadius.circular(12),
+  //               image: DecorationImage(
+  //                 image: imageProvider,
+  //                 fit: BoxFit.cover,
+  //               ),
+  //             ),
+  //           );
+  //         },
+  //         imageUrl: imageContent,
+  //         emptyWidget: Container(
+  //           height: 50,
+  //           decoration: const BoxDecoration(
+  //             image: DecorationImage(
+  //               fit: BoxFit.contain,
+  //               image: AssetImage('${AssetPath.pngPath}content-error.png'),
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   ),
+  // );
+  // }
 }

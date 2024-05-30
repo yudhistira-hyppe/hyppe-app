@@ -1,15 +1,21 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/live_stream/streaming_model.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
+import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
 import 'package:hyppe/core/services/socket_live_service.dart';
+import 'package:hyppe/ui/constant/entities/general_mixin/general_mixin.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
+import 'package:hyppe/ux/path.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -29,12 +35,11 @@ import '../../../../../../core/services/system.dart';
 import '../../../../../../ux/routing.dart';
 import '../../../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'dart:math' as math;
-
 import 'widget/already_reported.dart';
 import 'widget/report_live.dart';
 import 'widget/respon_report_live.dart';
 
-class ViewStreamingNotifier with ChangeNotifier {
+class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
   LocalizationModelV2 language = LocalizationModelV2();
   translate(LocalizationModelV2 translate) {
     language = translate;
@@ -50,15 +55,24 @@ class ViewStreamingNotifier with ChangeNotifier {
   static const String eventLikeStream = 'LIKE_STREAM';
   static const String eventCommentDisable = 'COMMENT_STREAM_DISABLED';
   static const String eventStatusStream = 'STATUS_STREAM';
+  static const String eventKickUser = 'KICK_USER_STREAM';
+  static const String eventCommentPin = 'COMMENT_PINNED_STREAM_SINGLE';
+  static const String eventCommentDelete = 'COMMENT_DELETE_STREAM_SINGLE';
 
   String userName = '';
   String? _currentUserId = SharedPreference().readStorage(SpKeys.userID);
   String get currentUserId => _currentUserId ?? '';
 
   StreamingModel dataStreaming = StreamingModel();
+  CommentLiveModel? pinComment;
 
   ///Status => Offline - Prepare - StandBy - Ready - Online
   StatusStream statusLive = StatusStream.offline;
+
+  List<CommentLiveModel> giftBasic = [];
+  List<CommentLiveModel> giftBasicTemp = [];
+  List<CommentLiveModel> giftDelux = [];
+  List<CommentLiveModel> giftDeluxTemp = [];
 
   List<ViewersLiveModel> dataViewers = [];
   List<CommentLiveModel> comment = [];
@@ -123,7 +137,8 @@ class ViewStreamingNotifier with ChangeNotifier {
     isOver = false;
     endLive = false;
     comment = [];
-    // notifyListeners();
+    pinComment = null;
+    notifyListeners();
   }
 
   // Engine Agora
@@ -133,13 +148,22 @@ class ViewStreamingNotifier with ChangeNotifier {
   int? remoteUid = -1;
   bool localUserJoined = false;
 
+  Future<bool> requestPermission(BuildContext context) async {
+    final isGranted = await System().requestPermission(context, permissions: [Permission.camera, Permission.storage, Permission.microphone]);
+    if (isGranted) {
+      return isGranted;
+    } else {
+      await System().requestPermission(context, permissions: [Permission.camera, Permission.storage, Permission.microphone]);
+      return true;
+    }
+  }
 
   Future<void> initAgora(LinkStreamModel data) async {
     // retrieve permissions
     // await [Permission.microphone, Permission.camera].request();
 
     //create the engine
-    
+
     engine = createAgoraRtcEngine();
 
     await engine.initialize(const RtcEngineContext(
@@ -169,9 +193,8 @@ class ViewStreamingNotifier with ChangeNotifier {
           resionAgora = reason;
           notifyListeners();
         }),
-        onUserOffline: (RtcConnection connection, int uid,
-            UserOfflineReasonType reason) {
-              destoryPusher();
+        onUserOffline: (RtcConnection connection, int uid, UserOfflineReasonType reason) {
+          // destoryPusher();
           debugPrint("viewer remote user $uid left channel");
           remoteUid = -1;
           statusLive = StatusStream.offline;
@@ -179,32 +202,29 @@ class ViewStreamingNotifier with ChangeNotifier {
           notifyListeners();
         },
         onTokenPrivilegeWillExpire: (RtcConnection connection, String token) {
-          debugPrint(
-              '[onTokenPrivilegeWillExpire] connection: ${connection.toJson()}, token: $token');
+          debugPrint('[onTokenPrivilegeWillExpire] connection: ${connection.toJson()}, token: $token');
         },
       ),
     );
 
-    
     await engine.setClientRole(role: ClientRoleType.clientRoleAudience);
-    
+
     await engine.enableAudio();
     await engine.enableVideo();
     await engine.startPreview();
 
-    print('====== ${data.tempToken}');
-    print('====== ${data.sId}');
-    try{
+    print('====== ${data.tempToken} ${dataStreaming.tokenAgora}');
+    print('====== ${data.sId} ${dataStreaming.sId}');
+    try {
       await engine.joinChannel(
-        token: data.tempToken??'',
-        channelId: data.sId??'',
+        token: data.tempToken ?? (dataStreaming.tokenAgora ?? ''),
+        channelId: data.sId ?? (dataStreaming.sId ?? ''),
         uid: 0,
         options: const ChannelMediaOptions(),
       );
-    }catch(_){
+    } catch (_) {
       debugPrint('===== error');
     }
-    
   }
 
   sendComment(BuildContext context, LinkStreamModel model, String comment) async {
@@ -212,7 +232,8 @@ class ViewStreamingNotifier with ChangeNotifier {
     if (connect) {
       try {
         final notifier = LiveStreamBloc();
-        Map data = {"_id": model.sId, "messages": comment, "type": "COMMENT"};
+        Map data = {"_id": model.sId, "messages": comment, "type": "COMMENT", "commentType": "MESSAGGES"};
+        commentController.clear();
         await notifier.getLinkStream(Routing.navigatorKey.currentContext ?? context, data, UrlConstants.updateStream);
         // final fetch = notifier.liveStreamFetch;
         // if (fetch.postsState == LiveStreamState.getApiSuccess) {
@@ -222,7 +243,6 @@ class ViewStreamingNotifier with ChangeNotifier {
       } catch (e) {
         debugPrint(e.toString());
       }
-      commentController.clear();
     } else {
       if (context.mounted) {
         ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
@@ -240,6 +260,9 @@ class ViewStreamingNotifier with ChangeNotifier {
     _socketService.closeSocket(eventLikeStream);
     _socketService.closeSocket(eventCommentDisable);
     _socketService.closeSocket(eventStatusStream);
+    _socketService.closeSocket(eventKickUser);
+    _socketService.closeSocket(eventCommentPin);
+    _socketService.closeSocket(eventCommentDelete);
     disposeAgora();
     statusLive = StatusStream.offline;
     totLikes = 0;
@@ -428,12 +451,22 @@ class ViewStreamingNotifier with ChangeNotifier {
           isCommentDisable = dataStreaming.commentDisabled ?? false;
           totViews = dataStreaming.viewCountActive ?? 0;
           returnNext = true;
+          if (dataStreaming.comment != null && (dataStreaming.comment?.isNotEmpty ?? [].isNotEmpty)) {
+            pinComment = dataStreaming.comment?[0];
+          }
+          if (groupsReport.isEmpty && (dataStreaming.reportRemark?.isNotEmpty ?? [].isNotEmpty)) {
+            for (var i = 0; i < (dataStreaming.reportRemark?.length ?? 0); i++) {
+              var data = dataStreaming.reportRemark?[i];
+              groupsReport.add(GroupModel(text: data ?? '', index: i, selected: false));
+            }
+          }
           comment.insert(
             0,
             CommentLiveModel(
               email: SharedPreference().readStorage(SpKeys.email),
               avatar: Avatar(mediaEndpoint: context.read<HomeNotifier>().profileImage),
               messages: 'joined',
+              commentType: 'JOIN',
               username: context.read<SelfProfileNotifier>().user.profile?.username,
             ),
           );
@@ -526,24 +559,28 @@ class ViewStreamingNotifier with ChangeNotifier {
   Future<void> startViewStreaming(BuildContext context, mounted, LinkStreamModel data) async {
     // notifyListeners();
     var init = await initLiveStream(context, mounted, data);
-    if (init) {
+    if (init && (dataStreaming.status ?? false)) {
       // _socketService.closeSocket();
-      
+
       await Future.delayed(const Duration(seconds: 1));
       await initAgora(data);
       print("======== ini socket status ${_socketService.isRunning} =========");
-      
+
       // if (!_socketService.isRunning) {
       _connectAndListenToSocket(eventComment, data);
       _connectAndListenToSocket(eventLikeStream, data);
       _connectAndListenToSocket(eventViewStream, data);
       _connectAndListenToSocket(eventStatusStream, data);
       _connectAndListenToSocket(eventCommentDisable, data);
+      _connectAndListenToSocket(eventKickUser, data);
+      _connectAndListenToSocket(eventCommentPin, data);
+      _connectAndListenToSocket(eventCommentDelete, data);
       // }
 
       // _alivcLivePusher.startPushWithURL(pushURL);
     } else {
       statusLive = StatusStream.offline;
+      isOver = true;
       notifyListeners();
     }
   }
@@ -592,13 +629,35 @@ class ViewStreamingNotifier with ChangeNotifier {
   }
 
   void handleSocket(message, event, LinkStreamModel dataStream) async {
-    print("handlesocket ====================");
-    print("handlesocket ==================== $message $event");
     if (event == eventComment) {
       print("handlesocket 222 ==================== $message $event $dataStream");
       var messages = CommentLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
       if (messages.idStream == dataStream.sId) {
-        comment.insert(0, messages);
+        if (messages.commentType == 'MESSAGGES' || messages.commentType == 'JOIN') {
+          comment.insert(0, messages);
+        } else if (messages.commentType == 'GIFT') {
+          if (messages.urlGift != null) {
+            if (giftDelux.isEmpty) {
+              giftDelux.add(messages);
+            } else {
+              giftDeluxTemp.add(messages);
+            }
+            if (timerDeluxe?.isActive ?? false) {
+            } else {
+              startTimerDelux();
+            }
+          } else {
+            if (giftBasic.length <= 2) {
+              giftBasic.add(messages);
+            } else {
+              giftBasicTemp.add(messages);
+            }
+            if (timerBasic?.isActive ?? false) {
+            } else {
+              startTimerBasic();
+            }
+          }
+        }
         notifyListeners();
       }
     } else if (event == eventLikeStream) {
@@ -624,13 +683,14 @@ class ViewStreamingNotifier with ChangeNotifier {
           await Future.delayed(const Duration(milliseconds: 4500));
           dataStreaming.pause = messages.pause;
         } else {
+          totViewsEnd = messages.totalViews ?? 0;
           endLive = true;
           notifyListeners();
-          Fluttertoast.showToast(
-            msg: 'Live Streaming akan segera berakhir',
-            gravity: ToastGravity.CENTER,
-          );
-          totViewsEnd = messages.totalViews ?? 0;
+          // Fluttertoast.showToast(
+          //   msg: 'Live Streaming akan segera berakhir',
+          //   gravity: ToastGravity.CENTER,
+          // );
+          destoryPusher();
         }
       }
     } else if (event == eventCommentDisable) {
@@ -638,7 +698,53 @@ class ViewStreamingNotifier with ChangeNotifier {
       if (messages.idStream == dataStream.sId) {
         isCommentDisable = messages.comment ?? false;
       }
+    } else if (event == eventKickUser) {
+      var data = json.decode('$message');
+      if (data['data']['email'] == SharedPreference().readStorage(SpKeys.email)) {
+        isOver = true;
+        totViewsEnd = data['data']['totalViews'];
+        destoryPusher();
+      }
+    } else if (event == eventCommentPin) {
+      CommentLiveModel messages = CommentLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
+      if (messages.idStream == dataStream.sId) {
+        if (messages.pinned ?? false) {
+          insertPinComment(messages.idComment ?? '');
+        } else {
+          removePinComment();
+        }
+      }
+    } else if (event == eventCommentDelete) {
+      CommentLiveModel messages = CommentLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
+      if (messages.idStream == dataStream.sId) {
+        removeComment(messages.idComment ?? '');
+      }
     }
+
+    notifyListeners();
+  }
+
+  void insertPinComment(String idComment) async {
+    if (pinComment != null) {
+      comment.insert(0, pinComment ?? CommentLiveModel());
+    }
+    for (var e in comment) {
+      if (e.idComment == idComment) {
+        pinComment = e;
+      }
+    }
+    comment.removeWhere((element) => element.idComment == idComment);
+    notifyListeners();
+  }
+
+  void removePinComment() async {
+    comment.insert(0, pinComment ?? CommentLiveModel());
+    pinComment = null;
+    notifyListeners();
+  }
+
+  void removeComment(String idComment) async {
+    comment.removeWhere((element) => element.idComment == idComment);
 
     notifyListeners();
   }
@@ -648,26 +754,22 @@ class ViewStreamingNotifier with ChangeNotifier {
 
   //Modal List Transaction
   List<GroupModel> groupsReport = [
-    GroupModel(text: "Aktivitas ilegal", index: 1, selected: false),
-    GroupModel(
-        text: "Hak cipta dan kekayaan intelektual", index: 2, selected: false),
-    GroupModel(text: "Keamanan anak", index: 3, selected: false),
-    GroupModel(
-        text: "Keamanan dan integritas platform", index: 4, selected: false),
-    GroupModel(text: "Kekerasan dan ancaman", index: 5, selected: false),
-    GroupModel(
-        text: "Ketelanjangan dan konten seksual", index: 6, selected: false),
-    GroupModel(text: "Konten berbahaya", index: 7, selected: false),
-    GroupModel(text: "Pelecehan dan penindasan", index: 8, selected: false),
-    GroupModel(
-        text: "Privasi dan informasi pribadi", index: 9, selected: false),
-    GroupModel(text: "Spam dan penipuan", index: 10, selected: false),
-    GroupModel(text: "Ujaran kebencian", index: 11, selected: false),
+    // GroupModel(text: "Aktivitas ilegal", index: 1, selected: false),
+    // GroupModel(text: "Hak cipta dan kekayaan intelektual", index: 2, selected: false),
+    // GroupModel(text: "Keamanan anak", index: 3, selected: false),
+    // GroupModel(text: "Keamanan dan integritas platform", index: 4, selected: false),
+    // GroupModel(text: "Kekerasan dan ancaman", index: 5, selected: false),
+    // GroupModel(text: "Ketelanjangan dan konten seksual", index: 6, selected: false),
+    // GroupModel(text: "Konten berbahaya", index: 7, selected: false),
+    // GroupModel(text: "Pelecehan dan penindasan", index: 8, selected: false),
+    // GroupModel(text: "Privasi dan informasi pribadi", index: 9, selected: false),
+    // GroupModel(text: "Spam dan penipuan", index: 10, selected: false),
+    // GroupModel(text: "Ujaran kebencian", index: 11, selected: false),
   ];
   LinkStreamModel? reportdata;
 
   Future<void> reportLive(BuildContext context) async {
-    if (!alreadyReported) {
+    if (alreadyReported) {
       showModalBottomSheet<int>(
           backgroundColor: Colors.transparent,
           context: context,
@@ -691,21 +793,65 @@ class ViewStreamingNotifier with ChangeNotifier {
     }
   }
 
-
-  Future<void> responReportLive(BuildContext context) async {
-    showModalBottomSheet<int>(
-        backgroundColor: Colors.transparent,
-        context: context,
-        isScrollControlled: true,
-        isDismissible: false,
-        builder: (context) {
-          return const ResponsReportLive();
-        }).whenComplete(() {
-      // selectedReportValue = null;
-      debugPrint('Complete Report Live Streaming');
+  Future<void> sendReportLive(BuildContext context, String message) async {
+    Map param = {"_id": dataStreaming.sId, "messages": message, "type": "REPORT"};
+    await updateStream(context, context.mounted, param).then((value) {
+      if (value != null) {
+        Navigator.pop(context);
+        responReportLive(context);
+      }
     });
   }
 
+  Future<void> responReportLive(BuildContext context) async {
+    try {
+      showModalBottomSheet<int>(
+          backgroundColor: Colors.transparent,
+          context: context,
+          isScrollControlled: true,
+          isDismissible: false,
+          builder: (context) {
+            return const ResponsReportLive();
+          }).whenComplete(() {
+        // selectedReportValue = null;
+        debugPrint('Complete Report Live Streaming');
+      });
+    } catch (e) {
+      print("error $e");
+    }
+  }
+
+  Future updateStream(BuildContext context, mounted, Map data) async {
+    var dataReturn;
+    bool connect = await System().checkConnections();
+    if (connect) {
+      try {
+        print(data);
+        final notifier = LiveStreamBloc();
+
+        await notifier.getLinkStream(context, data, UrlConstants.updateStream);
+
+        final fetch = notifier.liveStreamFetch;
+        if (fetch.postsState == LiveStreamState.getApiSuccess) {
+          dataReturn = fetch.data;
+          dataReturn ??= 'Update stream succesfully';
+          notifyListeners();
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+
+      notifyListeners();
+    } else {
+      // returnNext = false;
+      if (context.mounted) {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
+        });
+      }
+    }
+    return dataReturn;
+  }
 
   double getRandomDouble(double min, double max) {
     // Membuat instance dari kelas Random
@@ -720,6 +866,72 @@ class ViewStreamingNotifier with ChangeNotifier {
 
     return randomValue;
   }
+
+  Timer? timerBasic;
+
+  void startTimerBasic() {
+    timerBasic = Timer.periodic(const Duration(seconds: 3), (timer) {
+      print("=== ${timer}");
+      print("=== ${giftBasic.isNotEmpty}");
+      if (giftBasic.isNotEmpty) {
+        print("===================================haous========================");
+        comment.insert(0, giftBasic[0]);
+        giftBasic.removeAt(0);
+        if (giftBasicTemp.isNotEmpty && giftBasic.length <= 2) {
+          giftBasic.add(giftBasicTemp[0]);
+          giftBasicTemp.removeAt(0);
+        }
+
+        notifyListeners();
+      } else {
+        timerBasic?.cancel();
+      }
+    });
+  }
+
+  Timer? timerDeluxe;
+  void startTimerDelux() {
+    timerDeluxe = Timer.periodic(const Duration(seconds: 5), (timer) {
+      if (giftDelux.isNotEmpty) {
+        comment.insert(0, giftDelux[0]); //masukin ke comment
+        giftDelux.removeAt(0); //hapus gift deluxe
+        if (giftDeluxTemp.isNotEmpty) {
+          giftDelux.add(giftDeluxTemp[0]);
+          giftDeluxTemp.removeAt(0);
+        }
+
+        notifyListeners();
+      } else {
+        timerDeluxe?.cancel();
+      }
+    });
+  }
+
+  Future createLinkStream(BuildContext context, {required bool copiedToClipboard, required String description}) async {
+    await createdDynamicLinkMixin(
+      context,
+      data: DynamicLinkData(
+        routes: Routes.viewStreaming,
+        postID: dataStreaming.sId,
+        fullName: "",
+        description: '${dataStreaming.user?.fullName ?? dataStreaming.user?.username} (${dataStreaming.user?.username}) \n is LIVE ${dataStreaming.title} \n Office Vlog Check out... \n',
+        // thumb: System().showUserPicture(profileImage),
+        thumb: System().showUserPicture(dataStreaming.user?.avatar?.mediaEndpoint),
+      ),
+      copiedToClipboard: copiedToClipboard,
+    ).then((value) {
+      if (value) {
+        if (copiedToClipboard && context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            margin: EdgeInsets.only(bottom: 60, left: 16, right: 16),
+            backgroundColor: kHyppeTextLightPrimary,
+            content: Text('Link Copied', style: TextStyle(color: Colors.white)),
+            behavior: SnackBarBehavior.floating,
+          ));
+        }
+      }
+    });
+  }
 }
 
 class GroupModel {
@@ -728,10 +940,5 @@ class GroupModel {
   bool selected;
   String? startDate;
   String? endDate;
-  GroupModel(
-      {required this.text,
-      required this.index,
-      required this.selected,
-      this.startDate,
-      this.endDate});
+  GroupModel({required this.text, required this.index, required this.selected, this.startDate, this.endDate});
 }

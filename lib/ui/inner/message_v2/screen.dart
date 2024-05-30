@@ -178,7 +178,7 @@ class _MessageScreenState extends State<MessageScreen> with RouteAware {
                                             ),
                                           ),
                                           subtitle: CustomTextWidget(
-                                            textToDisplay: discussData?.lastestMessage ?? '',
+                                            textToDisplay: discussData?.lastestMessage == 'text_kosong' ? 'Share Live' : discussData?.lastestMessage ?? '',
                                             textAlign: TextAlign.start,
                                             textStyle: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondary),
                                           ),

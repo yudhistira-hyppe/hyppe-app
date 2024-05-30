@@ -75,6 +75,8 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
                   SettingTile(
                     icon: 'verification-icon.svg',
                     onTap: () {
+                      // Routing().move(Routes.verificationIDStep1);
+
                       switch (SharedPreference().readStorage(SpKeys.statusVerificationId)) {
                         case REVIEW:
                           // ShowBottomSheet().onShowColouredSheet(
@@ -120,7 +122,7 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
         bgColor = const Color.fromRGBO(171, 34, 175, 0.08);
         break;
       case UNVERIFIED:
-        statusText = notifier.translate.unverified??'Unverified';
+        statusText = notifier.translate.unverified ?? 'Unverified';
         statusColor = isDark ? Colors.black87 : Colors.white;
         bgColor = kHyppePrimary;
         break;
@@ -130,7 +132,7 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
         bgColor = Colors.yellow[200];
         break;
       default:
-        statusText = notifier.translate.unverified??'Unverified';
+        statusText = notifier.translate.unverified ?? 'Unverified';
         statusColor = isDark ? Colors.black87 : Colors.white;
     }
 

@@ -93,9 +93,11 @@ class UrlConstants {
 
   static const String challange = "/api/challenge";
 
+  static const String userShare = "/api/streamsharelist";
+
+  static const String monetization = "/api/monetization";
   // Monetization
   static const String monetizationRoute = "/api/monetization";
-
 
   ///---------------------------------------------------------------------------------------------------------///
   /* APIs Bookmark */
@@ -470,6 +472,15 @@ class UrlConstants {
   static const String viewrStream = "$liveStramRoute/view";
   static const String feedbackStream = "$liveStramRoute/feedback";
   static const String listLiveStreaming = "$liveStramRoute/list";
+  static const String listGift = "$liveStramRoute/gift"; //list hadiah yg diterima streamer
+  static const String checkStream = "$liveStramRoute/ceck"; //list hadiah yg diterima streamer
+  static const String appealStream = "$liveStramRoute/appeal"; //submit appeal
+
+  //List Gift
+  // static const String listGift = "$monetization/list";
+
+  //Appeal Bank
+  static const String appealBank = "$userbankaccountsRoute/v3";
 
   //Monetization
   static const String listmonetization = "$monetizationRoute/listActive";
@@ -484,5 +495,4 @@ class UrlConstants {
   static const String boostContentNew = "/api/transactionsv2/boostpostdetail";
   static const String createboostContent = "/api/transactionsv2/createboostpost";
   static const String transactioncoindetail = "$transactionRoute/detail/coin";
-
 }

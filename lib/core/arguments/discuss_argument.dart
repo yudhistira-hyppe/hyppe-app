@@ -13,6 +13,10 @@ class DiscussArgument {
 
   String txtMessages = '';
 
+  String giftID = '';
+
+  String gift = '';
+
   String reactionUri = '';
 
   bool isQuery = false;
@@ -27,6 +31,8 @@ class DiscussArgument {
 
   List<dynamic> tagComment = [];
 
+  String? streamID;
+
   DiscussArgument({
     required this.email,
     required this.receiverParty,
@@ -40,6 +46,8 @@ class DiscussArgument {
       'pageNumber': pageNumber,
       'postID': postID,
       'txtMessages': txtMessages,
+      'giftID': giftID,
+      'gift':gift,
       'reactionUri': reactionUri,
       'isQuery': isQuery,
       'withDetail': withDetail,
@@ -47,6 +55,7 @@ class DiscussArgument {
       'postType': postType.toString(),
       'messageEventType': discussEventType.toString(),
       'tagComment': tagComment,
+      'streamID': streamID,
     };
   }
 }

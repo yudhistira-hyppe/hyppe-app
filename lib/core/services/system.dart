@@ -416,6 +416,8 @@ class System {
         return InteractiveEventType.transactions;
       case "TOPUP_COIN":
         return InteractiveEventType.coin;
+      case "NOTIFY_LIVE":
+        return InteractiveEventType.live;
       default:
         return InteractiveEventType.none;
     }
@@ -1312,7 +1314,7 @@ class System {
     }
 
     if (shareImmediately && !copiedToClipboard) {
-      await shareText(dynamicLink: _linkResult.shortUrl.toString(), context: context);
+      await shareText(dynamicLink: "${dynamicLinkData.description} ${_linkResult.shortUrl.toString()}", context: context);
     }
 
     return _linkResult.shortUrl;

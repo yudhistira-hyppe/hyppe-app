@@ -26,6 +26,8 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/saldo_coin/saldo_coin.dart';
 import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/notifier.dart';
+import 'package:hyppe/ui/inner/home/widget/discount_foryou.dart';
+import 'package:hyppe/ui/inner/home/widget/my_saldo_widget.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/build_auto_complete_user_tag.dart';
@@ -91,7 +93,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
       notifier.initCoinOwnershipDetail(context);
     }
     // notifier.initThumbnail();
-    
+
     notifier.getInitialInterest(context);
 
     // Future.microtask(() => context.read<PreUploadContentNotifier>().checkLandingpage(context));
@@ -272,6 +274,8 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                 ? boostWidget(textTheme, notifier)
                                 : Container(),
                             notifier.boostContent != null ? detailBoostContent(notifier) : Container(),
+                            _buildDivider(context),
+                            DiscountForyou(),
                             twentyFourPx,
                             twentyFourPx,
                             twentyFourPx,
@@ -340,7 +344,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                           },
                                         ),
                                       ),
-                                  ),
+                                    ),
                                   ValueListenableBuilder(
                                     valueListenable: buttonactive, 
                                     builder: (context, value, _) {
@@ -1165,7 +1169,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
       ),
       child: Column(
         children: [
-          detailText(notifier.language.localeDatetime == 'id' ? 'Pendaftaran Kepemilikan' : 'Ownership Registration', notifier.language.localeDatetime == 'id' ? 'Ya': 'Yes'),
+          detailText(notifier.language.localeDatetime == 'id' ? 'Pendaftaran Kepemilikan' : 'Ownership Registration', notifier.language.localeDatetime == 'id' ? 'Ya' : 'Yes'),
           sixteenPx,
           detailText(notifier.language.localeDatetime == 'id' ? 'Biaya Pendaftaran Kepemilikan' : 'Certificate Ownership Fee', '${System().numberFormat(amount: notifier.cointPurchaseDetail.price??0)} Coins'),
           
@@ -1176,7 +1180,6 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                 detailText(notifier.language.discount, '- ${notifier.discountOwnership.nominal_discount} coins'),
               ],
             ),
-            
           sixteenPx,
           detailText(notifier.language.localeDatetime == 'id' ? 'Total Biaya' :'Total Price', System().numberFormat(amount: notifier.cointPurchaseDetail.total_payment??0), showicon: true),
           notifier.toSell
@@ -1234,46 +1237,59 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
               sixteenPx,
               detailText(notifier.language.boostPrice, '${System().numberFormat(amount: notifier.boostContent?.priceBoost)} Coins'),
               sixteenPx,
-              detailText(notifier.language.discount, '${System().numberFormat(amount: notifier.discountBoost.nominal_discount??0)} Coins'),
+              detailText(notifier.language.discount, '${System().numberFormat(amount: notifier.discountBoost.nominal_discount ?? 0)} Coins'),
               const Divider(
                 height: 30,
                 color: kHyppeLightIcon,
               ),
-              detailText(notifier.language.total, System().numberFormat(amount: (notifier.boostContent?.priceBoost??0) - (notifier.discountBoost.nominal_discount??0) < 0 ? 0 : (notifier.boostContent?.priceBoost??0) - (notifier.discountBoost.nominal_discount??0)), showicon: true),
+              detailText(
+                  notifier.language.total,
+                  System().numberFormat(
+                      amount: (notifier.boostContent?.priceBoost ?? 0) - (notifier.discountBoost.nominal_discount ?? 0) < 0
+                          ? 0
+                          : (notifier.boostContent?.priceBoost ?? 0) - (notifier.discountBoost.nominal_discount ?? 0)),
+                  showicon: true),
             ],
           ),
         ),
         // fivePx,
         GestureDetector(
-            onTap: () async {
-                  await Navigator.pushNamed(context, Routes.mydiscount, arguments: {'routes': '${Routes.preUploadContent}boostpost', 'totalPayment': notifier.boostContent?.priceBoost??0, 'discount': notifier.discountBoost, 'productType': ContentDiscount.disccontentownership});
-              },
-            child: Container(
-              margin: const EdgeInsets.symmetric(vertical: 18.0),
-
-              decoration: BoxDecoration(
-                border: Border.all(width: .3, color: kHyppeBurem),
-                borderRadius: BorderRadius.circular(12.0),
-                color: kHyppeBurem.withOpacity(.03)
+          onTap: () async {
+            await Navigator.pushNamed(context, Routes.mydiscount, arguments: {
+              'routes': '${Routes.preUploadContent}boostpost',
+              'totalPayment': notifier.boostContent?.priceBoost ?? 0,
+              'discount': notifier.discountBoost,
+              'productType': ContentDiscount.disccontentownership
+            });
+          },
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 18.0),
+            decoration: BoxDecoration(border: Border.all(width: .3, color: kHyppeBurem), borderRadius: BorderRadius.circular(12.0), color: kHyppeBurem.withOpacity(.03)),
+            child: ListTile(
+              minLeadingWidth: 10,
+              leading: const CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}ic-kupon.svg",
+                defaultColor: false,
               ),
-              child: ListTile(
-                minLeadingWidth: 10,
-                leading: const CustomIconWidget(
-                  iconData: "${AssetPath.vectorPath}ic-kupon.svg",
-                  defaultColor:  false,
-                ),
-                title: (notifier.discountBoost.checked??false) ? Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomTextWidget(textToDisplay: '${notifier.language.discount} ${System().currencyFormat(amount: notifier.discountBoost.nominal_discount)}'),
-                    CustomTextWidget(textToDisplay: notifier.discountBoost.code_package??'', textStyle: const TextStyle(color: kHyppeBurem, fontWeight: FontWeight.w400),),
-                  ],
-                ): Text(notifier.language.discountForYou ?? 'Diskon Untukmu',),
-                trailing: const Icon(Icons.arrow_forward_ios),
-              ),
+              title: (notifier.discountBoost.checked ?? false)
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomTextWidget(textToDisplay: '${notifier.language.discount} ${System().currencyFormat(amount: notifier.discountBoost.nominal_discount)}'),
+                        CustomTextWidget(
+                          textToDisplay: notifier.discountBoost.code_package ?? '',
+                          textStyle: const TextStyle(color: kHyppeBurem, fontWeight: FontWeight.w400),
+                        ),
+                      ],
+                    )
+                  : Text(
+                      notifier.language.discountForYou ?? 'Diskon Untukmu',
+                    ),
+              trailing: const Icon(Icons.arrow_forward_ios),
             ),
           ),
+        ),
       ],
     );
   }
@@ -1299,7 +1315,6 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
             CustomTextWidget(textToDisplay: text2)
           ],
         )
-        
       ],
     );
   }
@@ -1328,7 +1343,16 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
   Widget _externalLink(BuildContext context, PreUploadContentNotifier notifier) {
     if (notifier.isEdit) {
       return GestureDetector(
+        // onTap: () {
+        //   if (notifier.urlLink != '') {
+        //     Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent, 'urlLink': notifier.urlLink, 'judulLink': notifier.judulLink});
+        //   } else {
+        //     Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent});
+        //   }
+        // },
+
         onTap: () => notifier.validateUserUrl(context),
+
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -1344,7 +1368,11 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                     alignment: Alignment.centerLeft,
                     child: CustomTextWidget(
                       maxLines: 1,
-                      textToDisplay: notifier.judulLink == '' ? notifier.urlLink == '' ? notifier.language.addLink ?? 'Tambahkan link' : notifier.urlLink : notifier.judulLink,
+                      textToDisplay: notifier.judulLink == ''
+                          ? notifier.urlLink == ''
+                              ? notifier.language.addLink ?? 'Tambahkan link'
+                              : notifier.urlLink
+                          : notifier.judulLink,
                       textStyle: const TextStyle(color: kHyppeTextLightPrimary, fontSize: 14, fontWeight: FontWeight.w700),
                     ),
                   ),
@@ -1357,7 +1385,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
           ],
         ),
       );
-    }else{
+    } else {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -1365,7 +1393,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
           notifier.urlLink != ''
               ? InkWell(
                   onTap: () async {
-                    Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent, 'urlLink': notifier.urlLink, 'judulLink':notifier.judulLink});
+                    Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent, 'urlLink': notifier.urlLink, 'judulLink': notifier.judulLink});
                   },
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
@@ -1392,10 +1420,10 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                     if (!notifier.certified || statusKyc != VERIFIED) {
                       System().actionReqiredIdCard(context, action: () {
                         // notifier.navigateToOwnership(context);
-                        Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent });
+                        Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent});
                       });
                     } else {
-                      Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent });
+                      Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent});
                       // notifier.navigateToOwnership(context);
                     }
                   },

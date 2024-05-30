@@ -7,12 +7,14 @@ import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/arguments/main_argument.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/arguments/referral_argument.dart';
+import 'package:hyppe/core/arguments/view_streaming_argument.dart';
 import 'package:hyppe/core/bloc/referral/bloc.dart';
 import 'package:hyppe/core/bloc/referral/state.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/bloc/follow/bloc.dart';
 import 'package:hyppe/core/bloc/follow/state.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
+import 'package:hyppe/core/models/collection/live_stream/link_stream_model.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 
@@ -255,11 +257,10 @@ class DynamicLinkService {
               if (deepLink.queryParameters['referral'] == '1') {
                 print("-=-=-=-=-=-=-==-= masuk referral");
 
-
                 final bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
-                if(isGuest ?? false){
+                if (isGuest ?? false) {
                   isRealGuest = true;
-                }else{
+                } else {
                   hitReferralBackend(Routing.navigatorKey.currentContext!, data: data);
                   followSender(Routing.navigatorKey.currentContext!);
                 }
@@ -268,10 +269,9 @@ class DynamicLinkService {
                 print("isFromSplash: $isFromSplash");
                 _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
                 Future.delayed(const Duration(seconds: 2), () async {
-
-                  if(isRealGuest){
+                  if (isRealGuest) {
                     ShowBottomSheet().onLoginApp(Routing.navigatorKey.currentContext!);
-                  }else{
+                  } else {
                     await _routing.move(
                       path,
                       argument: OtherProfileArgument()..senderEmail = deepLink.queryParameters['sender_email'],
@@ -282,10 +282,9 @@ class DynamicLinkService {
                 print("isFromSplash: $isFromSplash $isRealGuest");
                 _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
                 Future.delayed(const Duration(milliseconds: 1000), () async {
-
-                  if(isRealGuest){
+                  if (isRealGuest) {
                     ShowBottomSheet().onLoginApp(Routing.navigatorKey.currentContext!);
-                  }else{
+                  } else {
                     await _routing.move(
                       path,
                       argument: OtherProfileArgument()..senderEmail = deepLink.queryParameters['sender_email'],
@@ -325,6 +324,16 @@ class DynamicLinkService {
                   );
                 });
               }
+              break;
+            case Routes.viewStreaming:
+              '_handleDeepLink vidDetail'.logger();
+
+              isFromSplash = false;
+              _routing.moveAndRemoveUntil(Routes.lobby, Routes.lobby);
+              Future.delayed(const Duration(seconds: 2), () async {
+                await _routing.move(Routes.viewStreaming, argument: ViewStreamingArgument(data: LinkStreamModel(sId: deepLink.queryParameters['postID'])));
+              });
+
               break;
           }
           // SharedPreference().writeStorage(SpKeys.isPreventRoute, false);

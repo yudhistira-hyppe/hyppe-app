@@ -34,7 +34,6 @@ class Routes {
   static const String adsBetweenFull = '/ads-between-full';
   static const String adsBetweenVidFull = '/ads-between-vid-full';
 
-
 // Sign up
   static const String signUpPin = '/sign-up-pin';
   static const String signUpWelcome = '/sign-up-welcome';
@@ -92,6 +91,9 @@ class Routes {
   static const String verificationIDStep7 = '/verification-id-step-7';
   static const String verificationIDFailed = '/verification-id-failed';
   static const String verificationIDSuccess = '/verification-id-success';
+  static const String verificationCameraSupport = '/verification-camera-support';
+  static const String previewSelfieSupport = '/preview-selfie-support';
+  static const String verificationSupportSuccess = '/verification-support-success';
 
   //delete account
   static const String deleteAccount = '/delete-account';
@@ -125,6 +127,9 @@ class Routes {
   static const String withdrawalSummary = '/withdrawal-summary';
   static const String pinWithdrawal = '/pin-withdrawal';
   static const String successWithdrawal = '/success-withdrawal';
+
+  static const String cameraAppealBank = '/camera-appeal-bank';
+  static const String successAppealBank = '/success-appeal-bank';
 
   //create pin
   static const String pinScreen = '/pin-screen';
@@ -188,6 +193,9 @@ class Routes {
   static const String streamingFeedback = '/streaming-feedback';
   static const String listStreamers = '/list-streamers';
   static const String viewStreaming = '/view-streaming';
+  static const String pelanggaranDetailtreaming = '/pelanggaran-detail';
+  static const String appealLiveSuccess = '/appeal-live-success';
+
 
   // ====
   static const String addlink = '/add-link';

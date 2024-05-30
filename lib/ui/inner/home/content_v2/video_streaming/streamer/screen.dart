@@ -8,17 +8,19 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
-import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/banned_stream.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/beforelive.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/force_stop.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/love_lottie.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/pauseLive.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/streamer.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/gift_deluxe.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
@@ -46,8 +48,7 @@ class StreamerScreen extends StatefulWidget {
   State<StreamerScreen> createState() => _StreamerScreenState();
 }
 
-class _StreamerScreenState extends State<StreamerScreen>
-    with TickerProviderStateMixin, WidgetsBindingObserver, RouteAware {
+class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStateMixin, WidgetsBindingObserver, RouteAware {
   // bool isloading = true;
   FocusNode commentFocusNode = FocusNode();
   AlivcPusherPreview? pusherPreviewView;
@@ -63,7 +64,6 @@ class _StreamerScreenState extends State<StreamerScreen>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      
       final streampro = Provider.of<StreamerNotifier>(context, listen: false);
       streampro.requestPermission(context);
       streampro.init(context, mounted);
@@ -107,8 +107,7 @@ class _StreamerScreenState extends State<StreamerScreen>
   void dispose() {
     // print("====dispose stremer ===");
     WidgetsBinding.instance.removeObserver(this);
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-        overlays: SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
     context.read<StreamerNotifier>().inactivityTimer?.cancel();
     context.read<StreamerNotifier>().disposeAgora();
     super.dispose();
@@ -136,7 +135,7 @@ class _StreamerScreenState extends State<StreamerScreen>
       print("========= Streamer AppLifecycleState.paused ==========");
       // streampro.pauseLive(context, mounted);
       final stream = Provider.of<StreamerNotifier>(context, listen: false);
-      if (stream.statusLive == StatusStream.online && stream.isPause == false){
+      if (stream.statusLive == StatusStream.online && stream.isPause == false) {
         stream.isPause = true;
         stream.pauseLive(context, mounted);
       }
@@ -213,8 +212,7 @@ class _StreamerScreenState extends State<StreamerScreen>
                                     child: CustomIconButtonWidget(
                                       padding: const EdgeInsets.all(0),
                                       alignment: Alignment.center,
-                                      iconData:
-                                          "${AssetPath.vectorPath}close.svg",
+                                      iconData: "${AssetPath.vectorPath}close.svg",
                                       defaultColor: false,
                                       onPressed: () {
                                         Routing().moveBack();
@@ -229,18 +227,23 @@ class _StreamerScreenState extends State<StreamerScreen>
                             : notifier.statusLive == StatusStream.prepare
                                 ? prepare()
                                 : notifier.statusLive == StatusStream.standBy
-                                    ? startCounting(
-                                        notifier.timeReady, notifier, tn)
+                                    ? startCounting(notifier.timeReady, notifier, tn)
                                     : notifier.statusLive == StatusStream.ready
-                                        ? prepare(
-                                            titile: notifier
-                                                    .tn?.liveVideoHasStarted ??
-                                                '')
-                                        : Container(),
+                                        ? prepare(titile: notifier.tn?.liveVideoHasStarted ?? '')
+                                        : notifier.statusLive == StatusStream.banned
+                                            ? const BannedStream()
+                                            : Container(),
+                    // Positioned(
+                    //     top: 300,
+                    //     left: 200,
+                    //     child: Container(
+                    //       height: 100,
+                    //       child: Text("hahah ${notifier.dataStream.status}"),
+                    //     )),
                     if (notifier.isPause) PauseLive(notifier: notifier),
-                    if (notifier.statusLive == StatusStream.ready ||
-                        notifier.statusLive == StatusStream.online)
-                      StreamerWidget(commentFocusNode: commentFocusNode),
+                    if (notifier.statusLive == StatusStream.ready || notifier.statusLive == StatusStream.online) StreamerWidget(commentFocusNode: commentFocusNode),
+                    if (notifier.statusLive == StatusStream.ready || notifier.statusLive == StatusStream.online) const GiftDeluxe(),
+                    if ((notifier.statusLive == StatusStream.ready || notifier.statusLive == StatusStream.online) && notifier.dataStream.status == false) const ForceStop(),
                     // StreamerWidget(commentFocusNode: commentFocusNode),
                     // Align(
                     //   alignment: Alignment.center,
@@ -328,8 +331,7 @@ class _StreamerScreenState extends State<StreamerScreen>
     );
   }
 
-  Widget startCounting(
-      int time, StreamerNotifier notifier, LocalizationModelV2 tn) {
+  Widget startCounting(int time, StreamerNotifier notifier, LocalizationModelV2 tn) {
     return Stack(
       children: [
         Align(
@@ -415,11 +417,14 @@ class _StreamerScreenState extends State<StreamerScreen>
         color: Colors.black,
         width: width,
         height: height,
-        child: AgoraVideoView(
-          controller: VideoViewController(
-            rtcEngine: notifier.engine,
-            canvas: const VideoCanvas(
-              uid: 0,
+        child: AspectRatio(
+          aspectRatio: MediaQuery.of(context).devicePixelRatio,
+          child: AgoraVideoView(
+            controller: VideoViewController(
+              rtcEngine: notifier.engine,
+              canvas: const VideoCanvas(
+                uid: 0,
+              ),
             ),
           ),
         ),

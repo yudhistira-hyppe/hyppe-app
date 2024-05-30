@@ -6,6 +6,12 @@ import 'package:hyppe/ux/routing.dart';
 
 class TransactionCoinDetailNotifier with ChangeNotifier {
   final Map _param = {};
+  bool _isloading = false;
+  bool get isloading => _isloading;
+  set isloading(bool val){
+    _isloading = val;
+    notifyListeners();
+  }
 
   DetailTransactionCoin _transactionDetail = DetailTransactionCoin();
   DetailTransactionCoin get transactionDetail => _transactionDetail;
@@ -16,6 +22,7 @@ class TransactionCoinDetailNotifier with ChangeNotifier {
 
   final bloc = TransactionCoinDetailBloc();
   Future<void> detailData(BuildContext context,{String? invoiceId}) async {
+    isloading = true;
     try{
       _param.addAll({
         'idtransaksi': invoiceId
@@ -30,9 +37,11 @@ class TransactionCoinDetailNotifier with ChangeNotifier {
       } else if (fetch.dataState == TransactionCoinDetailState.getcBlocSuccess) {
         transactionDetail = DetailTransactionCoin.fromJson(fetch.data);
       }
-
+      isloading = false;
       notifyListeners();
     }catch(_){
+      isloading = false;
+      notifyListeners();
       debugPrint(_.toString());
     }
   }

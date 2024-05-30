@@ -71,6 +71,7 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
         if (notifier.isloading) {
           Future.delayed(const Duration(milliseconds: 500), () {
             notifier.isloading = false;
+            setState(() {});
           });
         }
         return notifier.isloading
@@ -340,6 +341,7 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
       isPagePict = false;
     }
     String newUser = SharedPreference().readStorage(SpKeys.newUser) ?? '';
+    print("new user $newUser -- $globalTultipShow");
     if (newUser == "TRUE" || globalTultipShow) {
       return;
     }
@@ -357,11 +359,17 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
           });
         }
       } else if (index == 0) {
-        notifier.pageIndex = index;
+        setState(() {
+          notifier.pageIndex = index;
+        });
       } else if (index == 1) {
-        notifier.pageIndex = index;
+        setState(() {
+          notifier.pageIndex = index;
+        });
       } else if (index == 4) {
-        notifier.pageIndex = index;
+        setState(() {
+          notifier.pageIndex = index;
+        });
         if (isGuest ?? false) {
           isactivealiplayer = true;
           ShowBottomSheet().onLoginApp(Routing.navigatorKey.currentContext ?? context);

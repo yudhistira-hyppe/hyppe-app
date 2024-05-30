@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/models/collection/live_stream/link_stream_model.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/listGifBasic.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/pinComment.dart';
 
 import '../../../../../../constant/widget/custom_spacer.dart';
 import 'form_comment.dart';
@@ -18,9 +20,15 @@ class ViewerComment extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          const Padding(padding: EdgeInsets.only(bottom: 20), child: ListGiftViewer()),
           ListCommentViewer(commentFocusNode: commentFocusNode, data: data),
-          twentyEightPx,
-          FormCommentViewer(commentFocusNode: commentFocusNode, data: data,),
+          eightPx,
+          const PinCommenmtViewer(),
+          sixteenPx,
+          FormCommentViewer(
+            commentFocusNode: commentFocusNode,
+            data: data,
+          ),
         ],
       ),
     );

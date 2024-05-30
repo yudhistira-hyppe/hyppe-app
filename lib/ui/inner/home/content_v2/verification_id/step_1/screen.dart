@@ -28,19 +28,35 @@ class VerificationIDStep1 extends StatefulWidget {
 }
 
 class _VerificationIDStep1State extends State<VerificationIDStep1> {
+  final ScrollController _controller = ScrollController();
   String dataText = '';
+  bool agree = false;
+  bool finishScroll = false;
   @override
   void initState() {
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationIDStep1');
-    final ntfr = Provider.of<VerificationIDNotifier>(context, listen: false);
-    ntfr.clearAllTempData();
-    readFile();
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final ntfr = Provider.of<VerificationIDNotifier>(context, listen: false);
+      ntfr.clearAllTempData();
+      readFile();
+      try {
+        _controller.addListener(() {
+          if (_controller.offset >= _controller.position.maxScrollExtent && !_controller.position.outOfRange) {
+            setState(() {
+              finishScroll = true;
+            });
+          }
+        });
+      } catch (e) {
+        print("error $e");
+      }
+      FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationIDStep1');
+    });
   }
 
   readFile() async {
     String? isoCode = SharedPreference().readStorage(SpKeys.isoCode) ?? 'en';
-    print('${AssetPath.dummyMdPath}eula_kyc_$isoCode.md');
+
     var request = await rootBundle.loadString('${AssetPath.dummyMdPath}eula_kyc_$isoCode.md');
     setState(() {
       dataText = request;
@@ -62,82 +78,130 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
           ),
           titleSpacing: 0,
           title: CustomTextWidget(
-            textToDisplay: notifier.language.idVerification ?? '',
+            textToDisplay: notifier.language.userAgreement ?? '',
             textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
           ),
           centerTitle: false,
         ),
         body: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          controller: _controller,
           child: Column(children: [
             // Html(
             //   data: eulaHtml(context, (SharedPreference().readStorage(SpKeys.themeData) ?? false)),
             // ),
-            SizedBox(
-              height: SizeConfig.screenHeight,
-              child: Markdown(
-                data: dataText,
-                padding: EdgeInsets.only(left: 16, right: 16, bottom: 220, top: 16),
-                onTapLink: (text, href, title) async {
-                  try {
-                    print('markdown  $text, $href, $title');
-                    await launchUrl(Uri.parse(text), mode: LaunchMode.externalApplication);
-                  } catch (e) {
-                    // 'error href : $e'.logger();
-                  }
-                },
-              ),
+            // Container(
+            //   color: Colors.red,
+            //   height: SizeConfig.screenHeight! - 50,
+            //   child:
+            Markdown(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              data: dataText,
+              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 220, top: 16),
+              onTapLink: (text, href, title) async {
+                try {
+                  await launchUrl(Uri.parse(text), mode: LaunchMode.externalApplication);
+                } catch (e) {
+                  // 'error href : $e'.logger();
+                }
+              },
             ),
+            // ),
 
             // Expanded(
             //   child: InAppWebView(
             //     initialOptions: InAppWebViewGroupOptions(crossPlatform: InAppWebViewOptions(supportZoom: false)),
             //     initialUrlRequest: URLRequest(url: Uri.parse("http://localhost:8080/assets/eula.html")),
-            //     onWebViewCreated: (controller) {},
-            //     onLoadStart: (controller, url) {},
-            //     onLoadStop: (controller, url) {},
+            //     onWebViewCreated: (_controller) {},
+            //     onLoadStart: (_controller, url) {},
+            //     onLoadStop: (_controller, url) {},
             //   ),
             // )
           ]),
         ),
-        bottomSheet: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              height: 120 * SizeConfig.scaleDiagonal,
-              padding: const EdgeInsets.only(left: 16, right: 16),
-              color: Theme.of(context).backgroundColor,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  CustomElevatedButton(
-                    width: SizeConfig.screenWidth,
-                    height: 44.0 * SizeConfig.scaleDiagonal,
-                    function: () => Routing().moveAndPop(Routes.verificationIDStep2),
-                    buttonStyle: ButtonStyle(
-                      foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                      shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                      overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                      backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                    ),
-                    child: CustomTextWidget(
-                      textToDisplay: notifier.language.agreeAndContinue ?? '',
-                      textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  GestureDetector(
-                    onTap: () => Routing().moveBack(),
-                    child: Text(
-                      notifier.language.cancel ?? 'cancel',
-                      style: textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primary),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  thirtyTwoPx,
-                ],
+        bottomSheet: Container(
+          // height: 120 * SizeConfig.scaleDiagonal,
+          // padding: const EdgeInsets.only(left: 16, right: 16),
+          color: Theme.of(context).backgroundColor,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              sixteenPx,
+
+              Container(
+                padding: const EdgeInsets.only(left: 6, right: 16, bottom: 16),
+                child: Row(
+                  children: [
+                    Checkbox(
+                        value: agree,
+                        onChanged: (value) {
+                          setState(() {
+                            agree = value ?? false;
+                          });
+                        },
+                        checkColor: Colors.white,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                        fillColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+                          if (states.contains(MaterialState.disabled)) {
+                            return Colors.orange.withOpacity(.32);
+                          }
+                          if (!agree) {
+                            return Colors.white;
+                          }
+                          return kHyppePrimary;
+                        })),
+                    sixPx,
+                    Expanded(
+                        child: Text(
+                      notifier.language.userAgreementCheck ?? '',
+                      style: const TextStyle(fontSize: 12),
+                    ))
+                  ],
+                ),
               ),
-            ),
-          ],
+              Container(
+                padding: const EdgeInsets.only(left: 16, right: 16),
+                child: CustomElevatedButton(
+                  width: SizeConfig.screenWidth,
+                  height: 44.0 * SizeConfig.scaleDiagonal,
+                  function: () {
+                    if (finishScroll && agree) {
+                      Routing().moveAndPop(Routes.verificationIDStep2);
+                    }
+                  },
+                  buttonStyle: finishScroll && agree
+                      ? ButtonStyle(
+                          foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                          shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                          overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                          backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                        )
+                      : ButtonStyle(
+                          foregroundColor: MaterialStateProperty.all(const Color(0xFFCECECE)),
+                          shadowColor: MaterialStateProperty.all(const Color(0xFFCECECE)),
+                          overlayColor: MaterialStateProperty.all(const Color(0xFFCECECE)),
+                          backgroundColor: MaterialStateProperty.all(const Color(0xFFCECECE)),
+                        ),
+                  child: CustomTextWidget(
+                    textToDisplay: notifier.language.agreeAndContinue ?? '',
+                    textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              // GestureDetector(
+              //   onTap: () => Routing().moveBack(),
+              //   child: Text(
+              //     notifier.language.cancel ?? 'cancel',
+              //     style: textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primary),
+              //   ),
+              // ),
+              // const SizedBox(height: 16),
+              // thirtyTwoPx,
+            ],
+          ),
         ),
         // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         // resizeToAvoidBottomInset: true,

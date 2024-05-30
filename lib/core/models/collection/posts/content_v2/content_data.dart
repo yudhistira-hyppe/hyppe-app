@@ -673,6 +673,8 @@ class Comment {
   bool? active;
   String? postType;
   String? txtMessages;
+  String? giftID;
+  String? gift;
   String? postID;
   String? createdAt;
   String? updatedAt;
@@ -690,6 +692,8 @@ class Comment {
       this.active,
       this.postType,
       this.txtMessages,
+      this.giftID,
+      this.gift,
       this.postID,
       this.createdAt,
       this.updatedAt,
@@ -707,6 +711,8 @@ class Comment {
     active = json['active'];
     postType = json['postType'];
     txtMessages = json['txtMessages'];
+    giftID = json['giftID'];
+    gift = json['gift'];
     postID = json['postID'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
@@ -732,6 +738,8 @@ class Comment {
     data['active'] = active;
     data['postType'] = postType;
     data['txtMessages'] = txtMessages;
+    data['giftID'] = giftID;
+    data['gift'] = gift;
     data['postID'] = postID;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;

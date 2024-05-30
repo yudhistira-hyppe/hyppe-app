@@ -3,25 +3,35 @@ import 'dart:convert';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hyppe/core/arguments/discuss_argument.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
 import 'package:hyppe/core/arguments/summary_live_argument.dart';
 import 'package:hyppe/core/bloc/follow/bloc.dart';
 import 'package:hyppe/core/bloc/follow/state.dart';
 import 'package:hyppe/core/bloc/live_stream/bloc.dart';
 import 'package:hyppe/core/bloc/live_stream/state.dart';
+import 'package:hyppe/core/bloc/message_v2/bloc.dart';
+import 'package:hyppe/core/bloc/message_v2/state.dart';
 import 'package:hyppe/core/bloc/user_v2/bloc.dart';
 import 'package:hyppe/core/bloc/user_v2/state.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/config/url_constants.dart';
+import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/models/collection/live_stream/banned_stream_model.dart';
 import 'package:hyppe/core/models/collection/live_stream/comment_live_model.dart';
+import 'package:hyppe/core/models/collection/live_stream/gift_live_model.dart';
 import 'package:hyppe/core/models/collection/live_stream/link_stream_model.dart';
+import 'package:hyppe/core/models/collection/live_stream/list_user_gift_model.dart';
 import 'package:hyppe/core/models/collection/live_stream/live_summary_model.dart';
 import 'package:hyppe/core/models/collection/live_stream/viewers_live_model.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
+import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
+import 'package:hyppe/core/models/collection/utils/search_people/search_people.dart';
 import 'package:hyppe/core/query_request/users_data_query.dart';
 import 'package:hyppe/core/response/generic_response.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -30,8 +40,12 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/item.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/notifier.dart';
+import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -39,8 +53,9 @@ import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'dart:math' as math;
+import 'package:hyppe/ui/constant/entities/general_mixin/general_mixin.dart';
 
-class StreamerNotifier with ChangeNotifier {
+class StreamerNotifier with ChangeNotifier, GeneralMixin {
   final UsersDataQuery _usersFollowingQuery = UsersDataQuery()
     ..eventType = InteractiveEventType.following
     ..withEvents = [InteractiveEvent.initial, InteractiveEvent.accept, InteractiveEvent.request];
@@ -48,7 +63,7 @@ class StreamerNotifier with ChangeNotifier {
   static const String eventComment = 'COMMENT_STREAM_SINGLE';
   static const String eventViewStream = 'VIEW_STREAM';
   static const String eventLikeStream = 'LIKE_STREAM';
-  static const String eventCommentDisable = 'COMMENT_STREAM_DISABLED';
+  static const String eventStatusStream = 'STATUS_STREAM';
 
   final _socketService = SocketLiveService();
 
@@ -59,7 +74,12 @@ class StreamerNotifier with ChangeNotifier {
   int pageViewers = 0;
   int rowViewers = 10;
   int totPause = 0;
+  int pageNumberUserShare = 0;
+  int limitNumberUserShare = 15;
 
+  Duration timeCountdownReported = const Duration(seconds: 30);
+
+  BannedStreamModel? dataBanned;
   LinkStreamModel dataStream = LinkStreamModel();
   UserProfileModel audienceProfile = UserProfileModel();
   UserProfileModel audienceProfileViewer = UserProfileModel();
@@ -67,6 +87,10 @@ class StreamerNotifier with ChangeNotifier {
 
   StatusFollowing statusFollowingViewer = StatusFollowing.none;
   LiveSummaryModel dataSummary = LiveSummaryModel();
+
+  List<GiftLiveModel> dataGift = [];
+  List<GiftLiveModel> dataGiftDeluxe = [];
+  GiftLiveModel? giftSelect;
 
   // late AlivcBase _alivcBase;
   // late AlivcLivePusher _alivcLivePusher;
@@ -81,6 +105,8 @@ class StreamerNotifier with ChangeNotifier {
   bool isloadingProfileViewer = false;
   bool isCheckLoading = false;
   bool isloadingButton = false;
+  bool isloadingUserShare = false;
+  bool isloadingGift = false;
   bool mute = false;
   bool isPause = false;
   bool isCommentDisable = false;
@@ -100,8 +126,10 @@ class StreamerNotifier with ChangeNotifier {
   FocusNode titleFocusNode = FocusNode();
   TextEditingController titleUrlLiveCtrl = TextEditingController();
   TextEditingController titleLiveCtrl = TextEditingController();
-  TextEditingController commentCtrl = TextEditingController();
   TextEditingController urlLiveCtrl = TextEditingController();
+  TextEditingController commentCtrl = TextEditingController();
+  TextEditingController searchUserCtrl = TextEditingController();
+  TextEditingController messageShareCtrl = TextEditingController();
 
   Timer? inactivityTimer;
   DateTime dateTimeStart = DateTime.now();
@@ -120,18 +148,28 @@ class StreamerNotifier with ChangeNotifier {
   ///Status => Offline - Prepare - StandBy - Ready - Online
   StatusStream statusLive = StatusStream.offline;
 
+  List<CommentLiveModel> giftBasic = [];
+  List<CommentLiveModel> giftBasicTemp = [];
+  List<CommentLiveModel> giftDelux = [];
+  List<CommentLiveModel> giftDeluxTemp = [];
   List<Item> _items = <Item>[];
   List<Item> get items => _items;
 
   List<ViewersLiveModel> dataViewers = [];
   List<CommentLiveModel> comment = [];
   List<int> animationIndexes = [];
+  List<SearchPeolpleData> listShareUser = [];
+  List<SearchPeolpleData> shareUsers = [];
+  List<ListGiftModel> dataUserGift = [];
+
+  CommentLiveModel? pinComment;
 
   set titleLive(String val) {
     _titleLive = val;
     notifyListeners();
   }
 
+  onUpdate() => notifyListeners();
   set urlLink(String val) {
     _urlLink = val;
     notifyListeners();
@@ -151,10 +189,11 @@ class StreamerNotifier with ChangeNotifier {
   //   print(a);
   // }
 
-
   Future<void> init(BuildContext context, mounted, {bool forConfig = false}) async {
+    dataBanned = null;
     print("-------- init stream $forConfig ---------");
     isloading = true;
+
     isloadingPreview = true;
     notifyListeners();
 
@@ -172,8 +211,13 @@ class StreamerNotifier with ChangeNotifier {
     //   }
     //   await _onListen(context, mounted);
     // }
-    
-    await initAgora();
+
+    await checkBeforeLive(context, mounted).then((value) async {
+      if (dataBanned != null) {
+        // statusLive = StatusStream.banned;
+      }
+      await initAgora();
+    });
 
     // notifyListeners();
 
@@ -211,7 +255,7 @@ class StreamerNotifier with ChangeNotifier {
 
   Future<void> initAgora() async {
     // retrieve permissions
-    await [Permission.microphone, Permission.camera].request();
+    // await [Permission.microphone, Permission.camera].request();
 
     //create the engine
     engine = createAgoraRtcEngine();
@@ -219,12 +263,14 @@ class StreamerNotifier with ChangeNotifier {
       appId: UrlConstants.agoraId,
       channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
     ));
-    
+
+    isloading = false;
+    notifyListeners();
+
     engine.registerEventHandler(
       RtcEngineEventHandler(
         onCameraReady: () {
-          debugPrint("Camera Ready"); 
-          
+          debugPrint("Camera Ready");
         },
         onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
           debugPrint("local user ${connection.localUid} joined");
@@ -242,8 +288,7 @@ class StreamerNotifier with ChangeNotifier {
         onRemoteVideoStateChanged: ((connection, remoteUid, state, reason, elapsed) {
           debugPrint("connection $connection, remote user $remoteUid, state ${state.name}, resion $reason, $elapsed");
         }),
-        onUserOffline: (RtcConnection connection, int remoteUid,
-            UserOfflineReasonType reason) {
+        onUserOffline: (RtcConnection connection, int remoteUid, UserOfflineReasonType reason) {
           debugPrint("remote user $remoteUid left channel");
           remoteUid = -1;
           statusLive = StatusStream.offline;
@@ -253,7 +298,7 @@ class StreamerNotifier with ChangeNotifier {
     );
 
     await engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
-    
+
     await engine.enableAudio();
     await engine.enableVideo();
     await engine.startPreview();
@@ -271,7 +316,7 @@ class StreamerNotifier with ChangeNotifier {
   Future<void> startStreamer(BuildContext context, mounted) async {
     statusLive = StatusStream.standBy;
     notifyListeners();
-    
+
     if (!mounted) return;
     countDown(context, mounted);
   }
@@ -530,6 +575,7 @@ class StreamerNotifier with ChangeNotifier {
 // rtmp://live.hyppe.cloud/Hyppe/hdstream_hd-v?auth_key=1700732018-0-0-8e221f09856a236e9f2454e8dfddfae1
 
   Future<void> clickPushAction(BuildContext context, mounted) async {
+    pinComment = null;
     isCancel = false;
     timeReady = 3;
     userName = context.read<SelfProfileNotifier>().user.profile?.username ?? '';
@@ -546,15 +592,17 @@ class StreamerNotifier with ChangeNotifier {
       // _alivcLivePusher.startPushWithURL(dataStream.urlIngest ?? '');
       if (!mounted) return;
       await startStreamer(context, mounted);
-      
+
       if (_socketService.isRunning) {
         _socketService.closeSocket(eventComment);
         _socketService.closeSocket(eventLikeStream);
         _socketService.closeSocket(eventViewStream);
+        _socketService.closeSocket(eventStatusStream);
       }
       _connectAndListenToSocket(eventComment);
       _connectAndListenToSocket(eventLikeStream);
       _connectAndListenToSocket(eventViewStream);
+      _connectAndListenToSocket(eventStatusStream);
 
       // _alivcLivePusher.startPushWithURL(pushURL);
     } else {
@@ -567,6 +615,7 @@ class StreamerNotifier with ChangeNotifier {
     _socketService.closeSocket(eventComment);
     _socketService.closeSocket(eventLikeStream);
     _socketService.closeSocket(eventViewStream);
+    _socketService.closeSocket(eventStatusStream);
     // _alivcLivePusher.stopPush();
     // _alivcLivePusher.stopPreview();
     // _alivcLivePusher.destroy();
@@ -593,6 +642,8 @@ class StreamerNotifier with ChangeNotifier {
     isCommentDisable = false;
     flipCameraVisible = true;
     titleLiveCtrl.clear();
+    urlLink = '';
+    textUrl = '';
     userName = '';
     _titleLive = '';
     statusLive = StatusStream.offline;
@@ -632,8 +683,8 @@ class StreamerNotifier with ChangeNotifier {
           print('===Channel $channel');
           // Agora
           await engine.joinChannel(
-            token: tempToken??'',
-            channelId: channel??'',
+            token: tempToken ?? '',
+            channelId: channel ?? '',
             uid: 0,
             options: const ChannelMediaOptions(),
           );
@@ -664,11 +715,6 @@ class StreamerNotifier with ChangeNotifier {
     mute = false;
     flipCameraVisible = true;
     isPause = false;
-    notifyListeners();
-  }
-
-  Future<void> kickViewer() async {
-    // engine.setRemoteUserPriority(uid: uid, userPriority: userPriority)
     notifyListeners();
   }
 
@@ -755,7 +801,7 @@ class StreamerNotifier with ChangeNotifier {
     isCancel = true;
     statusLive = StatusStream.offline;
     // _alivcLivePusher.stopPush();
-    engine.release();
+    // engine.release();
     inactivityTimer?.cancel();
     stopStream(context, mounted);
   }
@@ -766,14 +812,14 @@ class StreamerNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future endLive(BuildContext context, mounted, {bool isBack = true}) async {
+  Future endLive(BuildContext context, mounted, {bool isBack = true, bool blockLive = false}) async {
     if (isBack) Routing().moveBack();
     var dateTimeFinish = DateTime.now();
     Duration duration = dateTimeFinish.difference(dateTimeStart);
     await destoryPusher();
     if (!mounted) return;
     await stopStream(context, mounted);
-    Routing().moveReplacement(Routes.streamingFeedback, argument: SummaryLiveArgument(duration: duration, data: dataSummary));
+    Routing().moveReplacement(Routes.streamingFeedback, argument: SummaryLiveArgument(duration: duration, data: dataSummary, blockLive: blockLive));
   }
 
   int secondsEnd = 0;
@@ -882,6 +928,69 @@ class StreamerNotifier with ChangeNotifier {
     // return returnNext;
   }
 
+  Future kickUser(BuildContext context, bool mounted, String userId, String username) async {
+    Map data = {"_id": dataStream.sId, "userId": userId, "type": "KICK"};
+    await updateStream(context, mounted, data).then((value) {
+      if (value == 'Update stream succesfully') {
+        Routing().moveBack();
+        // if (context.mounted) {
+        tn = context.read<TranslateNotifierV2>().translate;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            margin: const EdgeInsets.only(bottom: 60, left: 16, right: 16),
+            backgroundColor: kHyppeTextLightPrimary,
+            content: Row(
+              children: [
+                const CustomIconWidget(
+                  iconData: "${AssetPath.vectorPath}info-icon.svg",
+                  defaultColor: false,
+                  color: Colors.white,
+                ),
+                sixPx,
+                Text("${tn?.infoKick1} $username ${tn?.infoKick2}", style: const TextStyle(color: Colors.white)),
+              ],
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+        // }
+      }
+    });
+  }
+
+  Future updateStream(BuildContext context, mounted, Map data) async {
+    var dataReturn;
+    bool connect = await System().checkConnections();
+    if (connect) {
+      try {
+        print(data);
+        final notifier = LiveStreamBloc();
+
+        await notifier.getLinkStream(context, data, UrlConstants.updateStream);
+
+        final fetch = notifier.liveStreamFetch;
+        if (fetch.postsState == LiveStreamState.getApiSuccess) {
+          dataReturn = fetch.data;
+          dataReturn ??= 'Update stream succesfully';
+          notifyListeners();
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+
+      notifyListeners();
+    } else {
+      // returnNext = false;
+      if (context.mounted) {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
+          initLiveStream(context, mounted);
+        });
+      }
+    }
+    return dataReturn;
+  }
+
   Future initLiveStream(BuildContext context, mounted) async {
     bool returnNext = false;
     bool connect = await System().checkConnections();
@@ -896,11 +1005,15 @@ class StreamerNotifier with ChangeNotifier {
         }
         final fetch = notifier.liveStreamFetch;
         if (fetch.postsState == LiveStreamState.getApiSuccess) {
-          dataStream = LinkStreamModel.fromJson(fetch.data);
-          print('======= fetch.data');
-          tempToken = dataStream.token;
-          channel = dataStream.sId??'';
-          returnNext = true;
+          if (fetch.statusStream) {
+            dataStream = LinkStreamModel.fromJson(fetch.data);
+            print('======= fetch.data');
+            tempToken = dataStream.token;
+            channel = dataStream.sId ?? '';
+            returnNext = true;
+          } else {
+            returnNext = false;
+          }
         }
       } catch (e) {
         debugPrint(e.toString());
@@ -911,7 +1024,6 @@ class StreamerNotifier with ChangeNotifier {
       returnNext = false;
       if (context.mounted) {
         ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
-          
           Routing().moveBack();
           Fluttertoast.showToast(msg: 'Please try again letter');
           initLiveStream(context, mounted);
@@ -1193,13 +1305,14 @@ class StreamerNotifier with ChangeNotifier {
     if (connect) {
       try {
         final notifier = LiveStreamBloc();
-        Map data = {"_id": dataStream.sId, "messages": commentCtrl.text, "type": "COMMENT"};
+
+        Map data = {"_id": dataStream.sId, "messages": commentCtrl.text, "type": "COMMENT", "commentType": "MESSAGGES"};
+        commentCtrl.clear();
         if (mounted) {
           await notifier.getLinkStream(context, data, UrlConstants.updateStream);
         }
         final fetch = notifier.liveStreamFetch;
         if (fetch.postsState == LiveStreamState.getApiSuccess) {
-          commentCtrl.text = '';
           notifyListeners();
         }
       } catch (e) {
@@ -1292,14 +1405,39 @@ class StreamerNotifier with ChangeNotifier {
     if (event == eventComment) {
       var messages = CommentLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
       if (messages.idStream == dataStream.sId) {
-        comment.insert(0, messages);
+        if (messages.commentType == 'MESSAGGES' || messages.commentType == 'JOIN') {
+          comment.insert(0, messages);
+        } else if (messages.commentType == 'GIFT') {
+          if (messages.urlGift != null) {
+            print("=====ada json");
+            if (giftDelux.isEmpty) {
+              // messages.urlGift = 'https://be-staging.oss-ap-southeast-5.aliyuncs.com/images/gift/66471897d975922b87c91578_3d.json';
+              giftDelux.add(messages);
+            } else {
+              giftDeluxTemp.add(messages);
+            }
+            if (timerDeluxe?.isActive ?? false) {
+            } else {
+              startTimerDelux();
+            }
+          } else {
+            if (giftBasic.length <= 2) {
+              giftBasic.add(messages);
+            } else {
+              giftBasicTemp.add(messages);
+            }
+            if (timerBasic?.isActive ?? false) {
+            } else {
+              startTimerBasic();
+            }
+          }
+        }
       }
     } else if (event == eventLikeStream) {
       var messages = CountLikeLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
       if (messages.idStream == dataStream.sId) {
         // totLikes += messages.likeCount ?? 0;
         totLikes = messages.likeCountTotal ?? 0;
-        print("totalnya ${animationIndexes}");
         // for (var i = 0; i < (messages.likeCount ?? 0); i++) {
         var run = getRandomDouble(1, 999999999999999);
         animationIndexes.add(run.toInt());
@@ -1312,6 +1450,18 @@ class StreamerNotifier with ChangeNotifier {
       var messages = CountViewLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
       if (messages.idStream == dataStream.sId) {
         totViews = messages.viewCount ?? 0;
+      }
+    } else if (event == eventStatusStream) {
+      var data = json.decode('$message');
+      if (data['data']['idStream'] == dataStream.sId && data['data']['status'] == false) {
+        dataStream.status = false;
+        timeCountdownReported = Duration(seconds: data['data']['countdown'] ?? 30);
+        dataBanned = BannedStreamModel(
+          streamBannedDate: data['data']['datePelanggaran'],
+          streamBannedMax: data['data']['totalPelanggaran'],
+          statusBanned: data['data']['statusBanned'],
+          streamId: dataStream.sId,
+        );
       }
     }
     notifyListeners();
@@ -1329,5 +1479,386 @@ class StreamerNotifier with ChangeNotifier {
     randomValue = double.parse(randomValue.toStringAsFixed(4));
 
     return randomValue;
+  }
+
+  bool urlFalse = true;
+  void urlValidation(String url) {
+    if (Uri.tryParse(url)?.hasAbsolutePath ?? false) {
+      urlFalse = true;
+    } else {
+      urlFalse = false;
+    }
+    notifyListeners();
+  }
+
+  void insertPinComment(BuildContext context, bool mounted, CommentLiveModel data) async {
+    if (pinComment != null) {
+      comment.insert(0, pinComment ?? CommentLiveModel());
+    }
+    pinComment = data;
+    comment.removeWhere((element) => element.idComment == data.idComment);
+    Map param = {
+      "_id": dataStream.sId,
+      "idComment": data.idComment,
+      "pinned": true, //true/false
+      "type": "COMMENT_PINNED"
+    };
+    updateStream(context, mounted, param).then((value) {});
+    notifyListeners();
+  }
+
+  Future removePinComment(BuildContext context, bool mounted) async {
+    comment.insert(0, pinComment ?? CommentLiveModel());
+    Map param = {
+      "_id": dataStream.sId,
+      "idComment": pinComment?.idComment,
+      "pinned": false, //true/false
+      "type": "COMMENT_PINNED"
+    };
+    updateStream(context, mounted, param).then((value) {});
+    pinComment = null;
+    notifyListeners();
+  }
+
+  void removeComment(BuildContext context, bool mounted, String idComment) async {
+    Map param = {"_id": dataStream.sId, "idComment": idComment, "type": "COMMENT_DELETE"};
+    updateStream(context, mounted, param).then((value) {});
+    comment.removeWhere((element) => element.idComment == idComment);
+    notifyListeners();
+    Routing().moveBack();
+  }
+
+  Future deletePinComment(BuildContext context, bool mounted) async {
+    Map param = {
+      "_id": dataStream.sId,
+      "idComment": pinComment?.idComment,
+      "pinned": false, //true/false
+      "type": "COMMENT_PINNED"
+    };
+    await updateStream(context, mounted, param).then((value) {});
+    Map param2 = {"_id": dataStream.sId, "idComment": pinComment?.idComment, "type": "COMMENT_DELETE"};
+    // ignore: use_build_context_synchronously
+    updateStream(context, mounted, param2).then((value) {});
+    pinComment = null;
+    notifyListeners();
+    Routing().moveBack();
+  }
+
+  void sendGift(BuildContext context, bool mounted, String idGift, String urlGiftThumb, String title, {String? urlGift, String? idViewStream}) async {
+    Map param = {
+      "_id": dataStream.sId,
+      "commentType": "GIFT",
+      "type": "COMMENT",
+      "idGift": idGift,
+      "urlGiftThum": urlGiftThumb,
+      "messages": title,
+    };
+
+    if (idViewStream != null) param['_id'] = idViewStream;
+
+    if (urlGift != null) param['urlGift'] = urlGift;
+    updateStream(context, mounted, param).then((value) {});
+    Routing().moveBack();
+  }
+
+  Future getUserShare(BuildContext context, bool mounted, {bool isLoadmore = false}) async {
+    if (!isLoadmore) {
+      pageNumberUserShare = 0;
+      isloadingUserShare = true;
+    }
+
+    notifyListeners();
+    bool connect = await System().checkConnections();
+
+    if (connect) {
+      try {
+        final notifier = LiveStreamBloc();
+        Map data = {
+          "pageNumber": pageNumberUserShare,
+          "pageRow": limitNumberUserShare,
+        };
+
+        if (searchUserCtrl.text != '') {
+          pageNumberUserShare = 0;
+          data["username"] = searchUserCtrl.text;
+          data["pageNumber"] = pageNumberUserShare;
+        }
+
+        if (mounted) await notifier.getLinkStream(context, data, UrlConstants.userShare);
+
+        final fetch = notifier.liveStreamFetch;
+        if (fetch.postsState == LiveStreamState.getApiSuccess) {
+          if (!isLoadmore) listShareUser = [];
+          fetch.data.forEach((v) => listShareUser.add(SearchPeolpleData.fromJson(v)));
+          if (shareUsers.isNotEmpty) {
+            for (var e in listShareUser) {
+              for (var f in shareUsers) {
+                if (e.username == f.username) {
+                  e.isSelected = true;
+                }
+              }
+            }
+          }
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+
+      notifyListeners();
+    } else {
+      if (context.mounted) {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
+        });
+      }
+    }
+    isloadingUserShare = false;
+    notifyListeners();
+  }
+
+  void loadMore(BuildContext context, ScrollController scrollController) async {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
+      print('kebawah');
+      pageNumberUserShare++;
+      notifyListeners();
+      await getUserShare(context, context.mounted, isLoadmore: true);
+      notifyListeners();
+    }
+  }
+
+  insertListShare(SearchPeolpleData data) {
+    shareUsers.add(data);
+    notifyListeners();
+  }
+
+  removeListShare(SearchPeolpleData data) {
+    shareUsers.removeWhere((element) => element.username == data.username);
+    notifyListeners();
+  }
+
+  //send share DM DIRECT MESSAGE
+  Future sendShareMassage(BuildContext context, {bool isViewer = false}) async {
+    Routing().moveBack();
+    for (var i = 0; i < shareUsers.length; i++) {
+      sendMessageDirect(context, shareUsers[i].email ?? '', isViewer);
+    }
+
+    ScaffoldMessengerState().hideCurrentSnackBar();
+    messageShareCtrl.clear();
+    // if (context.mounted) {
+    tn = context.read<TranslateNotifierV2>().translate;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      margin: const EdgeInsets.only(bottom: 60, left: 16, right: 16),
+      backgroundColor: kHyppeTextLightPrimary,
+      content: Text(tn?.sentSuccessfully ?? '', style: const TextStyle(color: Colors.white)),
+      behavior: SnackBarBehavior.floating,
+    ));
+    // }
+  }
+
+  Future sendMessageDirect(BuildContext context, String recipientEmail, bool isViewer) async {
+    // if (messageShareCtrl.text.trim().isEmpty) return;
+
+    try {
+      messageShareCtrl.text.logger();
+
+      final message = messageShareCtrl.text;
+      final emailSender = SharedPreference().readStorage(SpKeys.email);
+
+      var idStream = isViewer ? context.read<ViewStreamingNotifier>().dataStreaming.sId : dataStream.sId;
+      final param = DiscussArgument(
+        email: emailSender,
+        receiverParty: recipientEmail,
+      )
+        ..txtMessages = message == '' ? "text_kosong" : message
+        ..streamID = idStream;
+
+      final notifier = MessageBlocV2();
+      await notifier.createDiscussionBloc(context, disqusArgument: param);
+
+      final fetch = notifier.messageFetch;
+
+      if (fetch.chatState == MessageState.createDiscussionBlocSuccess) {}
+      if (fetch.chatState == MessageState.createDiscussionBlocError) {}
+    } catch (e) {
+      e.toString().logger();
+    }
+  }
+
+  Future createLinkStream(BuildContext context, {required bool copiedToClipboard, required String description}) async {
+    var profile = context.read<SelfProfileNotifier>().user.profile;
+    await createdDynamicLinkMixin(
+      context,
+      data: DynamicLinkData(
+        routes: Routes.viewStreaming,
+        postID: dataStream.sId,
+        fullName: "",
+        description: '${profile?.fullName ?? profile?.username} (${profile?.username}) \n is LIVE ${dataStream.title}',
+        // thumb: System().showUserPicture(profileImage),
+        thumb: System().showUserPicture(profile?.avatar?.mediaEndpoint),
+      ),
+      copiedToClipboard: copiedToClipboard,
+    ).then((value) {
+      if (value) {
+        if (copiedToClipboard && context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            margin: EdgeInsets.only(bottom: 60, left: 16, right: 16),
+            backgroundColor: kHyppeTextLightPrimary,
+            content: Text('Link Copied', style: TextStyle(color: Colors.white)),
+            behavior: SnackBarBehavior.floating,
+          ));
+        }
+      }
+    });
+  }
+
+  Timer? timerBasic;
+
+  void startTimerBasic() {
+    timerBasic = Timer.periodic(const Duration(seconds: 3), (timer) {
+      print("=== ${timer}");
+      print("=== ${giftBasic.isNotEmpty}");
+      if (giftBasic.isNotEmpty) {
+        print("===================================haous========================");
+        comment.insert(0, giftBasic[0]);
+        giftBasic.removeAt(0);
+        if (giftBasicTemp.isNotEmpty && giftBasic.length <= 2) {
+          giftBasic.add(giftBasicTemp[0]);
+          giftBasicTemp.removeAt(0);
+        }
+
+        notifyListeners();
+      } else {
+        timerBasic?.cancel();
+      }
+    });
+  }
+
+  Timer? timerDeluxe;
+  void startTimerDelux() {
+    timerDeluxe = Timer.periodic(const Duration(seconds: 5), (timer) {
+      if (giftDelux.isNotEmpty) {
+        comment.insert(0, giftDelux[0]); //masukin ke comment
+        giftDelux.removeAt(0); //hapus gift deluxe
+        if (giftDeluxTemp.isNotEmpty) {
+          giftDelux.add(giftDeluxTemp[0]);
+          giftDeluxTemp.removeAt(0);
+        }
+
+        notifyListeners();
+      } else {
+        timerDeluxe?.cancel();
+      }
+    });
+  }
+
+  Future getGift(BuildContext context, bool mounted, String type, {bool isLoadmore = false}) async {
+    //type = CLASSIC -- DELUXE
+    // if (type == 'CLASSIC' && dataGift.isNotEmpty) return;
+    // if (type == 'DELUXE' && dataGiftDeluxe.isNotEmpty) return;
+    if (!isLoadmore) isloadingGift = true;
+    notifyListeners();
+    bool connect = await System().checkConnections();
+
+    if (connect) {
+      try {
+        final notifier = LiveStreamBloc();
+        Map data = {"page": 0, "limit": 9999, "descending": true, "type": "GIFT", "typeGift": type};
+
+        if (mounted) await notifier.getLinkStream(context, data, UrlConstants.listmonetization);
+
+        final fetch = notifier.liveStreamFetch;
+        if (fetch.postsState == LiveStreamState.getApiSuccess) {
+          if (type == 'CLASSIC') {
+            if (!isLoadmore) dataGift = [];
+            fetch.data.forEach((v) => dataGift.add(GiftLiveModel.fromJson(v)));
+          } else {
+            if (!isLoadmore) dataGiftDeluxe = [];
+            fetch.data.forEach((v) => dataGiftDeluxe.add(GiftLiveModel.fromJson(v)));
+          }
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+
+      notifyListeners();
+    } else {
+      if (context.mounted) {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
+        });
+      }
+    }
+    isloadingGift = false;
+    notifyListeners();
+  }
+
+  Future getListGift(BuildContext context, mounted) async {
+    if (pageViewers == 0) isloadingViewers = true;
+    notifyListeners();
+    bool connect = await System().checkConnections();
+    if (connect) {
+      try {
+        final notifier = LiveStreamBloc();
+        Map data = {
+          "_id": dataStream.sId,
+        };
+
+        if (mounted) {
+          await notifier.getLinkStream(context, data, UrlConstants.listGift);
+        }
+        final fetch = notifier.liveStreamFetch;
+        if (fetch.postsState == LiveStreamState.getApiSuccess) {
+          fetch.data.forEach((v) => dataUserGift.add(ListGiftModel.fromJson(v)));
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+
+      notifyListeners();
+    } else {
+      if (context.mounted) {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
+          initLiveStream(context, mounted);
+        });
+      }
+    }
+    isloadingViewers = false;
+    notifyListeners();
+  }
+
+  Future checkBeforeLive(BuildContext context, mounted) async {
+    bool connect = await System().checkConnections();
+    if (connect) {
+      try {
+        final notifier = LiveStreamBloc();
+
+        if (mounted) {
+          await notifier.getStream(context, UrlConstants.checkStream);
+        }
+        final fetch = notifier.liveStreamFetch;
+        if (fetch.postsState == LiveStreamState.getApiSuccess) {
+          print('====---=== status ${fetch.statusStream}');
+          if (fetch.statusStream == false) {
+            statusLive = StatusStream.banned;
+            dataBanned = BannedStreamModel.fromJson(fetch.data);
+          }
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+
+      notifyListeners();
+    } else {
+      if (context.mounted) {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
+          initLiveStream(context, mounted);
+        });
+      }
+    }
+    isloadingViewers = false;
+    notifyListeners();
   }
 }

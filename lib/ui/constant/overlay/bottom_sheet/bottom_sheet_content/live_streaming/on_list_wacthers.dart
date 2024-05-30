@@ -103,81 +103,78 @@ class _OnListWatchersState extends State<OnListWatchers> {
           ),
           sixteenPx,
           Flexible(
-            child: InkWell(
-              onTap: () => ShowBottomSheet.onWatcherStatus(context, watcher.email ?? '', watcher.sId ?? ''),
-              child: Row(
-                children: [
-                  CustomProfileImage(
-                    width: 36,
-                    height: 36,
-                    following: true,
-                    imageUrl: System().showUserPicture(watcher.avatar?.mediaEndpoint),
-                  ),
-                  twelvePx,
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CustomTextWidget(
-                              textAlign: TextAlign.left,
-                              textToDisplay: watcher.username ?? '',
-                              textStyle: context.getTextTheme().bodyText2?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                            ),
-                            fourPx,
-                            CustomTextWidget(
-                              textAlign: TextAlign.left,
-                              textToDisplay: watcher.fullName ?? '',
-                              textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w400, color: kHyppeBurem),
-                            ),
-                          ],
-                        ),
-                        // Button Follow
-                        CustomElevatedButton(
-                          width: 95,
-                          height: 32 * SizeConfig.scaleDiagonal,
-                          buttonStyle: ButtonStyle(
-                            backgroundColor: (watcher.following ?? false)
-                                ? null
-                                : (notifier.userName == notifier.audienceProfile.username)
-                                    ? null
-                                    : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+            child: Row(
+              children: [
+                CustomProfileImage(
+                  width: 36,
+                  height: 36,
+                  following: true,
+                  imageUrl: System().showUserPicture(watcher.avatar?.mediaEndpoint),
+                ),
+                twelvePx,
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomTextWidget(
+                            textAlign: TextAlign.left,
+                            textToDisplay: watcher.username ?? '',
+                            textStyle: context.getTextTheme().bodyText2?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                ),
                           ),
-                          function: notifier.isCheckLoading
+                          fourPx,
+                          CustomTextWidget(
+                            textAlign: TextAlign.left,
+                            textToDisplay: watcher.fullName ?? '',
+                            textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w400, color: kHyppeBurem),
+                          ),
+                        ],
+                      ),
+                      // Button Follow
+                      CustomElevatedButton(
+                        width: 95,
+                        height: 32 * SizeConfig.scaleDiagonal,
+                        buttonStyle: ButtonStyle(
+                          backgroundColor: (watcher.following ?? false)
                               ? null
                               : (notifier.userName == notifier.audienceProfile.username)
                                   ? null
-                                  : () {
-                                      if (notifier.statusFollowing == StatusFollowing.none || notifier.statusFollowing == StatusFollowing.rejected) {
-                                        notifier.followUser(context, watcher.email, idMediaStreaming: watcher.sId).then((value) {
-                                          watcher.following = true;
-                                        });
-                                      } else if (notifier.statusFollowing == StatusFollowing.following) {
-                                        notifier.followUser(context, watcher.email, isUnFollow: true, idMediaStreaming: watcher.sId).then((value) {
-                                          watcher.following = false;
-                                        });
-                                      }
-                                    },
-                          child: notifier.isCheckLoading
-                              ? const CustomLoading()
-                              : CustomTextWidget(
-                                  textToDisplay: (watcher.following ?? false) ? language.following ?? 'following' : language.follow ?? 'follow',
-                                  textStyle: Theme.of(context).textTheme.labelMedium?.copyWith(
-                                        color: (watcher.following ?? false) ? kHyppeGrey : kHyppeLightButtonText,
-                                      ),
-                                ),
+                                  : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                         ),
-                      ],
-                    ),
+                        function: notifier.isCheckLoading
+                            ? null
+                            : (notifier.userName == notifier.audienceProfile.username)
+                                ? null
+                                : () {
+                                    if (notifier.statusFollowing == StatusFollowing.none || notifier.statusFollowing == StatusFollowing.rejected) {
+                                      notifier.followUser(context, watcher.email, idMediaStreaming: watcher.sId).then((value) {
+                                        watcher.following = true;
+                                      });
+                                    } else if (notifier.statusFollowing == StatusFollowing.following) {
+                                      notifier.followUser(context, watcher.email, isUnFollow: true, idMediaStreaming: watcher.sId).then((value) {
+                                        watcher.following = false;
+                                      });
+                                    }
+                                  },
+                        child: notifier.isCheckLoading
+                            ? const CustomLoading()
+                            : CustomTextWidget(
+                                textToDisplay: (watcher.following ?? false) ? language.following ?? 'following' : language.follow ?? 'follow',
+                                textStyle: Theme.of(context).textTheme.labelMedium?.copyWith(
+                                      color: (watcher.following ?? false) ? kHyppeGrey : kHyppeLightButtonText,
+                                    ),
+                              ),
+                      ),
+                    ],
                   ),
-                  tenPx
-                ],
-              ),
+                ),
+                tenPx
+              ],
             ),
           ),
         ],

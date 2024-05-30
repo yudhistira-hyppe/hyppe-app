@@ -2039,7 +2039,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       checkChallenge = false;
     }
   }
-  
+
   Future validateUserUrl(context) async {
     final userKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
 
@@ -2049,9 +2049,9 @@ class PreUploadContentNotifier with ChangeNotifier {
       }, title: language.verificationYourIDFirst, bodyText: language.toAccessTransactionPageYouNeedToVerificationYourID);
     }
 
-    if (urlLink != ''){
-      Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent, 'urlLink': urlLink, 'judulLink':judulLink});
-    }else{
+    if (urlLink != '') {
+      Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent, 'urlLink': urlLink, 'judulLink': judulLink});
+    } else {
       Navigator.pushNamed(context, Routes.addlink, arguments: {'routes': Routes.preUploadContent});
     }
   }

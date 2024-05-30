@@ -99,6 +99,7 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
             //   alignment: const Alignment(-0.8, 0.8),
             //   child: CameraSwitchButton(),
             // ),
+            OverlayWithRectangleClipping(),
             Align(
               alignment: const Alignment(0.0, 0.9),
               child: Row(
@@ -122,19 +123,19 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
               ),
             ),
 
-            const Align(
-              alignment: Alignment.center,
-              child: CustomIconWidget(
-                iconData: "${AssetPath.vectorPath}card.svg",
-                defaultColor: false,
-                height: 183,
-                width: 281,
-              ),
-            ),
+            // const Align(
+            //   alignment: Alignment.center,
+            //   child: CustomIconWidget(
+            //     iconData: "${AssetPath.vectorPath}card.svg",
+            //     defaultColor: false,
+            //     height: 183,
+            //     width: 281,
+            //   ),
+            // ),
             Align(
               alignment: const Alignment(0.0, 0.6),
               child: CustomTextWidget(textToDisplay: notifier.language.cameraTakeIdCardInfo ?? '', textStyle: textTheme.subtitle1?.copyWith(color: Colors.white)),
-            )
+            ),
           ],
         )
 
@@ -308,5 +309,46 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
             ),
       ),
     );
+  }
+}
+
+class OverlayWithRectangleClipping extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(backgroundColor: Colors.transparent, body: _getCustomPaintOverlay(context));
+  }
+
+  //CustomPainter that helps us in doing this
+  CustomPaint _getCustomPaintOverlay(BuildContext context) {
+    return CustomPaint(size: MediaQuery.of(context).size, painter: RectanglePainter());
+  }
+}
+
+class RectanglePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..color = Colors.black54;
+
+    canvas.drawPath(
+        Path.combine(
+          PathOperation.difference, //simple difference of following operations
+          //bellow draws a rectangle of full screen (parent) size
+          Path()..addRect(Rect.fromLTWH(0, 0, size.width, size.height)),
+          //bellow clips out the circular rectangle with center as offset and dimensions you need to set
+          Path()
+            ..addRRect(
+              RRect.fromRectAndRadius(
+                Rect.fromCenter(center: Offset(size.width * 0.5, size.height * 0.5), width: size.width * 0.90, height: size.height * 0.25),
+                Radius.circular(15),
+              ),
+            )
+            ..close(),
+        ),
+        paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
   }
 }

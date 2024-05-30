@@ -44,117 +44,104 @@ class _SaldoCoinWidgetState extends State<SaldoCoinWidget> {
       widget.isChecking!(notifier.visibilityTransaction, notifier.saldoCoin);
     });
     super.didUpdateWidget(oldWidget);
-  } 
+  }
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return Consumer<SaldoCoinNotifier>(
-      builder: (context, notifier, _) {
-        
-        return Container(
-          color: Colors.white,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(right: 8.0),
-                    child: CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}ic-coin.svg",
-                      height: 32,
-                      defaultColor: false,
-                    ),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      RichText(
-                        
-                        text: TextSpan(
-                          style: textTheme.labelLarge
-                                  ?.copyWith(color: Colors.black),
-                          children: [
-                          const TextSpan(
-                              text: 'Saldo : ',),
-                          TextSpan(
-                              text: System().numberFormat(amount: notifier.saldoCoin),
-                          )
-                        ]),
-                      ),
-                      Visibility(
-                        visible: widget.transactionCoin > notifier.saldoCoin,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: RichText(
-                            text: TextSpan(children: [
-                              TextSpan(
-                                  text: 'Saldo kurang ',
-                                  style: textTheme.labelLarge
-                                      ?.copyWith(color: kHyppeBurem)),
-                              TextSpan(
-                                  text: System().numberFormat(amount: notifier.transactionCoin - notifier.saldoCoin),
-                                  style: textTheme.labelLarge
-                                      ?.copyWith(color: Colors.red.shade900)),
-                              TextSpan(
-                                  text: ' Coins',
-                                  style: textTheme.labelLarge
-                                      ?.copyWith(color: Colors.red.shade900))
-                            ]),
-                          ),
-                        ),
-                      ),
-                      Visibility(
-                        visible: widget.transactionCoin < notifier.saldoCoin,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: RichText(
-                            text: TextSpan(children: [
-                              TextSpan(
-                                  text: 'Saldo yang akan digunakan ',
-                                  style: textTheme.labelLarge
-                                      ?.copyWith(color: kHyppeBurem, fontSize: 12, fontWeight: FontWeight.normal)),
-                              TextSpan(
-                                  text: System().numberFormat(amount: notifier.transactionCoin),
-                                  style: textTheme.labelLarge
-                                      ?.copyWith(color: Colors.red.shade900, fontSize: 12, fontWeight: FontWeight.normal)),
-                              TextSpan(
-                                  text: ' Coins',
-                                  style: textTheme.labelLarge
-                                      ?.copyWith(color: Colors.red.shade900, fontSize: 12, fontWeight: FontWeight.normal))
-                            ]),
-                          ),
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
-              GestureDetector(
-                onTap: (){
-                  Routing().move(Routes.topUpCoins);
-                },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-                  width: kToolbarHeight * 1.8,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(18.0),
-                    color: Colors.black.withOpacity(.7),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      CustomTextWidget(textToDisplay: 'Top Up', textStyle: textTheme.labelLarge?.copyWith(color: Colors.white),),
-                      const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.white,)
-                    ],
+    return Consumer<SaldoCoinNotifier>(builder: (context, notifier, _) {
+      return Container(
+        color: Colors.white,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(right: 8.0),
+                  child: CustomIconWidget(
+                    iconData: "${AssetPath.vectorPath}ic-coin.svg",
+                    height: 32,
+                    defaultColor: false,
                   ),
                 ),
-              )
-            ],
-          ),
-        );
-      }
-    );
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    RichText(
+                      text: TextSpan(style: textTheme.labelLarge?.copyWith(color: Colors.black), children: [
+                        const TextSpan(
+                          text: 'Saldo : ',
+                        ),
+                        TextSpan(
+                          text: System().numberFormat(amount: notifier.saldoCoin),
+                        )
+                      ]),
+                    ),
+                    Visibility(
+                      visible: !notifier.visibilityTransaction,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: RichText(
+                          text: TextSpan(children: [
+                            TextSpan(text: 'Saldo kurang ', style: textTheme.labelLarge?.copyWith(color: kHyppeBurem)),
+                            TextSpan(text: System().numberFormat(amount: notifier.transactionCoin - notifier.saldoCoin), style: textTheme.labelLarge?.copyWith(color: Colors.red.shade900)),
+                            TextSpan(text: ' Coins', style: textTheme.labelLarge?.copyWith(color: Colors.red.shade900))
+                          ]),
+                        ),
+                      ),
+                    ),
+                    Visibility(
+                      visible: widget.transactionCoin < notifier.saldoCoin,
+                      // visible: true,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: RichText(
+                          text: TextSpan(children: [
+                            TextSpan(text: 'Saldo yang akan digunakan ', style: textTheme.labelLarge?.copyWith(color: kHyppeBurem, fontSize: 12, fontWeight: FontWeight.normal)),
+                            TextSpan(
+                                text: System().numberFormat(amount: notifier.transactionCoin),
+                                style: textTheme.labelLarge?.copyWith(color: Colors.red.shade900, fontSize: 12, fontWeight: FontWeight.normal)),
+                            TextSpan(text: ' Coins', style: textTheme.labelLarge?.copyWith(color: Colors.red.shade900, fontSize: 12, fontWeight: FontWeight.normal))
+                          ]),
+                        ),
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
+            GestureDetector(
+              onTap: () {
+                Routing().move(Routes.topUpCoins);
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                width: kToolbarHeight * 1.8,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18.0),
+                  color: Colors.black.withOpacity(.7),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    CustomTextWidget(
+                      textToDisplay: 'Top Up',
+                      textStyle: textTheme.labelLarge?.copyWith(color: Colors.white),
+                    ),
+                    const Icon(
+                      Icons.arrow_forward_ios,
+                      size: 16,
+                      color: Colors.white,
+                    )
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    });
   }
 }

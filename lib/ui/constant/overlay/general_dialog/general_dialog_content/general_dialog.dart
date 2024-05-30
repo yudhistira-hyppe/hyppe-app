@@ -17,6 +17,8 @@ class GeneralAlertDialog extends StatefulWidget {
   final bool? isLoading;
   final bool isHorizontal;
   final bool fillColor;
+  final Widget? bodyWidget;
+  final Widget? topWidget;
   const GeneralAlertDialog(
       {Key? key,
       this.titleText,
@@ -29,6 +31,8 @@ class GeneralAlertDialog extends StatefulWidget {
       this.titleButtonSecondary,
       this.isLoading = false,
       this.isHorizontal = true,
+      this.bodyWidget,
+      this.topWidget,
       this.fillColor = true})
       : super(key: key);
 
@@ -50,6 +54,7 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
+          widget.topWidget ?? SizedBox.shrink(),
           CustomTextWidget(
             textToDisplay: '${widget.titleText}',
             maxLines: widget.maxLineTitle,
@@ -65,6 +70,7 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
               textStyle: theme.textTheme.bodyText2,
             ),
           ),
+          widget.bodyWidget ?? const SizedBox.shrink(),
           widget.bodyText == null || widget.bodyText == '' ? const SizedBox.shrink() : twelvePx,
           widget.bodyText == null || widget.bodyText == '' ? const SizedBox.shrink() : twelvePx,
           _isLoading
@@ -111,14 +117,18 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
                         ),
                         eightPx,
                         widget.functionSecondary == null
-                            ? Container() : GestureDetector(
-                          onTap: (){
-                            if(widget.functionSecondary != null){
-                              widget.functionSecondary!();
-                            }
-                          },
-                          child: CustomTextWidget(textToDisplay: '${widget.titleButtonSecondary}', textStyle: theme.textTheme.button?.copyWith(color: theme.colorScheme.primary, fontSize: 14),),
-                        ),
+                            ? Container()
+                            : GestureDetector(
+                                onTap: () {
+                                  if (widget.functionSecondary != null) {
+                                    widget.functionSecondary!();
+                                  }
+                                },
+                                child: CustomTextWidget(
+                                  textToDisplay: '${widget.titleButtonSecondary}',
+                                  textStyle: theme.textTheme.button?.copyWith(color: theme.colorScheme.primary, fontSize: 14),
+                                ),
+                              ),
                         eightPx
                       ],
                     )

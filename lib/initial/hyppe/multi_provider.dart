@@ -43,6 +43,7 @@ import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/fullscreen/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/appeal/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/feedback/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 // import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamerios/notifier.dart';
@@ -268,6 +269,7 @@ class AppDependencies {
         // ChangeNotifierProvider<StreameriOSNotifier>(create: (context) => StreameriOSNotifier()),
         ChangeNotifierProvider<StreamingFeedbackNotifier>(create: (context) => StreamingFeedbackNotifier()),
         ChangeNotifierProvider<ViewStreamingNotifier>(create: (context) => ViewStreamingNotifier()),
+        ChangeNotifierProvider<AppealStreamNotifier>(create: (context) => AppealStreamNotifier()),
 
         //Coins
         ChangeNotifierProvider<CoinNotifier>(create: (context) => CoinNotifier()),

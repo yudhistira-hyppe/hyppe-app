@@ -45,16 +45,13 @@ class TitleLive extends StatelessWidget {
                 Flexible(
                   child: GestureDetector(
                     onTap: () {
-                      ShowBottomSheet.onStreamWatchersStatus(
-                          context, false, notifier);
+                      ShowBottomSheet.onStreamWatchersStatus(context, false, notifier);
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          (notifier.titleLive.isNotEmpty)
-                              ? notifier.titleLive
-                              : notifier.userName,
+                          (notifier.titleLive.isNotEmpty) ? notifier.titleLive : notifier.userName,
                           style: const TextStyle(
                             color: kHyppeTextPrimary,
                             fontWeight: FontWeight.w700,
@@ -75,8 +72,7 @@ class TitleLive extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    ShowBottomSheet.onStreamWatchersStatus(
-                        context, false, notifier);
+                    ShowBottomSheet.onStreamWatchersStatus(context, false, notifier);
                   },
                   child: const Icon(
                     Icons.keyboard_arrow_down,
@@ -85,30 +81,34 @@ class TitleLive extends StatelessWidget {
                 )
               ],
             ),
-            sixtyFourPx,
-            GestureDetector(
-              onTap: () async {
-                var uri = notifier.dataStream.urlLink??'';
-                if (!uri.withHttp()){
-                  uri='https://$uri';
-                }
-                if (await canLaunchUrl(Uri.parse(uri))) {
+            sixteenPx,
+            if (notifier.urlLink != '')
+              GestureDetector(
+                onTap: () async {
+                  var uri = notifier.urlLink;
+                  // var uri = notifier.dataStream.urlLink ?? '';
+                  if (!uri.withHttp()) {
+                    uri = 'https://$uri';
+                  }
+                  if (await canLaunchUrl(Uri.parse(uri))) {
                     await launchUrl(Uri.parse(uri));
                   } else {
-                    throw  Fluttertoast.showToast(msg: 'Could not launch $uri');
+                    throw Fluttertoast.showToast(msg: 'Could not launch $uri');
                   }
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: Colors.black.withOpacity(0.4),
-                ),
-                child: Text(notifier.dataStream.textUrl??notifier.dataStream.urlLink??'Klik disini ya!', 
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.black.withOpacity(0.4),
+                  ),
+                  child: Text(
+                    notifier.textUrl,
+                    // notifier.dataStream.textUrl ?? notifier.dataStream.urlLink ?? 'Klik disini ya!',
+                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
-            ),
           ],
         ),
       ),

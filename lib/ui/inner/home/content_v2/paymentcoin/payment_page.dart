@@ -145,7 +145,8 @@ class _PaymentCoinPageState extends State<PaymentCoinPage> {
                       Routing().moveBack();
                       Navigator.pushReplacementNamed(context, Routes.transactionwaiting, arguments: {'bank':bankdata, 'transaction':notifier.transactionCoinDetail});
                     }else if(notifier.blocPayNow.dataFetch.dataState == TransactionCoinState.getBlocError){
-                      Fluttertoast.showToast(msg: jsonDecode(notifier.blocPayNow.dataFetch.data.toString())['message']);
+                      // print(notifier.blocPayNow.dataFetch.data['message']);
+                      Fluttertoast.showToast(msg: notifier.blocPayNow.dataFetch.data['message']);
                     }
                   
                   });
