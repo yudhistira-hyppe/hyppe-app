@@ -245,7 +245,7 @@ class BeforeLive extends StatelessWidget {
                               Expanded(
                                 child: Text(
                                   notifier.tn?.enterLinkLiveStream ?? 'Masukkan URL yang ingin dibagikan',
-                                  style: TextStyle(color: kHyppeBurem),
+                                  style: const TextStyle(color: Color(0xffCECECE)),
                                 ),
                               ),
                               const Icon(

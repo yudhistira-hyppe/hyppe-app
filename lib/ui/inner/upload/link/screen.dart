@@ -229,20 +229,39 @@ class _AddLinkPageState extends State<AddLinkPage> {
       mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Flexible(
-          child: CustomDescContent(
-            desc:
-                "Dengan melanjutkan, saya menyatakan bahwa saya bertanggung jawab penuh atas link yang saya taruh, Dengan melanjutkan, saya menyatakan bahwa saya bertanggung jawab penuh atas link yang saya taruh",
-            trimLines: 2,
-            textAlign: TextAlign.start,
-            callbackIsMore: (val) {},
-            seeLess: ' ${notifier.language.less ?? 'Sedikit'}',
-            seeMore: ' ${notifier.language.more ?? 'Selengkapnya'}',
-            normStyle: const TextStyle(fontSize: 14, color: kHyppeSurface),
-            hrefStyle: Theme.of(context).textTheme.titleSmall?.copyWith(color: kHyppePrimary),
-            expandStyle: const TextStyle(fontSize: 14, color: kHyppePrimary, fontWeight: FontWeight.bold),
-          ),
-        ),
+        // Flexible(
+        //   child: CustomDescContent(
+        //     desc:
+        //         "Dengan melanjutkan, saya menyatakan bahwa saya bertanggung jawab penuh atas link yang saya taruh, Dengan melanjutkan, saya menyatakan bahwa saya bertanggung jawab penuh atas link yang saya taruh",
+        //     trimLines: 2,
+        //     textAlign: TextAlign.start,
+        //     callbackIsMore: (val) {},
+        //     seeLess: ' ${notifier.language.less ?? 'Sedikit'}',
+        //     seeMore: ' ${notifier.language.more ?? 'Selengkapnya'}',
+        //     normStyle: const TextStyle(fontSize: 14, color: kHyppeSurface),
+        //     hrefStyle: Theme.of(context).textTheme.titleSmall?.copyWith(color: kHyppePrimary),
+        //     expandStyle: const TextStyle(fontSize: 14, color: kHyppePrimary, fontWeight: FontWeight.bold),
+        //   ),
+        // ),
+        Expanded(
+            child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(notifier.language.localeDatetime == 'id'
+                ? "Saya bertanggung jawab sepenuhnya dan memastikan tautan yang ditambahkan sesuai dengan Panduan Komunitas Hyppe yang berlaku."
+                : "I take full responsibility and ensure that any links added comply with the applicable Hyppe Community Guidelines."),
+            GestureDetector(
+              onTap: () {
+                Routing().move(Routes.userAgreement);
+              },
+              child: Text(
+                notifier.language.more ?? '',
+                style: const TextStyle(fontSize: 14, color: kHyppePrimary, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        )),
+
         Checkbox(
             activeColor: Theme.of(context).colorScheme.primary,
             checkColor: Colors.white,

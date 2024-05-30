@@ -708,13 +708,15 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   //   notifyListeners();
   // }
 
-  Future<void> resumeStreamer() async {
+  Future<void> resumeStreamer(BuildContext context) async {
+    pauseSendStatus(context);
     engine.startPreview();
     engine.muteLocalVideoStream(false);
     engine.muteLocalAudioStream(false);
     mute = false;
     flipCameraVisible = true;
     isPause = false;
+
     notifyListeners();
   }
 
@@ -764,6 +766,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
+  DateTime? timePause;
   Future<void> pauseLive(BuildContext context, mounted) async {
     var pause = await pauseSendStatus(context);
     if (pause) {
@@ -774,6 +777,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
       engine.muteLocalAudioStream(mute);
       totPause++;
       isPause = true;
+      timePause = DateTime.now();
       notifyListeners();
     }
   }
@@ -1750,47 +1754,6 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
         timerDeluxe?.cancel();
       }
     });
-  }
-
-  Future getGift(BuildContext context, bool mounted, String type, {bool isLoadmore = false}) async {
-    //type = CLASSIC -- DELUXE
-    // if (type == 'CLASSIC' && dataGift.isNotEmpty) return;
-    // if (type == 'DELUXE' && dataGiftDeluxe.isNotEmpty) return;
-    if (!isLoadmore) isloadingGift = true;
-    notifyListeners();
-    bool connect = await System().checkConnections();
-
-    if (connect) {
-      try {
-        final notifier = LiveStreamBloc();
-        Map data = {"page": 0, "limit": 9999, "descending": true, "type": "GIFT", "typeGift": type};
-
-        if (mounted) await notifier.getLinkStream(context, data, UrlConstants.listmonetization);
-
-        final fetch = notifier.liveStreamFetch;
-        if (fetch.postsState == LiveStreamState.getApiSuccess) {
-          if (type == 'CLASSIC') {
-            if (!isLoadmore) dataGift = [];
-            fetch.data.forEach((v) => dataGift.add(GiftLiveModel.fromJson(v)));
-          } else {
-            if (!isLoadmore) dataGiftDeluxe = [];
-            fetch.data.forEach((v) => dataGiftDeluxe.add(GiftLiveModel.fromJson(v)));
-          }
-        }
-      } catch (e) {
-        debugPrint(e.toString());
-      }
-
-      notifyListeners();
-    } else {
-      if (context.mounted) {
-        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
-          Routing().moveBack();
-        });
-      }
-    }
-    isloadingGift = false;
-    notifyListeners();
   }
 
   Future getListGift(BuildContext context, mounted) async {

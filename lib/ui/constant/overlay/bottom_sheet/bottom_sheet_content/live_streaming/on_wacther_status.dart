@@ -90,6 +90,7 @@ class _OnWatcherStatusState extends State<OnWatcherStatus> {
                               isHost: false,
                               isViewer: false,
                               notifier: notifier,
+                              canTap: false,
                             ),
                           ),
                           GestureDetector(
@@ -98,6 +99,7 @@ class _OnWatcherStatusState extends State<OnWatcherStatus> {
 
                               if (widget.isViewer) {
                                 if (notifier.audienceProfile.username == viewNotifier.dataStreaming.user?.username) {
+                                  Navigator.pop(context);
                                   viewNotifier.reportLive(context);
                                 }
                               } else {

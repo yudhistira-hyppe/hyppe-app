@@ -33,16 +33,6 @@ class ListCommentViewer extends StatelessWidget {
                 onTap: () {
                   commentFocusNode!.unfocus();
                 },
-                onDoubleTapDown: (details) {
-                  var position = details.globalPosition;
-                  notifier.positionDxDy = position;
-                },
-                onDoubleTap: () {
-                  notifier.likeAddTapScreen();
-                  debouncer.run(() {
-                    notifier.sendLikeTapScreen(context, notifier.streamerData!);
-                  });
-                },
                 child: Align(
                   alignment: Alignment.bottomLeft,
                   child: ListView.builder(
@@ -109,7 +99,7 @@ class ListCommentViewer extends StatelessWidget {
                                             // ),
                                             if (notifier.comment[index].messages != 'joined')
                                               Text(
-                                                notifier.comment[index].messages ?? '',
+                                                translate.localeDatetime == 'id' ? 'bergabung' : 'joined',
                                                 style: const TextStyle(color: kHyppeTextPrimary),
                                               ),
                                           ],
@@ -117,9 +107,9 @@ class ListCommentViewer extends StatelessWidget {
                                       : notifier.comment[index].commentType == 'JOIN'
                                           ? Text.rich(TextSpan(text: notifier.comment[index].username ?? '', style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700), children: [
                                               if (notifier.comment[index].messages == 'joined')
-                                                const TextSpan(
-                                                  text: ' joined',
-                                                  style: TextStyle(color: kHyppeTextPrimary, fontWeight: FontWeight.w700),
+                                                TextSpan(
+                                                  text: ' ${translate.localeDatetime == 'id' ? 'bergabung' : 'joined'}',
+                                                  style: const TextStyle(color: kHyppeTextPrimary, fontWeight: FontWeight.w700),
                                                 ),
                                             ]))
                                           : Row(

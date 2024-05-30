@@ -8,16 +8,18 @@ class StreamingModel {
   int? expireTime;
   String? startLive;
   bool? status;
+  bool? pause;
   String? urlStream;
   String? urlIngest;
   String? createAt;
   String? endLive;
-  bool? pause;
+
   bool? commentDisabled;
   int? viewCountActive;
   String? url;
   String? textUrl;
   String? tokenAgora;
+  String? pauseDate;
   List<CommentLiveModel>? comment;
   List<String>? reportRemark;
   User? user;
@@ -40,6 +42,7 @@ class StreamingModel {
     this.comment,
     this.textUrl,
     this.tokenAgora,
+    this.pauseDate,
     this.reportRemark,
     this.user,
   });
@@ -51,16 +54,17 @@ class StreamingModel {
     expireTime = json['expireTime'];
     startLive = json['startLive'];
     status = json['status'];
+    pause = json['pause'];
     urlStream = json['urlStream'];
     urlIngest = json['urlIngest'];
     createAt = json['createAt'];
     endLive = json['endLive'];
-    pause = json['pause'];
     commentDisabled = json['commentDisabled'];
     viewCountActive = json['viewCountActive'] ?? 0;
     url = json['url'];
     textUrl = json['textUrl'];
     tokenAgora = json['tokenAgora'];
+    pauseDate = json['pauseDate'];
     if (json['comment'] != null) {
       comment = <CommentLiveModel>[];
       json['comment'].forEach((v) {

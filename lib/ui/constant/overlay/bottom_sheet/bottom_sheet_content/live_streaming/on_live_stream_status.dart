@@ -8,6 +8,7 @@ import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
@@ -58,8 +59,8 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
     final language = context.read<TranslateNotifierV2>().translate;
     final isIndo = SharedPreference().readStorage(SpKeys.isoCode) == 'id';
 
-    return Consumer<StreamerNotifier>(
-      builder: (_, notifier, __) {
+    return Consumer2<StreamerNotifier, ViewStreamingNotifier>(
+      builder: (_, notifier, viewStreaming, __) {
         return Container(
           height: double.infinity,
           width: double.infinity,
@@ -112,10 +113,13 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                     right: 16,
                   ),
                   child: ItemAccount(
-                    urlImage: widget.isViewer ? (notifier.dataStream.avatar?.mediaEndpoint ?? '') : (context.read<SelfProfileNotifier>().user.profile?.avatar?.mediaEndpoint) ?? '',
-                    username: widget.isViewer ? (notifier.dataStream.username ?? '') : (context.read<SelfProfileNotifier>().user.profile?.username ?? ''),
-                    name: widget.isViewer ? (notifier.dataStream.fullName ?? '') : (context.read<SelfProfileNotifier>().user.profile?.fullName ?? ''),
-                    email: widget.isViewer ? (notifier.dataStream.email ?? '') : (context.read<SelfProfileNotifier>().user.profile?.email ?? ''),
+                    urlImage: widget.isViewer
+                        ? (notifier.dataStream.avatar?.mediaEndpoint ?? (viewStreaming.dataStreaming.user?.avatar?.mediaEndpoint ?? ''))
+                        : (context.read<SelfProfileNotifier>().user.profile?.avatar?.mediaEndpoint ?? ''),
+                    username:
+                        widget.isViewer ? (notifier.dataStream.username ?? (viewStreaming.dataStreaming.user?.username ?? '')) : (context.read<SelfProfileNotifier>().user.profile?.username ?? ''),
+                    name: widget.isViewer ? (notifier.dataStream.fullName ?? (viewStreaming.dataStreaming.user?.fullName ?? '')) : (context.read<SelfProfileNotifier>().user.profile?.fullName ?? ''),
+                    email: widget.isViewer ? (notifier.dataStream.email ?? (viewStreaming.dataStreaming.user?.email ?? '')) : (context.read<SelfProfileNotifier>().user.profile?.email ?? ''),
                     sId: notifier.dataStream.sId ?? '',
                     isViewer: widget.isViewer,
                     notifier: notifier,
@@ -221,6 +225,7 @@ class ItemAccount extends StatefulWidget {
   final bool showThreeDot;
   final bool isViewer;
   final StreamerNotifier notifier;
+  final bool canTap;
 
   final String? idStream;
   const ItemAccount({
@@ -238,6 +243,7 @@ class ItemAccount extends StatefulWidget {
     this.length,
     this.idStream,
     this.showThreeDot = false,
+    this.canTap = true,
   });
 
   @override
@@ -251,7 +257,9 @@ class _ItemAccountState extends State<ItemAccount> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final streampro = Provider.of<StreamerNotifier>(context, listen: false);
       if (widget.isHost && widget.isViewer) {
-        streampro.getProfileNCheckViewer(context, widget.email);
+        final notifier = Provider.of<ViewStreamingNotifier>(context, listen: false);
+
+        streampro.getProfileNCheckViewer(context, notifier.dataStreaming.user?.email ?? widget.email);
       }
     });
   }
@@ -270,11 +278,13 @@ class _ItemAccountState extends State<ItemAccount> {
               children: [
                 CustomProfileImage(
                   onTap: () async {
-                    if (context.read<SelfProfileNotifier>().user.profile?.username != widget.username) {
-                      Routing().moveBack();
-                      Future.delayed(const Duration(milliseconds: 500), () {
-                        ShowBottomSheet.onWatcherStatus(Routing.navigatorKey.currentContext ?? context, widget.email, widget.sId, isViewer: widget.isViewer);
-                      });
+                    if (widget.canTap) {
+                      if (context.read<SelfProfileNotifier>().user.profile?.username != widget.username) {
+                        Routing().moveBack();
+                        Future.delayed(const Duration(milliseconds: 500), () {
+                          ShowBottomSheet.onWatcherStatus(Routing.navigatorKey.currentContext ?? context, widget.email, widget.sId, isViewer: widget.isViewer);
+                        });
+                      }
                     }
                   },
                   width: 36,

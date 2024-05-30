@@ -327,6 +327,10 @@ class DynamicLinkService {
               break;
             case Routes.viewStreaming:
               '_handleDeepLink vidDetail'.logger();
+              String? newUser = SharedPreference().readStorage(SpKeys.newUser);
+              if (newUser == "TRUE") {
+                return;
+              }
 
               isFromSplash = false;
               _routing.moveAndRemoveUntil(Routes.lobby, Routes.lobby);

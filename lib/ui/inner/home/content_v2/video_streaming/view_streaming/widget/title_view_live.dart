@@ -196,10 +196,9 @@ class TitleViewLive extends StatelessWidget {
         if (totViews > 0)
           GestureDetector(
             onTap: () {
-              print('testing see views');
               final ref = context.read<StreamerNotifier>();
               ref.dataStream = data;
-              print('testing see views ${ref.dataStream}');
+
               ref.titleLive = data.title ?? '';
               ref.userName = data.username ?? '';
               ShowBottomSheet.onStreamWatchersStatus(context, true, ref);

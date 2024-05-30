@@ -52,7 +52,6 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
   // bool isloading = true;
   FocusNode commentFocusNode = FocusNode();
   AlivcPusherPreview? pusherPreviewView;
-
   bool isLiked = false;
 
   @override
@@ -240,9 +239,9 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
                     //       height: 100,
                     //       child: Text("hahah ${notifier.dataStream.status}"),
                     //     )),
+                    if (notifier.statusLive == StatusStream.ready || notifier.statusLive == StatusStream.online) const GiftDeluxe(),
                     if (notifier.isPause) PauseLive(notifier: notifier),
                     if (notifier.statusLive == StatusStream.ready || notifier.statusLive == StatusStream.online) StreamerWidget(commentFocusNode: commentFocusNode),
-                    if (notifier.statusLive == StatusStream.ready || notifier.statusLive == StatusStream.online) const GiftDeluxe(),
                     if ((notifier.statusLive == StatusStream.ready || notifier.statusLive == StatusStream.online) && notifier.dataStream.status == false) const ForceStop(),
                     // StreamerWidget(commentFocusNode: commentFocusNode),
                     // Align(
