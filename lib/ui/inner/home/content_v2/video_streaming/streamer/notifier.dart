@@ -1643,8 +1643,17 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   //send share DM DIRECT MESSAGE
   Future sendShareMassage(BuildContext context, {bool isViewer = false}) async {
     Routing().moveBack();
+
+    var message = messageShareCtrl.text;
+
+    if (message == '') {
+      var profile = context.read<SelfProfileNotifier>().user.profile;
+      var translate = context.read<TranslateNotifierV2>().translate;
+      message = '@${profile?.username} ${translate.localeDatetime == 'id' ? 'mengirim kamu LIVE' : 'send you a LIVE'}';
+    }
+
     for (var i = 0; i < shareUsers.length; i++) {
-      sendMessageDirect(context, shareUsers[i].email ?? '', isViewer);
+      sendMessageDirect(context, shareUsers[i].email ?? '', isViewer, message);
     }
 
     ScaffoldMessengerState().hideCurrentSnackBar();
@@ -1660,21 +1669,19 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     // }
   }
 
-  Future sendMessageDirect(BuildContext context, String recipientEmail, bool isViewer) async {
+  Future sendMessageDirect(BuildContext context, String recipientEmail, bool isViewer, String message) async {
     // if (messageShareCtrl.text.trim().isEmpty) return;
 
     try {
-      messageShareCtrl.text.logger();
-
-      final message = messageShareCtrl.text;
       final emailSender = SharedPreference().readStorage(SpKeys.email);
 
       var idStream = isViewer ? context.read<ViewStreamingNotifier>().dataStreaming.sId : dataStream.sId;
+
       final param = DiscussArgument(
         email: emailSender,
         receiverParty: recipientEmail,
       )
-        ..txtMessages = message == '' ? "text_kosong" : message
+        ..txtMessages = message
         ..streamID = idStream;
 
       final notifier = MessageBlocV2();

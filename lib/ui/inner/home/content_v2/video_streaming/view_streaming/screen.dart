@@ -72,7 +72,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
     WakelockPlus.disable();
     SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
-    context.read<ViewStreamingNotifier>().disposeAgora();
+    notifier?.disposeAgora();
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
   }
@@ -264,7 +264,10 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                       //       height: 100,
                       //       child: Align(
                       //         alignment: Alignment.center,
-                      //         child: Text('${notifier.statusAgora} '),
+                      //         child: Text(
+                      //           '${notifier.remoteUid}',
+                      //           style: TextStyle(color: Colors.white),
+                      //         ),
                       //       ),
                       //     ),
                       //   ),

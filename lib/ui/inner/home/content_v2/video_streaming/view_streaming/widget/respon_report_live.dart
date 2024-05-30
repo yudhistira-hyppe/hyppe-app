@@ -95,7 +95,6 @@ class ResponsReportLive extends StatelessWidget {
                   fivePx,
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.pop(context);
                       context.read<ViewStreamingNotifier>().exitStreaming(context, notifier.reportdata!).whenComplete(() async {
                         // await context.read<ViewStreamingNotifier>().destoryPusher();
                         notifier.destoryPusher();
@@ -105,6 +104,7 @@ class ResponsReportLive extends StatelessWidget {
                           Fluttertoast.showToast(msg: tn.reportSubmitted ?? 'Laporan terkirim', backgroundColor: Colors.black54);
                         });
                       });
+                      // Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
                         elevation: 0,

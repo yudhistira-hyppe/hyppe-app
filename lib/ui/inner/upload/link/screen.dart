@@ -28,6 +28,7 @@ class AddLinkPage extends StatefulWidget {
 
 class _AddLinkPageState extends State<AddLinkPage> {
   Timer? _debounce;
+  String title = '';
 
   _onSearchChanged(String query, ExternalLinkNotifier notifier) {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
@@ -102,7 +103,7 @@ class _AddLinkPageState extends State<AddLinkPage> {
             backgroundColor: Colors.transparent,
             actions: [
               TextButton(
-                onPressed: notifier.urlValid && notifier.titleController.text != ''
+                onPressed: notifier.urlValid && title != ''
                     ? () {
                         if (notifier.beforeCurrentRoutes == Routes.preUploadContent) {
                           final stream = Provider.of<PreUploadContentNotifier>(context, listen: false);
@@ -121,7 +122,7 @@ class _AddLinkPageState extends State<AddLinkPage> {
                         notifier.onWillPop(context);
                       }
                     : null,
-                child: Text(notifier.language.done ?? 'Selesai', style: TextStyle(color: notifier.urlValid && notifier.titleController.text != '' ? Colors.black87 : Colors.black45)),
+                child: Text(notifier.language.done ?? 'Selesai', style: TextStyle(color: notifier.urlValid && title != '' ? Colors.black87 : Colors.black45)),
               )
             ],
           ),
@@ -218,6 +219,10 @@ class _AddLinkPageState extends State<AddLinkPage> {
             enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface, width: 2)),
             focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: notifier.linkFocus.hasFocus ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.primary)),
           ),
+          onChanged: (value) {
+            title = value.replaceAll(' ', '');
+            setState(() {});
+          },
         ),
       ],
     );

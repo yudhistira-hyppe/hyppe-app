@@ -73,7 +73,7 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                       counterText: '',
                       hintText: notifier.isCommentDisable ? tn.commentsAreDisabled : tn.addComment,
                       isDense: true, // important line
-                      contentPadding: EdgeInsets.fromLTRB(10, 10, widget.commentFocusNode!.hasFocus ? 70 : 10, 10), // control your hints text size
+                      contentPadding: EdgeInsets.fromLTRB(10, 10, widget.commentFocusNode!.hasFocus ? 80 : 10, 10), // control your hints text size
                       hintStyle: const TextStyle(color: Colors.white),
                       fillColor: kHyppeTransparent,
                       filled: true,

@@ -5,10 +5,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/general_argument.dart';
+import 'package:hyppe/core/arguments/view_streaming_argument.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:hyppe/core/models/collection/live_stream/link_stream_model.dart';
 import 'package:hyppe/core/services/dynamic_link_service.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:provider/provider.dart';
@@ -111,8 +113,8 @@ class NotificationService {
 
           if (data.postType == 'TRANSACTION') {
             Routing().move(Routes.transaction);
-          } else if (data.postType == 'COIN'){
-            Routing().move(Routes.paymentsuccessdetail, argument: {'postId':data.postId, 'type':'FCM'});
+          } else if (data.postType == 'COIN') {
+            Routing().move(Routes.paymentsuccessdetail, argument: {'postId': data.postId, 'type': 'FCM'});
           } else if (data.postType == 'CHALLENGE') {
             Routing().move(
               Routes.chalengeDetail,
@@ -127,6 +129,10 @@ class NotificationService {
             );
           } else if (data.postType == 'FOLLOWER' || data.postType == 'FOLLOWING') {
             materialAppKey.currentContext!.read<NotificationNotifier>().checkAndNavigateToProfile(materialAppKey.currentContext!, data.postId);
+          } else if (data.postType == 'streaming') {
+            Future.delayed(const Duration(seconds: 1), () async {
+              await Routing().move(Routes.viewStreaming, argument: ViewStreamingArgument(data: LinkStreamModel(sId: map['postID'])));
+            });
           } else {
             materialAppKey.currentContext!.read<NotificationNotifier>().navigateToContent(materialAppKey.currentContext!, data.postType, data.postId);
           }
@@ -148,18 +154,17 @@ class NotificationService {
         } else if (map['url'] != null) {
           final String url = map['url'];
           print('URL notif: $url');
-          if(url.contains('https://share.hyppe.app/')){
+          if (url.contains('https://share.hyppe.app/')) {
             final uri = Uri.parse(url);
             final data = await FirebaseDynamicLinks.instance.getDynamicLink(uri);
             DynamicLinkService.handleDeepLink(data);
-          }else{
+          } else {
             if (isFromSplash) {
               page = 3;
             } else {
               Routing().moveAndRemoveUntil(Routes.lobby, Routes.lobby, argument: MainArgument(canShowAds: false, page: 3));
             }
           }
-
         } else {
           throw 'Not recognize the type of the object of the notification ';
         }

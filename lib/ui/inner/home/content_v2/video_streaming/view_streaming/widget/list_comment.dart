@@ -97,11 +97,10 @@ class ListCommentViewer extends StatelessWidget {
                                             //   notifier.comment[index].username ?? '',
                                             //   style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700),
                                             // ),
-                                            if (notifier.comment[index].messages != 'joined')
-                                              Text(
-                                                translate.localeDatetime == 'id' ? 'bergabung' : 'joined',
-                                                style: const TextStyle(color: kHyppeTextPrimary),
-                                              ),
+                                            Text(
+                                              notifier.comment[index].messages ?? '',
+                                              style: const TextStyle(color: kHyppeTextPrimary),
+                                            ),
                                           ],
                                         )
                                       : notifier.comment[index].commentType == 'JOIN'

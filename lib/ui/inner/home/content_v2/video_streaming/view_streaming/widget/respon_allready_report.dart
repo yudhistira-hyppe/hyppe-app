@@ -67,7 +67,7 @@ class ResponsAllreadyReport extends StatelessWidget {
                   Divider(),
                   tenPx,
                   Text(
-                    tn.localeDatetime == 'id' ? "Kamu sudah melaporkan LIVE natalia.jessica" : "You have already reported natalia.jessica's LIVE",
+                    tn.localeDatetime == 'id' ? "Kamu sudah melaporkan LIVE ${notifier.dataStreaming.user?.username}" : "You have already reported  ${notifier.dataStreaming.user?.username} LIVE",
                     style: const TextStyle(color: kHyppeTextLightPrimary, fontSize: 22, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),

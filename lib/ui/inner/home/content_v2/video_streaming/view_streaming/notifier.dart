@@ -826,13 +826,13 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
   Future<void> sendReportLive(BuildContext context, String message) async {
     Map param = {"_id": dataStreaming.sId, "messages": message, "type": "REPORT"};
     await updateStream(context, context.mounted, param).then((value) {
-      print(value);
+      print("isi dari value $value");
       if (value != null) {
         Navigator.pop(context);
-        if (value['reportStatus'] != null && value['reportStatus'] == true) {
-          allReadyReport(context);
-        } else {
+        if (value == 'Update stream succesfully') {
           responReportLive(context);
+        } else if (value['reportStatus'] != null && value['reportStatus'] == true) {
+          allReadyReport(context);
         }
       }
     });
