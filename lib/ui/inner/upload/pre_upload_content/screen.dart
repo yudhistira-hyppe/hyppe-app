@@ -275,7 +275,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                 : Container(),
                             notifier.boostContent != null ? detailBoostContent(notifier) : Container(),
                             _buildDivider(context),
-                            DiscountForyou(),
+                            // DiscountForyou(),
                             twentyFourPx,
                             twentyFourPx,
                             twentyFourPx,

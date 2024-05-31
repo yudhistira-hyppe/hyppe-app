@@ -50,11 +50,6 @@ class _CoinPageState extends State<CoinPage> {
           textStyle: theme.textTheme.titleMedium,
           textToDisplay: '${lang?.saldocoins}',
         ),
-        actions: [
-          IconButton(onPressed: (){
-            Fluttertoast.showToast(msg: 'Feature not yet available');
-          }, icon: const Icon(Icons.info_outline))
-        ],
       ),
       body: Consumer2<TransactionNotifier, CoinNotifier>(
         builder: (context, notifier, cointNotif, child) {

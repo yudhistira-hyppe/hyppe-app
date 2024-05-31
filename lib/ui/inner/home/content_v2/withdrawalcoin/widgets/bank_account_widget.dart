@@ -34,8 +34,8 @@ class _BankAccountWidgetState extends State<BankAccountWidget> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
               child: CustomTextWidget(
-                textToDisplay: 'Rekening Bank',
-                textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(),
+                textToDisplay: widget.lang?.localeDatetime == 'id' ? 'Rekening Bank' : 'Your Bank Accounts',
+                textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(), 
                 textAlign: TextAlign.start,
               ),
             ),

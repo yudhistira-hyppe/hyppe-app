@@ -49,6 +49,7 @@ class _WithdrawalCoinPageState extends State<WithdrawalCoinPage> {
     final theme = Theme.of(context);
     return Consumer<WithdrawalCoinNotifier>(
       builder: (context, notifier, child) {
+        print(notifier.withdrawaltransactionDetail.amount);
         return Scaffold(
           appBar: AppBar(
             titleSpacing: 0,
@@ -71,7 +72,7 @@ class _WithdrawalCoinPageState extends State<WithdrawalCoinPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  WithdrawalCardWidget(notif: notifier,),
+                  WithdrawalCardWidget(notif: notifier, lang: lang),
                   fourteenPx,
                   BankAccountWidget(notif: notifier, lang: lang,)
                 ],
@@ -89,18 +90,18 @@ class _WithdrawalCoinPageState extends State<WithdrawalCoinPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CustomTextWidget(
-                        textToDisplay: 'Total Penarikan',
+                        textToDisplay: lang?.localeDatetime =='id' ? 'Total Penarikan' : 'Total Withdrawal',
                         textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: kHyppeBurem
                         ),
                         textAlign: TextAlign.start,
                       ),
                       GestureDetector(
-                        onTap: () => notifier.showButtomSheetFilters(context, lang),
+                        onTap: () => notifier.showButtomSheetFilters(context, lang, mounted),
                         child: Row(
                           children: [
                             CustomTextWidget(
-                              textToDisplay: System().currencyFormat(amount: notifier.resultValue),
+                              textToDisplay: System().currencyFormat(amount: notifier.withdrawaltransactionDetail.totalAmount??0),
                               textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                 fontWeight: FontWeight.bold
                               ),
@@ -120,17 +121,14 @@ class _WithdrawalCoinPageState extends State<WithdrawalCoinPage> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
-                    onPressed: notifier.dataAcccount.where((e) => e.selected==true).isNotEmpty ? (){
+                    onPressed: notifier.dataAcccount.where((e) => e.selected==true).isNotEmpty && notifier.textController.text.isNotEmpty ? (){
                       debugPrint(notifier.dataAcccount.firstWhere((e) => e.selected==true).bankName);
-                      debugPrint(notifier.resultValue.toString());
-                      if (notifier.resultValue < 50000){
-                        ShowBottomSheet().onShowColouredSheet(context, 'Saldo minimum penarikan Rp. 50.000', textButton: '', color: Theme.of(context).colorScheme.error);
-                        // Fluttertoast.showToast(msg: 'Saldo minimum penarikan Rp. 50.000', textColor: kHyppeTextPrimary, backgroundColor: Colors.red);
+                      // debugPrint(notifier.resultValue.toString());
+                      if (notifier.withdrawaltransactionDetail.amount! < 50000){
+                        ShowBottomSheet().onShowColouredSheet(context, lang?.localeDatetime == 'id' ? 'Saldo minimum penarikan Rp. 50.000' :'Withdrawals must be at least IDR 50,000', textButton: '', color: Theme.of(context).colorScheme.error);
                       }else{
-                        var  dataBank = notifier.dataAcccount.firstWhere((e) => e.selected==true);
-                        Navigator.pushNamed(context, Routes.verificationPinPage, arguments: [notifier.resultValue, dataBank]);
+                        Navigator.pushNamed(context, Routes.pinwithdrawalcoin, arguments: mounted);
                       }
-                      // Navigator.pushNamed(context, Routes.paymentCoins, arguments: notifier.groupsVA.firstWhere((e) => e.selected==true));
                     }:null,
                     style: ElevatedButton.styleFrom(
                         elevation: 0,
@@ -138,11 +136,11 @@ class _WithdrawalCoinPageState extends State<WithdrawalCoinPage> {
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         backgroundColor: kHyppePrimary),
-                    child: const SizedBox(
+                    child: SizedBox(
                       width: double.infinity,
                       height: kToolbarHeight,
                       child: Center(
-                        child: Text('Tarik', textAlign: TextAlign.center),
+                        child: Text(lang?.localeDatetime == 'id' ? 'Tarik' : 'Withdraw', textAlign: TextAlign.center),
                       ),
                     ),
                   ),

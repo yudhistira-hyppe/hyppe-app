@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
@@ -11,7 +10,8 @@ import '../notifier.dart';
 
 class InfoDialog extends StatelessWidget {
   final LocalizationModelV2 lang;
-  const InfoDialog({super.key, required this.lang});
+  final bool mounted;
+  const InfoDialog({super.key, required this.lang, required this.mounted});
 
   @override
   Widget build(BuildContext context) {
@@ -72,27 +72,25 @@ class InfoDialog extends StatelessWidget {
                     thickness: .1,
                     color: kHyppeBurem,
                   ),
-                  listTile('Jumlah Penarikan', System().currencyFormat(amount: result.typingValue)),
-                  listTile('Biaya Transaksi', '- ${System().currencyFormat(amount: withdrawalfree)}'),
-                  listTile('Biaya Converensi Coins', '- ${System().currencyFormat(amount: int.parse((result.typingValue * withdrawalfeecoin).toStringAsFixed(0)))}'),
+                  listTile('Jumlah Penarikan', System().currencyFormat(amount: result.withdrawaltransactionDetail.amount)),
+                  listTile('Biaya Transaksi', '- ${System().currencyFormat(amount: result.withdrawaltransactionDetail.bankCharge)}'),
+                  listTile('Biaya Converensi Coins', '- ${System().currencyFormat(amount: result.withdrawaltransactionDetail.convertFee)}'),
                   const Divider(
                     thickness: .1,
                     color: kHyppeBurem,
                   ),
-                  listTile('Jumlah Penarikan', System().currencyFormat(amount: result.resultValue)),
+                  listTile('Jumlah Penarikan', System().currencyFormat(amount: result.withdrawaltransactionDetail.totalAmount)),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       onPressed: result.dataAcccount.where((e) => e.selected==true).isNotEmpty ? (){
                         debugPrint(result.dataAcccount.firstWhere((e) => e.selected==true).bankName);
-                        debugPrint(result.resultValue.toString());
-                        if (result.resultValue < 50000){
-                          ShowBottomSheet().onShowColouredSheet(context, 'Saldo minimum penarikan Rp. 50.000', textButton: '', color: Theme.of(context).colorScheme.error);
-                          // Fluttertoast.showToast(msg: 'Saldo minimum penarikan Rp. 50.000', textColor: kHyppeTextPrimary, backgroundColor: Colors.red);
+                        debugPrint(result.withdrawaltransactionDetail.totalAmount.toString());
+                        if (result.withdrawaltransactionDetail.totalAmount! < 50000){
+                          ShowBottomSheet().onShowColouredSheet(context, lang.localeDatetime == 'id' ? 'Saldo minimum penarikan Rp. 50.000' :'Withdrawals must be at least IDR 50,000', textButton: '', color: Theme.of(context).colorScheme.error);
                         }else{
-                          Navigator.pushNamed(context, Routes.verificationPinPage);
+                          Navigator.pushNamed(context, Routes.pinwithdrawalcoin, arguments: mounted);
                         }
-                        // Navigator.pushNamed(context, Routes.paymentCoins, arguments: notifier.groupsVA.firstWhere((e) => e.selected==true));
                       }:null,
                       style: ElevatedButton.styleFrom(
                           elevation: 0,

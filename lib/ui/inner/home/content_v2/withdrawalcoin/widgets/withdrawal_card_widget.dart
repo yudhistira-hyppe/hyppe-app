@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
@@ -17,7 +18,8 @@ import 'package:provider/provider.dart';
 
 class WithdrawalCardWidget extends StatelessWidget {
   final WithdrawalCoinNotifier notif;
-  const WithdrawalCardWidget({super.key, required this.notif});
+  final LocalizationModelV2? lang;
+  const WithdrawalCardWidget({super.key, required this.notif, this.lang});
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +40,10 @@ class WithdrawalCardWidget extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Tukar total saldo Coin ke Rupiah'),
+                  Text(lang?.localeDatetime=='id' ? 'Tukar total saldo Coin ke Rupiah':'Enter coins to exchange'),
                   TextFieldCustom(
                     controller: notif.textController,
-                    placeholder: 'Jumlah Coins',
+                    placeholder: lang?.localeDatetime == 'id' ? 'Jumlah Coins' : 'Coins',
                     prefixIcon: const CustomIconWidget(
                       iconData: "${AssetPath.vectorPath}ic-coin.svg",
                       defaultColor: false,
@@ -51,20 +53,19 @@ class WithdrawalCardWidget extends StatelessWidget {
                       FilteringTextInputFormatter.deny(RegExp("[.]"))
                     ],
                     onChange: (p0) {
-                      print('total coint ${notif.totalCoin}');
                       notif.debouncer.run(() {
                         if (int.parse(notif.textController.text) > notif.totalCoin) {
                           notif.textController.text = '';
-                          notif.typingValue = 0;
-                          notif.convertCoin();
-                          Fluttertoast.showToast(msg: 'Maksimal Tukar Coins ${System().numberFormat(amount: notif.totalCoin)}');
+                          // notif.typingValue = 0;
+                          notif.convertCoin(context);
+                          Fluttertoast.showToast(msg: '${lang?.localeDatetime =='id'?'Maksimal Tukar Coins':'Withdrawals must be at least'}  ${System().numberFormat(amount: notif.totalCoin)}');
                         }else{
-                          notif.convertCoin();
+                          notif.convertCoin(context);
                         }
                       });
                     },
                   ),
-                  Text('Tukar ke ${System().currencyFormat(amount: notif.typingValue)}',
+                  Text('${lang?.localeDatetime == 'id' ? 'Tukar ke' : 'Exchange to'} ${System().currencyFormat(amount: notif.withdrawaltransactionDetail.amount??0)}',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(),
                   ),
                   SizedBox(
@@ -81,38 +82,31 @@ class WithdrawalCardWidget extends StatelessWidget {
                             backgroundColor: Colors.transparent,
                             shape: const StadiumBorder(side: BorderSide(width: .2, color: kHyppeBurem)),
                             onSelected: (bool value) {
-                              // notif.debouncer.run(() {
-                                // if (notif.textController.text.isNotEmpty){
                                   notif.textController.text = notif.groupsCoins[i].value.toStringAsFixed(0);
                                   if (int.parse(notif.textController.text) > notif.totalCoin){
                                     notif.textController.text = '';
-                                    notif.typingValue = 0;
-                                    notif.convertCoin();
-                                    Fluttertoast.showToast(msg: 'Maksimal Tukar Coins ${System().numberFormat(amount: notif.totalCoin)}');
+                                    // notif.typingValue = 0;
+                                    notif.convertCoin(context);
+                                    Fluttertoast.showToast(msg: '${lang?.localeDatetime =='id'?'Maksimal Tukar Coins':'Withdrawals must be at least'} ${System().numberFormat(amount: notif.totalCoin)}');
                                   }else{
                                     notif.textController.text = notif.groupsCoins[i].value.toStringAsFixed(0);
                                     if (int.parse(notif.textController.text) > notif.totalCoin){
                                       notif.textController.text = '';
-                                      notif.typingValue = 0;
-                                      notif.convertCoin();
-                                      Fluttertoast.showToast(msg: 'Maksimal Tukar Coins ${System().numberFormat(amount: notif.totalCoin)}');
+                                      // notif.typingValue = 0;
+                                      notif.convertCoin(context);
+                                      Fluttertoast.showToast(msg: '${lang?.localeDatetime =='id'?'Maksimal Tukar Coins':'Withdrawals must be at least'} ${System().numberFormat(amount: notif.totalCoin)}');
                                     }else{
                                       notif.textController.text = notif.groupsCoins[i].value.toStringAsFixed(0);
-                                      notif.convertCoin();
+                                      notif.convertCoin(context);
                                     }
                                   }
-                                // }else{
-                                //   notif.textController.text = notif.groupsCoins[i].value.toStringAsFixed(0);
-                                //   notif.convertCoin();
-                                // }
-                              // });
                             },
                         ),
                       ),
                     ),
                   ),
                   Container(
-                    height: kToolbarHeight,
+                    height: kToolbarHeight * 1.1,
                     padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                     decoration: BoxDecoration(
                       border: Border.all(color: kHyppeBurem.withOpacity(.5)),
@@ -126,7 +120,9 @@ class WithdrawalCardWidget extends StatelessWidget {
                         SizedBox(
                           width: MediaQuery.of(context).size.width * .68,
                           child: Text(
-                            'Penarikan dikenai biaya transaksi sebesar Rp6.000 dan biaya penukaran Coins 10%',
+                            lang?.localeDatetime=='id' 
+                            ? 'Biaya transaksi dan biaya penukaran berlaku. Proses tukar coins dapat memakan waktu 3-5 hari kerja.'
+                            : 'Transaction and exchange fees apply. Coin exchange takes 3-5 business days.',
                             style: Theme.of(context).textTheme.bodySmall?.copyWith(),
                           ),
                         ),

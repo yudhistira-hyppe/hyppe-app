@@ -176,7 +176,7 @@ class _TransactionCoinDetailScreenState extends State<TransactionCoinDetailScree
                                         ),
                                         TweenAnimationBuilder<Duration>(
                                           duration: const Duration(minutes: 15),
-                                          tween: Tween(begin: Duration(minutes: DateTime.parse(System().dateTimeRemoveT(notifier.transactionDetail.createdAt??'')).difference(DateFormat('yyyy-MM-dd HH:mm:ss').parse(DateTime.now().toString())).inMinutes), end: Duration.zero),
+                                          tween: Tween(begin: Duration(minutes: DateTime.parse(System().dateTimeRemoveT(notifier.transactionDetail.expiredtimeva??'')).difference(DateTime.parse(notifier.transactionDetail.timenow??'')).inMinutes), end: Duration.zero),
                                           onEnd: () async {
                                             // notifier.backHome();
                                             await context.read<TransactionCoinDetailNotifier>().detailData(context, invoiceId: widget.invoiceid);
@@ -197,10 +197,7 @@ class _TransactionCoinDetailScreenState extends State<TransactionCoinDetailScree
                                 sixteenPx,
                               ],
                             ),
-                          detailText(lang?.localeDatetime == 'id' ? 'Jumlah Hyppe Coin' : 'Total Hyppe Coin', '${DateTime.parse(System().dateTimeRemoveT(notifier.transactionDetail.expiredtimeva??''))}'),
-                          detailText(lang?.localeDatetime == 'id' ? 'Jumlah Hyppe Coin' : 'Total Hyppe Coin', '${DateFormat.Hms().format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(DateTime.now().toString()))}'),
-
-                          detailText(lang?.localeDatetime == 'id' ? 'Jumlah Hyppe Coin' : 'Total Hyppe Coin', '${System().numberFormat(amount: notifier.transactionDetail.totalCoin)} Coins'),
+                          
                           const Divider(
                             thickness: .1,
                           ),

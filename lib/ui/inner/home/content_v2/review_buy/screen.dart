@@ -137,7 +137,7 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                         children: [
                           contentInfo(textTheme,
                               title: notifier.language.certificateNumber ?? ' ',
-                              value: notifier.buyDataNew.nomorSertifikat ?? ''),
+                              value: notifier.buyDataNew?.nomorSertifikat ?? ''),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 5),
                             child: SizedBox(
@@ -150,10 +150,10 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                                   ? 'Jenis Konten'
                                   : 'Content Type',
                               value: System().convertTypeContent(
-                                  notifier.buyDataNew.jenisKonten ?? '0')),
+                                  notifier.buyDataNew?.jenisKonten ?? '0')),
                           contentInfo(textTheme,
                               title: 'Creator',
-                              value: notifier.buyDataNew.creator ?? ''),
+                              value: notifier.buyDataNew?.creator ?? ''),
                           // contentInfo(textTheme, title: 'Creator', value: widget.arguments?.username ?? ''),
                           contentInfo(textTheme,
                               title: notifier.language.time ?? '',
@@ -163,14 +163,14 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                               title: notifier.language.localeDatetime == 'id'
                                   ? 'Termasuk Total Dilihat'
                                   : 'Include Total Views',
-                              value: (notifier.buyDataNew.view ?? false)
+                              value: (notifier.buyDataNew?.view ?? false)
                                   ? notifier.language.yes ?? 'yes'
                                   : notifier.language.no ?? 'no'),
                           contentInfo(textTheme,
                               title: notifier.language.localeDatetime == 'id'
                                   ? 'Termasuk Total Suka'
                                   : 'Include Total Likes',
-                              value: (notifier.buyDataNew.like ?? false)
+                              value: (notifier.buyDataNew?.like ?? false)
                                   ? notifier.language.yes ?? 'yes'
                                   : notifier.language.no ?? 'no'),
                           if (!(notifier.discount?.checked ?? false))
@@ -180,7 +180,7 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                           contentInfo(textTheme,
                               title: notifier.language.sellingPrice ?? '',
                               value:
-                                  '${System().numberFormat(amount: (notifier.buyDataNew.price??0).toInt())} Coins'),
+                                  '${System().numberFormat(amount: (notifier.buyDataNew?.price??0).toInt())} Coins'),
                           if (notifier.discount != null)
                             Column(
                               children: [
@@ -238,7 +238,7 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                                               maxLines: 3,
                                               textToDisplay: System().numberFormat(
                                                   amount: (notifier
-                                                          .buyDataNew.price
+                                                          .buyDataNew?.price
                                                           ?.toInt())! -
                                                       (notifier.discount!
                                                               .nominal_discount ??
@@ -325,9 +325,10 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                         opacity: isloading ? 0.0 : 1.0,
                           duration: const Duration(milliseconds: 300),
                           child: SaldoCoinWidget(
-                          transactionCoin: notifier.buyDataNew.total??0,
+                          transactionCoin: notifier.buyDataNew?.total??0,
                           isChecking: (bool val, int saldoCoin){
                             buttonactive = val;
+                            setState(() {});
                           },
                         ),
                       ),

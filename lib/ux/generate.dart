@@ -46,6 +46,7 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/player/landing_diary_full.d
 import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/screen_full.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/see_all/diary_see_all_screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/withdrawalcoin/pin/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/withdrawalcoin/withdrawal_coin_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/withdrawalcoin/pages/finish_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/FAQ/screen.dart';
@@ -538,6 +539,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => TransactionCoinDetailScreen(invoiceid: settings.arguments as String), settings: settings);
       case Routes.paymentsuccessdetail:
         return MaterialPageRoute(builder: (_) => PaymentSuccessScreen(map: settings.arguments as Map), settings: settings);
+      case Routes.pinwithdrawalcoin:
+        return MaterialPageRoute(builder: (_) => PinWithdrawalNewScreen(mounted: settings.arguments as bool), settings: settings);
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }
