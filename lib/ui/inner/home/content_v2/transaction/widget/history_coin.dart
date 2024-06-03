@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/models/collection/coins/history_order_coin.dart';
+import 'package:hyppe/core/models/collection/coins/history_transaction.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -10,7 +11,7 @@ import 'package:hyppe/ui/inner/home/content_v2/transaction_coin_detail/screen.da
 import 'package:intl/intl.dart';
 
 class HistoryCoinWidget extends StatelessWidget {
-  final HistoryOrderCoinModel data;
+  final TransactionHistoryCoinModel data;
   final LocalizationModelV2? lang;
   const HistoryCoinWidget({super.key, required this.data, this.lang});
 
@@ -33,7 +34,14 @@ class HistoryCoinWidget extends StatelessWidget {
     }
 
     return GestureDetector(
-      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionCoinDetailScreen(invoiceid: data.id??'',))),
+      onTap: () {
+        if (data.type == 'Pembelian Coin'){
+          Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionCoinDetailScreen(invoiceid: data.sId??'',)));
+        }else{
+          Fluttertoast.showToast(msg: 'Feature Not Available');
+        }
+        // 
+      },
       child: Container(
         height: SizeConfig.screenHeight! * .25,
         width: double.infinity,
@@ -63,8 +71,8 @@ class HistoryCoinWidget extends StatelessWidget {
                       textAlign: TextAlign.start,
                     ),
                     CustomTextWidget(
-                      textToDisplay: DateFormat('dd MMM yyyy', 'id')
-                          .format(DateTime.parse(data.timestamp ?? '2024-03-02')),
+                      textToDisplay: DateFormat('dd MMM yyyy', lang!.localeDatetime)
+                          .format(DateTime.parse(data.updatedAt ?? '2024-03-02')),
                       // textStyle: textTheme.bodyMedium,
                     ),
                   ],
@@ -89,7 +97,7 @@ class HistoryCoinWidget extends StatelessWidget {
             Flexible(
               child: SizedBox(
                 height: SizeConfig.screenHeight! * .2,
-                child: Text(data.packagename??'', 
+                child: Text(data.package??'', 
                   maxLines: 2,
                   style: Theme.of(context)
                         .textTheme
@@ -119,7 +127,7 @@ class HistoryCoinWidget extends StatelessWidget {
                     ),
                   ),
                   CustomTextWidget(
-                    textToDisplay: System().currencyFormat(amount: data.totalamount),
+                    textToDisplay: System().currencyFormat(amount: data.totalCoin),
                     textStyle: Theme.of(context)
                         .textTheme
                         .titleSmall

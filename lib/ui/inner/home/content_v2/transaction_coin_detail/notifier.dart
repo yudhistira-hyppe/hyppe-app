@@ -21,12 +21,19 @@ class TransactionCoinDetailNotifier with ChangeNotifier {
   }
 
   final bloc = TransactionCoinDetailBloc();
-  Future<void> detailData(BuildContext context,{String? invoiceId}) async {
+  Future<void> detailData(BuildContext context,{String? invoiceId, String? status}) async {
     isloading = true;
     try{
-      _param.addAll({
-        'idtransaksi': invoiceId
-      });
+      if (status == 'History'){
+        _param.addAll({
+          'noinvoice': invoiceId
+        });
+      }else{
+        _param.addAll({
+          'idtransaksi': invoiceId
+        });
+      }
+      
 
       await bloc.getTransactionCoinDetail(context, data: _param);
       final fetch = bloc.dataFetch;

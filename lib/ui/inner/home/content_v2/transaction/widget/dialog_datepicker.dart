@@ -6,9 +6,8 @@ import 'package:hyppe/core/models/collection/localization_v2/localization_model.
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/coins/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:provider/provider.dart';
-
-import '../notifier.dart';
 
 class DialogDatePicker extends StatelessWidget {
   final bool isStartDate;
@@ -52,7 +51,7 @@ class DialogDatePicker extends StatelessWidget {
                   ),
                   Center(
                     child: Text(
-                      lang.localeDatetime == 'id'?'Pilih Tanggal':'Select Date Range',
+                      lang.localeDatetime =='id'?'Pilih Tanggal':'Select Date Range',
                       style: Theme.of(context)
                             .textTheme
                             .titleLarge
@@ -70,7 +69,7 @@ class DialogDatePicker extends StatelessWidget {
                           dateOrder: DatePickerDateOrder.dmy,
                           mode: CupertinoDatePickerMode.date,
                           onDateTimeChanged: (DateTime v) {
-                            context.read<HistoryOrderCoinNotifier>().settempSelectedDate(v.toString());
+                            context.read<TransactionNotifier>().settempSelectedDate(v.toString());
                           },
                     ),
                   ),
@@ -79,7 +78,7 @@ class DialogDatePicker extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.pop(context);
-                        context.read<HistoryOrderCoinNotifier>().selectedDatePicker(isStartDate: isStartDate);
+                        context.read<TransactionNotifier>().selectedDatePicker(isStartDate: isStartDate);
                       },
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
@@ -92,7 +91,7 @@ class DialogDatePicker extends StatelessWidget {
                         width: double.infinity,
                         height: kToolbarHeight,
                         child: Center(
-                          child: Text(lang.localeDatetime =='id' ? 'Terapkan' : 'Apply',
+                          child: Text(lang.apply??'Terapkan',
                               textAlign: TextAlign.center),
                         ),
                       ),
@@ -116,8 +115,8 @@ class DialogDatePicker extends StatelessWidget {
                         width: double.infinity,
                         height: kToolbarHeight,
                         child: Center(
-                          child: Text(lang.cancel?? 'Batal',
-                              textAlign: TextAlign.center, style: TextStyle(color: kHyppePrimary),),
+                          child: Text(lang.cancel??'Batal',
+                              textAlign: TextAlign.center, style: const TextStyle(color: kHyppePrimary),),
                         ),
                       ),
                     ),

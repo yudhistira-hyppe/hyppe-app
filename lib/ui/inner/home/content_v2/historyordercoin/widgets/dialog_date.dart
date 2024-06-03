@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/textfield.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../../core/models/collection/localization_v2/localization_model.dart';
 import '../notifier.dart';
 
 class DialogDate extends StatefulWidget {
@@ -15,6 +17,13 @@ class DialogDate extends StatefulWidget {
 }
 
 class _DialogDateState extends State<DialogDate> {
+  LocalizationModelV2? lang;
+
+  @override
+  void initState() {
+    lang = context.read<TranslateNotifierV2>().translate;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Consumer<HistoryOrderCoinNotifier>(
@@ -52,7 +61,7 @@ class _DialogDateState extends State<DialogDate> {
                   ),
                   Center(
                     child: Text(
-                      'Periode Transaksi',
+                      lang?.localeDatetime == 'id' ? 'Periode Transaksi' : 'Transaction period',
                       style: Theme.of(context)
                           .textTheme
                           .titleLarge
@@ -73,11 +82,11 @@ class _DialogDateState extends State<DialogDate> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text('Dari'),
+                                  Text(lang?.localeDatetime == 'id' ? 'Dari' : 'From'),
                                   TextFieldCustom(
                                     controller:
                                         notifier.textStartDateController,
-                                    placeholder: 'Dari',
+                                    placeholder: lang?.localeDatetime == 'id' ? 'Dari' : 'From',
                                     readOnly: true,
                                     onSubmitted: () => notifier
                                         .showButtomSheetDatePicker(context,
@@ -91,10 +100,10 @@ class _DialogDateState extends State<DialogDate> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text('Sampai'),
+                                  Text(lang?.localeDatetime == 'id' ? 'Sampai' : 'To'),
                                   TextFieldCustom(
                                     controller: notifier.textEndDateController,
-                                    placeholder: 'Sampai',
+                                    placeholder: lang?.localeDatetime == 'id' ? 'Sampai' : 'To',
                                     readOnly: true,
                                     onSubmitted: () => notifier
                                         .showButtomSheetDatePicker(context,
@@ -125,12 +134,12 @@ class _DialogDateState extends State<DialogDate> {
                               borderRadius: BorderRadius.circular(8.0),
                             ),
                             backgroundColor: kHyppePrimary),
-                        child: const SizedBox(
+                        child: SizedBox(
                           width: double.infinity,
                           height: kToolbarHeight,
                           child: Center(
                             child:
-                                Text('Terapkan', textAlign: TextAlign.center),
+                                Text(lang?.localeDatetime == 'id' ? 'Terapkan':'Apply', textAlign: TextAlign.center),
                           ),
                         ),
                       ),

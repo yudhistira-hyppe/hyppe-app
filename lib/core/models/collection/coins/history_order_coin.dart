@@ -1,6 +1,7 @@
 class HistoryOrderCoinModel {
   HistoryOrderCoinModel({
     this.id,
+    this.noinvoice,
     this.status,
     this.description,
     this.totalamount,
@@ -10,6 +11,7 @@ class HistoryOrderCoinModel {
   });
 
   String? id;
+  String? noinvoice;
   String? status;
   String? description;
   int? totalamount;
@@ -19,6 +21,7 @@ class HistoryOrderCoinModel {
 
   factory HistoryOrderCoinModel.fromJson(Map<String, dynamic> json) => HistoryOrderCoinModel(
         id: json["_id"],
+        noinvoice: json["noinvoice"]??'',
         status: json["status"]??'',
         description: json["description"]??'',
         totalamount: json["totalamount"]??0,
@@ -29,6 +32,7 @@ class HistoryOrderCoinModel {
 
   Map<String, dynamic> toJson() => {
         "_id": id,
+        "noinvoice": noinvoice,
         "status": status,
         "description": description,
         "totalamount": totalamount,

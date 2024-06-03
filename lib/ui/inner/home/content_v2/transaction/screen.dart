@@ -1,29 +1,26 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/app.dart';
+import 'package:hyppe/core/bloc/transaction/historytransaction/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
-import 'package:hyppe/core/constants/enum.dart';
-import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
-import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/section_dropdown_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/coins/widgets/custom_listtile.dart';
-import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/filter/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/buysell_widget.dart';
-import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/empty_bank_account.dart';
-import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/reward_widget.dart';
-import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/voucher_widget.dart';
-import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/witdhdrawal_widget.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
+
+import 'widget/history_coin.dart';
+import 'widget/shimmer_widget.dart';
 
 class Transaction extends StatefulWidget {
   const Transaction({Key? key}) : super(key: key);
@@ -33,20 +30,45 @@ class Transaction extends StatefulWidget {
 }
 
 class _TransactionState extends State<Transaction> {
-  final ScrollController _scrollController = ScrollController();
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      GlobalKey<RefreshIndicatorState>();
+  final ScrollController scrollController = ScrollController();
+  LocalizationModelV2? lang;
+  
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'Transaction');
+    lang = context.read<TranslateNotifierV2>().translate;
+    var _notifier =
+          Provider.of<TransactionNotifier>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final _notifier = context.read<TransactionNotifier>();
-      _notifier.resetSelected();
+      initializeDateFormatting('id', null);
+      _notifier.resetSelected(context, mounted);
       _notifier.getTypeFilter(context);
+      _notifier.getDateFilter(context);
       _notifier.setSkip(0);
-      _notifier.initTransactionHistory(context);
-      _scrollController
-          .addListener(() => _notifier.scrollList(context, _scrollController));
+      // _notifier.initTransactionHistory(context);
+      _notifier.initHistory(context, mounted);
+      // _scrollController
+      //     .addListener(() => _notifier.scrollList(context, _scrollController));
+    });
+    scrollController.addListener(() async {
+      if (scrollController.position.pixels >=
+          scrollController.position.maxScrollExtent) {
+        if (_notifier.isLoadMore) {
+          return;
+        }
+
+        if (mounted) {
+          _notifier.isLoadMore = true;
+        }
+
+        if (!_notifier.isLastPage && _notifier.isLoadMore) {
+          await _notifier.loadMore(context, mounted);
+        }
+
+        if (mounted) {
+          _notifier.isLoadMore = false;
+        }
+      }
     });
     super.initState();
   }
@@ -78,204 +100,202 @@ class _TransactionState extends State<Transaction> {
             actions: [
               IconButton(
                   onPressed: () {
-                    Fluttertoast.showToast(msg: 'Feature not yet available');
+                    Routing().move(Routes.help);
                   },
                   icon: const Icon(Icons.info_outline_rounded))
             ],
           ),
-          body: RefreshIndicator(
-            strokeWidth: 2.0,
-            color: Colors.purple,
-            key: _refreshIndicatorKey,
-            onRefresh: () async {
-              notifier.skip = 0;
-              await notifier.initTransactionHistory(context);
-            },
-            child: SingleChildScrollView(
-              controller: _scrollController,
-              physics: const AlwaysScrollableScrollPhysics(),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
+          body: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      color: kHyppeBurem.withOpacity(.05),
+                      border: Border.all(color: kHyppeBurem, width: .5),
+                      borderRadius: BorderRadius.circular(18.0)),
+                  child: CustomListTile(
+                    iconData: "${AssetPath.vectorPath}transaction-new.svg",
+                    title: notifier2.translate.yourorder ?? "Pesanan Kamu",
+                    onTap: () => Navigator.pushNamed(
+                        context, Routes.historyordercoin),
+                  ),
+                ),
+                twentyPx,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // TotalBalance(accountBalance: System().numberFormat(amount: notifier.accountBalance?.totalsaldo ?? 0)),
-                    // const ButtonTransaction(),
-                    Container(
-                      decoration: BoxDecoration(
-                          color: kHyppeBurem.withOpacity(.05),
-                          border: Border.all(color: kHyppeBurem, width: .5),
-                          borderRadius: BorderRadius.circular(18.0)),
-                      child: CustomListTile(
-                        iconData: "${AssetPath.vectorPath}transaction-new.svg",
-                        title: notifier2.translate.yourorder?? "Pesanan Kamu",
-                        onTap: () => Navigator.pushNamed(context, Routes.historyordercoin),
-                      ),
+                    CustomTextWidget(
+                      textToDisplay:
+                          notifier2.translate.recentTransaction ??
+                              'Recent Transaction',
+                      textStyle: const TextStyle(
+                          fontSize: 18.0, fontWeight: FontWeight.bold),
                     ),
-                    twentyPx,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CustomTextWidget(
-                          textToDisplay:
-                              notifier2.translate.recentTransaction ??
-                                  'Recent Transaction',
-                          textStyle: const TextStyle(
-                              fontSize: 18.0, fontWeight: FontWeight.bold),
-                        ),
-                        // CustomTextButton(
-                        //   onPressed: () {
-                        //     context
-                        //         .read<FilterTransactionNotifier>()
-                        //         .getTypeFilter(context);
-                        //     Routing().move(Routes.allTransaction);
-                        //   },
-                        //   child: CustomTextWidget(
-                        //     textToDisplay: notifier2.translate.seeMore ?? '',
-                        //     textStyle: Theme.of(context)
-                        //         .textTheme
-                        //         .bodyMedium
-                        //         ?.copyWith(
-                        //           color: kHyppePrimary,
-                        //           fontWeight: FontWeight.bold,
-                        //         ),
-                        //   ),
-                        // )
-                      ],
-                    ),
-                    twelvePx,
-                    Container(
-                      height: kToolbarHeight - 8,
-                      padding: const EdgeInsets.symmetric(vertical: 4.0),
-                      child: ListView(
-                        physics: const BouncingScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        children: [
-                          Visibility(
-                            visible: notifier.selectedFiltersValue.isNotEmpty ||
-                                notifier.selectedDateValue != 1,
-                            child: GestureDetector(
-                              onTap: () {
-                                notifier.resetSelected();
-                                notifier.isLoading = true;
-                                Future.microtask(() => notifier.initTransactionHistory(context));
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.only(right: 12.0),
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: kHyppeBurem, width: .5),
-                                    borderRadius: BorderRadius.circular(32.0)),
-                                child: const Icon(Icons.close),
-                              ),
-                            ),
-                          ),
-                          SectionDropdownWidget(
-                            title: notifier.selectedFiltersValue.isEmpty
-                                ? notifier.selectedFiltersLabel
-                                : notifier.selectedFiltersValue
-                                    .map((e) => e)
-                                    .join(', '),
-                            onTap: () {
-                              notifier.selectedTransaksi = false;
-                              notifier.showButtomSheetFilters(context);
-                              notifier.loadpickType();
-                            },
-                            isActive: notifier.selectedFiltersValue.isNotEmpty,
-                          ),
-                          SectionDropdownWidget(
-                              title: notifier.selectedDateLabel,
-                              onTap: () =>
-                                  notifier.showButtomSheetDate(context),
-                              isActive: notifier.selectedDateValue != 1
-                              // isActive: false
-                              ),
-                        ],
-                      ),
-                    ),
-                    notifier.isLoading
-                        ? SingleChildScrollView(
-                            child: Column(
-                            children: List.generate(
-                              10,
-                              (index) => Padding(
-                                padding: EdgeInsets.only(
-                                    top: 13 * SizeConfig.scaleDiagonal),
-                                child: CustomShimmer(
-                                    width: (SizeConfig.screenWidth!),
-                                    height: 150,
-                                    radius: 4),
-                              ),
-                            ),
-                          ))
-                        : (notifier.dataTransaction?.isEmpty ?? true)
-                            ? EmptyBankAccount(
-                                textWidget: Column(
-                                children: [
-                                  CustomTextWidget(
-                                    textToDisplay: notifier2.translate
-                                            .youDontHaveAnyTransactionsYet ??
-                                        '',
-                                    maxLines: 4,
-                                  ),
-                                ],
-                              ))
-                            : ListView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: notifier.dataTransaction?.length,
-                                itemBuilder: (context, index) {
-                                  String title = '';
-                                  switch (
-                                      notifier.dataTransaction?[index].type) {
-                                    case TransactionType.withdrawal:
-                                      title =
-                                          notifier2.translate.withdrawal ?? '';
-                                      return WithdrawalWidget(
-                                        title: title,
-                                        language: notifier2.translate,
-                                        data: notifier.dataTransaction?[index],
-                                      );
-                                    case TransactionType.reward:
-                                      title = notifier2.translate.reward ?? '';
-                                      return RewardWidget(
-                                        title: title,
-                                        language: notifier2.translate,
-                                        data: notifier.dataTransaction?[index],
-                                      );
-                                    default:
-                                      if (notifier
-                                              .dataTransaction?[index].jenis ==
-                                          "VOUCHER") {
-                                        return VoucherWidget(
-                                          data:
-                                              notifier.dataTransaction?[index],
-                                          language: notifier2.translate,
-                                        );
-                                      } else if (notifier
-                                              .dataTransaction?[index].jenis ==
-                                          "Disbursement") {
-                                        return WithdrawalWidget(
-                                            title: title,
-                                            language: notifier2.translate,
-                                            data: notifier
-                                                .dataTransaction?[index]);
-                                      } else {
-                                        return BuySellWidget(
-                                          data:
-                                              notifier.dataTransaction?[index],
-                                          language: notifier2.translate,
-                                        );
-                                      }
-                                  }
-                                }),
-                    notifier.isScrollLoading
-                        ? const CustomLoading()
-                        : const SizedBox()
                   ],
                 ),
-              ),
+                twelvePx,
+                Container(
+                  height: kToolbarHeight - 8,
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: ListView(
+                    physics: const BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      Visibility(
+                        visible: notifier.selectedFiltersValue != 1 ||
+                            notifier.selectedDateValue != 1,
+                        child: GestureDetector(
+                          onTap: () {
+                            notifier.resetSelected(context, mounted);
+                            notifier.isLoading = true;
+                            Future.microtask(() =>
+                                notifier.initHistory(context, mounted));
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(right: 12.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: kHyppeBurem, width: .5),
+                                borderRadius: BorderRadius.circular(32.0)),
+                            child: const Icon(Icons.close),
+                          ),
+                        ),
+                      ),
+                      SectionDropdownWidget(
+                          title: notifier.selectedFiltersLabel,
+                          onTap: () =>
+                              notifier.showButtomSheetFilters(context),
+                          isActive: notifier.filterDate.isNotEmpty
+                              ? notifier.filterList
+                                          .firstWhere(
+                                              (e) => e.selected == true)
+                                          .index ==
+                                      1
+                                  ? false
+                                  : true
+                              : false),
+                      SectionDropdownWidget(
+                          title: notifier.selectedDateLabel,
+                          onTap: () =>
+                              notifier.showButtomSheetDate(context),
+                          isActive: notifier.selectedDateValue != 1
+                          // isActive: false
+                          ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Consumer<TransactionNotifier>(
+                      builder: (context, notifier, _) {
+                    if ((notifier.bloc.dataFetch.dataState ==
+                                HistoryTransactionState.init ||
+                            notifier.bloc.dataFetch.dataState ==
+                                HistoryTransactionState.loading) &&
+                        !notifier.isLoadMore) {
+                      return const ContentLoader();
+                    } else {
+                      return (notifier.result.isEmpty)
+                          ? Container(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimary,
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10.0),
+                              margin:
+                                  const EdgeInsets.only(bottom: 8.0),
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.max,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.center,
+                                  children: [
+                                    const CustomIconWidget(
+                                      iconData:
+                                          '${AssetPath.vectorPath}icon_no_result.svg',
+                                      width: 160,
+                                      height: 160,
+                                      defaultColor: false,
+                                    ),
+                                    tenPx,
+                                    CustomTextWidget(
+                                      textAlign: TextAlign.center,
+                                      maxLines: 1,
+                                      textToDisplay:
+                                          lang?.localeDatetime == 'id'
+                                              ? 'Masih sepi, nih'
+                                              : 'There\'s no one here',
+                                      textStyle: context
+                                          .getTextTheme()
+                                          .bodyLarge
+                                          ?.copyWith(
+                                              fontWeight:
+                                                  FontWeight.w700,
+                                              color: context
+                                                  .getColorScheme()
+                                                  .onBackground),
+                                    ),
+                                    eightPx,
+                                    CustomTextWidget(
+                                      textAlign: TextAlign.center,
+                                      maxLines: 2,
+                                      textToDisplay: lang
+                                                  ?.localeDatetime ==
+                                              'id'
+                                          ? 'Yuk, mulai miliki penghasilan dari membuat konten dan dukung creator favoritmu!'
+                                          : 'Let\'s start earning from creating content and supporting your favorite creators!',
+                                      textStyle: context
+                                          .getTextTheme()
+                                          .bodyLarge,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                          : RefreshIndicator(
+                              onRefresh: () async {
+                                notifier.isLoadMore = false;
+                                notifier.isLastPage = false;
+
+                                notifier.page = 0;
+                
+                                await notifier.initHistory(
+                                    context, mounted);
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10.0),
+                                margin:
+                                    const EdgeInsets.only(bottom: 8.0),
+                                child: ListView.builder(
+                                  controller: scrollController,
+                                  physics:
+                                      const BouncingScrollPhysics(),
+                                  itemCount: notifier.isLoadMore
+                                      ? notifier.result.length + 1
+                                      : notifier.result.length,
+                                  itemBuilder: (context, index) {
+                                    if (notifier.result.length ==
+                                        index) {
+                                      return const CustomLoading();
+                                    }
+                
+                                    return HistoryCoinWidget(
+                                      data: notifier.result[index],
+                                      lang: lang,
+                                    );
+                                  },
+                                ),
+                              ),
+                            );
+                    }
+                  }),
+                ),
+              ],
             ),
           )),
     );

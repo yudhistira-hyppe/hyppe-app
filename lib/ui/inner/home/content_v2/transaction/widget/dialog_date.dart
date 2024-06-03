@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/constant/widget/textfield.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:provider/provider.dart';
 
@@ -13,88 +15,147 @@ class DialogDate extends StatefulWidget {
 }
 
 class _DialogDateState extends State<DialogDate> {
+
+  LocalizationModelV2? lang;
+
+  @override
+  void initState() {
+    lang = context.read<TranslateNotifierV2>().translate;
+    super.initState();
+  }
+  
   @override
   Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-      expand: false,
-      maxChildSize: .9,
-      initialChildSize: .4,
-      builder: (_, controller) {
-        return Container(
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(16.0),
-              topRight: Radius.circular(16.0),
-            ),
-          ),
-          child: Consumer<TransactionNotifier>(
-            builder: (context, notifier, child) {
-              return Column(
-                children: [
-                  FractionallySizedBox(
-                    widthFactor: 0.15,
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(
-                        vertical: 12.0,
-                      ),
-                      child: Container(
-                        height: 5.0,
-                        decoration: const BoxDecoration(
-                          color: kHyppeBurem,
-                          borderRadius: BorderRadius.all(Radius.circular(2.5)),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Center(
-                    child: Text(
-                      'Periode Transaksi',
-                      style: Theme.of(context)
-                            .textTheme
-                            .titleLarge
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  makeRadioTiles(context),
-                  twoPx,
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          context.read<TransactionNotifier>().changeSelectedDate();
-                          Future.microtask(() => context.read<TransactionNotifier>().filter(context));
-                        },
-                        style: ElevatedButton.styleFrom(
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
+    return Consumer<TransactionNotifier>(
+      builder: (context, notifier, _) {
+        return DraggableScrollableSheet(
+          expand: false,
+          maxChildSize: .9,
+          initialChildSize: notifier.selectedDateValue == 4 ? .6 : .45,
+          builder: (_, controller) {
+            return Container(
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(16.0),
+                  topRight: Radius.circular(16.0),
+                ),
+              ),
+              child: Consumer<TransactionNotifier>(
+                builder: (context, notifier, child) {
+                  return Column(
+                    children: [
+                      FractionallySizedBox(
+                        widthFactor: 0.15,
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(
+                            vertical: 12.0,
                           ),
-                          backgroundColor: kHyppePrimary
+                          child: Container(
+                            height: 5.0,
+                            decoration: const BoxDecoration(
+                              color: kHyppeBurem,
+                              borderRadius: BorderRadius.all(Radius.circular(2.5)),
+                            ),
+                          ),
                         ),
-                        child: SizedBox(
+                      ),
+                      Center(
+                        child: Text(
+                          lang?.localeDatetime == 'id' ? 'Periode Transaksi' : 'Transaction period',
+                          style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      makeRadioTiles(context),
+                      if (notifier.selectedDateValue == 4)
+                        Container(
+                          height: kToolbarHeight + 24,
                           width: double.infinity,
-                          height: kToolbarHeight,
-                          child: Center(
-                            child: Text(context
-                                      .watch<TranslateNotifierV2>()
-                                      .translate
-                                      .apply ??
-                                  'Terapkan',
-                                textAlign: TextAlign.center),
+                          padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                          child: Visibility(
+                            visible: notifier.selectedDateValue == 4,
+                            child: Row(
+                              children: [
+                                Flexible(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(lang?.localeDatetime == 'id' ? 'Dari' : 'From'),
+                                      TextFieldCustom(
+                                        controller:
+                                            notifier.textStartDateController,
+                                        placeholder: lang?.localeDatetime == 'id' ? 'Dari' : 'From',
+                                        readOnly: true,
+                                        onSubmitted: () => notifier
+                                            .showButtomSheetDatePicker(context,
+                                                isStartDate: true),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                fourteenPx,
+                                Flexible(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(lang?.localeDatetime == 'id' ? 'Sampai' : 'To'),
+                                      TextFieldCustom(
+                                        controller: notifier.textEndDateController,
+                                        placeholder: lang?.localeDatetime == 'id' ? 'Sampai' : 'To',
+                                        readOnly: true,
+                                        onSubmitted: () => notifier
+                                            .showButtomSheetDatePicker(context,
+                                                isStartDate: false),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      twoPx,
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              context.read<TransactionNotifier>().changeSelectedDate(context, mounted);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              backgroundColor: kHyppePrimary
+                            ),
+                            child: SizedBox(
+                              width: double.infinity,
+                              height: kToolbarHeight,
+                              child: Center(
+                                child: Text(context
+                                          .watch<TranslateNotifierV2>()
+                                          .translate
+                                          .apply ??
+                                      'Terapkan',
+                                    textAlign: TextAlign.center),
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                ],
-              );
-            }
-          ),
+                    ],
+                  );
+                }
+              ),
+            );
+          }
         );
       }
     );

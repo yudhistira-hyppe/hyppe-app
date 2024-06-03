@@ -4,14 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/bloc/saldo_coin/bloc.dart';
 import 'package:hyppe/core/bloc/saldo_coin/state.dart';
 import 'package:hyppe/core/bloc/transaction/bloc.dart';
-import 'package:hyppe/core/bloc/transaction/historytransaction/bloc.dart';
-import 'package:hyppe/core/bloc/transaction/historytransaction/state.dart';
 import 'package:hyppe/core/bloc/transaction/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/models/collection/coins/history_transaction.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/bank_data.dart';
 import 'package:hyppe/core/models/collection/transaction/bank_account/account_balance.dart';
 import 'package:hyppe/core/models/collection/transaction/bank_account/bank_account_model.dart';
@@ -25,17 +22,16 @@ import 'package:hyppe/ui/constant/entities/camera_devices/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/add_bank_account/camera_appeal_bank.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/add_bank_account/preview_doc_appeal.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/filter/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/dialog_filters.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'bank_account/widget/bank_account.dart';
 import 'widget/dialog_date.dart';
-import 'widget/dialog_datepicker.dart';
 
 class TransactionNotifier extends ChangeNotifier {
   Map _param = {};
@@ -141,188 +137,69 @@ class TransactionNotifier extends ChangeNotifier {
     }
   }
 
-  Map? _paramsHistory = {};
-  final bloc = HistoryTransactionDataBloc();
-  bool _isLoadingHistory = true;
-  bool get isLoadingHistory => _isLoadingHistory;
-  set isLoadingHistory(bool val) {
-    _isLoadingHistory = val;
-    notifyListeners();
-  }
-
-  int _page = 0;
-  int get page => _page;
-  set page(int val){
-    _page = val;
-    notifyListeners();
-  }
-
-  bool isLastPage = false;
-
-  bool _isLoadMore = false;
-  bool get isLoadMore => _isLoadMore;
-  set isLoadMore(bool val){
-    _isLoadMore = val;
-    notifyListeners();
-  }
-
-  //TextEdit Date 
-  final TextEditingController textStartDateController = TextEditingController();
-  final TextEditingController textEndDateController = TextEditingController();
-
-  List<TransactionHistoryCoinModel> _result = [];
-  List<TransactionHistoryCoinModel> get result => _result;
-  set result(List<TransactionHistoryCoinModel> val) {
-    _result = val;
-    notifyListeners();
-  }
-
   //Selected Value Transaction
-  int selectedFiltersValue = 1;
+  List selectedFiltersValue = [];
   String selectedFiltersLabel = 'Semua Transaksi';
   List<GroupModel> filterList = [];
   //Selected Value Date
   int selectedDateValue = 1;
   String selectedDateLabel = 'Semua Tanggal';
-  String tempSelectedDate = DateTime.now().toString();
-  List<GroupModel> filterDate = [];
+  List<GroupModel> filterDate = [
+    GroupModel(text: "All", index: 1, selected: true),
+    GroupModel(text: "Last 7 Days", index: 2, selected: false),
+    GroupModel(text: "Last 30 Days", index: 3, selected: false),
+  ];
 
   void getTypeFilter(BuildContext context) {
     final language = context.read<TranslateNotifierV2>().translate;
     filterList = [
-      GroupModel(text: "${language.all}", index: 1, selected: true),
-      GroupModel(text: language.localeDatetime == 'id' ? 'Pembelian Coins' : 'Coin Purchase', index: 2, selected: false),
-      GroupModel(text: language.localeDatetime == 'id' ? 'Penukaran Coins' : 'Exchanged Coins', index: 3, selected: false),
+      GroupModel(text: "${language.buy}", index: 1, selected: false),
+      GroupModel(text: "${language.sell}", index: 2, selected: false),
+      GroupModel(text: "${language.withdrawal}", index: 3, selected: false),
+      GroupModel(text: "${language.postBoost}", index: 4, selected: false),
+      GroupModel(text: "${language.reward}", index: 5, selected: false),
+      GroupModel(text: "Voucher", index: 6, selected: false),
     ];
   }
 
-  void getDateFilter(BuildContext context) {
-    final language = context.read<TranslateNotifierV2>().translate;
-    selectedDateLabel = language.localeDatetime == 'id' ? 'Semua Tanggal': 'All Date';
-    filterDate = [
-      GroupModel(text: "${language.all}", index: 1, selected: true),
-      GroupModel(text: language.localeDatetime =='id'?'30 Hari Terakhir':'Last 30 Days', index: 2, selected: false),
-      GroupModel(text: language.localeDatetime =='id'?'90 Hari Terakhir':'Last 90 Days', index: 3, selected: false),
-      GroupModel(text: language.localeDatetime =='id'?'Pilih Rentang Tanggal':'Select Date', index: 4, selected: false, 
-        startDate: DateTime.now().toString(),
-        endDate: DateTime.now().toString(),
-        ),
-    ];
-  }
-
-  void resetSelected(BuildContext context, mounted) async {
-    final language = context.read<TranslateNotifierV2>().translate;
-    _paramsHistory = {};
-    selectedDateLabel = language.localeDatetime == 'id' ? 'Semua Tanggal': 'All Date';
-    selectedFiltersLabel = language.localeDatetime == 'id' ? 'Semua Transaksi': 'All';
-    for (int i = 0; i < filterDate.length; i++) {
-      filterDate[i].selected = false;
+  void pickType(int? index) {
+    if (selectedFiltersValue.contains(filterList[index ?? 0].text)) {
+      selectedFiltersValue.removeWhere((v) => v == filterList[index ?? 0].text);
+      filterList[index ?? 0].selected = false;
+    } else {
+      filterList[index ?? 0].selected = true;
+      selectedFiltersValue.add(filterList[index ?? 0].text);
     }
-
-    for (int i = 0; i < filterList.length; i++) {
-      filterList[i].selected = false;
-    }
-
-    filterDate[0].selected = true;
-    filterList[0].selected = true;
-    selectedDateValue = 1;
-    selectedFiltersValue = 1;
-    _paramsHistory?.addAll({
-      "type": ["Pembelian Coin", "Penukaran Coin"],
-    });
     notifyListeners();
   }
 
-  void showButtomSheetDatePicker(BuildContext context,{bool isStartDate = false}) {
-    showModalBottomSheet<int>(
-        backgroundColor: Colors.transparent,
-        context: context,
-        isScrollControlled: true,
-        builder: (context) {
-          return DialogDatePicker(isStartDate: isStartDate,);
-        }
-    );
-  }
-
-  void settempSelectedDate(String val){
-    tempSelectedDate = val;
-  }
-
-  void selectedDatePicker({bool isStartDate = false}) {
-    int idx = filterDate.indexWhere((element) => element.selected == true);
-    if (isStartDate){
-      if (idx != -1){
-        filterDate[idx].startDate = tempSelectedDate;
-        textStartDateController.text = DateFormat('dd/MM/yyyy').format(DateTime.parse(filterDate[idx].startDate!));
-        notifyListeners();
-      }
-    }else{
-      if (idx != -1){
-        filterDate[idx].endDate = tempSelectedDate;
-        textEndDateController.text = DateFormat('dd/MM/yyyy').format(DateTime.parse(tempSelectedDate));
-        notifyListeners();
+  void loadpickType() {
+    for (var i = 0; i < selectedFiltersValue.length; i++) {
+      print(selectedFiltersValue[i]);
+      int idx = filterList.indexWhere((e) => e.text == selectedFiltersValue[i]);
+      // print(idx);
+      if (idx != -1) {
+        filterList[idx].selected = true;
       }
     }
-  }
-
-  void changeSelectedTransaction(BuildContext context, mounted) async {
-    final language = context.read<TranslateNotifierV2>().translate;
-    for (int i = 0; i < filterList.length; i++) {
-      filterList[i].selected = false;
-    }
-    filterList[filterList.indexWhere((element) => element.index == selectedFiltersValue)].selected = true;
-    if (selectedFiltersValue == 1){
-      selectedFiltersLabel = language.localeDatetime == 'id' ? 'Semua Tanggal': 'All Date';
-    }else{
-      selectedFiltersLabel = filterList.firstWhere((element) => element.selected == true).text;
-    }
-    await initHistory(context, mounted);
-
     notifyListeners();
   }
-  
-  // void pickType(int? index) {
-  //   if (selectedFiltersValue.contains(filterList[index ?? 0].text)) {
-  //     selectedFiltersValue.removeWhere((v) => v == filterList[index ?? 0].text);
-  //     filterList[index ?? 0].selected = false;
-  //   } else {
-  //     filterList[index ?? 0].selected = true;
-  //     selectedFiltersValue.add(filterList[index ?? 0].text);
-  //   }
-  //   notifyListeners();
-  // }
 
-  // void loadpickType() {
-  //   for (var i = 0; i < selectedFiltersValue.length; i++) {
-  //     int idx = filterList.indexWhere((e) => e.text == selectedFiltersValue[i]);
-  //     // print(idx);
-  //     if (idx != -1) {
-  //       filterList[idx].selected = true;
-  //     }
-  //   }
-  //   notifyListeners();
-  // }
-
-  void changeSelectedDate(BuildContext context, mounted) async {
-    final language = context.read<TranslateNotifierV2>().translate;
-    
+  void changeSelectedDate() {
     for (int i = 0; i < filterDate.length; i++) {
       filterDate[i].selected = false;
     }
     filterDate[filterDate.indexWhere((element) => element.index == selectedDateValue)].selected = true;
-    if (selectedDateValue == 1){
-      selectedDateLabel = language.localeDatetime == 'id' ? 'Semua Tanggal': 'All Date';
-    }else{
-      if (filterDate.firstWhere((element) => element.selected == true).index == 4){
+    if (selectedDateValue == 1) {
+      selectedDateLabel = 'Semua Tanggal';
+    } else {
+      if (filterDate.firstWhere((element) => element.selected == true).index == 4) {
         var res = filterDate.firstWhere((element) => element.selected == true);
-        selectedDateLabel = '${DateFormat('dd MMM yyyy').format(DateTime.parse(res.startDate??''))} - ${DateFormat('dd MMM yyyy').format(DateTime.parse(res.endDate??''))}';
-
-      }else{
+        selectedDateLabel = res.text;
+      } else {
         selectedDateLabel = filterDate.firstWhere((element) => element.selected == true).text;
       }
     }
-
-    await initHistory(context,mounted);
     notifyListeners();
   }
 
@@ -343,7 +220,11 @@ class TransactionNotifier extends ChangeNotifier {
           return const DialogFilters();
         }).whenComplete(() {
       if (!selectedTransaksi) {
-        
+        selectedFiltersValue.clear();
+        selectedFiltersLabel = 'Semua Transaksi';
+        isLoading = true;
+        notifyListeners();
+        Future.microtask(() => initTransactionHistory(context));
       }
     });
   }
@@ -358,150 +239,18 @@ class TransactionNotifier extends ChangeNotifier {
         });
   }
 
-  Future<void> initHistory(BuildContext context, mounted) async {
-    _paramsHistory = {};
-    try{
-      result.clear();
-      page = 0;
-
-      String email = SharedPreference().readStorage(SpKeys.email);
-      _paramsHistory?.addAll({
-        "email": email,
-        "status": ["SUCCESS", "PENDING", "IN PROGRESS", "FAILED"],
-        "page": page
-      });
-      
-      if (filterList.firstWhere((element) => element.selected == true).index == 2){
-          _paramsHistory?.addAll({
-            "type": ["Pembelian Coin"],
-          });
-        }else if (filterList.firstWhere((element) => element.selected == true).index == 3){
-          _paramsHistory?.addAll({
-            "type": ["Penukaran Coin"],
-          });
-        }else{
-          _paramsHistory?.addAll({
-            "type": ["Pembelian Coin", "Penukaran Coin"],
-          });
-        }
-      DateTime dateToday = DateTime.now();
-      String date = dateToday.toString().substring(0, 10);
-      int groupDate = filterDate.firstWhere((element) => element.selected == true).index;
-      switch (groupDate) {
-        case 2:
-            var startDate = DateTime(dateToday.year, dateToday.month, dateToday.day - 30);
-            final newStartDate = startDate.toString().substring(0, 10);
-            _paramsHistory?.addAll({
-               "startdate": newStartDate,
-                "enddate": date
-            });
-          break;
-        case 3:
-            var startDate = DateTime(dateToday.year, dateToday.month, dateToday.day - 90);
-            final newStartDate = startDate.toString().substring(0, 10);
-            _paramsHistory?.addAll({
-               "startdate": newStartDate,
-                "enddate": date
-            });
-          break;
-        case 4:
-            var res = filterDate.firstWhere((element) => element.selected == true);
-            final newStartDate = DateFormat('yyyy-MM-dd').format(DateTime.parse(res.startDate??''));
-            final enddate = DateFormat('yyyy-MM-dd').format(DateTime.parse(res.endDate??''));
-            _paramsHistory?.addAll({
-               "startdate": newStartDate,
-                "enddate": enddate
-            });
-          break;
-        default:
-          break;
-      }
-
-      await bloc.getHistoryTransaction(context, data: _paramsHistory);
-      
-      if (bloc.dataFetch.dataState == HistoryTransactionState.getBlocSuccess && bloc.dataFetch.data.isNotEmpty) {
-        result = bloc.dataFetch.data;
-        isLastPage = false;
-      } else {
-        isLastPage = true;
-      }
-      notifyListeners();
-    }catch(_){
-      debugPrint(_.toString());
+  void resetSelected() {
+    for (var i = 0; i < filterDate.length; i++) {
+      filterDate[i].selected = false;
     }
+    selectedTransaksi = false;
+    selectedDateValue = 1;
+    filterDate[0].selected = true;
+    selectedFiltersValue.clear();
+    selectedFiltersLabel = 'Semua Transaksi';
+    selectedDateLabel = 'Semua Tanggal';
+    notifyListeners();
   }
-
-  Future<void> loadMore(BuildContext context, mounted) async {
-    _paramsHistory = {};
-    try{
-      DateTime dateToday = DateTime.now();
-      String date = dateToday.toString().substring(0, 10);
-      page = page+1;
-
-      String email = SharedPreference().readStorage(SpKeys.email);
-      _paramsHistory?.addAll({
-        "email": email,
-        "status": ["SUCCESS", "PENDING", "IN PROGRESS", "FAILED"],
-        "type": ["Pembelian Coin", "Penukaran Coin"],
-        "page": page
-      });
-      int groupDate = filterDate.firstWhere((element) => element.selected == true).index;
-      switch (groupDate) {
-        case 2:
-            var startDate = DateTime(dateToday.year, dateToday.month, dateToday.day - 30);
-            final newStartDate = startDate.toString().substring(0, 10);
-            _paramsHistory?.addAll({
-               "startdate": newStartDate,
-                "enddate": date
-            });
-          break;
-        case 3:
-            var startDate = DateTime(dateToday.year, dateToday.month, dateToday.day - 90);
-            final newStartDate = startDate.toString().substring(0, 10);
-            _paramsHistory?.addAll({
-               "startdate": newStartDate,
-                "enddate": date
-            });
-          break;
-        case 4:
-            var res = filterDate.firstWhere((element) => element.selected == true);
-            final newStartDate = DateFormat('yyyy-MM-dd').format(DateTime.parse(res.startDate??''));
-            final enddate = DateFormat('yyyy-MM-dd').format(DateTime.parse(res.endDate??''));
-            _paramsHistory?.addAll({
-               "startdate": newStartDate,
-                "enddate": enddate
-            });
-          break;
-        default:
-          break;
-      }
-
-      await bloc.getHistoryTransaction(context, data: _paramsHistory);
-      
-      if (bloc.dataFetch.dataState == HistoryTransactionState.getBlocSuccess && bloc.dataFetch.data.isNotEmpty) {
-        result.addAll(bloc.dataFetch.data);
-      } else {
-        isLastPage = true;
-        page = page-1;
-        // Fluttertoast.showToast(msg: 'Already on the last ');
-      }
-    }catch(_){
-      debugPrint(_.toString());
-    }
-  }
-
-  // void resetSelected() {
-  //   for (var i = 0; i < filterDate.length; i++) {
-  //     filterDate[i].selected = false;
-  //   }
-  //   selectedTransaksi = false;
-  //   selectedDateValue = 1;
-  //   filterDate[0].selected = true;
-  //   selectedFiltersValue.clear();
-  //   selectedFiltersLabel = 'Semua Transaksi';
-  //   selectedDateLabel = 'Semua Tanggal';
-  //   notifyListeners();
-  // }
 
   set amountWithDrawal(String? val) {
     _amountWithDrawal = val;

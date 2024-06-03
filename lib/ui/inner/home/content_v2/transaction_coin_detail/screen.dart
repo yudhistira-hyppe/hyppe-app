@@ -1,11 +1,8 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:hyppe/core/bloc/monetization/detailtransaction/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
@@ -23,7 +20,8 @@ import 'notifier.dart';
 
 class TransactionCoinDetailScreen extends StatefulWidget {
   final String? invoiceid;
-  const TransactionCoinDetailScreen({super.key, required this.invoiceid});
+  final String? status;
+  const TransactionCoinDetailScreen({super.key, required this.invoiceid, this.status});
 
   @override
   State<TransactionCoinDetailScreen> createState() => _TransactionCoinDetailScreenState();
@@ -40,7 +38,7 @@ class _TransactionCoinDetailScreenState extends State<TransactionCoinDetailScree
     initializeDateFormatting('id', null);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       notifier = Provider.of<TransactionCoinDetailNotifier>(context, listen: false);
-      notifier.detailData(context, invoiceId: widget.invoiceid);
+      notifier.detailData(context, invoiceId: widget.invoiceid, status: widget.status);
     });
     super.initState();
   }
