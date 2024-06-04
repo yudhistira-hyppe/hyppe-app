@@ -985,6 +985,11 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
         thumb: System().showUserPicture(dataStreaming.user?.avatar?.mediaEndpoint),
       ),
       copiedToClipboard: copiedToClipboard,
+      afterShare: () {
+        if (!copiedToClipboard) {
+          shareCount(context, true, 1);
+        }
+      },
     ).then((value) {
       if (value) {
         if (copiedToClipboard && context.mounted) {
@@ -1064,6 +1069,11 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
     } else {
       return false;
     }
+  }
+
+  Future shareCount(BuildContext context, bool mounted, int total) async {
+    Map data = {"_id": dataStreaming.sId, "shareCount": total, "type": "SHARE"};
+    updateStream(context, mounted, data).then((value) {});
   }
 }
 

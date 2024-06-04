@@ -1657,10 +1657,12 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
       message = '@${profile?.username} ${translate.localeDatetime == 'id' ? 'mengirim kamu LIVE' : 'send you a LIVE'}';
     }
 
+    var idStream = isViewer ? context.read<ViewStreamingNotifier>().dataStreaming.sId : dataStream.sId;
+
     for (var i = 0; i < shareUsers.length; i++) {
-      sendMessageDirect(context, shareUsers[i].email ?? '', isViewer, message);
+      sendMessageDirect(context, idStream ?? '', shareUsers[i].email ?? '', isViewer, message);
     }
-    shareCount(context, true, shareUsers.length);
+    shareCount(context, true, idStream ?? '', shareUsers.length);
 
     ScaffoldMessengerState().hideCurrentSnackBar();
     messageShareCtrl.clear();
@@ -1675,13 +1677,11 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     // }
   }
 
-  Future sendMessageDirect(BuildContext context, String recipientEmail, bool isViewer, String message) async {
+  Future sendMessageDirect(BuildContext context, String idStream, String recipientEmail, bool isViewer, String message) async {
     // if (messageShareCtrl.text.trim().isEmpty) return;
 
     try {
       final emailSender = SharedPreference().readStorage(SpKeys.email);
-
-      var idStream = isViewer ? context.read<ViewStreamingNotifier>().dataStreaming.sId : dataStream.sId;
 
       final param = DiscussArgument(
         email: emailSender,
@@ -1722,13 +1722,13 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
       copiedToClipboard: copiedToClipboard,
       afterShare: () {
         if (!copiedToClipboard) {
-          shareCount(context, true, 1);
+          shareCount(context, true, dataStream.sId ?? '', 1);
         }
       },
     ).then((value) {
       if (value) {
         if (copiedToClipboard && context.mounted) {
-          shareCount(context, true, 1);
+          shareCount(context, true, dataStream.sId ?? '', 1);
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             margin: EdgeInsets.only(bottom: 60, left: 16, right: 16),
             backgroundColor: kHyppeTextLightPrimary,
@@ -1744,10 +1744,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
 
   void startTimerBasic() {
     timerBasic = Timer.periodic(const Duration(seconds: 3), (timer) {
-      print("=== ${timer}");
-      print("=== ${giftBasic.isNotEmpty}");
       if (giftBasic.isNotEmpty) {
-        print("===================================haous========================");
         comment.insert(0, giftBasic[0]);
         giftBasic.removeAt(0);
         if (giftBasicTemp.isNotEmpty && giftBasic.length <= 2) {
@@ -1850,8 +1847,8 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
-  Future shareCount(BuildContext context, bool mounted, int total) async {
-    Map data = {"_id": dataStream.sId, "shareCount": total, "type": "SHARE"};
+  Future shareCount(BuildContext context, bool mounted, String id, int total) async {
+    Map data = {"_id": id, "shareCount": total, "type": "SHARE"};
     updateStream(context, mounted, data).then((value) {});
   }
 }

@@ -28,8 +28,7 @@ import '../../../../../../constant/widget/custom_text_widget.dart';
 
 class CommentsDetailScreen extends StatefulWidget {
   final CommentsArgument argument;
-  const CommentsDetailScreen({Key? key, required this.argument})
-      : super(key: key);
+  const CommentsDetailScreen({Key? key, required this.argument}) : super(key: key);
 
   @override
   State<CommentsDetailScreen> createState() => _CommentsDetailScreenState();
@@ -49,8 +48,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       notifier.initState(context, postID, fromFront, parentComment);
     });
-    _scrollController
-        .addListener(() => notifier.scrollListener(context, _scrollController));
+    _scrollController.addListener(() => notifier.scrollListener(context, _scrollController));
     super.initState();
   }
 
@@ -97,23 +95,19 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                 child: Row(
                   children: [
                     GestureDetector(
-                        onTap: () {
-                          notifier.parentID = null;
-                          notifier.commentController.clear();
-                          Routing().moveBack();
-                        },
-                        child: const CustomIconWidget(
-                            width: 20,
-                            height: 25,
-                            iconData: '${AssetPath.vectorPath}back-arrow.svg')),
+                      onTap: () {
+                        notifier.parentID = null;
+                        notifier.commentController.clear();
+                        Routing().moveBack();
+                      },
+                      child: const CustomIconWidget(width: 20, height: 25, iconData: '${AssetPath.vectorPath}back-arrow.svg'),
+                    ),
                     fourteenPx,
                     Expanded(
                         child: CustomTextWidget(
                       textAlign: TextAlign.start,
                       textToDisplay: notifier.language.comment ?? 'Comment',
-                      textStyle: context.getTextTheme().bodyText1?.copyWith(
-                          color: context.getColorScheme().onBackground,
-                          fontWeight: FontWeight.w700),
+                      textStyle: context.getTextTheme().bodyText1?.copyWith(color: context.getColorScheme().onBackground, fontWeight: FontWeight.w700),
                     ))
                   ],
                 ),
@@ -125,8 +119,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                   color: Colors.purple,
                   onRefresh: () async {
                     notifier.commentData = null;
-                    notifier.initState(
-                        context, postID, fromFront, parentComment);
+                    notifier.initState(context, postID, fromFront, parentComment);
                   },
                   child: Column(
                     children: [
@@ -137,40 +130,25 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                                 color: context.getColorScheme().background,
                                 child: ListView.builder(
                                   itemCount: notifier.itemCount,
-                                  physics:
-                                      const AlwaysScrollableScrollPhysics(),
+                                  physics: const AlwaysScrollableScrollPhysics(),
                                   controller: _scrollController,
                                   scrollDirection: Axis.vertical,
-                                  keyboardDismissBehavior:
-                                      ScrollViewKeyboardDismissBehavior.onDrag,
+                                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                                   itemBuilder: (context, index) {
-                                    if (index == notifier.commentData?.length &&
-                                        notifier.hasNext) {
+                                    if (index == notifier.commentData?.length && notifier.hasNext) {
                                       return const CustomLoading();
                                     }
-                                    final comments =
-                                        notifier.commentData?[index];
-                                    print(
-                                        'all comments: ${comments?.comment?.txtMessages}');
-                                    return CommentTile(
-                                        logs: comments,
-                                        fromFront: fromFront,
-                                        notifier: notifier,
-                                        index: index);
+                                    final comments = notifier.commentData?[index];
+                                    print('all comments: ${comments?.comment?.txtMessages}');
+                                    return CommentTile(logs: comments, fromFront: fromFront, notifier: notifier, index: index);
                                   },
                                 ),
                               ),
                             )
                           : Expanded(
                               child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 100.0),
-                                child: CustomTextWidget(
-                                    textToDisplay: context
-                                            .read<TranslateNotifierV2>()
-                                            .translate
-                                            .beTheFirstToComment ??
-                                        ''),
+                                padding: const EdgeInsets.symmetric(vertical: 100.0),
+                                child: CustomTextWidget(textToDisplay: context.read<TranslateNotifierV2>().translate.beTheFirstToComment ?? ''),
                               ),
                             )
                     ],
@@ -182,10 +160,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                 List<CommentsLogs>? comments;
                 try {
                   if (parentID != null) {
-                    comments = notifier.commentData
-                        ?.where(
-                            (element) => element.comment?.lineID == parentID)
-                        .toList();
+                    comments = notifier.commentData?.where((element) => element.comment?.lineID == parentID).toList();
                   } else {
                     comments = null;
                   }
@@ -197,15 +172,10 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                     if (comments?.isNotEmpty ?? false)
                       Container(
                         color: kHyppeBgNotSolve,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 12, horizontal: 16),
+                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                         child: Row(
                           children: [
-                            Expanded(
-                                child: CustomTextWidget(
-                                    textAlign: TextAlign.start,
-                                    textToDisplay:
-                                        '${notifier.language.replyTo} ${comments?.first.comment?.senderInfo?.username ?? '-'}')),
+                            Expanded(child: CustomTextWidget(textAlign: TextAlign.start, textToDisplay: '${notifier.language.replyTo} ${comments?.first.comment?.senderInfo?.username ?? '-'}')),
                             InkWell(
                               onTap: () {
                                 notifier.parentID = null;
@@ -225,40 +195,26 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                       ),
                     Container(
                       color: context.getColorScheme().surface,
-                      padding: const EdgeInsets.only(
-                          bottom: 12, left: 16, right: 16, top: 10),
+                      padding: const EdgeInsets.only(bottom: 12, left: 16, right: 16, top: 10),
                       child: Column(
                         children: [
                           notifier.isShowAutoComplete
                               ? const AutoCompleteUserTagComment()
                               : Row(
-                                  children:
-                                      List.generate(emoji.length, (index) {
+                                  children: List.generate(emoji.length, (index) {
                                     return Expanded(
                                         child: InkWell(
                                             onTap: () {
-                                              context.handleActionIsGuest(
-                                                  () async {
-                                                final currentText = notifier
-                                                    .commentController.text;
-                                                notifier.commentController
-                                                        .text =
-                                                    "$currentText${emoji[index]}";
-                                                notifier.commentController
-                                                        .selection =
-                                                    TextSelection.fromPosition(
-                                                        TextPosition(
-                                                            offset: notifier
-                                                                .commentController
-                                                                .text
-                                                                .length));
+                                              context.handleActionIsGuest(() async {
+                                                final currentText = notifier.commentController.text;
+                                                notifier.commentController.text = "$currentText${emoji[index]}";
+                                                notifier.commentController.selection = TextSelection.fromPosition(TextPosition(offset: notifier.commentController.text.length));
                                                 notifier.onUpdate();
                                               });
                                             },
                                             child: CustomTextWidget(
                                               textToDisplay: emoji[index],
-                                              textStyle:
-                                                  const TextStyle(fontSize: 24),
+                                              textStyle: const TextStyle(fontSize: 24),
                                             )));
                                   }),
                                 ),
@@ -268,8 +224,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                               Expanded(
                                 child: TextField(
                                   onTap: () {
-                                    context.handleActionIsGuest(() async {},
-                                        addAction: () {
+                                    context.handleActionIsGuest(() async {}, addAction: () {
                                       notifier.inputNode.unfocus();
                                     });
                                   },
@@ -278,135 +233,87 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                                   style: Theme.of(context).textTheme.bodyText2,
                                   decoration: InputDecoration(
                                     filled: true,
-                                    border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(50),
-                                        borderSide: BorderSide(
-                                            color: context
-                                                .getColorScheme()
-                                                .surface)),
-                                    enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(50),
-                                        borderSide: BorderSide(
-                                            color: context
-                                                .getColorScheme()
-                                                .surface)),
-                                    fillColor: Theme.of(context)
-                                        .colorScheme
-                                        .background,
-                                    focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(50),
-                                        borderSide: BorderSide(
-                                            color: context
-                                                .getColorScheme()
-                                                .surface)),
-                                    hintText:
-                                        "${notifier.language.typeAMessage}...",
+                                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(50), borderSide: BorderSide(color: context.getColorScheme().surface)),
+                                    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(50), borderSide: BorderSide(color: context.getColorScheme().surface)),
+                                    fillColor: Theme.of(context).colorScheme.background,
+                                    focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(50), borderSide: BorderSide(color: context.getColorScheme().surface)),
+                                    hintText: "${notifier.language.typeAMessage}...",
                                     prefixIcon: Container(
-                                      margin: const EdgeInsets.only(
-                                          right: 5, left: 5),
+                                      margin: const EdgeInsets.only(right: 5, left: 5),
                                       child: Builder(builder: (context) {
-                                        final urlImage = context
-                                            .read<SelfProfileNotifier>()
-                                            .user
-                                            .profile
-                                            ?.avatar
-                                            ?.mediaEndpoint;
+                                        final urlImage = context.read<SelfProfileNotifier>().user.profile?.avatar?.mediaEndpoint;
                                         return CustomProfileImage(
                                           width: 26,
                                           height: 26,
-                                          imageUrl: System().showUserPicture(
-                                              comments
-                                                      ?.first
-                                                      .comment
-                                                      ?.senderInfo
-                                                      ?.avatar
-                                                      ?.mediaEndpoint ??
-                                                  (urlImage ?? '')),
-                                          badge: comments?.first.comment
-                                              ?.senderInfo?.urluserBadge,
+                                          imageUrl: System().showUserPicture(comments?.first.comment?.senderInfo?.avatar?.mediaEndpoint ?? (urlImage ?? '')),
+                                          badge: comments?.first.comment?.senderInfo?.urluserBadge,
                                           following: true,
                                         );
                                       }),
                                     ),
-                                    prefixIconConstraints: const BoxConstraints(
-                                        minWidth: 0, minHeight: 0),
-                                    suffixIcon: notifier
-                                            .commentController.text.isNotEmpty
+                                    prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
+                                    suffixIcon: notifier.commentController.text.isNotEmpty
                                         ? notifier.loading
                                             ? const CustomLoading(size: 4)
                                             : CustomTextButton(
                                                 child: CustomTextWidget(
-                                                  textToDisplay:
-                                                      notifier.language.send ??
-                                                          '',
+                                                  textToDisplay: notifier.language.send ?? '',
                                                   textStyle: TextStyle(
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .primary,
+                                                    color: Theme.of(context).colorScheme.primary,
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.w700,
                                                   ),
                                                 ),
                                                 onPressed: () async {
-                                                  await notifier.addComment(
-                                                      context,
-                                                      pageDetail: widget
-                                                          .argument.pageDetail);
+                                                  await notifier.addComment(context, pageDetail: widget.argument.pageDetail);
                                                   if (context.mounted) {
                                                     notifier.initState(
                                                       context,
                                                       widget.argument.postID,
                                                       widget.argument.fromFront,
-                                                      widget.argument
-                                                          .parentComment,
+                                                      widget.argument.parentComment,
                                                     );
                                                   }
                                                 },
                                               )
                                         : const SizedBox.shrink(),
                                   ),
-                                  onChanged: (value) =>
-                                      notifier.onChangeHandler(value, context),
+                                  onChanged: (value) => notifier.onChangeHandler(value, context),
                                 ),
                               ),
                               if (!notifier.inputNode.hasFocus)
-                              Container(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Material(
-                                  shape: const CircleBorder(),
-                                  child: InkWell(
-                                    splashColor: Colors.black,
-                                    onTap: () {
-                                      // notifier.isShowGift = true;
-                                      ShowBottomSheet()
-                                          .onShowGiftComment(context, argument: widget.argument, comments: comments);
-                                    },
-                                    onTapUp: (val) {},
-                                    customBorder: const CircleBorder(),
-                                    child: Ink(
-                                      decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        gradient: LinearGradient(
-                                          colors: [
-                                            Color(0xff7552C0),
-                                            Color(0xffAB22AF)
-                                          ],
-                                          stops: [0.25, 0.75],
-                                          begin: Alignment.centerLeft,
-                                          end: Alignment.centerRight,
+                                Container(
+                                  padding: const EdgeInsets.only(left: 8.0),
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Material(
+                                    shape: const CircleBorder(),
+                                    child: InkWell(
+                                      splashColor: Colors.black,
+                                      onTap: () {
+                                        // notifier.isShowGift = true;
+                                        ShowBottomSheet().onShowGiftComment(context, argument: widget.argument, comments: comments);
+                                      },
+                                      onTapUp: (val) {},
+                                      customBorder: const CircleBorder(),
+                                      child: Ink(
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          gradient: LinearGradient(
+                                            colors: [Color(0xff7552C0), Color(0xffAB22AF)],
+                                            stops: [0.25, 0.75],
+                                            begin: Alignment.centerLeft,
+                                            end: Alignment.centerRight,
+                                          ),
                                         ),
+                                        height: 38,
+                                        width: 38,
+                                        child: Image.asset("${AssetPath.pngPath}gift.png"),
                                       ),
-                                      height: 38,
-                                      width: 38,
-                                      child: Image.asset(
-                                          "${AssetPath.pngPath}gift.png"),
                                     ),
                                   ),
                                 ),
-                              ),
                             ],
                           ),
                         ],
@@ -422,8 +329,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
     });
   }
 
-  List<Widget> generateComment(BuildContext context, ContentData data,
-      CommentNotifierV2 notifier, int index, bool fromFront) {
+  List<Widget> generateComment(BuildContext context, ContentData data, CommentNotifierV2 notifier, int index, bool fromFront) {
     List<Widget> widget = [];
     if (index == 0) {
       widget.add(_bottomDetail(context, data, notifier));
@@ -434,52 +340,35 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
         child: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 100.0),
-            child: CustomTextWidget(
-                textToDisplay: context
-                        .read<TranslateNotifierV2>()
-                        .translate
-                        .beTheFirstToComment ??
-                    ''),
+            child: CustomTextWidget(textToDisplay: context.read<TranslateNotifierV2>().translate.beTheFirstToComment ?? ''),
           ),
         ),
       ));
     }
     // final comments = notifier.commentData?[index].comment;
     if (index > 0) {
-      Widget item = Container(
-          color: context.getColorScheme().background,
-          child: CommentTile(
-              logs: notifier.commentData?[index - 1],
-              fromFront: fromFront,
-              notifier: notifier,
-              index: index - 1));
+      Widget item = Container(color: context.getColorScheme().background, child: CommentTile(logs: notifier.commentData?[index - 1], fromFront: fromFront, notifier: notifier, index: index - 1));
       widget.add(item);
     }
 
     return widget;
   }
 
-  Widget _bottomDetail(
-      BuildContext context, ContentData data, CommentNotifierV2 notifier) {
+  Widget _bottomDetail(BuildContext context, ContentData data, CommentNotifierV2 notifier) {
     return Container(
       color: Colors.grey.shade100,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         decoration: BoxDecoration(
-            boxShadow: const [
-              BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)
-            ],
-            borderRadius: const BorderRadius.all(Radius.circular(16)),
-            color: context.getColorScheme().background),
+            boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)], borderRadius: const BorderRadius.all(Radius.circular(16)), color: context.getColorScheme().background),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomProfileImage(
               width: 36,
               height: 36,
-              onTap: () =>
-                  System().navigateToProfile(context, data.email ?? ''),
+              onTap: () => System().navigateToProfile(context, data.email ?? ''),
               imageUrl: System().showUserPicture(data.avatar?.mediaEndpoint),
               badge: data.urluserBadge,
               following: true,
@@ -491,10 +380,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // UserTemplate(username: '${data.username}', isVerified: data.isIdVerified ?? (data.privacy?.isIdVerified ?? false), date: data.createdAt ?? DateTime.now().toString()),
-                  UserTemplate(
-                      username: '${data.username}',
-                      isVerified: data.isIdVerified ??
-                          (data.privacy?.isIdVerified ?? false)),
+                  UserTemplate(username: '${data.username}', isVerified: data.isIdVerified ?? (data.privacy?.isIdVerified ?? false)),
                   twoPx,
                   Row(
                     children: [
@@ -516,20 +402,8 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                               seeMore: ' ${notifier.language.more}',
                               textOverflow: TextOverflow.visible,
                               normStyle: Theme.of(context).textTheme.bodyText2,
-                              hrefStyle: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2
-                                  ?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary),
-                              expandStyle: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2
-                                  ?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary),
+                              hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                              expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
                               callbackIsMore: (val) {
                                 setState(() {
                                   isLoad = val;
@@ -700,8 +574,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
               child: Container(
                 color: context.getColorScheme().background,
                 child: Column(
-                  children:
-                      List.generate(5, (index) => _commentItemShimmer(context)),
+                  children: List.generate(5, (index) => _commentItemShimmer(context)),
                 ),
               ),
             ))
@@ -719,10 +592,5 @@ class CommentsArgument {
   final ContentData data;
   final bool? pageDetail;
 
-  CommentsArgument(
-      {this.parentComment,
-      required this.postID,
-      required this.fromFront,
-      required this.data,
-      this.pageDetail});
+  CommentsArgument({this.parentComment, required this.postID, required this.fromFront, required this.data, this.pageDetail});
 }
