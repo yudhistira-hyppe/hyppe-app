@@ -10,7 +10,7 @@
 				<string>arm64</string>
 			</array>
 			<key>buildNumber</key>
-			<string>117</string>
+			<string>118</string>
 			<key>certificate</key>
 			<dict>
 				<key>SHA1</key>
@@ -235,6 +235,34 @@
 						<string>Cloud Managed Apple Distribution</string>
 					</dict>
 					<key>name</key>
+					<string>AgoraLipSyncExtension.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.0.0</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
 					<string>AgoraReplayKitExtension.framework</string>
 					<key>team</key>
 					<dict>
@@ -272,7 +300,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>4.3.0</string>
+					<string>4.3.1</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -280,7 +308,7 @@
 						<string>arm64</string>
 					</array>
 					<key>buildNumber</key>
-					<string>4.3.0</string>
+					<string>4.3.1</string>
 					<key>certificate</key>
 					<dict>
 						<key>SHA1</key>
@@ -300,7 +328,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>4.3.0</string>
+					<string>4.3.1</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -376,6 +404,34 @@
 					</dict>
 					<key>name</key>
 					<string>AgoraVideoAv1DecoderExtension.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>Z4489DNPPA</string>
+						<key>name</key>
+						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.0.0</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>04E560AFE276A5DAA87F0C1DDC9B7FB679134134</string>
+						<key>dateExpires</key>
+						<string>13/05/25</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>AgoraVideoAv1EncoderExtension.framework</string>
 					<key>team</key>
 					<dict>
 						<key>id</key>
@@ -552,7 +608,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>4.3.0</string>
+					<string>4.3.1</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -748,7 +804,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>1.6.2</string>
+					<string>1.7.5</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -776,7 +832,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>4.3.4</string>
+					<string>4.3.9</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -804,7 +860,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>0.0.17</string>
+					<string>0.0.19</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -888,7 +944,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>2.7.9</string>
+					<string>2.7.10</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -1224,7 +1280,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>9.3.0</string>
+					<string>9.4.1</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -1308,7 +1364,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>7.12.0</string>
+					<string>7.13.3</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -1420,7 +1476,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>3.25.3</string>
+					<string>3.26.1</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -1448,7 +1504,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>5.0.0</string>
+					<string>5.2.2</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -1476,7 +1532,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>5.19.0</string>
+					<string>5.19.2</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -1504,7 +1560,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>0.14.5</string>
+					<string>0.14.6</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -1560,7 +1616,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>5.4.4</string>
+					<string>5.4.5</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -1616,7 +1672,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>4.1.0</string>
+					<string>4.1.1</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -1644,7 +1700,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>6.3.0</string>
+					<string>6.3.1</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -1728,7 +1784,7 @@
 						<string>PT. HYPPE TEKNOLOGI INDONESIA</string>
 					</dict>
 					<key>versionNumber</key>
-					<string>1.0.0</string>
+					<string>1.0.4</string>
 				</dict>
 				<dict>
 					<key>architectures</key>
@@ -3212,7 +3268,7 @@
 			<key>profile</key>
 			<dict>
 				<key>UUID</key>
-				<string>7a36e1a4-6199-458f-8fd6-1b8a7ad14120</string>
+				<string>57cdca6b-b9e0-4202-bb52-840cb14af9e9</string>
 				<key>dateExpires</key>
 				<string>13/05/25</string>
 				<key>name</key>

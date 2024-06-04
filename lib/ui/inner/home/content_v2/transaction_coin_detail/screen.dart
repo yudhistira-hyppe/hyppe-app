@@ -65,7 +65,7 @@ class _TransactionCoinDetailScreenState extends State<TransactionCoinDetailScree
             return const Center(child: CustomLoading(),);
           }
           
-          switch (notifier.transactionDetail.status) {
+          switch (notifier.transactionDetail.status??'') {
             case 'Cancel':
               titleColor = kHyppeRed;
               textTitle = lang!.localeDatetime == 'id' ? 'Batal' : 'Cancel';

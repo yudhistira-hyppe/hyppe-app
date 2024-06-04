@@ -18,7 +18,6 @@ import '../../../../widget/custom_elevated_button.dart';
 import '../../../../widget/custom_profile_image.dart';
 import '../../../../widget/custom_spacer.dart';
 import '../../../../widget/icon_button_widget.dart';
-import '../../show_bottom_sheet.dart';
 
 class OnListWatchers extends StatefulWidget {
   const OnListWatchers({super.key});

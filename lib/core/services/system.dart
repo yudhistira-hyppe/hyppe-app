@@ -1177,6 +1177,8 @@ class System {
         return 'CHALLENGE';
       case NotificationCategory.coin:
         return 'TOPUP_COIN';
+      case NotificationCategory.live:
+        return 'NOTIFY_LIVE';
     }
   }
 
@@ -1204,6 +1206,8 @@ class System {
         return NotificationCategory.challange;
       case 'TOPUP_COIN':
         return NotificationCategory.coin;
+      case 'NOTIFY_LIVE':
+        return NotificationCategory.live;
       default:
         return NotificationCategory.all;
     }

@@ -191,6 +191,10 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
 
   Future<void> init(BuildContext context, mounted, {bool forConfig = false}) async {
     dataBanned = null;
+    dataStream = LinkStreamModel();
+    titleLive = '';
+    userName = '';
+
     print("-------- init stream $forConfig ---------");
     isloading = true;
 
@@ -708,13 +712,15 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   //   notifyListeners();
   // }
 
-  Future<void> resumeStreamer() async {
+  Future<void> resumeStreamer(BuildContext context) async {
+    pauseSendStatus(context);
     engine.startPreview();
     engine.muteLocalVideoStream(false);
     engine.muteLocalAudioStream(false);
     mute = false;
     flipCameraVisible = true;
     isPause = false;
+
     notifyListeners();
   }
 
@@ -764,6 +770,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
+  DateTime? timePause;
   Future<void> pauseLive(BuildContext context, mounted) async {
     var pause = await pauseSendStatus(context);
     if (pause) {
@@ -774,6 +781,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
       engine.muteLocalAudioStream(mute);
       totPause++;
       isPause = true;
+      timePause = DateTime.now();
       notifyListeners();
     }
   }
@@ -1034,8 +1042,9 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   }
 
   Future disableComment(BuildContext context, mounted) async {
+    pinComment = null;
+    comment = [];
     bool connect = await System().checkConnections();
-
     if (connect) {
       try {
         final notifier = LiveStreamBloc();
@@ -1639,8 +1648,17 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   //send share DM DIRECT MESSAGE
   Future sendShareMassage(BuildContext context, {bool isViewer = false}) async {
     Routing().moveBack();
+
+    var message = messageShareCtrl.text;
+
+    if (message == '') {
+      var profile = context.read<SelfProfileNotifier>().user.profile;
+      var translate = context.read<TranslateNotifierV2>().translate;
+      message = '@${profile?.username} ${translate.localeDatetime == 'id' ? 'mengirim kamu LIVE' : 'send you a LIVE'}';
+    }
+
     for (var i = 0; i < shareUsers.length; i++) {
-      sendMessageDirect(context, shareUsers[i].email ?? '', isViewer);
+      sendMessageDirect(context, shareUsers[i].email ?? '', isViewer, message);
     }
 
     ScaffoldMessengerState().hideCurrentSnackBar();
@@ -1656,21 +1674,19 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     // }
   }
 
-  Future sendMessageDirect(BuildContext context, String recipientEmail, bool isViewer) async {
+  Future sendMessageDirect(BuildContext context, String recipientEmail, bool isViewer, String message) async {
     // if (messageShareCtrl.text.trim().isEmpty) return;
 
     try {
-      messageShareCtrl.text.logger();
-
-      final message = messageShareCtrl.text;
       final emailSender = SharedPreference().readStorage(SpKeys.email);
 
       var idStream = isViewer ? context.read<ViewStreamingNotifier>().dataStreaming.sId : dataStream.sId;
+
       final param = DiscussArgument(
         email: emailSender,
         receiverParty: recipientEmail,
       )
-        ..txtMessages = message == '' ? "text_kosong" : message
+        ..txtMessages = message
         ..streamID = idStream;
 
       final notifier = MessageBlocV2();
@@ -1752,48 +1768,8 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     });
   }
 
-  Future getGift(BuildContext context, bool mounted, String type, {bool isLoadmore = false}) async {
-    //type = CLASSIC -- DELUXE
-    // if (type == 'CLASSIC' && dataGift.isNotEmpty) return;
-    // if (type == 'DELUXE' && dataGiftDeluxe.isNotEmpty) return;
-    if (!isLoadmore) isloadingGift = true;
-    notifyListeners();
-    bool connect = await System().checkConnections();
-
-    if (connect) {
-      try {
-        final notifier = LiveStreamBloc();
-        Map data = {"page": 0, "limit": 9999, "descending": true, "type": "GIFT", "typeGift": type};
-
-        if (mounted) await notifier.getLinkStream(context, data, UrlConstants.listmonetization);
-
-        final fetch = notifier.liveStreamFetch;
-        if (fetch.postsState == LiveStreamState.getApiSuccess) {
-          if (type == 'CLASSIC') {
-            if (!isLoadmore) dataGift = [];
-            fetch.data.forEach((v) => dataGift.add(GiftLiveModel.fromJson(v)));
-          } else {
-            if (!isLoadmore) dataGiftDeluxe = [];
-            fetch.data.forEach((v) => dataGiftDeluxe.add(GiftLiveModel.fromJson(v)));
-          }
-        }
-      } catch (e) {
-        debugPrint(e.toString());
-      }
-
-      notifyListeners();
-    } else {
-      if (context.mounted) {
-        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
-          Routing().moveBack();
-        });
-      }
-    }
-    isloadingGift = false;
-    notifyListeners();
-  }
-
   Future getListGift(BuildContext context, mounted) async {
+    dataUserGift = [];
     if (pageViewers == 0) isloadingViewers = true;
     notifyListeners();
     bool connect = await System().checkConnections();

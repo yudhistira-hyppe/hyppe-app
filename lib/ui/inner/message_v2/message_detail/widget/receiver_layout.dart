@@ -12,6 +12,7 @@ import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
+import 'package:hyppe/ui/inner/message_v2/message_detail/notifier.dart';
 import 'package:hyppe/ui/inner/message_v2/message_detail/widget/content_message_layout.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -28,6 +29,7 @@ class ReceiverLayout extends StatelessWidget {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'ReceiverLayout');
     SizeConfig().init(context);
     var translate = context.read<TranslateNotifierV2>().translate;
+    var notifMessage = context.read<MessageDetailNotifier>();
 
     Widget shareLive = Container();
     if (chatData?.medias.isNotEmpty ?? [].isNotEmpty) {
@@ -163,7 +165,7 @@ class ReceiverLayout extends StatelessWidget {
                   ),
                 ),
               ),
-              if (chatData?.txtMessages == 'text_kosong')
+              if (chatData?.txtMessages == '@${notifMessage.argument.usernameReceiver} mengirim kamu LIVE' || chatData?.txtMessages == '@${notifMessage.argument.usernameReceiver} send you a LIVE')
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: CustomTextWidget(
@@ -183,46 +185,46 @@ class ReceiverLayout extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         shareLive,
-        // if (chatData?.txtMessages == 'text_kosong' && chatData?.medias.first.sId == null)
-        Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.zero,
-              bottomLeft: Radius.circular(5),
-              bottomRight: Radius.circular(5),
-              topRight: Radius.circular(5),
+        if (chatData?.txtMessages != '@${notifMessage.argument.usernameReceiver} mengirim kamu LIVE' && chatData?.txtMessages != '@${notifMessage.argument.usernameReceiver} send you a LIVE')
+          Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.zero,
+                bottomLeft: Radius.circular(5),
+                bottomRight: Radius.circular(5),
+                topRight: Radius.circular(5),
+              ),
             ),
-          ),
-          constraints: BoxConstraints(
-            maxWidth: SizeConfig.screenWidth! * 0.7,
-          ),
-          child: Padding(
-            padding: EdgeInsets.all(10 * SizeConfig.scaleDiagonal),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                if ((chatData?.medias.isNotEmpty ?? false) && chatData?.medias.first.sId == null)
-                  ContentMessageLayout(
-                    message: chatData,
+            constraints: BoxConstraints(
+              maxWidth: SizeConfig.screenWidth! * 0.7,
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(10 * SizeConfig.scaleDiagonal),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  if ((chatData?.medias.isNotEmpty ?? false) && chatData?.medias.first.sId == null)
+                    ContentMessageLayout(
+                      message: chatData,
+                    ),
+                  CustomTextWidget(
+                    // textToDisplay: chatData.message,
+                    textAlign: TextAlign.start,
+                    textOverflow: TextOverflow.clip,
+                    textStyle: Theme.of(context).textTheme.bodyText2,
+                    textToDisplay: chatData?.txtMessages ?? chatData?.reactionIcon ?? '',
                   ),
-                CustomTextWidget(
-                  // textToDisplay: chatData.message,
-                  textAlign: TextAlign.start,
-                  textOverflow: TextOverflow.clip,
-                  textStyle: Theme.of(context).textTheme.bodyText2,
-                  textToDisplay: chatData?.txtMessages ?? chatData?.reactionIcon ?? '',
-                ),
-                CustomTextWidget(
-                  textAlign: TextAlign.end,
-                  textStyle: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 10),
-                  textToDisplay: chatData?.createdAt == null ? "" : System().dateFormatter(chatData?.createdAt ?? '', 1),
-                  // textToDisplay: chatData?.createdAt == null ? "" : System().dateFormatter(created ?? '', 1),
-                ),
-              ],
+                  CustomTextWidget(
+                    textAlign: TextAlign.end,
+                    textStyle: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 10),
+                    textToDisplay: chatData?.createdAt == null ? "" : System().dateFormatter(chatData?.createdAt ?? '', 1),
+                    // textToDisplay: chatData?.createdAt == null ? "" : System().dateFormatter(created ?? '', 1),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
       ],
     );
   }

@@ -32,7 +32,6 @@ class CouponWidget extends StatelessWidget {
                 (data?.min_use_disc ?? 0) &&
             available;
     // return discWidget(context, disabled: !enabled);
-    print(enabled);
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -134,7 +133,7 @@ class CouponWidget extends StatelessWidget {
           InkWell(
             onTap: () {
               // print('klick');
-              context.read<DiscNotifier>().showButtomSheetInfo(context, lang!);
+              context.read<DiscNotifier>().showButtomSheetInfo(context, lang!, data);
             },
             child: Row(
               children: [

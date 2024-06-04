@@ -107,44 +107,52 @@ class ListCommentViewer extends StatelessWidget {
                                             //   notifier.comment[index].username ?? '',
                                             //   style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700),
                                             // ),
-                                            if (notifier.comment[index].messages != 'joined')
-                                              Text(
-                                                notifier.comment[index].messages ?? '',
-                                                style: const TextStyle(color: kHyppeTextPrimary),
-                                              ),
+                                            Text(
+                                              notifier.comment[index].messages ?? '',
+                                              style: const TextStyle(color: kHyppeTextPrimary),
+                                            ),
                                           ],
                                         )
                                       : notifier.comment[index].commentType == 'JOIN'
                                           ? Text.rich(TextSpan(text: notifier.comment[index].username ?? '', style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700), children: [
                                               if (notifier.comment[index].messages == 'joined')
-                                                const TextSpan(
-                                                  text: ' joined',
-                                                  style: TextStyle(color: kHyppeTextPrimary, fontWeight: FontWeight.w700),
+                                                TextSpan(
+                                                  text: ' ${translate.localeDatetime == 'id' ? 'bergabung' : 'joined'}',
+                                                  style: const TextStyle(color: kHyppeTextPrimary, fontWeight: FontWeight.w700),
                                                 ),
                                             ]))
                                           : Row(
                                               children: [
-                                                Text.rich(
-                                                    TextSpan(text: notifier.comment[index].username ?? '', style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700), children: [
-                                                  TextSpan(
-                                                    text: " ${translate.sent} ${notifier.comment[index].messages}",
-                                                    style: const TextStyle(color: kHyppeTextPrimary, fontWeight: FontWeight.w700),
+                                                Expanded(
+                                                  child: RichText(
+                                                    text: TextSpan(
+                                                      text: notifier.comment[index].username ?? '',
+                                                      style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700),
+                                                      children: [
+                                                        TextSpan(
+                                                          text: " ${translate.sent} ${notifier.comment[index].messages}",
+                                                        ),
+                                                        WidgetSpan(
+                                                          child: type == '.svg'
+                                                              ? SvgPicture.network(
+                                                                  data.urlGiftThum ?? '',
+                                                                  height: 20 * SizeConfig.scaleDiagonal,
+                                                                  width: 20 * SizeConfig.scaleDiagonal,
+                                                                  semanticsLabel: 'A shark?!',
+                                                                  placeholderBuilder: (BuildContext context) =>
+                                                                      Container(padding: const EdgeInsets.all(30.0), child: const CircularProgressIndicator()),
+                                                                )
+                                                              : Container(
+                                                                  margin: const EdgeInsets.only(left: 8),
+                                                                  width: 20 * SizeConfig.scaleDiagonal,
+                                                                  height: 20 * SizeConfig.scaleDiagonal,
+                                                                  decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(data.urlGiftThum ?? ''))),
+                                                                ),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
-                                                ])),
-                                                type == '.svg'
-                                                    ? SvgPicture.network(
-                                                        data.urlGiftThum ?? '',
-                                                        height: 20 * SizeConfig.scaleDiagonal,
-                                                        width: 20 * SizeConfig.scaleDiagonal,
-                                                        semanticsLabel: 'A shark?!',
-                                                        placeholderBuilder: (BuildContext context) => Container(padding: const EdgeInsets.all(30.0), child: const CircularProgressIndicator()),
-                                                      )
-                                                    : Container(
-                                                        margin: const EdgeInsets.only(left: 16),
-                                                        width: 20 * SizeConfig.scaleDiagonal,
-                                                        height: 20 * SizeConfig.scaleDiagonal,
-                                                        decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(data.urlGiftThum ?? ''))),
-                                                      )
+                                                ),
                                               ],
                                             ),
                                 ),

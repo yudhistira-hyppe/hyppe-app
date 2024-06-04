@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/live_stream/list_user_gift_model.dart';
-import 'package:hyppe/core/models/collection/live_stream/viewers_live_model.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_cache_image.dart';
-import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:provider/provider.dart';
@@ -17,11 +14,8 @@ import '../../../../../../core/constants/asset_path.dart';
 import '../../../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../../../initial/hyppe/translate_v2.dart';
 import '../../../../../../ux/routing.dart';
-import '../../../../widget/custom_elevated_button.dart';
-import '../../../../widget/custom_profile_image.dart';
 import '../../../../widget/custom_spacer.dart';
 import '../../../../widget/icon_button_widget.dart';
-import '../../show_bottom_sheet.dart';
 
 class OnListGift extends StatefulWidget {
   const OnListGift({super.key});
@@ -109,21 +103,22 @@ class _OnListGiftState extends State<OnListGift> {
         children: [
           Flexible(
             child: InkWell(
-              onTap: () => ShowBottomSheet.onWatcherStatus(context, data.email ?? '', data.sId ?? ''),
+              onTap: () => System().navigateToProfile(context, data.email ?? ''),
+              // onTap: () => ShowBottomSheet.onWatcherStatus(context, data.email ?? '', data.sId ?? ''),
               child: Row(
                 children: [
                   type == '.svg'
                       ? SvgPicture.network(
                           data.thumbnail ?? '',
-                          height: 40 * SizeConfig.scaleDiagonal,
-                          width: 40 * SizeConfig.scaleDiagonal,
+                          height: 50 * SizeConfig.scaleDiagonal,
+                          width: 50 * SizeConfig.scaleDiagonal,
                           semanticsLabel: 'A shark?!',
                           placeholderBuilder: (BuildContext context) => Container(padding: const EdgeInsets.all(30.0), child: const CircularProgressIndicator()),
                         )
                       : SizedBox(
                           // width: MediaQuery.of(context2).size.width,
-                          width: 40 * SizeConfig.scaleDiagonal,
-                          height: 40 * SizeConfig.scaleDiagonal,
+                          width: 50 * SizeConfig.scaleDiagonal,
+                          height: 50 * SizeConfig.scaleDiagonal,
                           child: CustomCacheImage(
                             imageUrl: data.thumbnail ?? '',
                             imageBuilder: (_, imageProvider) {
@@ -178,7 +173,7 @@ class _OnListGiftState extends State<OnListGift> {
                               children: [
                                 TextSpan(
                                   text: "${data.name}",
-                                  style: TextStyle(color: kHyppeBurem),
+                                  style: const TextStyle(color: kHyppeBurem),
                                 ),
                               ],
                             )),
@@ -192,8 +187,8 @@ class _OnListGiftState extends State<OnListGift> {
                                   ),
                               children: [
                                 TextSpan(
-                                  text: "${data.username}",
-                                  style: TextStyle(color: kHyppePrimary),
+                                  text: "@${data.username}",
+                                  style: const TextStyle(color: kHyppePrimary),
                                 ),
                               ],
                             )),

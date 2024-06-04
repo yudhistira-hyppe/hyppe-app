@@ -102,13 +102,13 @@ class DiscNotifier extends ChangeNotifier {
     }
   }
 
-  void showButtomSheetInfo(BuildContext context, LocalizationModelV2 lang) {
+  void showButtomSheetInfo(BuildContext context, LocalizationModelV2 lang, DiscountModel? data) {
     showModalBottomSheet<int>(
         backgroundColor: Colors.transparent,
         context: context,
         isScrollControlled: true,
         builder: (context) {
-          return DialogInfoWidget(lang: lang,);
+          return DialogInfoWidget(lang: lang, data: data,);
         }
     );
   }

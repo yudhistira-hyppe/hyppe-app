@@ -102,7 +102,7 @@ class CommentTile extends StatelessWidget {
                                               .colorScheme
                                               .primary),
                                 ),
-                              // if (comment!.gift !=  null)
+                              if (comment!.gift !=  null)
                               Container(
                                 padding: const EdgeInsets.only(
                                     top: 2, left: 4, right: 4, bottom: 2),

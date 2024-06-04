@@ -16,6 +16,7 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/message_v2/message_detail/widget/content_message_layout.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -32,6 +33,7 @@ class SenderLayout extends StatelessWidget {
     SizeConfig().init(context);
 
     var translate = context.read<TranslateNotifierV2>().translate;
+    var profile = context.read<SelfProfileNotifier>().user.profile;
 
     Widget shareLive = Container();
     if (chatData?.medias.isNotEmpty ?? [].isNotEmpty) {
@@ -168,7 +170,7 @@ class SenderLayout extends StatelessWidget {
                   ),
                 ),
               ),
-              if (chatData?.txtMessages == 'text_kosong')
+              if (chatData?.txtMessages == '@${profile?.username} mengirim kamu LIVE' || chatData?.txtMessages == '@${profile?.username} send you a LIVE')
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: CustomTextWidget(
@@ -185,9 +187,11 @@ class SenderLayout extends StatelessWidget {
     }
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         shareLive,
-        if (chatData?.txtMessages == 'text_kosong' && chatData?.medias.first.sId == null)
+        // Text("${chatData?.txtMessages != '@${profile?.username} mengirim kamu LIVE' && chatData?.txtMessages != '@${profile?.username} send you a LIVE'}"),
+        if (chatData?.txtMessages != '@${profile?.username} mengirim kamu LIVE' && chatData?.txtMessages != '@${profile?.username} send you a LIVE')
           Container(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
@@ -206,7 +210,7 @@ class SenderLayout extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  if ((chatData?.medias.isNotEmpty ?? false))
+                  if ((chatData?.medias.isNotEmpty ?? false) && chatData?.medias.first.mediaThumbEndpoint != null)
                     ContentMessageLayout(
                       message: chatData,
                     ),

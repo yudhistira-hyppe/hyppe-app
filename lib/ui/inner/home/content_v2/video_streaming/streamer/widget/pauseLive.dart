@@ -18,6 +18,15 @@ class PauseLive extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tn = context.read<TranslateNotifierV2>().translate;
+
+    final timePause = notifier.timePause;
+    final date2 = DateTime.now();
+    final time = date2.difference(timePause ?? date2).inSeconds;
+
+    var finaltime = 300 - time - 1;
+
+    var duration = Duration(seconds: finaltime > 0 ? finaltime : 2);
+
     return SizedBox(
       // padding: const EdgeInsets.only(bottom: 100),
       height: SizeConfig.screenHeight,
@@ -46,8 +55,8 @@ class PauseLive extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       child: TweenAnimationBuilder<Duration>(
-                        duration: const Duration(minutes: 5, seconds: 0),
-                        tween: Tween(begin: const Duration(minutes: 5, seconds: 0), end: Duration.zero),
+                        duration: notifier.timePause == null ? const Duration(minutes: 5, seconds: 0) : duration,
+                        tween: Tween(begin: notifier.timePause == null ? const Duration(minutes: 5, seconds: 0) : duration, end: Duration.zero),
                         onEnd: () {
                           context.read<StreamerNotifier>().endLive(context, context.mounted, isBack: false);
                         },
@@ -77,7 +86,7 @@ class PauseLive extends StatelessWidget {
                     CustomTextButton(
                       onPressed: () {
                         if (!notifier.isloadingButton) {
-                          context.read<StreamerNotifier>().resumeStreamer();
+                          context.read<StreamerNotifier>().resumeStreamer(context);
                         }
                       },
                       style: ButtonStyle(

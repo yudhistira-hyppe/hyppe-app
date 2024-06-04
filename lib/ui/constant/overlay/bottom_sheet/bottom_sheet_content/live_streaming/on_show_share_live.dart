@@ -57,8 +57,11 @@ class _OnShowShareLiveBottomSheetState extends State<OnShowShareLiveBottomSheet>
   Widget build(BuildContext context) {
     var trans = context.read<TranslateNotifierV2>().translate;
 
-    return Consumer<StreamerNotifier>(
-      builder: (_, notifier, __) => Column(
+    return Consumer2<StreamerNotifier, ViewStreamingNotifier>(builder: (_, notifier, viewNotifier, __) {
+      if (widget.isViewer && viewNotifier.isOver) {
+        Navigator.pop(Routing.navigatorKey.currentContext ?? context);
+      }
+      return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
@@ -142,8 +145,8 @@ class _OnShowShareLiveBottomSheetState extends State<OnShowShareLiveBottomSheet>
               ),
             )
         ],
-      ),
-    );
+      );
+    });
   }
 
   Widget _iconButton({required Widget child}) {

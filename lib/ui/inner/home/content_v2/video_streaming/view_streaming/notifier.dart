@@ -2,17 +2,18 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/models/collection/live_stream/gift_live_model.dart';
 import 'package:hyppe/core/models/collection/live_stream/streaming_model.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
 import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
 import 'package:hyppe/core/services/socket_live_service.dart';
 import 'package:hyppe/ui/constant/entities/general_mixin/general_mixin.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/respon_allready_report.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -68,15 +69,19 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
 
   ///Status => Offline - Prepare - StandBy - Ready - Online
   StatusStream statusLive = StatusStream.offline;
+  GiftLiveModel? giftSelect;
 
   List<CommentLiveModel> giftBasic = [];
   List<CommentLiveModel> giftBasicTemp = [];
   List<CommentLiveModel> giftDelux = [];
   List<CommentLiveModel> giftDeluxTemp = [];
+  List<GiftLiveModel> dataGift = [];
+  List<GiftLiveModel> dataGiftDeluxe = [];
 
   List<ViewersLiveModel> dataViewers = [];
   List<CommentLiveModel> comment = [];
   List<int> animationIndexes = [];
+
   int totLikes = 0;
   int totViews = 0;
   int totViewsEnd = 0;
@@ -84,6 +89,7 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
   Offset positionDxDy = Offset(0, 0);
 
   bool endLive = false;
+  bool isloadingGift = false;
 
   bool _loading = false;
   bool get loading => _loading;
@@ -195,11 +201,13 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
         }),
         onUserOffline: (RtcConnection connection, int uid, UserOfflineReasonType reason) {
           // destoryPusher();
+          // if (!(dataStreaming.pause ?? false)) {
           debugPrint("viewer remote user $uid left channel");
           remoteUid = -1;
           statusLive = StatusStream.offline;
           isOver = true;
           notifyListeners();
+          // }
         },
         onTokenPrivilegeWillExpire: (RtcConnection connection, String token) {
           debugPrint('[onTokenPrivilegeWillExpire] connection: ${connection.toJson()}, token: $token');
@@ -255,6 +263,7 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
   }
 
   Future<void> destoryPusher() async {
+    print("masuk destroy pusher");
     _socketService.closeSocket(eventComment);
     _socketService.closeSocket(eventViewStream);
     _socketService.closeSocket(eventLikeStream);
@@ -433,8 +442,12 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
+  bool loadingPause = false;
+  Duration durationPause = const Duration(minutes: 5);
   Future initLiveStream(BuildContext context, mounted, LinkStreamModel model) async {
     bool returnNext = false;
+    loadingPause = true;
+    notifyListeners();
     bool connect = await System().checkConnections();
 
     if (connect) {
@@ -450,7 +463,22 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
           dataStreaming = StreamingModel.fromJson(fetch.data);
           isCommentDisable = dataStreaming.commentDisabled ?? false;
           totViews = dataStreaming.viewCountActive ?? 0;
-          returnNext = true;
+
+          print("=======duratoin ${dataStreaming.pause}");
+          if (dataStreaming.pause ?? false) {
+            statusAgora = RemoteVideoState.remoteVideoStateStopped;
+            resionAgora = RemoteVideoStateReason.remoteVideoStateReasonRemoteMuted;
+            final timePause = DateTime.parse(dataStreaming.pauseDate ?? '2024-01-01');
+            final date2 = DateTime.now();
+            final time = date2.difference(timePause).inSeconds;
+
+            var finaltime = 300 - time - 2;
+
+            durationPause = Duration(seconds: finaltime > 0 ? finaltime : 2);
+            print("=======duratoin $durationPause");
+            notifyListeners();
+          }
+
           if (dataStreaming.comment != null && (dataStreaming.comment?.isNotEmpty ?? [].isNotEmpty)) {
             pinComment = dataStreaming.comment?[0];
           }
@@ -470,6 +498,10 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
               username: context.read<SelfProfileNotifier>().user.profile?.username,
             ),
           );
+
+          loadingPause = false;
+          notifyListeners();
+          returnNext = true;
         }
       } catch (e) {
         debugPrint(e.toString());
@@ -630,7 +662,6 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
 
   void handleSocket(message, event, LinkStreamModel dataStream) async {
     if (event == eventComment) {
-      print("handlesocket 222 ==================== $message $event $dataStream");
       var messages = CommentLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
       if (messages.idStream == dataStream.sId) {
         if (messages.commentType == 'MESSAGGES' || messages.commentType == 'JOIN') {
@@ -678,18 +709,26 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
       }
     } else if (event == eventStatusStream) {
       var messages = StatusStreamLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
+      print("===00 id ${dataStream.sId} -- ${messages.idStream} ${messages.idStream == dataStream.sId}");
       if (messages.idStream == dataStream.sId) {
+        print("=====masuk true");
         if (messages.pause != null) {
-          await Future.delayed(const Duration(milliseconds: 4500));
+          dataStreaming.pauseDate = null;
+          // await Future.delayed(const Duration(milliseconds: 4500));
           dataStreaming.pause = messages.pause;
-        } else {
-          totViewsEnd = messages.totalViews ?? 0;
-          endLive = true;
+
           notifyListeners();
+        } else if (messages.datePelanggaran != null) {
+        } else {
+          print("=====masuk toast");
           // Fluttertoast.showToast(
           //   msg: 'Live Streaming akan segera berakhir',
           //   gravity: ToastGravity.CENTER,
           // );
+          totViewsEnd = messages.totalViews ?? 0;
+          endLive = true;
+          notifyListeners();
+
           destoryPusher();
         }
       }
@@ -697,12 +736,16 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
       var messages = StatusCommentLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
       if (messages.idStream == dataStream.sId) {
         isCommentDisable = messages.comment ?? false;
+        pinComment = null;
+        comment = [];
       }
     } else if (event == eventKickUser) {
       var data = json.decode('$message');
       if (data['data']['email'] == SharedPreference().readStorage(SpKeys.email)) {
         isOver = true;
-        totViewsEnd = data['data']['totalViews'];
+        totViewsEnd = data['totalViews'];
+        var dataStream = LinkStreamModel(sId: data['data']['idStream']);
+        await exitStreaming(Routing.navigatorKey.currentContext!, dataStream);
         destoryPusher();
       }
     } else if (event == eventCommentPin) {
@@ -728,7 +771,7 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
     if (pinComment != null) {
       comment.insert(0, pinComment ?? CommentLiveModel());
     }
-    for (var e in comment) {
+    for (var e in (dataStreaming.commentAll ?? [])) {
       if (e.idComment == idComment) {
         pinComment = e;
       }
@@ -796,9 +839,14 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
   Future<void> sendReportLive(BuildContext context, String message) async {
     Map param = {"_id": dataStreaming.sId, "messages": message, "type": "REPORT"};
     await updateStream(context, context.mounted, param).then((value) {
+      print("isi dari value $value");
       if (value != null) {
         Navigator.pop(context);
-        responReportLive(context);
+        if (value == 'Update stream succesfully') {
+          responReportLive(context);
+        } else if (value['reportStatus'] != null && value['reportStatus'] == true) {
+          allReadyReport(context);
+        }
       }
     });
   }
@@ -812,6 +860,24 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
           isDismissible: false,
           builder: (context) {
             return const ResponsReportLive();
+          }).whenComplete(() {
+        // selectedReportValue = null;
+        debugPrint('Complete Report Live Streaming');
+      });
+    } catch (e) {
+      print("error $e");
+    }
+  }
+
+  Future<void> allReadyReport(BuildContext context) async {
+    try {
+      showModalBottomSheet<int>(
+          backgroundColor: Colors.transparent,
+          context: context,
+          isScrollControlled: true,
+          isDismissible: true,
+          builder: (context) {
+            return const ResponsAllreadyReport();
           }).whenComplete(() {
         // selectedReportValue = null;
         debugPrint('Complete Report Live Streaming');
@@ -914,7 +980,7 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
         routes: Routes.viewStreaming,
         postID: dataStreaming.sId,
         fullName: "",
-        description: '${dataStreaming.user?.fullName ?? dataStreaming.user?.username} (${dataStreaming.user?.username}) \n is LIVE ${dataStreaming.title} \n Office Vlog Check out... \n',
+        description: '${dataStreaming.user?.fullName ?? dataStreaming.user?.username} (${dataStreaming.user?.username}) \n is LIVE ${dataStreaming.title}',
         // thumb: System().showUserPicture(profileImage),
         thumb: System().showUserPicture(dataStreaming.user?.avatar?.mediaEndpoint),
       ),
@@ -931,6 +997,73 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
         }
       }
     });
+  }
+
+  Future getGift(BuildContext context, bool mounted, String type, {bool isLoadmore = false}) async {
+    //type = CLASSIC -- DELUXE
+    // if (type == 'CLASSIC' && dataGift.isNotEmpty) return;
+    // if (type == 'DELUXE' && dataGiftDeluxe.isNotEmpty) return;
+    if (!isLoadmore) isloadingGift = true;
+    notifyListeners();
+    bool connect = await System().checkConnections();
+
+    if (connect) {
+      try {
+        final notifier = LiveStreamBloc();
+        Map data = {"page": 0, "limit": 9999, "descending": true, "type": "GIFT", "typeGift": type};
+
+        if (mounted) await notifier.getLinkStream(context, data, UrlConstants.listmonetization);
+
+        final fetch = notifier.liveStreamFetch;
+        if (fetch.postsState == LiveStreamState.getApiSuccess) {
+          if (type == 'CLASSIC') {
+            if (!isLoadmore) dataGift = [];
+            fetch.data.forEach((v) => dataGift.add(GiftLiveModel.fromJson(v)));
+          } else {
+            if (!isLoadmore) dataGiftDeluxe = [];
+            fetch.data.forEach((v) => dataGiftDeluxe.add(GiftLiveModel.fromJson(v)));
+          }
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+
+      notifyListeners();
+    } else {
+      if (context.mounted) {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
+        });
+      }
+    }
+    isloadingGift = false;
+    notifyListeners();
+  }
+
+  void sendGift(BuildContext context, bool mounted, String idGift, String urlGiftThumb, String title, {String? urlGift, String? idViewStream}) async {
+    Map param = {
+      "_id": dataStreaming.sId,
+      "commentType": "GIFT",
+      "type": "COMMENT",
+      "idGift": idGift,
+      "urlGiftThum": urlGiftThumb,
+      "messages": title,
+    };
+
+    if (idViewStream != null) param['_id'] = idViewStream;
+
+    if (urlGift != null) param['urlGift'] = urlGift;
+    updateStream(context, mounted, param).then((value) {});
+    Routing().moveBack();
+  }
+
+  int saldoCoin = 0;
+  bool buttonGift() {
+    if (saldoCoin >= (giftSelect?.price ?? 0) && giftSelect != null) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
 

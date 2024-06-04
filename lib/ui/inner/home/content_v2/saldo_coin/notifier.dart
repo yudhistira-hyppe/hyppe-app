@@ -33,23 +33,22 @@ class SaldoCoinNotifier with ChangeNotifier {
         saldoCoin = bloc.dataFetch.data ?? 0;
       }
       await checkSaldoCoin();
-      
-    }catch(_){
+    } catch (_) {
       debugPrint(_.toString());
     }
   }
 
   Future<void> checkSaldoCoin() async {
-    try{
+    try {
       int check = saldoCoin - transactionCoin;
       print('========== $saldoCoin $transactionCoin $check');
-      if (check > 0){
+      if (check > 0) {
         visibilityTransaction = true;
-      }else{
+      } else {
         visibilityTransaction = false;
       }
-      notifyListeners();
-    }catch(_){
+      // notifyListeners();
+    } catch (_) {
       visibilityTransaction = false;
     }
   }

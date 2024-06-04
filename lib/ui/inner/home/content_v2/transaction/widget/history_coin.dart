@@ -36,7 +36,7 @@ class HistoryCoinWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (data.type == 'Pembelian Coin'){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionCoinDetailScreen(invoiceid: data.sId??'',)));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionCoinDetailScreen(invoiceid: data.noInvoice??'', status: 'History',)));
         }else{
           Fluttertoast.showToast(msg: 'Feature Not Available');
         }

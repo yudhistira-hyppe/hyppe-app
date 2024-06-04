@@ -14,7 +14,7 @@ enum SourceFile { internet, local }
 
 enum SearchCategory { vid, diary, pic, account, htags }
 
-enum NotificationCategory { all, like, comment, follower, following, mention, general, transactions, verificationid, adsClick, adsView, challange, coin }
+enum NotificationCategory { all, like, comment, follower, following, mention, general, transactions, verificationid, adsClick, adsView, challange, coin, live }
 
 enum UserType { verified, notVerified }
 

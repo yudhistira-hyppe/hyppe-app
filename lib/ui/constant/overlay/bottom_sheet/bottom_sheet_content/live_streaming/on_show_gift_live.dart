@@ -12,6 +12,8 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/button_challange.dart';
 import 'package:hyppe/ui/inner/home/content_v2/saldo_coin/saldo_coin.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/notifier.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class OnShowGiftLiveBottomSheet extends StatefulWidget {
@@ -31,7 +33,7 @@ class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<StreamerNotifier>().getGift(context, mounted, 'CLASSIC');
+      context.read<ViewStreamingNotifier>().getGift(context, mounted, 'CLASSIC');
     });
     super.initState();
   }
@@ -39,8 +41,11 @@ class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
   @override
   Widget build(BuildContext context) {
     var trans = context.read<TranslateNotifierV2>().translate;
-    return Consumer<StreamerNotifier>(
-      builder: (context, notifier, __) => Column(
+    return Consumer<ViewStreamingNotifier>(builder: (_, notifier, __) {
+      if (notifier.isOver) {
+        Navigator.pop(Routing.navigatorKey.currentContext!);
+      }
+      return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
@@ -56,7 +61,7 @@ class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
               firstTab = (value == 0);
               setState(() {});
               if (value == 1) {
-                context.read<StreamerNotifier>().getGift(context, mounted, 'DELUXE');
+                notifier.getGift(context, mounted, 'DELUXE');
               }
             },
             itemBuilder: (context, index) {
@@ -71,36 +76,33 @@ class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
             child: SaldoCoinWidget(
               transactionCoin: notifier.giftSelect?.price ?? 0,
               isChecking: (bool val, int saldoCoin) {
-                buttonactive = val;
-                setState(() {});
+                notifier.saldoCoin = saldoCoin;
               },
             ),
           ),
-          Consumer<StreamerNotifier>(
-            builder: (_, sn, __) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-                child: ButtonChallangeWidget(
-                  function: () {
-                    if (buttonactive) {
-                      sn.sendGift(context, mounted, sn.giftSelect?.sId ?? '', sn.giftSelect?.thumbnail ?? '', sn.giftSelect?.name ?? '',
-                          urlGift: sn.giftSelect?.animation, idViewStream: widget.idViewStream);
-                    }
-                  },
-                  bgColor: !buttonactive ? kHyppeDisabled : kHyppePrimary,
-                  text: trans.send,
-                ),
-              );
-            },
-          )
+          // Text("notifier.endLive ${notifier.isOver} ${buttonactive && !notifier.isOver}"),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+            child: ButtonChallangeWidget(
+              function: () {
+                if (notifier.buttonGift() && !notifier.isOver) {
+                  notifier.sendGift(context, mounted, notifier.giftSelect?.sId ?? '', notifier.giftSelect?.thumbnail ?? '', notifier.giftSelect?.name ?? '',
+                      urlGift: notifier.giftSelect?.animation, idViewStream: widget.idViewStream);
+                }
+              },
+              bgColor: notifier.buttonGift() && !notifier.isOver ? kHyppePrimary : kHyppeDisabled,
+              text: trans.send,
+            ),
+          ),
+          twelvePx,
         ],
-      ),
-    );
+      );
+    });
   }
 
   Widget _classic(bool isClassic) {
     var trans = context.read<TranslateNotifierV2>().translate;
-    return Consumer<StreamerNotifier>(
+    return Consumer<ViewStreamingNotifier>(
       builder: (_, sn, __) {
         var firstData = isClassic ? sn.dataGift : sn.dataGiftDeluxe;
         return Padding(
@@ -172,7 +174,7 @@ class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
                                     ? SvgPicture.network(
                                         data.thumbnail ?? '',
                                         // 'https://www.svgrepo.com/show/1615/nurse.svg',
-                                        height: 40 * SizeConfig.scaleDiagonal,
+                                        height: 44 * SizeConfig.scaleDiagonal,
                                         // width: 30 * SizeConfig.scaleDiagonal,
                                         fit: BoxFit.cover,
                                         // semanticsLabel: 'A shark?!',
@@ -188,8 +190,8 @@ class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
                                     //   )
                                     : SizedBox(
                                         // width: MediaQuery.of(context2).size.width,
-                                        width: 30 * SizeConfig.scaleDiagonal,
-                                        height: 30 * SizeConfig.scaleDiagonal,
+                                        width: 44 * SizeConfig.scaleDiagonal,
+                                        height: 44 * SizeConfig.scaleDiagonal,
                                         child: CustomCacheImage(
                                           imageUrl: data.thumbnail ?? '',
                                           imageBuilder: (_, imageProvider) {

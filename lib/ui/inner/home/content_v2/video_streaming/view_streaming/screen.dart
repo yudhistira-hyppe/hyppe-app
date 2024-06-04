@@ -72,7 +72,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
     WakelockPlus.disable();
     SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
-    context.read<ViewStreamingNotifier>().disposeAgora();
+    notifier?.disposeAgora();
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
   }
@@ -142,16 +142,24 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                           width: SizeConfig.screenWidth,
                           height: SizeConfig.screenHeight,
                           child: notifier.remoteUid != -1
-                              ? AspectRatio(
-                                  aspectRatio: MediaQuery.of(context).devicePixelRatio,
-                                  child: AgoraVideoView(
-                                    controller: VideoViewController.remote(
-                                      rtcEngine: notifier.engine,
-                                      canvas: VideoCanvas(
-                                        uid: notifier.remoteUid,
-                                        renderMode: RenderModeType.renderModeHidden,
+                              ? GestureDetector(
+                                  onDoubleTap: () {
+                                    notifier.likeAddTapScreen();
+                                    debouncer.run(() {
+                                      notifier.sendLikeTapScreen(context, notifier.streamerData!);
+                                    });
+                                  },
+                                  child: AspectRatio(
+                                    aspectRatio: MediaQuery.of(context).devicePixelRatio,
+                                    child: AgoraVideoView(
+                                      controller: VideoViewController.remote(
+                                        rtcEngine: notifier.engine,
+                                        canvas: VideoCanvas(
+                                          uid: notifier.remoteUid,
+                                          renderMode: RenderModeType.renderModeHidden,
+                                        ),
+                                        connection: RtcConnection(channelId: widget.args.data.sId ?? ''),
                                       ),
-                                      connection: RtcConnection(channelId: widget.args.data.sId ?? ''),
                                     ),
                                   ),
                                 )
@@ -161,9 +169,9 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                                 ),
                         ),
                       ),
-                      if ((notifier.statusAgora == RemoteVideoState.remoteVideoStateStopped || notifier.statusAgora == RemoteVideoState.remoteVideoStateStopped) &&
-                          (notifier.resionAgora == RemoteVideoStateReason.remoteVideoStateReasonRemoteMuted || notifier.resionAgora == RemoteVideoStateReason.remoteVideoStateReasonSdkInBackground))
-                        PauseLiveView(data: widget.args.data),
+                      // if ((notifier.statusAgora == RemoteVideoState.remoteVideoStateStopped || notifier.statusAgora == RemoteVideoState.remoteVideoStateStopped) &&
+                      //     (notifier.resionAgora == RemoteVideoStateReason.remoteVideoStateReasonRemoteMuted || notifier.resionAgora == RemoteVideoStateReason.remoteVideoStateReasonSdkInBackground))
+                      if (notifier.dataStreaming.pause ?? false) PauseLiveView(data: widget.args.data),
 
                       Positioned.fill(
                         bottom: -60,
@@ -248,11 +256,41 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                       //   top: 100,
                       //   left: 100,
                       //   child: GestureDetector(
-                      //       onTap: () {
-                      //         print("disini");
-                      //       },
-                      //       child: Container(color: Colors.red, width: 100, height: 100, child: Align(alignment: Alignment.center, child: Text('${MediaQuery.of(context).size.height} ')))),
+                      //     onTap: () {
+                      //       print("disini");
+                      //     },
+                      //     child: Container(
+                      //       width: 100,
+                      //       height: 100,
+                      //       child: Align(
+                      //         alignment: Alignment.center,
+                      //         child: Text(
+                      //           '${notifier.isOver}',
+                      //           style: TextStyle(color: Colors.white),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ),
                       // ),
+                      Positioned.fill(
+                          child: GestureDetector(
+                        onTap: () {
+                          commentFocusNode.unfocus();
+                        },
+                        onDoubleTapDown: (details) {
+                          var position = details.globalPosition;
+                          notifier.positionDxDy = position;
+                        },
+                        onDoubleTap: () {
+                          notifier.likeAddTapScreen();
+                          debouncer.run(() {
+                            notifier.sendLikeTapScreen(context, notifier.streamerData!);
+                          });
+                        },
+                        child: Container(
+                          color: Colors.transparent,
+                        ),
+                      )),
 
                       TitleViewLive(
                         data: widget.args.data,
