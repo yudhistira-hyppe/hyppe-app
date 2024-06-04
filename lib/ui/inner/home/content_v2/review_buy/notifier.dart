@@ -144,6 +144,7 @@ class ReviewBuyNotifier extends ChangeNotifier {
       bool connect = await System().checkConnections();
       if (!mounted) return;
       ShowGeneralDialog.loadingDialog(context);
+      print('========== ${discount != null}');
       var postcontent = {
         'id': _routeArgument?.postID,
         "qty": 1,
@@ -166,7 +167,7 @@ class ReviewBuyNotifier extends ChangeNotifier {
         _paramTransaction.addAll({
           "pin": pinController.text,
           "postid": [postcontent],
-          "idDiscount":discount?.id??'',
+          // "idDiscount":discount?.id??'',
           "salelike": buyDataNew?.like??false,
           'saleview': buyDataNew?.view??false,
           "type": 'CONTENT',

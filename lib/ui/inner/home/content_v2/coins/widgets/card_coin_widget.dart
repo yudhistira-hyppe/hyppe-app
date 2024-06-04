@@ -18,7 +18,7 @@ class CardCoinWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: SizeConfig.screenHeight! * .3,
+      height: SizeConfig.screenHeight! * .22,
       padding: const EdgeInsets.all(18.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
@@ -59,17 +59,17 @@ class CardCoinWidget extends StatelessWidget {
               textAlign: TextAlign.start,
           ),
           fivePx,
-          SizedBox(
-            height: SizeConfig.screenHeight! * .08,
-            child: Text(subdesc??'', 
-              style: Theme.of(context)
-                    .textTheme
-                    .titleSmall
-                    ?.copyWith(
-                        color: kHyppeBurem),
-                textAlign: TextAlign.start,
-            ),
-          ),
+          // SizedBox(
+          //   height: SizeConfig.screenHeight! * .08,
+          //   child: Text(subdesc??'', 
+          //     style: Theme.of(context)
+          //           .textTheme
+          //           .titleSmall
+          //           ?.copyWith(
+          //               color: kHyppeBurem),
+          //       textAlign: TextAlign.start,
+          //   ),
+          // ),
           Align(
             alignment: Alignment.bottomLeft,
             child: Text('Total', 

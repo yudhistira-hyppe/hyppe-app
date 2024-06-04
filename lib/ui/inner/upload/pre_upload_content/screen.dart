@@ -251,12 +251,12 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                         iconData: "${AssetPath.vectorPath}ic-kupon.svg",
                                         defaultColor:  notifier.saldoCoin < (notifier.cointPurchaseDetail.price??0)  ? false : true,
                                       ),
-                                      title: (notifier.discountOwnership.checked??false) ? Column(
+                                      title: (notifier.discountOwnership!.checked??false) ? Column(
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          CustomTextWidget(textToDisplay: '${notifier.language.discount} ${System().currencyFormat(amount: notifier.discountOwnership.nominal_discount)}'),
-                                          CustomTextWidget(textToDisplay: notifier.discountOwnership.code_package??'', textStyle: const TextStyle(color: kHyppeBurem, fontWeight: FontWeight.w400),),
+                                          CustomTextWidget(textToDisplay: '${notifier.language.discount} ${System().currencyFormat(amount: notifier.discountOwnership!.nominal_discount)}'),
+                                          CustomTextWidget(textToDisplay: notifier.discountOwnership!.code_package??'', textStyle: const TextStyle(color: kHyppeBurem, fontWeight: FontWeight.w400),),
                                         ],
                                       ): Text(notifier.language.discountForYou ?? 'Diskon Untukmu', style: TextStyle(color: notifier.saldoCoin < (notifier.cointPurchaseDetail.price??0) ? kHyppeBackground : kHyppeBurem.withOpacity(.3)),),
                                       trailing: Icon(Icons.arrow_forward_ios, color: notifier.saldoCoin < (notifier.cointPurchaseDetail.price??0) ? kHyppeBackground : kHyppeBurem.withOpacity(.3),),
@@ -1173,11 +1173,11 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
           sixteenPx,
           detailText(notifier.language.localeDatetime == 'id' ? 'Biaya Pendaftaran Kepemilikan' : 'Certificate Ownership Fee', '${System().numberFormat(amount: notifier.cointPurchaseDetail.price??0)} Coins'),
           
-          if (notifier.discountOwnership.checked??false)
+          if (notifier.discountOwnership!.checked??false)
             Column(
               children: [
                 sixteenPx,
-                detailText(notifier.language.discount, '- ${notifier.discountOwnership.nominal_discount} coins'),
+                detailText(notifier.language.discount, '- ${notifier.discountOwnership!.nominal_discount} coins'),
               ],
             ),
           sixteenPx,

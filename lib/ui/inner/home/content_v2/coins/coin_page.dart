@@ -17,6 +17,7 @@ import 'package:hyppe/ui/inner/home/content_v2/coins/widgets/custom_listtile.dar
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -39,10 +40,11 @@ class _CoinPageState extends State<CoinPage> {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'saldocoins');
     lang = context.read<TranslateNotifierV2>().translate;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      context.read<CoinNotifier>().initialCoin();
-      context.read<CoinNotifier>().initHistory(context, mounted);
+      initializeDateFormatting('id', null);
       context.read<CoinNotifier>().getDateFilter(context);
       context.read<CoinNotifier>().getTypeFilter(context);
+      context.read<CoinNotifier>().initialCoin();
+      context.read<CoinNotifier>().initHistory(context, mounted);
     });
     super.initState();
   }
@@ -170,7 +172,7 @@ class _CoinPageState extends State<CoinPage> {
         child: GestureDetector(
           onTap: (){
             if (notifier.result[i].type == 'Pembelian Coin'){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionCoinDetailScreen(invoiceid: notifier.result[i].noInvoice??'', status: 'History',)));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionCoinDetailScreen(invoiceid: notifier.result[i].sId??'', status: 'History',)));
             }else{
               Fluttertoast.showToast(msg: 'Feature Not Available');
             }

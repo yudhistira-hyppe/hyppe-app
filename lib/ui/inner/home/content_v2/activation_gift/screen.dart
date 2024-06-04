@@ -77,7 +77,7 @@ class _ActivationGiftScreenState extends State<ActivationGiftScreen> {
                       await notifier.checkPosts(context, mounted);
                       if (!notifier.countContent){
                          if (!mounted) return;
-                          notifier.showButtomSheetInfo(context, lang!);
+                          notifier.showButtomSheetWaring(context, lang!);
                       }
                     },
                     child: AnimatedContainer(
