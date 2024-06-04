@@ -280,7 +280,7 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
                   ],
                 ),
           onWillPop: () async {
-            if (notifier.statusLive == StatusStream.offline) {
+            if (notifier.statusLive == StatusStream.offline || notifier.statusLive == StatusStream.banned) {
               Routing().moveBack();
               notifier.destoryPusher();
             } else if (notifier.statusLive == StatusStream.standBy) {

@@ -744,8 +744,8 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
       if (data['data']['email'] == SharedPreference().readStorage(SpKeys.email)) {
         isOver = true;
         totViewsEnd = data['totalViews'];
-        var dataStream = LinkStreamModel(sId: data['data']['idStream']);
-        await exitStreaming(Routing.navigatorKey.currentContext!, dataStream);
+        // var dataStream = LinkStreamModel(sId: data['data']['idStream']);
+        // await exitStreaming(Routing.navigatorKey.currentContext!, dataStream);
         destoryPusher();
       }
     } else if (event == eventCommentPin) {

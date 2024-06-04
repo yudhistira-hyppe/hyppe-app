@@ -1660,6 +1660,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     for (var i = 0; i < shareUsers.length; i++) {
       sendMessageDirect(context, shareUsers[i].email ?? '', isViewer, message);
     }
+    shareCount(context, true, shareUsers.length);
 
     ScaffoldMessengerState().hideCurrentSnackBar();
     messageShareCtrl.clear();
@@ -1701,8 +1702,13 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  Future createLinkStream(BuildContext context, {required bool copiedToClipboard, required String description}) async {
+  Future createLinkStream(
+    BuildContext context, {
+    required bool copiedToClipboard,
+    required String description,
+  }) async {
     var profile = context.read<SelfProfileNotifier>().user.profile;
+
     await createdDynamicLinkMixin(
       context,
       data: DynamicLinkData(
@@ -1714,9 +1720,15 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
         thumb: System().showUserPicture(profile?.avatar?.mediaEndpoint),
       ),
       copiedToClipboard: copiedToClipboard,
+      afterShare: () {
+        if (!copiedToClipboard) {
+          shareCount(context, true, 1);
+        }
+      },
     ).then((value) {
       if (value) {
         if (copiedToClipboard && context.mounted) {
+          shareCount(context, true, 1);
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             margin: EdgeInsets.only(bottom: 60, left: 16, right: 16),
             backgroundColor: kHyppeTextLightPrimary,
@@ -1836,5 +1848,10 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     }
     isloadingViewers = false;
     notifyListeners();
+  }
+
+  Future shareCount(BuildContext context, bool mounted, int total) async {
+    Map data = {"_id": dataStream.sId, "shareCount": total, "type": "SHARE"};
+    updateStream(context, mounted, data).then((value) {});
   }
 }
