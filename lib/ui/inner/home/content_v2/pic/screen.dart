@@ -1861,10 +1861,12 @@ class _HyppePreviewPicState extends State<HyppePreviewPic>
                                         fontWeight: FontWeight.bold),
                                   ),
                                   //===== Aditional Link
-                                  tenPx,
-                                  if (picData?.urlLink != null)
-                                    RichText(
-                                      text: TextSpan(children: [
+                                  // tenPx,
+                                  // if ()
+                                    picData?.urlLink != null || picData?.judulLink != null
+                                    ? RichText(
+                                      text: TextSpan(
+                                        children: [
                                         TextSpan(
                                           text: (picData?.judulLink != null)
                                               ? picData?.judulLink
@@ -1888,7 +1890,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic>
                                             },
                                         )
                                       ]),
-                                    ),
+                                    )
+                                    : const SizedBox.shrink(),
+                                  // Text(picData!.urlLink!, style: TextStyle(color: Colors.black),),
                                     
                                   if (picData?.allowComments ?? false)
                                     GestureDetector(

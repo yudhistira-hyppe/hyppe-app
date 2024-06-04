@@ -61,7 +61,7 @@ class _DialogTransState extends State<DialogTrans> {
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.pop(context);
-                    context.read<CoinNotifier>().changeSelectedTransaction();
+                    context.read<CoinNotifier>().changeSelectedTransaction(context, mounted);
                   },
                   style: ElevatedButton.styleFrom(
                     elevation: 0,

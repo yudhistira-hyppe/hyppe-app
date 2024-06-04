@@ -6,6 +6,7 @@ import 'package:hyppe/core/bloc/live_stream/state.dart';
 import 'package:hyppe/core/bloc/utils_v2/bloc.dart';
 import 'package:hyppe/core/bloc/utils_v2/state.dart';
 import 'package:hyppe/core/config/url_constants.dart';
+import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
@@ -16,8 +17,10 @@ import 'package:hyppe/core/extension/custom_extension.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/widget/sub_comment_tile.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
+import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 // import 'package:collection/collection.dart' show IterableExtension;
@@ -577,5 +580,16 @@ class CommentNotifierV2 with ChangeNotifier {
     }
     isloadingGift = false;
     notifyListeners();
+  }
+
+  Future validateUserGif(context, CommentsDetailScreen widget, List<CommentsLogs>? comments, LocalizationModelV2 language) async {
+    final userKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
+    if (userKyc != VERIFIED) {
+      return ShowBottomSheet.onShowStatementPin(context, onCancel: () {}, onSave: () {
+        Routing().moveAndPop(Routes.homePageSignInSecurity);
+      }, title: language.verificationYourIDFirst, bodyText: language.toAccessTransactionPageYouNeedToVerificationYourID);
+    }
+
+    ShowBottomSheet().onShowGiftComment(context, argument: widget.argument, comments: comments);
   }
 }

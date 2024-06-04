@@ -159,6 +159,7 @@ class Routes {
 
   static const String pinboostpost = '/pin-boostpost';
   static const String pinbuycontent = '/pin-buycontent';
+  static const String pinwithdrawalcoin = '/pin-withdrawalcoin';
 
   static const String transactioncoindetail = '/transaction-coin-detail';
   static const String paymentsuccessdetail = '/payment-success-detail';

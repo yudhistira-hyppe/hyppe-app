@@ -10,6 +10,7 @@ class DiscountModel {
     this.active,
     this.status,
     this.code_package,
+    this.description,
     this.stock,
     this.audiens,
     this.satuan_diskon,
@@ -37,6 +38,7 @@ class DiscountModel {
   bool? active;
   bool? status;
   String? code_package;
+  String? description;
   int? stock;
   String? audiens;
   String? satuan_diskon;
@@ -64,6 +66,7 @@ class DiscountModel {
         active: json["active"]??false,
         status: json["status"]??false,
         code_package: json["code_package"]??'',
+        description: json["description"]??'',
         stock: json["stock"]??0,
         audiens: json["audiens"]??'',
         satuan_diskon: json["satuan_diskon"]??'',
@@ -92,6 +95,7 @@ class DiscountModel {
         "active": active,
         "status": status,
         "code_package": code_package,
+        "description": description,
         "stock": stock,
         "audiens": audiens,
         "satuan_diskon": satuan_diskon,

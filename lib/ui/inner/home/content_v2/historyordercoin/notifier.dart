@@ -208,6 +208,7 @@ class HistoryOrderCoinNotifier with ChangeNotifier {
       }
     }
     await initHistory(context, mounted);
+    
     notifyListeners();
   }
 

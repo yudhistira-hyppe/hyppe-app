@@ -39,7 +39,7 @@ class _TransactionState extends State<Transaction> {
     final _notifier = context.read<TransactionNotifier>();
     _notifier.setSkip(0);
     print('initstate');
-    _notifier.initTransactionHistory(context);
+    // _notifier.initTransactionHistory(context);
     _scrollController.addListener(() => _notifier.scrollList(context, _scrollController));
     super.initState();
   }
@@ -73,7 +73,7 @@ class _TransactionState extends State<Transaction> {
             key: _refreshIndicatorKey,
             onRefresh: () async {
               notifier.skip = 0;
-              await notifier.initTransactionHistory(context);
+              // await notifier.initTransactionHistory(context);
             },
             child: notifier.isLoading
                 ? const SingleChildScrollView(child: ShimmerTransactionHistory())

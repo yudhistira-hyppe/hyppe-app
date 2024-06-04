@@ -58,6 +58,7 @@ class ReviewBuyNotifier extends ChangeNotifier {
     _paramTransaction = {};
     if (_routeArgument?.postID != null) {
       discount = null;
+      buyDataNew = null;
       await _initFetchBuyDetail(context);
       await detailBuyData(context);
     }
@@ -81,27 +82,28 @@ class ReviewBuyNotifier extends ChangeNotifier {
     }
   }
   
-  BuyDataNew _buyDataNew = BuyDataNew();
-  BuyDataNew get buyDataNew => _buyDataNew;
-  set buyDataNew(BuyDataNew value) {
+  BuyDataNew? _buyDataNew = BuyDataNew();
+  BuyDataNew? get buyDataNew => _buyDataNew;
+  set buyDataNew(BuyDataNew? value) {
     _buyDataNew = value;
     notifyListeners();
   }
 
-  final Map _param = {};
+  Map _param = {};
   Future<void> detailBuyData(BuildContext context) async {
+    _param = {};
     final notifier = BuyDataNewBloc();
     if (discount != null){
         _param.addAll({
           'postID': _routeArgument?.postID,
-          'price': (data!.price??0) / 1000,
+          'price': (_routeArgument?.saleAmount??0),
           "typeTransaction":'CONTENT',
           'discount_id': discount?.id??'',
         });
       }else{
         _param.addAll({
           'postID': _routeArgument?.postID,
-          'price': (data!.price??0) / 1000,
+          'price': (_routeArgument?.saleAmount??0),
           "typeTransaction":'CONTENT',
         });
       }
@@ -145,16 +147,16 @@ class ReviewBuyNotifier extends ChangeNotifier {
       var postcontent = {
         'id': _routeArgument?.postID,
         "qty": 1,
-        "price": buyDataNew.price,
-        "totalAmount": buyDataNew.price
+        "price": buyDataNew?.price,
+        "totalAmount": buyDataNew?.price
       };
       if (discount != null){
         _paramTransaction.addAll({
           "pin": pinController.text,
           "postid": [postcontent],
           "idDiscount":discount?.id??'',
-          "salelike": buyDataNew.like??false,
-          'saleview': buyDataNew.view??false,
+          "salelike": buyDataNew?.like??false,
+          'saleview': buyDataNew?.view??false,
           "type": 'CONTENT',
           "paymentmethod": 'COIN',
           "productCode": 'CM',
@@ -165,8 +167,8 @@ class ReviewBuyNotifier extends ChangeNotifier {
           "pin": pinController.text,
           "postid": [postcontent],
           "idDiscount":discount?.id??'',
-          "salelike": buyDataNew.like??false,
-          'saleview': buyDataNew.view??false,
+          "salelike": buyDataNew?.like??false,
+          'saleview': buyDataNew?.view??false,
           "type": 'CONTENT',
           "paymentmethod": 'COIN',
           "productCode": 'CM',

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -11,7 +12,8 @@ class CardCoinWidget extends StatelessWidget {
   final String date;
   final String? desc;
   final String? subdesc;
-  const CardCoinWidget({super.key, required this.title, required this.date, this.desc, this.subdesc});
+  final int totalCoin;
+  const CardCoinWidget({super.key, required this.title, required this.date, required this.totalCoin, this.desc, this.subdesc});
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +95,7 @@ class CardCoinWidget extends StatelessWidget {
                   ),
                 ),
                 CustomTextWidget(
-                  textToDisplay: '100',
+                  textToDisplay: System().numberFormat(amount: totalCoin),
                   textStyle: Theme.of(context)
                       .textTheme
                       .titleSmall

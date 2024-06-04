@@ -293,7 +293,13 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                                       splashColor: Colors.black,
                                       onTap: () {
                                         // notifier.isShowGift = true;
-                                        ShowBottomSheet().onShowGiftComment(context, argument: widget.argument, comments: comments);
+                                        // dsfsdfsdf
+
+                                        // context.handleActionIsGuest(() {
+                                        //   ShowBottomSheet()
+                                        //     .onShowGiftComment(context, argument: widget.argument, comments: comments);
+                                        // });
+                                        notifier.validateUserGif(context, widget, comments, notifier.language);
                                       },
                                       onTapUp: (val) {},
                                       customBorder: const CircleBorder(),

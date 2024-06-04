@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/collection/discount/discountmodel.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 
 class DialogInfoWidget extends StatelessWidget {
   final LocalizationModelV2? lang;
-  const DialogInfoWidget({super.key, required this.lang});
+  final DiscountModel? data;
+  const DialogInfoWidget({super.key, required this.lang, required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +56,15 @@ class DialogInfoWidget extends StatelessWidget {
               tenPx,
               const Divider(color: kHyppeBurem, thickness: .5,),
               tenPx,
-              listText(context, number: 1, label: 'eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque'),
-              listText(context, number: 2, label: 'fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet massa'),
-              listText(context, number: 3, label: 'vitae tortor condimentum'),
-              listText(context, number: 4, label: 'lacinia quis vel eros donec ac odio tempor orci dapibus ultrices in iaculis nunc sed augue lacus, viverra'),
-              listText(context, number: 5, label: 'vitae congue eu, consequat ac felis donec et odio pellentesque diam volutpat commodo'),
-              listText(context, number: 6, label: 'sed egestas egestas fringilla phasellus faucibus'),
+              Html(
+                data: data?.description??'',
+              )
+              // listText(context, number: 1, label: 'eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque'),
+              // listText(context, number: 2, label: 'fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet massa'),
+              // listText(context, number: 3, label: 'vitae tortor condimentum'),
+              // listText(context, number: 4, label: 'lacinia quis vel eros donec ac odio tempor orci dapibus ultrices in iaculis nunc sed augue lacus, viverra'),
+              // listText(context, number: 5, label: 'vitae congue eu, consequat ac felis donec et odio pellentesque diam volutpat commodo'),
+              // listText(context, number: 6, label: 'sed egestas egestas fringilla phasellus faucibus'),
             ],
           ),
         );

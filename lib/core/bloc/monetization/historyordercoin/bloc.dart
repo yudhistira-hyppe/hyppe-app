@@ -26,12 +26,12 @@ class HistoryOrderCoinDataBloc {
       if (startdate == null || enddate == null){
         data = {
           'page': page ?? 0,
-          'limit': limit ?? 10
+          'limit': limit ?? 5
         };
       }else{
         data = {
           'page': page ?? 0,
-          'limit': limit ?? 10,
+          'limit': limit ?? 5,
           'startdate': startdate,
           'enddate': enddate,
         };

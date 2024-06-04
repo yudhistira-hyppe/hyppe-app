@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/withdrawalcoin/notifier.dart';
+import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ux/routing.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +21,14 @@ class FinishTrxPage extends StatefulWidget {
 }
 
 class _FinishTrxPageState extends State<FinishTrxPage> {
+  LocalizationModelV2? lang;
+
+  @override
+  void initState() {
+    lang = context.read<TranslateNotifierV2>().translate;
+    initializeDateFormatting('id', null);
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,6 +61,8 @@ class _FinishTrxPageState extends State<FinishTrxPage> {
               _buildDetail(notifier),
               fifteenPx,
               _buildHelp(),
+              fifteenPx,
+              fifteenPx,
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
                 child: ElevatedButton(
@@ -91,53 +105,52 @@ class _FinishTrxPageState extends State<FinishTrxPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildTitleCaption(text: 'Rincian Transaksi'),
+          _buildTitleCaption(text: lang?.localeDatetime == 'id' ? 'Rincian Transaksi' : 'Transaction Details'),
           _buildValueText(
               title: 'Transaksi ID',
-              value: '2023/APP/PTC/CN/000011',
+              value: notifier.withdrawalTransaction.noInvoice,
               styleValue: styleValue,
               styleTitle: styleTitle),
           _buildValueText(
               title: 'Status',
-              value: 'Dalam Proses',
+              value: notifier.withdrawalTransaction.status =='PENDING' ? lang?.localeDatetime == 'id' ? 'Dalam Proses' : 'In Process' :'Done',
               styleValue: styleValue,
               styleTitle: styleTitle),
           _buildValueText(
-              title: 'Tanggal',
-              value: DateFormat('dd MMM yyyy').format(DateTime.now()),
+              title: lang?.localeDatetime == 'id' ? 'Tanggal' : 'Date',
+              value: DateFormat('dd MMM yyyy', lang?.localeDatetime).format(DateTime.now()),
               styleValue: styleValue,
               styleTitle: styleTitle),
           _buildValueText(
-              title: 'Waktu',
-              value: '${DateFormat('hh:mm').format(DateTime.now())} WIB',
+              title: lang?.localeDatetime == 'id' ? 'Waktu': 'Time',
+              value: '${DateFormat('hh:mm', lang?.localeDatetime).format(DateTime.now())} WIB',
               styleValue: styleValue,
               styleTitle: styleTitle),
           const Divider(
             thickness: .1,
           ),
           _buildValueText(
-              title: 'Jumlah',
-              value: System().currencyFormat(amount: notifier.typingValue),
+              title: lang?.localeDatetime == 'id' ? 'Jumlah' : 'Withdrawal Amount',
+              value: System().currencyFormat(amount: notifier.withdrawaltransactionDetail.amount),
               styleValue: styleValue,
               styleTitle: styleTitle),
           _buildValueText(
-              title: 'Biaya Transaksi',
-              value: System().currencyFormat(amount: withdrawalfree),
+              title: lang?.localeDatetime == 'id' ? 'Biaya Transaksi' : 'Transaction Fee',
+              value: System().currencyFormat(amount: notifier.withdrawaltransactionDetail.bankCharge),
               styleValue: styleValue,
               styleTitle: styleTitle),
           _buildValueText(
-              title: 'Biaya Konversi Coins',
+              title: lang?.localeDatetime == 'id' ? 'Biaya Konversi Coins' : 'Coin Conversion Fee',
               value: System().currencyFormat(
-                  amount: int.parse((notifier.typingValue * withdrawalfeecoin)
-                      .toStringAsFixed(0))),
+                  amount: notifier.withdrawaltransactionDetail.convertFee),
               styleValue: styleValue,
               styleTitle: styleTitle),
           const Divider(
             thickness: .1,
           ),
           _buildValueText(
-            title: 'Saldo Diterima',
-            value: System().currencyFormat(amount: notifier.resultValue),
+            title: lang?.localeDatetime == 'id' ? 'Saldo Diterima' : 'Balance Received',
+            value: System().currencyFormat(amount: notifier.withdrawaltransactionDetail.totalAmount),
             styleValue: Theme.of(context)
                 .textTheme
                 .bodyLarge!
@@ -158,10 +171,13 @@ class _FinishTrxPageState extends State<FinishTrxPage> {
       child: Row(
         children: [
           const Spacer(),
-          Text('Pusat Bantuan', style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-            fontWeight: FontWeight.bold,
-            color: kHyppePrimary
-          ),)
+          GestureDetector(
+            onTap: () => Routing().move(Routes.help),
+            child: Text(lang?.localeDatetime == 'id' ? 'Pusat Bantuan' : 'Help Center', style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+              fontWeight: FontWeight.bold,
+              color: kHyppePrimary
+            ),),
+          )
         ],
       ),
     );
@@ -208,7 +224,7 @@ class _FinishTrxPageState extends State<FinishTrxPage> {
       children: [
         fivePx,
         Text(
-          System().currencyFormat(amount: notifier.resultValue),
+          System().currencyFormat(amount: notifier.withdrawaltransactionDetail.totalAmount),
           style: Theme.of(context)
               .textTheme
               .bodyLarge!
@@ -216,7 +232,7 @@ class _FinishTrxPageState extends State<FinishTrxPage> {
         ),
         fivePx,
         Text(
-          'Transfer ke ${notifier.dataAcccount.firstWhere((e) => e.selected == true).nama}',
+          '${lang?.localeDatetime == 'id' ? 'Transfer ke ' : 'Transfer to '} ${notifier.dataAcccount.firstWhere((e) => e.selected == true).nama}',
           style: Theme.of(context)
               .textTheme
               .bodyLarge!

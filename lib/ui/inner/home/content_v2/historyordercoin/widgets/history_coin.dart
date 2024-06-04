@@ -24,7 +24,7 @@ class HistoryCoinWidget extends StatelessWidget {
         textTitle = lang!.localeDatetime == 'id' ? 'Batal' : 'Cancel';
         break;
       case 'WAITING_PAYMENT':
-        titleColor = kHyppeGreen;
+        titleColor = kHyppeRed;
         textTitle = lang!.localeDatetime == 'id' ? 'Menunggu Pembayaran' : 'Awating Payment';
         break;
       default:
@@ -33,9 +33,7 @@ class HistoryCoinWidget extends StatelessWidget {
     }
 
     return GestureDetector(
-      onTap: () {
-        
-      },
+      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionCoinDetailScreen(invoiceid: data.id??'',))),
       child: Container(
         height: SizeConfig.screenHeight! * .25,
         width: double.infinity,
@@ -91,7 +89,7 @@ class HistoryCoinWidget extends StatelessWidget {
             Flexible(
               child: SizedBox(
                 height: SizeConfig.screenHeight! * .2,
-                child: Text(data.description??'', 
+                child: Text(data.packagename??'', 
                   maxLines: 2,
                   style: Theme.of(context)
                         .textTheme

@@ -8,7 +8,6 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/status_code.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
-import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 
 import 'state.dart';
@@ -32,7 +31,7 @@ class TransactionCoinDetailBloc {
           } else {
             setDiscFetch(
               TransactionCoinDetailFetch(TransactionCoinDetailState.getcBlocSuccess,
-                  data: onResult.data['data']),
+                  data: onResult.data['data']??''),
             );
           }
         },

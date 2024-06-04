@@ -1,6 +1,7 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hyppe/core/bloc/transaction/historytransaction/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
@@ -16,9 +17,12 @@ import 'package:hyppe/ui/inner/home/content_v2/coins/widgets/custom_listtile.dar
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../transaction_coin_detail/screen.dart';
 import 'widgets/coins_widget.dart';
+import 'widgets/shimmer_widget.dart';
 
 class CoinPage extends StatefulWidget {
   const CoinPage({super.key});
@@ -36,6 +40,9 @@ class _CoinPageState extends State<CoinPage> {
     lang = context.read<TranslateNotifierV2>().translate;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       context.read<CoinNotifier>().initialCoin();
+      context.read<CoinNotifier>().initHistory(context, mounted);
+      context.read<CoinNotifier>().getDateFilter(context);
+      context.read<CoinNotifier>().getTypeFilter(context);
     });
     super.initState();
   }
@@ -50,11 +57,6 @@ class _CoinPageState extends State<CoinPage> {
           textStyle: theme.textTheme.titleMedium,
           textToDisplay: '${lang?.saldocoins}',
         ),
-        actions: [
-          IconButton(onPressed: (){
-            Fluttertoast.showToast(msg: 'Feature not yet available');
-          }, icon: const Icon(Icons.info_outline))
-        ],
       ),
       body: Consumer2<TransactionNotifier, CoinNotifier>(
         builder: (context, notifier, cointNotif, child) {
@@ -114,7 +116,11 @@ class _CoinPageState extends State<CoinPage> {
                         Visibility(
                           visible: cointNotif.selectedTransValue != 1 || cointNotif.selectedDateValue != 1,
                           child: GestureDetector(
-                            onTap: () => cointNotif.resetSelected(),
+                            onTap: () {
+                              cointNotif.resetSelected(context);
+                              Future.microtask(() =>
+                                cointNotif.initHistory(context, mounted));
+                            },
                             child: Container(
                               margin: const EdgeInsets.only(right: 12.0),
                               padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -139,10 +145,14 @@ class _CoinPageState extends State<CoinPage> {
                       ],
                     ),
                   ),
-                  Wrap(
-                    alignment: WrapAlignment.center,
-                    children: widgetGenerate(),
-                  ),
+                  ((cointNotif.bloc.dataFetch.dataState ==
+                                HistoryTransactionState.init ||
+                            cointNotif.bloc.dataFetch.dataState ==
+                                HistoryTransactionState.loading) &&
+                        !cointNotif.isLoadMore) ? const ContentLoader() : Wrap(
+                      alignment: WrapAlignment.center,
+                      children: widgetGenerate(cointNotif),
+                    )
                 ],
               ),
             ),
@@ -152,12 +162,27 @@ class _CoinPageState extends State<CoinPage> {
     );
   }
 
-  List<Widget> widgetGenerate() {
+  List<Widget> widgetGenerate(CoinNotifier notifier) {
     List<Widget> widget = [];
-    for (var i = 0; i < 3; i++) {
-      Widget item = const Padding(
-        padding: EdgeInsets.symmetric(vertical: 12.0),
-        child: CardCoinWidget(title: 'Reward Jual Konten', date: '12 Jan 2023', desc: '[Deskripsi]', subdesc: 'Pendapatan hasil penjualan [Jenis Konten] dari [@username]',),
+    for (var i = 0; i < notifier.result.length; i++) {
+      Widget item = Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12.0),
+        child: GestureDetector(
+          onTap: (){
+            if (notifier.result[i].type == 'Pembelian Coin'){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionCoinDetailScreen(invoiceid: notifier.result[i].noInvoice??'', status: 'History',)));
+            }else{
+              Fluttertoast.showToast(msg: 'Feature Not Available');
+            }
+          },
+          child: CardCoinWidget(
+            title: notifier.result[i].coa??'', 
+            totalCoin: notifier.result[i].totalCoin??0,
+            date: DateFormat('dd MMM yyyy', lang!.localeDatetime).format(DateTime.parse(notifier.result[i].updatedAt ?? '2024-03-02')),
+            desc: notifier.result[i].package, 
+            // subdesc: 'Pendapatan hasil penjualan [Jenis Konten] dari [@username]',
+          ),
+        ),
       );
       widget.add(item);
     }

@@ -10,6 +10,7 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
+import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -72,9 +73,10 @@ class ViewPaymentMethod extends StatelessWidget {
                           horizontal: 12.0, vertical: 6.0),
                       child: TweenAnimationBuilder<Duration>(
                         duration: const Duration(minutes: 15),
-                        tween: Tween(begin: Duration(minutes: (DateTime.parse(System().dateTimeRemoveT(transactionDetail.expiredtimeva??'')).difference(DateTime.now()).inMinutes / 60).ceil()), end: Duration.zero),
+                        tween: Tween(begin: Duration(minutes: (DateTime.parse(System().dateTimeRemoveT(transactionDetail.expiredtimeva??'')).difference(DateTime.parse(transactionDetail.timenow??'')).inMinutes)), end: Duration.zero),
                         onEnd: () {
                           // notifier.backHome();
+                          Routing().moveAndRemoveUntil(Routes.lobby, Routes.lobby);
                         },
                         builder: (BuildContext context, Duration value, Widget? child) {
                           final minutes = value.inMinutes;

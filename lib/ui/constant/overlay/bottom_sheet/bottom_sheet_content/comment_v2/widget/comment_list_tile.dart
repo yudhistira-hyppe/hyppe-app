@@ -5,6 +5,7 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_desc_content_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
 
@@ -86,7 +87,7 @@ class _CommentListTileState extends State<CommentListTile> {
                         ),
                       ),
                       SizedBox(height: 6 * SizeConfig.scaleDiagonal),
-
+                      if (comment?.txtMessages != '')
                       CustomDescContent(
                           desc: comment?.txtMessages ?? '',
                           trimLines: 5,
@@ -97,6 +98,44 @@ class _CommentListTileState extends State<CommentListTile> {
                           normStyle: Theme.of(context).textTheme.bodyText2,
                           hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppePrimary),
                           expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary)),
+                      if (comment!.gift !=  null)
+                        Container(
+                          padding: const EdgeInsets.only(
+                              top: 2, left: 4, right: 4, bottom: 2),
+                          decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  const Color(0xffF56DA7)
+                                      .withOpacity(0.4),
+                                  const Color(0xffffffff).withOpacity(0.5)
+                                ],
+                                stops: const [0.25, 0.75],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                              ),
+                              borderRadius: BorderRadius.circular(40)),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              fivePx,
+                              Text(
+                                notifier.language.localeDatetime == 'id'
+                                    ? 'Terikirm '
+                                    : 'Send to ',
+                                style: const TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(left: 16),
+                                width: 35 * SizeConfig.scaleDiagonal,
+                                height: 35 * SizeConfig.scaleDiagonal,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: NetworkImage(comment?.gift??''))),
+                              )
+                            ],
+                          ),
+                        ),
                       SizedBox(height: 9 * SizeConfig.scaleDiagonal),
                       Row(
                         children: [
