@@ -191,6 +191,10 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
 
   Future<void> init(BuildContext context, mounted, {bool forConfig = false}) async {
     dataBanned = null;
+    dataStream = LinkStreamModel();
+    titleLive = '';
+    userName = '';
+
     print("-------- init stream $forConfig ---------");
     isloading = true;
 
@@ -1038,8 +1042,9 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   }
 
   Future disableComment(BuildContext context, mounted) async {
+    pinComment = null;
+    comment = [];
     bool connect = await System().checkConnections();
-
     if (connect) {
       try {
         final notifier = LiveStreamBloc();
@@ -1764,6 +1769,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   }
 
   Future getListGift(BuildContext context, mounted) async {
+    dataUserGift = [];
     if (pageViewers == 0) isloadingViewers = true;
     notifyListeners();
     bool connect = await System().checkConnections();

@@ -76,8 +76,7 @@ class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
             child: SaldoCoinWidget(
               transactionCoin: notifier.giftSelect?.price ?? 0,
               isChecking: (bool val, int saldoCoin) {
-                buttonactive = val;
-                // setState(() {});
+                notifier.saldoCoin = saldoCoin;
               },
             ),
           ),
@@ -86,15 +85,16 @@ class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
             child: ButtonChallangeWidget(
               function: () {
-                if (buttonactive && !notifier.isOver) {
+                if (notifier.buttonGift() && !notifier.isOver) {
                   notifier.sendGift(context, mounted, notifier.giftSelect?.sId ?? '', notifier.giftSelect?.thumbnail ?? '', notifier.giftSelect?.name ?? '',
                       urlGift: notifier.giftSelect?.animation, idViewStream: widget.idViewStream);
                 }
               },
-              bgColor: buttonactive && !notifier.isOver ? kHyppePrimary : kHyppeDisabled,
+              bgColor: notifier.buttonGift() && !notifier.isOver ? kHyppePrimary : kHyppeDisabled,
               text: trans.send,
             ),
-          )
+          ),
+          twelvePx,
         ],
       );
     });

@@ -169,9 +169,9 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                                 ),
                         ),
                       ),
-                      if ((notifier.statusAgora == RemoteVideoState.remoteVideoStateStopped || notifier.statusAgora == RemoteVideoState.remoteVideoStateStopped) &&
-                          (notifier.resionAgora == RemoteVideoStateReason.remoteVideoStateReasonRemoteMuted || notifier.resionAgora == RemoteVideoStateReason.remoteVideoStateReasonSdkInBackground))
-                        PauseLiveView(data: widget.args.data),
+                      // if ((notifier.statusAgora == RemoteVideoState.remoteVideoStateStopped || notifier.statusAgora == RemoteVideoState.remoteVideoStateStopped) &&
+                      //     (notifier.resionAgora == RemoteVideoStateReason.remoteVideoStateReasonRemoteMuted || notifier.resionAgora == RemoteVideoStateReason.remoteVideoStateReasonSdkInBackground))
+                      if (notifier.dataStreaming.pause ?? false) PauseLiveView(data: widget.args.data),
 
                       Positioned.fill(
                         bottom: -60,
@@ -265,7 +265,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                       //       child: Align(
                       //         alignment: Alignment.center,
                       //         child: Text(
-                      //           '${notifier.remoteUid}',
+                      //           '${notifier.isOver}',
                       //           style: TextStyle(color: Colors.white),
                       //         ),
                       //       ),

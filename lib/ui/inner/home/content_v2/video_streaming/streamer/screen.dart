@@ -199,6 +199,19 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
                         ),
                       ),
                     ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: GestureDetector(
+                        onDoubleTap: () {
+                          notifier.flipCamera();
+                        },
+                        child: Container(
+                          height: SizeConfig.screenHeight! * 0.7,
+                          width: SizeConfig.screenWidth,
+                          color: Colors.transparent,
+                        ),
+                      ),
+                    ),
                     notifier.isloadingPreview
                         ? SizedBox(
                             height: SizeConfig.screenHeight,
@@ -241,6 +254,7 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
                     //     )),
                     if (notifier.statusLive == StatusStream.ready || notifier.statusLive == StatusStream.online) const GiftDeluxe(),
                     if (notifier.isPause) PauseLive(notifier: notifier),
+
                     if (notifier.statusLive == StatusStream.ready || notifier.statusLive == StatusStream.online) StreamerWidget(commentFocusNode: commentFocusNode),
                     if ((notifier.statusLive == StatusStream.ready || notifier.statusLive == StatusStream.online) && notifier.dataStream.status == false) const ForceStop(),
                     // StreamerWidget(commentFocusNode: commentFocusNode),

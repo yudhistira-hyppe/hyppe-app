@@ -110,7 +110,9 @@ class _AppealStreamingScreenState extends State<AppealStreamingScreen> {
                       textAlign: TextAlign.center,
                       text: TextSpan(
                         style: Theme.of(context).textTheme.titleSmall,
-                        text: translate.localeDatetime == 'id' ? 'Kamu dianggap telah melanggar terhadap Pedoman Komunitas kami.' : '',
+                        text: translate.localeDatetime == 'id'
+                            ? 'Kamu dianggap telah melanggar terhadap Pedoman Komunitas kami.'
+                            : 'Your account has been suspended from going LIVE due to violations of our Community Guidelines.',
                       )),
                   twentyFourPx,
                   detailContent(context, translate),
@@ -121,13 +123,13 @@ class _AppealStreamingScreenState extends State<AppealStreamingScreen> {
                   ),
                   twentyFourPx,
                   Text(
-                    translate.localeDatetime == 'id' ? 'Banding' : '',
+                    translate.localeDatetime == 'id' ? 'Banding' : 'Appeal',
                     style: Theme.of(context).primaryTextTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   twentyPx,
                   Text(translate.localeDatetime == 'id'
                       ? 'Akunmu ditangguhkan untuk melakukan siaran LIVE karena melanggar Pedoman Komunitas kami. Untuk mengajukan banding, sertakan deskripsi masalah di bawah ini. '
-                      : ''),
+                      : 'Your account has been suspended from going LIVE due to violations of our Community Guidelines. To file an appeal, please provide a detailed description below.'),
                   twentyPx,
                   const Divider(
                     color: kHyppeBorderTab,
@@ -137,7 +139,7 @@ class _AppealStreamingScreenState extends State<AppealStreamingScreen> {
                   Row(
                     children: [
                       Text(
-                        translate.localeDatetime == 'id' ? 'Pilih alasan banding' : '',
+                        translate.localeDatetime == 'id' ? 'Pilih alasan banding' : 'Select an appeal reason',
                         style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       Text(
@@ -237,7 +239,8 @@ class _AppealStreamingScreenState extends State<AppealStreamingScreen> {
                           : appealSelect == 0
                               ? null
                               : () {
-                                  notifier.submitAppeal(context, mounted, appealReaseonData[appealSelect]['title'], noteCtrl.text);
+                                  print(appealSelect);
+                                  notifier.submitAppeal(context, mounted, appealReaseonData[appealSelect - 1]['title'], noteCtrl.text);
                                 },
                       style: ButtonStyle(backgroundColor: appealSelect == 0 ? MaterialStateProperty.all(kHyppeDisabled) : MaterialStateProperty.all(kHyppePrimary)),
                       child: notifier.loadingAppel
@@ -269,8 +272,8 @@ class _AppealStreamingScreenState extends State<AppealStreamingScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  translate.localeDatetime == 'id' ? 'Detail Konten' : '',
-                  style: Theme.of(context).primaryTextTheme.bodyMedium,
+                  translate.localeDatetime == 'id' ? 'Detail Konten' : 'Content Details',
+                  style: Theme.of(context).primaryTextTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700),
                   textAlign: TextAlign.start,
                 ),
                 sixPx,

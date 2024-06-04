@@ -1,10 +1,12 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:hyppe/core/arguments/general_argument.dart';
+import 'package:hyppe/core/arguments/view_streaming_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/models/collection/live_stream/link_stream_model.dart';
 import 'package:hyppe/core/models/collection/notification_v2/notification.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
@@ -56,11 +58,11 @@ class _ComponentState extends State<Component> {
               final allow = Uri.parse(fixUrl).isAbsolute;
               if (allow) {
                 try {
-                  if(fixUrl.contains('https://share.hyppe.app/')){
+                  if (fixUrl.contains('https://share.hyppe.app/')) {
                     final uri = Uri.parse(fixUrl);
                     final data = await FirebaseDynamicLinks.instance.getDynamicLink(uri);
                     DynamicLinkService.handleDeepLink(data);
-                  }else{
+                  } else {
                     final uri = Uri.parse(fixUrl);
                     if (await canLaunchUrl(uri)) {
                       await launchUrl(
@@ -90,7 +92,12 @@ class _ComponentState extends State<Component> {
               NotificationCategory.adsView,
             ];
             if (NotificationCategory.coin == System().getNotificationCategory(widget.data?.event ?? '')) {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionCoinDetailScreen(invoiceid: widget.data?.postID??'',)));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => TransactionCoinDetailScreen(
+                            invoiceid: widget.data?.postID ?? '',
+                          )));
               // Routing().move(Routes.paymentsuccessdetail, argument: {'postId': widget.data?.postID??'', 'type':'Notification'});
             } else if (listTransacation.contains(eventType)) {
               await Routing().move(Routes.transaction);
@@ -103,10 +110,12 @@ class _ComponentState extends State<Component> {
                     ..title = widget.data?.title
                     ..body = System().bodyMultiLang(bodyEn: widget.data?.body ?? widget.data?.bodyId, bodyId: widget.data?.bodyId) ?? ''
                     ..session = widget.data?.contentEventID == null ? null : int.parse(widget.data?.contentEventID ?? '0'));
+            } else if (NotificationCategory.live == eventType) {
+              Routing().move(Routes.viewStreaming, argument: ViewStreamingArgument(data: LinkStreamModel(sId: widget.data?.notificationID)));
             } else {
-              if (widget.data?.eventType == 'FOLLOWER'){
+              if (widget.data?.eventType == 'FOLLOWER') {
                 System().navigateToProfile(context, widget.data?.mate ?? '');
-              }else{
+              } else {
                 await context.read<NotificationNotifier>().navigateToContent(context, widget.data?.postType, widget.data?.postID);
               }
             }
@@ -115,6 +124,7 @@ class _ComponentState extends State<Component> {
             isLoading = false;
           });
         }
+
         // if (widget.data?.eventType == '')
       },
       child: Container(

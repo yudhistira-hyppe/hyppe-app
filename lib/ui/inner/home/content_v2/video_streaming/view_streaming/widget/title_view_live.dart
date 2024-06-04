@@ -57,7 +57,12 @@ class TitleViewLive extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                ShowBottomSheet.onWatcherStatus(context, dataStream.user?.email ?? '', dataStream.sId ?? '', isViewer: true);
+                ShowBottomSheet.onWatcherStatus(
+                  context,
+                  dataStream.user?.email ?? '',
+                  dataStream.sId ?? '',
+                  isViewer: true,
+                );
               },
               child: CustomProfileImage(
                 cacheKey: '',
@@ -227,8 +232,9 @@ class TitleViewLive extends StatelessWidget {
         eightPx,
         GestureDetector(
           onTap: () {
-            context.read<ViewStreamingNotifier>().exitStreaming(context, data).whenComplete(() async {
-              await context.read<ViewStreamingNotifier>().destoryPusher();
+            var notifier = context.read<ViewStreamingNotifier>();
+            notifier.exitStreaming(context, data).whenComplete(() async {
+              await notifier.destoryPusher();
               Routing().moveBack();
             });
           },

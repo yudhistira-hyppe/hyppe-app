@@ -70,35 +70,35 @@ class _PauseLiveViewState extends State<PauseLiveView> {
                       textAlign: TextAlign.center,
                     ),
                     sixteenPx,
-                    if ((notifier.statusAgora == RemoteVideoState.remoteVideoStateStopped || notifier.statusAgora == RemoteVideoState.remoteVideoStateStopped) &&
-                        (notifier.resionAgora == RemoteVideoStateReason.remoteVideoStateReasonRemoteMuted || notifier.resionAgora == RemoteVideoStateReason.remoteVideoStateReasonSdkInBackground))
-                      notifier.loadingPause
-                          ? Container()
-                          : Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              child: TweenAnimationBuilder<Duration>(
-                                duration: notifier.dataStreaming.pauseDate != null ? notifier.durationPause : const Duration(minutes: 5, seconds: 0),
-                                tween: Tween(begin: notifier.dataStreaming.pauseDate != null ? notifier.durationPause : const Duration(minutes: 5, seconds: 0), end: Duration.zero),
-                                onEnd: () {
-                                  // notifier.exitStreaming(context, widget.data).whenComplete(() async {
-                                  //   await context.read<ViewStreamingNotifier>().destoryPusher();
-                                  //   Routing().moveBack();
-                                  // });
-                                },
-                                builder: (BuildContext context, Duration value, Widget? child) {
-                                  final minutes = value.inMinutes;
-                                  final seconds = value.inSeconds % 60;
-                                  return CustomTextWidget(
-                                    textToDisplay: '${minutes < 10 ? '0' : ''}$minutes : ${seconds < 10 ? '0' : ''}$seconds',
-                                    textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                          color: kHyppeTextPrimary,
-                                          fontSize: 60,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                  );
-                                },
-                              ),
+                    // if ((notifier.statusAgora == RemoteVideoState.remoteVideoStateStopped || notifier.statusAgora == RemoteVideoState.remoteVideoStateStopped) &&
+                    //     (notifier.resionAgora == RemoteVideoStateReason.remoteVideoStateReasonRemoteMuted || notifier.resionAgora == RemoteVideoStateReason.remoteVideoStateReasonSdkInBackground))
+                    notifier.loadingPause
+                        ? Container()
+                        : Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            child: TweenAnimationBuilder<Duration>(
+                              duration: notifier.dataStreaming.pauseDate != null ? notifier.durationPause : const Duration(minutes: 5, seconds: 0),
+                              tween: Tween(begin: notifier.dataStreaming.pauseDate != null ? notifier.durationPause : const Duration(minutes: 5, seconds: 0), end: Duration.zero),
+                              onEnd: () {
+                                // notifier.exitStreaming(context, widget.data).whenComplete(() async {
+                                //   await context.read<ViewStreamingNotifier>().destoryPusher();
+                                //   Routing().moveBack();
+                                // });
+                              },
+                              builder: (BuildContext context, Duration value, Widget? child) {
+                                final minutes = value.inMinutes;
+                                final seconds = value.inSeconds % 60;
+                                return CustomTextWidget(
+                                  textToDisplay: '${minutes < 10 ? '0' : ''}$minutes : ${seconds < 10 ? '0' : ''}$seconds',
+                                  textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                        color: kHyppeTextPrimary,
+                                        fontSize: 60,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                );
+                              },
                             ),
+                          ),
                     sixteenPx,
                     const Text(
                       'Host akan segera kembali',

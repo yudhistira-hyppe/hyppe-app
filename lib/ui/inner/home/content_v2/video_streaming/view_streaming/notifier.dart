@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/live_stream/gift_live_model.dart';
@@ -200,11 +201,13 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
         }),
         onUserOffline: (RtcConnection connection, int uid, UserOfflineReasonType reason) {
           // destoryPusher();
+          // if (!(dataStreaming.pause ?? false)) {
           debugPrint("viewer remote user $uid left channel");
           remoteUid = -1;
           statusLive = StatusStream.offline;
           isOver = true;
           notifyListeners();
+          // }
         },
         onTokenPrivilegeWillExpire: (RtcConnection connection, String token) {
           debugPrint('[onTokenPrivilegeWillExpire] connection: ${connection.toJson()}, token: $token');
@@ -260,6 +263,7 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
   }
 
   Future<void> destoryPusher() async {
+    print("masuk destroy pusher");
     _socketService.closeSocket(eventComment);
     _socketService.closeSocket(eventViewStream);
     _socketService.closeSocket(eventLikeStream);
@@ -705,21 +709,26 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
       }
     } else if (event == eventStatusStream) {
       var messages = StatusStreamLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
+      print("===00 id ${dataStream.sId} -- ${messages.idStream} ${messages.idStream == dataStream.sId}");
       if (messages.idStream == dataStream.sId) {
+        print("=====masuk true");
         if (messages.pause != null) {
           dataStreaming.pauseDate = null;
           // await Future.delayed(const Duration(milliseconds: 4500));
           dataStreaming.pause = messages.pause;
 
           notifyListeners();
+        } else if (messages.datePelanggaran != null) {
         } else {
-          totViewsEnd = messages.totalViews ?? 0;
-          endLive = true;
-          notifyListeners();
+          print("=====masuk toast");
           // Fluttertoast.showToast(
           //   msg: 'Live Streaming akan segera berakhir',
           //   gravity: ToastGravity.CENTER,
           // );
+          totViewsEnd = messages.totalViews ?? 0;
+          endLive = true;
+          notifyListeners();
+
           destoryPusher();
         }
       }
@@ -727,12 +736,16 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
       var messages = StatusCommentLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
       if (messages.idStream == dataStream.sId) {
         isCommentDisable = messages.comment ?? false;
+        pinComment = null;
+        comment = [];
       }
     } else if (event == eventKickUser) {
       var data = json.decode('$message');
       if (data['data']['email'] == SharedPreference().readStorage(SpKeys.email)) {
         isOver = true;
         totViewsEnd = data['totalViews'];
+        var dataStream = LinkStreamModel(sId: data['data']['idStream']);
+        await exitStreaming(Routing.navigatorKey.currentContext!, dataStream);
         destoryPusher();
       }
     } else if (event == eventCommentPin) {
@@ -758,7 +771,7 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
     if (pinComment != null) {
       comment.insert(0, pinComment ?? CommentLiveModel());
     }
-    for (var e in comment) {
+    for (var e in (dataStreaming.commentAll ?? [])) {
       if (e.idComment == idComment) {
         pinComment = e;
       }
@@ -1042,6 +1055,15 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
     if (urlGift != null) param['urlGift'] = urlGift;
     updateStream(context, mounted, param).then((value) {});
     Routing().moveBack();
+  }
+
+  int saldoCoin = 0;
+  bool buttonGift() {
+    if (saldoCoin >= (giftSelect?.price ?? 0) && giftSelect != null) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
 

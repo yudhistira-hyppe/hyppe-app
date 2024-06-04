@@ -84,13 +84,15 @@ class StatusStreamLiveModel {
   bool? pause;
   bool? status;
   int? totalViews;
+  String? datePelanggaran;
 
-  StatusStreamLiveModel({this.idStream, this.pause, this.status, this.totalViews});
+  StatusStreamLiveModel({this.idStream, this.pause, this.status, this.totalViews, this.datePelanggaran});
 
   StatusStreamLiveModel.fromJson(Map<String, dynamic> json) {
     idStream = json['idStream'];
     pause = json['pause'];
     status = json['status'];
+    datePelanggaran = json['datePelanggaran'];
     totalViews = json['totalViews'] ?? 0;
   }
 }
