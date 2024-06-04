@@ -23,13 +23,7 @@ class CommentTile extends StatelessWidget {
   final CommentsLogs? logs;
   final CommentNotifierV2 notifier;
   final int? index;
-  CommentTile(
-      {Key? key,
-      required this.logs,
-      required this.fromFront,
-      required this.notifier,
-      this.index})
-      : super(key: key);
+  CommentTile({Key? key, required this.logs, required this.fromFront, required this.notifier, this.index}) : super(key: key);
 
   final email = SharedPreference().readStorage(SpKeys.email);
   @override
@@ -51,10 +45,8 @@ class CommentTile extends StatelessWidget {
               CustomProfileImage(
                 width: 36,
                 height: 36,
-                onTap: () => System()
-                    .navigateToProfile(context, logs?.comment?.sender ?? ''),
-                imageUrl:
-                    System().showUserPicture(commentor?.avatar?.mediaEndpoint),
+                onTap: () => System().navigateToProfile(context, logs?.comment?.sender ?? ''),
+                imageUrl: System().showUserPicture(commentor?.avatar?.mediaEndpoint),
                 badge: commentor?.urluserBadge,
                 following: true,
                 onFollow: () {},
@@ -64,10 +56,7 @@ class CommentTile extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UserTemplate(
-                        username: '${commentor?.username}',
-                        isVerified: commentor?.isIdVerified ?? false,
-                        date: comment?.createdAt ?? DateTime.now().toString()),
+                    UserTemplate(username: '${commentor?.username}', isVerified: commentor?.isIdVerified ?? false, date: comment?.createdAt ?? DateTime.now().toString()),
                     twoPx,
                     Row(
                       children: [
@@ -82,64 +71,41 @@ class CommentTile extends StatelessWidget {
                                   trimLines: 5,
                                   textAlign: TextAlign.start,
                                   seeLess: ' ${notifier.language.seeLess}',
-                                  seeMore:
-                                      ' ${notifier.language.seeMoreContent}',
+                                  seeMore: ' ${notifier.language.seeMoreContent}',
                                   textOverflow: TextOverflow.visible,
-                                  normStyle:
-                                      Theme.of(context).textTheme.bodyText2,
-                                  hrefStyle: Theme.of(context)
-                                      .textTheme
-                                      .bodyText2
-                                      ?.copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary),
-                                  expandStyle: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary),
+                                  normStyle: Theme.of(context).textTheme.bodyText2,
+                                  hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                                  expandStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.primary),
                                 ),
-                              if (comment!.gift !=  null)
-                              Container(
-                                padding: const EdgeInsets.only(
-                                    top: 2, left: 4, right: 4, bottom: 2),
-                                decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        const Color(0xffF56DA7)
-                                            .withOpacity(0.4),
-                                        const Color(0xffffffff).withOpacity(0.5)
-                                      ],
-                                      stops: const [0.25, 0.75],
-                                      begin: Alignment.centerLeft,
-                                      end: Alignment.centerRight,
-                                    ),
-                                    borderRadius: BorderRadius.circular(40)),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    fivePx,
-                                    Text(
-                                      notifier.language.localeDatetime == 'id'
-                                          ? 'Terikirm '
-                                          : 'Send to ',
-                                      style: const TextStyle(fontWeight: FontWeight.bold),
-                                    ),
-                                    Container(
-                                      margin: const EdgeInsets.only(left: 16),
-                                      width: 35 * SizeConfig.scaleDiagonal,
-                                      height: 35 * SizeConfig.scaleDiagonal,
-                                      decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                              image: NetworkImage(comment?.gift??''))),
-                                    )
-                                  ],
-                                ),
-                              )
+                              if (comment!.gift != null)
+                                Container(
+                                  padding: const EdgeInsets.only(top: 2, left: 4, right: 4, bottom: 2),
+                                  decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [const Color(0xffF56DA7).withOpacity(0.4), const Color(0xffffffff).withOpacity(0.5)],
+                                        stops: const [0.25, 0.75],
+                                        begin: Alignment.centerLeft,
+                                        end: Alignment.centerRight,
+                                      ),
+                                      borderRadius: BorderRadius.circular(40)),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      fivePx,
+                                      Text(
+                                        notifier.language.localeDatetime == 'id' ? 'Terikirm ' : 'Send to ',
+                                        style: const TextStyle(fontWeight: FontWeight.bold),
+                                      ),
+                                      Container(
+                                        margin: const EdgeInsets.only(left: 16),
+                                        width: 35 * SizeConfig.scaleDiagonal,
+                                        height: 35 * SizeConfig.scaleDiagonal,
+                                        decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(comment?.gift ?? ''))),
+                                      )
+                                    ],
+                                  ),
+                                )
                             ],
                           ),
                         ),
@@ -159,14 +125,10 @@ class CommentTile extends StatelessWidget {
                       },
                       child: CustomTextWidget(
                         textToDisplay: notifier.language.reply ?? 'Reply',
-                        textStyle: context.getTextTheme().overline?.copyWith(
-                            color: context.getColorScheme().primary,
-                            fontWeight: FontWeight.w700),
+                        textStyle: context.getTextTheme().overline?.copyWith(color: context.getColorScheme().primary, fontWeight: FontWeight.w700),
                       ),
                     ),
-                    repliesCount > 0
-                        ? SizedBox(height: 16 * SizeConfig.scaleDiagonal)
-                        : const SizedBox.shrink(),
+                    repliesCount > 0 ? SizedBox(height: 16 * SizeConfig.scaleDiagonal) : const SizedBox.shrink(),
                     repliesCount > 0
                         ? InkWell(
                             onTap: () {
@@ -175,15 +137,8 @@ class CommentTile extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 5),
                               child: CustomTextWidget(
-                                textStyle: context
-                                    .getTextTheme()
-                                    .overline
-                                    ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary),
-                                textToDisplay: notifier.repliesComments
-                                        .containsKey(logs?.comment?.lineID)
+                                textStyle: context.getTextTheme().overline?.copyWith(color: Theme.of(context).colorScheme.secondary),
+                                textToDisplay: notifier.repliesComments.containsKey(logs?.comment?.lineID)
                                     ? '${_language.hideReplies}'
                                     : "${_language.see} $repliesCount ${repliesCount > 1 ? _language.replies : _language.reply2}",
                               ),
@@ -197,8 +152,7 @@ class CommentTile extends StatelessWidget {
                 InkWell(
                   onTap: () {
                     context.handleActionIsGuest(() async {
-                      ShowGeneralDialog.deleteContentDialog(
-                          context, '${_language.comment}', () async {
+                      ShowGeneralDialog.deleteContentDialog(context, '${_language.comment}', () async {
                         notifier.deleteComment(
                           context,
                           comment?.lineID ?? '',

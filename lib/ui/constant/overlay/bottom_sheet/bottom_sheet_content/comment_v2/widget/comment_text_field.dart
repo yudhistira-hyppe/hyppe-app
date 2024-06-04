@@ -148,7 +148,7 @@ class CommentTextField extends StatelessWidget {
                               textAlign: TextAlign.start,
                             ),
                             leading: Padding(
-                              padding: EdgeInsets.only(top: 4),
+                              padding:const  EdgeInsets.only(top: 4),
                               child: StoryColorValidator(
                                 haveStory: false,
                                 featureType: FeatureType.pic,

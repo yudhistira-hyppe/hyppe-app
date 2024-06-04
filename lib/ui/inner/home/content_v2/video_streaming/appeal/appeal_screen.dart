@@ -286,7 +286,7 @@ class _AppealStreamingScreenState extends State<AppealStreamingScreen> {
             )),
             const SizedBox(width: 10),
             CustomCacheImage(
-              imageUrl: System().showUserPicture(profile?.avatar?.mediaEndpoint),
+              imageUrl: profile?.avatar == null ? '' : System().showUserPicture(profile?.avatar?.mediaEndpoint),
               imageBuilder: (_, imageProvider) {
                 return Container(
                   width: 48 * SizeConfig.scaleDiagonal,
@@ -304,10 +304,10 @@ class _AppealStreamingScreenState extends State<AppealStreamingScreen> {
                   height: 48 * SizeConfig.scaleDiagonal,
                   alignment: Alignment.topRight,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(2),
+                    borderRadius: BorderRadius.circular(5),
                     image: const DecorationImage(
                       fit: BoxFit.contain,
-                      image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                      image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
                     ),
                   ),
                 );
@@ -317,10 +317,10 @@ class _AppealStreamingScreenState extends State<AppealStreamingScreen> {
                 height: 48 * SizeConfig.scaleDiagonal,
                 alignment: Alignment.topRight,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(2),
+                  borderRadius: BorderRadius.circular(5),
                   image: const DecorationImage(
                     fit: BoxFit.contain,
-                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                    image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
                   ),
                 ),
               ),

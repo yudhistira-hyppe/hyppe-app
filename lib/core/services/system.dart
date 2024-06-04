@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
@@ -298,6 +299,8 @@ class System {
       value = DateFormat('d MMMM yyyy', lang).format(DateTime.parse(dateParams));
     } else if (displayOption == 8) {
       value = DateFormat('MMMM yyyy', lang).format(DateTime.parse(dateParams));
+    } else if (displayOption == 9) {
+      value = DateFormat('yyyy.MM.dd hh:mm', lang).format(DateTime.parse(dateParams));
     }
     return value;
   }
@@ -337,9 +340,13 @@ class System {
     return info;
   }
 
-  Future<void> shareText({required String dynamicLink, required BuildContext context}) async {
+  Future shareText({required String dynamicLink, required BuildContext context}) async {
     try {
-      await Share.share(dynamicLink);
+      final result = await Share.shareWithResult(dynamicLink);
+
+      if (result.status == ShareResultStatus.success) {
+        return 'Sukses Share';
+      }
     } catch (e) {
       print("error log $e");
     }
@@ -1291,6 +1298,7 @@ class System {
     bool shareImmediately = true,
     bool copiedToClipboard = false,
     required DynamicLinkData dynamicLinkData,
+    Function()? afterShare,
   }) async {
     final DynamicLinkParameters parameters = DynamicLinkParameters(
       uriPrefix: Env.data.deeplinkBaseUrl,
@@ -1318,7 +1326,10 @@ class System {
     }
 
     if (shareImmediately && !copiedToClipboard) {
-      await shareText(dynamicLink: "${dynamicLinkData.description} ${_linkResult.shortUrl.toString()}", context: context);
+      final result = await shareText(dynamicLink: "${dynamicLinkData.description} ${_linkResult.shortUrl.toString()}", context: context);
+      if (result == 'Sukses Share') {
+        afterShare?.call();
+      }
     }
 
     return _linkResult.shortUrl;

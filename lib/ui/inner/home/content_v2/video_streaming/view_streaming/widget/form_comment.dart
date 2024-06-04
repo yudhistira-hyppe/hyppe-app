@@ -4,10 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/kyc_status.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/live_stream/link_stream_model.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/setting/setting_notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/iconButton.dart';
 import 'package:provider/provider.dart';
@@ -180,7 +185,12 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                 child: InkWell(
                   splashColor: Colors.black,
                   onTap: () {
-                    ShowBottomSheet().onShowGiftLive(context, idViewStream: notifier.dataStreaming.sId);
+                    final userKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
+                    if (userKyc == VERIFIED) {
+                      ShowBottomSheet().onShowGiftLive(context, idViewStream: notifier.dataStreaming.sId);
+                    } else {
+                      context.read<SettingNotifier>().validateUserGif(context, context.read<TranslateNotifierV2>());
+                    }
                   },
                   onTapUp: (val) {},
                   customBorder: const CircleBorder(),

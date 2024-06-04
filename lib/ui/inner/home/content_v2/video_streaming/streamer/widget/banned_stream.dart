@@ -4,7 +4,6 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/live_stream/banned_stream_model.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/inner/home/content_v2/video_streaming/appeal/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/appeal/pelanggaran_detail.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -46,13 +45,15 @@ class BannedStream extends StatelessWidget {
                 twentyFourPx,
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PelanggaranDetail(
-                            data: notifier.dataBanned ?? BannedStreamModel(),
-                          ),
-                        ));
+                    if (!(notifier.dataBanned?.statusAppeal ?? false)) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PelanggaranDetail(
+                              data: notifier.dataBanned ?? BannedStreamModel(),
+                            ),
+                          ));
+                    }
                   },
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -71,16 +72,17 @@ class BannedStream extends StatelessWidget {
                                 text: trans.localeDatetime == 'id'
                                     ? "Akunmu saat ini tidak dapat melakukan siaran LIVE karena telah melanggar Pedoman Komunitas Hyppe. "
                                     : "Your account currently restricted to go LIVE due to a violation of Hyppe’s Community Guidelines. ",
-                                children: [
-                                  TextSpan(text: trans.localeDatetime == 'id' ? "Ajukan banding di sini" : "Submit appeal here ", style: const TextStyle(decoration: TextDecoration.underline))
-                                ]),
+                                children: (!(notifier.dataBanned?.statusAppeal ?? false))
+                                    ? [TextSpan(text: trans.localeDatetime == 'id' ? "Ajukan banding di sini" : "Submit appeal here ", style: const TextStyle(decoration: TextDecoration.underline))]
+                                    : null),
                           ),
                         ),
-                        eightPx,
-                        const Icon(
-                          Icons.chevron_right_rounded,
-                          color: kHyppeLightButtonText,
-                        )
+                        if ((!(notifier.dataBanned?.statusAppeal ?? false))) eightPx,
+                        if ((!(notifier.dataBanned?.statusAppeal ?? false)))
+                          const Icon(
+                            Icons.chevron_right_rounded,
+                            color: kHyppeLightButtonText,
+                          )
                       ],
                     ),
                   ),

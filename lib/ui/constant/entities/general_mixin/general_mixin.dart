@@ -91,6 +91,7 @@ mixin GeneralMixin {
     BuildContext context, {
     required DynamicLinkData data,
     required bool copiedToClipboard,
+    Function()? afterShare,
   }) async {
     var _popupDialog = System().createPopupDialog(
       Container(
@@ -105,6 +106,7 @@ mixin GeneralMixin {
           context,
           dynamicLinkData: data,
           copiedToClipboard: copiedToClipboard,
+          afterShare: afterShare,
         )
         .whenComplete(() => _popupDialog.remove());
 
