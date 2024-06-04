@@ -107,6 +107,8 @@ class PreUploadContentNotifier with ChangeNotifier {
   String? _desFile;
   String? get desFile => _desFile;
 
+  bool isloadingSetting = false;
+
   ModelGoogleMapPlace? _modelGoogleMapPlace;
   ModelGoogleMapPlace? get modelGoogleMapPlace => _modelGoogleMapPlace;
   List<SearchPeolpleData> _searchPeolpleData = [];
@@ -392,15 +394,20 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   int _saldoCoin = 0;
   int get saldoCoin => _saldoCoin;
-  set saldoCoin(int val){
+  set saldoCoin(int val) {
     _saldoCoin = val;
+    notifyListeners();
+  }
+
+  set canSale(bool val) {
+    _canSale = val;
     notifyListeners();
   }
 
   //Discount Ownership
   DiscountModel _discountOwnership = DiscountModel();
   DiscountModel get discountOwnership => _discountOwnership;
-  set discountOwnership(DiscountModel val){
+  set discountOwnership(DiscountModel val) {
     _discountOwnership = val;
     notifyListeners();
   }
@@ -408,7 +415,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   //Discount Boost Content
   DiscountModel _discountBoost = DiscountModel();
   DiscountModel get discountBoost => _discountBoost;
-  set discountBoost(DiscountModel val){
+  set discountBoost(DiscountModel val) {
     _discountBoost = val;
     notifyListeners();
   }
@@ -1198,6 +1205,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     _isLoadingDetail = val;
     notifyListeners();
   }
+
   CointPurchaseDetailModel _cointPurchaseDetail = CointPurchaseDetailModel();
   CointPurchaseDetailModel get cointPurchaseDetail => _cointPurchaseDetail;
   set cointPurchaseDetail(CointPurchaseDetailModel value) {
@@ -1207,26 +1215,25 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   Future<void> initCoinOwnershipDetail(BuildContext context) async {
     final bloc = CoinPurchaseDetailDataBloc();
-    try{
+    try {
       _isLoadingDetail = true;
-      if (discountOwnership.id != null){
+      if (discountOwnership.id != null) {
         _param.addAll({
-          "typeTransaction":'CONTENT_OWNERSHIP',
+          "typeTransaction": 'CONTENT_OWNERSHIP',
           'discount_id': discountOwnership.id,
         });
-      }else{
+      } else {
         _param.addAll({
-          "typeTransaction":'CONTENT_OWNERSHIP',
+          "typeTransaction": 'CONTENT_OWNERSHIP',
         });
       }
-      
-      
+
       await bloc.getCoinPurchaseDetail(context, data: _param);
       if (bloc.dataFetch.dataState == CoinPurchaseDetailState.getCoinPurchaseDetailBlocSuccess) {
         cointPurchaseDetail = bloc.dataFetch.data;
       }
       _isLoadingDetail = false;
-    }catch(_){
+    } catch (_) {
       _isLoadingDetail = false;
       debugPrint(_.toString());
     }
@@ -1591,12 +1598,12 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   void checkValidasi() {
     final harga = num.parse(priceController.text.replaceAll(',', '').replaceAll('.', ''));
-    if (harga % 10 == 0){
-        isWarning = false;
-    }else{
+    if (harga % 10 == 0) {
+      isWarning = false;
+    } else {
       isWarning = true;
     }
-   
+
     notifyListeners();
   }
 
@@ -1670,28 +1677,37 @@ class PreUploadContentNotifier with ChangeNotifier {
     if (priceController.text == '0') {
       toSell = false;
     }
+
     Routing().move(Routes.ownershipSelling);
-    _getSettingApps(context);
   }
 
-  Future _getSettingApps(BuildContext context) async {
-    _isLoading = true;
+  Future getSettingApps(BuildContext context) async {
+    isloadingSetting = true;
+    notifyListeners();
     print('setting apss');
-    final notifier = UtilsBlocV2();
-    await notifier.settingAppsBloc(context);
+    try {
+      final notifier = UtilsBlocV2();
+      await notifier.settingAppsBloc(Routing.navigatorKey.currentState?.context ?? context);
 
-    final fetch = notifier.utilsFetch;
-    if (fetch.utilsState == UtilsState.getSettingSuccess) {
-      final SettingModel _result = SettingModel.fromJson(fetch.data);
-      print(_result.settingMP);
-      _canSale = _result.settingMP ?? false;
-      _isLoading = false;
+      final fetch = notifier.utilsFetch;
+      print("fetch.utilsState ${fetch.utilsState}");
+
+      if (fetch.utilsState == UtilsState.getSettingSuccess) {
+        final SettingModel _result = SettingModel.fromJson(fetch.data);
+        print(_result.settingMP);
+        canSale = _result.settingMP ?? false;
+      }
+      isloadingSetting = false;
+      notifyListeners();
+      print(isloadingSetting);
+    } catch (e) {
+      isloadingSetting = false;
       notifyListeners();
     }
   }
 
   Future getMasterBoost(BuildContext context) async {
-    _isLoading = true;
+    isLoading = true;
     notifyListeners();
 
     final notifier = UtilsBlocV2();
@@ -1724,10 +1740,10 @@ class PreUploadContentNotifier with ChangeNotifier {
         );
         if (toTransaktion == 1) Routing().move(Routes.transaction);
       }
-      _isLoading = false;
+      isLoading = false;
       notifyListeners();
     } else if (fetch.utilsState == UtilsState.getMasterBoostError) {
-      _isLoading = false;
+      isLoading = false;
       notifyListeners();
     }
   }
@@ -1789,8 +1805,8 @@ class PreUploadContentNotifier with ChangeNotifier {
         "dateEnd": _tmpfinsihDate.toString().substring(0, 10),
         "type": _tmpBoost,
       };
-      if (discountBoost.checked??false){
-        data['discount'] = discountBoost.nominal_discount??0;
+      if (discountBoost.checked ?? false) {
+        data['discount'] = discountBoost.nominal_discount ?? 0;
       }
       if (_tmpBoost == 'manual') {
         data['interval'] = _tmpBoostIntervalId;
@@ -1804,7 +1820,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         _boostContent = BoostContent.fromJson(fetch.data);
         _privacyTitle = language.public ?? 'PUBLIC';
         privacyValue = 'PUBLIC';
-        if (!isDisc){
+        if (!isDisc) {
           Routing().moveBack();
         }
         // exitBoostPage();
@@ -1860,21 +1876,23 @@ class PreUploadContentNotifier with ChangeNotifier {
     _errorPinWithdrawMsg = val;
     notifyListeners();
   }
+
   Map _params = {};
 
   Future createBoostpost(BuildContext context) async {
     _createBoostpost(context);
   }
+
   Future _createBoostpost(BuildContext context) async {
     _params = {};
-    try{
+    try {
       bool connect = await System().checkConnections();
-      
+
       ShowGeneralDialog.loadingDialog(context);
       _params.addAll({
-        "pin":pinController.text,
-        "platform":"APP",
-        "coin": boostContent?.priceBoost??0,
+        "pin": pinController.text,
+        "platform": "APP",
+        "coin": boostContent?.priceBoost ?? 0,
         "postId": editData?.postID ?? '',
         "dateStart": boostContent!.dateBoostStart,
         "dateEnd": boostContent!.dateBoostEnd,
@@ -1882,13 +1900,13 @@ class PreUploadContentNotifier with ChangeNotifier {
         "session": boostContent!.sessionBoost?.toJson(),
         "interval": boostContent!.intervalBoost?.toJson()
       });
-      if (discountBoost.checked??false){
+      if (discountBoost.checked ?? false) {
         _params.addAll({
-          "discountCoin":discountBoost.nominal_discount,
-          "idVoucher":[discountBoost.id]
+          "discountCoin": discountBoost.nominal_discount,
+          "idVoucher": [discountBoost.id]
         });
       }
-      if (connect){
+      if (connect) {
         final bloc = BoostPostContentDataBloc();
         await bloc.createBoostPostContent(context, data: _params);
         final fetch = bloc.dataFetch;
@@ -1896,7 +1914,13 @@ class PreUploadContentNotifier with ChangeNotifier {
         if (fetch.dataState == BoostPostContentState.getBlocSuccess) {
           Routing().moveBack();
           _onExit();
-          Navigator.push(context, MaterialPageRoute(builder: (context) => BoostpostScreen(dataBoostpost: fetch.data, lang: language,)));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BoostpostScreen(
+                        dataBoostpost: fetch.data,
+                        lang: language,
+                      )));
           pinController.clear();
           _errorPinWithdrawMsg = '';
         }
@@ -1904,17 +1928,17 @@ class PreUploadContentNotifier with ChangeNotifier {
           Routing().moveBack();
           // notifyListeners();
           if (fetch.data != null) {
-              ShowBottomSheet().onShowColouredSheet(context, fetch.data['message'], color: Theme.of(context).colorScheme.error);
+            ShowBottomSheet().onShowColouredSheet(context, fetch.data['message'], color: Theme.of(context).colorScheme.error);
           }
         }
-      }else{
+      } else {
         // ignore: use_build_context_synchronously
         ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
           Routing().moveBack();
           createBoostpost(context);
         });
       }
-    }catch(e){
+    } catch (e) {
       debugPrint(e.toString());
     }
   }

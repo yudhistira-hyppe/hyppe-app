@@ -215,6 +215,7 @@ class ContentData {
   List<String>? viewer;
   String? urlLink;
   String? judulLink;
+  List<String>? userView;
 
   ContentData({
     this.metadata,
@@ -291,6 +292,7 @@ class ContentData {
     this.viewer,
     this.urlLink,
     this.judulLink,
+    this.userView,
   });
 
   ContentData.fromJson(Map<String, dynamic> json) {
@@ -415,6 +417,10 @@ class ContentData {
     if (json['viewer'] != null) {
       viewer = json['viewer'].cast<String>();
     }
+    if (json['userView'] != null) {
+      userView = json['userView'].cast<String>();
+    }
+
     urlLink = json['urlLink'] ?? '';
     judulLink = json['judulLink'] ?? '';
   }

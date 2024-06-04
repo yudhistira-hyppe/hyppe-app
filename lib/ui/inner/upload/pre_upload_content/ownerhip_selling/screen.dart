@@ -18,8 +18,22 @@ import 'package:provider/provider.dart';
 
 import '../../../../constant/widget/custom_currency_input_formatter.dart';
 
-class OwnershipSellingScreen extends StatelessWidget {
+class OwnershipSellingScreen extends StatefulWidget {
   const OwnershipSellingScreen({Key? key}) : super(key: key);
+
+  @override
+  State<OwnershipSellingScreen> createState() => _OwnershipSellingScreenState();
+}
+
+class _OwnershipSellingScreenState extends State<OwnershipSellingScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      var nn = Provider.of<PreUploadContentNotifier>(context, listen: false);
+      nn.getSettingApps(context);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +52,11 @@ class OwnershipSellingScreen extends StatelessWidget {
             color: Theme.of(context).colorScheme.onSurface,
           ),
           title: CustomTextWidget(
-            textToDisplay: notifier.language.ownershipSelling ?? '',
+            textToDisplay: "${notifier.language.ownershipSelling ?? ''} ${notifier.isloadingSetting}",
             textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
           ),
         ),
-        body: notifier.isLoading
+        body: notifier.isloadingSetting
             ? const Center(child: const CustomLoading())
             : SingleChildScrollView(
                 child: Padding(
@@ -270,7 +284,8 @@ class OwnershipSellingScreen extends StatelessWidget {
                         notifier.toSell && notifier.isWarning && notifier.priceController.text != ''
                             ? CustomTextWidget(
                                 textAlign: TextAlign.start,
-                                textToDisplay: notifier.language.localeDatetime == 'id' ? 'Wajib diisi dengan harga kelipatan = 10 (contoh 10, 20,...dst)' : 'Price must be a multiple of 10 (e.g., 10, 20, etc.)',
+                                textToDisplay:
+                                    notifier.language.localeDatetime == 'id' ? 'Wajib diisi dengan harga kelipatan = 10 (contoh 10, 20,...dst)' : 'Price must be a multiple of 10 (e.g., 10, 20, etc.)',
                                 textStyle: const TextStyle(color: kHyppeDanger),
                               )
                             : Container()
