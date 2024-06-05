@@ -326,7 +326,7 @@ class _ItemAccountState extends State<ItemAccount> {
                   ),
                 ),
                 if (!widget.isHost) tenPx,
-                if (!widget.isHost && !widget.isViewer)
+                if (!widget.isHost && !widget.isViewer && SharedPreference().readStorage(SpKeys.email) != widget.email)
                   CustomGesture(
                     onTap: () async {
                       Navigator.pop(context);
