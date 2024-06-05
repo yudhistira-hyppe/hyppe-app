@@ -66,7 +66,35 @@ class PicDetailBottom extends StatelessWidget {
               : Container(),
           twelvePx,
           _buildDescription(context),
-          
+          data?.urlLink != '' || data?.judulLink != ''
+          ? RichText(
+            text: TextSpan(
+              children: [
+              TextSpan(
+                text: (data?.judulLink != null)
+                    ? data?.judulLink
+                    : data?.urlLink,
+                style: TextStyle(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .primary,
+                    fontWeight: FontWeight.bold),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () async {
+                    var uri = data?.urlLink??'';
+                      if (!uri.withHttp()){
+                        uri='https://$uri';
+                      }
+                      if (await canLaunchUrl(Uri.parse(uri))) {
+                          await launchUrl(Uri.parse(uri));
+                        } else {
+                          throw  Fluttertoast.showToast(msg: 'Could not launch $uri');
+                        }
+                  },
+              )
+            ]),
+          )
+          : const SizedBox.shrink(),
           SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
                   (data?.reportedStatus != 'OWNED' && data?.reportedStatus != 'BLURRED' && data?.reportedStatus2 != 'BLURRED') &&
                   (data?.boosted.isEmpty ?? [].isEmpty) &&
@@ -117,12 +145,12 @@ class PicDetailBottom extends StatelessWidget {
                             hrefStyle: Theme.of(context).textTheme.titleSmall?.copyWith(color: kHyppePrimary),
                             expandStyle: Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.black, fontWeight: FontWeight.bold),
                           ),
-                          data?.urlLink != null || data?.judulLink != null
+                          data?.urlLink != '' || data?.judulLink != ''
                           ? RichText(
                             text: TextSpan(
                               children: [
                               TextSpan(
-                                text: (data?.judulLink != null)
+                                text: (data?.judulLink != '')
                                     ? data?.judulLink
                                     : data?.urlLink,
                                 style: TextStyle(

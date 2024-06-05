@@ -1482,19 +1482,26 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                   //===== Aditional Link
                                   // tenPx,
                                   // if ()
-                                  picData?.urlLink != null || picData?.judulLink != null
-                                      ? RichText(
-                                          text: TextSpan(children: [
-                                            TextSpan(
-                                              text: (picData?.judulLink != null) ? picData?.judulLink : picData?.urlLink,
-                                              style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold),
-                                              recognizer: TapGestureRecognizer()
-                                                ..onTap = () async {
-                                                  var uri = picData?.urlLink ?? '';
-                                                  if (!uri.withHttp()) {
-                                                    uri = 'https://$uri';
-                                                  }
-                                                  if (await canLaunchUrl(Uri.parse(uri))) {
+                                    picData?.urlLink != '' || picData?.judulLink != ''
+                                    ? RichText(
+                                      text: TextSpan(
+                                        children: [
+                                        TextSpan(
+                                          text: (picData?.judulLink != null)
+                                              ? picData?.judulLink
+                                              : picData?.urlLink,
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              fontWeight: FontWeight.bold),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () async {
+                                              var uri = picData?.urlLink??'';
+                                                if (!uri.withHttp()){
+                                                  uri='https://$uri';
+                                                }
+                                                if (await canLaunchUrl(Uri.parse(uri))) {
                                                     await launchUrl(Uri.parse(uri));
                                                   } else {
                                                     throw Fluttertoast.showToast(msg: 'Could not launch $uri');

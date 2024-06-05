@@ -2,10 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
@@ -43,6 +45,7 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:math' as math;
 
 import '../../../../../../../core/config/ali_config.dart';
@@ -78,14 +81,22 @@ class VideoFullLandingscreenPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<VideoFullLandingscreenPage> createState() => _VideoFullLandingscreenPageState();
+  State<VideoFullLandingscreenPage> createState() =>
+      _VideoFullLandingscreenPageState();
 }
 
-class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage> with WidgetsBindingObserver, AfterFirstLayoutMixin, SingleTickerProviderStateMixin {
-  final GlobalKey<ScaffoldState> _scaffoldKeyPlayer = GlobalKey<ScaffoldState>();
+class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
+    with
+        WidgetsBindingObserver,
+        AfterFirstLayoutMixin,
+        SingleTickerProviderStateMixin {
+  final GlobalKey<ScaffoldState> _scaffoldKeyPlayer =
+      GlobalKey<ScaffoldState>();
 
   PageController controller = PageController();
-  late final AnimationController animatedController = AnimationController(vsync: this, duration: const Duration(seconds: 2))..repeat();
+  late final AnimationController animatedController =
+      AnimationController(vsync: this, duration: const Duration(seconds: 2))
+        ..repeat();
   FlutterAliplayer? fAliplayer;
   ContentData? dataSelected;
   AdsPlayerPage? adsPlayerPage;
@@ -144,11 +155,13 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
   @override
   void afterFirstLayout(BuildContext context) {
     // if (fAliplayer == null && fAliplayer?.getPlayerName().toString() != 'FullVideoLandingpage') {
-    fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'FullVideoLandingpage');
+    fAliplayer = FlutterAliPlayerFactory.createAliPlayer(
+        playerId: 'FullVideoLandingpage');
     initAlipayer();
     // }
     landscape();
-    var notifier = (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>();
+    var notifier = (Routing.navigatorKey.currentContext ?? context)
+        .read<PreviewVidNotifier>();
     if (notifier.vidData?[widget.index ?? 0].certified ?? false) {
       System().block(context);
     } else {
@@ -161,7 +174,8 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
   void landscape() async {
     fAliplayer?.pause();
     Future.delayed(const Duration(seconds: 1), () {
-      final notifier = (Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
+      final notifier = (Routing.navigatorKey.currentContext ?? context)
+          .read<VideoNotifier>();
       final isShowing = notifier.isShowingAds;
       if (!isShowing) {
         fAliplayer?.play();
@@ -191,14 +205,16 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
         isScrolled = true;
       });
       final _notifier = context.read<PreviewVidNotifier>();
-      if (isOnPageTurning && controller.page == controller.page?.roundToDouble()) {
+      if (isOnPageTurning &&
+          controller.page == controller.page?.roundToDouble()) {
         _notifier.pageIndex = controller.page?.toInt() ?? 0;
         setState(() {
           // current = _controller.page.toInt();
           isOnPageTurning = false;
         });
       } else if (!isOnPageTurning) {
-        if (((_notifier.pageIndex.toDouble()) - (controller.page ?? 0)).abs() > 0.1) {
+        if (((_notifier.pageIndex.toDouble()) - (controller.page ?? 0)).abs() >
+            0.1) {
           setState(() {
             isOnPageTurning = true;
           });
@@ -211,7 +227,8 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
     if ((vidData?.length ?? 0) - 1 == curentIndex) {
       getNewData();
     }
-    if (vidData?[widget.index ?? 0].inBetweenAds == null && vidData?[widget.index ?? 0].postID != null) {
+    if (vidData?[widget.index ?? 0].inBetweenAds == null &&
+        vidData?[widget.index ?? 0].postID != null) {
       _initializeTimer();
     }
   }
@@ -246,7 +263,8 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
     lang = context.read<TranslateNotifierV2>().translate;
     email = SharedPreference().readStorage(SpKeys.email);
 
-    var notifier = (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>();
+    var notifier = (Routing.navigatorKey.currentContext ?? context)
+        .read<PreviewVidNotifier>();
     var data = notifier.vidData?[widget.index ?? 0];
 
     if ((data?.metadata?.height ?? 0) < (data?.metadata?.width ?? 0)) {
@@ -278,7 +296,9 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
     fAliplayer?.seekTo(changevalue, FlutterAvpdef.ACCURATE);
     fAliplayer?.setOnPrepared((playerId) {
       // Fluttertoast.showToast(msg: "OnPrepared ");
-      fAliplayer?.getPlayerName().then((value) => print("getPlayerName==$value"));
+      fAliplayer
+          ?.getPlayerName()
+          .then((value) => print("getPlayerName==$value"));
       fAliplayer?.getMediaInfo().then((value) {
         print("getMediaInfo==$value");
         _videoDuration = value['duration'];
@@ -300,7 +320,8 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
     });
     fAliplayer?.setOnStateChanged((newState, playerId) {
       _currentPlayerState = newState;
-      print("aliyun : onStateChanged $newState ${_currentPlayerState = newState}");
+      print(
+          "aliyun : onStateChanged $newState ${_currentPlayerState = newState}");
       switch (newState) {
         case FlutterAvpdef.AVPStatus_AVPStatusStarted:
           // Wakelock.enable();
@@ -370,27 +391,34 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
     });
 
     fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
-      final notifier = (Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
+      final notifier = (Routing.navigatorKey.currentContext ?? context)
+          .read<VideoNotifier>();
       if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
         if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
           _currentPosition = extraValue ?? 0;
 
           final detik = (_currentPosition / 1000).round();
-          print("====detik $detik -- ${notifier.adsTime} -- ${notifier.tempAdsData}");
+          print(
+              "====detik $detik -- ${notifier.adsTime} -- ${notifier.tempAdsData}");
           if (notifier.tempAdsData != null) {
             if (notifier.adsTime == detik) {
               fAliplayer?.pause();
               final tempAds = notifier.tempAdsData;
               if (tempAds != null) {
                 notifier.setMapAdsContent(dataSelected?.postID ?? '', tempAds);
-                final fixAds = notifier.mapInContentAds[dataSelected?.postID ?? ''];
+                final fixAds =
+                    notifier.mapInContentAds[dataSelected?.postID ?? ''];
 
                 if (fixAds != null) {
-                  context.read<PreviewVidNotifier>().setAdsData(curentIndex, fixAds, context);
+                  context
+                      .read<PreviewVidNotifier>()
+                      .setAdsData(curentIndex, fixAds, context);
                 }
               }
             } else if (detik > notifier.adsTime) {
-              if (notifier.adsvideoIsPlay && notifier.mapInContentAds[dataSelected?.postID ?? ''] == null) {
+              if (notifier.adsvideoIsPlay &&
+                  notifier.mapInContentAds[dataSelected?.postID ?? ''] ==
+                      null) {
                 notifier.isShowingAds = false;
                 notifier.adsvideoIsPlay = false;
               }
@@ -482,12 +510,18 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
 
   void vidConfig() {
     var configMap = {
-      'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
-      'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
-      'mMaxBufferDuration': GlobalSettings.mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
-      'mMaxDelayTime': GlobalSettings.mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
-      'mNetworkTimeout': GlobalSettings.mNetworkTimeout, // The network timeout period. Unit: milliseconds.
-      'mNetworkRetryCount': GlobalSettings.mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
+      'mStartBufferDuration': GlobalSettings
+          .mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
+      'mHighBufferDuration': GlobalSettings
+          .mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
+      'mMaxBufferDuration': GlobalSettings
+          .mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
+      'mMaxDelayTime': GlobalSettings
+          .mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
+      'mNetworkTimeout': GlobalSettings
+          .mNetworkTimeout, // The network timeout period. Unit: milliseconds.
+      'mNetworkRetryCount': GlobalSettings
+          .mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
       'mEnableLocalCache': GlobalSettings.mEnableCacheConfig,
       'mLocalCacheDir': GlobalSettings.mDirController,
       'mClearFrameWhenStop': true
@@ -512,12 +546,16 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
   }
 
   _pauseScreen() async {
-    (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().removeWakelock();
+    (Routing.navigatorKey.currentContext ?? context)
+        .read<HomeNotifier>()
+        .removeWakelock();
   }
 
   _initializeTimer() async {
     if (widget.enableWakelock) {
-      (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initWakelockTimer(onShowInactivityWarning: _handleInactivity);
+      (Routing.navigatorKey.currentContext ?? context)
+          .read<HomeNotifier>()
+          .initWakelockTimer(onShowInactivityWarning: _handleInactivity);
     }
   }
 
@@ -535,7 +573,8 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
       textColor: kHyppeTextLightPrimary,
       textButtonColor: kHyppePrimary,
       iconSvg: 'close.svg',
-      textButton: context.read<TranslateNotifierV2>().translate.stringContinue ?? '',
+      textButton:
+          context.read<TranslateNotifierV2>().translate.stringContinue ?? '',
       onClose: () {
         context.read<MainNotifier>().isInactiveState = false;
         fAliplayer?.play();
@@ -560,7 +599,9 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
     HomeNotifier hn = context.read<HomeNotifier>();
     PreviewVidNotifier vn = context.read<PreviewVidNotifier>();
 
-    await hn.initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {
+    await hn
+        .initNewHome(context, mounted, isreload: false, isgetMore: true)
+        .then((value) {
       setState(() {
         vn.vidData?.forEach((e) {
           print(e.description);
@@ -588,7 +629,8 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
     try {
       fAliplayer?.destroy();
       _pauseScreen();
-      final notifier = (Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
+      final notifier = (Routing.navigatorKey.currentContext ?? context)
+          .read<VideoNotifier>();
       notifier.adsAliplayer?.stop();
       isActivePage = false;
       // final notifier = (Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
@@ -610,7 +652,8 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
       orientation = Orientation.portrait;
     }
 
-    print('start step -> height: $height width: $width orientation: $lastOrientation');
+    print(
+        'start step -> height: $height width: $width orientation: $lastOrientation');
 
     if (lastOrientation != orientation) {
       setState(() {
@@ -625,7 +668,8 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
         print('step 2');
       } else {
         // await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
-        await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+        await SystemChrome.setPreferredOrientations(
+            [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
         print('step 3');
       }
       Future.delayed(const Duration(milliseconds: 1000), () {
@@ -638,13 +682,15 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
 
   void nextPage() {
     Future.delayed(Duration(milliseconds: 500), () {
-      controller.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.ease);
+      controller.nextPage(
+          duration: const Duration(milliseconds: 500), curve: Curves.ease);
     });
   }
 
   void previousPage() {
     Future.delayed(Duration(milliseconds: 500), () {
-      controller.previousPage(duration: const Duration(milliseconds: 500), curve: Curves.ease);
+      controller.previousPage(
+          duration: const Duration(milliseconds: 500), curve: Curves.ease);
     });
   }
 
@@ -742,7 +788,8 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
         });
         _inSeek = false;
         setState(() {
-          if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
+          if (_currentPlayerState == FlutterAvpdef.completion &&
+              _showTipsWidget) {
             setState(() {
               _showTipsWidget = false;
             });
@@ -779,7 +826,8 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
         });
         _inSeek = false;
         setState(() {
-          if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
+          if (_currentPlayerState == FlutterAvpdef.completion &&
+              _showTipsWidget) {
             setState(() {
               _showTipsWidget = false;
             });
@@ -803,7 +851,8 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
       onTap: () {
         if (isPause) {
           // if (_showTipsWidget) fAliplayer?.prepare();
-          if (_currentPosition > 0 && _currentPlayerState == FlutterAvpdef.AVPStatus_AVPStatusStopped) {
+          if (_currentPosition > 0 &&
+              _currentPlayerState == FlutterAvpdef.AVPStatus_AVPStatusStopped) {
             fAliplayer?.prepare();
             fAliplayer?.seekTo(_currentPosition, FlutterAvpdef.ACCURATE);
             fAliplayer?.play();
@@ -825,7 +874,9 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
         }
       },
       child: CustomIconWidget(
-        iconData: isPause ? "${AssetPath.vectorPath}play3.svg" : "${AssetPath.vectorPath}pause3.svg",
+        iconData: isPause
+            ? "${AssetPath.vectorPath}play3.svg"
+            : "${AssetPath.vectorPath}pause3.svg",
         defaultColor: false,
       ),
       // Icon(
@@ -898,7 +949,8 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
         setState(() {});
       }
       final notifier = PostsBloc();
-      await notifier.getAuthApsara(fixContext ?? context, apsaraId: apsaraId, check: false);
+      await notifier.getAuthApsara(fixContext ?? context,
+          apsaraId: apsaraId, check: false);
       final fetch = notifier.postsFetch;
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
         Map jsonMap = json.decode(fetch.data.toString());
@@ -915,11 +967,15 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
 
         final isViewed = dataSelected?.isViewed ?? true;
 
-        final ref = (Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
+        final ref = (Routing.navigatorKey.currentContext ?? context)
+            .read<VideoNotifier>();
         ref.tempAdsData = null;
         if (!isViewed) {
           ref.hasShowedAds = false;
-          ref.getAdsVideo(Routing.navigatorKey.currentContext ?? context, _videoDuration).whenComplete(() {
+          ref
+              .getAdsVideo(Routing.navigatorKey.currentContext ?? context,
+                  _videoDuration)
+              .whenComplete(() {
             // (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().setIsViewed(widget.index!);
           });
         }
@@ -972,122 +1028,157 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
 
     print('view ads: ${widget.isAutoPlay ?? false}');
 
-    return Consumer2<VideoNotifier, PreviewVidNotifier>(builder: (context, notifier, vidNotifier, _) {
+    return Consumer2<VideoNotifier, PreviewVidNotifier>(
+        builder: (context, notifier, vidNotifier, _) {
       vidData = vidNotifier.vidData;
       // print('view ads: 2 ${vidData}');
       return Scaffold(
-          key: _scaffoldKeyPlayer,
-          resizeToAvoidBottomInset: false,
-          body: GestureDetector(
-              onHorizontalDragEnd: (dragEndDetails) {
-                print("=======hasil ${notifier.isShowingAds}  -- ${notifier.hasShowedAds}");
-                if (dragEndDetails.primaryVelocity! < 0) {
-                } else if (dragEndDetails.primaryVelocity! > 0) {
-                  if (!notifier.isShowingAds && !notifier.adsvideoIsPlay) {
-                    int changevalue;
-                    changevalue = _currentPosition + 1000;
-                    if (changevalue > _videoDuration) {
-                      changevalue = _videoDuration;
-                    }
-                    // whileDispose();
-                    vidData?[widget.index ?? 0].isLoading = true;
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-                      Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
-                    });
+        key: _scaffoldKeyPlayer,
+        resizeToAvoidBottomInset: false,
+        body: GestureDetector(
+            onHorizontalDragEnd: (dragEndDetails) {
+              print(
+                  "=======hasil ${notifier.isShowingAds}  -- ${notifier.hasShowedAds}");
+              if (dragEndDetails.primaryVelocity! < 0) {
+              } else if (dragEndDetails.primaryVelocity! > 0) {
+                if (!notifier.isShowingAds && !notifier.adsvideoIsPlay) {
+                  int changevalue;
+                  changevalue = _currentPosition + 1000;
+                  if (changevalue > _videoDuration) {
+                    changevalue = _videoDuration;
                   }
+                  // whileDispose();
+                  vidData?[widget.index ?? 0].isLoading = true;
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    SystemChrome.setPreferredOrientations([
+                      DeviceOrientation.portraitUp,
+                      DeviceOrientation.portraitDown
+                    ]);
+                    Navigator.pop(
+                        context,
+                        VideoIndicator(
+                            videoDuration: _videoDuration,
+                            seekValue: changevalue,
+                            positionText: _currentPositionText,
+                            showTipsWidget: _showTipsWidget,
+                            isMute: isMute));
+                  });
                 }
-              },
-              child: notifier.loadVideo
-                  ? Container(
-                      color: Colors.black,
-                      child: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    )
-                  : PageView.builder(
-                      controller: controller,
-                      physics: notifier.isShowingAds && notifier.adsvideoIsPlay ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
-                      scrollDirection: Axis.vertical,
-                      itemCount: vidData?.length ?? 0,
-                      onPageChanged: (value) {
-                        curentIndex = value;
-                        notifier.currIndex = value;
-                        isScrollAds = true;
-                        if (_lastCurIndex != curentIndex) {
-                          fAliplayer?.stop();
-                          fAliplayer?.clearScreen();
-                          Future.delayed(const Duration(milliseconds: 700), () {
-                            start(Routing.navigatorKey.currentContext ?? context, vidData?[curentIndex] ?? ContentData());
-                            System().increaseViewCount2(Routing.navigatorKey.currentContext ?? context, vidData?[curentIndex] ?? ContentData(), check: false);
-                          });
-                          if (vidData?[curentIndex].certified ?? false) {
-                            System().block(Routing.navigatorKey.currentContext ?? context);
+              }
+            },
+            child: notifier.loadVideo
+                ? Container(
+                    color: Colors.black,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
+                : PageView.builder(
+                    controller: controller,
+                    physics: notifier.isShowingAds && notifier.adsvideoIsPlay
+                        ? const NeverScrollableScrollPhysics()
+                        : const AlwaysScrollableScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    itemCount: vidData?.length ?? 0,
+                    onPageChanged: (value) {
+                      curentIndex = value;
+                      notifier.currIndex = value;
+                      isScrollAds = true;
+                      if (_lastCurIndex != curentIndex) {
+                        fAliplayer?.stop();
+                        fAliplayer?.clearScreen();
+                        Future.delayed(const Duration(milliseconds: 700), () {
+                          start(Routing.navigatorKey.currentContext ?? context,
+                              vidData?[curentIndex] ?? ContentData());
+                          System().increaseViewCount2(
+                              Routing.navigatorKey.currentContext ?? context,
+                              vidData?[curentIndex] ?? ContentData(),
+                              check: false);
+                        });
+                        if (vidData?[curentIndex].certified ?? false) {
+                          System().block(
+                              Routing.navigatorKey.currentContext ?? context);
+                        } else {
+                          System().disposeBlock();
+                        }
+                        scrollPage(vidData?[value].metadata?.height,
+                            vidData?[value].metadata?.width);
+                        if (value > 1) {
+                          if ((vidData?[value - 1].metadata?.height ?? 0) <
+                              (vidData?[value - 1].metadata?.width ?? 0)) {
+                            beforePosition = Orientation.landscape;
                           } else {
-                            System().disposeBlock();
-                          }
-                          scrollPage(vidData?[value].metadata?.height, vidData?[value].metadata?.width);
-                          if (value > 1) {
-                            if ((vidData?[value - 1].metadata?.height ?? 0) < (vidData?[value - 1].metadata?.width ?? 0)) {
-                              beforePosition = Orientation.landscape;
-                            } else {
-                              beforePosition = Orientation.portrait;
-                            }
-                          }
-                          context.read<PreviewVidNotifier>().currIndex = value;
-      
-                          if ((vidData?.length ?? 0) - 1 == curentIndex) {
-                            //get new data;
-                            getNewData();
-                          }
-                          _lastCurIndex = curentIndex;
-                        }
-                      },
-                      itemBuilder: (context, index) {
-                        if (index != curentIndex) {
-                          return Container(
-                            color: Colors.black,
-                          );
-                        }
-                        "================== isPause $isPause $isScrolled".logger();
-                        // return Container(
-                        //   height: MediaQuery.of(context).size.height,
-                        //   width: MediaQuery.of(context).size.width,
-                        //   child: Center(child: Text("data ${index}")),
-                        // );
-                        print('view ads: 1');
-                        final isAds = vidData?[index].inBetweenAds != null && vidData?[index].postID == null;
-                        if (isAds) {
-                          //fAliplayer stoped === Irfan ====
-                          fAliplayer?.pause();
-                          isPlay = false;
-                          _showLoading = false;
-                          if (notifier.adsvideoIsPlay && notifier.mapInContentAds[dataSelected?.postID ?? ''] == null) {
-                            notifier.isShowingAds = false;
-                            notifier.adsvideoIsPlay = false;
+                            beforePosition = Orientation.portrait;
                           }
                         }
-      
-                        return isloadingRotate
-                            ? Container(
-                                color: Colors.black,
-                                height: MediaQuery.of(context).size.height,
-                                width: MediaQuery.of(context).size.width,
-                                child: const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              )
-                            : isAds
-                                ? context.getAdsInBetween(vidData, index, (info) {}, () {
-                                    context.read<PreviewVidNotifier>().setInBetweenAds(index, null);
-                                  }, (player, id) {}, isfull: true, isVideo: true, orientation: beforePosition, isScroll: isScrollAds)
-                                : videoPlayerWidget(vidNotifier, vidData![index], index);
-                      })),
-        );
+                        context.read<PreviewVidNotifier>().currIndex = value;
+
+                        if ((vidData?.length ?? 0) - 1 == curentIndex) {
+                          //get new data;
+                          getNewData();
+                        }
+                        _lastCurIndex = curentIndex;
+                      }
+                    },
+                    itemBuilder: (context, index) {
+                      if (index != curentIndex) {
+                        return Container(
+                          color: Colors.black,
+                        );
+                      }
+                      "================== isPause $isPause $isScrolled"
+                          .logger();
+                      // return Container(
+                      //   height: MediaQuery.of(context).size.height,
+                      //   width: MediaQuery.of(context).size.width,
+                      //   child: Center(child: Text("data ${index}")),
+                      // );
+                      print('view ads: 1');
+                      final isAds = vidData?[index].inBetweenAds != null &&
+                          vidData?[index].postID == null;
+                      if (isAds) {
+                        //fAliplayer stoped === Irfan ====
+                        fAliplayer?.pause();
+                        isPlay = false;
+                        _showLoading = false;
+                        if (notifier.adsvideoIsPlay &&
+                            notifier.mapInContentAds[
+                                    dataSelected?.postID ?? ''] ==
+                                null) {
+                          notifier.isShowingAds = false;
+                          notifier.adsvideoIsPlay = false;
+                        }
+                      }
+
+                      return isloadingRotate
+                          ? Container(
+                              color: Colors.black,
+                              height: MediaQuery.of(context).size.height,
+                              width: MediaQuery.of(context).size.width,
+                              child: const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            )
+                          : isAds
+                              ? context.getAdsInBetween(
+                                  vidData, index, (info) {}, () {
+                                  context
+                                      .read<PreviewVidNotifier>()
+                                      .setInBetweenAds(index, null);
+                                }, (player, id) {},
+                                  isfull: true,
+                                  isVideo: true,
+                                  orientation: beforePosition,
+                                  isScroll: isScrollAds)
+                              : videoPlayerWidget(
+                                  vidNotifier, vidData![index], index);
+                    })),
+      );
     });
   }
 
-  Widget videoPlayerWidget(PreviewVidNotifier vidNotifier, ContentData data, int index) {
+  Widget videoPlayerWidget(
+      PreviewVidNotifier vidNotifier, ContentData data, int index) {
     VideoNotifier notifier = context.read<VideoNotifier>();
     var width = MediaQuery.of(context).size.width;
 
@@ -1101,18 +1192,22 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
     if (notifier.mapInContentAds[data.postID ?? ''] != null) {
       adsPlayerPage = AdsPlayerPage(
         dataSourceMap: {
-          DataSourceRelated.vidKey: notifier.mapInContentAds[data.postID ?? '']?.videoId,
+          DataSourceRelated.vidKey:
+              notifier.mapInContentAds[data.postID ?? '']?.videoId,
           DataSourceRelated.regionKey: DataSourceRelated.defaultRegion,
         },
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        thumbnail: (data.isApsara ?? false) ? (data.mediaThumbEndPoint ?? '') : '${data.fullThumbPath}',
+        thumbnail: (data.isApsara ?? false)
+            ? (data.mediaThumbEndPoint ?? '')
+            : '${data.fullThumbPath}',
         data: notifier.mapInContentAds[data.postID ?? ''],
         functionFullTriger: () {},
         getPlayer: (player) {},
         onStop: () {
           notifier.setMapAdsContent(data.postID ?? '', null);
-          vidNotifier.setAdsData(index, notifier.mapInContentAds[data.postID ?? ''], context);
+          vidNotifier.setAdsData(
+              index, notifier.mapInContentAds[data.postID ?? ''], context);
         },
         fromFullScreen: true,
         onFullscreen: () async {
@@ -1173,7 +1268,9 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                     aliPlayerViewType: AliPlayerViewTypeForAndroid.textureview,
                   ),
                 ),
-                if (isPause && _currentPlayerState == FlutterAvpdef.AVPStatus_AVPStatusStopped)
+                if (isPause &&
+                    _currentPlayerState ==
+                        FlutterAvpdef.AVPStatus_AVPStatusStopped)
                   SizedBox(
                     height: double.maxFinite,
                     width: MediaQuery.of(context).size.width,
@@ -1212,7 +1309,12 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                     child: SizedBox(
                         width: MediaQuery.of(context).size.width,
                         height: MediaQuery.of(context).size.height,
-                        child: Offstage(offstage: _isLock, child: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, orientation, data))),
+                        child: Offstage(
+                            offstage: _isLock,
+                            child: _buildContentWidget(
+                                Routing.navigatorKey.currentContext ?? context,
+                                orientation,
+                                data))),
                   ),
                 Positioned.fill(
                   child: SizedBox(
@@ -1224,7 +1326,8 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                     ),
                   ),
                 ),
-                _buildProgressBar(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height),
+                _buildProgressBar(MediaQuery.of(context).size.width,
+                    MediaQuery.of(context).size.height),
                 if (isPlay)
                   Positioned.fill(
                     child: Align(
@@ -1238,13 +1341,18 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                       ),
                     ),
                   ),
-                if (notifier.mapInContentAds[data.postID ?? ''] != null && isPlay)
+                if (notifier.mapInContentAds[data.postID ?? ''] != null &&
+                    isPlay)
                   Positioned.fill(
                     child: ClipRRect(
                       borderRadius: const BorderRadius.all(
                         Radius.circular(16),
                       ),
-                      child: Container(color: Colors.black, width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height, child: adsPlayerPage),
+                      child: Container(
+                          color: Colors.black,
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height,
+                          child: adsPlayerPage),
                     ),
                   ),
               ],
@@ -1263,8 +1371,11 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
           Positioned(
             top: 0,
             child: Container(
-              height: orientation == Orientation.portrait ? kToolbarHeight * 2 : kToolbarHeight * 1.4,
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 18.0),
+              height: orientation == Orientation.portrait
+                  ? kToolbarHeight * 2
+                  : kToolbarHeight * 1.4,
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8, vertical: 18.0),
               child: CustomAppBar(
                   isVidFormProfile: false,
                   orientation: orientation,
@@ -1286,21 +1397,32 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
 
                     vidData?[widget.index ?? 0].isLoading = true;
                     WidgetsBinding.instance.addPostFrameCallback((_) {
-                      SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+                      SystemChrome.setPreferredOrientations([
+                        DeviceOrientation.portraitUp,
+                        DeviceOrientation.portraitDown
+                      ]);
                       Navigator.pop(
-                          context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
+                          context,
+                          VideoIndicator(
+                              videoDuration: _videoDuration,
+                              seekValue: changevalue,
+                              positionText: _currentPositionText,
+                              showTipsWidget: _showTipsWidget,
+                              isMute: isMute));
                     });
 
                     // }
                   },
                   onTapOnProfileImage: () async {
-                    var res = await System().navigateToProfile(context, data.email ?? '');
+                    var res = await System()
+                        .navigateToProfile(context, data.email ?? '');
                     fAliplayer?.pause();
                     isPause = true;
                     setState(() {});
                     print('data result $res');
                     if (res != null && res == true) {
-                      if ((data.metadata?.height ?? 0) < (data.metadata?.width ?? 0)) {
+                      if ((data.metadata?.height ?? 0) <
+                          (data.metadata?.width ?? 0)) {
                         print('Landscape VidPlayerPage');
                         SystemChrome.setPreferredOrientations([
                           DeviceOrientation.landscapeLeft,
@@ -1319,11 +1441,16 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                     context.handleActionIsGuest(() async {
                       fAliplayer?.pause();
                       if (data.email != email) {
-                        context.read<PreviewPicNotifier>().reportContent(context, data, fAliplayer: data.fAliplayer, onCompleted: () async {
+                        context.read<PreviewPicNotifier>().reportContent(
+                            context, data, fAliplayer: data.fAliplayer,
+                            onCompleted: () async {
                           imageCache.clear();
                           imageCache.clearLiveImages();
                           fAliplayer?.play();
-                          await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
+                          await (Routing.navigatorKey.currentContext ?? context)
+                              .read<HomeNotifier>()
+                              .initNewHome(context, mounted,
+                                  isreload: true, forceIndex: 2);
                         });
                         isPause = true;
                         setState(() {});
@@ -1344,7 +1471,10 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                             Routing().moveBack();
                             Routing().moveBack();
 
-                            (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
+                            (Routing.navigatorKey.currentContext ?? context)
+                                .read<HomeNotifier>()
+                                .initNewHome(context, mounted,
+                                    isreload: true, forceIndex: 2);
                           },
                           fAliplayer: data.fAliplayer,
                         ).then((value) {
@@ -1377,7 +1507,8 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
       onEnd: _onPlayerHide,
       child: Center(
         child: Container(
-          width: orientation == Orientation.landscape ? width * .35 : width * .8,
+          width:
+              orientation == Orientation.landscape ? width * .35 : width * .8,
           decoration: BoxDecoration(
             color: backgroundColor,
           ),
@@ -1424,16 +1555,26 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                   onFunctionTap: () {
                     likeNotifier.likePost(context, data);
                   },
-                  iconData: '${AssetPath.vectorPath}${(data.insight?.isPostLiked ?? false) ? 'liked.svg' : 'love-shadow.svg'}',
-                  value: data.insight!.likes! > 0 ? '${data.insight?.likes}' : '${lang?.like}',
+                  iconData:
+                      '${AssetPath.vectorPath}${(data.insight?.isPostLiked ?? false) ? 'liked.svg' : 'love-shadow.svg'}',
+                  value: data.insight!.likes! > 0
+                      ? '${data.insight?.likes}'
+                      : '${lang?.like}',
                   liked: data.insight?.isPostLiked ?? false)),
           if (data.allowComments ?? false)
             buttonVideoRight(
               onFunctionTap: () {
-                Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data, pageDetail: false));
+                Routing().move(Routes.commentsDetail,
+                    argument: CommentsArgument(
+                        postID: data.postID ?? '',
+                        fromFront: true,
+                        data: data,
+                        pageDetail: false));
               },
               iconData: '${AssetPath.vectorPath}comment-shadow.svg',
-              value: data.comments! > 0 ? data.comments.toString() : lang?.comments ?? '',
+              value: data.comments! > 0
+                  ? data.comments.toString()
+                  : lang?.comments ?? '',
             ),
           if (data.isShared ?? false)
             buttonVideoRight(
@@ -1443,7 +1584,10 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                   // });
                   fAliplayer?.pause();
 
-                  context.read<VidDetailNotifier>().createdDynamicLink(context, data: data).then((val) {
+                  context
+                      .read<VidDetailNotifier>()
+                      .createdDynamicLink(context, data: data)
+                      .then((val) {
                     // setState(() {
                     //   isShared = false;
                     // });
@@ -1455,7 +1599,8 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
             buttonVideoRight(
                 onFunctionTap: () async {
                   fAliplayer?.pause();
-                  await ShowBottomSheet.onBuyContent(context, data: data, fAliplayer: fAliplayer);
+                  await ShowBottomSheet.onBuyContent(context,
+                      data: data, fAliplayer: fAliplayer);
                 },
                 iconData: '${AssetPath.vectorPath}cart-shadow.svg',
                 value: lang!.buy ?? 'Buy'),
@@ -1464,7 +1609,11 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
     );
   }
 
-  Widget buttonVideoRight({Function()? onFunctionTap, required String iconData, required String value, bool liked = false}) {
+  Widget buttonVideoRight(
+      {Function()? onFunctionTap,
+      required String iconData,
+      required String value,
+      bool liked = false}) {
     return InkResponse(
       onTap: onFunctionTap,
       child: Padding(
@@ -1489,10 +1638,20 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
               transform: Matrix4.translationValues(0.0, -5.0, 0.0),
               child: Text(
                 value,
-                style: const TextStyle(shadows: [
-                  Shadow(offset: Offset(0.0, 1.0), blurRadius: 2.0, color: Colors.black54),
-                  Shadow(offset: Offset(0.0, 1.0), blurRadius: 8.0, color: Colors.black54),
-                ], color: kHyppePrimaryTransparent, fontWeight: FontWeight.w500, fontSize: 12),
+                style: const TextStyle(
+                    shadows: [
+                      Shadow(
+                          offset: Offset(0.0, 1.0),
+                          blurRadius: 2.0,
+                          color: Colors.black54),
+                      Shadow(
+                          offset: Offset(0.0, 1.0),
+                          blurRadius: 8.0,
+                          color: Colors.black54),
+                    ],
+                    color: kHyppePrimaryTransparent,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12),
               ),
             ),
           ],
@@ -1501,7 +1660,8 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
     );
   }
 
-  _buildContentWidget(BuildContext context, Orientation orientation, ContentData data) {
+  _buildContentWidget(
+      BuildContext context, Orientation orientation, ContentData data) {
     return AnimatedOpacity(
       // opacity: onTapCtrl || isPause ? 1.0 : 0.0,
       opacity: 1.0,
@@ -1515,7 +1675,10 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                       gradient: LinearGradient(
                         end: const Alignment(0.0, -1),
                         begin: const Alignment(0.0, 1),
-                        colors: [const Color(0x8A000000), Colors.black12.withOpacity(0.0)],
+                        colors: [
+                          const Color(0x8A000000),
+                          Colors.black12.withOpacity(0.0)
+                        ],
                       ),
                     )
                   : null,
@@ -1526,33 +1689,46 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                     Positioned(
                       bottom: orientation == Orientation.portrait ? 28 : 0,
                       left: 0,
-                      right: orientation == Orientation.landscape ? SizeConfig.screenHeight! * .2 : SizeConfig.screenHeight! * .08,
+                      right: orientation == Orientation.landscape
+                          ? SizeConfig.screenHeight! * .2
+                          : SizeConfig.screenHeight! * .08,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
                             child: Row(
                               children: [
                                 Visibility(
                                   visible: data.tagPeople?.isNotEmpty ?? false,
                                   child: Container(
-                                    decoration: BoxDecoration(color: kHyppeBackground.withOpacity(.4), borderRadius: BorderRadius.circular(8.0)),
-                                    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+                                    decoration: BoxDecoration(
+                                        color: kHyppeBackground.withOpacity(.4),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0)),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 4, vertical: 6),
                                     margin: const EdgeInsets.only(right: 12.0),
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 4.0),
                                       child: GestureDetector(
                                         onTap: () {
                                           fAliplayer?.pause();
                                           context
                                               .read<PicDetailNotifier>()
-                                              .showUserTag(context, data.tagPeople, data.postID, title: lang!.inThisVideo, fAliplayer: fAliplayer, orientation: orientation);
+                                              .showUserTag(context,
+                                                  data.tagPeople, data.postID,
+                                                  title: lang!.inThisVideo,
+                                                  fAliplayer: fAliplayer,
+                                                  orientation: orientation);
                                         },
                                         child: Row(
                                           children: [
                                             const CustomIconWidget(
-                                              iconData: '${AssetPath.vectorPath}tag-people-light.svg',
+                                              iconData:
+                                                  '${AssetPath.vectorPath}tag-people-light.svg',
                                               defaultColor: false,
                                               height: 18,
                                             ),
@@ -1561,7 +1737,8 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                                             ),
                                             Text(
                                               '${data.tagPeople!.length} ${lang!.people}',
-                                              style: const TextStyle(color: kHyppeTextPrimary),
+                                              style: const TextStyle(
+                                                  color: kHyppeTextPrimary),
                                             )
                                           ],
                                         ),
@@ -1572,7 +1749,10 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                                 Visibility(
                                   visible: data.location != '',
                                   child: Container(
-                                    decoration: BoxDecoration(color: kHyppeBackground.withOpacity(.4), borderRadius: BorderRadius.circular(8.0)),
+                                    decoration: BoxDecoration(
+                                        color: kHyppeBackground.withOpacity(.4),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0)),
                                     padding: const EdgeInsets.symmetric(
                                       vertical: 6,
                                     ),
@@ -1607,39 +1787,98 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                                     isShowMore = val;
                                   });
                                 },
-                                seeLess: ' ${lang?.less}', // ${notifier2.translate.seeLess}',
-                                seeMore: ' ${lang?.more}', //${notifier2.translate.seeMoreContent}',
-                                normStyle: const TextStyle(fontSize: 14, color: kHyppeTextPrimary),
-                                hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                                expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppeTextPrimary, fontWeight: FontWeight.bold),
+                                seeLess:
+                                    ' ${lang?.less}', // ${notifier2.translate.seeLess}',
+                                seeMore:
+                                    ' ${lang?.more}', //${notifier2.translate.seeMoreContent}',
+                                normStyle: const TextStyle(
+                                    fontSize: 14, color: kHyppeTextPrimary),
+                                hrefStyle: Theme.of(context)
+                                    .textTheme
+                                    .subtitle2
+                                    ?.copyWith(color: kHyppePrimary),
+                                expandStyle: Theme.of(context)
+                                    .textTheme
+                                    .subtitle2
+                                    ?.copyWith(
+                                        color: kHyppeTextPrimary,
+                                        fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),
-                          SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
+                          if (data.urlLink != '')
+                            Container(
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: RichText(
+                                text: TextSpan(children: [
+                                  TextSpan(
+                                    text: (data.judulLink != null)
+                                        ? data.judulLink
+                                        : data.urlLink,
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        fontWeight: FontWeight.bold),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () async {
+                                        var uri = data.urlLink ?? '';
+                                        if (!uri.withHttp()) {
+                                          uri = 'https://$uri';
+                                        }
+                                        if (await canLaunchUrl(
+                                            Uri.parse(uri))) {
+                                          await launchUrl(Uri.parse(uri));
+                                        } else {
+                                          throw Fluttertoast.showToast(
+                                              msg: 'Could not launch $uri');
+                                        }
+                                      },
+                                  )
+                                ]),
+                              ),
+                            ),
+                          SharedPreference().readStorage(
+                                          SpKeys.statusVerificationId) ==
+                                      VERIFIED &&
                                   (data.boosted.isEmpty) &&
-                                  (data.reportedStatus != 'OWNED' && data.reportedStatus != 'BLURRED' && data.reportedStatus2 != 'BLURRED') &&
-                                  data.email == SharedPreference().readStorage(SpKeys.email)
+                                  (data.reportedStatus != 'OWNED' &&
+                                      data.reportedStatus != 'BLURRED' &&
+                                      data.reportedStatus2 != 'BLURRED') &&
+                                  data.email ==
+                                      SharedPreference()
+                                          .readStorage(SpKeys.email)
                               ? Container(
-                                  width: orientation == Orientation.landscape ? SizeConfig.screenWidth! * .28 : SizeConfig.screenWidth!,
+                                  width: orientation == Orientation.landscape
+                                      ? SizeConfig.screenWidth! * .28
+                                      : SizeConfig.screenWidth!,
                                   margin: const EdgeInsets.only(bottom: 16),
-                                  padding: const EdgeInsets.only(top: 12, left: 8.0, right: 8.0),
+                                  padding: const EdgeInsets.only(
+                                      top: 12, left: 8.0, right: 8.0),
                                   child: ButtonBoost(
                                     onDetail: false,
                                     marginBool: true,
                                     contentData: data,
                                     startState: () {
-                                      SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                                      SharedPreference().writeStorage(
+                                          SpKeys.isShowPopAds, true);
                                     },
                                     afterState: () {
-                                      SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                                      SharedPreference().writeStorage(
+                                          SpKeys.isShowPopAds, false);
                                     },
                                   ),
                                 )
                               : Container(),
-                          if (data.email == email && (data.boostCount ?? 0) >= 0 && (data.boosted.isNotEmpty))
+                          if (data.email == email &&
+                              (data.boostCount ?? 0) >= 0 &&
+                              (data.boosted.isNotEmpty))
                             Container(
                               padding: const EdgeInsets.all(10),
-                              margin: const EdgeInsets.only(bottom: 10, left: 18.0),
+                              margin:
+                                  const EdgeInsets.only(bottom: 10, left: 18.0),
                               width: MediaQuery.of(context).size.width * .18,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(6),
@@ -1649,7 +1888,8 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   const CustomIconWidget(
-                                    iconData: "${AssetPath.vectorPath}reach.svg",
+                                    iconData:
+                                        "${AssetPath.vectorPath}reach.svg",
                                     defaultColor: false,
                                     height: 24,
                                     color: kHyppeTextLightPrimary,
@@ -1657,8 +1897,12 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                                   Padding(
                                     padding: const EdgeInsets.only(left: 13),
                                     child: CustomTextWidget(
-                                      textToDisplay: "${data.boostJangkauan ?? '0'} ${lang?.reach}",
-                                      textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                                      textToDisplay:
+                                          "${data.boostJangkauan ?? '0'} ${lang?.reach}",
+                                      textStyle: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w700,
+                                          color: kHyppeTextLightPrimary),
                                     ),
                                   )
                                 ],
@@ -1673,7 +1917,8 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                                   child: Text(
                                     "${System.getTimeformatByMs(_currentPositionText)}/${System.getTimeformatByMs(_videoDuration)}",
                                     textAlign: TextAlign.end,
-                                    style: const TextStyle(color: Colors.white, fontSize: 11),
+                                    style: const TextStyle(
+                                        color: Colors.white, fontSize: 11),
                                   ),
                                 ),
                               ),
@@ -1682,16 +1927,23 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                                   Expanded(
                                     child: SliderTheme(
                                       data: SliderTheme.of(context).copyWith(
-                                        overlayShape: SliderComponentShape.noThumb,
-                                        activeTrackColor: const Color(0xAA7d7d7d),
-                                        inactiveTrackColor: const Color.fromARGB(170, 156, 155, 155),
+                                        overlayShape:
+                                            SliderComponentShape.noThumb,
+                                        activeTrackColor:
+                                            const Color(0xAA7d7d7d),
+                                        inactiveTrackColor:
+                                            const Color.fromARGB(
+                                                170, 156, 155, 155),
                                         trackHeight: 3.0,
                                         thumbColor: Colors.purple,
-                                        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8.0),
+                                        thumbShape: const RoundSliderThumbShape(
+                                            enabledThumbRadius: 8.0),
                                       ),
                                       child: Slider(
                                           min: 0,
-                                          max: _videoDuration == 0 ? 1 : _videoDuration.toDouble(),
+                                          max: _videoDuration == 0
+                                              ? 1
+                                              : _videoDuration.toDouble(),
                                           value: _currentPosition.toDouble(),
                                           activeColor: Colors.purple,
                                           thumbColor: Colors.purple,
@@ -1702,16 +1954,21 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                                           onChangeEnd: (value) {
                                             _inSeek = false;
                                             setState(() {
-                                              if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
+                                              if (_currentPlayerState ==
+                                                      FlutterAvpdef
+                                                          .completion &&
+                                                  _showTipsWidget) {
                                                 setState(() {
                                                   _showTipsWidget = false;
                                                 });
                                               }
                                             });
-                                            fAliplayer?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE);
+                                            fAliplayer?.seekTo(value.ceil(),
+                                                FlutterAvpdef.ACCURATE);
                                           },
                                           onChanged: (value) {
-                                            fAliplayer?.requestBitmapAtPosition(value.ceil());
+                                            fAliplayer?.requestBitmapAtPosition(
+                                                value.ceil());
 
                                             setState(() {
                                               _currentPosition = value.ceil();
@@ -1723,9 +1980,11 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                               ),
                             ],
                           ),
-                          if (data.music?.musicTitle != '' && data.music?.musicTitle != null)
+                          if (data.music?.musicTitle != '' &&
+                              data.music?.musicTitle != null)
                             Container(
-                              margin: const EdgeInsets.only(top: 0.0, left: 8.0, right: 8.0),
+                              margin: const EdgeInsets.only(
+                                  top: 0.0, left: 8.0, right: 8.0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -1735,41 +1994,68 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                                         const Padding(
                                           padding: EdgeInsets.only(right: 8.0),
                                           child: CustomIconWidget(
-                                            iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                            iconData:
+                                                "${AssetPath.vectorPath}music_stroke_black.svg",
                                             defaultColor: false,
                                             color: kHyppeLightBackground,
                                             height: 18,
                                           ),
                                         ),
                                         Expanded(
-                                          child: _textSize(data.music?.musicTitle ?? '', const TextStyle(fontWeight: FontWeight.bold)).width > SizeConfig.screenWidth! * .56
+                                          child: _textSize(
+                                                          data.music
+                                                                  ?.musicTitle ??
+                                                              '',
+                                                          const TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold))
+                                                      .width >
+                                                  SizeConfig.screenWidth! * .56
                                               ? SizedBox(
-                                                  width: SizeConfig.screenWidth! * .56,
+                                                  width:
+                                                      SizeConfig.screenWidth! *
+                                                          .56,
                                                   height: kTextTabBarHeight,
                                                   child: Marquee(
-                                                    text: '  ${data.music?.musicTitle ?? ''}',
-                                                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),
+                                                    text:
+                                                        '  ${data.music?.musicTitle ?? ''}',
+                                                    style: const TextStyle(
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color: Colors.white),
                                                   ),
                                                 )
                                               : CustomTextWidget(
-                                                  textToDisplay: " ${data.music?.musicTitle ?? ''}",
+                                                  textToDisplay:
+                                                      " ${data.music?.musicTitle ?? ''}",
                                                   maxLines: 1,
-                                                  textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700),
+                                                  textStyle: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w700),
                                                   textAlign: TextAlign.left,
                                                 ),
                                         ),
                                         CircleAvatar(
                                           radius: 18,
-                                          backgroundColor: kHyppeSurface.withOpacity(.9),
+                                          backgroundColor:
+                                              kHyppeSurface.withOpacity(.9),
                                           child: CustomBaseCacheImage(
-                                            imageUrl: data.music?.apsaraThumnailUrl ?? '',
+                                            imageUrl:
+                                                data.music?.apsaraThumnailUrl ??
+                                                    '',
                                             imageBuilder: (_, imageProvider) {
                                               return Container(
                                                 width: 48,
                                                 height: 48,
                                                 decoration: BoxDecoration(
                                                   color: kDefaultIconDarkColor,
-                                                  borderRadius: const BorderRadius.all(Radius.circular(24)),
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(24)),
                                                   image: DecorationImage(
                                                     fit: BoxFit.cover,
                                                     image: imageProvider,
@@ -1779,7 +2065,8 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                                             },
                                             errorWidget: (_, __, ___) {
                                               return const CustomIconWidget(
-                                                iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                                iconData:
+                                                    "${AssetPath.vectorPath}music_stroke_black.svg",
                                                 defaultColor: false,
                                                 color: kHyppeLightBackground,
                                                 height: 18,
@@ -1789,12 +2076,16 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                                               animation: animatedController,
                                               builder: (_, child) {
                                                 return Transform.rotate(
-                                                  angle: animatedController.value * 2 * -math.pi,
+                                                  angle:
+                                                      animatedController.value *
+                                                          2 *
+                                                          -math.pi,
                                                   child: child,
                                                 );
                                               },
                                               child: const CustomIconWidget(
-                                                iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                                iconData:
+                                                    "${AssetPath.vectorPath}music_stroke_black.svg",
                                                 defaultColor: false,
                                                 color: kHyppeLightBackground,
                                                 height: 18,
@@ -1861,7 +2152,9 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
               width: 4.0,
             ),
             SizedBox(
-              width: data.tagPeople?.isNotEmpty ?? false ? SizeConfig.screenWidth! * .4 : SizeConfig.screenWidth! * .65,
+              width: data.tagPeople?.isNotEmpty ?? false
+                  ? SizeConfig.screenWidth! * .4
+                  : SizeConfig.screenWidth! * .65,
               child: Text(
                 '${data.location}',
                 maxLines: 1,
@@ -1886,7 +2179,9 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
               width: 4.0,
             ),
             SizedBox(
-              width: data.tagPeople?.isNotEmpty ?? false ? SizeConfig.screenWidth! * .13 : SizeConfig.screenWidth! * .22,
+              width: data.tagPeople?.isNotEmpty ?? false
+                  ? SizeConfig.screenWidth! * .13
+                  : SizeConfig.screenWidth! * .22,
               child: Text(
                 '${data.location}',
                 maxLines: 1,
@@ -1927,7 +2222,11 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                         defaultColor: false,
                         height: 30,
                       ),
-                      Text(lang!.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                      Text(lang!.sensitiveContent ?? 'Sensitive Content',
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600)),
                       Text("HyppeVid ${lang!.contentContainsSensitiveMaterial}",
                           textAlign: TextAlign.center,
                           style: const TextStyle(
@@ -1939,15 +2238,24 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                               onTap: () async {
                                 System().checkConnections().then((value) {
                                   if (value) {
-                                    Routing().move(Routes.appeal, argument: data);
+                                    Routing()
+                                        .move(Routes.appeal, argument: data);
                                   }
                                 });
                               },
                               child: Container(
                                   padding: const EdgeInsets.all(8),
                                   margin: const EdgeInsets.all(18),
-                                  decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
-                                  child: Text(lang?.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.white),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Text(
+                                      lang?.appealThisWarning ??
+                                          'Appeal This Warning',
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600))),
                             )
                           : const SizedBox(),
                       const Spacer(),
@@ -1964,7 +2272,8 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                         },
                         child: Container(
                           padding: const EdgeInsets.only(top: 8),
-                          margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
+                          margin: const EdgeInsets.only(
+                              bottom: 20, right: 8, left: 8),
                           width: SizeConfig.screenWidth,
                           decoration: const BoxDecoration(
                             border: Border(
@@ -1976,7 +2285,10 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                           ),
                           child: Text(
                             "${lang!.see} HyppeVid",
-                            style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -1991,7 +2303,11 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
   }
 
   Size _textSize(String text, TextStyle style) {
-    final TextPainter textPainter = TextPainter(text: TextSpan(text: text, style: style), maxLines: 1, textDirection: TextDirection.ltr)..layout(minWidth: 0, maxWidth: double.infinity);
+    final TextPainter textPainter = TextPainter(
+        text: TextSpan(text: text, style: style),
+        maxLines: 1,
+        textDirection: TextDirection.ltr)
+      ..layout(minWidth: 0, maxWidth: double.infinity);
     return textPainter.size;
   }
 }
@@ -2002,5 +2318,10 @@ class VideoIndicator {
   final int? positionText;
   final bool? showTipsWidget;
   final bool? isMute;
-  VideoIndicator({required this.videoDuration, required this.seekValue, required this.positionText, this.showTipsWidget = false, required this.isMute});
+  VideoIndicator(
+      {required this.videoDuration,
+      required this.seekValue,
+      required this.positionText,
+      this.showTipsWidget = false,
+      required this.isMute});
 }

@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 // import 'package:flutter/services.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
@@ -21,6 +23,7 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_vio
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/widget/user_template.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../../app.dart';
 import '../../../../../../core/arguments/contents/vid_detail_screen_argument.dart';
@@ -545,6 +548,35 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                           ),
                       isPlay: isPlay,
                     ),
+                    data.urlLink != '' || data.judulLink != ''
+                    ? RichText(
+                      text: TextSpan(
+                        children: [
+                        TextSpan(
+                          text: (data.judulLink != null)
+                              ? data.judulLink
+                              : data.urlLink,
+                          style: TextStyle(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primary,
+                              fontWeight: FontWeight.bold),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () async {
+                              var uri = data.urlLink??'';
+                                if (!uri.withHttp()){
+                                  uri='https://$uri';
+                                }
+                                if (await canLaunchUrl(Uri.parse(uri))) {
+                                    await launchUrl(Uri.parse(uri));
+                                  } else {
+                                    throw  Fluttertoast.showToast(msg: 'Could not launch $uri');
+                                  }
+                            },
+                        )
+                      ]),
+                    )
+                    : const SizedBox.shrink(),
                   ],
                 ),
               ),

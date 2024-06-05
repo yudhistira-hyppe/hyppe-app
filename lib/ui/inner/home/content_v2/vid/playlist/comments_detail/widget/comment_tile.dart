@@ -94,7 +94,7 @@ class CommentTile extends StatelessWidget {
                                     children: [
                                       fivePx,
                                       Text(
-                                        notifier.language.localeDatetime == 'id' ? 'Terikirm ' : 'Send to ',
+                                        notifier.language.localeDatetime == 'id' ? 'Terkirim ' : 'Send to ',
                                         style: const TextStyle(fontWeight: FontWeight.bold),
                                       ),
                                       Container(

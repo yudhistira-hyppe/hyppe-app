@@ -236,7 +236,7 @@ class ShowBottomSheet {
               ),
             ),
           );
-        });
+        }).whenComplete(() => contextAsal.read<ViewStreamingNotifier>().buttonSheetProfil = false);
   }
 
   Future<ReactStream> onReactStreaming(context, ReactStream react, int nilai) async {
@@ -1965,6 +1965,7 @@ class ShowBottomSheet {
                   child: OnShowGiftLiveBottomSheet(scrollController: scrollController, idViewStream: idViewStream),
                 );
               });
+        }).then((value) {
         });
   }
 

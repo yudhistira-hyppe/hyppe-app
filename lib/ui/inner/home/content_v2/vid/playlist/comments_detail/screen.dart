@@ -301,7 +301,10 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                                           //   ShowBottomSheet()
                                           //     .onShowGiftComment(context, argument: widget.argument, comments: comments);
                                           // });
-                                          notifier.validateUserGif(context, widget, comments, notifier.language);
+                                          context.handleActionIsGuest(() async {
+                                            notifier.validateUserGif(context, widget, comments, notifier.language);
+                                          });
+                                          
                                         },
                                         onTapUp: (val) {},
                                         customBorder: const CircleBorder(),

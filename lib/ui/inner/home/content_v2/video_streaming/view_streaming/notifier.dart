@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/live_stream/gift_live_model.dart';
@@ -119,6 +118,13 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
+  bool _buttonSheetProfil = false;
+  bool get buttonSheetProfil => _buttonSheetProfil;
+  set buttonSheetProfil(bool state) {
+    _buttonSheetProfil = state;
+    notifyListeners();
+  }
+
   List<LinkStreamModel> _listStreamers = [];
   List<LinkStreamModel> get listStreamers => _listStreamers;
   set listStreamers(List<LinkStreamModel> data) {
@@ -164,7 +170,7 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  Future<void> initAgora(LinkStreamModel data) async {
+  Future<void> initAgora(BuildContext context, LinkStreamModel data) async {
     // retrieve permissions
     // await [Permission.microphone, Permission.camera].request();
 
@@ -207,6 +213,10 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
             statusLive = StatusStream.offline;
             isOver = true;
             notifyListeners();
+          }
+
+          if (buttonSheetProfil){
+            Navigator.pop(context);
           }
         },
         onTokenPrivilegeWillExpire: (RtcConnection connection, String token) {
@@ -599,7 +609,8 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
       // _socketService.closeSocket();
 
       await Future.delayed(const Duration(seconds: 1));
-      await initAgora(data);
+      if (!mounted) return;
+      await initAgora(context, data);
       print("======== ini socket status ${_socketService.isRunning} =========");
 
       // if (!_socketService.isRunning) {

@@ -18,8 +18,8 @@ class CardCoinWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: SizeConfig.screenHeight! * .27,
-      padding: const EdgeInsets.all(18.0),
+      height: SizeConfig.screenHeight! * .23,
+      padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 8.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
         border: Border.all(width: .5, color: kHyppeBurem.withOpacity(.2)),

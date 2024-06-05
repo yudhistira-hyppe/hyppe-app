@@ -106,14 +106,8 @@ class _OnShowGiftCommantBottomSheetState
                   children: [
                     Expanded(
                       child: TextField(
-                        onTap: () {
-                          context.handleActionIsGuest(() async {},
-                              addAction: () {
-                            notifier.inputNode.unfocus();
-                          });
-                        },
                         controller: notifier.commentController,
-                        focusNode: notifier.inputNode,
+                        // focusNode: notifier.inputNode,
                         style: Theme.of(context).textTheme.bodyText2,
                         decoration: InputDecoration(
                           filled: true,
@@ -203,8 +197,8 @@ class _OnShowGiftCommantBottomSheetState
                                     )
                               : const SizedBox.shrink(),
                         ),
-                        onChanged: (value) =>
-                            notifier.onChangeHandler(value, context),
+                        // onChanged: (value) =>
+                        //     notifier.onChangeHandler(value, context),
                       ),
                     ),
                   ],
@@ -220,7 +214,7 @@ class _OnShowGiftCommantBottomSheetState
               transactionCoin: notifier.giftSelect?.price ?? 0,
               isChecking: (bool val, int saldoCoin) {
                 buttonactive = val;
-                // setState(() {});
+                setState(() {});
               },
             ),
           ),

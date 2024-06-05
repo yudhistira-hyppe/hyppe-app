@@ -121,7 +121,7 @@ class _CommentListTileState extends State<CommentListTile> {
                               fivePx,
                               Text(
                                 notifier.language.localeDatetime == 'id'
-                                    ? 'Terikirm '
+                                    ? 'Terkirim '
                                     : 'Send to ',
                                 style: const TextStyle(fontWeight: FontWeight.bold),
                               ),
