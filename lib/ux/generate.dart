@@ -40,6 +40,8 @@ import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/detail/scree
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/shimmer_slider.dart';
 import 'package:hyppe/ui/inner/home/content_v2/coins/coin_page.dart';
+import 'package:hyppe/ui/inner/home/content_v2/community_guidelines/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/community_guidelines/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/content_preferences/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/player/diary_player.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/player/landing_diary_full.dart';
@@ -163,6 +165,7 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_detail.da
 import 'package:hyppe/ui/inner/home/content_v2/profile/setting/setting_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/sign_in_security/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/change_password/screen.dart';
+import 'package:provider/provider.dart';
 import '../core/arguments/detail_ticket_argument.dart';
 import '../core/arguments/main_argument.dart';
 import '../ui/inner/home/content_v2/help/detail_ticket/screen.dart';
@@ -530,7 +533,7 @@ class Generate {
 
       case Routes.historyordercoin:
         return MaterialPageRoute(builder: (_) => const HistoryOrderCoinScreen(), settings: settings);
-      
+
       case Routes.pinboostpost:
         return MaterialPageRoute(builder: (_) => const PinBoostpostScreen(), settings: settings);
       case Routes.pinbuycontent:
@@ -541,6 +544,13 @@ class Generate {
         return MaterialPageRoute(builder: (_) => PaymentSuccessScreen(map: settings.arguments as Map), settings: settings);
       case Routes.pinwithdrawalcoin:
         return MaterialPageRoute(builder: (_) => PinWithdrawalNewScreen(mounted: settings.arguments as bool), settings: settings);
+      case Routes.communityGuidelines:
+        return MaterialPageRoute(
+            builder: (_) => ChangeNotifierProvider<CommunityGuidelinesNotifier>(
+                  create: (_) => CommunityGuidelinesNotifier(),
+                  child: CommunityGuidelinesScreen(arguments: settings.arguments as GeneralArgument),
+                ),
+            settings: settings);
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

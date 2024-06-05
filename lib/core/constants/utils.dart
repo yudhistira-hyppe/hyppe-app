@@ -18,3 +18,5 @@ const limitSearch = 12;
 const withdrawalfree = 6000;
 const withdrawalfeecoin = 0.1;
 const minimalwithdrawal = 50000;
+
+const guidlineLive = 'LIVE GUIDELINE';

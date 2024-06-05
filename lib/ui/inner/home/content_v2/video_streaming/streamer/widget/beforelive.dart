@@ -107,10 +107,12 @@ class BeforeLive extends StatelessWidget {
                                 maxLength: 30,
                                 maxLines: 2,
                                 onChanged: (value) {
+                                  notifier.titleLiveCtrl.text.trimLeft();
+
                                   if (notifier.titleLiveCtrl.text.length > 30) {
                                     notifier.titleLiveCtrl.text = notifier.titleLiveCtrl.text.substring(0, 30);
                                   } else {
-                                    notifier.titleLive = value;
+                                    notifier.titleLive = value.trimLeft();
                                   }
                                 },
                               ),
@@ -251,6 +253,7 @@ class BeforeLive extends StatelessWidget {
                               const Icon(
                                 Icons.arrow_forward_ios,
                                 size: 18,
+                                color: Colors.white,
                               )
                             ],
                           ),
@@ -298,6 +301,7 @@ class BeforeLive extends StatelessWidget {
                                 const Icon(
                                   Icons.arrow_forward_ios,
                                   size: 18,
+                                  color: Colors.white,
                                 )
                               ],
                             )),

@@ -131,6 +131,7 @@ class ListCommentViewer extends StatelessWidget {
                                                       children: [
                                                         TextSpan(
                                                           text: " ${translate.sent} ${notifier.comment[index].messages}",
+                                                          style: const TextStyle(color: Colors.white),
                                                         ),
                                                         WidgetSpan(
                                                           child: type == '.svg'

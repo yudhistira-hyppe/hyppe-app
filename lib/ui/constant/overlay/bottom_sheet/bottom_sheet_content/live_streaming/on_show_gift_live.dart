@@ -1,9 +1,11 @@
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +13,6 @@ import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/button_challange.dart';
 import 'package:hyppe/ui/inner/home/content_v2/saldo_coin/saldo_coin.dart';
-import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
@@ -86,8 +87,39 @@ class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
             child: ButtonChallangeWidget(
               function: () {
                 if (notifier.buttonGift() && !notifier.isOver) {
-                  notifier.sendGift(context, mounted, notifier.giftSelect?.sId ?? '', notifier.giftSelect?.thumbnail ?? '', notifier.giftSelect?.name ?? '',
-                      urlGift: notifier.giftSelect?.animation, idViewStream: widget.idViewStream);
+                  if ((notifier.giftSelect?.lastStock ?? 0) > 0) {
+                    notifier.sendGift(context, mounted, notifier.giftSelect?.sId ?? '', notifier.giftSelect?.thumbnail ?? '', notifier.giftSelect?.name ?? '',
+                        urlGift: notifier.giftSelect?.animation, idViewStream: widget.idViewStream);
+                  } else {
+                    FToast().init(context);
+                    if (true) FToast().removeCustomToast();
+                    FToast().showToast(
+                      child: Container(
+                        width: SizeConfig.screenWidth,
+                        decoration: BoxDecoration(color: kHyppeBorderDanger, borderRadius: BorderRadius.circular(8)),
+                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.info_outline,
+                              color: Colors.white,
+                            ),
+                            twelvePx,
+                            Expanded(
+                                child: Text(
+                              (trans.localeDatetime ?? '') == 'id' ? 'Maaf stok paket gift telah habis, silakan lihat gift lainnya.' : '',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                              ),
+                            )),
+                          ],
+                        ),
+                      ),
+                      gravity: ToastGravity.BOTTOM,
+                      toastDuration: const Duration(seconds: 3),
+                    );
+                  }
                 }
               },
               bgColor: notifier.buttonGift() && !notifier.isOver ? kHyppePrimary : kHyppeDisabled,

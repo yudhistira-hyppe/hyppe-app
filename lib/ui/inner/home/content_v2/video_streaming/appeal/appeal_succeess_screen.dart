@@ -26,35 +26,6 @@ class AppealSuccessStreamingScreen extends StatefulWidget {
 }
 
 class _AppealSuccessStreamingScreenState extends State<AppealSuccessStreamingScreen> {
-  TextEditingController noteCtrl = TextEditingController();
-
-  List appealReaseonData = [
-    {
-      'id': 1,
-      'title': 'Siaran LIVE ini tidak mengandung konten sensitif',
-      'titleEn': '',
-      'desc': 'Konten ini tidak mengandung unsur telanjang, seksual, kekerasan, sadis, atau simbol kebencian lainnya.',
-      'descEn': '',
-    },
-    {
-      'id': 2,
-      'title': 'Siaran LIVE ini memiliki konteks tambahan',
-      'titleEn': '',
-      'desc': 'Konten memiliki konteks khusus tanpa tujuan melanggar merasa pedoman.',
-      'descEn': '',
-    },
-    {
-      'id': 3,
-      'title': 'Lainnya',
-      'titleEn': '',
-      'desc':
-          'Alasan lainnya yang tidak termasuk dalam kategori di atas. Mohon tambahkan deskripsi lebih rinci di bawah ini untuk membantu kami memahami lebih baik mengapa kamu merasa kontennya tidak melanggar pedoman.',
-      'descEn': '',
-    },
-  ];
-
-  int appealSelect = 0;
-
   @override
   void initState() {
     SystemChrome.setPreferredOrientations([
@@ -154,13 +125,13 @@ class _AppealSuccessStreamingScreenState extends State<AppealSuccessStreamingScr
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  translate.localeDatetime == 'id' ? 'Detail Konten' : '',
-                  style: Theme.of(context).primaryTextTheme.bodyMedium,
+                  translate.localeDatetime == 'id' ? 'Detail Konten' : 'Content Details',
+                  style: Theme.of(context).primaryTextTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700),
                   textAlign: TextAlign.start,
                 ),
                 sixPx,
                 Text(
-                  "${translate.localeDatetime == 'id' ? 'LIVE pada' : 'LIVE on'}  ${data.streamBannedDate ?? '-'} WIB",
+                  "${translate.localeDatetime == 'id' ? 'LIVE pada' : 'LIVE on'}   ${System().dateFormatter(data.streamBannedDate ?? '2024-01-01', 11) ?? '-'} WIB",
                   style: Theme.of(context).textTheme.bodyMedium,
                   textAlign: TextAlign.start,
                 ),
@@ -168,7 +139,7 @@ class _AppealSuccessStreamingScreenState extends State<AppealSuccessStreamingScr
             )),
             const SizedBox(width: 10),
             CustomCacheImage(
-              imageUrl: System().showUserPicture(profile?.avatar?.mediaEndpoint),
+              imageUrl: profile?.avatar == null ? '' : System().showUserPicture(profile?.avatar?.mediaEndpoint),
               imageBuilder: (_, imageProvider) {
                 return Container(
                   width: 48 * SizeConfig.scaleDiagonal,
@@ -189,7 +160,7 @@ class _AppealSuccessStreamingScreenState extends State<AppealSuccessStreamingScr
                     borderRadius: BorderRadius.circular(2),
                     image: const DecorationImage(
                       fit: BoxFit.contain,
-                      image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                      image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
                     ),
                   ),
                 );
@@ -202,7 +173,7 @@ class _AppealSuccessStreamingScreenState extends State<AppealSuccessStreamingScr
                   borderRadius: BorderRadius.circular(2),
                   image: const DecorationImage(
                     fit: BoxFit.contain,
-                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                    image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
                   ),
                 ),
               ),

@@ -21,14 +21,12 @@ class _ActivationGiftScreenState extends State<ActivationGiftScreen> {
   double size = 30;
   double innerPadding = 0;
 
-
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'activationgift');
     lang = context.read<TranslateNotifierV2>().translate;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      var notifier =
-          Provider.of<ActivationGiftNotifier>(context, listen: false);
+      var notifier = Provider.of<ActivationGiftNotifier>(context, listen: false);
       notifier.initPage();
     });
     super.initState();
@@ -40,18 +38,12 @@ class _ActivationGiftScreenState extends State<ActivationGiftScreen> {
       return Scaffold(
         appBar: AppBar(
           titleSpacing: 0,
-          leading: IconButton(
-              onPressed: () => Routing().moveBack(),
-              icon: const Icon(Icons.arrow_back_ios)),
+          leading: IconButton(onPressed: () => Routing().moveBack(), icon: const Icon(Icons.arrow_back_ios)),
           title: CustomTextWidget(
             textStyle: Theme.of(context).textTheme.titleMedium,
             textToDisplay: lang?.contentgift ?? 'Kontent Gift',
           ),
-          actions: [
-            IconButton(
-                onPressed: () => notifier.showButtomSheetInfo(context, lang!),
-                icon: const Icon(Icons.info_outline))
-          ],
+          actions: [IconButton(onPressed: () => notifier.showButtomSheetInfo(context, lang!), icon: const Icon(Icons.info_outline))],
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -62,7 +54,7 @@ class _ActivationGiftScreenState extends State<ActivationGiftScreen> {
               children: [
                 CustomTextWidget(
                   textToDisplay: lang?.localeDatetime == 'id' ? 'Aktifkan Gift' : 'Content Gift',
-                  textStyle: const TextStyle(fontWeight: FontWeight.bold),  
+                  textStyle: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -73,35 +65,44 @@ class _ActivationGiftScreenState extends State<ActivationGiftScreen> {
                       ),
                     ),
                     GestureDetector(
-                    onTap: () async {
-                      await notifier.checkPosts(context, mounted);
-                      if (!notifier.countContent){
-                         if (!mounted) return;
+                      onTap: () async {
+                        await notifier.checkPosts(context, mounted);
+                        if (!notifier.countContent) {
+                          if (!mounted) return;
                           notifier.showButtomSheetWaring(context, lang!);
-                      }
-                    },
-                    child: AnimatedContainer(
-                      height: size,
-                      width: size * 2,
-                      padding: EdgeInsets.all(innerPadding),
-                      alignment: notifier.giftActivation ? Alignment.centerRight : Alignment.centerLeft,
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeOut,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: notifier.giftActivation ?  kHyppePrimary : Colors.grey.shade300,
-                      ),
-                      child: Container(
-                        width: size - innerPadding * 1.5,
-                        height: size - innerPadding * 1.5,
-                        margin: const EdgeInsets.symmetric(vertical: 1, horizontal: 1),
+                        }
+                      },
+                      child: AnimatedContainer(
+                        height: size,
+                        width: size * 2,
+                        padding: EdgeInsets.all(innerPadding),
+                        alignment: notifier.giftActivation ? Alignment.centerRight : Alignment.centerLeft,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeOut,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: notifier.giftActivation ? Colors.white : Colors.grey.shade500,
+                          borderRadius: BorderRadius.circular(50),
+                          color: notifier.giftActivation ? kHyppePrimary : Colors.grey.shade300,
+                        ),
+                        child: Container(
+                          width: size - innerPadding * 1.5,
+                          height: size - innerPadding * 1.5,
+                          margin: const EdgeInsets.symmetric(vertical: 1, horizontal: 1),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: notifier.giftActivation ? kHyppePrimary : Colors.grey.shade300,
+                          ),
+                          child: Container(
+                            width: size - innerPadding * 1.5,
+                            height: size - innerPadding * 1.5,
+                            margin: const EdgeInsets.symmetric(vertical: 1, horizontal: 1),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              color: notifier.giftActivation ? Colors.white : Colors.grey.shade500,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
                   ],
                 )
               ],

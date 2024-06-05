@@ -130,6 +130,11 @@ class NotificationService {
           } else if (data.postType == 'FOLLOWER' || data.postType == 'FOLLOWING') {
             materialAppKey.currentContext!.read<NotificationNotifier>().checkAndNavigateToProfile(materialAppKey.currentContext!, data.postId);
           } else if (data.postType == 'streaming') {
+            String? idStream = SharedPreference().readStorage(SpKeys.idStream);
+            if (idStream != null || idStream != '') {
+              return;
+            }
+
             Future.delayed(const Duration(seconds: 1), () async {
               await Routing().move(Routes.viewStreaming, argument: ViewStreamingArgument(data: LinkStreamModel(sId: map['postID'])));
             });

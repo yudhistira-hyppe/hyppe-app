@@ -197,7 +197,6 @@ class Routes {
   static const String pelanggaranDetailtreaming = '/pelanggaran-detail';
   static const String appealLiveSuccess = '/appeal-live-success';
 
-
   // ====
   static const String addlink = '/add-link';
   static const String mydiscount = '/my-discount-page';
@@ -206,4 +205,7 @@ class Routes {
   static const String contentgift = 'content-gift';
 
   static const String historyordercoin = 'history-order-coin';
+
+  //community Guideline
+  static const String communityGuidelines = 'community-guidelines';
 }

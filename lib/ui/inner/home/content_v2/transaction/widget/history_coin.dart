@@ -66,8 +66,8 @@ class HistoryCoinWidget extends StatelessWidget {
                   children: [
                     Text(
                       lang!.localeDatetime == 'id'
-                          ? data.descTitleId??''
-                          : data.descTitleEn??'',
+                          ? data.type??''
+                          : data.type??'',
                       style: Theme.of(context)
                           .textTheme
                           .titleMedium

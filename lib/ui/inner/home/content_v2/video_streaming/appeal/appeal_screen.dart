@@ -278,7 +278,7 @@ class _AppealStreamingScreenState extends State<AppealStreamingScreen> {
                 ),
                 sixPx,
                 Text(
-                  "${translate.localeDatetime == 'id' ? 'LIVE pada' : 'LIVE on'}  ${data.streamBannedDate ?? '-'} WIB",
+                  "${translate.localeDatetime == 'id' ? 'LIVE pada' : 'LIVE on'}  ${System().dateFormatter(data.streamBannedDate ?? '2024-01-01', 11) ?? '-'} WIB",
                   style: Theme.of(context).textTheme.bodyMedium,
                   textAlign: TextAlign.start,
                 ),

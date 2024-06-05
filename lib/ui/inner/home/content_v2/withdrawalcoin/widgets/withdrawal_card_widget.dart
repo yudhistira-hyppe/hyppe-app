@@ -43,6 +43,7 @@ class WithdrawalCardWidget extends StatelessWidget {
                   Text(lang?.localeDatetime=='id' ? 'Tukar total saldo Coin ke Rupiah':'Enter coins to exchange'),
                   TextFieldCustom(
                     controller: notif.textController,
+                    maxLength: 9,
                     placeholder: lang?.localeDatetime == 'id' ? 'Jumlah Coins' : 'Coins',
                     prefixIcon: const CustomIconWidget(
                       iconData: "${AssetPath.vectorPath}ic-coin.svg",
@@ -53,6 +54,7 @@ class WithdrawalCardWidget extends StatelessWidget {
                       FilteringTextInputFormatter.deny(RegExp("[.]"))
                     ],
                     onChange: (p0) {
+                      print(p0);
                       notif.debouncer.run(() {
                         if (int.parse(notif.textController.text) > notif.totalCoin) {
                           notif.textController.text = '';

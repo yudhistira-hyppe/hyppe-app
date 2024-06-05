@@ -24,6 +24,7 @@ class StreamingModel {
   List<CommentLiveModel>? commentAll;
   List<String>? reportRemark;
   User? user;
+  List<LikeModelLive>? like;
 
   StreamingModel({
     this.sId,
@@ -47,6 +48,7 @@ class StreamingModel {
     this.pauseDate,
     this.reportRemark,
     this.user,
+    this.like,
   });
 
   StreamingModel.fromJson(Map<String, dynamic> json) {
@@ -82,6 +84,13 @@ class StreamingModel {
     if (json['reportRemark'] != null) {
       reportRemark = json['reportRemark'].cast<String>();
     }
+    if (json['like'] != null) {
+      like = <LikeModelLive>[];
+      json['like'].forEach((v) {
+        like!.add(LikeModelLive.fromJson(v));
+      });
+    }
+
     user = json['user'] != null ? User.fromJson(json['user']) : null;
   }
 }
@@ -121,6 +130,25 @@ class User {
     if (avatar != null) {
       data['avatar'] = avatar!.toJson();
     }
+    return data;
+  }
+}
+
+class LikeModelLive {
+  String? userId;
+  String? createAt;
+
+  LikeModelLive({this.userId, this.createAt});
+
+  LikeModelLive.fromJson(Map<String, dynamic> json) {
+    userId = json['userId'];
+    createAt = json['createAt'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['userId'] = this.userId;
+    data['createAt'] = this.createAt;
     return data;
   }
 }

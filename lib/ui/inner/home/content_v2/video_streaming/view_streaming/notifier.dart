@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/live_stream/gift_live_model.dart';
@@ -119,6 +118,13 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
+  bool _buttonSheetProfil = false;
+  bool get buttonSheetProfil => _buttonSheetProfil;
+  set buttonSheetProfil(bool state) {
+    _buttonSheetProfil = state;
+    notifyListeners();
+  }
+
   List<LinkStreamModel> _listStreamers = [];
   List<LinkStreamModel> get listStreamers => _listStreamers;
   set listStreamers(List<LinkStreamModel> data) {
@@ -164,7 +170,7 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  Future<void> initAgora(LinkStreamModel data) async {
+  Future<void> initAgora(BuildContext context, LinkStreamModel data) async {
     // retrieve permissions
     // await [Permission.microphone, Permission.camera].request();
 
@@ -201,13 +207,17 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
         }),
         onUserOffline: (RtcConnection connection, int uid, UserOfflineReasonType reason) {
           // destoryPusher();
-          // if (!(dataStreaming.pause ?? false)) {
-          debugPrint("viewer remote user $uid left channel");
-          remoteUid = -1;
-          statusLive = StatusStream.offline;
-          isOver = true;
-          notifyListeners();
-          // }
+          if (!(dataStreaming.pause ?? false)) {
+            debugPrint("viewer remote user $uid left channel");
+            remoteUid = -1;
+            statusLive = StatusStream.offline;
+            isOver = true;
+            notifyListeners();
+          }
+
+          if (buttonSheetProfil){
+            Navigator.pop(context);
+          }
         },
         onTokenPrivilegeWillExpire: (RtcConnection connection, String token) {
           debugPrint('[onTokenPrivilegeWillExpire] connection: ${connection.toJson()}, token: $token');
@@ -463,6 +473,7 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
           dataStreaming = StreamingModel.fromJson(fetch.data);
           isCommentDisable = dataStreaming.commentDisabled ?? false;
           totViews = dataStreaming.viewCountActive ?? 0;
+          totLikes = dataStreaming.like?.length ?? 0;
 
           print("=======duratoin ${dataStreaming.pause}");
           if (dataStreaming.pause ?? false) {
@@ -595,7 +606,8 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
       // _socketService.closeSocket();
 
       await Future.delayed(const Duration(seconds: 1));
-      await initAgora(data);
+      if (!mounted) return;
+      await initAgora(context, data);
       print("======== ini socket status ${_socketService.isRunning} =========");
 
       // if (!_socketService.isRunning) {
@@ -771,11 +783,24 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
     if (pinComment != null) {
       comment.insert(0, pinComment ?? CommentLiveModel());
     }
-    for (var e in (dataStreaming.commentAll ?? [])) {
-      if (e.idComment == idComment) {
-        pinComment = e;
+
+    var old = dataStreaming.commentAll?.any((item) => item.idComment == idComment);
+    var last = comment.any((item) => item.idComment == idComment);
+
+    if (old ?? false) {
+      for (var e in (dataStreaming.commentAll ?? [])) {
+        if (e.idComment == idComment) {
+          pinComment = e;
+        }
+      }
+    } else if (last) {
+      for (var e in (comment)) {
+        if (e.idComment == idComment) {
+          pinComment = e;
+        }
       }
     }
+
     comment.removeWhere((element) => element.idComment == idComment);
     notifyListeners();
   }
@@ -993,6 +1018,7 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
     ).then((value) {
       if (value) {
         if (copiedToClipboard && context.mounted) {
+          shareCount(context, true, 1);
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             margin: EdgeInsets.only(bottom: 60, left: 16, right: 16),
             backgroundColor: kHyppeTextLightPrimary,

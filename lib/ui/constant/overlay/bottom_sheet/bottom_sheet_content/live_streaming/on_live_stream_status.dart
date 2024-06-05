@@ -128,6 +128,7 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
                     sId: notifier.dataStream.sId ?? '',
                     isViewer: widget.isViewer,
                     notifier: notifier,
+                    isHost: widget.isViewer,
                     userId: widget.isViewer ? (notifier.dataStream.userId ?? (viewStreaming.dataStreaming.user?.sId ?? '')) : (context.read<SelfProfileNotifier>().user.profile?.idUser ?? ''),
                   ),
                 );
@@ -360,59 +361,60 @@ class _ItemAccountState extends State<ItemAccount> {
                       ),
                     ),
                   ),
-                if (!widget.isHost && widget.showThreeDot && SharedPreference().readStorage(SpKeys.email) != widget.email)
+                // if (!widget.isHost && widget.showThreeDot && SharedPreference().readStorage(SpKeys.email) != widget.email)
 
-                  // CustomGesture(
-                  //   margin: EdgeInsets.zero,
-                  //   onTap: () async {
-                  //     Routing().moveBack();
-                  //     ShowBottomSheet.onWatcherStatus(context, widget.email, widget.idStream ?? '', isViewer: widget.isViewer);
-                  //   },
-                  //   child: Container(
-                  //     alignment: Alignment.center,
-                  //     child: const RotationTransition(
-                  //       turns: AlwaysStoppedAnimation(90 / 360),
-                  //       child: Align(alignment: Alignment.center, child: CustomIconWidget(width: 24, iconData: "${AssetPath.vectorPath}more.svg", color: Colors.black, defaultColor: false)),
-                  //     ),
-                  //   ),
-                  // ),
-                  if (widget.isHost && widget.isViewer)
-                    CustomElevatedButton(
-                      width: 100,
-                      height: 24,
-                      buttonStyle: ButtonStyle(
-                        backgroundColor: (widget.notifier.statusFollowingViewer == StatusFollowing.requested || widget.notifier.statusFollowingViewer == StatusFollowing.following)
-                            ? null
-                            : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                      ),
-                      function: widget.notifier.isCheckLoading
+                // CustomGesture(
+                //   margin: EdgeInsets.zero,
+                //   onTap: () async {
+                //     Routing().moveBack();
+                //     ShowBottomSheet.onWatcherStatus(context, widget.email, widget.idStream ?? '', isViewer: widget.isViewer);
+                //   },
+                //   child: Container(
+                //     alignment: Alignment.center,
+                //     child: const RotationTransition(
+                //       turns: AlwaysStoppedAnimation(90 / 360),
+                //       child: Align(alignment: Alignment.center, child: CustomIconWidget(width: 24, iconData: "${AssetPath.vectorPath}more.svg", color: Colors.black, defaultColor: false)),
+                //     ),
+                //   ),
+                // ),
+
+                if (widget.isHost && widget.isViewer)
+                  CustomElevatedButton(
+                    width: 100,
+                    height: 24,
+                    buttonStyle: ButtonStyle(
+                      backgroundColor: (widget.notifier.statusFollowingViewer == StatusFollowing.requested || widget.notifier.statusFollowingViewer == StatusFollowing.following)
                           ? null
-                          : () {
-                              if (widget.notifier.statusFollowingViewer == StatusFollowing.none || widget.notifier.statusFollowingViewer == StatusFollowing.rejected) {
-                                widget.notifier.followUserViewer(context, widget.email, idMediaStreaming: widget.sId).then((value) {
-                                  widget.notifier.audienceProfileViewer.insight?.followers = widget.notifier.audienceProfileViewer.insight!.followers! + 1;
-                                });
-                              } else if (widget.notifier.statusFollowingViewer == StatusFollowing.following) {
-                                widget.notifier.followUserViewer(context, widget.email, isUnFollow: true, idMediaStreaming: widget.sId).then((value) {
-                                  widget.notifier.audienceProfileViewer.insight?.followers = widget.notifier.audienceProfileViewer.insight!.followers! - 1;
-                                });
-                              }
-                            },
-                      child: widget.notifier.isCheckLoading
-                          ? const CustomLoading()
-                          : CustomTextWidget(
-                              textToDisplay: widget.notifier.statusFollowingViewer == StatusFollowing.following
-                                  ? language.following ?? 'following '
-                                  : widget.notifier.statusFollowingViewer == StatusFollowing.requested
-                                      ? language.requested ?? 'requested'
-                                      : language.follow ?? 'follow',
-                              textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
-                                    color: (widget.notifier.statusFollowingViewer == StatusFollowing.requested || widget.notifier.statusFollowingViewer == StatusFollowing.following)
-                                        ? kHyppeGrey
-                                        : kHyppeLightButtonText,
-                                  ),
-                            ),
+                          : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                     ),
+                    function: widget.notifier.isCheckLoading
+                        ? null
+                        : () {
+                            if (widget.notifier.statusFollowingViewer == StatusFollowing.none || widget.notifier.statusFollowingViewer == StatusFollowing.rejected) {
+                              widget.notifier.followUserViewer(context, widget.email, idMediaStreaming: widget.sId).then((value) {
+                                widget.notifier.audienceProfileViewer.insight?.followers = widget.notifier.audienceProfileViewer.insight!.followers! + 1;
+                              });
+                            } else if (widget.notifier.statusFollowingViewer == StatusFollowing.following) {
+                              widget.notifier.followUserViewer(context, widget.email, isUnFollow: true, idMediaStreaming: widget.sId).then((value) {
+                                widget.notifier.audienceProfileViewer.insight?.followers = widget.notifier.audienceProfileViewer.insight!.followers! - 1;
+                              });
+                            }
+                          },
+                    child: widget.notifier.isCheckLoading
+                        ? const CustomLoading()
+                        : CustomTextWidget(
+                            textToDisplay: widget.notifier.statusFollowingViewer == StatusFollowing.following
+                                ? language.following ?? 'following '
+                                : widget.notifier.statusFollowingViewer == StatusFollowing.requested
+                                    ? language.requested ?? 'requested'
+                                    : language.follow ?? 'follow',
+                            textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
+                                  color: (widget.notifier.statusFollowingViewer == StatusFollowing.requested || widget.notifier.statusFollowingViewer == StatusFollowing.following)
+                                      ? kHyppeGrey
+                                      : kHyppeLightButtonText,
+                                ),
+                          ),
+                  ),
               ],
             ),
             if (widget.length == ((widget.index ?? 0) + 1) && (widget.isloading ?? false)) const CustomLoading(size: 4),

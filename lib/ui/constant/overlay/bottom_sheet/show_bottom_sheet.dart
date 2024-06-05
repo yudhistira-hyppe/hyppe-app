@@ -1965,6 +1965,7 @@ class ShowBottomSheet {
                   child: OnShowGiftLiveBottomSheet(scrollController: scrollController, idViewStream: idViewStream),
                 );
               });
+        }).then((value) {
         });
   }
 

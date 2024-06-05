@@ -98,6 +98,8 @@ class UrlConstants {
   static const String monetization = "/api/monetization";
   // Monetization
   static const String monetizationRoute = "/api/monetization";
+  
+  static const String guidlineRoute = "/api/guidelines";
 
   ///---------------------------------------------------------------------------------------------------------///
   /* APIs Bookmark */
@@ -499,4 +501,10 @@ class UrlConstants {
   static const String withdrawtransactiondetail = "$transactionRoute/withdrawtransactiondetail";
   static const String withdrawaldetail = "$transactionRoute/consolewithdrawdetail";
   static const String withdrawcoin = "$transactionRoute/withdrawcoin";
+
+  //communityGuidlenList for detail
+  static const String guidlineList = "$guidlineRoute/list";
+
+  
 }
+

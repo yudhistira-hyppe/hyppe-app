@@ -49,7 +49,7 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  NotificationsDataQuery notificationsQuery = NotificationsDataQuery()..limit = 25;
+  NotificationsDataQuery notificationsQuery = NotificationsDataQuery()..limit = 10;
 
   List<NotificationModel>? _data;
   List<NotificationModel>? get data => _data;
@@ -241,7 +241,14 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
       case FeatureType.story:
         // await onGetContentData(context, featureType, (v) => Routing().move(Routes.storyDetail, argument: StoryDetailScreenArgument(storyData: v)), postID);
         // await onGetContentData(context, featureType, (v) => Routing().move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: v)), postID);
-        await onGetContentData(context, featureType, (v) => Routing().move(Routes.showStories, argument: StoryDetailScreenArgument(peopleIndex: 0) ..postID = postID ..backPage = true), postID);
+        await onGetContentData(
+            context,
+            featureType,
+            (v) => Routing().move(Routes.showStories,
+                argument: StoryDetailScreenArgument(peopleIndex: 0)
+                  ..postID = postID
+                  ..backPage = true),
+            postID);
         // _routing.move(
         //         path,
         //         argument: StoryDetailScreenArgument(peopleIndex: 0)
@@ -255,7 +262,7 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
         return;
     }
   }
-  
+
   Future checkAndNavigateToProfile(BuildContext context, String? username, {bool isReplace = false, bool isPlay = true}) async {
     UserProfileModel? result = null;
     try {
@@ -334,5 +341,3 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
     }
   }
 }
-
- 

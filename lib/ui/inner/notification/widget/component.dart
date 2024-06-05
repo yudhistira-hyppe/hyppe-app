@@ -110,8 +110,8 @@ class _ComponentState extends State<Component> {
                     ..title = widget.data?.title
                     ..body = System().bodyMultiLang(bodyEn: widget.data?.body ?? widget.data?.bodyId, bodyId: widget.data?.bodyId) ?? ''
                     ..session = widget.data?.contentEventID == null ? null : int.parse(widget.data?.contentEventID ?? '0'));
-            } else if (NotificationCategory.live == eventType) {
-              Routing().move(Routes.viewStreaming, argument: ViewStreamingArgument(data: LinkStreamModel(sId: widget.data?.notificationID)));
+            } else if ("LIVE" == widget.data?.event) {
+              Routing().move(Routes.viewStreaming, argument: ViewStreamingArgument(data: LinkStreamModel(sId: widget.data?.streamId)));
             } else {
               if (widget.data?.eventType == 'FOLLOWER') {
                 System().navigateToProfile(context, widget.data?.mate ?? '');
@@ -133,7 +133,7 @@ class _ComponentState extends State<Component> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // profile picture
-            widget.data?.eventType == 'CHALLENGE'
+            widget.data?.eventType == 'CHALLENGE' || widget.data?.eventType == 'NOTIFY_LIVE'
                 ? Container(
                     padding: EdgeInsets.all(16 * SizeConfig.scaleDiagonal),
                     decoration: BoxDecoration(
@@ -185,9 +185,11 @@ class _ComponentState extends State<Component> {
                         CustomTextWidget(
                           textToDisplay: widget.data?.eventType == 'CHALLENGE'
                               ? widget.data?.title ?? ''
-                              : isAnnouncement
-                                  ? (System().bodyMultiLang(bodyEn: widget.data?.titleEN ?? widget.data?.title, bodyId: widget.data?.title) ?? '')
-                                  : widget.data?.senderOrReceiverInfo?.username ?? '',
+                              : widget.data?.eventType == 'NOTIFY_LIVE'
+                                  ? (System().bodyMultiLang(bodyEn: widget.data?.title ?? widget.data?.title, bodyId: widget.data?.titleId) ?? '')
+                                  : isAnnouncement
+                                      ? (System().bodyMultiLang(bodyEn: widget.data?.titleEN ?? widget.data?.title, bodyId: widget.data?.title) ?? '')
+                                      : widget.data?.senderOrReceiverInfo?.username ?? '',
                           textAlign: TextAlign.start,
                           textStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.bold),
                           textOverflow: TextOverflow.fade,
