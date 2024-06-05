@@ -1,9 +1,10 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/widget/comment_tile.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/widget/user_template.dart';
@@ -281,45 +282,46 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                                   onChanged: (value) => notifier.onChangeHandler(value, context),
                                 ),
                               ),
-                              if (!notifier.inputNode.hasFocus)
-                                Container(
-                                  padding: const EdgeInsets.only(left: 8.0),
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Material(
-                                    shape: const CircleBorder(),
-                                    child: InkWell(
-                                      splashColor: Colors.black,
-                                      onTap: () {
-                                        // notifier.isShowGift = true;
-                                        // dsfsdfsdf
+                              if (data.email != SharedPreference().readStorage(SpKeys.email))
+                                if (!notifier.inputNode.hasFocus)
+                                  Container(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Material(
+                                      shape: const CircleBorder(),
+                                      child: InkWell(
+                                        splashColor: Colors.black,
+                                        onTap: () {
+                                          // notifier.isShowGift = true;
+                                          // dsfsdfsdf
 
-                                        // context.handleActionIsGuest(() {
-                                        //   ShowBottomSheet()
-                                        //     .onShowGiftComment(context, argument: widget.argument, comments: comments);
-                                        // });
-                                        notifier.validateUserGif(context, widget, comments, notifier.language);
-                                      },
-                                      onTapUp: (val) {},
-                                      customBorder: const CircleBorder(),
-                                      child: Ink(
-                                        decoration: const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          gradient: LinearGradient(
-                                            colors: [Color(0xff7552C0), Color(0xffAB22AF)],
-                                            stops: [0.25, 0.75],
-                                            begin: Alignment.centerLeft,
-                                            end: Alignment.centerRight,
+                                          // context.handleActionIsGuest(() {
+                                          //   ShowBottomSheet()
+                                          //     .onShowGiftComment(context, argument: widget.argument, comments: comments);
+                                          // });
+                                          notifier.validateUserGif(context, widget, comments, notifier.language);
+                                        },
+                                        onTapUp: (val) {},
+                                        customBorder: const CircleBorder(),
+                                        child: Ink(
+                                          decoration: const BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            gradient: LinearGradient(
+                                              colors: [Color(0xff7552C0), Color(0xffAB22AF)],
+                                              stops: [0.25, 0.75],
+                                              begin: Alignment.centerLeft,
+                                              end: Alignment.centerRight,
+                                            ),
                                           ),
+                                          height: 38,
+                                          width: 38,
+                                          child: Image.asset("${AssetPath.pngPath}gift.png"),
                                         ),
-                                        height: 38,
-                                        width: 38,
-                                        child: Image.asset("${AssetPath.pngPath}gift.png"),
                                       ),
                                     ),
                                   ),
-                                ),
                             ],
                           ),
                         ],

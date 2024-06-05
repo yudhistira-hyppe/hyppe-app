@@ -2,8 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/coins/notifier.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class DialogDatePicker extends StatelessWidget {
@@ -12,6 +15,7 @@ class DialogDatePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    LocalizationModelV2? lang = context.read<TranslateNotifierV2>().translate;
     return DraggableScrollableSheet(
       expand: false,
       maxChildSize: .9,
@@ -47,7 +51,7 @@ class DialogDatePicker extends StatelessWidget {
                   ),
                   Center(
                     child: Text(
-                      'Pilih Tanggal',
+                      lang.localeDatetime =='id' ? 'Pilih Tanggal' : 'Selected Date',
                       style: Theme.of(context)
                             .textTheme
                             .titleLarge
@@ -58,14 +62,18 @@ class DialogDatePicker extends StatelessWidget {
                     height: SizeConfig.screenHeight! * 0.35,
                     width: double.infinity,
                     child: CupertinoDatePicker(
-                          initialDateTime: DateTime.now(),
+                          initialDateTime: DateFormat('yyyy-MM-dd').parse(isStartDate ? notifier.tempSelectedDateStart : notifier.tempSelectedDateEnd),
                           maximumDate: DateTime.now(),
                           maximumYear: DateTime.now().year,
                           minimumDate: DateTime(2020, 01, 01),
                           dateOrder: DatePickerDateOrder.dmy,
                           mode: CupertinoDatePickerMode.date,
                           onDateTimeChanged: (DateTime v) {
-                            context.read<CoinNotifier>().tempSelectedDate = v.toString();
+                            if (isStartDate){
+                              context.read<CoinNotifier>().tempSelectedDateStart = v.toString();
+                            }else{
+                              context.read<CoinNotifier>().tempSelectedDateEnd = v.toString();
+                            }
                           },
                     ),
                   ),
@@ -75,6 +83,7 @@ class DialogDatePicker extends StatelessWidget {
                       onPressed: () {
                         Navigator.pop(context);
                         context.read<CoinNotifier>().selectedDatePicker(isStartDate: isStartDate);
+                        
                       },
                       style: ElevatedButton.styleFrom(
                         elevation: 0,

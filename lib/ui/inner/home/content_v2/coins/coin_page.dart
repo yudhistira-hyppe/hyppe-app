@@ -4,9 +4,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/bloc/transaction/historytransaction/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/section_dropdown_widget.dart';
@@ -45,6 +47,9 @@ class _CoinPageState extends State<CoinPage> {
       context.read<CoinNotifier>().getTypeFilter(context);
       context.read<CoinNotifier>().initialCoin();
       context.read<CoinNotifier>().initHistory(context, mounted);
+      context.read<CoinNotifier>().tempSelectedDateStart = DateTime.now().toString();
+      context.read<CoinNotifier>().tempSelectedDateEnd = DateTime.now().toString();
+
     });
     super.initState();
   }
@@ -72,7 +77,7 @@ class _CoinPageState extends State<CoinPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CoinsWidget(accountBalance: System().numberFormat(amount: notifier.saldoCoin)),
+                  CoinsWidget(accountBalance: System().numberFormat(amount: notifier.saldoCoin,), lang: lang),
                   thirtySixPx,
                   Container(
                     decoration: BoxDecoration(
@@ -83,7 +88,7 @@ class _CoinPageState extends State<CoinPage> {
                       children: [
                         CustomListTile(
                           iconData: "${AssetPath.vectorPath}ic-bank.svg",
-                          title: "Tambah Akun Bank",
+                          title: lang?.localeDatetime =='id'? "Tambah Akun Bank" : 'Add Bank Account',
                           onTap: () {
                             notifier.navigateToBankAccount();
                           },
@@ -102,7 +107,7 @@ class _CoinPageState extends State<CoinPage> {
                     ),
                   ),
                   SectionWidget(
-                    title: 'Aktivitas Hyppe Coins', 
+                    title: lang?.localeDatetime =='id' ? 'Aktivitas Hyppe Coins' : 'Hyppe Coins Activities', 
                     style: Theme.of(context)
                       .textTheme
                       .titleMedium
@@ -147,11 +152,61 @@ class _CoinPageState extends State<CoinPage> {
                       ],
                     ),
                   ),
-                  ((cointNotif.bloc.dataFetch.dataState ==
+                  if ((cointNotif.bloc.dataFetch.dataState ==
                                 HistoryTransactionState.init ||
                             cointNotif.bloc.dataFetch.dataState ==
                                 HistoryTransactionState.loading) &&
-                        !cointNotif.isLoadMore) ? const ContentLoader() : Wrap(
+                        !cointNotif.isLoadMore)
+                        const ContentLoader()
+                  else if (cointNotif.result.isEmpty)
+                    Container(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 18.0),
+                      margin: const EdgeInsets.only(bottom: 8.0),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const CustomIconWidget(
+                              iconData:
+                                  '${AssetPath.vectorPath}icon_no_result.svg',
+                              width: 160,
+                              height: 160,
+                              defaultColor: false,
+                            ),
+                            tenPx,
+                            CustomTextWidget(
+                              textAlign: TextAlign.center,
+                              maxLines: 1,
+                              textToDisplay: lang?.localeDatetime == 'id'
+                                  ? 'Masih sepi, nih'
+                                  : 'There\'s no one here',
+                              textStyle: context
+                                  .getTextTheme()
+                                  .bodyLarge
+                                  ?.copyWith(
+                                      fontWeight: FontWeight.w700,
+                                      color: context
+                                          .getColorScheme()
+                                          .onBackground),
+                            ),
+                            eightPx,
+                            CustomTextWidget(
+                              textAlign: TextAlign.center,
+                              maxLines: 2,
+                              textToDisplay: lang?.localeDatetime == 'id'
+                                  ? 'Yuk, mulai miliki penghasilan dari membuat konten dan dukung creator favoritmu!'
+                                  : 'Let\'s start earning from creating content and supporting your favorite creators!',
+                              textStyle: context.getTextTheme().bodyLarge,
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  else Wrap(
                       alignment: WrapAlignment.center,
                       children: widgetGenerate(cointNotif),
                     )
@@ -181,8 +236,8 @@ class _CoinPageState extends State<CoinPage> {
             title: notifier.result[i].coa??'', 
             totalCoin: notifier.result[i].totalCoin??0,
             date: DateFormat('dd MMM yyyy', lang!.localeDatetime).format(DateTime.parse(notifier.result[i].updatedAt ?? '2024-03-02')),
-            desc: notifier.result[i].package, 
-            // subdesc: 'Pendapatan hasil penjualan [Jenis Konten] dari [@username]',
+            desc: lang?.localeDatetime == 'id' ? notifier.result[i].descTitleId : notifier.result[i].descTitleEn, 
+            subdesc: lang?.localeDatetime == 'id' ? notifier.result[i].descContentId : notifier.result[i].descContentEn, 
           ),
         ),
       );

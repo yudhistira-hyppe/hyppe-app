@@ -1,6 +1,5 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/bloc/monetization/historyordercoin/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -41,6 +40,8 @@ class _HistoryOrderCoinScreenState extends State<HistoryOrderCoinScreen> {
       initializeDateFormatting('id', null);
       notifier.getTypeFilter(context);
       notifier.initHistory(context, mounted);
+      notifier.tempSelectedDateStart = DateTime.now().toString();
+      notifier.tempSelectedDateEnd = DateTime.now().toString();
       notifier.page = 0;
     });
     scrollController.addListener(() async {
@@ -88,7 +89,8 @@ class _HistoryOrderCoinScreenState extends State<HistoryOrderCoinScreen> {
         actions: [
           IconButton(
               onPressed: () {
-                Fluttertoast.showToast(msg: 'Feature not yet available');
+                context.read<HistoryOrderCoinNotifier>().showButtomSheetInfoDialog(context, lang);
+                // Fluttertoast.showToast(msg: 'Feature not yet available');
               },
               icon: const Icon(Icons.info_outline_rounded))
         ],

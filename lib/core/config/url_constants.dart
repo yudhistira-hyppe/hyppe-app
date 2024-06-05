@@ -497,5 +497,6 @@ class UrlConstants {
   static const String createboostContent = "/api/transactionsv2/createboostpost";
   static const String transactioncoindetail = "$transactionRoute/detail/coin";
   static const String withdrawtransactiondetail = "$transactionRoute/withdrawtransactiondetail";
+  static const String withdrawaldetail = "$transactionRoute/consolewithdrawdetail";
   static const String withdrawcoin = "$transactionRoute/withdrawcoin";
 }

@@ -8,6 +8,7 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction_coin_detail/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/withdrawalcoin/detail/screen.dart';
 import 'package:intl/intl.dart';
 
 class HistoryCoinWidget extends StatelessWidget {
@@ -38,7 +39,8 @@ class HistoryCoinWidget extends StatelessWidget {
         if (data.type == 'Pembelian Coin'){
           Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionCoinDetailScreen(invoiceid: data.noInvoice??'', status: 'History',)));
         }else{
-          Fluttertoast.showToast(msg: 'Feature Not Available');
+          // Fluttertoast.showToast(msg: 'Feature Not Available');
+          Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionDetailScreen(invoiceid: data.noInvoice??'')));
         }
         // 
       },
@@ -62,8 +64,8 @@ class HistoryCoinWidget extends StatelessWidget {
                   children: [
                     Text(
                       lang!.localeDatetime == 'id'
-                          ? 'Pembelian Coin'
-                          : 'Coin Purchase',
+                          ? data.descTitleId??''
+                          : data.descTitleEn??'',
                       style: Theme.of(context)
                           .textTheme
                           .titleMedium
@@ -97,17 +99,32 @@ class HistoryCoinWidget extends StatelessWidget {
             Flexible(
               child: SizedBox(
                 height: SizeConfig.screenHeight! * .2,
-                child: Text(data.package??'', 
-                  maxLines: 2,
-                  style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(
-                            fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.start,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(lang?.localeDatetime == 'id' ? data.descTitleId??'' : data.descTitleEn??'', 
+                      maxLines: 2,
+                      style: Theme.of(context)
+                            .textTheme
+                            .titleMedium
+                            ?.copyWith(
+                                fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.start,
+                    ),
+                    Text(lang?.localeDatetime == 'id' ? data.descContentId??'' : data.descContentEn??'', 
+                      maxLines: 2,
+                      style: Theme.of(context)
+                            .textTheme
+                            .titleSmall
+                            ?.copyWith(
+                                color: kHyppeBurem),
+                        textAlign: TextAlign.start,
+                    ),
+                  ],
                 ),
               ),
             ),
+
             fifteenPx,
             Align(
               alignment: Alignment.bottomLeft,
@@ -127,7 +144,7 @@ class HistoryCoinWidget extends StatelessWidget {
                     ),
                   ),
                   CustomTextWidget(
-                    textToDisplay: System().currencyFormat(amount: data.totalCoin),
+                    textToDisplay: System().currencyFormat(amount: data.detail![0].totalAmount),
                     textStyle: Theme.of(context)
                         .textTheme
                         .titleSmall

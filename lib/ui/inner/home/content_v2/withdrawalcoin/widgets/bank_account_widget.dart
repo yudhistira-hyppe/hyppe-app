@@ -111,17 +111,23 @@ class _BankAccountWidgetState extends State<BankAccountWidget> {
                 children: [
                   Text(
                     '${widget.notif.dataAcccount[i].bankName}',
-                    style: TextStyle(
-                        color: (widget.notif.dataAcccount[i].selected ?? false) ? Colors.black : Colors.grey,
-                        fontWeight:
-                            (widget.notif.dataAcccount[i].selected ?? false) ? FontWeight.bold : FontWeight.normal),
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                        // color: (widget.notif.dataAcccount[i].selected ?? false) ? Colors.black : Colors.grey,
+                        // fontWeight:
+                        //     (widget.notif.dataAcccount[i].selected ?? false) ? FontWeight.bold : FontWeight.normal),
                   ),
                   Text(
                     '${widget.notif.dataAcccount[i].noRek} - ${widget.notif.dataAcccount[i].nama}',
-                    style: TextStyle(
-                        color: (widget.notif.dataAcccount[i].selected ?? false) ? kHyppeBurem : kHyppeBurem.withOpacity(.4),
-                        fontWeight:
-                            (widget.notif.dataAcccount[i].selected ?? false) ? FontWeight.w500 : FontWeight.w400),
+                    style: const TextStyle(
+                      color: kHyppeBurem,
+                      fontWeight: FontWeight.w500,
+                    ),
+                        // color: (widget.notif.dataAcccount[i].selected ?? false) ? kHyppeBurem : kHyppeBurem.withOpacity(.4),
+                        // fontWeight:
+                        //     (widget.notif.dataAcccount[i].selected ?? false) ? FontWeight.w500 : FontWeight.w400),
                   ),
                 ],
               ),

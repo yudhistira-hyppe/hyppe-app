@@ -425,6 +425,8 @@ class System {
         return InteractiveEventType.coin;
       case "NOTIFY_LIVE":
         return InteractiveEventType.live;
+      case "WITHDRAW_COIN":
+        return InteractiveEventType.withdrawal;
       default:
         return InteractiveEventType.none;
     }

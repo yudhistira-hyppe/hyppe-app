@@ -45,7 +45,8 @@ class _TransactionState extends State<Transaction> {
       _notifier.getTypeFilter(context);
       _notifier.getDateFilter(context);
       _notifier.setSkip(0);
-      // _notifier.initTransactionHistory(context);
+      _notifier.tempSelectedDateStart = DateTime.now().toString();
+      _notifier.tempSelectedDateEnd = DateTime.now().toString();
       _notifier.initHistory(context, mounted);
       // _scrollController
       //     .addListener(() => _notifier.scrollList(context, _scrollController));

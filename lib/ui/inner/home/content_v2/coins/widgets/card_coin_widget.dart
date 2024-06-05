@@ -18,7 +18,7 @@ class CardCoinWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: SizeConfig.screenHeight! * .22,
+      height: SizeConfig.screenHeight! * .27,
       padding: const EdgeInsets.all(18.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
@@ -45,7 +45,7 @@ class CardCoinWidget extends StatelessWidget {
                       color: kHyppeBurem),
               textAlign: TextAlign.start,
           ),
-          tenPx,
+          // tenPx,
           const Divider(
             thickness: .2,
             color: kHyppeBurem,
@@ -59,17 +59,17 @@ class CardCoinWidget extends StatelessWidget {
               textAlign: TextAlign.start,
           ),
           fivePx,
-          // SizedBox(
-          //   height: SizeConfig.screenHeight! * .08,
-          //   child: Text(subdesc??'', 
-          //     style: Theme.of(context)
-          //           .textTheme
-          //           .titleSmall
-          //           ?.copyWith(
-          //               color: kHyppeBurem),
-          //       textAlign: TextAlign.start,
-          //   ),
-          // ),
+          SizedBox(
+            height: SizeConfig.screenHeight! * .05,
+            child: Text(subdesc??'', 
+              style: Theme.of(context)
+                    .textTheme
+                    .titleSmall
+                    ?.copyWith(
+                        color: kHyppeBurem),
+                textAlign: TextAlign.start,
+            ),
+          ),
           Align(
             alignment: Alignment.bottomLeft,
             child: Text('Total', 
