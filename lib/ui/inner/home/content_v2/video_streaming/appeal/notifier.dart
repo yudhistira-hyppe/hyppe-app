@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/bloc/live_stream/bloc.dart';
 import 'package:hyppe/core/bloc/live_stream/state.dart';
 import 'package:hyppe/core/config/url_constants.dart';
@@ -38,7 +39,7 @@ class AppealStreamNotifier with ChangeNotifier {
 
         final fetch = notifier.liveStreamFetch;
         if (fetch.postsState == LiveStreamState.getApiSuccess) {
-          Routing().move(Routes.appealLiveSuccess);
+          Routing().moveReplacement(Routes.appealLiveSuccess, argument: GeneralArgument(isTrue: true));
         }
       } catch (e) {
         debugPrint(e.toString());

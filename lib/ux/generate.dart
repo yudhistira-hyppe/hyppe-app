@@ -497,7 +497,7 @@ class Generate {
                 ));
 
       case Routes.appealLiveSuccess:
-        return MaterialPageRoute(builder: (_) => const AppealSuccessStreamingScreen());
+        return MaterialPageRoute(builder: (_) => AppealSuccessStreamingScreen(argument: settings.arguments as GeneralArgument));
 
       case Routes.picFullScreenDetail:
         return CupertinoPageRoute(builder: (_) => PicFullscreenPage(argument: settings.arguments as PicFullscreenArgument));
