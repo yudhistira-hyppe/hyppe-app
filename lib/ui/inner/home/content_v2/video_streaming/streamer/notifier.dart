@@ -620,6 +620,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     _socketService.closeSocket(eventLikeStream);
     _socketService.closeSocket(eventViewStream);
     _socketService.closeSocket(eventStatusStream);
+    SharedPreference().removeValue(SpKeys.idStream);
     // _alivcLivePusher.stopPush();
     // _alivcLivePusher.stopPreview();
     // _alivcLivePusher.destroy();
@@ -820,14 +821,22 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
-  Future endLive(BuildContext context, mounted, {bool isBack = true, bool blockLive = false}) async {
+  Future endLive(BuildContext context, mounted, {bool isBack = true, bool blockLive = false, bool blockUser = false}) async {
     if (isBack) Routing().moveBack();
     var dateTimeFinish = DateTime.now();
     Duration duration = dateTimeFinish.difference(dateTimeStart);
     await destoryPusher();
     if (!mounted) return;
     await stopStream(context, mounted);
-    Routing().moveReplacement(Routes.streamingFeedback, argument: SummaryLiveArgument(duration: duration, data: dataSummary, blockLive: blockLive));
+    Routing().moveReplacement(
+      Routes.streamingFeedback,
+      argument: SummaryLiveArgument(
+        duration: duration,
+        data: dataSummary,
+        blockLive: blockLive,
+        blockUser: blockUser,
+      ),
+    );
   }
 
   int secondsEnd = 0;
@@ -1019,6 +1028,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
             tempToken = dataStream.token;
             channel = dataStream.sId ?? '';
             returnNext = true;
+            SharedPreference().writeStorage(SpKeys.idStream, dataStream.sId);
           } else {
             returnNext = false;
           }
@@ -1845,6 +1855,23 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     }
     isloadingViewers = false;
     notifyListeners();
+  }
+
+  Future closeNyangkut(BuildContext context) async {
+    try {
+      final notifier = LiveStreamBloc();
+      var id = SharedPreference().readStorage(SpKeys.idStream);
+      Map data = {"_id": id, "type": "STOP"};
+      await notifier.getLinkStream(context, data, UrlConstants.updateStream);
+      final fetch = notifier.liveStreamFetch;
+      if (fetch.postsState == LiveStreamState.getApiSuccess) {
+        dataSummary = LiveSummaryModel.fromJson(fetch.data);
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    destoryPusher();
   }
 
   Future shareCount(BuildContext context, bool mounted, String id, int total) async {

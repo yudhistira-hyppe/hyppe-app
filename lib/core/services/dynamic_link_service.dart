@@ -332,6 +332,11 @@ class DynamicLinkService {
                 return;
               }
 
+              String? idStream = SharedPreference().readStorage(SpKeys.idStream);
+              if (idStream != null || idStream != '') {
+                return;
+              }
+
               isFromSplash = false;
               _routing.moveAndRemoveUntil(Routes.lobby, Routes.lobby);
               Future.delayed(const Duration(seconds: 2), () async {

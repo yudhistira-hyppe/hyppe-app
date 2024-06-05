@@ -44,4 +44,5 @@ class SpKeys {
 
   //Upload Content
   static const String uploadContent = 'uploadContent';
+  static const String idStream = 'idStream';
 }

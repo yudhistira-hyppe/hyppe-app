@@ -1,8 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter_livepush_plugin/live_base.dart';
-import 'package:flutter_livepush_plugin/live_push_config.dart';
-import 'package:flutter_livepush_plugin/live_pusher.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
@@ -52,9 +49,9 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
   GlobalKey keybutton = GlobalKey();
   String newUser = '';
 
-  late AlivcBase _alivcBase;
-  late AlivcLivePusher _alivcLivePusher;
-  late AlivcLivePusherConfig _alivcLivePusherConfig;
+  // late AlivcBase _alivcBase;
+  // late AlivcLivePusher _alivcLivePusher;
+  // late AlivcLivePusherConfig _alivcLivePusherConfig;
   bool isCreator = false;
 
   @override

@@ -201,13 +201,13 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
         }),
         onUserOffline: (RtcConnection connection, int uid, UserOfflineReasonType reason) {
           // destoryPusher();
-          // if (!(dataStreaming.pause ?? false)) {
-          debugPrint("viewer remote user $uid left channel");
-          remoteUid = -1;
-          statusLive = StatusStream.offline;
-          isOver = true;
-          notifyListeners();
-          // }
+          if (!(dataStreaming.pause ?? false)) {
+            debugPrint("viewer remote user $uid left channel");
+            remoteUid = -1;
+            statusLive = StatusStream.offline;
+            isOver = true;
+            notifyListeners();
+          }
         },
         onTokenPrivilegeWillExpire: (RtcConnection connection, String token) {
           debugPrint('[onTokenPrivilegeWillExpire] connection: ${connection.toJson()}, token: $token');
@@ -463,6 +463,7 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
           dataStreaming = StreamingModel.fromJson(fetch.data);
           isCommentDisable = dataStreaming.commentDisabled ?? false;
           totViews = dataStreaming.viewCountActive ?? 0;
+          totLikes = dataStreaming.like?.length ?? 0;
 
           print("=======duratoin ${dataStreaming.pause}");
           if (dataStreaming.pause ?? false) {
@@ -771,11 +772,24 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
     if (pinComment != null) {
       comment.insert(0, pinComment ?? CommentLiveModel());
     }
-    for (var e in (dataStreaming.commentAll ?? [])) {
-      if (e.idComment == idComment) {
-        pinComment = e;
+
+    var old = dataStreaming.commentAll?.any((item) => item.idComment == idComment);
+    var last = comment.any((item) => item.idComment == idComment);
+
+    if (old ?? false) {
+      for (var e in (dataStreaming.commentAll ?? [])) {
+        if (e.idComment == idComment) {
+          pinComment = e;
+        }
+      }
+    } else if (last) {
+      for (var e in (comment)) {
+        if (e.idComment == idComment) {
+          pinComment = e;
+        }
       }
     }
+
     comment.removeWhere((element) => element.idComment == idComment);
     notifyListeners();
   }
@@ -993,6 +1007,7 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
     ).then((value) {
       if (value) {
         if (copiedToClipboard && context.mounted) {
+          shareCount(context, true, 1);
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             margin: EdgeInsets.only(bottom: 60, left: 16, right: 16),
             backgroundColor: kHyppeTextLightPrimary,

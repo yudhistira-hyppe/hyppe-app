@@ -1,7 +1,6 @@
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_livepush_plugin/live_pusher_preview.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -24,6 +23,8 @@ import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/g
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
+
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 class Debouncer {
   final int milliseconds;
@@ -51,7 +52,6 @@ class StreamerScreen extends StatefulWidget {
 class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStateMixin, WidgetsBindingObserver, RouteAware {
   // bool isloading = true;
   FocusNode commentFocusNode = FocusNode();
-  AlivcPusherPreview? pusherPreviewView;
   bool isLiked = false;
 
   @override
@@ -127,6 +127,7 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
     }
     if (state == AppLifecycleState.resumed) {
       print("========= Streamer AppLifecycleState.resumed ==========");
+      WakelockPlus.enable();
     }
 
     if (state == AppLifecycleState.paused) {

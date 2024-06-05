@@ -37,7 +37,20 @@ class ForceStop extends StatelessWidget {
                 duration: notifier.timeCountdownReported,
                 tween: Tween(begin: notifier.timeCountdownReported, end: Duration.zero),
                 onEnd: () {
-                  context.read<StreamerNotifier>().endLive(context, context.mounted, isBack: false, blockLive: notifier.dataBanned?.statusBanned ?? false);
+                  bool blockLive = false;
+                  bool blockUser = false;
+                  if (notifier.dataBanned?.statusBanned ?? false) {
+                    blockUser = true;
+                  } else {
+                    blockLive = true;
+                  }
+                  context.read<StreamerNotifier>().endLive(
+                        context,
+                        context.mounted,
+                        isBack: false,
+                        blockLive: blockLive,
+                        blockUser: blockUser,
+                      );
                 },
                 builder: (BuildContext context, Duration value, Widget? child) {
                   final seconds = value.inSeconds % 60;

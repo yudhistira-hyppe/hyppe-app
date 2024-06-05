@@ -300,7 +300,11 @@ class System {
     } else if (displayOption == 8) {
       value = DateFormat('MMMM yyyy', lang).format(DateTime.parse(dateParams));
     } else if (displayOption == 9) {
-      value = DateFormat('yyyy.MM.dd hh:mm', lang).format(DateTime.parse(dateParams));
+      value = DateFormat('yyyy.MM.dd - hh:mm', lang).format(DateTime.parse(dateParams));
+    } else if (displayOption == 10) {
+      value = DateFormat('dd:MM:yyyy - hh:mm', lang).format(DateTime.parse(dateParams));
+    } else if (displayOption == 11) {
+      value = DateFormat('d MMM yyyy - hh:mm', lang).format(DateTime.parse(dateParams));
     }
     return value;
   }

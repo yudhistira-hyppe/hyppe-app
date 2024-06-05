@@ -30,6 +30,7 @@ class NotificationModel {
   int? index;
   int? challengeSession;
   String? contentEventID; // untuk challeng masuk ke tab isinya 1 atau 0
+  String? streamId;
 
   NotificationModel({
     this.active,
@@ -54,6 +55,7 @@ class NotificationModel {
     this.postType,
     this.urluserBadge,
     this.contentEventID,
+    this.streamId,
   });
 
   NotificationModel.fromJson(Map<String, dynamic> json) {
@@ -81,6 +83,7 @@ class NotificationModel {
     postID = json['postID'];
     isRead = json['isRead'] ?? false;
     postType = json['postType'];
+    streamId = json['streamId'];
     if (json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty) {
       if (json['urluserBadge'] is List) {
         urluserBadge = UserBadgeModel.fromJson(json['urluserBadge'].first);

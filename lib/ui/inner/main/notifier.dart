@@ -3,9 +3,6 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_livepush_plugin/live_base.dart';
-import 'package:flutter_livepush_plugin/live_push_config.dart';
-import 'package:flutter_livepush_plugin/live_push_def.dart';
 import 'package:hyppe/core/bloc/user_v2/bloc.dart' as userV2;
 import 'package:hyppe/core/bloc/user_v2/state.dart';
 import 'package:hyppe/core/bloc/utils_v2/bloc.dart';
@@ -27,6 +24,7 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/home/screen.dart';
 import 'package:hyppe/ui/inner/notification/screen.dart';
@@ -155,7 +153,7 @@ class MainNotifier with ChangeNotifier {
       context.read<HomeNotifier>().profileImageKey = keyImageCache;
       context.read<HomeNotifier>().onUpdate();
       if (context.read<SelfProfileNotifier>().user.profile?.creator ?? false) {
-        _initPush();
+        // _initPush();
       }
       tutorialData = context.read<SelfProfileNotifier>().user.profile?.tutorial ?? [];
 
@@ -168,6 +166,10 @@ class MainNotifier with ChangeNotifier {
       SharedPreference().writeStorage(SpKeys.userID, context.read<SelfProfileNotifier>().user.profile?.idUser);
       System().analyticSetUser(name: selfProfile.user.profile?.username ?? '');
       // SharedPreference().writeStorage(SpKeys.statusVerificationId, 'sdsd')asdasd
+
+      if (SharedPreference().readStorage(SpKeys.idStream) != null || SharedPreference().readStorage(SpKeys.idStream) != '') {
+        context.read<StreamerNotifier>().closeNyangkut(context);
+      }
       notifyListeners();
     }
 
@@ -178,23 +180,23 @@ class MainNotifier with ChangeNotifier {
     });
   }
 
-  AlivcBase? _alivcBase;
-  AlivcLivePusherConfig? _alivcLivePusherConfig;
+  // AlivcBase? _alivcBase;
+  // AlivcLivePusherConfig? _alivcLivePusherConfig;
 
-  Future<void> _initPush() async {
-    _alivcBase = AlivcBase.init();
-    _alivcBase?.registerSDK().then((value) => print(value));
-    _alivcBase?.setObserver();
-    _alivcBase?.setOnLicenceCheck((result, reason) {
-      print('sad');
-      print("======== belum ada lisensi $reason ========");
-      if (result != AlivcLiveLicenseCheckResultCode.success) {
-        print("======== belum ada lisensi $reason ========");
-      }
-    });
-    _alivcLivePusherConfig = AlivcLivePusherConfig.init();
-    _alivcLivePusherConfig?.setCameraType(AlivcLivePushCameraType.front);
-  }
+  // Future<void> _initPush() async {
+  //   _alivcBase = AlivcBase.init();
+  //   _alivcBase?.registerSDK().then((value) => print(value));
+  //   _alivcBase?.setObserver();
+  //   _alivcBase?.setOnLicenceCheck((result, reason) {
+  //     print('sad');
+  //     print("======== belum ada lisensi $reason ========");
+  //     if (result != AlivcLiveLicenseCheckResultCode.success) {
+  //       print("======== belum ada lisensi $reason ========");
+  //     }
+  //   });
+  //   _alivcLivePusherConfig = AlivcLivePusherConfig.init();
+  //   _alivcLivePusherConfig?.setCameraType(AlivcLivePushCameraType.front);
+  // }
 
   void permsissionNotif() async {
     var status = await System().checkPermission(permission: Permission.notification);

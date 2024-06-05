@@ -13,7 +13,6 @@ import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/no
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/love_lottie.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/over_live_streaming.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/pauseLive.dart';
-import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/title_view_live.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/viewer_comment.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:path_provider/path_provider.dart';

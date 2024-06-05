@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/models/collection/live_stream/banned_stream_model.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -74,7 +76,13 @@ class _PelanggaranDetailState extends State<PelanggaranDetail> {
       children: [
         GestureDetector(
           onTap: () {
-            Routing().move(Routes.userAgreement);
+            Routing().move(
+              Routes.communityGuidelines,
+              argument: GeneralArgument(
+                id: guidlineLive,
+                title: translate.localeDatetime == 'id' ? 'Panduan Komunitas' : 'Community Guidelines',
+              ),
+            );
           },
           child: Container(
             color: Colors.transparent,
@@ -85,7 +93,7 @@ class _PelanggaranDetailState extends State<PelanggaranDetail> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomTextWidget(
-                        textToDisplay: translate.localeDatetime == 'id' ? 'Pelanggaran pedoman komunitas' : 'Community guidelines violation',
+                        textToDisplay: translate.localeDatetime == 'id' ? 'Pelanggaran Pedoman Komunitas' : 'Community Guidelines Violation',
                         textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
                       ),
                       eightPx,
@@ -114,7 +122,7 @@ class _PelanggaranDetailState extends State<PelanggaranDetail> {
         twentyPx,
         textTwo(
           translate.localeDatetime == 'id' ? 'Waktu Pelanggaran' : 'Time of Violation',
-          "${System().dateFormatter(widget.data.streamBannedDate ?? '2024-01-01', 9)}  WIB}",
+          "${System().dateFormatter(widget.data.streamBannedDate ?? '2024-01-01', 9)}  WIB",
         ),
         twentyPx,
         textTwo(

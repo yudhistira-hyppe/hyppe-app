@@ -39,9 +39,6 @@ PODS:
   - AgoraRtcEngine_iOS/VideoCodecEnc (4.3.1)
   - AgoraRtcEngine_iOS/VirtualBackground (4.3.1)
   - AgoraRtcEngine_iOS/VQA (4.3.1)
-  - AlivcLivePusher_Interactive (6.1.0):
-    - AlivcLivePusher_Interactive/AlivcLivePusher (= 6.1.0)
-  - AlivcLivePusher_Interactive/AlivcLivePusher (6.1.0)
   - AppAuth (1.7.5):
     - AppAuth/Core (= 1.7.5)
     - AppAuth/ExternalUserAgent (= 1.7.5)
@@ -220,9 +217,6 @@ PODS:
   - flutter_inappwebview/Core (0.0.1):
     - Flutter
     - OrderedSet (~> 5.0)
-  - flutter_livepush_plugin (6.1.0):
-    - AlivcLivePusher_Interactive (= 6.1.0)
-    - Flutter
   - flutter_local_notifications (0.0.1):
     - Flutter
   - flutter_sharing_intent (0.0.1):
@@ -461,7 +455,6 @@ DEPENDENCIES:
   - flutter_aliplayer (from `.symlinks/plugins/flutter_aliplayer/ios`)
   - flutter_image_compress_common (from `.symlinks/plugins/flutter_image_compress_common/ios`)
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
-  - flutter_livepush_plugin (from `.symlinks/plugins/flutter_livepush_plugin/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_sharing_intent (from `.symlinks/plugins/flutter_sharing_intent/ios`)
   - flutter_video_info (from `.symlinks/plugins/flutter_video_info/ios`)
@@ -500,7 +493,6 @@ SPEC REPOS:
   trunk:
     - AgoraIrisRTC_iOS
     - AgoraRtcEngine_iOS
-    - AlivcLivePusher_Interactive
     - AppAuth
     - DKImagePickerController
     - DKPhotoGallery
@@ -585,8 +577,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_image_compress_common/ios"
   flutter_inappwebview:
     :path: ".symlinks/plugins/flutter_inappwebview/ios"
-  flutter_livepush_plugin:
-    :path: ".symlinks/plugins/flutter_livepush_plugin/ios"
   flutter_local_notifications:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_sharing_intent:
@@ -656,7 +646,6 @@ SPEC CHECKSUMS:
   agora_rtc_engine: 6753fa324d39ac0e7f65f2b67ea5003a4442e370
   AgoraIrisRTC_iOS: 7710d853202eca4900c2916aefc44abd5a139d4e
   AgoraRtcEngine_iOS: f64be00fdda786bb7edd84ab461c31b7b4c93534
-  AlivcLivePusher_Interactive: b692d3aab33c036654050a8ae1dd7ffffa0e5200
   AppAuth: 501c04eda8a8d11f179dbe8637b7a91bb7e5d2fa
   audio_session: 088d2483ebd1dc43f51d253d4a1c517d9a2e7207
   audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
@@ -690,7 +679,6 @@ SPEC CHECKSUMS:
   flutter_aliplayer: 8e16ca63a36208d76c3920498f81324fd2de19c9
   flutter_image_compress_common: ec1d45c362c9d30a3f6a0426c297f47c52007e3e
   flutter_inappwebview: 3d32228f1304635e7c028b0d4252937730bbc6cf
-  flutter_livepush_plugin: e076bd6c1d6f8f771d3f39e7e0bb979d509e9fef
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   flutter_sharing_intent: e35380d0e1501d7111dbb7e46d5ac6339da6da98
   flutter_video_info: a932e1b0da369bba95c3a14b7f61d5f8b0d03280

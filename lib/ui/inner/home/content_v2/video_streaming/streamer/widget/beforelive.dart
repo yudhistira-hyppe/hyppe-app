@@ -251,6 +251,7 @@ class BeforeLive extends StatelessWidget {
                               const Icon(
                                 Icons.arrow_forward_ios,
                                 size: 18,
+                                color: Colors.white,
                               )
                             ],
                           ),
@@ -298,6 +299,7 @@ class BeforeLive extends StatelessWidget {
                                 const Icon(
                                   Icons.arrow_forward_ios,
                                   size: 18,
+                                  color: Colors.white,
                                 )
                               ],
                             )),
