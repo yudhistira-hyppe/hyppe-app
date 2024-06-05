@@ -1800,7 +1800,7 @@ class _ScrollPicState extends State<ScrollPic>
                     fontWeight: FontWeight.bold),
               ),
               fivePx,
-              if (pics?[index].urlLink != null || pics?[index].judulLink != null)
+              if (pics?[index].urlLink != '' || pics?[index].judulLink != '')
                 RichText(
                   text: TextSpan(children: [
                     TextSpan(

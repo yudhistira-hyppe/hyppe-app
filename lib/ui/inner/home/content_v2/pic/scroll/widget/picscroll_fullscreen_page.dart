@@ -830,7 +830,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                   ),
                 ),
                 fivePx,
-              if (data.urlLink != null)
+              if (data.urlLink != '')
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 16.0),
                   padding: const EdgeInsets.only(left: 8.0),

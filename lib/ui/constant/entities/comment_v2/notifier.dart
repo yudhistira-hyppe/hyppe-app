@@ -309,7 +309,7 @@ class CommentNotifierV2 with ChangeNotifier {
       ..tagComment = userTagCaption;
 
     try {
-      final _resFuture = commentQuery.addComment(context);
+      final _resFuture = commentQuery.addComment(context, gift: true);
       final res = await _resFuture;
       if (res != null) {
         newCommentLocal(res);

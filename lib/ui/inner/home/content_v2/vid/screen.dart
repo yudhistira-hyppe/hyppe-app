@@ -10,6 +10,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_aliplayer/flutter_alilistplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
@@ -55,6 +56,7 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import '../../../../../app.dart';
 import '../../../../../core/config/ali_config.dart';
@@ -1705,6 +1707,33 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                     hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
                                     expandStyle: const TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
                                   ),
+                                  vidData.urlLink != '' || vidData.judulLink != ''
+                                  ? RichText(
+                                    text: TextSpan(
+                                      children: [
+                                      TextSpan(
+                                        text: (vidData.judulLink != null) ? vidData.judulLink : vidData.urlLink,
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            fontWeight: FontWeight.bold),
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = () async {
+                                            var uri = vidData.urlLink??'';
+                                              if (!uri.withHttp()){
+                                                uri='https://$uri';
+                                              }
+                                              if (await canLaunchUrl(Uri.parse(uri))) {
+                                                  await launchUrl(Uri.parse(uri));
+                                                } else {
+                                                  throw  Fluttertoast.showToast(msg: 'Could not launch $uri');
+                                                }
+                                          },
+                                      )
+                                    ]),
+                                  ): const SizedBox.shrink(),
+
                                   GestureDetector(
                                     onTap: () {
                                       Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: vidData.postID ?? '', fromFront: true, data: vidData));

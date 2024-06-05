@@ -31,13 +31,13 @@ class HistoryCoinWidget extends StatelessWidget {
         titleColor = kHyppeGreen;
         textTitle = lang!.localeDatetime == 'id' ? 'Berhasil' : 'Success';
     }
-
+    
     return GestureDetector(
       onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionCoinDetailScreen(invoiceid: data.id??'',))),
       child: Container(
-        height: SizeConfig.screenHeight! * .25,
         width: double.infinity,
-        padding: const EdgeInsets.all(18.0),
+        height: SizeConfig.screenHeight! * .22,
+        padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 8.0),
         margin: const EdgeInsets.symmetric(vertical: 12.0),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),

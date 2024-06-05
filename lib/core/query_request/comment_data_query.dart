@@ -102,17 +102,28 @@ class CommentDataQuery extends PaginationQueryInterface {
     return res ?? [];
   }
 
-  Future<CommentsLogs?> addComment(BuildContext context) async {
+  Future<CommentsLogs?> addComment(BuildContext context,{bool gift = false}) async {
     if (postID.isEmpty) throw Exception('Post ID is not set');
 
     try {
-      final param = CommentArgument()
+      var param = CommentArgument();
+      if (gift){
+        param = CommentArgument()
+          ..isQuery = false
+          ..postID = postID
+          ..parentID = parentID
+          ..txtMessages = txtMessages
+          ..giftID = giftID
+          ..tagComment = tagComment;
+      }else{
+        param = CommentArgument()
         ..isQuery = false
         ..postID = postID
         ..parentID = parentID
         ..txtMessages = txtMessages
-        ..giftID = giftID
         ..tagComment = tagComment;
+      }
+      
 
       final notifier = CommentBloc();
       await notifier.commentsBlocV2(context, argument: param);

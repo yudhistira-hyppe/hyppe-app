@@ -223,7 +223,7 @@ class _CoinPageState extends State<CoinPage> {
     List<Widget> widget = [];
     for (var i = 0; i < notifier.result.length; i++) {
       Widget item = Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12.0),
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: GestureDetector(
           onTap: (){
             if (notifier.result[i].type == 'Pembelian Coin'){

@@ -7,6 +7,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_aliplayer/flutter_alilistplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/contents/slided_vid_detail_screen_argument.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
@@ -58,6 +59,7 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../../../constant/widget/custom_text_widget.dart';
@@ -1373,6 +1375,33 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                 hrefStyle: Theme.of(context).textTheme.titleSmall?.copyWith(color: kHyppePrimary),
                 expandStyle: const TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
               ),
+              vidData?[index].urlLink != '' || vidData?[index].judulLink != ''
+              ? RichText(
+                text: TextSpan(
+                  children: [
+                  TextSpan(
+                    text: (vidData?[index].judulLink != null) ? vidData![index].judulLink : vidData![index].urlLink,
+                    style: TextStyle(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .primary,
+                        fontWeight: FontWeight.bold),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () async {
+                        var uri = vidData?[index].urlLink??'';
+                          if (!uri.withHttp()){
+                            uri='https://$uri';
+                          }
+                          if (await canLaunchUrl(Uri.parse(uri))) {
+                              await launchUrl(Uri.parse(uri));
+                            } else {
+                              throw  Fluttertoast.showToast(msg: 'Could not launch $uri');
+                            }
+                      },
+                  )
+                ]),
+              )
+              : const SizedBox.shrink(),
               if (vidData?[index].allowComments ?? true)
                 GestureDetector(
                   onTap: () {

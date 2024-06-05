@@ -1863,7 +1863,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic>
                                   //===== Aditional Link
                                   // tenPx,
                                   // if ()
-                                    picData?.urlLink != null || picData?.judulLink != null
+                                    picData?.urlLink != '' || picData?.judulLink != ''
                                     ? RichText(
                                       text: TextSpan(
                                         children: [

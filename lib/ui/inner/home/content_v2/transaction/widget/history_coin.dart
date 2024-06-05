@@ -21,18 +21,20 @@ class HistoryCoinWidget extends StatelessWidget {
     Color? titleColor;
     String? textTitle;
     switch (data.status) {
-      case 'Cancel':
+      case 'FAILED':
+      case 'RIJECTED':
         titleColor = kHyppeRed;
         textTitle = lang!.localeDatetime == 'id' ? 'Batal' : 'Cancel';
         break;
-      case 'WAITING_PAYMENT':
+      case 'PENDING':
         titleColor = kHyppeRed;
-        textTitle = lang!.localeDatetime == 'id' ? 'Menunggu Pembayaran' : 'Awating Payment';
+        textTitle = lang!.localeDatetime == 'id' ? 'Dalam Proses' : 'Menunggu Mu';
         break;
       default:
         titleColor = kHyppeGreen;
         textTitle = lang!.localeDatetime == 'id' ? 'Berhasil' : 'Success';
     }
+
 
     return GestureDetector(
       onTap: () {
@@ -45,9 +47,9 @@ class HistoryCoinWidget extends StatelessWidget {
         // 
       },
       child: Container(
-        height: SizeConfig.screenHeight! * .25,
         width: double.infinity,
-        padding: const EdgeInsets.all(18.0),
+        height: SizeConfig.screenHeight! * .22,
+        padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 8.0),
         margin: const EdgeInsets.symmetric(vertical: 12.0),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),

@@ -882,7 +882,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                     ),
                   ),
                 ),
-                if (data.urlLink != null)
+                if (data.urlLink != '')
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 16.0),
                   padding: const EdgeInsets.only(left: 8.0),
