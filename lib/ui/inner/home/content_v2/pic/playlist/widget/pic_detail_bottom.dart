@@ -1,5 +1,7 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -33,6 +35,7 @@ import 'package:hyppe/ui/constant/widget/custom_follow_button.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../../constant/widget/custom_desc_content_widget.dart';
 
@@ -63,6 +66,7 @@ class PicDetailBottom extends StatelessWidget {
               : Container(),
           twelvePx,
           _buildDescription(context),
+          
           SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
                   (data?.reportedStatus != 'OWNED' && data?.reportedStatus != 'BLURRED' && data?.reportedStatus2 != 'BLURRED') &&
                   (data?.boosted.isEmpty ?? [].isEmpty) &&
@@ -113,6 +117,35 @@ class PicDetailBottom extends StatelessWidget {
                             hrefStyle: Theme.of(context).textTheme.titleSmall?.copyWith(color: kHyppePrimary),
                             expandStyle: Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.black, fontWeight: FontWeight.bold),
                           ),
+                          data?.urlLink != null || data?.judulLink != null
+                          ? RichText(
+                            text: TextSpan(
+                              children: [
+                              TextSpan(
+                                text: (data?.judulLink != null)
+                                    ? data?.judulLink
+                                    : data?.urlLink,
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primary,
+                                    fontWeight: FontWeight.bold),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () async {
+                                    var uri = data?.urlLink??'';
+                                      if (!uri.withHttp()){
+                                        uri='https://$uri';
+                                      }
+                                      if (await canLaunchUrl(Uri.parse(uri))) {
+                                          await launchUrl(Uri.parse(uri));
+                                        } else {
+                                          throw  Fluttertoast.showToast(msg: 'Could not launch $uri');
+                                        }
+                                  },
+                              )
+                            ]),
+                          )
+                          : const SizedBox.shrink(),
                         ],
                       ),
                     )

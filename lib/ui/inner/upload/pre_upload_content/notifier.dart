@@ -405,9 +405,9 @@ class PreUploadContentNotifier with ChangeNotifier {
   }
 
   //Discount Ownership
-  DiscountModel _discountOwnership = DiscountModel();
-  DiscountModel get discountOwnership => _discountOwnership;
-  set discountOwnership(DiscountModel val) {
+  DiscountModel? _discountOwnership;
+  DiscountModel? get discountOwnership => _discountOwnership;
+  set discountOwnership(DiscountModel? val) {
     _discountOwnership = val;
     notifyListeners();
   }
@@ -749,7 +749,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         isShared: isShared,
         urlLink: urlLink,
         judulLink: judulLink,
-        discount: discountOwnership,
+        discount: (discountOwnership!.checked ?? false) ? discountOwnership : null,
         cointPurchaseDetail: cointPurchaseDetail,
         rotate: orientation ?? NativeDeviceOrientation.portraitUp,
         location: locationName == language.addLocation ? '' : locationName,
@@ -868,7 +868,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       urlLink: urlLink,
       judulLink: judulLink,
       location: locationName == language.addLocation ? '' : locationName,
-      discount: discountOwnership,
+      discount: (discountOwnership!.checked ?? false) ? discountOwnership : null,
       cointPurchaseDetail: cointPurchaseDetail,
     );
     final fetch = notifier.postsFetch;
@@ -1217,10 +1217,10 @@ class PreUploadContentNotifier with ChangeNotifier {
     final bloc = CoinPurchaseDetailDataBloc();
     try {
       _isLoadingDetail = true;
-      if (discountOwnership.id != null) {
+      if (discountOwnership!.id != null) {
         _param.addAll({
           "typeTransaction": 'CONTENT_OWNERSHIP',
-          'discount_id': discountOwnership.id,
+          'discount_id': discountOwnership!.id,
         });
       } else {
         _param.addAll({

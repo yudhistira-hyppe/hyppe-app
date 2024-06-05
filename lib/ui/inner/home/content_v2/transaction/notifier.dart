@@ -184,7 +184,8 @@ class TransactionNotifier extends ChangeNotifier {
   //Selected Value Date
   int selectedDateValue = 1;
   String selectedDateLabel = 'Semua Tanggal';
-  String tempSelectedDate = DateTime.now().toString();
+  String tempSelectedDateStart = DateTime.now().toString();
+  String tempSelectedDateEnd = DateTime.now().toString();
   List<GroupModel> filterDate = [];
 
   void getTypeFilter(BuildContext context) {
@@ -244,24 +245,15 @@ class TransactionNotifier extends ChangeNotifier {
     );
   }
 
-  void settempSelectedDate(String val){
-    tempSelectedDate = val;
-  }
-
   void selectedDatePicker({bool isStartDate = false}) {
-    int idx = filterDate.indexWhere((element) => element.selected == true);
     if (isStartDate){
-      if (idx != -1){
-        filterDate[idx].startDate = tempSelectedDate;
-        textStartDateController.text = DateFormat('dd/MM/yyyy').format(DateTime.parse(filterDate[idx].startDate!));
-        notifyListeners();
-      }
+      filterDate[3].startDate = tempSelectedDateStart;
+      textStartDateController.text = DateFormat('dd/MM/yyyy').format(DateTime.parse(tempSelectedDateStart));
+      notifyListeners();
     }else{
-      if (idx != -1){
-        filterDate[idx].endDate = tempSelectedDate;
-        textEndDateController.text = DateFormat('dd/MM/yyyy').format(DateTime.parse(tempSelectedDate));
-        notifyListeners();
-      }
+      filterDate[3].endDate = tempSelectedDateEnd;
+      textEndDateController.text = DateFormat('dd/MM/yyyy').format(DateTime.parse(tempSelectedDateEnd));
+      notifyListeners();
     }
   }
 
@@ -442,9 +434,22 @@ class TransactionNotifier extends ChangeNotifier {
       _paramsHistory?.addAll({
         "email": email,
         "status": ["SUCCESS", "PENDING", "IN PROGRESS", "FAILED"],
-        "type": ["Pembelian Coin", "Penukaran Coin"],
+        // "type": ["Pembelian Coin", "Penukaran Coin"],
         "page": page
       });
+      if (filterList.firstWhere((element) => element.selected == true).index == 2){
+          _paramsHistory?.addAll({
+            "type": ["Pembelian Coin"],
+          });
+        }else if (filterList.firstWhere((element) => element.selected == true).index == 3){
+          _paramsHistory?.addAll({
+            "type": ["Penukaran Coin"],
+          });
+        }else{
+          _paramsHistory?.addAll({
+            "type": ["Pembelian Coin", "Penukaran Coin"],
+          });
+        }
       int groupDate = filterDate.firstWhere((element) => element.selected == true).index;
       switch (groupDate) {
         case 2:

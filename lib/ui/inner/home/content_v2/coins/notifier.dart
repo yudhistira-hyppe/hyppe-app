@@ -23,7 +23,8 @@ class CoinNotifier with ChangeNotifier {
   //Selected Value Date
   int selectedDateValue = 1;
   String selectedDateLabel = 'Semua Tanggal';
-  String tempSelectedDate = DateTime.now().toString();
+  String tempSelectedDateStart = DateTime.now().toString();
+  String tempSelectedDateEnd = DateTime.now().toString();
 
   List<TransactionHistoryCoinModel> _result = [];
   List<TransactionHistoryCoinModel> get result => _result;
@@ -110,8 +111,10 @@ class CoinNotifier with ChangeNotifier {
       if (groupsDate.firstWhere((element) => element.selected == true).index == 4){
         var res = groupsDate.firstWhere((element) => element.selected == true);
         selectedDateLabel = '${DateFormat('dd/MM/yyy').format(DateTime.parse(res.startDate??''))} - ${DateFormat('dd/MM/yyy').format(DateTime.parse(res.endDate??''))}';
+        notifyListeners();
       }else{
         selectedDateLabel = groupsDate.firstWhere((element) => element.selected == true).text;
+        notifyListeners();
       }
     }
 
@@ -120,19 +123,14 @@ class CoinNotifier with ChangeNotifier {
   }
 
   void selectedDatePicker({bool isStartDate = false}) {
-    int idx = groupsDate.indexWhere((element) => element.selected == true);
     if (isStartDate){
-      if (idx != -1){
-        groupsDate[idx].startDate = tempSelectedDate;
-        textStartDateController.text = DateFormat('dd/MM/yyyy').format(DateTime.parse(groupsDate[idx].startDate!));
-        notifyListeners();
-      }
+      groupsDate[3].startDate = tempSelectedDateStart;
+      textStartDateController.text = DateFormat('dd/MM/yyyy').format(DateTime.parse(tempSelectedDateStart));
+      notifyListeners();
     }else{
-      if (idx != -1){
-        groupsDate[idx].endDate = tempSelectedDate;
-        textEndDateController.text = DateFormat('dd/MM/yyyy').format(DateTime.parse(tempSelectedDate));
-        notifyListeners();
-      }
+      groupsDate[3].endDate = tempSelectedDateEnd;
+      textEndDateController.text = DateFormat('dd/MM/yyyy').format(DateTime.parse(tempSelectedDateEnd));
+      notifyListeners();
     }
   }
 

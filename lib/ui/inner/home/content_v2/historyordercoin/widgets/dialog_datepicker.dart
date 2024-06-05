@@ -6,6 +6,7 @@ import 'package:hyppe/core/models/collection/localization_v2/localization_model.
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/coins/notifier.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../notifier.dart';
@@ -63,14 +64,19 @@ class DialogDatePicker extends StatelessWidget {
                     height: SizeConfig.screenHeight! * 0.35,
                     width: double.infinity,
                     child: CupertinoDatePicker(
-                          initialDateTime: DateTime.now(),
+                          initialDateTime: DateFormat('yyyy-MM-dd').parse(isStartDate ? notifier.tempSelectedDateStart : notifier.tempSelectedDateEnd),
                           maximumDate: DateTime.now(),
                           maximumYear: DateTime.now().year,
                           minimumDate: DateTime(2020, 01, 01),
                           dateOrder: DatePickerDateOrder.dmy,
                           mode: CupertinoDatePickerMode.date,
                           onDateTimeChanged: (DateTime v) {
-                            context.read<HistoryOrderCoinNotifier>().settempSelectedDate(v.toString());
+                            if (isStartDate){
+                              context.read<HistoryOrderCoinNotifier>().tempSelectedDateStart = v.toString();
+                            }else{
+                              context.read<HistoryOrderCoinNotifier>().tempSelectedDateEnd = v.toString();
+                            }
+                            
                           },
                     ),
                   ),

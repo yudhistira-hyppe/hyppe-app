@@ -831,8 +831,9 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                 ),
                 fivePx,
               if (data.urlLink != null)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: const EdgeInsets.only(left: 8.0),
                   child: RichText(
                     text: TextSpan(children: [
                       TextSpan(

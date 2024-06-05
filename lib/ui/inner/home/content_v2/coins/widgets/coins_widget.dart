@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -13,7 +14,8 @@ import 'package:provider/provider.dart';
 
 class CoinsWidget extends StatelessWidget {
   final String? accountBalance;
-  const CoinsWidget({super.key, required this.accountBalance});
+  final LocalizationModelV2? lang;
+  const CoinsWidget({super.key, required this.accountBalance, required this.lang});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +48,7 @@ class CoinsWidget extends StatelessWidget {
                     context,
                     onCancel: () {},
                     onSave: null,
-                    title: 'Ketentuan Hyppe Coins',
+                    title: lang?.localeDatetime =='id' ? 'Ketentuan Hyppe Coins' : 'Hyppe Coins Terms and Conditions',
                     initialChildSize: .3,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -59,7 +61,7 @@ class CoinsWidget extends StatelessWidget {
                               fivePx,
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * .9,
-                                child: const Text('Hyppe Coins dapat dikonversi menjadi satuan rupiah. 1 hyppe Coins = Rp100'))
+                                child: Text(lang?.localeDatetime =='id' ? 'Hyppe Coins dapat dikonversi menjadi satuan rupiah. 1 hyppe Coins = Rp100':'Hyppe Coins can be converted into IDR. 1 Hyppe Coins = IDR 100'))
                             ],
                           ),
                           fivePx,
@@ -70,7 +72,7 @@ class CoinsWidget extends StatelessWidget {
                               fivePx,
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * .9,
-                                child: const Text('Tidak ada pengembalian dana untuk pembelian Hyppe Coins yang telah dilakukan.'))
+                                child: Text(lang?.localeDatetime =='id' ? 'Tidak ada pengembalian dana untuk pembelian Hyppe Coins yang telah dilakukan.': 'There are no refunds for Hyppe Coins purchases that have been made.'))
                             ],
                           ),
                         ],

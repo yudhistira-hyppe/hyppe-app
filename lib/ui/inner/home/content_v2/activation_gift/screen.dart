@@ -88,8 +88,17 @@ class _ActivationGiftScreenState extends State<ActivationGiftScreen> {
                           height: size - innerPadding * 1.5,
                           margin: const EdgeInsets.symmetric(vertical: 1, horizontal: 1),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            color: notifier.giftActivation ? Colors.white : Colors.grey.shade500,
+                            borderRadius: BorderRadius.circular(50),
+                            color: notifier.giftActivation ? kHyppePrimary : Colors.grey.shade300,
+                          ),
+                          child: Container(
+                            width: size - innerPadding * 1.5,
+                            height: size - innerPadding * 1.5,
+                            margin: const EdgeInsets.symmetric(vertical: 1, horizontal: 1),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              color: notifier.giftActivation ? Colors.white : Colors.grey.shade500,
+                            ),
                           ),
                         ),
                       ),

@@ -14,6 +14,7 @@ import 'package:hyppe/ui/inner/home/content_v2/coins/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/disccount/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/withdrawalcoin/detail/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/withdrawalcoin/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/support_ticket/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/ticket_history/notifier.dart';
@@ -291,6 +292,7 @@ class AppDependencies {
 
         ChangeNotifierProvider<TransactionCoinDetailNotifier>(create: (context) => TransactionCoinDetailNotifier()),
         ChangeNotifierProvider<PaymentSuccessCoinNotifier>(create: (context) => PaymentSuccessCoinNotifier()),
+        ChangeNotifierProvider<WithdrawalDetailNotifier>(create: (context) => WithdrawalDetailNotifier()),
 
       ];
 }

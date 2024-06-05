@@ -300,6 +300,7 @@ class PostsBloc {
     formData.fields.add(MapEntry('judulLink', judulLink.toString()));
     if (certified == true){
       formData.fields.add(MapEntry('transaction_fee', (cointPurchaseDetail?.total_payment??0).toString() ));
+      print('========== post disctont ${discount != null}');
       if (discount != null){
         formData.fields.add(MapEntry('discount_id', discount.id.toString()));
         formData.fields.add(MapEntry('discount_fee', discount.nominal_discount.toString()));

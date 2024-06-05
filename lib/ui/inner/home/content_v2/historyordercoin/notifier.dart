@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/bloc/monetization/historyordercoin/bloc.dart';
 import 'package:hyppe/core/bloc/monetization/historyordercoin/state.dart';
 import 'package:hyppe/core/models/collection/coins/history_order_coin.dart';
+import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'widgets/dialog_date.dart';
 import 'widgets/dialog_datepicker.dart';
+import 'widgets/dialog_info.dart';
 class HistoryOrderCoinNotifier with ChangeNotifier {
   final bloc = HistoryOrderCoinDataBloc();
 
@@ -22,12 +24,8 @@ class HistoryOrderCoinNotifier with ChangeNotifier {
   //Selected Value Date
   int selectedDateValue = 1;
   String selectedDateLabel = 'Semua Tanggal';
-  String tempSelectedDate = DateTime.now().toString();
-  
-
-  void settempSelectedDate(String val){
-    tempSelectedDate = val;
-  }
+  String tempSelectedDateStart = DateTime.now().toString();
+  String tempSelectedDateEnd = DateTime.now().toString();
 
   //TextEdit Date 
   final TextEditingController textStartDateController = TextEditingController();
@@ -155,6 +153,7 @@ class HistoryOrderCoinNotifier with ChangeNotifier {
       } else {
         isLastPage = true;
         page = page-1;
+        notifyListeners();
         // Fluttertoast.showToast(msg: 'Already on the last ');
       }
     }catch(_){
@@ -212,6 +211,18 @@ class HistoryOrderCoinNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+
+  void showButtomSheetInfoDialog(BuildContext context, LocalizationModelV2? lang) {
+    showModalBottomSheet<int>(
+        backgroundColor: Colors.transparent,
+        context: context,
+        isScrollControlled: true,
+        builder: (context) {
+          return InfoDialog(lang: lang,);
+        }
+    );
+  }
+
   void showButtomSheetDatePicker(BuildContext context,{bool isStartDate = false}) {
     showModalBottomSheet<int>(
         backgroundColor: Colors.transparent,
@@ -224,19 +235,14 @@ class HistoryOrderCoinNotifier with ChangeNotifier {
   }
 
   void selectedDatePicker({bool isStartDate = false}) {
-    int idx = groupsDate.indexWhere((element) => element.selected == true);
     if (isStartDate){
-      if (idx != -1){
-        groupsDate[idx].startDate = tempSelectedDate;
-        textStartDateController.text = DateFormat('dd/MM/yyyy').format(DateTime.parse(groupsDate[idx].startDate!));
-        notifyListeners();
-      }
+      groupsDate[3].startDate = tempSelectedDateStart;
+      textStartDateController.text = DateFormat('dd/MM/yyyy').format(DateTime.parse(tempSelectedDateStart));
+      notifyListeners();
     }else{
-      if (idx != -1){
-        groupsDate[idx].endDate = tempSelectedDate;
-        textEndDateController.text = DateFormat('dd/MM/yyyy').format(DateTime.parse(tempSelectedDate));
-        notifyListeners();
-      }
+      groupsDate[3].endDate = tempSelectedDateEnd;
+      textEndDateController.text = DateFormat('dd/MM/yyyy').format(DateTime.parse(tempSelectedDateEnd));
+      notifyListeners();
     }
   }
 }
