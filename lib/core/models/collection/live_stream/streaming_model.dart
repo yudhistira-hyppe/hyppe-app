@@ -25,6 +25,7 @@ class StreamingModel {
   List<String>? reportRemark;
   User? user;
   List<LikeModelLive>? like;
+  int? viewCountUnic;
 
   StreamingModel({
     this.sId,
@@ -49,6 +50,7 @@ class StreamingModel {
     this.reportRemark,
     this.user,
     this.like,
+    this.viewCountUnic,
   });
 
   StreamingModel.fromJson(Map<String, dynamic> json) {
@@ -69,6 +71,7 @@ class StreamingModel {
     textUrl = json['textUrl'];
     tokenAgora = json['tokenAgora'];
     pauseDate = json['pauseDate'];
+    viewCountUnic = json['viewCountUnic'];
     if (json['comment'] != null) {
       comment = <CommentLiveModel>[];
       json['comment'].forEach((v) {

@@ -107,7 +107,9 @@ class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
                             twelvePx,
                             Expanded(
                                 child: Text(
-                              (trans.localeDatetime ?? '') == 'id' ? 'Maaf stok paket gift telah habis, silakan lihat gift lainnya.' : '',
+                              (trans.localeDatetime ?? '') == 'id'
+                                  ? 'Maaf stok paket gift telah habis, silakan lihat gift lainnya.'
+                                  : 'Sorry, the gift package you want is out of stock. See other packages.',
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 12,

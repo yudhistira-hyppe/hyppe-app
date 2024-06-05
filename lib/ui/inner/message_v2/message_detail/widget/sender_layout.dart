@@ -88,15 +88,26 @@ class SenderLayout extends StatelessWidget {
                                       );
                                     },
                                     imageUrl: System().showUserPicture(endpoint),
-                                    emptyWidget: Container(
-                                      height: 50,
-                                      decoration: const BoxDecoration(
-                                        image: DecorationImage(
-                                          fit: BoxFit.contain,
-                                          image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                        ),
+                                    emptyWidget: ClipRRect(
+                                      borderRadius: const BorderRadius.only(topRight: Radius.circular(8)),
+                                      child: Image(
+                                        image: const AssetImage('${AssetPath.pngPath}profile-error.jpg'),
+                                        fit: BoxFit.fitHeight,
+                                        width: SizeConfig.screenWidth,
+                                        // height: picData?.imageHeightTemp == 0 || (picData?.imageHeightTemp ?? 0) <= 100 ? null : picData?.imageHeightTemp,
                                       ),
                                     ),
+                                    errorWidget: (_, __, ___) {
+                                      return ClipRRect(
+                                        borderRadius: const BorderRadius.only(topRight: Radius.circular(8)),
+                                        child: Image(
+                                          image: const AssetImage('${AssetPath.pngPath}profile-error.jpg'),
+                                          fit: BoxFit.fitHeight,
+                                          width: SizeConfig.screenWidth,
+                                          // height: picData?.imageHeightTemp == 0 || (picData?.imageHeightTemp ?? 0) <= 100 ? null : picData?.imageHeightTemp,
+                                        ),
+                                      );
+                                    },
                                   ),
                                   Positioned.fill(
                                       child: Align(

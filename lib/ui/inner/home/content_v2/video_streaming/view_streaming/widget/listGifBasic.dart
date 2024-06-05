@@ -39,7 +39,11 @@ class _ListGiftViewerState extends State<ListGiftViewer> {
   Widget build(BuildContext context) {
     return Consumer<ViewStreamingNotifier>(
       builder: (_, notifier, __) {
-        return Column(verticalDirection: VerticalDirection.down, children: <Widget>[for (var item in notifier.giftBasic) gift(item)]);
+        return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            verticalDirection: VerticalDirection.down,
+            children: <Widget>[for (var item in notifier.giftBasic) gift(item)]);
       },
     );
   }
