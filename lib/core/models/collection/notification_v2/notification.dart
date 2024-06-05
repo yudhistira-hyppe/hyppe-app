@@ -11,6 +11,7 @@ class NotificationModel {
   String? eventType;
   String? title;
   String? titleEN;
+  String? titleId;
   String? body;
   String? bodyId;
   // List<Content> content = [];
@@ -39,6 +40,7 @@ class NotificationModel {
     this.eventType,
     this.title,
     this.titleEN,
+    this.titleId,
     this.body,
     this.bodyId,
     // this.content = const [],
@@ -64,6 +66,7 @@ class NotificationModel {
     actionButtons = json['actionButtons'];
     eventType = json['eventType'];
     titleEN = json['titleEN'];
+    titleId = json['titleId'];
     title = json['title'];
     body = json['body'];
     bodyId = json['bodyId'];

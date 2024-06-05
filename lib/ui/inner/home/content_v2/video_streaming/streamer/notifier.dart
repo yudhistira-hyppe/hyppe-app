@@ -76,6 +76,8 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   int totPause = 0;
   int pageNumberUserShare = 0;
   int limitNumberUserShare = 15;
+  int settingStreamTime1 = 200; //waktu untuk streaming dalam detik
+  int settingStreamTime2 = 80;
 
   Duration timeCountdownReported = const Duration(seconds: 30);
 
@@ -847,7 +849,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
       WakelockPlus.enable();
 
       if (inactivityTimer != null) inactivityTimer?.cancel();
-      inactivityTimer = Timer(const Duration(seconds: 3300), () {
+      inactivityTimer = Timer(Duration(seconds: settingStreamTime1), () {
         ShowGeneralDialog.generalDialog(
           Routing.navigatorKey.currentContext,
           titleText: tn?.liveBroadcastRemaining5Minutes ?? '',
@@ -862,12 +864,12 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
           isHorizontal: false,
           fillColor: false,
         );
-        secondsEnd = 300;
+        secondsEnd = settingStreamTime2;
         inactivityTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
           if (secondsEnd <= 0) {
             inactivityTimer?.cancel();
             secondsEnd = 0;
-            endLive(context, mounted, isBack: false);
+            endLive(context, true, isBack: false);
           } else {
             secondsEnd--;
             notifyListeners();

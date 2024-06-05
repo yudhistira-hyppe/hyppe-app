@@ -107,10 +107,12 @@ class BeforeLive extends StatelessWidget {
                                 maxLength: 30,
                                 maxLines: 2,
                                 onChanged: (value) {
+                                  notifier.titleLiveCtrl.text.trimLeft();
+
                                   if (notifier.titleLiveCtrl.text.length > 30) {
                                     notifier.titleLiveCtrl.text = notifier.titleLiveCtrl.text.substring(0, 30);
                                   } else {
-                                    notifier.titleLive = value;
+                                    notifier.titleLive = value.trimLeft();
                                   }
                                 },
                               ),

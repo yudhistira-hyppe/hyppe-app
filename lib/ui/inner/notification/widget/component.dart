@@ -183,11 +183,13 @@ class _ComponentState extends State<Component> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CustomTextWidget(
-                          textToDisplay: widget.data?.eventType == 'CHALLENGE' || widget.data?.eventType == 'NOTIFY_LIVE'
+                          textToDisplay: widget.data?.eventType == 'CHALLENGE'
                               ? widget.data?.title ?? ''
-                              : isAnnouncement
-                                  ? (System().bodyMultiLang(bodyEn: widget.data?.titleEN ?? widget.data?.title, bodyId: widget.data?.title) ?? '')
-                                  : widget.data?.senderOrReceiverInfo?.username ?? '',
+                              : widget.data?.eventType == 'NOTIFY_LIVE'
+                                  ? (System().bodyMultiLang(bodyEn: widget.data?.title ?? widget.data?.title, bodyId: widget.data?.titleId) ?? '')
+                                  : isAnnouncement
+                                      ? (System().bodyMultiLang(bodyEn: widget.data?.titleEN ?? widget.data?.title, bodyId: widget.data?.title) ?? '')
+                                      : widget.data?.senderOrReceiverInfo?.username ?? '',
                           textAlign: TextAlign.start,
                           textStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.bold),
                           textOverflow: TextOverflow.fade,

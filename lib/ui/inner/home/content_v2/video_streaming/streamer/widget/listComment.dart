@@ -23,128 +23,134 @@ class ListCommentLive extends StatelessWidget {
         width: SizeConfig.screenWidth! * 0.9,
         child: notifier.isCommentDisable
             ? Container()
-            : ListView.builder(
-                reverse: true,
-                shrinkWrap: true,
-                itemCount: notifier.comment.length,
-                itemBuilder: (context, index) {
-                  var data = notifier.comment[index];
-                  String type = '';
-                  if (data.commentType == 'GIFT') {
-                    final mimeType = System().extensionFiles(data.urlGiftThum ?? '')?.split('/')[0] ?? '';
-                    if (mimeType != '') {
-                      var a = mimeType.split('/');
-                      type = a[0];
-                    }
-                  }
-
-                  return GestureDetector(
-                    onLongPress: () {
-                      if (notifier.comment[index].commentType == 'MESSAGGES') {
-                        ShowBottomSheet().onShowCommentOptionLive(context, notifier.comment[index]);
+            : GestureDetector(
+                onDoubleTap: () {
+                  notifier.flipCamera();
+                },
+                child: ListView.builder(
+                  reverse: true,
+                  shrinkWrap: true,
+                  itemCount: notifier.comment.length,
+                  itemBuilder: (context, index) {
+                    var data = notifier.comment[index];
+                    String type = '';
+                    if (data.commentType == 'GIFT') {
+                      final mimeType = System().extensionFiles(data.urlGiftThum ?? '')?.split('/')[0] ?? '';
+                      if (mimeType != '') {
+                        var a = mimeType.split('/');
+                        type = a[0];
                       }
-                    },
-                    child: Container(
-                      color: Colors.transparent,
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                if (notifier.userName != notifier.comment[index].username) {
-                                  ShowBottomSheet.onWatcherStatus(
-                                    context,
-                                    notifier.comment[index].email ?? '',
-                                    notifier.dataStream.sId ?? '',
-                                  );
-                                }
-                              },
-                              child: CustomProfileImage(
-                                cacheKey: '',
-                                following: true,
-                                forStory: false,
-                                width: 26 * SizeConfig.scaleDiagonal,
-                                height: 26 * SizeConfig.scaleDiagonal,
-                                imageUrl: System().showUserPicture(
-                                  notifier.comment[index].avatar?.mediaEndpoint,
-                                ),
-                                // badge: notifier.user.profile?.urluserBadge,
-                                allwaysUseBadgePadding: false,
-                              ),
-                            ),
-                            twelvePx,
-                            Expanded(
-                              child: notifier.comment[index].commentType == 'MESSAGGES'
-                                  ? Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text.rich(TextSpan(
-                                          text: notifier.comment[index].username ?? '',
-                                          style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700),
-                                        )),
+                    }
 
-                                        // Text(
-                                        //   notifier.comment[index].username ?? '',
-                                        //   style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700),
-                                        // ),
-                                        if (notifier.comment[index].messages != 'joined')
-                                          Text(
-                                            notifier.comment[index].messages ?? '',
-                                            style: const TextStyle(color: kHyppeTextPrimary),
-                                          ),
-                                      ],
-                                    )
-                                  : notifier.comment[index].commentType == 'JOIN'
-                                      ? Text.rich(TextSpan(text: notifier.comment[index].username ?? '', style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700), children: [
-                                          if (notifier.comment[index].messages == 'joined')
-                                            const TextSpan(
-                                              text: ' joined',
-                                              style: TextStyle(color: kHyppeTextPrimary, fontWeight: FontWeight.w700),
+                    return GestureDetector(
+                      onLongPress: () {
+                        if (notifier.comment[index].commentType == 'MESSAGGES') {
+                          ShowBottomSheet().onShowCommentOptionLive(context, notifier.comment[index]);
+                        }
+                      },
+                      child: Container(
+                        color: Colors.transparent,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  if (notifier.userName != notifier.comment[index].username) {
+                                    ShowBottomSheet.onWatcherStatus(
+                                      context,
+                                      notifier.comment[index].email ?? '',
+                                      notifier.dataStream.sId ?? '',
+                                    );
+                                  }
+                                },
+                                child: CustomProfileImage(
+                                  cacheKey: '',
+                                  following: true,
+                                  forStory: false,
+                                  width: 26 * SizeConfig.scaleDiagonal,
+                                  height: 26 * SizeConfig.scaleDiagonal,
+                                  imageUrl: System().showUserPicture(
+                                    notifier.comment[index].avatar?.mediaEndpoint,
+                                  ),
+                                  // badge: notifier.user.profile?.urluserBadge,
+                                  allwaysUseBadgePadding: false,
+                                ),
+                              ),
+                              twelvePx,
+                              Expanded(
+                                child: notifier.comment[index].commentType == 'MESSAGGES'
+                                    ? Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text.rich(TextSpan(
+                                            text: notifier.comment[index].username ?? '',
+                                            style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700),
+                                          )),
+
+                                          // Text(
+                                          //   notifier.comment[index].username ?? '',
+                                          //   style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700),
+                                          // ),
+                                          if (notifier.comment[index].messages != 'joined')
+                                            Text(
+                                              notifier.comment[index].messages ?? '',
+                                              style: const TextStyle(color: kHyppeTextPrimary),
                                             ),
-                                        ]))
-                                      : Row(
-                                          children: [
-                                            Expanded(
-                                              child: RichText(
-                                                text: TextSpan(
-                                                  text: notifier.comment[index].username ?? '',
-                                                  style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700),
-                                                  children: [
-                                                    TextSpan(
-                                                      text: " ${translate.sent} ${notifier.comment[index].messages}",
-                                                    ),
-                                                    WidgetSpan(
-                                                      child: type == '.svg'
-                                                          ? SvgPicture.network(
-                                                              data.urlGiftThum ?? '',
-                                                              height: 20 * SizeConfig.scaleDiagonal,
-                                                              width: 20 * SizeConfig.scaleDiagonal,
-                                                              semanticsLabel: 'A shark?!',
-                                                              placeholderBuilder: (BuildContext context) => Container(padding: const EdgeInsets.all(30.0), child: const CircularProgressIndicator()),
-                                                            )
-                                                          : Container(
-                                                              margin: const EdgeInsets.only(left: 8),
-                                                              width: 20 * SizeConfig.scaleDiagonal,
-                                                              height: 20 * SizeConfig.scaleDiagonal,
-                                                              decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(data.urlGiftThum ?? ''))),
-                                                            ),
-                                                    ),
-                                                  ],
+                                        ],
+                                      )
+                                    : notifier.comment[index].commentType == 'JOIN'
+                                        ? Text.rich(TextSpan(text: notifier.comment[index].username ?? '', style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700), children: [
+                                            if (notifier.comment[index].messages == 'joined')
+                                              const TextSpan(
+                                                text: ' joined',
+                                                style: TextStyle(color: kHyppeTextPrimary, fontWeight: FontWeight.w700),
+                                              ),
+                                          ]))
+                                        : Row(
+                                            children: [
+                                              Expanded(
+                                                child: RichText(
+                                                  text: TextSpan(
+                                                    text: notifier.comment[index].username ?? '',
+                                                    style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700),
+                                                    children: [
+                                                      TextSpan(
+                                                        text: " ${translate.sent} ${notifier.comment[index].messages}",
+                                                        style: const TextStyle(color: Colors.white),
+                                                      ),
+                                                      WidgetSpan(
+                                                        child: type == '.svg'
+                                                            ? SvgPicture.network(
+                                                                data.urlGiftThum ?? '',
+                                                                height: 20 * SizeConfig.scaleDiagonal,
+                                                                width: 20 * SizeConfig.scaleDiagonal,
+                                                                semanticsLabel: 'A shark?!',
+                                                                placeholderBuilder: (BuildContext context) => Container(padding: const EdgeInsets.all(30.0), child: const CircularProgressIndicator()),
+                                                              )
+                                                            : Container(
+                                                                margin: const EdgeInsets.only(left: 8),
+                                                                width: 20 * SizeConfig.scaleDiagonal,
+                                                                height: 20 * SizeConfig.scaleDiagonal,
+                                                                decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(data.urlGiftThum ?? ''))),
+                                                              ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                            )
-                          ],
+                                            ],
+                                          ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
       ),
     );
