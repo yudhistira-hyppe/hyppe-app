@@ -43,12 +43,12 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
   double offset = 0.0;
   List filterList = [
     {"id": '1', 'name': "Pic"},
-    {"id": '2', 'name': "Diary"},
-    {"id": '3', 'name': "Vid"},
+    // {"id": '2', 'name': "Dairy"},
+    {"id": '2', 'name': "Vid"},
   ];
 
   GlobalKey keyButton = GlobalKey();
-  GlobalKey keyButton1 = GlobalKey();
+  // GlobalKey keyButton1 = GlobalKey();
   GlobalKey keyButton2 = GlobalKey();
   LocalizationModelV2? _language;
 
@@ -59,7 +59,8 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
   }
 
   void show() {
-    ShowCaseWidget.of(context).startShowCase([keyButton, keyButton1, keyButton2, keyButton1, widget.keyButton]);
+    // ShowCaseWidget.of(context).startShowCase([keyButton, keyButton1, keyButton2, keyButton1, widget.keyButton]);
+    ShowCaseWidget.of(context).startShowCase([keyButton,  keyButton2, widget.keyButton]);
   }
 
   @override
@@ -67,7 +68,7 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HomeScreen');
 
     'initState isOnHomeScreen $isHomeScreen'.logger();
-    _tabController2 = TabController(length: 3, vsync: this);
+    _tabController2 = TabController(length: 2, vsync: this);
 
     offset = 0;
     WidgetsBinding.instance.addPostFrameCallback((_) => show());
@@ -112,11 +113,11 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
           ),
           body: Builder(
             builder: (context) => DefaultTabController(
-              length: 3,
+              length: 2,
               child: RefreshIndicator(
                 color: kHyppePrimary,
                 notificationPredicate: (notification) {
-                  if (notifier.isLoadingPict || notifier.isLoadingDiary || notifier.isLoadingVid) {
+                  if (notifier.isLoadingPict  || notifier.isLoadingVid) {
                     return false;
                   } else {
                     // with NestedScrollView local(depth == 2) OverscrollNotification are not sent
@@ -191,18 +192,18 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
                                             descCase = _language?.tutorLanding1 ?? '';
                                             stepTitle = "1/6";
                                             break;
+                                          // case 1:
+                                            // if (_tabController2.index == 1) {
+                                            //   titleCase = 'Diary! 🎥';
+                                            //   descCase = _language?.tutorLanding2 ?? '';
+                                            //   stepTitle = "2/6";
+                                            // } else {
+                                            //   titleCase = 'Geser 👆';
+                                            //   descCase = _language?.tutorLanding4 ?? '';
+                                            //   stepTitle = "4/6";
+                                            // }
+                                            // break;
                                           case 1:
-                                            if (_tabController2.index == 1) {
-                                              titleCase = 'Diary! 🎥';
-                                              descCase = _language?.tutorLanding2 ?? '';
-                                              stepTitle = "2/6";
-                                            } else {
-                                              titleCase = 'Geser 👆';
-                                              descCase = _language?.tutorLanding4 ?? '';
-                                              stepTitle = "4/6";
-                                            }
-                                            break;
-                                          case 2:
                                             titleCase = 'Video! 🎥';
                                             descCase = _language?.tutorLanding3 ?? '';
                                             stepTitle = "3/6";
@@ -213,9 +214,7 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
                                           child: Showcase(
                                             key: index == 0
                                                 ? keyButton
-                                                : index == 1
-                                                    ? keyButton1
-                                                    : keyButton2,
+                                                : keyButton2,
                                             tooltipBackgroundColor: kHyppeTextLightPrimary,
                                             overlayOpacity: 0,
                                             targetPadding: const EdgeInsets.all(0),
@@ -249,11 +248,11 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
                                                             });
                                                             break;
                                                           case 1:
-                                                            setState(() {
-                                                              if (_tabController2.index == 1) {
-                                                                _tabController2.index = 2;
-                                                              } else {}
-                                                            });
+                                                            // setState(() {
+                                                            //   if (_tabController2.index == 1) {
+                                                            //     _tabController2.index = 2;
+                                                            //   } else {}
+                                                            // });
                                                             break;
                                                           case 2:
                                                             // _tabController2.index = 0;
@@ -302,13 +301,13 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
                             // offset: offset,
                           ),
                         ),
-                        Container(
-                          padding: const EdgeInsets.only(left: 6.0, right: 6),
-                          color: kHyppeLightSurface,
-                          child: DiaryTutor(
-                            scrollController: context.read<MainNotifier>().globalKey?.currentState?.innerController,
-                          ),
-                        ),
+                        // Container(
+                        //   padding: const EdgeInsets.only(left: 6.0, right: 6),
+                        //   color: kHyppeLightSurface,
+                        //   child: DiaryTutor(
+                        //     scrollController: context.read<MainNotifier>().globalKey?.currentState?.innerController,
+                        //   ),
+                        // ),
                         // second tab bar viiew widget
                         Container(
                           padding: const EdgeInsets.only(left: 6.0, right: 6),

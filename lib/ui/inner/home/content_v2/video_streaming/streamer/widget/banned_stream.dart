@@ -50,20 +50,20 @@ class BannedStream extends StatelessWidget {
                 twentyFourPx,
                 GestureDetector(
                   onTap: () {
-                    if (!(notifier.dataBanned?.statusAppeal ?? false)) {
-                      // Routing().move(Routes.communityGuidelines, argument: GeneralArgument(id: guidlineLive, title: trans.localeDatetime == 'id' ? 'Panduan Komunitas' : 'Community Guidelines',),);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PelanggaranDetail(
-                              data: notifier.dataBanned ?? BannedStreamModel(),
-                            ),
-                          ));
-                    } else if (notifier.dataBanned?.statusApprove == 'WAITING_RESPONSE') {
-                      context.read<AppealStreamNotifier>().dataBanned = notifier.dataBanned ?? BannedStreamModel();
-                      notifier.destoryPusher();
-                      Routing().move(Routes.appealLiveSuccess);
-                    }
+                    // if (!(notifier.dataBanned?.statusAppeal ?? false)) {
+
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PelanggaranDetail(
+                            data: notifier.dataBanned ?? BannedStreamModel(),
+                          ),
+                        ));
+                    // } else if (notifier.dataBanned?.statusApprove == 'WAITING_RESPONSE') {
+                    //   context.read<AppealStreamNotifier>().dataBanned = notifier.dataBanned ?? BannedStreamModel();
+                    //   notifier.destoryPusher();
+                    //   Routing().moveReplacement(Routes.appealLiveSuccess);
+                    // }
                   },
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),

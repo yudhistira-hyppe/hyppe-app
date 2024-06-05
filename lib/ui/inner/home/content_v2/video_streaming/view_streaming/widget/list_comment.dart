@@ -75,6 +75,7 @@ class ListCommentViewer extends StatelessWidget {
                                   onTap: () {
                                     final email = (context.read<SelfProfileNotifier>().user.profile?.email);
                                     if (email != notifier.comment[index].email) {
+                                      context.read<ViewStreamingNotifier>().buttonSheetProfil = false;
                                       ShowBottomSheet.onWatcherStatus(context, notifier.comment[index].email ?? '', data.sId ?? '', isViewer: true);
                                     }
                                   },

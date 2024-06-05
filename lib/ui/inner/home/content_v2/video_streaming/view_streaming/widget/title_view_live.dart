@@ -57,6 +57,7 @@ class TitleViewLive extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
+                context.read<ViewStreamingNotifier>().buttonSheetProfil = false;
                 ShowBottomSheet.onWatcherStatus(
                   context,
                   dataStream.user?.email ?? '',

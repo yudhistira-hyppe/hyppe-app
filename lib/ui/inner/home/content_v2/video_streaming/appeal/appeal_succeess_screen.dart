@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyppe/app.dart';
+import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -19,7 +20,8 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class AppealSuccessStreamingScreen extends StatefulWidget {
-  const AppealSuccessStreamingScreen({Key? key}) : super(key: key);
+  final GeneralArgument? argument;
+  const AppealSuccessStreamingScreen({Key? key, this.argument}) : super(key: key);
 
   @override
   State<AppealSuccessStreamingScreen> createState() => _AppealSuccessStreamingScreenState();
@@ -47,65 +49,78 @@ class _AppealSuccessStreamingScreenState extends State<AppealSuccessStreamingScr
           }
           return true;
         },
-        child: Scaffold(
-          appBar: AppBar(
-            // leading: const BackButton(),
-            title: CustomTextWidget(
-              textStyle: Theme.of(context).textTheme.titleMedium,
-              textToDisplay: translate.localeDatetime == 'id' ? 'Pengajuan Banding' : 'Violation Details',
+        child: WillPopScope(
+          onWillPop: () async {
+            return false;
+          },
+          child: Scaffold(
+            appBar: AppBar(
+              // leading: const BackButton(),
+              title: CustomTextWidget(
+                textStyle: Theme.of(context).textTheme.titleMedium,
+                textToDisplay: translate.localeDatetime == 'id' ? 'Pengajuan Banding' : 'Violation Details',
+              ),
+              automaticallyImplyLeading: false,
             ),
-
-            automaticallyImplyLeading: false,
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Center(
-                  child: Icon(
-                    Icons.check_circle_outline_rounded,
-                    color: kHyppeTextSuccess,
-                    size: 40,
+            body: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Center(
+                    child: Icon(
+                      Icons.check_circle_outline_rounded,
+                      color: kHyppeTextSuccess,
+                      size: 40,
+                    ),
                   ),
-                ),
-                sixteenPx,
-                Center(
-                  child: CustomTextWidget(
-                    textToDisplay: translate.localeDatetime == 'id' ? 'Pengajuan banding dikirim' : 'Appeal submitted',
-                    textStyle: Theme.of(context).primaryTextTheme.titleMedium,
+                  sixteenPx,
+                  Center(
+                    child: CustomTextWidget(
+                      textToDisplay: translate.localeDatetime == 'id' ? 'Pengajuan banding dikirim' : 'Appeal submitted',
+                      textStyle: Theme.of(context).primaryTextTheme.titleMedium,
+                    ),
                   ),
-                ),
-                twelvePx,
-                RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      style: Theme.of(context).textTheme.titleSmall,
-                      text: translate.localeDatetime == 'id'
-                          ? 'Kami akan mengirimkan notifikasi untuk update status pengajuan bandingmu.'
-                          : 'We will send you a notification as soon as we have an update.',
-                    )),
-                twentyFourPx,
-                detailContent(context, translate),
-                const Spacer(),
-                twentyEightPx,
-                SizedBox(
-                  width: SizeConfig.screenWidth,
-                  height: 50,
-                  child: CustomTextButton(
-                    onPressed: () {
-                      Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
-                    },
-                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary)),
-                    child: notifier.loadingAppel
-                        ? const CustomLoading()
-                        : CustomTextWidget(
-                            textToDisplay: translate.localeDatetime == 'id' ? 'Kembali Keberanda' : 'Back to Home',
-                            textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(color: kHyppeLightButtonText),
-                          ),
+                  twelvePx,
+                  RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        style: Theme.of(context).textTheme.titleSmall,
+                        text: translate.localeDatetime == 'id'
+                            ? 'Kami akan mengirimkan notifikasi untuk update status pengajuan bandingmu.'
+                            : 'We will send you a notification as soon as we have an update.',
+                      )),
+                  twentyFourPx,
+                  detailContent(context, translate),
+                  const Spacer(),
+                  twentyEightPx,
+                  SizedBox(
+                    width: SizeConfig.screenWidth,
+                    height: 50,
+                    child: CustomTextButton(
+                      onPressed: () async {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          Future.delayed(const Duration(milliseconds: 500), () {
+                            if (widget.argument?.isTrue ?? false) {
+                              Routing().moveBack();
+                              Routing().moveReplacement(Routes.lobby);
+                            } else {
+                              Routing().moveBack();
+                            }
+                          });
+                        });
+                      },
+                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary)),
+                      child: notifier.loadingAppel
+                          ? const CustomLoading()
+                          : CustomTextWidget(
+                              textToDisplay: translate.localeDatetime == 'id' ? 'Kembali Keberanda' : 'Back to Home',
+                              textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(color: kHyppeLightButtonText),
+                            ),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

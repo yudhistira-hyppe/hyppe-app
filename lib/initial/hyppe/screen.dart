@@ -26,8 +26,7 @@ class _HyppeState extends State<Hyppe> {
   void initState() {
     hyppeNotifier.setInitialTheme();
     super.initState();
-    _intentDataStreamSubscription = FlutterSharingIntent.instance.getMediaStream()
-        .listen((List<SharedFile> value) {
+    _intentDataStreamSubscription = FlutterSharingIntent.instance.getMediaStream().listen((List<SharedFile> value) {
       print("Shared: getMediaStream ${value.map((f) => f.value).join(",")}");
     }, onError: (err) {
       print("getIntentDataStream error: $err");
@@ -37,8 +36,6 @@ class _HyppeState extends State<Hyppe> {
     FlutterSharingIntent.instance.getInitialSharing().then((List<SharedFile> value) {
       print("Shared: getInitialMedia ${value.map((f) => f.value).join(",")}");
     });
-
-
   }
 
   @override
@@ -68,10 +65,12 @@ class _HyppeState extends State<Hyppe> {
               debugShowCheckedModeBanner: false,
               navigatorKey: Routing.navigatorKey,
               scaffoldMessengerKey: Routing.scaffoldMessengerKey,
-              builder: (context, child) => MediaQuery(
-                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                child: child ?? Container(),
-              ),
+              builder: (context, child) => mounted
+                  ? MediaQuery(
+                      data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                      child: child ?? Container(),
+                    )
+                  : Container(),
             );
           },
         ),

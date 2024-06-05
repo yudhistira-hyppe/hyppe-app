@@ -166,8 +166,9 @@ class MainNotifier with ChangeNotifier {
       SharedPreference().writeStorage(SpKeys.userID, context.read<SelfProfileNotifier>().user.profile?.idUser);
       System().analyticSetUser(name: selfProfile.user.profile?.username ?? '');
       // SharedPreference().writeStorage(SpKeys.statusVerificationId, 'sdsd')asdasd
+      var idStream = SharedPreference().readStorage(SpKeys.idStream);
 
-      if (SharedPreference().readStorage(SpKeys.idStream) != null || SharedPreference().readStorage(SpKeys.idStream) != '') {
+      if (idStream != null) {
         context.read<StreamerNotifier>().closeNyangkut(context);
       }
       notifyListeners();
