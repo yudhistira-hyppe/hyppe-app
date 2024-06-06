@@ -2010,7 +2010,7 @@ class ShowBottomSheet {
           ),
         );
       },
-    );
+    ).whenComplete(() => notifier.buttonSheetReport = false);
   }
 
   static onListOfGift(context) async {
