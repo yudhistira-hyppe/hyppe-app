@@ -496,6 +496,8 @@ class Generate {
                   args: settings.arguments as ViewStreamingArgument,
                 ));
 
+      case Routes.pelanggaranDetailtreaming:
+        return MaterialPageRoute(builder: (_) => const PelanggaranDetail());
       case Routes.appealLiveSuccess:
         return MaterialPageRoute(builder: (_) => AppealSuccessStreamingScreen(argument: settings.arguments as GeneralArgument));
 

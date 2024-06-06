@@ -9,6 +9,7 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
@@ -48,12 +49,34 @@ class HomeAppBar extends StatelessWidget {
       actions: [
         // Doku(),
         GestureDetector(
-            onTap: () {
-              context.handleActionIsGuest(() {
-                Routing().move(Routes.listStreamers);
-              });
+          onTap: () {
+            context.handleActionIsGuest(() {
+              Routing().move(Routes.listStreamers);
+            });
+          },
+          // child: CustomIconWidget(width: 30, height: 30, defaultColor: false, iconData: '${AssetPath.vectorPath}ic_live_streaming.svg'),
+
+          child: Consumer<PreviewPicNotifier>(
+            builder: (_, notifier, __) {
+              return Stack(
+                children: [
+                  const Align(alignment: Alignment.center, child: const CustomIconWidget(width: 30, height: 30, defaultColor: false, iconData: '${AssetPath.vectorPath}ic_live_streaming.svg')),
+                  if (notifier.pic != null && (notifier.pic?.isNotEmpty ?? [].isNotEmpty))
+                    if (notifier.pic?.first.streamer ?? false)
+                      Positioned(
+                        top: 10,
+                        right: 0,
+                        child: Container(
+                          width: 13,
+                          height: 13,
+                          decoration: BoxDecoration(color: kHyppeBorderDanger, borderRadius: BorderRadius.circular(100)),
+                        ),
+                      ),
+                ],
+              );
             },
-            child: CustomIconWidget(width: 30, height: 30, defaultColor: false, iconData: '${AssetPath.vectorPath}ic_live_streaming.svg')),
+          ),
+        ),
         // CustomIconButtonWidget(iconData: '${AssetPath.vectorPath}ic_live_streaming.svg', onPressed: (){
         //   Routing().move(Routes.listStreamers);
         // }),

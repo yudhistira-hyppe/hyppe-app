@@ -131,10 +131,9 @@ class NotificationService {
             materialAppKey.currentContext!.read<NotificationNotifier>().checkAndNavigateToProfile(materialAppKey.currentContext!, data.postId);
           } else if (data.postType == 'streaming') {
             String? idStream = SharedPreference().readStorage(SpKeys.idStream);
-            if (idStream != null || idStream != '') {
+            if (idStream != null) {
               return;
             }
-
             Future.delayed(const Duration(seconds: 1), () async {
               await Routing().move(Routes.viewStreaming, argument: ViewStreamingArgument(data: LinkStreamModel(sId: map['postID'])));
             });
@@ -145,6 +144,10 @@ class NotificationService {
           final data = NotificationBody.fromJson(map);
           if (data.postType == 'TRANSACTION') {
             Routing().move(Routes.transaction);
+          } else if (data.postType == "LIVE_GIFT") {
+            Routing().move(Routes.saldoCoins);
+          } else if (data.postType == "LIVE_BENNED") {
+            Routing().move(Routes.pelanggaranDetailtreaming);
           } else {
             throw 'Not recognize the type of the object of the notification ';
           }
