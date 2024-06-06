@@ -423,7 +423,7 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  Future exitStreaming(BuildContext context, LinkStreamModel model) async {
+  Future<bool> exitStreaming(BuildContext context, LinkStreamModel model) async {
     bool connect = await System().checkConnections();
 
     if (connect) {
@@ -436,11 +436,13 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
         // if (fetch.postsState == LiveStreamState.getApiSuccess) {
         //   returnNext = true;
         // }
+        return true;
       } catch (e) {
         debugPrint(e.toString());
+        return true;
       }
 
-      notifyListeners();
+      // notifyListeners();
     } else {
       // returnNext = false;
       if (context.mounted) {
@@ -449,6 +451,7 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
           exitStreaming(context, model);
         });
       }
+      return true;
     }
   }
 

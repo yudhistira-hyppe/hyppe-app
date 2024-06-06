@@ -26,8 +26,6 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/saldo_coin/saldo_coin.dart';
 import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/notifier.dart';
-import 'package:hyppe/ui/inner/home/widget/discount_foryou.dart';
-import 'package:hyppe/ui/inner/home/widget/my_saldo_widget.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/build_auto_complete_user_tag.dart';

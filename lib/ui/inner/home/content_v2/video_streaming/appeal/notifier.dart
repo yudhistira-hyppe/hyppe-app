@@ -34,7 +34,7 @@ class AppealStreamNotifier with ChangeNotifier {
         final notifier = LiveStreamBloc();
 
         Map data = {
-          "idStream": dataBanned.streamId,
+          // "idStream": dataBanned.streamId,
           "title": title,
           "messages": messages,
         };

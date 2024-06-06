@@ -61,16 +61,17 @@ class HomeAppBar extends StatelessWidget {
               return Stack(
                 children: [
                   const Align(alignment: Alignment.center, child: const CustomIconWidget(width: 30, height: 30, defaultColor: false, iconData: '${AssetPath.vectorPath}ic_live_streaming.svg')),
-                  if (notifier.pic?.first.streamer ?? false)
-                    Positioned(
-                      top: 10,
-                      right: 0,
-                      child: Container(
-                        width: 13,
-                        height: 13,
-                        decoration: BoxDecoration(color: kHyppeBorderDanger, borderRadius: BorderRadius.circular(100)),
+                  if (notifier.pic != null && (notifier.pic?.isNotEmpty ?? [].isNotEmpty))
+                    if (notifier.pic?.first.streamer ?? false)
+                      Positioned(
+                        top: 10,
+                        right: 0,
+                        child: Container(
+                          width: 13,
+                          height: 13,
+                          decoration: BoxDecoration(color: kHyppeBorderDanger, borderRadius: BorderRadius.circular(100)),
+                        ),
                       ),
-                    ),
                 ],
               );
             },
