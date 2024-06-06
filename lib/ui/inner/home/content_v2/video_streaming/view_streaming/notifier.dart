@@ -478,7 +478,10 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
           totViews = dataStreaming.viewCountActive ?? 0;
           totLikes = dataStreaming.like?.length ?? 0;
 
-          print("=======duratoin ${dataStreaming.pause}");
+          if (!(dataStreaming.status ?? false)) {
+            totViewsEnd = dataStreaming.viewCountUnic ?? 0;
+          }
+
           if (dataStreaming.pause ?? false) {
             statusAgora = RemoteVideoState.remoteVideoStateStopped;
             resionAgora = RemoteVideoStateReason.remoteVideoStateReasonRemoteMuted;
@@ -809,6 +812,7 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
   }
 
   void removePinComment() async {
+    pinComment?.commentType = 'MESSAGGES';
     comment.insert(0, pinComment ?? CommentLiveModel());
     pinComment = null;
     notifyListeners();

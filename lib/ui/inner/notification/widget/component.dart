@@ -14,6 +14,7 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/story_color_validator.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction_coin_detail/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/appeal/pelanggaran_detail.dart';
 import 'package:hyppe/ui/inner/notification/notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ux/path.dart';
@@ -112,6 +113,15 @@ class _ComponentState extends State<Component> {
                     ..session = widget.data?.contentEventID == null ? null : int.parse(widget.data?.contentEventID ?? '0'));
             } else if ("LIVE" == widget.data?.event) {
               Routing().move(Routes.viewStreaming, argument: ViewStreamingArgument(data: LinkStreamModel(sId: widget.data?.streamId)));
+            } else if ("LIVE_GIFT" == widget.data?.event) {
+              Routing().move(Routes.saldoCoins);
+            } else if ("LIVE_BENNED" == widget.data?.event) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const PelanggaranDetail(),
+                ),
+              );
             } else {
               if (widget.data?.eventType == 'FOLLOWER') {
                 System().navigateToProfile(context, widget.data?.mate ?? '');

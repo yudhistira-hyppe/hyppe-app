@@ -260,7 +260,7 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
                                                         }
                                                       },
                                                       child: Text(
-                                                        _language?.next??'Selanjutnya',
+                                                        _language?.next ?? 'Selanjutnya',
                                                         style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
                                                       ))
                                                 ],

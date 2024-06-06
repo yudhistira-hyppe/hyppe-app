@@ -25,7 +25,7 @@ class _SaldoCoinWidgetState extends State<SaldoCoinWidget> {
   void initState() {
     super.initState();
     notifier = Provider.of<SaldoCoinNotifier>(context, listen: false);
-    
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       notifier.initSaldo(context);
       notifier.transactionCoin = widget.transactionCoin;
@@ -40,7 +40,7 @@ class _SaldoCoinWidgetState extends State<SaldoCoinWidget> {
       notifier.checkSaldoCoin();
     }
 
-    Future.delayed(const Duration(milliseconds: 300),(){
+    Future.delayed(const Duration(milliseconds: 300), () {
       widget.isChecking!(notifier.visibilityTransaction, notifier.saldoCoin);
     });
     super.didUpdateWidget(oldWidget);
@@ -85,7 +85,7 @@ class _SaldoCoinWidgetState extends State<SaldoCoinWidget> {
                         padding: const EdgeInsets.only(top: 8.0),
                         child: RichText(
                           text: TextSpan(children: [
-                            TextSpan(text: 'Saldo kurang ', style: textTheme.labelLarge?.copyWith(color: kHyppeBurem)),
+                            TextSpan(text: 'Saldo kurang ', style: textTheme.labelLarge?.copyWith(color: kHyppeBurem, fontSize: 12, fontWeight: FontWeight.normal)),
                             TextSpan(text: System().numberFormat(amount: notifier.transactionCoin - notifier.saldoCoin), style: textTheme.labelLarge?.copyWith(color: Colors.red.shade900)),
                             TextSpan(text: ' Coins', style: textTheme.labelLarge?.copyWith(color: Colors.red.shade900))
                           ]),

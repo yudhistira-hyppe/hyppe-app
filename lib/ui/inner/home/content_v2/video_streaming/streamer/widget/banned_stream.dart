@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/live_stream/banned_stream_model.dart';
@@ -50,20 +51,20 @@ class BannedStream extends StatelessWidget {
                 twentyFourPx,
                 GestureDetector(
                   onTap: () {
-                    // if (!(notifier.dataBanned?.statusAppeal ?? false)) {
-
-                    Navigator.push(
+                    if (!(notifier.dataBanned?.statusAppeal ?? false)) {
+                      Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => PelanggaranDetail(
                             data: notifier.dataBanned ?? BannedStreamModel(),
                           ),
-                        ));
-                    // } else if (notifier.dataBanned?.statusApprove == 'WAITING_RESPONSE') {
-                    //   context.read<AppealStreamNotifier>().dataBanned = notifier.dataBanned ?? BannedStreamModel();
-                    //   notifier.destoryPusher();
-                    //   Routing().moveReplacement(Routes.appealLiveSuccess);
-                    // }
+                        ),
+                      );
+                    } else if (notifier.dataBanned?.statusApprove == 'WAITING_RESPONSE') {
+                      context.read<AppealStreamNotifier>().dataBanned = notifier.dataBanned ?? BannedStreamModel();
+                      notifier.destoryPusher();
+                      Routing().moveReplacement(Routes.appealLiveSuccess, argument: GeneralArgument(isTrue: false));
+                    }
                   },
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
