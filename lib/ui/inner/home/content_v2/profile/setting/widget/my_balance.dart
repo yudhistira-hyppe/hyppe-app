@@ -93,7 +93,7 @@ class MyBalance extends StatelessWidget {
                     ],
                   ),
                   fivePx,
-                  value.isLoading
+                  value.isLoadingSaldo
                       ? const CustomLoading()
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.start,

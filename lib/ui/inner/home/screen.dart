@@ -133,100 +133,100 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      FirebaseCrashlytics.instance.setCustomKey('layout', 'HomeScreen');
-      isHomeScreen = widget.canShowAds;
-      'initState isOnHomeScreen $isHomeScreen'.logger();
-      _tabController = TabController(length: 2, vsync: this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {});
 
-      Future.delayed(Duration.zero, () {
-        // _tabController.index = 0;
-        final notifier = context.read<HomeNotifier>();
-        notifier.setSessionID();
-        // notifier.tabIndex = 0;
-        _language = context.read<TranslateNotifierV2>().translate;
-        final notifierFollow = context.read<FollowRequestUnfollowNotifier>();
-        final notifierMain = context.read<MainNotifier>();
-        // notifierMain.globalKey = globalKey;
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'HomeScreen');
+    isHomeScreen = widget.canShowAds;
+    'initState isOnHomeScreen $isHomeScreen'.logger();
+    _tabController = TabController(length: 2, vsync: this);
 
-        if (notifier.preventReloadAfterUploadPost) {
-          notifier.preventReloadAfterUploadPost = false;
-        } else {
-          var pic = context.read<PreviewPicNotifier>();
-          var diary = context.read<PreviewDiaryNotifier>();
-          var vid = context.read<PreviewVidNotifier>();
-          if (pic.pic == null && diary.diaryData == null && vid.vidData == null) {
-            notifier.initNewHome(context, mounted, isreload: false, isNew: true);
-          }
+    Future.delayed(Duration.zero, () {
+      // _tabController.index = 0;
+      final notifier = context.read<HomeNotifier>();
+      notifier.setSessionID();
+      // notifier.tabIndex = 0;
+      _language = context.read<TranslateNotifierV2>().translate;
+      final notifierFollow = context.read<FollowRequestUnfollowNotifier>();
+      final notifierMain = context.read<MainNotifier>();
+      // notifierMain.globalKey = globalKey;
+
+      if (notifier.preventReloadAfterUploadPost) {
+        notifier.preventReloadAfterUploadPost = false;
+      } else {
+        var pic = context.read<PreviewPicNotifier>();
+        var diary = context.read<PreviewDiaryNotifier>();
+        var vid = context.read<PreviewVidNotifier>();
+        if (pic.pic == null && diary.diaryData == null && vid.vidData == null) {
+          notifier.initNewHome(context, mounted, isreload: false, isNew: true);
         }
-        if (notifierFollow.listFollow.isEmpty) {
-          notifierFollow.listFollow = [
-            {'name': "${_language?.follow}", 'code': 'TOFOLLOW'},
-            {'name': "${_language?.following}", 'code': 'FOLLOWING'},
-          ];
-        }
-        Future.delayed(Duration(milliseconds: 500), () {
-          notifierMain.globalKey?.currentState?.innerController.addListener(() {
-            try {
-              if ((notifierMain.globalKey?.currentState?.innerController.position.pixels ?? 0) >= (notifierMain.globalKey?.currentState?.innerController.position.maxScrollExtent ?? 0) &&
-                  !(notifierMain.globalKey?.currentState?.innerController.position.outOfRange ?? true)) {
-                notifier.initNewHome(context, mounted, isreload: false, isgetMore: true);
-              }
-            } catch (e) {
-              e.logger();
-            }
-          });
-        });
-
-        globalKey.currentState?.innerController.addListener(() {
-          if (mounted) {
-            setState(() {
-              offset = globalKey.currentState?.innerController.position.pixels ?? 0;
-              // print("======offset ${offset}");
-            });
-          }
-        });
-
-        Routing.navigatorKey.currentContext?.read<MainNotifier>().scrollController.addListener(() {
-          // print(context.read<MainNotifier>().scrollController.offset);
+      }
+      if (notifierFollow.listFollow.isEmpty) {
+        notifierFollow.listFollow = [
+          {'name': "${_language?.follow}", 'code': 'TOFOLLOW'},
+          {'name': "${_language?.following}", 'code': 'FOLLOWING'},
+        ];
+      }
+      Future.delayed(Duration(milliseconds: 500), () {
+        notifierMain.globalKey?.currentState?.innerController.addListener(() {
           try {
-            if (mounted) {
-              if ((Routing.navigatorKey.currentContext?.read<MainNotifier>().scrollController.offset ?? 0) >= 160) {
-                setState(() {
-                  appbarSeen = false;
-                });
-              } else {
-                setState(() {
-                  appbarSeen = true;
-                });
-              }
-            } else {
-              if ((Routing.navigatorKey.currentContext?.read<MainNotifier>().scrollController.offset ?? 0) >= 160) {
-                appbarSeen = false;
-              } else {
-                appbarSeen = true;
-              }
+            if ((notifierMain.globalKey?.currentState?.innerController.position.pixels ?? 0) >= (notifierMain.globalKey?.currentState?.innerController.position.maxScrollExtent ?? 0) &&
+                !(notifierMain.globalKey?.currentState?.innerController.position.outOfRange ?? true)) {
+              notifier.initNewHome(context, mounted, isreload: false, isgetMore: true);
             }
           } catch (e) {
             e.logger();
           }
         });
-        // });
-        context.read<ReportNotifier>().inPosition = contentPosition.home;
-        _initLicense();
-        // FlutterAliPlayerFactory.loadRtsLibrary();
-        // _loadEncrypted();
       });
 
-      context.read<PreUploadContentNotifier>().onGetInterest(context);
+      globalKey.currentState?.innerController.addListener(() {
+        if (mounted) {
+          setState(() {
+            offset = globalKey.currentState?.innerController.position.pixels ?? 0;
+            // print("======offset ${offset}");
+          });
+        }
+      });
 
-      if (mounted) {
-        setState(() => {});
-      }
-      super.initState();
-      '++++++++++++++++ iniststate'.logger();
-      System().analyticSetScreen('landingpage');
+      Routing.navigatorKey.currentContext?.read<MainNotifier>().scrollController.addListener(() {
+        // print(context.read<MainNotifier>().scrollController.offset);
+        try {
+          if (mounted) {
+            if ((Routing.navigatorKey.currentContext?.read<MainNotifier>().scrollController.offset ?? 0) >= 160) {
+              setState(() {
+                appbarSeen = false;
+              });
+            } else {
+              setState(() {
+                appbarSeen = true;
+              });
+            }
+          } else {
+            if ((Routing.navigatorKey.currentContext?.read<MainNotifier>().scrollController.offset ?? 0) >= 160) {
+              appbarSeen = false;
+            } else {
+              appbarSeen = true;
+            }
+          }
+        } catch (e) {
+          e.logger();
+        }
+      });
+      // });
+      context.read<ReportNotifier>().inPosition = contentPosition.home;
+      _initLicense();
+      // FlutterAliPlayerFactory.loadRtsLibrary();
+      // _loadEncrypted();
     });
+
+    context.read<PreUploadContentNotifier>().onGetInterest(context);
+
+    if (mounted) {
+      setState(() => {});
+    }
+    super.initState();
+    '++++++++++++++++ iniststate'.logger();
+    System().analyticSetScreen('landingpage');
   }
 
   _initLicense() {

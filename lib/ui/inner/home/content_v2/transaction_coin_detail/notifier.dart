@@ -28,15 +28,15 @@ class TransactionCoinDetailNotifier with ChangeNotifier {
     try{
       
 
-      // if (status == 'History'){
-      //   _param.addAll({
-      //     'noinvoice': invoiceId
-      //   });
-      // }else{
+      if (status == 'History'){
         _param.addAll({
-          'idtransaksi': invoiceId
+          'noinvoice': invoiceId
         });
-      // }
+      }else{
+        _param.addAll({
+          'noinvoice': invoiceId
+        });
+      }
       
 
       await bloc.getTransactionCoinDetail(context, data: _param);

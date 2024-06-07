@@ -381,9 +381,9 @@ class SelfProfileTop extends StatelessWidget {
                         color: kHyppePrimary,
                       ),
                       const SizedBox(
-                        width: 12.0,
+                        width: 4.0,
                       ),
-                      (notifier.user.profile!.judulLink != null)
+                      (notifier.user.profile!.judulLink != '')
                           ? Text(
                               notifier.user.profile!.judulLink ?? '',
                               style: const TextStyle(color: kHyppePrimary),

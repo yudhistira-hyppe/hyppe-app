@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/coins/history_order_coin.dart';
+import 'package:hyppe/core/models/collection/coins/history_transaction.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -10,7 +11,7 @@ import 'package:hyppe/ui/inner/home/content_v2/transaction_coin_detail/screen.da
 import 'package:intl/intl.dart';
 
 class HistoryCoinWidget extends StatelessWidget {
-  final HistoryOrderCoinModel data;
+  final TransactionHistoryCoinModel data;
   final LocalizationModelV2? lang;
   const HistoryCoinWidget({super.key, required this.data, this.lang});
 
@@ -19,11 +20,12 @@ class HistoryCoinWidget extends StatelessWidget {
     Color? titleColor;
     String? textTitle;
     switch (data.status) {
-      case 'Cancel':
+      case 'FAILED':
         titleColor = kHyppeRed;
         textTitle = lang!.localeDatetime == 'id' ? 'Batal' : 'Cancel';
         break;
-      case 'WAITING_PAYMENT':
+      case 'PENDING':
+      case 'IN PROGRESS':
         titleColor = kHyppeRed;
         textTitle = lang!.localeDatetime == 'id' ? 'Menunggu Pembayaran' : 'Awating Payment';
         break;
@@ -33,7 +35,7 @@ class HistoryCoinWidget extends StatelessWidget {
     }
     
     return GestureDetector(
-      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionCoinDetailScreen(invoiceid: data.id??'',))),
+      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionCoinDetailScreen(invoiceid: data.noInvoice??'',))),
       child: Container(
         width: double.infinity,
         height: SizeConfig.screenHeight! * .22,
@@ -64,7 +66,7 @@ class HistoryCoinWidget extends StatelessWidget {
                     ),
                     CustomTextWidget(
                       textToDisplay: DateFormat('dd MMM yyyy', 'id')
-                          .format(DateTime.parse(data.timestamp ?? '2024-03-02')),
+                          .format(DateTime.parse(data.createdAt ?? '2024-03-02')),
                       // textStyle: textTheme.bodyMedium,
                     ),
                   ],
@@ -89,7 +91,7 @@ class HistoryCoinWidget extends StatelessWidget {
             Flexible(
               child: SizedBox(
                 height: SizeConfig.screenHeight! * .2,
-                child: Text(data.packagename??'', 
+                child: Text(data.descTitleId??'', 
                   maxLines: 2,
                   style: Theme.of(context)
                         .textTheme
@@ -119,7 +121,7 @@ class HistoryCoinWidget extends StatelessWidget {
                     ),
                   ),
                   CustomTextWidget(
-                    textToDisplay: System().currencyFormat(amount: data.totalamount),
+                    textToDisplay: System().currencyFormat(amount: data.detail?[0].totalAmount??0),
                     textStyle: Theme.of(context)
                         .textTheme
                         .titleSmall

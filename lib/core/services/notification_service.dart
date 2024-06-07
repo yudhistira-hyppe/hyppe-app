@@ -137,6 +137,8 @@ class NotificationService {
             Future.delayed(const Duration(seconds: 1), () async {
               await Routing().move(Routes.viewStreaming, argument: ViewStreamingArgument(data: LinkStreamModel(sId: map['postID'])));
             });
+          } else if (data.postType == "LIVE_BENNED") {
+            Routing().move(Routes.pelanggaranDetailtreaming);
           } else {
             materialAppKey.currentContext!.read<NotificationNotifier>().navigateToContent(materialAppKey.currentContext!, data.postType, data.postId);
           }
@@ -146,8 +148,6 @@ class NotificationService {
             Routing().move(Routes.transaction);
           } else if (data.postType == "LIVE_GIFT") {
             Routing().move(Routes.saldoCoins);
-          } else if (data.postType == "LIVE_BENNED") {
-            Routing().move(Routes.pelanggaranDetailtreaming);
           } else {
             throw 'Not recognize the type of the object of the notification ';
           }

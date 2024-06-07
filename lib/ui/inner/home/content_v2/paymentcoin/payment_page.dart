@@ -1,6 +1,5 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/bloc/monetization/transaction/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/content_discount.dart';
@@ -11,6 +10,7 @@ import 'package:hyppe/core/models/collection/localization_v2/localization_model.
 import 'package:hyppe/core/models/collection/posts/content_v2/bank_data.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -144,7 +144,7 @@ class _PaymentCoinPageState extends State<PaymentCoinPage> {
                       Navigator.pushReplacementNamed(context, Routes.transactionwaiting, arguments: {'bank':bankdata, 'transaction':notifier.transactionCoinDetail});
                     }else if(notifier.blocPayNow.dataFetch.dataState == TransactionCoinState.getBlocError){
                       // print(notifier.blocPayNow.dataFetch.data['message']);
-                      Fluttertoast.showToast(msg: notifier.blocPayNow.dataFetch.data['message']);
+                      ShowBottomSheet().onShowColouredSheet(context, notifier.blocPayNow.dataFetch.data['message'], maxLines: 2, color: Theme.of(context).colorScheme.error);
                     }
                   
                   });

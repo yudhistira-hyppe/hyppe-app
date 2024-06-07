@@ -44,6 +44,7 @@ class TextFieldCustom extends StatelessWidget {
         style: TextStyle(color: readOnly ? Colors.grey : Colors.black87),
         keyboardType: keyboardType ?? TextInputType.text,
         decoration: InputDecoration(
+          counterText: '',
           focusColor: Colors.white,
           enabledBorder: OutlineInputBorder(
             borderRadius: const BorderRadius.all(

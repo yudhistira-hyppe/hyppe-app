@@ -107,7 +107,7 @@ dependencies:
   # //Agora
   agora_rtc_engine: ^6.2.6
 
-  timelines: ^0.1.0
+  timeline_tile: ^2.0.0
   
   dynamic_widget: # Dynamic widget builder
     git:
