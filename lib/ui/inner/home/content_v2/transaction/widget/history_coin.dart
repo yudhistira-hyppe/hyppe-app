@@ -27,6 +27,7 @@ class HistoryCoinWidget extends StatelessWidget {
         textTitle = lang!.localeDatetime == 'id' ? 'Batal' : 'Cancel';
         break;
       case 'PENDING':
+      case 'IN PROGRESS':
         titleColor = kHyppeRed;
         textTitle = lang!.localeDatetime == 'id' ? 'Dalam Proses' : 'Menunggu Mu';
         break;

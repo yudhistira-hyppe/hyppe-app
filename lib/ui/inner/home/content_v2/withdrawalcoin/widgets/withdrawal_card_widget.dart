@@ -54,13 +54,12 @@ class WithdrawalCardWidget extends StatelessWidget {
                       FilteringTextInputFormatter.deny(RegExp("[.]"))
                     ],
                     onChange: (p0) {
-                      print(p0);
                       notif.debouncer.run(() {
                         if (int.parse(notif.textController.text) > notif.totalCoin) {
                           notif.textController.text = '';
                           // notif.typingValue = 0;
                           notif.convertCoin(context);
-                          Fluttertoast.showToast(msg: '${lang?.localeDatetime =='id'?'Maksimal Tukar Coins':'Withdrawals must be at least'}  ${System().numberFormat(amount: notif.totalCoin)}');
+                          ShowBottomSheet().onShowColouredSheet(context, '${lang?.localeDatetime =='id'?'Maksimal Tukar Coins':'Withdrawals must be at least'}  ${System().numberFormat(amount: notif.totalCoin)}', color: Theme.of(context).colorScheme.error);
                         }else{
                           notif.convertCoin(context);
                         }
@@ -89,14 +88,14 @@ class WithdrawalCardWidget extends StatelessWidget {
                                     notif.textController.text = '';
                                     // notif.typingValue = 0;
                                     notif.convertCoin(context);
-                                    Fluttertoast.showToast(msg: '${lang?.localeDatetime =='id'?'Maksimal Tukar Coins':'Withdrawals must be at least'} ${System().numberFormat(amount: notif.totalCoin)}');
+                                    ShowBottomSheet().onShowColouredSheet(context, '${lang?.localeDatetime =='id'?'Maksimal Tukar Coins':'Withdrawals must be at least'} ${System().numberFormat(amount: notif.totalCoin)}', color: Theme.of(context).colorScheme.error);
                                   }else{
                                     notif.textController.text = notif.groupsCoins[i].value.toStringAsFixed(0);
                                     if (int.parse(notif.textController.text) > notif.totalCoin){
                                       notif.textController.text = '';
                                       // notif.typingValue = 0;
                                       notif.convertCoin(context);
-                                      Fluttertoast.showToast(msg: '${lang?.localeDatetime =='id'?'Maksimal Tukar Coins':'Withdrawals must be at least'} ${System().numberFormat(amount: notif.totalCoin)}');
+                                      ShowBottomSheet().onShowColouredSheet(context, '${lang?.localeDatetime =='id'?'Maksimal Tukar Coins':'Withdrawals must be at least'} ${System().numberFormat(amount: notif.totalCoin)}', color: Theme.of(context).colorScheme.error);
                                     }else{
                                       notif.textController.text = notif.groupsCoins[i].value.toStringAsFixed(0);
                                       notif.convertCoin(context);

@@ -75,30 +75,42 @@ class DetailWithdrawalModel {
 }
 
 class Tracking {
-  String? title;
+  String? titleId;
+  String? titleEn;
   String? status;
   String? action;
   String? timestamp;
-  String? description;
+  String? descriptionId;
+  String? descriptionEn;
 
   Tracking(
-      {this.title, this.status, this.action, this.timestamp, this.description});
+      {this.titleId,
+      this.titleEn,
+      this.status,
+      this.action,
+      this.timestamp,
+      this.descriptionId,
+      this.descriptionEn});
 
   Tracking.fromJson(Map<String, dynamic> json) {
-    title = json['title'];
+    titleId = json['title_id'];
+    titleEn = json['title_en'];
     status = json['status'];
     action = json['action'];
     timestamp = json['timestamp'];
-    description = json['description'];
+    descriptionId = json['description_id'];
+    descriptionEn = json['description_en'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['title'] = title;
+    data['title_id'] = titleId;
+    data['title_en'] = titleEn;
     data['status'] = status;
     data['action'] = action;
     data['timestamp'] = timestamp;
-    data['description'] = description;
+    data['description_id'] = descriptionId;
+    data['description_en'] = descriptionEn;
     return data;
   }
 }

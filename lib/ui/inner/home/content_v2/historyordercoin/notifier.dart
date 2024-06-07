@@ -2,8 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/bloc/monetization/historyordercoin/bloc.dart';
 import 'package:hyppe/core/bloc/monetization/historyordercoin/state.dart';
-import 'package:hyppe/core/models/collection/coins/history_order_coin.dart';
+import 'package:hyppe/core/bloc/transaction/historytransaction/bloc.dart';
+import 'package:hyppe/core/bloc/transaction/historytransaction/state.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/models/collection/coins/history_transaction.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -12,11 +16,12 @@ import 'widgets/dialog_date.dart';
 import 'widgets/dialog_datepicker.dart';
 import 'widgets/dialog_info.dart';
 class HistoryOrderCoinNotifier with ChangeNotifier {
-  final bloc = HistoryOrderCoinDataBloc();
+  final bloc = HistoryTransactionDataBloc();
+  Map? _paramsHistory = {};
 
-  List<HistoryOrderCoinModel> _result = [];
-  List<HistoryOrderCoinModel> get result => _result;
-  set result(List<HistoryOrderCoinModel> val) {
+  List<TransactionHistoryCoinModel> _result = [];
+  List<TransactionHistoryCoinModel> get result => _result;
+  set result(List<TransactionHistoryCoinModel> val) {
     _result = val;
     notifyListeners();
   }
@@ -76,6 +81,14 @@ class HistoryOrderCoinNotifier with ChangeNotifier {
       result.clear();
       page = 0;
       
+      String email = SharedPreference().readStorage(SpKeys.email);
+      _paramsHistory?.addAll({
+        "email": email,
+        "status": ["PENDING","IN PROGRESS","FAILED"],
+        "type": ["Pembelian Coin"],
+        "page": page
+      });
+
       DateTime dateToday = DateTime.now();
       String date = dateToday.toString().substring(0, 10);
       int groupDate = groupsDate.firstWhere((element) => element.selected == true).index;
@@ -83,29 +96,35 @@ class HistoryOrderCoinNotifier with ChangeNotifier {
         case 2:
             var startDate = DateTime(dateToday.year, dateToday.month, dateToday.day - 30);
             final newStartDate = startDate.toString().substring(0, 10);
-            if (!mounted) return;
-            await bloc.getHistoryOrderCoin(context, page: page, startdate: newStartDate, enddate: date);
+            _paramsHistory?.addAll({
+               "startdate": newStartDate,
+                "enddate": date
+            });
           break;
         case 3:
             var startDate = DateTime(dateToday.year, dateToday.month, dateToday.day - 90);
             final newStartDate = startDate.toString().substring(0, 10);
-            if (!mounted) return;
-            await bloc.getHistoryOrderCoin(context, page: page, startdate: newStartDate, enddate: date);
+            _paramsHistory?.addAll({
+               "startdate": newStartDate,
+                "enddate": date
+            });
           break;
         case 4:
             var res = groupsDate.firstWhere((element) => element.selected == true);
             final newStartDate = DateFormat('yyyy-MM-dd').format(DateTime.parse(res.startDate??''));
             final enddate = DateFormat('yyyy-MM-dd').format(DateTime.parse(res.endDate??''));
-            if (!mounted) return;
-            await bloc.getHistoryOrderCoin(context, page: page, startdate: newStartDate, enddate: enddate);
+            _paramsHistory?.addAll({
+               "startdate": newStartDate,
+                "enddate": enddate
+            });
           break;
         default:
-          if (!mounted) return;
-          await bloc.getHistoryOrderCoin(context, page: page);
           break;
       }
+
+      await bloc.getHistoryTransaction(context, data: _paramsHistory);
       
-      if (bloc.dataFetch.dataState == HistoryOrderCoinState.getBlocSuccess && bloc.dataFetch.data.isNotEmpty) {
+      if (bloc.dataFetch.dataState == HistoryTransactionState.getBlocSuccess && bloc.dataFetch.data.isNotEmpty) {
         result = bloc.dataFetch.data;
         isLastPage = false;
       } else {
@@ -118,42 +137,58 @@ class HistoryOrderCoinNotifier with ChangeNotifier {
   }
 
   Future<void> loadMore(BuildContext context, mounted) async {
+    _paramsHistory = {};
     try{
       DateTime dateToday = DateTime.now();
       String date = dateToday.toString().substring(0, 10);
       page = page+1;
+
+      String email = SharedPreference().readStorage(SpKeys.email);
+      _paramsHistory?.addAll({
+        "email": email,
+        "status": ["PENDING", "IN PROGRESS", "FAILED"],
+        "type": ["Pembelian Coin"],
+        "page": page
+      });
+      
       int groupDate = groupsDate.firstWhere((element) => element.selected == true).index;
       switch (groupDate) {
         case 2:
             var startDate = DateTime(dateToday.year, dateToday.month, dateToday.day - 30);
             final newStartDate = startDate.toString().substring(0, 10);
-            if (!mounted) return;
-            await bloc.getHistoryOrderCoin(context, page: page, startdate: newStartDate, enddate: date);
+            _paramsHistory?.addAll({
+               "startdate": newStartDate,
+                "enddate": date
+            });
           break;
         case 3:
             var startDate = DateTime(dateToday.year, dateToday.month, dateToday.day - 90);
             final newStartDate = startDate.toString().substring(0, 10);
-            if (!mounted) return;
-            await bloc.getHistoryOrderCoin(context, page: page, startdate: newStartDate, enddate: date);
+            _paramsHistory?.addAll({
+               "startdate": newStartDate,
+                "enddate": date
+            });
           break;
         case 4:
             var res = groupsDate.firstWhere((element) => element.selected == true);
-            final newStartDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(res.startDate??''));
-            final enddate = DateFormat('dd-MM-yyyy').format(DateTime.parse(res.endDate??''));
-            if (!mounted) return;
-            await bloc.getHistoryOrderCoin(context, page: page, startdate: newStartDate, enddate: enddate);
+            final newStartDate = DateFormat('yyyy-MM-dd').format(DateTime.parse(res.startDate??''));
+            final enddate = DateFormat('yyyy-MM-dd').format(DateTime.parse(res.endDate??''));
+            _paramsHistory?.addAll({
+               "startdate": newStartDate,
+                "enddate": enddate
+            });
           break;
         default:
-          if (!mounted) return;
-          await bloc.getHistoryOrderCoin(context, page: page);
           break;
       }
-      if (bloc.dataFetch.dataState == HistoryOrderCoinState.getBlocSuccess && bloc.dataFetch.data.isNotEmpty) {
+
+      await bloc.getHistoryTransaction(context, data: _paramsHistory);
+      
+      if (bloc.dataFetch.dataState == HistoryTransactionState.getBlocSuccess && bloc.dataFetch.data.isNotEmpty) {
         result.addAll(bloc.dataFetch.data);
       } else {
         isLastPage = true;
         page = page-1;
-        notifyListeners();
         // Fluttertoast.showToast(msg: 'Already on the last ');
       }
     }catch(_){

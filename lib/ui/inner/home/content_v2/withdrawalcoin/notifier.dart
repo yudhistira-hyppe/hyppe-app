@@ -216,9 +216,9 @@ class WithdrawalCoinNotifier with ChangeNotifier {
                 pinController.clear();
                 _errorPinWithdrawMsg = '';
                 if (lang.translate.localeDatetime == 'id'){
-                  ShowBottomSheet().onShowColouredSheet(context, bloc.dataFetch.data['message'][0]['info']['ID'], color: Theme.of(context).colorScheme.error);
+                  ShowBottomSheet().onShowColouredSheet(context, bloc.dataFetch.data['message'][0]['info']['ID'], maxLines: 2, color: Theme.of(context).colorScheme.error);
                 }else{
-                  ShowBottomSheet().onShowColouredSheet(context, bloc.dataFetch.data['message'][0]['info']['EN'], color: Theme.of(context).colorScheme.error);
+                  ShowBottomSheet().onShowColouredSheet(context, bloc.dataFetch.data['message'][0]['info']['EN'], maxLines: 2, color: Theme.of(context).colorScheme.error);
                 }
             }
           }

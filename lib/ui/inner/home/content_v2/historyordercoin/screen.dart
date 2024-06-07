@@ -1,6 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:hyppe/core/bloc/monetization/historyordercoin/state.dart';
+import 'package:hyppe/core/bloc/transaction/historytransaction/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
@@ -97,9 +97,9 @@ class _HistoryOrderCoinScreenState extends State<HistoryOrderCoinScreen> {
       ),
       body: Consumer<HistoryOrderCoinNotifier>(builder: (context, notifier, _) {
         
-        if ((notifier.bloc.dataFetch.dataState == HistoryOrderCoinState.init ||
+        if ((notifier.bloc.dataFetch.dataState == HistoryTransactionState.init ||
                 notifier.bloc.dataFetch.dataState ==
-                    HistoryOrderCoinState.loading) &&
+                    HistoryTransactionState.loading) &&
             !notifier.isLoadMore) {
           return const ContentLoader();
         } else {

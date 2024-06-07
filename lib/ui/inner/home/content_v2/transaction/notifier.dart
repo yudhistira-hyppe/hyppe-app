@@ -118,6 +118,8 @@ class TransactionNotifier extends ChangeNotifier {
   bool get isDetailLoading => _isDetailLoading;
   bool _isLoadingSummaryWithdraw = false;
   bool get isLoadingSummaryWithdraw => _isLoadingSummaryWithdraw;
+  bool _isLoadingSaldo = false;
+  bool get isLoadingSaldo => _isLoadingSaldo;
 
   DateTime _timeVA = DateTime.now();
   DateTime get timeVA => _timeVA;
@@ -433,7 +435,7 @@ class TransactionNotifier extends ChangeNotifier {
       String email = SharedPreference().readStorage(SpKeys.email);
       _paramsHistory?.addAll({
         "email": email,
-        "status": ["SUCCESS", "PENDING", "IN PROGRESS", "FAILED"],
+        "status": ["SUCCESS", "IN PROGRESS", "FAILED"],
         // "type": ["Pembelian Coin", "Penukaran Coin"],
         "page": page
       });
@@ -569,6 +571,11 @@ class TransactionNotifier extends ChangeNotifier {
 
   setIsLoading(bool val) {
     _isLoading = val;
+  }
+
+  set isLoadingSaldo(bool val) {
+    _isLoadingSaldo = val;
+    notifyListeners();
   }
 
   set isLoadingInProgress(bool val) {
@@ -831,7 +838,7 @@ class TransactionNotifier extends ChangeNotifier {
   }
 
   Future getAccountBalance(BuildContext context) async {
-    if (dataTransaction?.isEmpty ?? false) isLoading = true;
+    isLoadingSaldo = true;
 
     bool connect = await System().checkConnections();
     if (connect) {
@@ -847,6 +854,7 @@ class TransactionNotifier extends ChangeNotifier {
         } else {
           _accountBalance = AccountBalanceModel.fromJSON({"totalpenarikan": 0});
         }
+        isLoadingSaldo = false;
       }
 
       if (fetch.postsState == TransactionState.getAccountBalanceError) {

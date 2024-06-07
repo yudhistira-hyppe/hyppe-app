@@ -2,10 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
@@ -46,6 +48,7 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:math' as math;
 
 import '../../../../../../../core/config/ali_config.dart';
@@ -1545,6 +1548,34 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
                               ),
                             ),
                           ),
+                          if (data.urlLink != '')
+                            Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 12.0),
+                              child: RichText(
+                                text: TextSpan(children: [
+                                  TextSpan(
+                                    text: (data.judulLink != null)
+                                        ? data.judulLink
+                                        : data.urlLink,
+                                    style: TextStyle(
+                                        color: Theme.of(context).colorScheme.primary,
+                                        fontWeight: FontWeight.bold),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () async {
+                                        var uri = data.urlLink??'';
+                                        if (!uri.withHttp()){
+                                          uri='https://$uri';
+                                        }
+                                        if (await canLaunchUrl(Uri.parse(uri))) {
+                                            await launchUrl(Uri.parse(uri));
+                                          } else {
+                                            throw  Fluttertoast.showToast(msg: 'Could not launch $uri');
+                                          }
+                                      },
+                                  )
+                                ]),
+                              ),
+                            ),
                           SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
                                   (data.boosted.isEmpty) &&
                                   (data.reportedStatus != 'OWNED' && data.reportedStatus != 'BLURRED' && data.reportedStatus2 != 'BLURRED') &&

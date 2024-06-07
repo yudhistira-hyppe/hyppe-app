@@ -9,6 +9,7 @@ import 'package:hyppe/core/models/collection/localization_v2/localization_model.
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/section_dropdown_widget.dart';
@@ -36,20 +37,42 @@ class CoinPage extends StatefulWidget {
 
 class _CoinPageState extends State<CoinPage> {
   LocalizationModelV2? lang;
+  final ScrollController scrollController = ScrollController();
   
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'saldocoins');
     lang = context.read<TranslateNotifierV2>().translate;
+    var notifier = Provider.of<CoinNotifier>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       initializeDateFormatting('id', null);
-      context.read<CoinNotifier>().getDateFilter(context);
-      context.read<CoinNotifier>().getTypeFilter(context);
-      context.read<CoinNotifier>().initialCoin();
-      context.read<CoinNotifier>().initHistory(context, mounted);
-      context.read<CoinNotifier>().tempSelectedDateStart = DateTime.now().toString();
-      context.read<CoinNotifier>().tempSelectedDateEnd = DateTime.now().toString();
+      notifier.getDateFilter(context);
+      notifier.getTypeFilter(context);
+      notifier.initialCoin();
+      notifier.initHistory(context, mounted);
+      notifier.tempSelectedDateStart = DateTime.now().toString();
+      notifier.tempSelectedDateEnd = DateTime.now().toString();
 
+    });
+    scrollController.addListener(() async {
+      if (scrollController.position.pixels >=
+          scrollController.position.maxScrollExtent) {
+        if (notifier.isLoadMore) {
+          return;
+        }
+
+        if (mounted) {
+          notifier.isLoadMore = true;
+        }
+
+        if (!notifier.isLastPage && notifier.isLoadMore) {
+          await notifier.loadMore(context, mounted);
+        }
+
+        if (mounted) {
+          notifier.isLoadMore = false;
+        }
+      }
     });
     super.initState();
   }
@@ -74,6 +97,7 @@ class _CoinPageState extends State<CoinPage> {
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 12.0),
               physics: const BouncingScrollPhysics(),
+              controller: scrollController,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -221,7 +245,12 @@ class _CoinPageState extends State<CoinPage> {
 
   List<Widget> widgetGenerate(CoinNotifier notifier) {
     List<Widget> widget = [];
-    for (var i = 0; i < notifier.result.length; i++) {
+    int lengthResult = notifier.result.length;
+    for (var i = 0; i < lengthResult; i++) {
+      if (notifier.result.length == i && notifier.isLoadMore){
+        Widget item =  const CustomLoading();
+        widget.add(item);
+      }
       Widget item = Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: GestureDetector(
