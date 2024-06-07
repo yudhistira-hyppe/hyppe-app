@@ -76,8 +76,8 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   int totPause = 0;
   int pageNumberUserShare = 0;
   int limitNumberUserShare = 15;
-  int settingStreamTime1 = 3600; //waktu untuk streaming dalam detik (1jam)
-  int settingStreamTime2 = 300; // 5 menit
+  int settingStreamTime1 = 300; //waktu untuk streaming dalam detik (1jam = 3600 s)
+  int settingStreamTime2 = 100; // 5 menit (300 s)
 
   Duration timeCountdownReported = const Duration(seconds: 30);
 
@@ -199,9 +199,9 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
 
     print("-------- init stream $forConfig ---------");
     isloading = true;
-
     isloadingPreview = true;
     notifyListeners();
+    await requestPermission(context);
 
     // _alivcBase = AlivcBase.init();
 
@@ -226,6 +226,9 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     });
 
     // notifyListeners();
+    isloading = false;
+    isloadingPreview = false;
+    notifyListeners();
 
     if (!mounted) return;
     tn = context.read<TranslateNotifierV2>().translate;
@@ -307,11 +310,8 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
 
     await engine.enableAudio();
     await engine.enableVideo();
-    await engine.startPreview();
 
-    isloading = false;
-    isloadingPreview = false;
-    notifyListeners();
+    await engine.startPreview();
   }
 
   Future<void> disposeAgora() async {
