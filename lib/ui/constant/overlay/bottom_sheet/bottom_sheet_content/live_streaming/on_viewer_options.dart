@@ -22,6 +22,12 @@ class OnViewerOptions extends StatefulWidget {
 
 class _OnViewerOptionsState extends State<OnViewerOptions> {
   @override
+  void initState() {
+    
+    context.read<ViewStreamingNotifier>().buttonSheetReport = true;
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     final language = context.read<TranslateNotifierV2>().translate;
     return Container(

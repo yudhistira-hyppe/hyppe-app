@@ -125,6 +125,13 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
+  bool _buttonSheetReport = false;
+  bool get buttonSheetReport => _buttonSheetReport;
+  set buttonSheetReport(bool state) {
+    _buttonSheetReport = state;
+    notifyListeners();
+  }
+
   List<LinkStreamModel> _listStreamers = [];
   List<LinkStreamModel> get listStreamers => _listStreamers;
   set listStreamers(List<LinkStreamModel> data) {
@@ -216,6 +223,10 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
           }
 
           if (buttonSheetProfil){
+            Navigator.pop(context);
+          }
+
+          if (buttonSheetReport){
             Navigator.pop(context);
           }
         },
@@ -853,6 +864,7 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
             return const AlreadyReported();
           }).whenComplete(() {
         debugPrint('Already Reported');
+        buttonSheetReport = false;
       });
     } else {
       showModalBottomSheet<int>(
@@ -863,6 +875,7 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
             return const ReportLive();
           }).whenComplete(() {
         selectedReportValue = null;
+        buttonSheetReport = false;
         debugPrint('Complete Report Live Streaming');
       });
     }

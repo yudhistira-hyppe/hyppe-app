@@ -136,6 +136,7 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                     // notifier.reportfAliplayer = widget.fAliplayer;
                     notifier.reportdata = widget.data;
                     print('data ===== ${widget.data}');
+                    notifier.buttonSheetReport = false;
                     ShowBottomSheet.onViewerOptions(context, notifier);
                   },
                   child: Padding(

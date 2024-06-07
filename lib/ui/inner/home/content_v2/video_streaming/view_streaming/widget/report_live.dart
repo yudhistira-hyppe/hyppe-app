@@ -14,6 +14,12 @@ class ReportLive extends StatefulWidget {
 }
 
 class _ReportLiveState extends State<ReportLive> {
+
+  @override
+  void initState() {
+    context.read<ViewStreamingNotifier>().buttonSheetReport = true;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     final tn = context.read<TranslateNotifierV2>().translate;
