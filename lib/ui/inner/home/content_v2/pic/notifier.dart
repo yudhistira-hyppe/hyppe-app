@@ -32,7 +32,7 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
   bool isMute = true;
   int currIndex = 0;
   int get currentIndex => currIndex;
-  
+
   LocalizationModelV2 language = LocalizationModelV2();
   translate(LocalizationModelV2 translate) {
     language = translate;
@@ -47,10 +47,11 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
   Offset positionDxDy = const Offset(0, 0);
 
   List<ContentData>? get pic => _pic;
-  setIsSound(bool val){
+  setIsSound(bool val) {
     isMute = val;
     notifyListeners();
   }
+
   set pic(List<ContentData>? val) {
     _pic = val;
     notifyListeners();
@@ -244,8 +245,7 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
   void navigateToSlidedDetailPic(BuildContext context, int index) async {
     final connect = await _system.checkConnections();
     if (connect) {
-      Routing().move(Routes.picSlideDetailPreview,
-          argument: SlidedPicDetailScreenArgument(picData: pic, index: index.toDouble(), page: contentsQuery.page, limit: contentsQuery.limit, type: TypePlaylist.landingpage));
+      Routing().move(Routes.picSlideDetailPreview, argument: SlidedPicDetailScreenArgument(picData: pic, index: index.toDouble(), page: contentsQuery.page, limit: contentsQuery.limit, type: TypePlaylist.landingpage));
     } else {
       ShowBottomSheet.onNoInternetConnection(context);
     }
@@ -311,18 +311,18 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
 
   void initialPicConnection(BuildContext context) async {
     final connect = await _system.checkConnections();
-      if (!connect) {
-        isConnect = false;
-        notifyListeners();
-        // ignore: use_build_context_synchronously
-        ShowGeneralDialog.showToastAlert(
-          context,
-          language.internetConnectionLost ?? ' Error',
-          () async {},
-        );
-      } else {
-        isConnect = true;
-        notifyListeners();
-      }
+    if (!connect) {
+      isConnect = false;
+      notifyListeners();
+      // ignore: use_build_context_synchronously
+      ShowGeneralDialog.showToastAlert(
+        context,
+        language.internetConnectionLost ?? ' Error',
+        () async {},
+      );
+    } else {
+      isConnect = true;
+      notifyListeners();
+    }
   }
 }

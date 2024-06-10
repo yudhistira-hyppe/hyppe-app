@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'dart:ffi';
+
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
@@ -1489,7 +1490,17 @@ class System {
       try {
         print("!!!!!!!!!!!!!!!!!!!!kirim data");
         final notifier = ViewBloc();
-        await notifier.viewPostUserBloc(context, postId: data.postID ?? '', emailOwner: data.email ?? '');
+        await notifier.viewPostUserBloc(context,
+            postId: data.postID ?? '',
+            emailOwner: data.email ?? '',
+            userView: data.userView ?? [],
+            userLike: data.userLike ?? [],
+            postType: data.postType ?? '',
+            saleAmount: data.saleAmount ?? 0,
+            createdAt: data.createdAt ?? '',
+            mediaSource: data.mediaSource ?? [],
+            description: data.description ?? '',
+            active: data.active ?? true);
         final fetch = notifier.viewFetch;
 
         if (!(data.insight?.isView ?? true)) {
@@ -1507,21 +1518,36 @@ class System {
   }
 
   Future<void> increaseViewCount2(BuildContext context, v2.ContentData data, {bool check = true}) async {
-    print("??!!!!!!!!!!!!!!!!!!!!kirim data");
+    DateTime now = DateTime.now();
     try {
-      print("!!!!!!!!!!!!!!!!!!!!kirim data2");
-      final notifier = ViewBloc();
-      await notifier.viewPostUserBloc(context, postId: data.postID ?? '', emailOwner: data.email ?? '', check: check);
-      final fetch = notifier.viewFetch;
+      // print("--> services/system.dart increaseViewCount2 post-data;postID;email:" + data.postID.toString() + ";" + data.email.toString());
+      // print("--> services/system.dart increaseViewCount2 postID;data.insight-before:" + data.postID.toString() + ";" + jsonEncode(data.insight?.toJson()));
+      // print("--> services/system.dart increaseViewCount2 userView: " + data.userView.toString());
 
       if (!(data.insight?.isView ?? true)) {
+        final notifier = ViewBloc();
+        await notifier.viewPostUserBloc(context,
+            postId: data.postID ?? '',
+            emailOwner: data.email ?? '',
+            check: check,
+            userView: data.userView ?? [],
+            userLike: data.userLike ?? [],
+            postType: data.postType ?? '',
+            saleAmount: data.saleAmount ?? 0,
+            createdAt: data.createdAt ?? '',
+            mediaSource: data.mediaSource ?? [],
+            description: data.description ?? '',
+            active: data.active ?? true);
+        final fetch = notifier.viewFetch;
+
         if (fetch.viewState == ViewState.viewUserPostSuccess) {
           data.insight?.isView = true;
           if (!System().isMy(data.email)) {
             var email = SharedPreference().readStorage(SpKeys.email);
-            if (!(data.viewer?.contains(email) ?? false)) {
+            if (!(data.userView?.contains(email) ?? false)) {
               data.insight?.views = (data.insight?.views ?? 0) + 1;
             }
+            print("--> viewcount:postID;data.insight-after:" + data.postID.toString() + ";" + jsonEncode(data.insight?.toJson()));
           }
         }
       }
