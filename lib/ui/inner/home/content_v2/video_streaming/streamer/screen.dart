@@ -127,6 +127,10 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
     // var streampro = Provider.of<StreamerNotifier>(context, listen: false);
     if (state == AppLifecycleState.inactive) {
       print("========= Streamer AppLifecycleState.inactive ==========");
+
+      // WidgetsBinding.instance.removeObserver(this);
+      // context.read<StreamerNotifier>().inactivityTimer?.cancel();
+      // context.read<StreamerNotifier>().disposeAgora();
     }
     if (state == AppLifecycleState.resumed) {
       print("========= Streamer AppLifecycleState.resumed ==========");

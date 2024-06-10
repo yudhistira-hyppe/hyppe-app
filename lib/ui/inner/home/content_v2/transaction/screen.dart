@@ -32,13 +32,12 @@ class Transaction extends StatefulWidget {
 class _TransactionState extends State<Transaction> {
   final ScrollController scrollController = ScrollController();
   LocalizationModelV2? lang;
-  
+
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'Transaction');
     lang = context.read<TranslateNotifierV2>().translate;
-    var _notifier =
-          Provider.of<TransactionNotifier>(context, listen: false);
+    var _notifier = Provider.of<TransactionNotifier>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       initializeDateFormatting('id', null);
       _notifier.resetSelected(context, mounted);
@@ -52,8 +51,7 @@ class _TransactionState extends State<Transaction> {
       //     .addListener(() => _notifier.scrollList(context, _scrollController));
     });
     scrollController.addListener(() async {
-      if (scrollController.position.pixels >=
-          scrollController.position.maxScrollExtent) {
+      if (scrollController.position.pixels >= scrollController.position.maxScrollExtent) {
         if (_notifier.isLoadMore) {
           return;
         }
@@ -81,9 +79,7 @@ class _TransactionState extends State<Transaction> {
 
   @override
   void deactivate() {
-    Provider.of<TransactionNotifier>(materialAppKey.currentContext ?? context,
-            listen: false)
-        .setIsLoading(false);
+    Provider.of<TransactionNotifier>(materialAppKey.currentContext ?? context, listen: false).setIsLoading(false);
     super.deactivate();
   }
 
@@ -111,15 +107,11 @@ class _TransactionState extends State<Transaction> {
             child: Column(
               children: [
                 Container(
-                  decoration: BoxDecoration(
-                      color: kHyppeBurem.withOpacity(.05),
-                      border: Border.all(color: kHyppeBurem, width: .5),
-                      borderRadius: BorderRadius.circular(18.0)),
+                  decoration: BoxDecoration(color: kHyppeBurem.withOpacity(.05), border: Border.all(color: kHyppeBurem, width: .5), borderRadius: BorderRadius.circular(18.0)),
                   child: CustomListTile(
                     iconData: "${AssetPath.vectorPath}transaction-new.svg",
                     title: notifier2.translate.yourorder ?? "Pesanan Kamu",
-                    onTap: () => Navigator.pushNamed(
-                        context, Routes.historyordercoin),
+                    onTap: () => Navigator.pushNamed(context, Routes.historyordercoin),
                   ),
                 ),
                 twentyPx,
@@ -127,11 +119,8 @@ class _TransactionState extends State<Transaction> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomTextWidget(
-                      textToDisplay:
-                          notifier2.translate.recentTransaction ??
-                              'Recent Transaction',
-                      textStyle: const TextStyle(
-                          fontSize: 18.0, fontWeight: FontWeight.bold),
+                      textToDisplay: notifier2.translate.recentTransaction ?? 'Recent Transaction',
+                      textStyle: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -144,80 +133,53 @@ class _TransactionState extends State<Transaction> {
                     scrollDirection: Axis.horizontal,
                     children: [
                       Visibility(
-                        visible: notifier.selectedFiltersValue != 1 ||
-                            notifier.selectedDateValue != 1,
+                        visible: notifier.selectedFiltersValue != 1 || notifier.selectedDateValue != 1,
                         child: GestureDetector(
                           onTap: () {
                             notifier.resetSelected(context, mounted);
                             notifier.isLoading = true;
-                            Future.microtask(() =>
-                                notifier.initHistory(context, mounted));
+                            Future.microtask(() => notifier.initHistory(context, mounted));
                           },
                           child: Container(
                             margin: const EdgeInsets.only(right: 12.0),
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: kHyppeBurem, width: .5),
-                                borderRadius: BorderRadius.circular(32.0)),
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            decoration: BoxDecoration(border: Border.all(color: kHyppeBurem, width: .5), borderRadius: BorderRadius.circular(32.0)),
                             child: const Icon(Icons.close),
                           ),
                         ),
                       ),
                       SectionDropdownWidget(
                           title: notifier.selectedFiltersLabel,
-                          onTap: () =>
-                              notifier.showButtomSheetFilters(context),
+                          onTap: () => notifier.showButtomSheetFilters(context),
                           isActive: notifier.filterDate.isNotEmpty
-                              ? notifier.filterList
-                                          .firstWhere(
-                                              (e) => e.selected == true)
-                                          .index ==
-                                      1
+                              ? notifier.filterList.firstWhere((e) => e.selected == true).index == 1
                                   ? false
                                   : true
                               : false),
-                      SectionDropdownWidget(
-                          title: notifier.selectedDateLabel,
-                          onTap: () =>
-                              notifier.showButtomSheetDate(context),
-                          isActive: notifier.selectedDateValue != 1
+                      SectionDropdownWidget(title: notifier.selectedDateLabel, onTap: () => notifier.showButtomSheetDate(context), isActive: notifier.selectedDateValue != 1
                           // isActive: false
                           ),
                     ],
                   ),
                 ),
                 Expanded(
-                  child: Consumer<TransactionNotifier>(
-                      builder: (context, notifier, _) {
-                    if ((notifier.bloc.dataFetch.dataState ==
-                                HistoryTransactionState.init ||
-                            notifier.bloc.dataFetch.dataState ==
-                                HistoryTransactionState.loading) &&
-                        !notifier.isLoadMore) {
+                  child: Consumer<TransactionNotifier>(builder: (context, notifier, _) {
+                    if ((notifier.bloc.dataFetch.dataState == HistoryTransactionState.init || notifier.bloc.dataFetch.dataState == HistoryTransactionState.loading) && !notifier.isLoadMore) {
                       return const ContentLoader();
                     } else {
                       return (notifier.result.isEmpty)
                           ? Container(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onPrimary,
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10.0),
-                              margin:
-                                  const EdgeInsets.only(bottom: 8.0),
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              padding: const EdgeInsets.symmetric(vertical: 10.0),
+                              margin: const EdgeInsets.only(bottom: 8.0),
                               child: Center(
                                 child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   mainAxisSize: MainAxisSize.max,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     const CustomIconWidget(
-                                      iconData:
-                                          '${AssetPath.vectorPath}icon_no_result.svg',
+                                      iconData: '${AssetPath.vectorPath}icon_no_result.svg',
                                       width: 160,
                                       height: 160,
                                       defaultColor: false,
@@ -226,32 +188,17 @@ class _TransactionState extends State<Transaction> {
                                     CustomTextWidget(
                                       textAlign: TextAlign.center,
                                       maxLines: 1,
-                                      textToDisplay:
-                                          lang?.localeDatetime == 'id'
-                                              ? 'Masih sepi, nih'
-                                              : 'There\'s no one here',
-                                      textStyle: context
-                                          .getTextTheme()
-                                          .bodyLarge
-                                          ?.copyWith(
-                                              fontWeight:
-                                                  FontWeight.w700,
-                                              color: context
-                                                  .getColorScheme()
-                                                  .onBackground),
+                                      textToDisplay: lang?.localeDatetime == 'id' ? 'Masih sepi, nih' : 'There\'s no one here',
+                                      textStyle: context.getTextTheme().bodyLarge?.copyWith(fontWeight: FontWeight.w700, color: context.getColorScheme().onBackground),
                                     ),
                                     eightPx,
                                     CustomTextWidget(
                                       textAlign: TextAlign.center,
                                       maxLines: 2,
-                                      textToDisplay: lang
-                                                  ?.localeDatetime ==
-                                              'id'
+                                      textToDisplay: lang?.localeDatetime == 'id'
                                           ? 'Yuk, mulai miliki penghasilan dari membuat konten dan dukung creator favoritmu!'
                                           : 'Let\'s start earning from creating content and supporting your favorite creators!',
-                                      textStyle: context
-                                          .getTextTheme()
-                                          .bodyLarge,
+                                      textStyle: context.getTextTheme().bodyLarge,
                                     ),
                                   ],
                                 ),
@@ -263,28 +210,21 @@ class _TransactionState extends State<Transaction> {
                                 notifier.isLastPage = false;
 
                                 notifier.page = 0;
-                
-                                await notifier.initHistory(
-                                    context, mounted);
+
+                                await notifier.initHistory(context, mounted);
                               },
                               child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10.0),
-                                margin:
-                                    const EdgeInsets.only(bottom: 8.0),
+                                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                margin: const EdgeInsets.only(bottom: 8.0),
                                 child: ListView.builder(
                                   controller: scrollController,
-                                  physics:
-                                      const BouncingScrollPhysics(),
-                                  itemCount: notifier.isLoadMore
-                                      ? notifier.result.length + 1
-                                      : notifier.result.length,
+                                  physics: const BouncingScrollPhysics(),
+                                  itemCount: notifier.isLoadMore ? notifier.result.length + 1 : notifier.result.length,
                                   itemBuilder: (context, index) {
-                                    if (notifier.result.length ==
-                                        index) {
+                                    if (notifier.result.length == index) {
                                       return const CustomLoading();
                                     }
-                
+
                                     return HistoryCoinWidget(
                                       data: notifier.result[index],
                                       lang: lang,

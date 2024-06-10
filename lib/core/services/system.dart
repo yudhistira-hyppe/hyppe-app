@@ -305,6 +305,8 @@ class System {
       value = DateFormat('dd:MM:yyyy - hh:mm', lang).format(DateTime.parse(dateParams));
     } else if (displayOption == 11) {
       value = DateFormat('d MMM yyyy - hh:mm', lang).format(DateTime.parse(dateParams));
+    } else if (displayOption == 12) {
+      value = DateFormat('MM dd, yyyy - hh:mm', lang).format(DateTime.parse(dateParams));
     }
     return value;
   }
@@ -1106,7 +1108,6 @@ class System {
   }
 
   Future<bool> requestPermission(BuildContext context, {required List<Permission> permissions}) async {
-    // request permission
     final permissionsStatus = await permissions.request();
 
     return !permissionsStatus.values.toList().contains(PermissionStatus.denied);

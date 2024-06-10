@@ -132,8 +132,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
     genderController.text = (notifierData.user.profile?.gender ?? "").getGenderByLanguage();
     dobController.text = notifierData.user.profile?.dob ?? "";
     mobileController.text = notifierData.user.profile?.mobileNumber ?? "";
-    urlLinkController.text = notifierData.user.profile?.urlLink??"";
-    titleLinkController.text = notifierData.user.profile?.judulLink??"";
+    urlLinkController.text = notifierData.user.profile?.urlLink ?? "";
+    titleLinkController.text = notifierData.user.profile?.judulLink ?? "";
   }
 
   DateTime initialDateTime() {
@@ -382,13 +382,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
           print('-');
 
           SignUpCompleteProfiles _dataBio = SignUpCompleteProfiles(
-            email: emailController.text,
-            bio: bio,
-            fullName: fullNameController.text,
-            username: userNameController.text,
-            urlLink: urlLinkController.text,
-            judulLink: titleLinkController.text
-          );
+              email: emailController.text, bio: bio, fullName: fullNameController.text, username: userNameController.text, urlLink: urlLinkController.text, judulLink: titleLinkController.text);
 
           SignUpCompleteProfiles _dataPersonalInfo = SignUpCompleteProfiles(
             email: emailController.text,
@@ -842,12 +836,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
 
     Navigator.pushNamed(context, Routes.addlink, arguments: {
       'routes': Routes.selfProfile,
-      'urlLink': urlLinkController.text.isEmpty
-          ? null
-          : urlLinkController.text,
-      'judulLink': titleLinkController.text.isEmpty
-          ? null
-          : titleLinkController.text
+      'urlLink': urlLinkController.text.isEmpty ? null : urlLinkController.text,
+      'judulLink': titleLinkController.text.isEmpty ? null : titleLinkController.text
     });
   }
 }

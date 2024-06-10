@@ -140,7 +140,7 @@ class _PelanggaranDetailState extends State<PelanggaranDetail> {
           twentyPx,
           textTwo(
             translate.localeDatetime == 'id' ? 'Jumlah Pelanggaran' : 'Number of Violations',
-            '${widget.data?.streamBannedMax ?? notifier.dataBanned.streamBannedDate ?? '-'} kali',
+            '${widget.data?.streamBannedMax ?? notifier.dataBanned.streamBannedMax ?? '-'} kali',
           ),
         ],
       ),

@@ -18,94 +18,73 @@ class CardCoinWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: SizeConfig.screenHeight! * .23,
+      // height: SizeConfig.screenHeight! * .25,
       padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 8.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
         border: Border.all(width: .5, color: kHyppeBurem.withOpacity(.2)),
-        color: kHyppeBurem.withOpacity(.05)
+        color: kHyppeBurem.withOpacity(.05),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Text(title, 
-            style: Theme.of(context)
-                  .textTheme
-                  .titleMedium
-                  ?.copyWith(
-                      fontWeight: FontWeight.bold),
-              textAlign: TextAlign.start,
+          Text(
+            title,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+            textAlign: TextAlign.start,
           ),
           fivePx,
-          Text(date, 
-            style: Theme.of(context)
-                  .textTheme
-                  .titleSmall
-                  ?.copyWith(
-                      color: kHyppeBurem),
-              textAlign: TextAlign.start,
+          Text(
+            date,
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(color: kHyppeBurem),
+            textAlign: TextAlign.start,
           ),
           // tenPx,
           const Divider(
             thickness: .2,
             color: kHyppeBurem,
           ),
-          Text(desc??'', 
-            style: Theme.of(context)
-                  .textTheme
-                  .titleMedium
-                  ?.copyWith(
-                      fontWeight: FontWeight.bold),
-              textAlign: TextAlign.start,
+          Text(
+            desc ?? '',
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+            textAlign: TextAlign.start,
           ),
           fivePx,
           SizedBox(
             height: SizeConfig.screenHeight! * .05,
-            child: Text(subdesc??'', 
-              style: Theme.of(context)
-                    .textTheme
-                    .titleSmall
-                    ?.copyWith(
-                        color: kHyppeBurem),
-                textAlign: TextAlign.start,
+            child: Text(
+              subdesc ?? '',
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(color: kHyppeBurem),
+              textAlign: TextAlign.start,
             ),
           ),
           Align(
             alignment: Alignment.bottomLeft,
-            child: Text('Total', 
-              style: Theme.of(context)
-                    .textTheme
-                    .titleSmall
-                    ?.copyWith(
-                        color: kHyppeBurem,
-                        fontWeight: FontWeight.bold),
-                textAlign: TextAlign.start,
+            child: Text(
+              'Total',
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(color: kHyppeBurem, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.start,
             ),
           ),
           fivePx,
-          Flexible(
-            child: Row(
-                children: [
-                const Padding(
-                  padding: EdgeInsets.only(right: 8.0),
-                  child: CustomIconWidget(
-                    iconData: "${AssetPath.vectorPath}ic-coin.svg",
-                    height: 18,
-                    defaultColor: false,
-                  ),
+          Row(
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(right: 8.0),
+                child: CustomIconWidget(
+                  iconData: "${AssetPath.vectorPath}ic-coin.svg",
+                  height: 18,
+                  defaultColor: false,
                 ),
-                CustomTextWidget(
-                  textToDisplay: System().numberFormat(amount: totalCoin),
-                  textStyle: Theme.of(context)
-                      .textTheme
-                      .titleSmall
-                      ?.copyWith(
-                          fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.start,
-                ),
-              ],
-            ),
-          )
+              ),
+              CustomTextWidget(
+                textToDisplay: System().numberFormat(amount: totalCoin),
+                textStyle: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+                textAlign: TextAlign.start,
+              ),
+            ],
+          ),
         ],
       ),
     );

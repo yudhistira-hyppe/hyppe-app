@@ -197,41 +197,46 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     titleLive = '';
     userName = '';
 
-    print("-------- init stream $forConfig ---------");
     isloading = true;
     isloadingPreview = true;
     notifyListeners();
-    await requestPermission(context);
+    bool permissionStat = await requestPermission(context);
+    print("========status $permissionStat");
+    if (permissionStat) {
+      await checkBeforeLive(context, mounted).then((value) async {
+        if (dataBanned != null) {
+          // statusLive = StatusStream.banned;
+        }
+        await initAgora();
+      });
 
-    // _alivcBase = AlivcBase.init();
+      // notifyListeners();
+      isloading = false;
+      isloadingPreview = false;
+      notifyListeners();
 
-    // await _alivcBase.registerSDK();
-    // await _alivcBase.setObserver();
-    // if (!forConfig) {
-    //   await setLiveConfig();
-    //   await _setLivePusher();
-
-    //   if (isFirst && mounted) {
-    //     isFirst = false;
-    //     await init(context, mounted);
-    //   }
-    //   await _onListen(context, mounted);
-    // }
-
-    await checkBeforeLive(context, mounted).then((value) async {
-      if (dataBanned != null) {
-        // statusLive = StatusStream.banned;
+      if (!mounted) return;
+      tn = context.read<TranslateNotifierV2>().translate;
+    } else {
+      if (mounted) {
+        ShowGeneralDialog.generalDialog(
+          context,
+          titleText: System().bodyMultiLang(bodyEn: 'Permission is Permanetely Denied', bodyId: 'Izin Ditolak Secara Permanen'),
+          titleButtonPrimary: System().bodyMultiLang(bodyEn: 'Open Settings', bodyId: 'Buka Pengaturan'),
+          titleButtonSecondary: 'OK',
+          bodyText: System().bodyMultiLang(bodyEn: 'Please give permission for camera and microphone', bodyId: 'Tolong beri izin untuk kamera dan mikrofon'),
+          maxLineTitle: 9999,
+          isHorizontal: false,
+          functionPrimary: () {
+            openAppSettings();
+          },
+          functionSecondary: () {
+            Routing().moveBack();
+            Routing().moveBack();
+          },
+        );
       }
-      await initAgora();
-    });
-
-    // notifyListeners();
-    isloading = false;
-    isloadingPreview = false;
-    notifyListeners();
-
-    if (!mounted) return;
-    tn = context.read<TranslateNotifierV2>().translate;
+    }
   }
 
   void setDefaultExternalLink(BuildContext context) {
@@ -241,12 +246,16 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   }
 
   Future<bool> requestPermission(BuildContext context) async {
-    final isGranted = await System().requestPermission(context, permissions: [Permission.camera, Permission.storage, Permission.microphone]);
+    final isGranted = await System().requestPermission(context, permissions: [Permission.camera, Permission.microphone]);
     if (isGranted) {
       return isGranted;
     } else {
-      await System().requestPermission(context, permissions: [Permission.camera, Permission.storage, Permission.microphone]);
-      return true;
+      final isGranted2 = await System().requestPermission(context, permissions: [Permission.camera, Permission.microphone]);
+      if (isGranted2) {
+        return isGranted;
+      } else {
+        return false;
+      }
     }
   }
 
@@ -302,6 +311,9 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
           remoteUid = -1;
           statusLive = StatusStream.offline;
           notifyListeners();
+        },
+        onNetworkTypeChanged: (connection, type) {
+          debugPrint("connection user $connection --- type $type left channel");
         },
       ),
     );
@@ -941,7 +953,6 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
       if (context.mounted) {
         ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
           Routing().moveBack();
-          initLiveStream(context, mounted);
         });
       }
     }
