@@ -17,7 +17,20 @@ class ViewBloc {
 
   final _repos = Repos();
 
-  Future viewPostUserBloc(BuildContext context, {required String postId, required String emailOwner, bool check = true}) async {
+  Future viewPostUserBloc(
+    BuildContext context, {
+    String postType = '',
+    required String postId,
+    required String emailOwner,
+    bool check = true,
+    required List userView,
+    required List userLike,
+    required num saleAmount,
+    required String createdAt,
+    required List mediaSource,
+    required String description,
+    required bool active,
+  }) async {
     final email = SharedPreference().readStorage(SpKeys.email);
     final Map<String, dynamic> _data = {
       "eventType": "VIEW",

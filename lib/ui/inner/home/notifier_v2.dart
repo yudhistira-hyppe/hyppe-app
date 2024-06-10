@@ -49,6 +49,9 @@ import '../search_v2/notifier.dart';
 class HomeNotifier with ChangeNotifier {
   //for visibilty
 
+  List<ContentData>? _landingData;
+  List<ContentData>? get landingData => _landingData;
+
   LocalizationModelV2 language = LocalizationModelV2();
 
   translate(LocalizationModelV2 translate) {
@@ -140,6 +143,11 @@ class HomeNotifier with ChangeNotifier {
 
   set lastCurIndex(val) {
     _lastCurIndex = val;
+    notifyListeners();
+  }
+
+  set landingData(List<ContentData>? val) {
+    _landingData = val;
     notifyListeners();
   }
 
@@ -543,7 +551,11 @@ class HomeNotifier with ChangeNotifier {
         res.add(ContentData.fromJson(v));
       });
 
+      print("--> HomeNotifier reload res.length:" + res.length.toString());
+
       await CheckVersion().check(context, fetch.version, fetch.versionIos);
+
+      landingData = res;
 
       return res;
     } catch (e) {
@@ -838,9 +850,7 @@ class HomeNotifier with ChangeNotifier {
   Future navigateToProfilePage(BuildContext context, {bool whenComplete = false, Function? onWhenComplete}) async {
     if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
 
-    whenComplete
-        ? Routing().move(Routes.selfProfile, argument: GeneralArgument(isTrue: true)).whenComplete(() => onWhenComplete)
-        : Routing().move(Routes.selfProfile, argument: GeneralArgument(isTrue: true));
+    whenComplete ? Routing().move(Routes.selfProfile, argument: GeneralArgument(isTrue: true)).whenComplete(() => onWhenComplete) : Routing().move(Routes.selfProfile, argument: GeneralArgument(isTrue: true));
   }
 
   //untuk test aliplayer

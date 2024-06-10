@@ -1158,18 +1158,10 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                             onTap: () {
                               notifier.checkConnection();
                             },
-                            child: Container(
-                                decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                                width: SizeConfig.screenWidth,
-                                height: 250,
-                                alignment: Alignment.center,
-                                child: CustomTextWidget(textToDisplay: lang?.couldntLoadVideo ?? 'Error')),
+                            child: Container(decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)), width: SizeConfig.screenWidth, height: 250, alignment: Alignment.center, child: CustomTextWidget(textToDisplay: lang?.couldntLoadVideo ?? 'Error')),
                           ),
               ),
-              SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                      (vidData![index].boosted.isEmpty) &&
-                      (vidData?[index].reportedStatus != 'OWNED' && vidData?[index].reportedStatus != 'BLURRED' && vidData?[index].reportedStatus2 != 'BLURRED') &&
-                      vidData?[index].email == email
+              SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED && (vidData![index].boosted.isEmpty) && (vidData?[index].reportedStatus != 'OWNED' && vidData?[index].reportedStatus != 'BLURRED' && vidData?[index].reportedStatus2 != 'BLURRED') && vidData?[index].email == email
                   ? Container(
                       width: double.infinity,
                       margin: const EdgeInsets.only(bottom: 16),
@@ -1575,11 +1567,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                     ),
                   ),
                 _buildProgressBar(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height),
-                if (isPlay)
-                  SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
-                      child: Offstage(offstage: _isLock, child: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, data))),
+                if (isPlay) SizedBox(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height, child: Offstage(offstage: _isLock, child: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, data))),
                 Positioned.fill(
                   child: Align(
                     alignment: Alignment.center,

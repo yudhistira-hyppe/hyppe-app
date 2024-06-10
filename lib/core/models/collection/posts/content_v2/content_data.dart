@@ -213,6 +213,9 @@ class ContentData {
   GlobalKey? keyGlobalSell;
   bool? isContentLoading;
   List<String>? viewer;
+  List<String>? userView;
+  List<String>? userLike;
+  List<MediaSource>? mediaSource;
   String? urlLink;
   String? judulLink;
 
@@ -289,6 +292,9 @@ class ContentData {
     this.inBetweenAds,
     this.isContentLoading,
     this.viewer,
+    this.userView,
+    this.userLike,
+    this.mediaSource,
     this.urlLink,
     this.judulLink,
   });
@@ -414,6 +420,20 @@ class ContentData {
     isContentLoading = false;
     if (json['viewer'] != null) {
       viewer = json['viewer'].cast<String>();
+    }
+    if (json['userView'] != null) {
+      userView = json['userView'].cast<String>();
+    }
+    if (json['userLike'] != null) {
+      userLike = json['userLike'].cast<String>();
+    }
+    if (json['mediaSource'] != null) {
+      mediaSource = <MediaSource>[];
+      json['mediaSource'].forEach((v) {
+        mediaSource!.add(MediaSource.fromJson(v));
+      });
+    } else {
+      mediaSource = [];
     }
     urlLink = json['urlLink'] ?? '';
     judulLink = json['judulLink'] ?? '';
@@ -683,24 +703,7 @@ class Comment {
   int? iV;
   UserComment? userComment;
 
-  Comment(
-      {this.sId,
-      this.disqusID,
-      this.sequenceNumber,
-      this.sender,
-      this.receiver,
-      this.active,
-      this.postType,
-      this.txtMessages,
-      this.giftID,
-      this.gift,
-      this.postID,
-      this.createdAt,
-      this.updatedAt,
-      this.medias,
-      this.sClass,
-      this.iV,
-      this.userComment});
+  Comment({this.sId, this.disqusID, this.sequenceNumber, this.sender, this.receiver, this.active, this.postType, this.txtMessages, this.giftID, this.gift, this.postID, this.createdAt, this.updatedAt, this.medias, this.sClass, this.iV, this.userComment});
 
   Comment.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -835,6 +838,43 @@ class Tutorial {
     data['status'] = status;
     data['textID'] = textID;
     data['textEn'] = textEn;
+    return data;
+  }
+}
+
+class MediaSource {
+  String? key;
+  bool? isActive;
+  String? originalName;
+  String? mediaMime;
+  String? klas;
+  bool? apsara;
+  String? mediaType;
+  String? apsaraId;
+
+  MediaSource({this.key, this.isActive, this.originalName, this.mediaMime, this.klas, this.apsara, this.mediaType, this.apsaraId});
+
+  MediaSource.fromJson(Map<String, dynamic> json) {
+    key = json['key'];
+    isActive = json['isActive'];
+    originalName = json['originalName'];
+    mediaMime = json['mediaMime'];
+    klas = json['_class'];
+    apsara = json['apsara'];
+    mediaType = json['mediaType'];
+    apsaraId = json['apsaraId'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['key'] = key;
+    data['isActive'] = isActive;
+    data['originalName'] = originalName;
+    data['mediaMime'] = mediaMime;
+    data['_class'] = klas;
+    data['apsara'] = apsara;
+    data['mediaType'] = mediaType;
+    data['apsaraId'] = apsaraId;
     return data;
   }
 }

@@ -1238,6 +1238,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                           dataAli[notifier.vidData?[_curIdx].postID]?.pause();
                                         }
                                         start(Routing.navigatorKey.currentContext ?? context, notifier.vidData?[_curIdx] ?? ContentData());
+                                        print("--> vid/screen.dart _HyppePreviewVidState:1241:");
+                                        print(notifier.vidData?[_curIdx].userView.toString());
                                         System().increaseViewCount2(context, notifier.vidData?[_curIdx] ?? ContentData()).whenComplete(() async {});
                                         videoNot.setMapAdsContent(notifier.vidData?[_curIdx].postID ?? '', null);
                                         // Wakelock.disable();
@@ -1515,10 +1517,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                       postId: notifier.vidData?[index].postID ?? '',
                                     ),
                                   twelvePx,
-                                  SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                                          (vidData.boosted.isEmpty) &&
-                                          (vidData.reportedStatus != 'OWNED' && vidData.reportedStatus != 'BLURRED' && vidData.reportedStatus2 != 'BLURRED') &&
-                                          vidData.email == email
+                                  SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED && (vidData.boosted.isEmpty) && (vidData.reportedStatus != 'OWNED' && vidData.reportedStatus != 'BLURRED' && vidData.reportedStatus2 != 'BLURRED') && vidData.email == email
                                       ? Container(
                                           width: double.infinity,
                                           margin: const EdgeInsets.only(bottom: 16),
@@ -2092,11 +2091,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                     ),
                   ),
                 _buildProgressBar(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height),
-                if (isPlay)
-                  SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
-                      child: Offstage(offstage: _isLock, child: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, data))),
+                if (isPlay) SizedBox(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height, child: Offstage(offstage: _isLock, child: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, data))),
                 if (isPlay)
                   Positioned.fill(
                     child: Align(
