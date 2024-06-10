@@ -230,7 +230,8 @@ class CoinNotifier with ChangeNotifier {
       _paramsHistory?.addAll({
         "email": email,
         "status": ["SUCCESS"],
-        "page": page
+        "page": page,
+        "order_by":true
       });
       
       switch (groupsTrans.firstWhere((element) => element.selected == true).index) {
@@ -318,7 +319,8 @@ class CoinNotifier with ChangeNotifier {
       _paramsHistory?.addAll({
         "email": email,
         "status": ["SUCCESS", "PENDING", "IN PROGRESS", "FAILED"],
-        "page": page
+        "page": page,
+        "order_by":true
       });
       
       switch (groupsTrans.firstWhere((element) => element.selected == true).index) {

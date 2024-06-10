@@ -19,16 +19,18 @@ class PaymentSuccessCoinNotifier with ChangeNotifier {
   Future<void> detailData(BuildContext context,{Map? map}) async {
     _param = {};
     try{
-      if (map?['type'] == 'FMC'){
-        _param.addAll({
+      // if (map?['type'] == 'FMC'){
+      //   _param.addAll({
+      //     'noinvoice': map?['postId']
+      //   });
+      // }else{
+      //   _param.addAll({
+      //     'idtransaksi': map?['postId']
+      //   });
+      // }
+      _param.addAll({
           'noinvoice': map?['postId']
         });
-      }else{
-        _param.addAll({
-          'idtransaksi': map?['postId']
-        });
-      }
-      
 
       await bloc.getTransactionCoinDetail(context, data: _param);
       final fetch = bloc.dataFetch;

@@ -1717,29 +1717,30 @@ class PreUploadContentNotifier with ChangeNotifier {
 
     if (fetch.utilsState == UtilsState.getMasterBoostSuccess) {
       boostMasterData = BoostMasterModel.fromJson(fetch.data);
-      if (boostMasterData?.pendingTransaction == 1) {
-        Routing().moveBack();
+      // if (boostMasterData?.pendingTransaction == 1) {
+      //   Routing().moveBack();
 
-        await ShowBottomSheet().onShowColouredSheet(
-          context,
-          language.otherPostsInProcessOfPayment ?? '',
-          subCaption: language.thePostisintheProcessofPayment,
-          subCaptionButton: language.viewPaymentStatus,
-          color: kHyppeRed,
-          iconSvg: '${AssetPath.vectorPath}remove.svg',
-          maxLines: 10,
-          functionSubCaption: () {
-            toTransaktion = 2;
-            Routing().moveAndPop(Routes.transaction);
-            // Routing().moveBack();
-            // Routing().moveBack();
-            // Routing().moveBack();
-            // Routing().moveBack();
-            // _onExit();
-          },
-        );
-        if (toTransaktion == 1) Routing().move(Routes.transaction);
-      }
+      //   await ShowBottomSheet().onShowColouredSheet(
+      //     context,
+      //     language.otherPostsInProcessOfPayment ?? '',
+      //     subCaption: language.thePostisintheProcessofPayment,
+      //     subCaptionButton: language.viewPaymentStatus,
+      //     color: kHyppeRed,
+      //     iconSvg: '${AssetPath.vectorPath}remove.svg',
+      //     maxLines: 10,
+      //     functionSubCaption: () {
+      //       toTransaktion = 2;
+      //       Routing().moveAndPop(Routes.transaction);
+      //       // Routing().moveBack();
+      //       // Routing().moveBack();
+      //       // Routing().moveBack();
+      //       // Routing().moveBack();
+      //       // _onExit();
+      //     },
+      //   );
+        // if (toTransaktion == 1) 
+        // Routing().move(Routes.transaction);
+      // }
       isLoading = false;
       notifyListeners();
     } else if (fetch.utilsState == UtilsState.getMasterBoostError) {
@@ -1889,6 +1890,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       bool connect = await System().checkConnections();
 
       ShowGeneralDialog.loadingDialog(context);
+
       _params.addAll({
         "pin": pinController.text,
         "platform": "APP",
@@ -1910,8 +1912,9 @@ class PreUploadContentNotifier with ChangeNotifier {
         final bloc = BoostPostContentDataBloc();
         await bloc.createBoostPostContent(context, data: _params);
         final fetch = bloc.dataFetch;
+        print('============== ${fetch.dataState}');
 
-        if (fetch.dataState == BoostPostContentState.getBlocSuccess) {
+        if (bloc.dataFetch.dataState == BoostPostContentState.getBlocSuccess) {
           Routing().moveBack();
           _onExit();
           Navigator.push(
@@ -1923,10 +1926,10 @@ class PreUploadContentNotifier with ChangeNotifier {
                       )));
           pinController.clear();
           _errorPinWithdrawMsg = '';
-        }
-        if (fetch.dataState == BoostPostContentState.getBlocError) {
+        }else { 
+          print('============== ${fetch.data}');
           Routing().moveBack();
-          // notifyListeners();
+          notifyListeners();
           if (fetch.data != null) {
             ShowBottomSheet().onShowColouredSheet(context, fetch.data['message'], color: Theme.of(context).colorScheme.error);
           }

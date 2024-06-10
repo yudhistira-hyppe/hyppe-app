@@ -435,7 +435,7 @@ class TransactionNotifier extends ChangeNotifier {
       String email = SharedPreference().readStorage(SpKeys.email);
       _paramsHistory?.addAll({
         "email": email,
-        "status": ["SUCCESS", "IN PROGRESS", "FAILED"],
+        "status": ["SUCCESS", "PENDING", "IN PROGRESS", "FAILED"],
         // "type": ["Pembelian Coin", "Penukaran Coin"],
         "page": page
       });

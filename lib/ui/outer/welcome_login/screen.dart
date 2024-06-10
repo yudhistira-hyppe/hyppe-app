@@ -168,7 +168,7 @@ class _WelcomeLoginScreenState extends State<WelcomeLoginScreen> {
                     ),
                   ),
                   tenPx,
-                  // testLogin(),
+                  testLogin(),
                   CustomGesture(
                     margin: const EdgeInsets.symmetric(horizontal: 16),
                     onTap: () {

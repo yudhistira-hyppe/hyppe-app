@@ -52,7 +52,7 @@ class _OwnershipSellingScreenState extends State<OwnershipSellingScreen> {
             color: Theme.of(context).colorScheme.onSurface,
           ),
           title: CustomTextWidget(
-            textToDisplay: "${notifier.language.ownershipSelling ?? ''} ${notifier.isloadingSetting}",
+            textToDisplay: notifier.language.ownershipSelling ?? '',
             textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
           ),
         ),

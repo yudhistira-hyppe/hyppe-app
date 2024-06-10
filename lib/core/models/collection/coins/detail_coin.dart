@@ -1,4 +1,4 @@
-class DetailTransactionCoin {
+class DetailCoinModel {
   String? sId;
   String? type;
   String? idTransaction;
@@ -12,18 +12,14 @@ class DetailTransactionCoin {
   int? priceDiscont;
   int? price;
   int? totalPrice;
-  int? coinadminfee;
   String? createdAt;
   String? updatedAt;
   String? typeCategory;
   String? typeUser;
   String? vaNumber;
-  int? transactionFees;
-  int? biayPG;
   String? idStream;
   String? code;
   String? namePaket;
-  String? idPaket;
   String? coa;
   String? coaDetailName;
   String? coaDetailStatus;
@@ -37,14 +33,8 @@ class DetailTransactionCoin {
   String? usernamebuyer;
   String? emailseller;
   String? usernameseller;
-  String? contentid;
-  int? amount;
-  String? paymentmethod;
+  String? contentId;
   String? status;
-  String? description;
-  String? bank;
-  int? totalamount;
-  String? productId;
   String? expiredtimeva;
   String? idtrLama;
   String? postType;
@@ -53,22 +43,11 @@ class DetailTransactionCoin {
   int? withdrawCost;
   String? adType;
   String? titleStream;
-  String? methodename;
   String? productName;
+  String? postOwner;
   String? timenow;
-  String? bankname;
-  String? bankcode;
-  String? urlEbanking;
-  String? bankIcon;
-  String? atm;
-  String? internetBanking;
-  String? mobileBanking;
-  String? titleId;
-  String? titleEn;
-  String? contentId;
-  String? contentEn;
 
-  DetailTransactionCoin(
+  DetailCoinModel(
       {this.sId,
       this.type,
       this.idTransaction,
@@ -82,19 +61,14 @@ class DetailTransactionCoin {
       this.priceDiscont,
       this.price,
       this.totalPrice,
-      this.coinadminfee,
       this.createdAt,
       this.updatedAt,
       this.typeCategory,
       this.typeUser,
       this.vaNumber,
-      this.transactionFees,
-      this.contentid,
-      this.biayPG,
       this.idStream,
       this.code,
       this.namePaket,
-      this.idPaket,
       this.coa,
       this.coaDetailName,
       this.coaDetailStatus,
@@ -108,13 +82,8 @@ class DetailTransactionCoin {
       this.usernamebuyer,
       this.emailseller,
       this.usernameseller,
-      this.amount,
-      this.paymentmethod,
+      this.contentId,
       this.status,
-      this.description,
-      this.bank,
-      this.totalamount,
-      this.productId,
       this.expiredtimeva,
       this.idtrLama,
       this.postType,
@@ -123,22 +92,11 @@ class DetailTransactionCoin {
       this.withdrawCost,
       this.adType,
       this.titleStream,
-      this.methodename,
       this.productName,
-      this.timenow,
-      this.bankname,
-      this.bankcode,
-      this.urlEbanking,
-      this.bankIcon,
-      this.atm,
-      this.internetBanking,
-      this.mobileBanking,
-      this.titleEn,
-      this.titleId,
-      this.contentId,
-      this.contentEn});
+      this.postOwner,
+      this.timenow});
 
-  DetailTransactionCoin.fromJson(Map<String, dynamic> json) {
+  DetailCoinModel.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     type = json['type'];
     idTransaction = json['idTransaction'];
@@ -148,28 +106,23 @@ class DetailTransactionCoin {
     idUser = json['idUser'];
     coinDiscount = json['coinDiscount'];
     coin = json['coin'];
-    contentid = json['content_id'];
     totalCoin = json['totalCoin'];
     priceDiscont = json['priceDiscont'];
     price = json['price'];
     totalPrice = json['totalPrice'];
-    coinadminfee = json['coinadminfee'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     typeCategory = json['typeCategory'];
     typeUser = json['typeUser'];
     vaNumber = json['va_number'];
-    transactionFees = json['transactionFees'];
-    biayPG = json['biayPG'];
     idStream = json['idStream'];
     code = json['code'];
     namePaket = json['namePaket'];
-    idPaket = json['package_id'];
     coa = json['coa'];
     coaDetailName = json['coaDetailName'];
     coaDetailStatus = json['coaDetailStatus'];
     postId = json['post_id'];
-    credit = json['credit'].toString();
+    credit = json['credit'];
     boostType = json['boost_type'];
     boostInterval = json['boost_interval'];
     boostUnit = json['boost_unit'];
@@ -178,13 +131,8 @@ class DetailTransactionCoin {
     usernamebuyer = json['usernamebuyer'];
     emailseller = json['emailseller'];
     usernameseller = json['usernameseller'];
-    amount = json['amount'];
-    paymentmethod = json['paymentmethod'];
+    contentId = json['content_id'];
     status = json['status'];
-    description = json['description'];
-    bank = json['bank'];
-    totalamount = json['totalamount'];
-    productId = json['product_id'];
     expiredtimeva = json['expiredtimeva'];
     idtrLama = json['idtr_lama'];
     postType = json['post_type'];
@@ -193,20 +141,9 @@ class DetailTransactionCoin {
     withdrawCost = json['withdrawCost'];
     adType = json['adType'];
     titleStream = json['titleStream'];
-    methodename = json['methodename'];
     productName = json['productName'];
+    postOwner = json['post_owner'];
     timenow = json['timenow'];
-    bankname = json['bankname'];
-    bankcode = json['bankcode'];
-    urlEbanking = json['urlEbanking'];
-    bankIcon = json['bankIcon'];
-    atm = json['atm'];
-    internetBanking = json['internetBanking'];
-    mobileBanking = json['mobileBanking'];
-    titleId = json['desc_title_id'];
-    titleEn = json['desc_title_en'];
-    contentId = json['desc_content_id'];
-    contentEn = json['desc_content_en'];
   }
 
   Map<String, dynamic> toJson() {
@@ -220,23 +157,18 @@ class DetailTransactionCoin {
     data['idUser'] = idUser;
     data['coinDiscount'] = coinDiscount;
     data['coin'] = coin;
-    data['content_id'] = contentid;
     data['totalCoin'] = totalCoin;
     data['priceDiscont'] = priceDiscont;
     data['price'] = price;
     data['totalPrice'] = totalPrice;
-    data['coinadminfee'] = coinadminfee;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     data['typeCategory'] = typeCategory;
     data['typeUser'] = typeUser;
     data['va_number'] = vaNumber;
-    data['transactionFees'] = transactionFees;
-    data['biayPG'] = biayPG;
     data['idStream'] = idStream;
     data['code'] = code;
     data['namePaket'] = namePaket;
-    data['package_id'] = idPaket;
     data['coa'] = coa;
     data['coaDetailName'] = coaDetailName;
     data['coaDetailStatus'] = coaDetailStatus;
@@ -250,13 +182,8 @@ class DetailTransactionCoin {
     data['usernamebuyer'] = usernamebuyer;
     data['emailseller'] = emailseller;
     data['usernameseller'] = usernameseller;
-    data['amount'] = amount;
-    data['paymentmethod'] = paymentmethod;
+    data['content_id'] = contentId;
     data['status'] = status;
-    data['description'] = description;
-    data['bank'] = bank;
-    data['totalamount'] = totalamount;
-    data['product_id'] = productId;
     data['expiredtimeva'] = expiredtimeva;
     data['idtr_lama'] = idtrLama;
     data['post_type'] = postType;
@@ -265,20 +192,9 @@ class DetailTransactionCoin {
     data['withdrawCost'] = withdrawCost;
     data['adType'] = adType;
     data['titleStream'] = titleStream;
-    data['methodename'] = methodename;
     data['productName'] = productName;
+    data['post_owner'] = postOwner;
     data['timenow'] = timenow;
-    data['bankname'] = bankname;
-    data['bankcode'] = bankcode;
-    data['urlEbanking'] = urlEbanking;
-    data['bankIcon'] = bankIcon;
-    data['atm'] = atm;
-    data['internetBanking'] = internetBanking;
-    data['mobileBanking'] = mobileBanking;
-    data['desc_title_id'] = titleId;
-    data['desc_title_en'] = titleEn;
-    data['desc_content_id'] = contentId;
-    data['desc_content_en'] = contentEn;
     return data;
   }
 }

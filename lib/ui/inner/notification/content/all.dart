@@ -27,6 +27,8 @@ class AllNotification extends StatelessWidget {
             rightWidget: System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.follower ||
                     System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.live || System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.following || System().convertEventType(notifier.data?[index].event) == InteractiveEventType.coin
                     || System().convertEventType(notifier.data?[index].event) == InteractiveEventType.withdrawal
+                    || System().convertEventType(notifier.data?[index].event) == InteractiveEventType.withdrawalfailed
+                    || System().convertEventType(notifier.data?[index].event) == InteractiveEventType.withdrawalsuccess
                 // notifier.data?[index].event == 'REQUEST_APPEAL'
                 // notifier.data?[index].event == 'ADMIN_FLAGING' ||
                 // notifier.data?[index].event == 'NOTSUSPENDED_APPEAL'

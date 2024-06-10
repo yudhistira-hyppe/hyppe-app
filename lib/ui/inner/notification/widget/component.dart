@@ -97,11 +97,12 @@ class _ComponentState extends State<Component> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => TransactionCoinDetailScreen(
-                            invoiceid: widget.data?.postID ?? '',
+                            invoiceid: widget.data?.postID?? '',
+                            title: 'Detail Transaksi',
                           )));
               // Routing().move(Routes.paymentsuccessdetail, argument: {'postId': widget.data?.postID??'', 'type':'Notification'});
             } else if (listTransacation.contains(eventType)) {
-              await Routing().move(Routes.transaction);
+              await Routing().move(Routes.saldoCoins);
             } else if (NotificationCategory.challange == eventType) {
               await Routing().move(Routes.chalengeDetail,
                   argument: GeneralArgument()

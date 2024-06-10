@@ -38,6 +38,10 @@ class ExternalLinkNotifier with ChangeNotifier {
   bool get selectedPermission => _selectedPermission??false;
   void setselectedPermission(bool? val) {
     _selectedPermission = val;
+    if (!val!){
+       linkController.clear();
+       titleController.clear();
+    }
     notifyListeners();
   }
 

@@ -540,8 +540,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const PinBoostpostScreen(), settings: settings);
       case Routes.pinbuycontent:
         return MaterialPageRoute(builder: (_) => PinBuyScreen(mounted: settings.arguments as dynamic), settings: settings);
-      case Routes.transactioncoindetail:
-        return MaterialPageRoute(builder: (_) => TransactionCoinDetailScreen(invoiceid: settings.arguments as String), settings: settings);
+      // case Routes.transactioncoindetail:
+      //   return MaterialPageRoute(builder: (_) => TransactionCoinDetailScreen(), settings: settings);
       case Routes.paymentsuccessdetail:
         return MaterialPageRoute(builder: (_) => PaymentSuccessScreen(map: settings.arguments as Map), settings: settings);
       case Routes.pinwithdrawalcoin:

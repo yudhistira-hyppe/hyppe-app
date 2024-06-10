@@ -431,6 +431,10 @@ class System {
         return InteractiveEventType.live;
       case "WITHDRAW_COIN":
         return InteractiveEventType.withdrawal;
+      case "FAILED_WITHDRAW_COIN":
+        return InteractiveEventType.withdrawalfailed;
+      case "SUCCESS_WITHDRAW_COIN":
+        return InteractiveEventType.withdrawalsuccess;
       default:
         return InteractiveEventType.none;
     }

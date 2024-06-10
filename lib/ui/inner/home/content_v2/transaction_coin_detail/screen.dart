@@ -21,7 +21,8 @@ import 'notifier.dart';
 class TransactionCoinDetailScreen extends StatefulWidget {
   final String? invoiceid;
   final String? status;
-  const TransactionCoinDetailScreen({super.key, required this.invoiceid, this.status});
+  final String? title;
+  const TransactionCoinDetailScreen({super.key, required this.invoiceid, this.status, required this.title});
 
   @override
   State<TransactionCoinDetailScreen> createState() => _TransactionCoinDetailScreenState();
@@ -56,7 +57,7 @@ class _TransactionCoinDetailScreenState extends State<TransactionCoinDetailScree
             icon: const Icon(Icons.arrow_back_ios)),
         title: CustomTextWidget(
           textStyle: theme.textTheme.titleMedium,
-          textToDisplay: lang?.localeDatetime == 'id' ? 'Detail Transaksi' : 'Transaction Detail',
+          textToDisplay: widget.title??'',
         ),
       ),
       body: Consumer<TransactionCoinDetailNotifier>(
@@ -66,11 +67,13 @@ class _TransactionCoinDetailScreenState extends State<TransactionCoinDetailScree
           }
           
           switch (notifier.transactionDetail.status??'') {
+            case 'FAILED':
             case 'Cancel':
               titleColor = kHyppeRed;
-              textTitle = lang!.localeDatetime == 'id' ? 'Batal' : 'Cancel';
+              textTitle = lang!.localeDatetime == 'id' ? 'Gagal' : 'Failed';
               break;
             case 'WAITING_PAYMENT':
+            case 'PENDING':
               titleColor = kHyppeRed;
               textTitle = lang!.localeDatetime == 'id' ? 'Menunggu Pembayaran' : 'Awating Payment';
               break;
@@ -97,7 +100,7 @@ class _TransactionCoinDetailScreenState extends State<TransactionCoinDetailScree
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               CustomTextWidget(
-                                textToDisplay: notifier.transactionDetail.jenisTransaksi??'',
+                                textToDisplay: '${lang?.localeDatetime == 'id' ? 'Pembelian Coins' : 'Coins Purchase' } ${notifier.transactionDetail.namePaket}',
                                 textStyle: const TextStyle(fontWeight: FontWeight.bold),
                               ),
                               fivePx,
@@ -204,9 +207,11 @@ class _TransactionCoinDetailScreenState extends State<TransactionCoinDetailScree
                             textStyle: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           sixteenPx,
-                          detailText(lang?.localeDatetime == 'id' ? 'Harga Hyppe Coin' : 'Price Hyppe Coin', System().currencyFormat(amount: notifier.transactionDetail.amount)),
+                          detailText(lang?.localeDatetime == 'id' ? 'Harga Hyppe Coin' : 'Price Hyppe Coin', System().currencyFormat(amount: notifier.transactionDetail.amount??0)),
                           sixteenPx,
-                          detailText(lang?.localeDatetime == 'id' ? 'Biaya Layanan' : 'Transaction Fee', System().currencyFormat(amount: notifier.transactionDetail.transactionFees)),
+                          detailText(lang?.localeDatetime == 'id' ? 'Biaya Layanan' : 'Transaction Fee', System().currencyFormat(amount: notifier.transactionDetail.transactionFees??0)),
+                          sixteenPx,
+                          detailText(lang?.localeDatetime == 'id' ? 'Total Diskon' : 'Discount', System().currencyFormat(amount: notifier.transactionDetail.priceDiscont??0)),
                           const Divider(
                             thickness: .1,
                           ),

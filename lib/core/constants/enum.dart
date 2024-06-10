@@ -84,7 +84,7 @@ enum TransactionType { sell, buy, withdrawal, boost, reward, voucher, disburseme
 
 enum VerifyPageRedirection { toLogin, toHome, toSignUpV2, none }
 
-enum InteractiveEventType { unfollow, following, follower, view, reaction, transactions, verificationid, supportfile, none, coin, live, withdrawal }
+enum InteractiveEventType { unfollow, following, follower, view, reaction, transactions, verificationid, supportfile, none, coin, live, withdrawal, withdrawalfailed, withdrawalsuccess }
 
 enum InteractiveEvent { initial, accept, request, done, revoke, none }
 

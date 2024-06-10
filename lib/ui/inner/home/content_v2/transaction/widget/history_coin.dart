@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/coins/history_transaction.dart';
@@ -24,7 +23,7 @@ class HistoryCoinWidget extends StatelessWidget {
       case 'FAILED':
       case 'RIJECTED':
         titleColor = kHyppeRed;
-        textTitle = lang!.localeDatetime == 'id' ? 'Batal' : 'Cancel';
+        textTitle = lang!.localeDatetime == 'id' ? 'Gagal' : 'Failed';
         break;
       case 'PENDING':
       case 'IN PROGRESS':
@@ -40,10 +39,12 @@ class HistoryCoinWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (data.type == 'Pembelian Coin'){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionCoinDetailScreen(invoiceid: data.noInvoice??'', status: 'History',)));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionCoinDetailScreen(invoiceid: data.noInvoice??'', title: lang?.localeDatetime == 'id' ? 'Detail Transaksi' : 'Transaction Detail', status: 'History',)));
         }else{
           // Fluttertoast.showToast(msg: 'Feature Not Available');
-          Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionDetailScreen(invoiceid: data.noInvoice??'')));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionDetailScreen(invoiceid: data.noInvoice??'', title: lang?.localeDatetime == 'id'
+              ? 'Detail Transaksi'
+              : 'Transaction Detail',)));
         }
         // 
       },
@@ -105,7 +106,7 @@ class HistoryCoinWidget extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(lang?.localeDatetime == 'id' ? data.descTitleId??'' : data.descTitleEn??'', 
+                    Text(lang?.localeDatetime == 'id' ? data.titleId??'' : data.titleEn??'', 
                       maxLines: 2,
                       style: Theme.of(context)
                             .textTheme
@@ -114,7 +115,7 @@ class HistoryCoinWidget extends StatelessWidget {
                                 fontWeight: FontWeight.bold),
                         textAlign: TextAlign.start,
                     ),
-                    Text(lang?.localeDatetime == 'id' ? data.descContentId??'' : data.descContentEn??'', 
+                    Text(lang?.localeDatetime == 'id' ? data.contentId??'' : data.contentEn??'', 
                       maxLines: 2,
                       style: Theme.of(context)
                             .textTheme
