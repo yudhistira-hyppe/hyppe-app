@@ -83,8 +83,8 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
           case 'IN PROGRESS':
             titleColor = kHyppeRed;
             textTitle = lang!.localeDatetime == 'id'
-                ? 'Menunggu Pembayaran'
-                : 'Awating Payment';
+                ? 'Dalam Proses'
+                : 'In Progress';
             break;
           default:
             titleColor = kHyppeGreen;

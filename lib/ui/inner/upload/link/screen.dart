@@ -133,7 +133,7 @@ class _AddLinkPageState extends State<AddLinkPage> {
                 _permissionLink(notifier),
                 thirtyTwoPx,
                 if (notifier.selectedPermission) _textField(notifier),
-                thirtyTwoPx,
+                // thirtyTwoPx,
                 if (notifier.isEdited)
                   TextButton(
                       onPressed: () {

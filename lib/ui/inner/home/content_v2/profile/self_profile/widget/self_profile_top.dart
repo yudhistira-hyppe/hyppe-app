@@ -383,13 +383,13 @@ class SelfProfileTop extends StatelessWidget {
                       const SizedBox(
                         width: 4.0,
                       ),
-                      (notifier.user.profile!.judulLink != '')
+                      (notifier.user.profile?.judulLink != '')
                           ? Text(
-                              notifier.user.profile!.judulLink ?? '',
+                              notifier.user.profile?.judulLink ?? '',
                               style: const TextStyle(color: kHyppePrimary),
                             )
                           : Text(
-                              notifier.user.profile!.urlLink ?? '',
+                              notifier.user.profile?.urlLink ?? '',
                               style: const TextStyle(color: kHyppePrimary),
                             )
                     ],

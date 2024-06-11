@@ -135,6 +135,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   bool _allowComment = true;
   bool _isShared = true;
   bool _certified = false;
+  bool _showPriceCertificate = false;
   bool _certifiedTmp = false;
   dynamic _uploadSuccess;
   List<String>? _tags;
@@ -173,6 +174,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   bool get allowComment => _allowComment;
   bool get isShared => _isShared;
   bool get certified => _certified;
+  bool get showPriceCertificate => _showPriceCertificate;
   bool get certifiedTmp => _certifiedTmp;
   List<String>? get tags => _tags;
   String get visibility => _visibility;
@@ -354,6 +356,11 @@ class PreUploadContentNotifier with ChangeNotifier {
     if (!val) {
       _toSell = false;
     }
+    notifyListeners();
+  }
+
+  set showPriceCertificate(bool val) {
+    _showPriceCertificate = val;
     notifyListeners();
   }
 
@@ -604,6 +611,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     allowComment = true;
     isShared = true;
     certified = false;
+    showPriceCertificate = false;
     captionController.clear();
     _selectedLocation = '';
     _interestData = [];
@@ -869,7 +877,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       judulLink: judulLink,
       location: locationName == language.addLocation ? '' : locationName,
       discount: (discountOwnership!.checked ?? false) ? discountOwnership : null,
-      cointPurchaseDetail: cointPurchaseDetail,
+      cointPurchaseDetail: showPriceCertificate ? cointPurchaseDetail : null,
     );
     final fetch = notifier.postsFetch;
 
@@ -1248,6 +1256,7 @@ class PreUploadContentNotifier with ChangeNotifier {
           initCoinOwnershipDetail(context);
           Routing().moveBack();
           certified = !certified;
+          showPriceCertificate = !showPriceCertificate;
         },
         onCancel: () {
           Routing().moveBack();
@@ -1255,6 +1264,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       );
     } else {
       certified = false;
+      showPriceCertificate = false;
     }
   }
 
@@ -1634,6 +1644,7 @@ class PreUploadContentNotifier with ChangeNotifier {
 
     if (toSell && priceController.text == '') {
       toSell = false;
+
     } else {
       _privacyTitle = "${language.public}";
       privacyValue = 'PUBLIC';

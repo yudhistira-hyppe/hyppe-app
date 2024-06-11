@@ -86,7 +86,11 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
         notifier.captionController.text = notifier.hastagChallange;
         notifier.captionController.selection = const TextSelection.collapsed(offset: 0);
         notifier.setDefaultExternalLink(context);
+        if (notifier.certified){
+          notifier.showPriceCertificate = false;
+        }
       } else {
+        notifier.showPriceCertificate = false;
         notifier.urlLink = widget.arguments.contentData?.urlLink ?? '';
         notifier.judulLink = widget.arguments.contentData?.judulLink ?? '';
         notifier.initCoinOwnershipDetail(context);
@@ -228,7 +232,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                             eightPx,
                             notifier.featureType != FeatureType.story ? ownershipSellingWidget(textTheme, notifier) : const SizedBox(),
                             notifier.certified ? detailTotalPrice(notifier) : Container(),
-                            if (notifier.certified)
+                            if (notifier.showPriceCertificate)
                               ValueListenableBuilder(
                                   valueListenable: buttonactive,
                                   builder: (context, value, _) {
@@ -305,7 +309,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      notifier.certified
+                      notifier.showPriceCertificate
                           ? Container(
                               color: Colors.white,
                               padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -1039,7 +1043,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
             },
       title: CustomTextWidget(
         textToDisplay: notifier.language.postBoost ?? 'Post Boost',
-        textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
+        textStyle: textTheme.caption?.copyWith(color: (widget.arguments.onEdit && notifier.certified) ? kHyppeBurem.withOpacity(.5) : Theme.of(context).colorScheme.secondary),
         textAlign: TextAlign.start,
       ),
       contentPadding: EdgeInsets.zero,
@@ -1092,11 +1096,11 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                   : notifier.boostContent != null
                       ? System().capitalizeFirstLetter(notifier.boostContent?.typeBoost ?? '')
                       : notifier.language.no ?? 'no',
-              textStyle: textTheme.caption?.copyWith(color: kHyppeTextLightPrimary, fontFamily: "Lato"),
+              textStyle: textTheme.caption?.copyWith(color: (widget.arguments.onEdit && notifier.certified) ? kHyppeBurem.withOpacity(.5) : kHyppeTextLightPrimary, fontFamily: "Lato"),
             ),
           ),
           twentyPx,
-          const Icon(Icons.arrow_forward_ios_rounded, color: kHyppeTextLightPrimary),
+          Icon(Icons.arrow_forward_ios_rounded, color:(widget.arguments.onEdit && notifier.certified) ? kHyppeBurem.withOpacity(.5) : kHyppeTextLightPrimary),
         ],
       ),
     );

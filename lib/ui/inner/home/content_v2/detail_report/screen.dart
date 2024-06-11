@@ -65,7 +65,10 @@ class _DetailReportState extends State<DetailReport> {
           if (notifier.transactionDetail.code =='BP'){
             textTitle = lang?.localeDatetime == 'id' ? 'Berlangganan Boost Post' : 'Subscribe to Boost Post';
             return detailBoostContent(textTitle: textTitle);
-          }else if (notifier.transactionDetail.postType != '-' && notifier.transactionDetail.coa !='Penjualan Konten' && notifier.transactionDetail.coa !='Pembelian Konten'){
+          }else if (notifier.transactionDetail.coa == 'Conten Ownership'){
+            textTitle = lang?.localeDatetime == 'id' ? 'Kepemilikan Konten' : 'Content Ownership';
+            return detailOwnershipContent(textTitle: textTitle);
+          }else if (notifier.transactionDetail.coa == 'Content Gift'){
             if (notifier.transactionDetail.coaDetailStatus =='debit'){
               textTitle = lang?.localeDatetime == 'id' ? 'Menerima Gift' : 'Received Content Gift';
             }else{
@@ -593,6 +596,82 @@ class _DetailReportState extends State<DetailReport> {
                       thickness: .1,
                     ),
                     detailText(lang?.localeDatetime == 'id' ? 'Total Pembayaran' : 'Total Payment', System().numberFormat(amount: notifier.transactionDetail.totalCoin), showicon: true),
+                  ],
+                )
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget detailOwnershipContent({String? textTitle}){
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      child: Container(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomTextWidget(
+                        textToDisplay: textTitle??'',
+                        textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      fivePx,
+                      fivePx,
+                      CustomTextWidget(
+                        textToDisplay: DateFormat('dd MMM yyyy, HH:mm').format(DateTime.parse(
+                      notifier.transactionDetail.createdAt ??
+                          DateTime.now().toString())),
+                        textStyle: const TextStyle(fontWeight: FontWeight.normal, color: kHyppeBurem),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            fifteenPx,
+            fifteenPx,
+            Container(
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.all(12.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12.0),
+                  border: Border.all(width: .2, color: kHyppeBurem),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomTextWidget(
+                      textToDisplay: lang?.localeDatetime == 'id' ? 'Detail Transaksi' : 'Transaction Details',
+                      textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    sixteenPx,
+                    detailText(lang?.localeDatetime == 'id' ? 'Transaksi ID' : 'ID Transaction', notifier.transactionDetail.noInvoice??''),
+                    sixteenPx,
+                    detailText(lang?.localeDatetime == 'id' ? 'Konten ID' : 'Content ID', notifier.transactionDetail.contentid??''),
+                    sixteenPx,
+                    detailText(lang?.localeDatetime == 'id' ? 'Jenis Konten' : 'Content Type', notifier.transactionDetail.postType??''),
+                    const Divider(
+                      thickness: .1,
+                    ),
+                    CustomTextWidget(
+                      textToDisplay: lang?.localeDatetime == 'id' ? 'Detail Pembayaran' : 'Payment Details',
+                      textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    sixteenPx,
+                    detailText(lang?.localeDatetime == 'id' ? 'Biaya Admin' : 'Admin Fee', '${System().numberFormat(amount: notifier.transactionDetail.totalCoin)} coins'),
+                    const Divider(
+                      thickness: .1,
+                    ),
+                    detailText(lang?.localeDatetime == 'id' ? 'Total Tagihan' : 'Total Charge', System().numberFormat(amount: notifier.transactionDetail.totalCoin), showicon: true),
                   ],
                 )
             ),

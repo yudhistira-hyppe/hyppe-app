@@ -1,5 +1,7 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -11,6 +13,7 @@ import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/widget/user_template
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/build_auto_complete_user_tag_comment.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../../../../core/models/collection/comment_v2/comment_data_v2.dart';
@@ -283,7 +286,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                                 ),
                               ),
                               if (data.email != SharedPreference().readStorage(SpKeys.email))
-                                if (!notifier.inputNode.hasFocus)
+                                if (!notifier.inputNode.hasFocus && (comments?.isEmpty ?? true))
                                   Container(
                                     padding: const EdgeInsets.only(left: 8.0),
                                     decoration: const BoxDecoration(
@@ -425,7 +428,38 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                         ),
                       ),
                     ],
-                  )
+                  ),
+
+                  data.urlLink != '' || data.judulLink != ''
+                  ? RichText(
+                    text: TextSpan(
+                      children: [
+                      TextSpan(
+                        text: (data.judulLink != null)
+                            ? data.judulLink
+                            : data.urlLink,
+                        style: TextStyle(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary,
+                            fontWeight: FontWeight.bold),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () async {
+                            var uri = data.urlLink??'';
+                              if (!uri.withHttp()){
+                                uri='https://$uri';
+                              }
+                              if (await canLaunchUrl(Uri.parse(uri))) {
+                                  await launchUrl(Uri.parse(uri));
+                                } else {
+                                  throw Fluttertoast.showToast(msg: 'Could not launch $uri');
+                                }
+                              },
+                          )
+                        ]),
+                      )
+                    : const SizedBox.shrink(),
+
                 ],
               ),
             ),
