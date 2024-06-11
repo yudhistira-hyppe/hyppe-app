@@ -42,15 +42,16 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'CommentsDetailScreen');
-    final notifier = context.read<CommentNotifierV2>();
-    final postID = widget.argument.postID;
-    final fromFront = widget.argument.fromFront;
-    final parentComment = widget.argument.parentComment;
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      notifier.initState(context, postID, fromFront, parentComment);
-    });
-    _scrollController.addListener(() => notifier.scrollListener(context, _scrollController));
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final notifier = context.read<CommentNotifierV2>();
+      final postID = widget.argument.postID;
+      final fromFront = widget.argument.fromFront;
+      final parentComment = widget.argument.parentComment;
+      notifier.initState(context, postID, fromFront, parentComment);
+
+      _scrollController.addListener(() => notifier.scrollListener(context, _scrollController));
+    });
   }
 
   @override
@@ -66,17 +67,18 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
     super.dispose();
   }
 
+  List<String> emoji = [
+    '❤',
+    '🙌',
+    '🔥',
+    '😢',
+    '😍',
+    '😯',
+    '😂',
+  ];
+
   @override
   Widget build(BuildContext context) {
-    List<String> emoji = [
-      '❤',
-      '🙌',
-      '🔥',
-      '😢',
-      '😍',
-      '😯',
-      '😂',
-    ];
     final postID = widget.argument.postID;
     final fromFront = widget.argument.fromFront;
     final parentComment = widget.argument.parentComment;
@@ -283,7 +285,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                                 ),
                               ),
                               if (data.email != SharedPreference().readStorage(SpKeys.email))
-                                if (!notifier.inputNode.hasFocus)
+                                if (!notifier.inputNode.hasFocus && (comments?.isEmpty ?? true))
                                   Container(
                                     padding: const EdgeInsets.only(left: 8.0),
                                     decoration: const BoxDecoration(
@@ -304,7 +306,6 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                                           context.handleActionIsGuest(() async {
                                             notifier.validateUserGif(context, widget, comments, notifier.language);
                                           });
-                                          
                                         },
                                         onTapUp: (val) {},
                                         customBorder: const CircleBorder(),

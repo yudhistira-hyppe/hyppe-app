@@ -36,7 +36,6 @@ class UploadContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
-    print("===== candepp $canDeppAr");
     return canDeppAr == 'true'
         ? CameraDevicesPage(
             onDoubleTap: () {

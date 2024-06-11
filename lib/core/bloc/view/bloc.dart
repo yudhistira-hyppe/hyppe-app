@@ -36,7 +36,13 @@ class ViewBloc {
       "eventType": "VIEW",
       "postID": postId,
       "receiverParty": emailOwner,
-      // "userView": userView,
+      "userView": userView,
+      "userLike": userLike,
+      "saleAmount": saleAmount,
+      "createdAt": createdAt,
+      "mediaSource": mediaSource,
+      "description": description,
+      "active": active
     };
 
     String challangedata = SharedPreference().readStorage(SpKeys.challangeData) ?? '';

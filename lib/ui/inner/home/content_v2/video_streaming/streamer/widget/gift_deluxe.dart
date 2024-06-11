@@ -36,20 +36,18 @@ class _GiftDeluxeState extends State<GiftDeluxe> {
     return Consumer<StreamerNotifier>(
       builder: (_, notifier, __) => SafeArea(
         child: Stack(
-          fit: StackFit.expand,
+          // fit: StackFit.expand,
           children: [
             if (notifier.giftDelux.isNotEmpty)
-              Container(
-                // color: Colors.blue,
-                child: Transform.scale(
-                  scale: 1,
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: AspectRatio(
+                  aspectRatio: 540 / 960,
                   child: notifier.giftDelux.isEmpty
                       ? const SizedBox.shrink()
                       : Lottie.network(
                           notifier.giftDelux[0].urlGift ?? '',
                           repeat: true,
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height,
                           fit: BoxFit.fill,
                         ),
                 ),

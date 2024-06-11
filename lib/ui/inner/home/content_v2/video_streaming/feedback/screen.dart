@@ -95,7 +95,7 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            openBlock2Component(notifier);
+                            // openBlock2Component(notifier);
                           },
                           child: CustomTextWidget(
                             textToDisplay: language.engagement ?? 'Keterlibatan',
@@ -400,6 +400,7 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                       const CustomIconWidget(
                         iconData: "${AssetPath.vectorPath}forcestoplive.svg",
                         defaultColor: false,
+                        height: 50,
                       ),
                       twelvePx,
                       Text(

@@ -132,6 +132,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     //     15: "15${language.timerSecond}",
     //   };
     // }
+
     if (featureType == FeatureType.diary) {
       _selectedDuration = 60;
     } else if (featureType == FeatureType.vid) {

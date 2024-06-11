@@ -32,6 +32,7 @@ class NotificationModel {
   int? challengeSession;
   String? contentEventID; // untuk challeng masuk ke tab isinya 1 atau 0
   String? streamId;
+  List<DataBanned>? dataBanned;
 
   NotificationModel({
     this.active,
@@ -58,6 +59,7 @@ class NotificationModel {
     this.urluserBadge,
     this.contentEventID,
     this.streamId,
+    this.dataBanned,
   });
 
   NotificationModel.fromJson(Map<String, dynamic> json) {
@@ -95,6 +97,12 @@ class NotificationModel {
       }
     }
     contentEventID = json["contentEventID"];
+    if (json['data'] != null) {
+      dataBanned = <DataBanned>[];
+      json['data'].forEach((v) {
+        dataBanned!.add(DataBanned.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -236,5 +244,19 @@ class Content {
     } else {
       return fixMedia;
     }
+  }
+}
+
+class DataBanned {
+  String? idBanned;
+  String? bannedDate;
+  int? userWarningCount;
+
+  DataBanned({this.idBanned, this.bannedDate, this.userWarningCount});
+
+  DataBanned.fromJson(Map<String, dynamic> json) {
+    idBanned = json['idBanned'];
+    bannedDate = json['bannedDate'];
+    userWarningCount = json['userWarningCount'];
   }
 }

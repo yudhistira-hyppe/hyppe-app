@@ -46,6 +46,8 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
+  final GlobalKey<AnimatedListState> listKey = GlobalKey();
+
   final _socketService = SocketLiveService();
 
   final commentController = TextEditingController();
@@ -222,11 +224,11 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
             notifyListeners();
           }
 
-          if (buttonSheetProfil){
+          if (buttonSheetProfil) {
             Navigator.pop(context);
           }
 
-          if (buttonSheetReport){
+          if (buttonSheetReport) {
             Navigator.pop(context);
           }
         },
@@ -695,6 +697,7 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
       if (messages.idStream == dataStream.sId) {
         if (messages.commentType == 'MESSAGGES' || messages.commentType == 'JOIN') {
           comment.insert(0, messages);
+          listKey.currentState?.insertItem(0, duration: const Duration(milliseconds: 500));
         } else if (messages.commentType == 'GIFT') {
           if (messages.urlGift != null) {
             if (giftDelux.isEmpty) {
@@ -738,9 +741,9 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
       }
     } else if (event == eventStatusStream) {
       var messages = StatusStreamLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
-      print("===00 id ${dataStream.sId} -- ${messages.idStream} ${messages.idStream == dataStream.sId}");
+      // print("===00 id ${dataStream.sId} -- ${messages.idStream} ${messages.idStream == dataStream.sId}");
       if (messages.idStream == dataStream.sId) {
-        print("=====masuk true");
+        // print("=====masuk true");
         if (messages.pause != null) {
           dataStreaming.pauseDate = null;
           // await Future.delayed(const Duration(milliseconds: 4500));
@@ -791,6 +794,17 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
       if (messages.idStream == dataStream.sId) {
         removeComment(messages.idComment ?? '');
       }
+    }
+
+    notifyListeners();
+  }
+
+  void endGiftDelux() {
+    comment.insert(0, giftDelux[0]); //masukin ke comment
+    giftDelux.removeAt(0); //hapus gift deluxe
+    if (giftDeluxTemp.isNotEmpty) {
+      giftDelux.add(giftDeluxTemp[0]);
+      giftDeluxTemp.removeAt(0);
     }
 
     notifyListeners();
@@ -1002,13 +1016,14 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
 
   Timer? timerDeluxe;
   void startTimerDelux() {
-    timerDeluxe = Timer.periodic(const Duration(seconds: 5), (timer) {
+    timerDeluxe = Timer.periodic(const Duration(seconds: 4), (timer) {
       if (giftDelux.isNotEmpty) {
         comment.insert(0, giftDelux[0]); //masukin ke comment
         giftDelux.removeAt(0); //hapus gift deluxe
         if (giftDeluxTemp.isNotEmpty) {
           giftDelux.add(giftDeluxTemp[0]);
           giftDeluxTemp.removeAt(0);
+          timerDeluxe?.cancel();
         }
 
         notifyListeners();
@@ -1025,7 +1040,7 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
         routes: Routes.viewStreaming,
         postID: dataStreaming.sId,
         fullName: "",
-        description: '${dataStreaming.user?.fullName ?? dataStreaming.user?.username} (${dataStreaming.user?.username}) \n is LIVE ${dataStreaming.title}',
+        description: '${dataStreaming.user?.fullName ?? dataStreaming.user?.username} (${dataStreaming.user?.username}) \n is LIVE ${dataStreaming.title ?? ''}',
         // thumb: System().showUserPicture(profileImage),
         thumb: System().showUserPicture(dataStreaming.user?.avatar?.mediaEndpoint),
       ),

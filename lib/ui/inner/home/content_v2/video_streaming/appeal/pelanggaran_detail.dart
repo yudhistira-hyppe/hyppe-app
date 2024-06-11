@@ -20,7 +20,8 @@ import 'package:provider/provider.dart';
 
 class PelanggaranDetail extends StatefulWidget {
   final BannedStreamModel? data;
-  const PelanggaranDetail({super.key, this.data});
+  final String? idBanned;
+  const PelanggaranDetail({super.key, this.data, this.idBanned});
 
   @override
   State<PelanggaranDetail> createState() => _PelanggaranDetailState();
@@ -32,8 +33,8 @@ class _PelanggaranDetailState extends State<PelanggaranDetail> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       var notifier = context.read<AppealStreamNotifier>();
-      if (widget.data == null) {
-        notifier.checkBeforeLive(context, mounted);
+      if (widget.idBanned != null) {
+        notifier.checkBeforeLive(context, mounted, idBanned: widget.idBanned);
       } else {
         setState(() {
           notifier.dataBanned = widget.data ?? BannedStreamModel();
@@ -73,7 +74,7 @@ class _PelanggaranDetailState extends State<PelanggaranDetail> {
                   children: [
                     topDetail(context, translate),
                     const Spacer(),
-                    bottomDetail(context, translate),
+                    if (notifier.showButton) bottomDetail(context, translate),
                   ],
                 ),
               ),
