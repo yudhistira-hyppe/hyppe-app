@@ -149,6 +149,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       notifier.setIsSound(true);
     });
     context.read<HomeNotifier>().removeWakelock();
+
     super.initState();
   }
 
@@ -689,6 +690,21 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
   Widget itemPict(BuildContext context, PreviewPicNotifier notifier, int index, HomeNotifier homeNotifier) {
     var picData = notifier.pic?[index];
+    // print(homeNotifier.landingData?.length);
+    // var landingData = homeNotifier.landingData?.where((el) => el.postID == picData?.postID);
+    // var landingDataIndex = landingData?.first;
+    // print(landingDataIndex?.createdAt.toString());
+    // print(landingDataIndex?.userLike.toString());
+    // print(landingDataIndex?.postType.toString());
+    // print(landingDataIndex?.saleAmount.toString());
+    // print(landingDataIndex?.userView.toString());
+    // print(landingDataIndex?.description.toString());
+    // print(landingDataIndex?.active.toString());
+    // print(landingDataIndex?.mediaSource.toString());
+    // print(picData?.userLike.toString());
+    // print(picData?.userView.toString());
+    // print(picData?.postType.toString());
+    // print("--> get-data contains postID;userview;viewer:" + (picData?.postID).toString() + ";" + (picData!.userView?.contains(email)).toString() + ";" + (picData!.viewer?.contains(email)).toString());
     final isAds = picData?.inBetweenAds != null && picData?.postID == null;
     return picData?.isContentLoading ?? false
         ? Builder(builder: (context) {
@@ -743,7 +759,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                               // fAliplayer?.stop();
                               MyAudioService.instance.stop();
                               Future.delayed(const Duration(milliseconds: 500), () {
+                                // print("--> pic/screen.dart _HyppePreviewPicState:746:" + picData.toJson().toString());
                                 System().increaseViewCount2(context, picData ?? ContentData(), check: false);
+
                                 if ((picData?.saleAmount ?? 0) > 0 || ((picData?.certified ?? false) && (picData?.saleAmount ?? 0) == 0)) {
                                   if (mounted) {
                                     setState(() {
@@ -861,13 +879,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                 }
                               });
 
-                              if (picData?.viewer != null && (picData?.viewer?.isNotEmpty ?? [].isEmpty)) {
-                                if (picData!.viewer!.contains(email)) {
-                                  Future.delayed(const Duration(milliseconds: 500), () {
-                                    System().increaseViewCount2(context, picData, check: false);
-                                  });
-                                }
-                              }
+                              Future.delayed(const Duration(milliseconds: 500), () {
+                                // print("--> picData:867:" + picData.toJson().toString());
+                                System().increaseViewCount2(context, picData ?? ContentData(), check: false);
+                              });
 
                               if (picData?.certified ?? false) {
                                 System().block(context);
@@ -875,7 +890,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                 System().disposeBlock();
                               }
                               setState(() {
-                                Future.delayed(Duration(milliseconds: 400), () {
+                                Future.delayed(const Duration(milliseconds: 400), () {
                                   itemHeight = notifier.pic?[indexList ?? 0].height ?? 0;
                                 });
                               });
@@ -1175,7 +1190,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                 child: ZoomableImage(
                                                   enable: homeNotifier.connectionError ? false : true,
                                                   onScaleStart: () {
-                                                    print("================masuk zoom============");
+                                                    // print("================masuk zoom============");
                                                     widget.onScaleStart?.call();
                                                   }, // optional
                                                   onScaleStop: () {
@@ -1226,7 +1241,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                           emptyWidget: GestureDetector(
                                                             onTap: () {
                                                               _networklHasErrorNotifier.value++;
-                                                              Random random = new Random();
+                                                              Random random = Random();
                                                               int randomNumber = random.nextInt(100); // from 0 upto 99 included
 
                                                               picData?.valueCache = randomNumber.toString();
@@ -1237,7 +1252,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                                 decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
                                                                 width: SizeConfig.screenWidth,
                                                                 height: 250,
-                                                                padding: EdgeInsets.all(20),
+                                                                padding: const EdgeInsets.all(20),
                                                                 alignment: Alignment.center,
                                                                 child: CustomTextWidget(
                                                                   textToDisplay: lang?.couldntLoadImage ?? 'Error',
@@ -1247,7 +1262,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                           errorWidget: (context, url, error) {
                                                             return GestureDetector(
                                                               onTap: () {
-                                                                Random random = new Random();
+                                                                Random random = Random();
                                                                 int randomNumber = random.nextInt(100); // from 0 upto 99 included
                                                                 _networklHasErrorNotifier.value++;
                                                                 picData?.valueCache = randomNumber.toString();
@@ -1301,7 +1316,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                   if (picData?.email == email && (picData?.boostCount ?? 0) >= 0 && (picData?.boosted.isNotEmpty ?? [].isEmpty))
                                     Container(
                                       padding: const EdgeInsets.all(10),
-                                      margin: EdgeInsets.only(bottom: 10),
+                                      margin: const EdgeInsets.only(bottom: 10),
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(6),
                                         color: kHyppeGreyLight,
@@ -1482,26 +1497,19 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                   //===== Aditional Link
                                   // tenPx,
                                   // if ()
-                                    picData?.urlLink != '' || picData?.judulLink != ''
-                                    ? RichText(
-                                      text: TextSpan(
-                                        children: [
-                                        TextSpan(
-                                          text: (picData?.judulLink != null)
-                                              ? picData?.judulLink
-                                              : picData?.urlLink,
-                                          style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
-                                              fontWeight: FontWeight.bold),
-                                          recognizer: TapGestureRecognizer()
-                                            ..onTap = () async {
-                                              var uri = picData?.urlLink??'';
-                                                if (!uri.withHttp()){
-                                                  uri='https://$uri';
-                                                }
-                                                if (await canLaunchUrl(Uri.parse(uri))) {
+                                  picData?.urlLink != '' || picData?.judulLink != ''
+                                      ? RichText(
+                                          text: TextSpan(children: [
+                                            TextSpan(
+                                              text: (picData?.judulLink != null) ? picData?.judulLink : picData?.urlLink,
+                                              style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold),
+                                              recognizer: TapGestureRecognizer()
+                                                ..onTap = () async {
+                                                  var uri = picData?.urlLink ?? '';
+                                                  if (!uri.withHttp()) {
+                                                    uri = 'https://$uri';
+                                                  }
+                                                  if (await canLaunchUrl(Uri.parse(uri))) {
                                                     await launchUrl(Uri.parse(uri));
                                                   } else {
                                                     throw Fluttertoast.showToast(msg: 'Could not launch $uri');
@@ -1727,6 +1735,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                       const Spacer(),
                       GestureDetector(
                         onTap: () {
+                          print("--> picData:1714:" + data.toJson().toString());
                           System().increaseViewCount2(context, data);
                           context.read<ReportNotifier>().seeContent(context, data, hyppePic);
                         },

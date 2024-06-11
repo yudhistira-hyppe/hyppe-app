@@ -18,6 +18,7 @@ import 'package:hyppe/ui/inner/home/content_v2/coins/widgets/card_coin_widget.da
 import 'package:hyppe/ui/inner/home/content_v2/coins/widgets/custom_listtile.dart';
 import 'package:hyppe/ui/inner/home/content_v2/detail_report/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction_coin_detail/activity_coin_detail.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -39,7 +40,7 @@ class CoinPage extends StatefulWidget {
 class _CoinPageState extends State<CoinPage> {
   LocalizationModelV2? lang;
   final ScrollController scrollController = ScrollController();
-  
+
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'saldocoins');
@@ -53,11 +54,9 @@ class _CoinPageState extends State<CoinPage> {
       notifier.initHistory(context, mounted);
       notifier.tempSelectedDateStart = DateTime.now().toString();
       notifier.tempSelectedDateEnd = DateTime.now().toString();
-
     });
     scrollController.addListener(() async {
-      if (scrollController.position.pixels >=
-          scrollController.position.maxScrollExtent) {
+      if (scrollController.position.pixels >= scrollController.position.maxScrollExtent) {
         if (notifier.isLoadMore) {
           return;
         }
@@ -77,6 +76,7 @@ class _CoinPageState extends State<CoinPage> {
     });
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -89,167 +89,195 @@ class _CoinPageState extends State<CoinPage> {
           textToDisplay: '${lang?.saldocoins}',
         ),
       ),
-      body: Consumer2<TransactionNotifier, CoinNotifier>(
-        builder: (context, notifier, cointNotif, child) {
-          return RefreshIndicator(
-            onRefresh: () async {
-              await context.read<TransactionNotifier>().initSaldo(context);
-            },
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 12.0),
-              physics: const BouncingScrollPhysics(),
-              controller: scrollController,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CoinsWidget(accountBalance: System().numberFormat(amount: notifier.saldoCoin,), lang: lang),
-                  thirtySixPx,
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: kHyppeBurem, width: .5),
-                      borderRadius: BorderRadius.circular(18.0)
+      body: Consumer2<TransactionNotifier, CoinNotifier>(builder: (context, notifier, cointNotif, child) {
+        return RefreshIndicator(
+          onRefresh: () async {
+            await context.read<TransactionNotifier>().initSaldo(context);
+          },
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 12.0),
+            physics: const BouncingScrollPhysics(),
+            controller: scrollController,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CoinsWidget(
+                    accountBalance: System().numberFormat(
+                      amount: notifier.saldoCoin,
                     ),
-                    child: Column(
-                      children: [
-                        CustomListTile(
-                          iconData: "${AssetPath.vectorPath}ic-bank.svg",
-                          title: lang?.localeDatetime =='id'? "Tambah Akun Bank" : 'Add Bank Account',
-                          onTap: () {
-                            notifier.navigateToBankAccount();
-                          },
-                        ),
-                        const Divider(
-                          color: kHyppeBurem,
-                        ),
-                        CustomListTile(
-                          iconData: "${AssetPath.vectorPath}ic-disccount.svg",
-                          title: lang?.discountForYou ?? 'Diskon Untukmu',
-                          onTap: () {
-                            Navigator.pushNamed(context, Routes.mydiscount, arguments: {'routes': Routes.saldoCoins});
-                          },
-                        )
-                      ],
-                    ),
+                    lang: lang),
+                thirtySixPx,
+                Container(
+                  decoration: BoxDecoration(border: Border.all(color: kHyppeBurem, width: .5), borderRadius: BorderRadius.circular(18.0)),
+                  child: Column(
+                    children: [
+                      CustomListTile(
+                        iconData: "${AssetPath.vectorPath}ic-bank.svg",
+                        title: lang?.localeDatetime == 'id' ? "Tambah Akun Bank" : 'Add Bank Account',
+                        onTap: () {
+                          notifier.navigateToBankAccount();
+                        },
+                      ),
+                      const Divider(
+                        color: kHyppeBurem,
+                      ),
+                      CustomListTile(
+                        iconData: "${AssetPath.vectorPath}ic-disccount.svg",
+                        title: lang?.discountForYou ?? 'Diskon Untukmu',
+                        onTap: () {
+                          Navigator.pushNamed(context, Routes.mydiscount, arguments: {'routes': Routes.saldoCoins});
+                        },
+                      )
+                    ],
                   ),
-                  SectionWidget(
-                    title: lang?.localeDatetime =='id' ? 'Aktivitas Hyppe Coins' : 'Hyppe Coins Activities', 
-                    style: Theme.of(context)
-                      .textTheme
-                      .titleMedium
-                      ?.copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  Container(
-                    height: kToolbarHeight - 8,
-                    padding: const EdgeInsets.symmetric(vertical: 4.0),
-                    child: ListView(
-                      physics: const BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        Visibility(
-                          visible: cointNotif.selectedTransValue != 1 || cointNotif.selectedDateValue != 1,
-                          child: GestureDetector(
-                            onTap: () {
-                              cointNotif.resetSelected(context);
-                              Future.microtask(() =>
-                                cointNotif.initHistory(context, mounted));
-                            },
-                            child: Container(
-                              margin: const EdgeInsets.only(right: 12.0),
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: kHyppeBurem, width: .5),
-                                borderRadius: BorderRadius.circular(32.0)
-                              ),
-                              child: const Icon(Icons.close),
-                            ),
+                ),
+                SectionWidget(
+                  title: lang?.localeDatetime == 'id' ? 'Aktivitas Hyppe Coins' : 'Hyppe Coins Activities',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                ),
+                Container(
+                  height: kToolbarHeight - 8,
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: ListView(
+                    physics: const BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      Visibility(
+                        visible: cointNotif.selectedTransValue != 1 || cointNotif.selectedDateValue != 1,
+                        child: GestureDetector(
+                          onTap: () {
+                            cointNotif.resetSelected(context);
+                            Future.microtask(() => cointNotif.initHistory(context, mounted));
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(right: 12.0),
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            decoration: BoxDecoration(border: Border.all(color: kHyppeBurem, width: .5), borderRadius: BorderRadius.circular(32.0)),
+                            child: const Icon(Icons.close),
                           ),
                         ),
-                        SectionDropdownWidget(
-                          title: cointNotif.selectedTransLabel, 
-                          onTap: () => cointNotif.showButtomSheetTransaction(context),
-                          isActive: cointNotif.groupsTrans.firstWhere((e) => e.selected==true).index == 1 ? false : true,
-                        ),
-                        SectionDropdownWidget(
-                          title: cointNotif.selectedDateLabel, 
-                          onTap: () => cointNotif.showButtomSheetDate(context),
-                          isActive: cointNotif.groupsDate.firstWhere((e) => e.selected==true).index == 1 ? false : true,
-                        ),
-                      ],
-                    ),
-                  ),
-                  if ((cointNotif.bloc.dataFetch.dataState ==
-                                HistoryTransactionState.init ||
-                            cointNotif.bloc.dataFetch.dataState ==
-                                HistoryTransactionState.loading) &&
-                        !cointNotif.isLoadMore)
-                        const ContentLoader()
-                  else if (cointNotif.result.isEmpty)
-                    Container(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 18.0),
-                      margin: const EdgeInsets.only(bottom: 8.0),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.max,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const CustomIconWidget(
-                              iconData:
-                                  '${AssetPath.vectorPath}icon_no_result.svg',
-                              width: 160,
-                              height: 160,
-                              defaultColor: false,
-                            ),
-                            tenPx,
-                            CustomTextWidget(
-                              textAlign: TextAlign.center,
-                              maxLines: 1,
-                              textToDisplay: lang?.localeDatetime == 'id'
-                                  ? 'Masih sepi, nih'
-                                  : 'There\'s no one here',
-                              textStyle: context
-                                  .getTextTheme()
-                                  .bodyLarge
-                                  ?.copyWith(
-                                      fontWeight: FontWeight.w700,
-                                      color: context
-                                          .getColorScheme()
-                                          .onBackground),
-                            ),
-                            eightPx,
-                            CustomTextWidget(
-                              textAlign: TextAlign.center,
-                              maxLines: 2,
-                              textToDisplay: lang?.localeDatetime == 'id'
-                                  ? 'Yuk, mulai miliki penghasilan dari membuat konten dan dukung creator favoritmu!'
-                                  : 'Let\'s start earning from creating content and supporting your favorite creators!',
-                              textStyle: context.getTextTheme().bodyLarge,
-                            ),
-                          ],
-                        ),
                       ),
-                    )
-                  else Wrap(
-                      alignment: WrapAlignment.center,
-                      children: widgetGenerate(cointNotif),
-                    )
-                ],
+                      SectionDropdownWidget(
+                        title: cointNotif.selectedTransLabel,
+                        onTap: () => cointNotif.showButtomSheetTransaction(context),
+                        isActive: cointNotif.groupsTrans.firstWhere((e) => e.selected == true).index == 1 ? false : true,
+                      ),
+                      SectionDropdownWidget(
+                        title: cointNotif.selectedDateLabel,
+                        onTap: () => cointNotif.showButtomSheetDate(context),
+                        isActive: cointNotif.groupsDate.firstWhere((e) => e.selected == true).index == 1 ? false : true,
+                      ),
+                    ],
+                  ),
+                ),
+                if ((cointNotif.bloc.dataFetch.dataState == HistoryTransactionState.init || cointNotif.bloc.dataFetch.dataState == HistoryTransactionState.loading) && !cointNotif.isLoadMore)
+                  const ContentLoader()
+                else if (cointNotif.result.isEmpty)
+                  Container(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 18.0),
+                    margin: const EdgeInsets.only(bottom: 8.0),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const CustomIconWidget(
+                            iconData: '${AssetPath.vectorPath}icon_no_result.svg',
+                            width: 160,
+                            height: 160,
+                            defaultColor: false,
+                          ),
+                          tenPx,
+                          CustomTextWidget(
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            textToDisplay: lang?.localeDatetime == 'id' ? 'Masih sepi, nih' : 'There\'s no one here',
+                            textStyle: context.getTextTheme().bodyLarge?.copyWith(fontWeight: FontWeight.w700, color: context.getColorScheme().onBackground),
+                          ),
+                          eightPx,
+                          CustomTextWidget(
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            textToDisplay: lang?.localeDatetime == 'id'
+                                ? 'Yuk, mulai miliki penghasilan dari membuat konten dan dukung creator favoritmu!'
+                                : 'Let\'s start earning from creating content and supporting your favorite creators!',
+                            textStyle: context.getTextTheme().bodyLarge,
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                else
+                  widgetGenerate2(cointNotif),
+                // Wrap(
+                //   alignment: WrapAlignment.center,
+                //   children: widgetGenerate(cointNotif),
+                // )
+              ],
+            ),
+          ),
+        );
+      }),
+    );
+  }
+
+  Widget widgetGenerate2(CoinNotifier notifier) {
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: notifier.result.length,
+      physics: const NeverScrollableScrollPhysics(),
+      itemBuilder: (context, i) {
+        if (notifier.result.length == i && notifier.isLoadMore) {
+          return const CustomLoading();
+        }
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: GestureDetector(
+                onTap: () {
+                  if (notifier.result[i].type == 'Pembelian Coin') {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TransactionCoinDetailScreen(
+                                  invoiceid: notifier.result[i].noInvoice ?? '',
+                                  status: 'History', title: 'Detail Coins',
+                                )));
+                  } else {
+                    // Fluttertoast.showToast(msg: 'Feature Not Available');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ActifityCoinDetail(),
+                      ),
+                    );
+                  }
+                },
+                child: CardCoinWidget(
+                  title: notifier.result[i].coa ?? '',
+                  totalCoin: notifier.result[i].totalCoin ?? 0,
+                  date: DateFormat('dd MMM yyyy', lang!.localeDatetime).format(DateTime.parse(notifier.result[i].updatedAt ?? '2024-03-02')),
+                  desc: lang?.localeDatetime == 'id' ? notifier.result[i].titleId : notifier.result[i].titleEn,
+                  subdesc: lang?.localeDatetime == 'id' ? notifier.result[i].contentId : notifier.result[i].contentEn,
+                ),
               ),
             ),
-          );
-        }
-      ),
+          ],
+        );
+      },
     );
   }
 
   List<Widget> widgetGenerate(CoinNotifier notifier) {
     List<Widget> widget = [];
     int lengthResult = notifier.result.length;
+
     for (var i = 0; i < lengthResult; i++) {
-      if (notifier.result.length == i && notifier.isLoadMore){
-        Widget item =  const CustomLoading();
+      if (notifier.result.length == i && notifier.isLoadMore) {
+        Widget item = const CustomLoading();
         widget.add(item);
       }
       Widget item = Padding(
@@ -267,8 +295,8 @@ class _CoinPageState extends State<CoinPage> {
             }
           },
           child: CardCoinWidget(
-            title: notifier.result[i].coa??'', 
-            totalCoin: notifier.result[i].totalCoin??0,
+            title: notifier.result[i].coa ?? '',
+            totalCoin: notifier.result[i].totalCoin ?? 0,
             date: DateFormat('dd MMM yyyy', lang!.localeDatetime).format(DateTime.parse(notifier.result[i].updatedAt ?? '2024-03-02')),
             desc: lang?.localeDatetime == 'id' ? notifier.result[i].titleId : notifier.result[i].titleEn, 
             subdesc: lang?.localeDatetime == 'id' ? notifier.result[i].contentId : notifier.result[i].contentEn, 

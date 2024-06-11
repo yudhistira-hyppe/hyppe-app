@@ -33,7 +33,7 @@ class UtilsBlocV2 {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context,statusCode: errorData.response?.statusCode);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setUtilsFetch(UtilsFetch(UtilsState.welcomeNotesError));
       },
       host: "${UrlConstants.welcomeNotes}?langIso=$_langIso&countryCode=ID&pageNumber=0&pageRow=100",
@@ -79,7 +79,7 @@ class UtilsBlocV2 {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context,statusCode: errorData.response?.statusCode);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setUtilsFetch(UtilsFetch(UtilsState.getInterestsError));
       },
       errorServiceType: ErrorType.getGender,

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/notifier.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -36,24 +37,23 @@ class _GiftDeluxeState extends State<GiftDeluxe> {
     return Consumer<ViewStreamingNotifier>(
       builder: (_, notifier, __) => SafeArea(
         child: Stack(
-          fit: StackFit.expand,
+          // fit: StackFit.expand,
           children: [
-            Container(
-              color: Colors.transparent,
-              child: Transform.scale(
-                scale: 1,
-                child: notifier.giftDelux.isEmpty
-                    ? const SizedBox.shrink()
-                    : Lottie.network(
-                        notifier.giftDelux[0].urlGift ?? '',
-                        repeat: true,
-                        width: SizeConfig.screenWidth,
-                        height: SizeConfig.screenHeight,
-                        fit: BoxFit.fill,
-                      ),
+            if (notifier.giftDelux.isNotEmpty)
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: AspectRatio(
+                  aspectRatio: 540 / 960,
+                  child: notifier.giftDelux.isEmpty
+                      ? const SizedBox.shrink()
+                      : Lottie.network(
+                          notifier.giftDelux[0].urlGift ?? '',
+                          repeat: true,
+                          fit: BoxFit.fill,
+                        ),
+                ),
               ),
-            ),
-            // Text("timer ${_time2.tick.}"),
+            // if (notifier.giftDelux.isNotEmpty) Text("timer ${notifier.giftDelux[0].urlGift}"),
           ],
         ),
       ),

@@ -936,25 +936,29 @@ class ShowBottomSheet {
   }) {
     showModalBottomSheet(
       context: context,
-      enableDrag: true,
-      isDismissible: false,
       isScrollControlled: true,
+      enableDrag: true,
       builder: (builder) {
         return Container(
           padding: const EdgeInsets.symmetric(vertical: 15),
-          constraints: const BoxConstraints(maxHeight: 270),
+          // constraints: const BoxConstraints(maxHeight: 500),
           decoration: const BoxDecoration(
+            // color: Colors.red,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(8),
               topRight: Radius.circular(8),
             ),
           ),
-          child: UserOverviewGenderContent(
-            value: value,
-            onSave: onSave,
-            onChange: onChange,
-            onCancel: onCancel,
-            initFuture: initFuture,
+          child: Wrap(
+            children: [
+              UserOverviewGenderContent(
+                value: value,
+                onSave: onSave,
+                onChange: onChange,
+                onCancel: onCancel,
+                initFuture: initFuture,
+              ),
+            ],
           ),
         );
       },
@@ -1965,8 +1969,7 @@ class ShowBottomSheet {
                   child: OnShowGiftLiveBottomSheet(scrollController: scrollController, idViewStream: idViewStream),
                 );
               });
-        }).then((value) {
-        });
+        }).then((value) {});
   }
 
   onShowGiftComment(BuildContext _, {CommentsArgument? argument, List<CommentsLogs>? comments}) {

@@ -45,6 +45,13 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
             setState(() {
               finishScroll = true;
             });
+          } else {
+            if (finishScroll) {
+              setState(() {
+                agree = false;
+                finishScroll = false;
+              });
+            }
           }
         });
       } catch (e) {
@@ -137,9 +144,11 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
                     Checkbox(
                         value: agree,
                         onChanged: (value) {
-                          setState(() {
-                            agree = value ?? false;
-                          });
+                          if (finishScroll) {
+                            setState(() {
+                              agree = value ?? false;
+                            });
+                          }
                         },
                         checkColor: Colors.white,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),

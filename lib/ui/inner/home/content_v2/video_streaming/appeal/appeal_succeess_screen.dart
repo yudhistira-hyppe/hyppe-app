@@ -103,7 +103,7 @@ class _AppealSuccessStreamingScreenState extends State<AppealSuccessStreamingScr
                           Future.delayed(const Duration(milliseconds: 500), () {
                             if (widget.argument?.isTrue ?? false) {
                               Routing().moveBack();
-                              Routing().moveReplacement(Routes.lobby);
+                              Routing().moveBack();
                             } else {
                               Routing().moveBack();
                             }

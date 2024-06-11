@@ -32,18 +32,35 @@ class UserOverviewGenderContent extends StatefulWidget {
 
 class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
   String _value = '';
-  late Future<dynamic> _future;
+  Future<dynamic>? _future;
+
+  var gender = [
+    {'id': "Laki-laki", 'en': "Male"},
+    {'id': "Perempuan", 'en': "Female"},
+    {'id': "Lainnya", 'en': "Other"},
+  ];
 
   @override
   void initState() {
-    _future = widget.initFuture;
+    // _future = widget.initFuture;
+    _future = getNothink();
+
     if (widget.value.isNotEmpty) {
-      _value = widget.value;
+      for (var i = 0; i < gender.length; i++) {
+        if (widget.value == gender[i]['id']) {
+          _value = gender[i]['en'] ?? '';
+          break;
+        } else {
+          _value = widget.value;
+        }
+      }
     }
-    print('gender');
+    print('gender ${widget.value}');
     print('gender ${_value}');
     super.initState();
   }
+
+  Future<dynamic> getNothink() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -53,103 +70,104 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
       initialData: const [],
       future: _future,
       builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Center(
-            child: CustomErrorWidget(
-              function: () {
-                setState(() {
-                  _future = widget.initFuture;
-                });
-              },
-              errorType: ErrorType.getGender,
-            ),
-          );
-        } else if (snapshot.connectionState == ConnectionState.done) {
-          print('ini datanya');
-          print(snapshot.data);
-          String _gendersResult = '${snapshot.data}'.replaceAll("[", "").replaceAll("]", "");
-          final _genders = List<String>.from(_gendersResult.split(','));
+        // if (snapshot.hasError) {
+        //   return Center(
+        //     child: CustomErrorWidget(
+        //       function: () {
+        //         setState(() {
+        //           _future = widget.initFuture;
+        //         });
+        //       },
+        //       errorType: ErrorType.getGender,
+        //     ),
+        //   );
+        // } else if (snapshot.connectionState == ConnectionState.done) {
+        //   print('ini datanya');
+        //   print(snapshot.data);
+        //   String _gendersResult = '${snapshot.data}'.replaceAll("[", "").replaceAll("]", "");
+        //   final _genders = List<String>.from(_gendersResult.split(','));
 
-          return Column(
-            children: [
-              CustomTextWidget(
-                textAlign: TextAlign.center,
-                textToDisplay: translateNotifier.translate.gender ?? 'gender',
-                textStyle: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 18),
-              ),
-              Expanded(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: _genders.length,
-                  padding: const EdgeInsets.all(0),
-                  itemBuilder: (context, index) {
-                    return RadioListTile<String>(
-                      groupValue: System().capitalizeFirstLetter(_genders[index]),
-                      value: _value,
-                      onChanged: (value) {
-                        setState(() {
-                          _value = System().capitalizeFirstLetter(_genders[index]);
-                          widget.onChange(System().capitalizeFirstLetter(_genders[index]));
-                        });
-                      },
-                      toggleable: true,
-                      activeColor: Theme.of(context).colorScheme.primary,
-                      title: CustomTextWidget(
-                        textAlign: TextAlign.left,
-                        textToDisplay: System().capitalizeFirstLetter(_genders[index]),
-                        textStyle: Theme.of(context).primaryTextTheme.bodyText1,
-                      ),
-                      controlAffinity: ListTileControlAffinity.trailing,
-                    );
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CustomTextWidget(
+              textAlign: TextAlign.center,
+              textToDisplay: translateNotifier.translate.gender ?? 'gender',
+              textStyle: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 18),
+            ),
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: gender.length,
+              padding: const EdgeInsets.all(0),
+              itemBuilder: (context, index) {
+                var data = gender[index];
+                return RadioListTile<String>(
+                  groupValue: System().capitalizeFirstLetter(data['en'] ?? ''),
+                  value: _value,
+                  onChanged: (value) {
+                    setState(() {
+                      // _value = System().capitalizeFirstLetter(System().bodyMultiLang(bodyEn: data['en'], bodyId: data['id']) ?? '');
+                      _value = System().capitalizeFirstLetter(data['en'] ?? '');
+                      widget.onChange(System().capitalizeFirstLetter(System().bodyMultiLang(bodyEn: data['en'], bodyId: data['id']) ?? ''));
+                    });
                   },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: CustomElevatedButton(
-                  height: 50,
-                  width: SizeConfig.screenWidth,
-                  buttonStyle: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                      Theme.of(context).colorScheme.primary,
-                    ),
+                  toggleable: true,
+                  activeColor: Theme.of(context).colorScheme.primary,
+                  title: CustomTextWidget(
+                    textAlign: TextAlign.left,
+                    textToDisplay: System().capitalizeFirstLetter(System().bodyMultiLang(bodyEn: data['en'], bodyId: data['id']) ?? ''),
+                    textStyle: Theme.of(context).primaryTextTheme.bodyText1,
                   ),
-                  // function: () => Routing().moveBack(),
-                  function: () {
-                    widget.onSave();
-                  },
-                  child: CustomTextWidget(
-                    textToDisplay: translateNotifier.translate.save ?? 'save',
-                    textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                  controlAffinity: ListTileControlAffinity.trailing,
+                );
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: CustomElevatedButton(
+                height: 50,
+                width: SizeConfig.screenWidth,
+                buttonStyle: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                    Theme.of(context).colorScheme.primary,
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: CustomElevatedButton(
-                  height: 50,
-                  width: SizeConfig.screenWidth,
-                  function: () {
-                    widget.onCancel();
-                    // notifier.resetGender();
-                    // FocusScope.of(context).unfocus();
-                  },
-                  buttonStyle: ButtonStyle(
-                    overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
-                  ),
-                  child: CustomTextWidget(
-                    textToDisplay: translateNotifier.translate.cancel ?? '',
-                    textStyle: Theme.of(context).textTheme.button,
-                  ),
+                // function: () => Routing().moveBack(),
+                function: () {
+                  widget.onSave();
+                },
+                child: CustomTextWidget(
+                  textToDisplay: translateNotifier.translate.save ?? 'save',
+                  textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
                 ),
               ),
-            ],
-          );
-        } else {
-          return const Center(
-            child: CustomLoading(),
-          );
-        }
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: CustomElevatedButton(
+                height: 50,
+                width: SizeConfig.screenWidth,
+                function: () {
+                  widget.onCancel();
+                  // notifier.resetGender();
+                  // FocusScope.of(context).unfocus();
+                },
+                buttonStyle: ButtonStyle(
+                  overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                ),
+                child: CustomTextWidget(
+                  textToDisplay: translateNotifier.translate.cancel ?? '',
+                  textStyle: Theme.of(context).textTheme.button,
+                ),
+              ),
+            ),
+          ],
+        );
+        // } else {
+        //   return const Center(
+        //     child: CustomLoading(),
+        //   );
+        // }
       },
     );
 

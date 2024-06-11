@@ -19,6 +19,7 @@ import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/live_stream/banned_stream_model.dart';
@@ -66,6 +67,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   static const String eventStatusStream = 'STATUS_STREAM';
 
   final _socketService = SocketLiveService();
+  final GlobalKey<AnimatedListState> listKey = GlobalKey();
 
   int livePushMode = 0;
   int timeReady = 3;
@@ -76,8 +78,8 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   int totPause = 0;
   int pageNumberUserShare = 0;
   int limitNumberUserShare = 15;
-  int settingStreamTime1 = 3600; //waktu untuk streaming dalam detik (1jam)
-  int settingStreamTime2 = 300; // 5 menit
+  int settingStreamTime1 = 300; //waktu untuk streaming dalam detik (1jam = 3600 s)
+  int settingStreamTime2 = 100; // 5 menit (300 s)
 
   Duration timeCountdownReported = const Duration(seconds: 30);
 
@@ -197,38 +199,46 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     titleLive = '';
     userName = '';
 
-    print("-------- init stream $forConfig ---------");
     isloading = true;
-
     isloadingPreview = true;
     notifyListeners();
-
-    // _alivcBase = AlivcBase.init();
-
-    // await _alivcBase.registerSDK();
-    // await _alivcBase.setObserver();
-    // if (!forConfig) {
-    //   await setLiveConfig();
-    //   await _setLivePusher();
-
-    //   if (isFirst && mounted) {
-    //     isFirst = false;
-    //     await init(context, mounted);
-    //   }
-    //   await _onListen(context, mounted);
-    // }
-
-    await checkBeforeLive(context, mounted).then((value) async {
-      if (dataBanned != null) {
-        // statusLive = StatusStream.banned;
-      }
+    bool permissionStat = await requestPermission(context);
+    print("========status $permissionStat");
+    if (permissionStat) {
       await initAgora();
-    });
+      await checkBeforeLive(context, mounted).then((value) async {
+        if (dataBanned != null) {
+          // statusLive = StatusStream.banned;
+        }
+      });
 
-    // notifyListeners();
+      // notifyListeners();
+      isloading = false;
+      isloadingPreview = false;
+      notifyListeners();
 
-    if (!mounted) return;
-    tn = context.read<TranslateNotifierV2>().translate;
+      if (!mounted) return;
+      tn = context.read<TranslateNotifierV2>().translate;
+    } else {
+      if (mounted) {
+        ShowGeneralDialog.generalDialog(
+          context,
+          titleText: System().bodyMultiLang(bodyEn: 'Permission is Permanetely Denied', bodyId: 'Izin Ditolak Secara Permanen'),
+          titleButtonPrimary: System().bodyMultiLang(bodyEn: 'Open Settings', bodyId: 'Buka Pengaturan'),
+          titleButtonSecondary: 'OK',
+          bodyText: System().bodyMultiLang(bodyEn: 'Please give permission for camera and microphone', bodyId: 'Tolong beri izin untuk kamera dan mikrofon'),
+          maxLineTitle: 9999,
+          isHorizontal: false,
+          functionPrimary: () {
+            openAppSettings();
+          },
+          functionSecondary: () {
+            Routing().moveBack();
+            Routing().moveBack();
+          },
+        );
+      }
+    }
   }
 
   void setDefaultExternalLink(BuildContext context) {
@@ -238,12 +248,16 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   }
 
   Future<bool> requestPermission(BuildContext context) async {
-    final isGranted = await System().requestPermission(context, permissions: [Permission.camera, Permission.storage, Permission.microphone]);
+    final isGranted = await System().requestPermission(context, permissions: [Permission.camera, Permission.microphone]);
     if (isGranted) {
       return isGranted;
     } else {
-      await System().requestPermission(context, permissions: [Permission.camera, Permission.storage, Permission.microphone]);
-      return true;
+      final isGranted2 = await System().requestPermission(context, permissions: [Permission.camera, Permission.microphone]);
+      if (isGranted2) {
+        return isGranted;
+      } else {
+        return false;
+      }
     }
   }
 
@@ -269,9 +283,6 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
       appId: UrlConstants.agoraId,
       channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
     ));
-
-    isloading = false;
-    notifyListeners();
 
     engine.registerEventHandler(
       RtcEngineEventHandler(
@@ -300,6 +311,9 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
           statusLive = StatusStream.offline;
           notifyListeners();
         },
+        onNetworkTypeChanged: (connection, type) {
+          debugPrint("connection user $connection --- type $type left channel");
+        },
       ),
     );
 
@@ -307,11 +321,8 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
 
     await engine.enableAudio();
     await engine.enableVideo();
-    await engine.startPreview();
 
-    isloading = false;
-    isloadingPreview = false;
-    notifyListeners();
+    await engine.startPreview();
   }
 
   Future<void> disposeAgora() async {
@@ -828,6 +839,10 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     if (isBack) Routing().moveBack();
     var dateTimeFinish = DateTime.now();
     Duration duration = dateTimeFinish.difference(dateTimeStart);
+
+    if (duration > Duration(seconds: settingStreamTime1)) {
+      duration = Duration(seconds: settingStreamTime1);
+    }
     await destoryPusher();
     if (!mounted) return;
     await stopStream(context, mounted);
@@ -941,7 +956,6 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
       if (context.mounted) {
         ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
           Routing().moveBack();
-          initLiveStream(context, mounted);
         });
       }
     }
@@ -951,15 +965,19 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   Future kickUser(BuildContext context, bool mounted, String userId, String username) async {
     Map data = {"_id": dataStream.sId, "userId": userId, "type": "KICK"};
     await updateStream(context, mounted, data).then((value) {
+      print("==== hahaha $value");
       if (value == 'Update stream succesfully') {
         Routing().moveBack();
         // if (context.mounted) {
-        tn = context.read<TranslateNotifierV2>().translate;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            margin: const EdgeInsets.only(bottom: 60, left: 16, right: 16),
-            backgroundColor: kHyppeTextLightPrimary,
-            content: Row(
+
+        if (true) FToast().removeCustomToast();
+        FToast().showToast(
+          child: Container(
+            width: SizeConfig.screenWidth,
+            // margin: const EdgeInsets.only(bottom: 60, left: 16, right: 16),
+            decoration: BoxDecoration(color: kHyppeTextLightPrimary, borderRadius: BorderRadius.circular(8)),
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            child: Row(
               children: [
                 const CustomIconWidget(
                   iconData: "${AssetPath.vectorPath}info-icon.svg",
@@ -967,12 +985,16 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
                   color: Colors.white,
                 ),
                 sixPx,
-                Text("${tn?.infoKick1} $username ${tn?.infoKick2}", style: const TextStyle(color: Colors.white)),
+                Expanded(
+                  child: Text("${tn?.infoKick1} $username ${tn?.infoKick2}", style: const TextStyle(color: Colors.white)),
+                ),
               ],
             ),
-            behavior: SnackBarBehavior.floating,
           ),
+          gravity: ToastGravity.BOTTOM,
+          toastDuration: const Duration(seconds: 3),
         );
+
         // }
       }
     });
@@ -1429,6 +1451,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
       if (messages.idStream == dataStream.sId) {
         if (messages.commentType == 'MESSAGGES' || messages.commentType == 'JOIN') {
           comment.insert(0, messages);
+          listKey.currentState?.insertItem(0, duration: const Duration(milliseconds: 500));
         } else if (messages.commentType == 'GIFT') {
           if (messages.urlGift != null) {
             print("=====ada json");
@@ -1481,7 +1504,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
         dataBanned = BannedStreamModel(
           streamBannedDate: data['data']['datePelanggaran'],
           streamBannedMax: data['data']['totalPelanggaran'],
-          statusBanned: data['data']['statusBanned'],
+          statusBannedStreaming: data['data']['statusBanned'],
           streamId: dataStream.sId,
         );
       }
@@ -1663,10 +1686,11 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     Routing().moveBack();
 
     var message = messageShareCtrl.text;
+    var translate = context.read<TranslateNotifierV2>().translate;
 
     if (message == '') {
       var profile = context.read<SelfProfileNotifier>().user.profile;
-      var translate = context.read<TranslateNotifierV2>().translate;
+
       message = '@${profile?.username} ${translate.localeDatetime == 'id' ? 'mengirim kamu LIVE' : 'send you a LIVE'}';
     }
 
@@ -1680,11 +1704,10 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     ScaffoldMessengerState().hideCurrentSnackBar();
     messageShareCtrl.clear();
     // if (context.mounted) {
-    tn = context.read<TranslateNotifierV2>().translate;
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       margin: const EdgeInsets.only(bottom: 60, left: 16, right: 16),
       backgroundColor: kHyppeTextLightPrimary,
-      content: Text(tn?.sentSuccessfully ?? '', style: const TextStyle(color: Colors.white)),
+      content: Text(translate.sentSuccessfully ?? '', style: const TextStyle(color: Colors.white)),
       behavior: SnackBarBehavior.floating,
     ));
     // }
@@ -1728,7 +1751,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
         routes: Routes.viewStreaming,
         postID: dataStream.sId,
         fullName: "",
-        description: '${profile?.fullName ?? profile?.username} (${profile?.username}) \n is LIVE ${dataStream.title}',
+        description: '${profile?.fullName ?? profile?.username} (${profile?.username}) \n is LIVE ${dataStream.title ?? ''}',
         // thumb: System().showUserPicture(profileImage),
         thumb: System().showUserPicture(profile?.avatar?.mediaEndpoint),
       ),

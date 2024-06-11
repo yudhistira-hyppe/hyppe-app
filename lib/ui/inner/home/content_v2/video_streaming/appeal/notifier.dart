@@ -4,7 +4,6 @@ import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/bloc/live_stream/bloc.dart';
 import 'package:hyppe/core/bloc/live_stream/state.dart';
 import 'package:hyppe/core/config/url_constants.dart';
-import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/models/collection/live_stream/banned_stream_model.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
@@ -17,7 +16,12 @@ class AppealStreamNotifier with ChangeNotifier {
   BannedStreamModel _dataBanned = BannedStreamModel();
   BannedStreamModel get dataBanned => _dataBanned;
 
+  static const statAppealActive = 'ACTIVE'; //user di banned sudah appeal, masih waiting admin
+  static const statAppealActiveBanned = 'ACTIVE_BANNED'; //user sudah di approve atau di reject
+  static const statAppealNoActive = 'NOACTIVE'; // user di banned tapi belum appeal
+
   bool loadingAppel = false;
+  bool showButton = true;
 
   set dataBanned(BannedStreamModel val) {
     _dataBanned = val;
@@ -68,7 +72,7 @@ class AppealStreamNotifier with ChangeNotifier {
 
   bool isloading = false;
 
-  Future checkBeforeLive(BuildContext context, mounted) async {
+  Future checkBeforeLive(BuildContext context, mounted, {String? idBanned}) async {
     isloading = true;
     notifyListeners();
     bool connect = await System().checkConnections();
@@ -76,16 +80,33 @@ class AppealStreamNotifier with ChangeNotifier {
       try {
         final notifier = LiveStreamBloc();
 
+        var url = '${UrlConstants.checkStream}?idBanned=$idBanned';
+
         if (mounted) {
-          await notifier.getStream(context, UrlConstants.checkStream);
+          await notifier.getStream(context, url);
         }
         final fetch = notifier.liveStreamFetch;
         if (fetch.postsState == LiveStreamState.getApiSuccess) {
           if (fetch.statusStream == false) {
             dataBanned = BannedStreamModel.fromJson(fetch.data);
-            if (dataBanned.statusAppeal ?? false) {
-              Routing().moveReplacement(Routes.appealLiveSuccess, argument: GeneralArgument(isTrue: false));
+            switch (dataBanned.statusBanned) {
+              case statAppealActive:
+                Routing().moveReplacement(Routes.appealLiveSuccess, argument: GeneralArgument(isTrue: false));
+                break;
+              case statAppealActiveBanned:
+                showButton = false;
+                notifyListeners();
+                break;
+              case statAppealNoActive:
+                showButton = true;
+                notifyListeners();
+                break;
+              default:
             }
+            // if(dataBanned.statusBanned == )
+            // if (dataBanned.statusAppeal ?? false) {
+            //   Routing().moveReplacement(Routes.appealLiveSuccess, argument: GeneralArgument(isTrue: false));
+            // }
           }
         }
       } catch (e) {

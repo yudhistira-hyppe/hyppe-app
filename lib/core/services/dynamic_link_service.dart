@@ -333,7 +333,7 @@ class DynamicLinkService {
               }
 
               String? idStream = SharedPreference().readStorage(SpKeys.idStream);
-              if (idStream != null || idStream != '') {
+              if (idStream != null) {
                 return;
               }
 

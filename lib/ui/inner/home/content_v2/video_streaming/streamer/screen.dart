@@ -1,6 +1,7 @@
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -62,9 +63,9 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
 
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       final streampro = Provider.of<StreamerNotifier>(context, listen: false);
-      streampro.requestPermission(context);
+      FToast().init(context);
       streampro.init(context, mounted);
 
       commentFocusNode.addListener(() {
@@ -127,6 +128,10 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
     // var streampro = Provider.of<StreamerNotifier>(context, listen: false);
     if (state == AppLifecycleState.inactive) {
       print("========= Streamer AppLifecycleState.inactive ==========");
+
+      // WidgetsBinding.instance.removeObserver(this);
+      // context.read<StreamerNotifier>().inactivityTimer?.cancel();
+      // context.read<StreamerNotifier>().disposeAgora();
     }
     if (state == AppLifecycleState.resumed) {
       print("========= Streamer AppLifecycleState.resumed ==========");

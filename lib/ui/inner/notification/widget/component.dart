@@ -117,10 +117,11 @@ class _ComponentState extends State<Component> {
             } else if ("LIVE_GIFT" == widget.data?.event) {
               Routing().move(Routes.saldoCoins);
             } else if ("LIVE_BENNED" == widget.data?.event) {
+              print("==== id ${widget.data?.dataBanned?.first.idBanned}");
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const PelanggaranDetail(),
+                  builder: (context) => PelanggaranDetail(idBanned: widget.data?.dataBanned?.first.idBanned ?? ''),
                 ),
               );
             } else {

@@ -4,8 +4,9 @@ class BannedStreamModel {
   int? streamBannedMax;
   String? dateStream;
   String? statusApprove;
+  String? statusBanned;
   bool? statusAppeal;
-  bool? statusBanned;
+  bool? statusBannedStreaming;
 
   BannedStreamModel({
     this.streamId,
@@ -13,8 +14,9 @@ class BannedStreamModel {
     this.streamBannedMax,
     this.dateStream,
     this.statusApprove,
-    this.statusAppeal,
     this.statusBanned,
+    this.statusAppeal,
+    this.statusBannedStreaming,
   });
 
   BannedStreamModel.fromJson(Map<String, dynamic> json) {
@@ -23,7 +25,7 @@ class BannedStreamModel {
     streamBannedMax = json['streamBannedMax'];
     dateStream = json['dateStream'];
     statusApprove = json['statusApprove'];
-    statusAppeal = json['statusAppeal'];
     statusBanned = json['statusBanned'];
+    statusAppeal = json['statusAppeal'];
   }
 }

@@ -39,18 +39,18 @@ class ForceStop extends StatelessWidget {
                 onEnd: () {
                   bool blockLive = false;
                   bool blockUser = false;
-                  if (notifier.dataBanned?.statusBanned ?? false) {
+                  if (notifier.dataBanned?.statusBannedStreaming ?? false) {
                     blockUser = true;
                   } else {
                     blockLive = true;
                   }
-                  context.read<StreamerNotifier>().endLive(
-                        context,
-                        context.mounted,
-                        isBack: false,
-                        blockLive: blockLive,
-                        blockUser: blockUser,
-                      );
+                  notifier.endLive(
+                    context,
+                    context.mounted,
+                    isBack: false,
+                    blockLive: blockLive,
+                    blockUser: blockUser,
+                  );
                 },
                 builder: (BuildContext context, Duration value, Widget? child) {
                   final seconds = value.inSeconds % 60;

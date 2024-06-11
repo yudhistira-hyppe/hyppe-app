@@ -33,26 +33,26 @@ class _ListStreamersScreenState extends State<ListStreamersScreen> with TickerPr
 
   @override
   void initState() {
-    final notifier = Routing.navigatorKey.currentContext?.read<ViewStreamingNotifier>();
-    notifier?.initListStreamers();
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      final notifier = Routing.navigatorKey.currentContext?.read<ViewStreamingNotifier>();
+      notifier?.initListStreamers();
       (Routing.navigatorKey.currentContext ?? context).read<ViewStreamingNotifier>().getListStreamers(Routing.navigatorKey.currentContext ?? context, mounted);
-    });
-    _controller = AnimationController(vsync: this);
-    _controller.addListener(() {
-      if (_controller.isCompleted) {
-        _controller.reset();
-      }
-    });
-    scrollController.addListener(() {
-      if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
-        if (notifier != null) {
-          if (notifier.listStreamers.length % 20 == 0) {
-            notifier.getListStreamers(context, mounted, isReload: false);
+      _controller = AnimationController(vsync: this);
+      _controller.addListener(() {
+        if (_controller.isCompleted) {
+          _controller.reset();
+        }
+      });
+      scrollController.addListener(() {
+        if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
+          if (notifier != null) {
+            if (notifier.listStreamers.length % 20 == 0) {
+              notifier.getListStreamers(context, mounted, isReload: false);
+            }
           }
         }
-      }
+      });
     });
   }
 
