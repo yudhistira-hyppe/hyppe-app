@@ -43,7 +43,7 @@ class SettingNotifier extends ChangeNotifier with LoadingNotifier {
   String? appPackage = "";
 
   Future logOut(BuildContext context) async {
-    'asdasdasdasd ${isLoading}'.logger();
+    '--> setting/setting_notifier.dart logOut:isLoading ${isLoading}'.logger();
     // if (!isLoading) {
     setLoading(true);
     final notifier = UserBloc();

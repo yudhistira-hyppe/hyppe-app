@@ -29,6 +29,7 @@ import 'package:hyppe/ui/outer/sign_up/contents/pin/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/services/fcm_service.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -64,6 +65,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
   bool _incorrect = false;
   GoogleSignInAccount? _userGoogleSignIn;
   String? googleSignInError;
+  late bool rememberMe;
 
   double get latitude => _latitude;
   double get longitude => _longitude;
@@ -152,6 +154,9 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
 
   Future onClickLogin(BuildContext context) async {
     bool connection = await System().checkConnections();
+    print('--> welcome_login/notifier.dart onClickLogin:rememberMe:' + rememberMe.toString());
+    print('--> welcome_login/notifier.dart onClickLogin:email:' + emailController.text.toString());
+    print('--> welcome_login/notifier.dart onClickLogin:password:' + passwordController.text.toString());
     setLoading(true);
     await System().getLocation(context).then((value) async {
       if (value) {
@@ -178,6 +183,10 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
             DynamicLinkService.hitReferralBackend(context);
             hide = true;
             final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
+            if (rememberMe)
+              SharedPreference().writeStorage(SpKeys.valRememberMe, [emailController.text, passwordController.text]);
+            else
+              SharedPreference().writeStorage(SpKeys.valRememberMe, ["", ""]);
             _validateUserData(context, _result, false, onlineVersion: fetch.version, onlineIosVersion: fetch.versionIos);
           }
           if (fetch.userState == UserState.LoginError) {
@@ -337,8 +346,12 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
       SharedPreference().writeStorage(SpKeys.isLoginSosmed, 'manual');
       SharedPreference().writeStorage(SpKeys.userID, signData.idUser);
       SharedPreference().writeStorage(SpKeys.isoCode, signData.langIso);
+      SharedPreference().writeStorage(SpKeys.rememberMe, rememberMe);
       await context.read<TranslateNotifierV2>().initTranslate(context);
       // SharedPreference().writeStorage(SpKeys.onlineVersion, onlineVersion);
+
+      print('--> welcome_login/notifier.dart _validateUserData:rememberMe:' + SharedPreference().readStorage('rememberMe').toString());
+      print('--> welcome_login/notifier.dart _validateUserData:valRememberMe:' + SharedPreference().readStorage('valRememberMe').toString());
 
       DeviceBloc().activityAwake(context);
       final _mainNotifier = Provider.of<MainNotifier>(context, listen: false);

@@ -60,6 +60,11 @@ class SharedPreference {
       await _preferences!.remove(SpKeys.datetimeLastShowAds);
       await _preferences!.remove(SpKeys.datetimeLastShowChallange);
       await _preferences!.remove(SpKeys.challangeData);
+      if (_preferences!.get(SpKeys.rememberMe) != null) {
+        if (!readStorage(SpKeys.rememberMe) || readStorage(SpKeys.rememberMe) == false) {
+          await _preferences!.setStringList(SpKeys.valRememberMe, ["", ""]);
+        }
+      }
     }
   }
 }

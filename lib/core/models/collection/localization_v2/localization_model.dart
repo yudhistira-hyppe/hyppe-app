@@ -1198,6 +1198,8 @@ class LocalizationModelV2 {
   String? requiredgift;
   String? yourorder;
   String? emptyGift;
+  String? simpanInfoLogin;
+  String? keteranganSimpanInfoLogin;
   LocalizationModelV2(
       {this.login,
       this.logIn,
@@ -2387,7 +2389,9 @@ class LocalizationModelV2 {
       this.contentgift,
       this.requiredgift,
       this.yourorder,
-      this.emptyGift,});
+      this.emptyGift,
+      this.simpanInfoLogin,
+      this.keteranganSimpanInfoLogin});
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
     login = json['login'];
@@ -2682,8 +2686,7 @@ class LocalizationModelV2 {
     inbox = json['inbox'];
     toMe = json['toMe'];
     resetYourPassword = json['resetYourPassword'];
-    weReceivedARequestToResetThePasswordForYourHyppeAccountToUpdateYourPasswordEnterThisVerificationCodeInYourHyppeApp =
-        json['weReceivedARequestToResetThePasswordForYourHyppeAccountToUpdateYourPasswordEnterThisVerificationCodeInYourHyppeApp'];
+    weReceivedARequestToResetThePasswordForYourHyppeAccountToUpdateYourPasswordEnterThisVerificationCodeInYourHyppeApp = json['weReceivedARequestToResetThePasswordForYourHyppeAccountToUpdateYourPasswordEnterThisVerificationCodeInYourHyppeApp'];
     thisCodeWillExpireIn8MinutesPleaseDoNotForwardOrGiveThisCodeToAnyone = json['thisCodeWillExpireIn8MinutesPleaseDoNotForwardOrGiveThisCodeToAnyone'];
     problemOrQuestion = json['problemOrQuestion'];
     callUsAt = json['callUsAt'];
@@ -3254,8 +3257,7 @@ class LocalizationModelV2 {
     violationType = json["violationType"];
     appeal = json["appeal"];
     communityGuidelines = json["communityGuidelines"];
-    ifYouReviewedOurCommunityGuidelinesAndBelieveYourContentWasRemovedByMistakeLetUsKnowBySubmittingAnAppeal =
-        json["ifYouReviewedOurCommunityGuidelinesAndBelieveYourContentWasRemovedByMistakeLetUsKnowBySubmittingAnAppeal"];
+    ifYouReviewedOurCommunityGuidelinesAndBelieveYourContentWasRemovedByMistakeLetUsKnowBySubmittingAnAppeal = json["ifYouReviewedOurCommunityGuidelinesAndBelieveYourContentWasRemovedByMistakeLetUsKnowBySubmittingAnAppeal"];
     chooseanAppealReason = json["chooseanAppealReason"];
     stateYourIssue = json["stateYourIssue"];
     pleaseprovideadditionaldetails = json["pleaseprovideadditionaldetails"];
@@ -3608,5 +3610,7 @@ class LocalizationModelV2 {
     requiredgift = json['requiredgift'];
     yourorder = json['yourorder'];
     emptyGift = json['emptyGift'];
+    simpanInfoLogin = json['simpanInfoLogin'];
+    keteranganSimpanInfoLogin = json['keteranganSimpanInfoLogin'];
   }
 }

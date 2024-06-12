@@ -1,8 +1,10 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
@@ -14,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/ui/outer/login/notifier.dart';
 import 'package:hyppe/ui/outer/welcome_login/notifier.dart';
 import 'package:provider/provider.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 
 class SignInForm extends StatefulWidget {
   @override
@@ -21,6 +24,9 @@ class SignInForm extends StatefulWidget {
 }
 
 class _SignInFormState extends State<SignInForm> {
+  var rememberMe = SharedPreference().readStorage(SpKeys.rememberMe) ?? false;
+  var valRememberMe = SharedPreference().readStorage(SpKeys.valRememberMe) ?? ["", ""];
+
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'SignInForm');
@@ -31,6 +37,19 @@ class _SignInFormState extends State<SignInForm> {
 
   @override
   Widget build(BuildContext context) {
+    print("--> login/widget/sign_in_form rememberMe:" + rememberMe.toString());
+    print("--> login/widget/sign_in_form valRememberMe:" + valRememberMe.toString());
+
+    if (rememberMe) {
+      var preEmail = valRememberMe[0] ?? "";
+      var prePass = valRememberMe[1] ?? '';
+      context.read<WelcomeLoginNotifier>().email = preEmail;
+      context.read<WelcomeLoginNotifier>().password = prePass;
+      context.read<WelcomeLoginNotifier>().emailController.text = preEmail;
+      context.read<WelcomeLoginNotifier>().passwordController.text = prePass;
+      context.read<WelcomeLoginNotifier>().buttonDisable();
+    }
+
     return Consumer<WelcomeLoginNotifier>(
       builder: (_, notifier, __) => Column(
         children: [
@@ -66,8 +85,7 @@ class _SignInFormState extends State<SignInForm> {
                   ),
                   border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
                   enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
-                  focusedBorder:
-                      UnderlineInputBorder(borderSide: BorderSide(color: notifier.emailFocus.hasFocus ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface)),
+                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: notifier.emailFocus.hasFocus ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface)),
                   errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.error)),
                 ),
                 readOnly: notifier.isLoading
@@ -126,11 +144,7 @@ class _SignInFormState extends State<SignInForm> {
                   suffixIcon: Transform.scale(
                     scale: SizeWidget().calculateSize(1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
                     child: CustomTextButton(
-                      style: ButtonStyle(
-                          alignment: const Alignment(0.75, 0.0),
-                          minimumSize: MaterialStateProperty.all(Size.zero),
-                          padding: MaterialStateProperty.all(EdgeInsets.zero),
-                          overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                      style: ButtonStyle(alignment: const Alignment(0.75, 0.0), minimumSize: MaterialStateProperty.all(Size.zero), padding: MaterialStateProperty.all(EdgeInsets.zero), overlayColor: MaterialStateProperty.all(Colors.transparent)),
                       child: CustomIconWidget(
                         iconData: notifier.hide ? '${AssetPath.vectorPath}eye-off.svg' : '${AssetPath.vectorPath}eye.svg',
                       ),
@@ -139,8 +153,7 @@ class _SignInFormState extends State<SignInForm> {
                   ),
                   border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
                   enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
-                  focusedBorder:
-                      UnderlineInputBorder(borderSide: BorderSide(color: notifier.passwordFocus.hasFocus ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface)),
+                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: notifier.passwordFocus.hasFocus ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface)),
                 ),
                 readOnly: notifier.isLoading
                     ? true
@@ -183,6 +196,59 @@ class _SignInFormState extends State<SignInForm> {
                   ),
                 ),
           fourPx,
+          Container(
+            padding: EdgeInsets.all(15),
+            width: SizeConfig.screenWidth,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.0),
+              color: Theme.of(context).colorScheme.surface.withOpacity(0.7),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                        flex: 8,
+                        child: Container(
+                          // color: Colors.green,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                notifier.language.simpanInfoLogin ?? 'Simpan info login',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                notifier.language.keteranganSimpanInfoLogin ?? 'Gak perlu masukan lagi email dan kata sandi di perangkat ini',
+                                style: TextStyle(color: Colors.black.withOpacity(0.4)),
+                              )
+                            ],
+                          ),
+                        )),
+                    Expanded(
+                        flex: 2,
+                        child: Container(
+                            alignment: Alignment.center,
+                            child: Switch(
+                              value: SharedPreference().readStorage(SpKeys.rememberMe) ?? false,
+                              activeColor: kHyppePrimary,
+                              onChanged: (bool value) {
+                                print('--> login/widget/sign_in_form switch:rememberMe:' + value.toString());
+                                setState(() {
+                                  notifier.rememberMe = value;
+                                  SharedPreference().writeStorage(SpKeys.rememberMe, value);
+                                });
+                              },
+                            )))
+                  ],
+                )
+              ],
+            ),
+          ),
+          twentyPx,
           CustomElevatedButton(
             function: () {
               if (!notifier.isLoading) {
