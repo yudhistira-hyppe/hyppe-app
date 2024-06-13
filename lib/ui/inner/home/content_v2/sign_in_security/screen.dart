@@ -106,7 +106,7 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
     );
   }
 
-  Container verificationStatus(BuildContext context, String status, TranslateNotifierV2 notifier) {
+  Widget verificationStatus(BuildContext context, String status, TranslateNotifierV2 notifier) {
     String statusText;
     Color statusColor = const Color(0xffE6094B);
     Color bgColor = const Color(0xffFFE8E5);
@@ -127,33 +127,42 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
         statusText = notifier.translate.unverified ?? 'Unverified';
     }
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          if (status == 'verified')
-            Container(
-              padding: const EdgeInsets.all(5),
-              decoration: BoxDecoration(color: kHyppePrimary, borderRadius: BorderRadius.circular(10)),
-              child: const CustomIconWidget(
-                defaultColor: false,
-                height: 5,
-                width: 5,
-                iconData: "${AssetPath.vectorPath}checkmark.svg",
-              ),
-            ),
-          const SizedBox(width: 5),
-          CustomTextWidget(
-            textToDisplay: statusText,
-            textStyle: Theme.of(context).textTheme.caption?.copyWith(color: statusColor, fontWeight: FontWeight.w700),
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
+            color: bgColor,
+            borderRadius: BorderRadius.circular(15),
           ),
-        ],
-      ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // if (status == 'verified')
+              //   Container(
+              //     padding: const EdgeInsets.all(5),
+              //     decoration: BoxDecoration(color: kHyppePrimary, borderRadius: BorderRadius.circular(10)),
+              //     child: const CustomIconWidget(
+              //       defaultColor: false,
+              //       height: 5,
+              //       width: 5,
+              //       iconData: "${AssetPath.vectorPath}checkmark.svg",
+              //     ),
+              //   ),
+              // const SizedBox(width: 5),
+              CustomTextWidget(
+                textToDisplay: statusText,
+                textStyle: Theme.of(context).textTheme.caption?.copyWith(color: statusColor, fontWeight: FontWeight.w700),
+              ),
+            ],
+          ),
+        ),
+        const Icon(
+          Icons.chevron_right_rounded,
+          color: kHyppeTextLightPrimary,
+          size: 26,
+        )
+      ],
     );
   }
 }
