@@ -910,6 +910,8 @@ class PreUploadContentNotifier with ChangeNotifier {
             saleLike: _includeTotalLikes,
             saleView: _includeTotalViews,
             isShared: isShared,
+            urlLink: urlLink,
+            judulLink: judulLink
           );
       notifyListeners();
 
@@ -931,6 +933,8 @@ class PreUploadContentNotifier with ChangeNotifier {
             saleLike: _includeTotalLikes,
             saleView: _includeTotalViews,
             isShared: isShared,
+            urlLink: urlLink,
+            judulLink: judulLink
           );
 
       // print("ini kategori $_interestData");

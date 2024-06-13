@@ -526,7 +526,9 @@ class SelfProfileNotifier with ChangeNotifier {
       String? saleAmount,
       bool? isShared,
       bool? saleLike,
-      bool? saleView}) async {
+      bool? saleView,
+      String? urlLink,
+      String? judulLink}) async {
     ContentData? _updatedData;
     print("ini kontennya $content");
     switch (content) {
@@ -560,6 +562,8 @@ class SelfProfileNotifier with ChangeNotifier {
       _updatedData.saleAmount = num.parse(saleAmount ?? '0');
       _updatedData.saleLike = saleLike;
       _updatedData.saleLike = saleView;
+      _updatedData.urlLink = urlLink;
+      _updatedData.judulLink = judulLink;
       print('location nih $location');
       print('location nih ${_updatedData.location}');
       _updatedData.cats = [];

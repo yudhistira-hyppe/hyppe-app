@@ -681,6 +681,8 @@ class HomeNotifier with ChangeNotifier {
     bool? isShared,
     bool? saleLike,
     bool? saleView,
+    String? urlLink,
+    String? judulLink
   }) {
     ContentData? updatedData;
     ContentData? updatedData2;
@@ -724,6 +726,8 @@ class HomeNotifier with ChangeNotifier {
           : '0');
       updatedData.saleLike = saleLike;
       updatedData.saleView = saleView;
+      updatedData.urlLink = urlLink;
+      updatedData.judulLink = judulLink;
       updatedData.cats = [];
       updatedData.tagPeople = [];
       updatedData.isShared = isShared;
@@ -752,6 +756,8 @@ class HomeNotifier with ChangeNotifier {
             : '0');
         updatedData2.saleLike = saleLike;
         updatedData2.saleView = saleView;
+        updatedData.urlLink = urlLink;
+        updatedData.judulLink = judulLink;
         updatedData2.cats = [];
         updatedData2.tagPeople = [];
         // _updatedData2.tagPeople = tagPeople;
