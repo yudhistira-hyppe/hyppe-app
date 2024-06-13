@@ -759,7 +759,7 @@ class _VidScrollFullScreenPageState extends State<VidScrollFullScreenPage> with 
                         buttonVideoRight(
                           onFunctionTap: () {
                             context.handleActionIsGuest(() {
-                              Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: widget.data.postID ?? '', fromFront: true, data: widget.data, pageDetail: true));
+                              Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: widget.data.postID ?? '', fromFront: true, data: widget.data, pageDetail: true, giftActication: widget.data.giftActivation));
                             });
                           },
                           iconData: '${AssetPath.vectorPath}comment-shadow.svg',

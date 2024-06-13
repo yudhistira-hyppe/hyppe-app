@@ -136,6 +136,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   bool _isShared = true;
   bool _certified = false;
   bool _showPriceCertificate = false;
+  bool _showPriceBoost = false;
   bool _certifiedTmp = false;
   dynamic _uploadSuccess;
   List<String>? _tags;
@@ -175,6 +176,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   bool get isShared => _isShared;
   bool get certified => _certified;
   bool get showPriceCertificate => _showPriceCertificate;
+  bool get showPriceBoost => _showPriceBoost;
   bool get certifiedTmp => _certifiedTmp;
   List<String>? get tags => _tags;
   String get visibility => _visibility;
@@ -361,6 +363,11 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   set showPriceCertificate(bool val) {
     _showPriceCertificate = val;
+    notifyListeners();
+  }
+
+  set showPriceBoost(bool val) {
+    _showPriceBoost = val;
     notifyListeners();
   }
 
@@ -628,6 +635,8 @@ class PreUploadContentNotifier with ChangeNotifier {
     isUpdate = false;
     _postIdPanding = '';
     _boostContent = null;
+    _showPriceBoost = false;
+    _showPriceCertificate = false;
     _tmpstartDate = DateTime(1000);
     _tmpfinsihDate = DateTime(1000);
     _tmpBoost = '';
@@ -1830,6 +1839,7 @@ class PreUploadContentNotifier with ChangeNotifier {
 
       if (fetch.utilsState == UtilsState.getMasterBoostSuccess) {
         _boostContent = BoostContent.fromJson(fetch.data);
+        _showPriceBoost = true;
         _privacyTitle = language.public ?? 'PUBLIC';
         privacyValue = 'PUBLIC';
         if (!isDisc) {

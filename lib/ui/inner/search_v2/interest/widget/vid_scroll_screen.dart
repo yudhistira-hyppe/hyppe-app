@@ -495,6 +495,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                                   postID: vidData[index].postID ?? '',
                                   fromFront: true,
                                   data: vidData[index],
+                                  giftActication: vidData[index].giftActivation,
                                   pageDetail: true,
                                 ));
                           },
@@ -586,6 +587,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                       postID: vidData[index].postID ?? '',
                       fromFront: true,
                       data: vidData[index],
+                      giftActication: vidData[index].giftActivation,
                       pageDetail: true,
                     ));
               },

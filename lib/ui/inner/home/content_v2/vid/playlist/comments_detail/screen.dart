@@ -288,7 +288,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                                 ),
                               ),
                               if (data.email != SharedPreference().readStorage(SpKeys.email))
-                                if (!notifier.inputNode.hasFocus && (comments?.isEmpty ?? true))
+                                if (!notifier.inputNode.hasFocus && (comments?.isEmpty ?? true) && (widget.argument.giftActication??false))
                                   Container(
                                     padding: const EdgeInsets.only(left: 8.0),
                                     decoration: const BoxDecoration(
@@ -637,6 +637,7 @@ class CommentsArgument {
   final DisqusLogs? parentComment;
   final ContentData data;
   final bool? pageDetail;
+  final bool? giftActication;
 
-  CommentsArgument({this.parentComment, required this.postID, required this.fromFront, required this.data, this.pageDetail});
+  CommentsArgument({this.parentComment, this.giftActication, required this.postID, required this.fromFront, required this.data, this.pageDetail});
 }

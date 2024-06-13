@@ -438,6 +438,8 @@ class System {
         return InteractiveEventType.withdrawalfailed;
       case "SUCCESS_WITHDRAW_COIN":
         return InteractiveEventType.withdrawalsuccess;
+      case "ADS CLICK":
+        return InteractiveEventType.withdrawalsuccess;
       default:
         return InteractiveEventType.none;
     }

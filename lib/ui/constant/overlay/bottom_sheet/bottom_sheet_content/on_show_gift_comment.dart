@@ -215,7 +215,7 @@ class _OnShowGiftCommantBottomSheetState
               transactionCoin: notifier.giftSelect?.price ?? 0,
               isChecking: (bool val, int saldoCoin) {
                 buttonactive = val;
-                // setState(() {});
+                setState(() {});
               },
             ),
           ),
@@ -227,7 +227,7 @@ class _OnShowGiftCommantBottomSheetState
                 child: ButtonChallangeWidget(
                   function: () {
                     if (buttonactive) {
-                      print('disini ${(sn.giftSelect?.lastStock??0)}');
+                      print('disini ${(sn.giftSelect?.toJson())}');
                       if ((sn.giftSelect?.lastStock??0) < 1){
                         FToast().init(context);
                           if (true) FToast().removeCustomToast();
@@ -370,7 +370,7 @@ class _OnShowGiftCommantBottomSheetState
                                     ? SvgPicture.network(
                                         data.thumbnail ?? '',
                                         // 'https://www.svgrepo.com/show/1615/nurse.svg',
-                                        height: 40 * SizeConfig.scaleDiagonal,
+                                        height: 44 * SizeConfig.scaleDiagonal,
                                         // width: 30 * SizeConfig.scaleDiagonal,
                                         fit: BoxFit.cover,
                                         // semanticsLabel: 'A shark?!',
@@ -391,8 +391,8 @@ class _OnShowGiftCommantBottomSheetState
                                     //   )
                                     : SizedBox(
                                         // width: MediaQuery.of(context2).size.width,
-                                        width: 30 * SizeConfig.scaleDiagonal,
-                                        height: 30 * SizeConfig.scaleDiagonal,
+                                        width: 44 * SizeConfig.scaleDiagonal,
+                                        height: 44 * SizeConfig.scaleDiagonal,
                                         child: CustomCacheImage(
                                           imageUrl: data.thumbnail ?? '',
                                           imageBuilder: (_, imageProvider) {

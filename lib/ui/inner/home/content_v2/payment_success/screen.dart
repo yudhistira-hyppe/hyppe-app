@@ -146,7 +146,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                                 notifier.transactionDetail.noInvoice ?? ''),
                             sixteenPx,
                             detailText('Package ID',
-                                notifier.transactionDetail.idPaket ?? ''),
+                                notifier.transactionDetail.packageId ?? ''),
                             sixteenPx,
                             detailText(
                                 lang?.localeDatetime == 'id'

@@ -1,9 +1,13 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/bloc/monetization/disc/state.dart';
+import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/review_buy/notifier.dart';
 import 'package:hyppe/ui/inner/home/widget/loadmore.dart';
@@ -87,6 +91,44 @@ class _MyCouponsPageState extends State<MyCouponsPage> {
               DiscState.getNotInternet) {
             return ErrorCouponsWidget(lang: lang,);
           } else {
+            if (notifier.result.isEmpty){
+              return Container(
+                color: Theme.of(context).colorScheme.onPrimary,
+                padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 18.0),
+                margin: const EdgeInsets.only(bottom: 8.0),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const CustomIconWidget(
+                        iconData: '${AssetPath.vectorPath}icon_no_result.svg',
+                        width: 160,
+                        height: 160,
+                        defaultColor: false,
+                      ),
+                      tenPx,
+                      CustomTextWidget(
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        textToDisplay: lang?.localeDatetime == 'id' ? 'Wah, belum ada promo nih!' : 'Oops, no coupon yet!',
+                        textStyle: context.getTextTheme().bodyLarge?.copyWith(fontWeight: FontWeight.w700, color: context.getColorScheme().onBackground),
+                      ),
+                      eightPx,
+                      CustomTextWidget(
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        textToDisplay: lang?.localeDatetime == 'id'
+                            ? 'Jangan khawatir, kupon diskon akan segera tersedia. Yuk cek lagi nanti!'
+                            : 'Don\'t worry, new coupons will be available soon. Check back later!',
+                        textStyle: context.getTextTheme().bodyLarge,
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
             return RefreshLoadmore(
                 scrollController: scrollController,
                 isLastPage: notifier.isLastPage,
@@ -153,7 +195,7 @@ class _MyCouponsPageState extends State<MyCouponsPage> {
           margin: const EdgeInsets.symmetric(vertical: 22, horizontal: 18.0),
           height: kToolbarHeight,
           child: ElevatedButton(
-            onPressed: () async {
+            onPressed: notifier.result.isEmpty ? null : () async {
               Navigator.pop(context);
               Map res = ModalRoute.of(context)!.settings.arguments as Map;
               if (res['routes'] != null){

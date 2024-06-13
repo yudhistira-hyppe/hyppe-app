@@ -6,6 +6,7 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/discount/discountmodel.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:intl/intl.dart';
@@ -123,12 +124,36 @@ class CouponWidget extends StatelessWidget {
             textToDisplay: data?.productName ?? 'Unknown',
             textStyle: const TextStyle(fontSize: 12.0),
           ),
-          CustomTextWidget(
-            textToDisplay:
-                '${lang?.discount} ${System().currencyFormat(amount: data?.nominal_discount)}',
-            textStyle:
-                const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+          Row(
+            children: [
+              CustomTextWidget(
+                textToDisplay:
+                    '${lang?.discount}',
+                textStyle:
+                    const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+              ),
+              fivePx,
+              (data?.satuan_diskon =='RP')
+              ? CustomTextWidget(
+                  textToDisplay: data?.satuan_diskon??'',
+                  textStyle:
+                      const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                )
+              : const CustomIconWidget(
+                  iconData: "${AssetPath.vectorPath}ic-coin.svg",
+                  height: 24,
+                  defaultColor: false,
+                ),
+              fivePx,
+              CustomTextWidget(
+                  textToDisplay:
+                      System().numberFormat(amount: data?.nominal_discount),
+                  textStyle:
+                      const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                ),
+            ],
           ),
+          
           tenPx,
           InkWell(
             onTap: () {
@@ -139,7 +164,7 @@ class CouponWidget extends StatelessWidget {
               children: [
                 CustomTextWidget(
                   textToDisplay:
-                      '${lang?.mintransaction} ${System().currencyFormat(amount: data?.min_use_disc ?? 0)}',
+                      '${lang?.mintransaction} ${data?.satuan_diskon=='COIN'?'':'Rp '}${System().numberFormat(amount: data?.min_use_disc ?? 0)}',
                   textStyle: const TextStyle(fontSize: 12.0),
                 ),
                 const Icon(

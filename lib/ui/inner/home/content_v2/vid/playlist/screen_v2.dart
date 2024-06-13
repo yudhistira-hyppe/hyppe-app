@@ -477,7 +477,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                           InkWell(
                             onTap: () {
                               context.handleActionIsGuest(() {
-                                notifier.goToComments(CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data));
+                                notifier.goToComments(CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data, giftActication: data.giftActivation));
                               });
                             },
                             child: const CustomIconWidget(
@@ -624,7 +624,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
             ? InkWell(
                 onTap: () {
                   context.handleActionIsGuest(() {
-                    notifier.goToComments(CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data));
+                    notifier.goToComments(CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data, giftActication: data.giftActivation));
                   });
                 },
                 child: Container(
@@ -725,7 +725,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                 fourPx,
                 InkWell(
                   onTap: () {
-                    notifier.goToComments(CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data));
+                    notifier.goToComments(CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data, giftActication: data.giftActivation));
                   },
                   child: CustomTextWidget(
                     textToDisplay: '${notifier.language.tapHere2}',

@@ -86,7 +86,7 @@ class _SaldoCoinWidgetState extends State<SaldoCoinWidget> {
                         child: RichText(
                           text: TextSpan(children: [
                             TextSpan(text: 'Saldo kurang ', style: textTheme.labelLarge?.copyWith(color: kHyppeBurem, fontSize: 12, fontWeight: FontWeight.normal)),
-                            TextSpan(text: System().numberFormat(amount: notifier.transactionCoin - notifier.saldoCoin), style: textTheme.labelLarge?.copyWith(color: Colors.red.shade900)),
+                            TextSpan(text: System().numberFormat(amount: notifier.transactionCoin - notifier.saldoCoin), style: textTheme.labelLarge?.copyWith(color: Colors.red.shade900, fontSize: 12)),
                             TextSpan(text: ' Coins', style: textTheme.labelLarge?.copyWith(color: Colors.red.shade900))
                           ]),
                         ),
@@ -102,8 +102,8 @@ class _SaldoCoinWidgetState extends State<SaldoCoinWidget> {
                             TextSpan(text: 'Saldo yang akan digunakan ', style: textTheme.labelLarge?.copyWith(color: kHyppeBurem, fontSize: 12, fontWeight: FontWeight.normal)),
                             TextSpan(
                                 text: System().numberFormat(amount: notifier.transactionCoin),
-                                style: textTheme.labelLarge?.copyWith(color: Colors.red.shade900, fontSize: 12, fontWeight: FontWeight.normal)),
-                            TextSpan(text: ' Coins', style: textTheme.labelLarge?.copyWith(color: Colors.red.shade900, fontSize: 12, fontWeight: FontWeight.normal))
+                                style: textTheme.labelLarge?.copyWith(fontSize: 12, fontWeight: FontWeight.bold)),
+                            TextSpan(text: ' Coins', style: textTheme.labelLarge?.copyWith(fontSize: 12, fontWeight: FontWeight.bold))
                           ]),
                         ),
                       ),

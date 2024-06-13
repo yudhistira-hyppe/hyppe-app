@@ -1025,6 +1025,7 @@ class _PicScrollFullscreenPageState extends State<PicScrollFullscreenPage> with 
                         postID: notifier?.pics?[index].postID ?? '',
                         fromFront: true,
                         data: notifier?.pics?[index] ?? ContentData(),
+                        giftActication: notifier?.pics?[index].giftActivation,
                         pageDetail: true,
                       ));
                 },

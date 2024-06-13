@@ -19,7 +19,7 @@ class HistoryTransactionDataBloc {
   setHistoryTransactionFetch(HistoryTransactionDataFetch val) => _dataFetch = val;
 
   Future getHistoryTransaction(BuildContext context,
-      {Map? data}) async {
+      {Map? data, bool? historyTransaksi}) async {
     setHistoryTransactionFetch(HistoryTransactionDataFetch(HistoryTransactionState.loading));
     try {
       String email = SharedPreference().readStorage(SpKeys.email);
@@ -50,7 +50,7 @@ class HistoryTransactionDataBloc {
           'x-auth-user': email,
         },
         data: data,
-        host: UrlConstants.historytransactioncoin,
+        host: (historyTransaksi??false) ? UrlConstants.historytransaction : UrlConstants.historytransactioncoin,
         methodType: MethodType.post,
         withAlertMessage: false,
         withCheckConnection: true,

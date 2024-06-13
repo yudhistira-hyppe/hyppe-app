@@ -918,6 +918,7 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                                   postID: diaryData[index].postID ?? '',
                                   fromFront: true,
                                   data: diaryData[index],
+                                  giftActication: diaryData[index].giftActivation,
                                   pageDetail: true,
                                 ));
                           },
@@ -998,6 +999,7 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                     postID: diaryData[index].postID ?? '',
                     fromFront: true,
                     data: diaryData[index],
+                    giftActication: diaryData[index].giftActivation,
                     pageDetail: true,
                   ));
             },

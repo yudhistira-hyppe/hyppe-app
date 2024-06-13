@@ -233,7 +233,7 @@ class PicCenterItem extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 21.0),
                   child: GestureDetector(
                     onTap: () {
-                      Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: data?.postID ?? '', fromFront: true, data: data ?? ContentData()));
+                      Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: data?.postID ?? '', fromFront: true, data: data ?? ContentData(), giftActication: data?.giftActivation));
                     },
                     child: const CustomIconWidget(
                       defaultColor: false,
@@ -283,7 +283,7 @@ class PicCenterItem extends StatelessWidget {
           twelvePx,
           GestureDetector(
             onTap: () {
-              Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: data?.postID ?? '', fromFront: true, data: data ?? ContentData()));
+              Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: data?.postID ?? '', fromFront: true, data: data ?? ContentData(), giftActication: data?.giftActivation));
             },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -304,7 +304,7 @@ class PicCenterItem extends StatelessWidget {
                 (data?.comment?.length ?? 0) > 2
                     ? GestureDetector(
                         onTap: () {
-                          Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: data?.postID ?? '', fromFront: true, data: data ?? ContentData()));
+                          Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: data?.postID ?? '', fromFront: true, data: data ?? ContentData(), giftActication: data?.giftActivation));
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4.0),

@@ -36,6 +36,7 @@ class _DetailReportState extends State<DetailReport> {
     initializeDateFormatting('id', null);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       notifier = Provider.of<TransactionCoinDetailNotifier>(context, listen: false);
+      print('========= ${widget.detail.noInvoice}');
       notifier.detailData(context, invoiceId: widget.detail.noInvoice);
     });
     super.initState();
@@ -75,25 +76,27 @@ class _DetailReportState extends State<DetailReport> {
               textTitle = lang?.localeDatetime == 'id' ? 'Mengirim Gift' : 'Sent Content Gift';
             }
             return detail(textTitle: textTitle);
-          }else if (notifier.transactionDetail.idStream != '-'){
+          }else if (notifier.transactionDetail.coa == 'Live Gift'){
             if (notifier.transactionDetail.coaDetailStatus =='debit'){
               textTitle = lang?.localeDatetime == 'id' ? 'Menerima Gift' : 'Received LIVE Gift';
             }else{
               textTitle = lang?.localeDatetime == 'id' ? 'Mengirim Gift' : 'Sent LIVE Gift';
             }
-            
             return detailLive(textTitle: textTitle);
           }else if (notifier.transactionDetail.coa =='Penjualan Konten'){
             textTitle = lang?.localeDatetime == 'id' ? 'Penjualan Konten' : 'Content Sold';
             return detailJualContent(textTitle: textTitle);
           }else if (notifier.transactionDetail.coa =='Pembelian Konten'){
-            textTitle = lang?.localeDatetime == 'id' ? 'Pembelian Konten ${widget.detail.package}' : 'Coin Purchase ${widget.detail.package}';
+            textTitle = lang?.localeDatetime == 'id' ? 'Pembelian Konten ${widget.detail.package??''}' : 'Coin Purchase ${widget.detail.package}';
             return detailBeliContent(textTitle: textTitle);
           }else if (notifier.transactionDetail.code == 'AD'){
             textTitle = lang?.localeDatetime == 'id' ? 'Menonton Iklan' : 'Ads Reward';
             return detailAds(textTitle: textTitle);
+          }else if (notifier.transactionDetail.coa == 'Paket Kredit'){
+            textTitle = lang?.localeDatetime == 'id' ? 'Pembelian Paket Credit' : 'Buy Credit Package';
+            return detailCredits(textTitle: textTitle);
           }else{
-            Routing().moveBack();
+            // Routing().moveBack();
             return Container();
           }
         }
@@ -180,13 +183,13 @@ class _DetailReportState extends State<DetailReport> {
                     sixteenPx,
                     detailText(lang?.localeDatetime == 'id' ? 'Transaksi ID' : 'ID Transaction', notifier.transactionDetail.noInvoice??''),
                     sixteenPx,
-                    detailText(lang?.localeDatetime == 'id' ? 'Konten ID' : 'Content ID', notifier.transactionDetail.contentid??''),
+                    detailText(lang?.localeDatetime == 'id' ? 'Konten ID' : 'Content ID', notifier.transactionDetail.postId??''),
                     sixteenPx,
                     detailText(lang?.localeDatetime == 'id' ? 'Jenis Konten' : 'Content Type', notifier.transactionDetail.postType??''),
                     sixteenPx,
                     detailText(lang?.localeDatetime == 'id' ? 'Nama Gift' : 'Gift Name', notifier.transactionDetail.productName??''),
                     sixteenPx,
-                    detailText(lang?.localeDatetime == 'id' ? 'Dari' : 'From', notifier.transactionDetail.usernamebuyer??''),
+                    detailText(lang?.localeDatetime == 'id' ? 'Dari' : 'From', notifier.transactionDetail.pemberi??''),
                     const Divider(
                       thickness: .1,
                     ),
@@ -267,8 +270,8 @@ class _DetailReportState extends State<DetailReport> {
                     detailText(lang?.localeDatetime == 'id' ? 'Nama Gift' : 'Gift Name', notifier.transactionDetail.productName??''),
                     sixteenPx,
                     if (notifier.transactionDetail.coaDetailStatus =='debit' )
-                      detailText(lang?.localeDatetime == 'id' ? 'Dari' : 'From', notifier.transactionDetail.usernameseller??'')
-                    else detailText(lang?.localeDatetime == 'id' ? 'Untuk' : 'To', notifier.transactionDetail.usernamebuyer??''),
+                      detailText(lang?.localeDatetime == 'id' ? 'Dari' : 'From', notifier.transactionDetail.pemberi??'')
+                    else detailText(lang?.localeDatetime == 'id' ? 'Untuk' : 'To', notifier.transactionDetail.penerima??''),
                     const Divider(
                       thickness: .1,
                     ),
@@ -342,11 +345,11 @@ class _DetailReportState extends State<DetailReport> {
                     sixteenPx,
                     detailText(lang?.localeDatetime == 'id' ? 'Transaksi ID' : 'ID Transaction', notifier.transactionDetail.noInvoice??''),
                     sixteenPx,
-                    detailText(lang?.localeDatetime == 'id' ? 'Konten ID' : 'Content ID', notifier.transactionDetail.contentid??''),
+                    detailText(lang?.localeDatetime == 'id' ? 'Konten ID' : 'Content ID', notifier.transactionDetail.postId??''),
                     sixteenPx,
                     detailText(lang?.localeDatetime == 'id' ? 'Jenis Konten' : 'Content Type', notifier.transactionDetail.postType??''),
                     sixteenPx,
-                    detailText(lang?.localeDatetime == 'id' ? 'Pembeli' : 'Buyer', notifier.transactionDetail.usernamebuyer??''),
+                    detailText(lang?.localeDatetime == 'id' ? 'Pembeli' : 'Buyer', notifier.transactionDetail.penerima??''),
                     const Divider(
                       thickness: .1,
                     ),
@@ -355,7 +358,7 @@ class _DetailReportState extends State<DetailReport> {
                       textStyle: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     sixteenPx,
-                    detailText(lang?.localeDatetime == 'id' ? 'Harga Konten' : 'Item Price', '${System().numberFormat(amount: notifier.transactionDetail.totalCoin??0)} coins'),
+                    detailText(lang?.localeDatetime == 'id' ? 'Harga Konten' : 'Item Price', '${System().numberFormat(amount: (notifier.transactionDetail.coin??0)+(notifier.transactionDetail.coinadminfee??0))} coins'),
                     sixteenPx,
                     detailText(lang?.localeDatetime == 'id' ? 'Biaya Layanan' : 'Admin Fee', '${System().numberFormat(amount: notifier.transactionDetail.coinadminfee??0)} coins'),
                     const Divider(
@@ -422,11 +425,11 @@ class _DetailReportState extends State<DetailReport> {
                     sixteenPx,
                     detailText(lang?.localeDatetime == 'id' ? 'Transaksi ID' : 'ID Transaction', notifier.transactionDetail.noInvoice??''),
                     sixteenPx,
-                    detailText(lang?.localeDatetime == 'id' ? 'Konten ID' : 'Content ID', notifier.transactionDetail.contentid??''),
+                    detailText(lang?.localeDatetime == 'id' ? 'Konten ID' : 'Content ID', notifier.transactionDetail.postId??''),
                     sixteenPx,
                     detailText(lang?.localeDatetime == 'id' ? 'Jenis Konten' : 'Content Type', notifier.transactionDetail.postType??''),
                     sixteenPx,
-                    detailText(lang?.localeDatetime == 'id' ? 'Pembeli' : 'Buyer', notifier.transactionDetail.usernamebuyer??''),
+                    detailText(lang?.localeDatetime == 'id' ? 'Penjual' : 'Seller', notifier.transactionDetail.penerima??''),
                     const Divider(
                       thickness: .1,
                     ),
@@ -435,13 +438,13 @@ class _DetailReportState extends State<DetailReport> {
                       textStyle: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     sixteenPx,
-                    detailText(lang?.localeDatetime == 'id' ? 'Harga Konten' : 'Item Price', '${System().numberFormat(amount: notifier.transactionDetail.totalCoin)} coins'),
-                    sixteenPx,
-                    detailText(lang?.localeDatetime == 'id' ? 'Biaya Layanan' : 'Admin Fee', '${System().numberFormat(amount: notifier.transactionDetail.totalCoin)} coins'),
+                    detailText(lang?.localeDatetime == 'id' ? 'Harga Konten' : 'Item Price', '${System().numberFormat(amount: notifier.transactionDetail.coin)} coins'),
+                    // sixteenPx,
+                    // detailText(lang?.localeDatetime == 'id' ? 'Biaya Layanan' : 'Admin Fee', '${System().numberFormat(amount: notifier.transactionDetail.coinadminfee)} coins'),
                     const Divider(
                       thickness: .1,
                     ),
-                    detailText(lang?.localeDatetime == 'id' ? 'Saldo Diterima' : 'Coins Received', System().numberFormat(amount: notifier.transactionDetail.totalCoin), showicon: true),
+                    detailText(lang?.localeDatetime == 'id' ? 'Total Pembayaran' : 'Total Payment', System().numberFormat(amount: notifier.transactionDetail.totalCoin??0), showicon: true),
                   ],
                 )
             ),
@@ -576,7 +579,7 @@ class _DetailReportState extends State<DetailReport> {
                     sixteenPx,
                     detailText(lang?.localeDatetime == 'id' ? 'Transaksi ID' : 'ID Transaction', notifier.transactionDetail.noInvoice??''),
                     sixteenPx,
-                    detailText(lang?.localeDatetime == 'id' ? 'Konten ID' : 'Content ID', notifier.transactionDetail.contentid??''),
+                    detailText(lang?.localeDatetime == 'id' ? 'Konten ID' : 'Content ID', notifier.transactionDetail.postId??''),
                     sixteenPx,
                     detailText(lang?.localeDatetime == 'id' ? 'Jenis Konten' : 'Content Type', notifier.transactionDetail.postType??''),
                     sixteenPx,
@@ -656,7 +659,7 @@ class _DetailReportState extends State<DetailReport> {
                     sixteenPx,
                     detailText(lang?.localeDatetime == 'id' ? 'Transaksi ID' : 'ID Transaction', notifier.transactionDetail.noInvoice??''),
                     sixteenPx,
-                    detailText(lang?.localeDatetime == 'id' ? 'Konten ID' : 'Content ID', notifier.transactionDetail.contentid??''),
+                    detailText(lang?.localeDatetime == 'id' ? 'Konten ID' : 'Content ID', notifier.transactionDetail.postId??''),
                     sixteenPx,
                     detailText(lang?.localeDatetime == 'id' ? 'Jenis Konten' : 'Content Type', notifier.transactionDetail.postType??''),
                     const Divider(
@@ -672,6 +675,77 @@ class _DetailReportState extends State<DetailReport> {
                       thickness: .1,
                     ),
                     detailText(lang?.localeDatetime == 'id' ? 'Total Tagihan' : 'Total Charge', System().numberFormat(amount: notifier.transactionDetail.totalCoin), showicon: true),
+                  ],
+                )
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget detailCredits({String? textTitle}){
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      child: Container(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomTextWidget(
+                        textToDisplay: textTitle??'',
+                        textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      fivePx,
+                      fivePx,
+                      CustomTextWidget(
+                        textToDisplay: DateFormat('dd MMM yyyy, HH:mm').format(DateTime.parse(
+                      notifier.transactionDetail.createdAt ??
+                          DateTime.now().toString())),
+                        textStyle: const TextStyle(fontWeight: FontWeight.normal, color: kHyppeBurem),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            fifteenPx,
+            fifteenPx,
+            Container(
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.all(12.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12.0),
+                  border: Border.all(width: .2, color: kHyppeBurem),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomTextWidget(
+                      textToDisplay: lang?.localeDatetime == 'id' ? 'Detail Transaksi' : 'Transaction Details',
+                      textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    sixteenPx,
+                    detailText(lang?.localeDatetime == 'id' ? 'Transaksi ID' : 'ID Transaction', notifier.transactionDetail.noInvoice??''),
+                    sixteenPx,
+                    detailText(lang?.localeDatetime == 'id' ? 'Nilai Paket' : 'Package Value', '${(notifier.transactionDetail.detail?.length??0) > 0 ? 0 : 0} Credit'),
+                    sixteenPx,
+                    detailText(lang?.localeDatetime == 'id' ? 'Harga Paket Credit' : 'Price Package', '${(notifier.transactionDetail.detail?.length??0) > 0 ? (notifier.transactionDetail.detail?[0].amount??0) : 0} Coins'),
+                    sixteenPx,
+                    if (notifier.transactionDetail.coinDiscount! > 0)
+                      detailText(lang?.localeDatetime == 'id' ? 'Diskon' : 'Disccount', '${(notifier.transactionDetail.coinDiscount??0)} Coins'),
+                    const Divider(
+                      thickness: .1,
+                    ),
+                    sixteenPx,
+                    detailText(lang?.localeDatetime == 'id' ? 'Total Tagihan' : 'Total Pembayaran', System().numberFormat(amount: notifier.transactionDetail.totalCoin), showicon: true),
                   ],
                 )
             ),

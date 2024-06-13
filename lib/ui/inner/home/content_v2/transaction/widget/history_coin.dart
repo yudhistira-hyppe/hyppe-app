@@ -19,16 +19,16 @@ class HistoryCoinWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Color? titleColor;
     String? textTitle;
-    switch (data.status) {
-      case 'FAILED':
-      case 'RIJECTED':
+    switch (data.status?.toLowerCase()) {
+      case 'failed':
+      case 'rejected':
         titleColor = kHyppeRed;
         textTitle = lang!.localeDatetime == 'id' ? 'Gagal' : 'Failed';
         break;
-      case 'PENDING':
-      case 'IN PROGRESS':
+      case 'pending':
+      case 'in progress':
         titleColor = kHyppeRed;
-        textTitle = lang!.localeDatetime == 'id' ? 'Dalam Proses' : 'Menunggu Mu';
+        textTitle = lang!.localeDatetime == 'id' ? 'Dalam Proses' : 'In Progress';
         break;
       default:
         titleColor = kHyppeGreen;
@@ -68,8 +68,8 @@ class HistoryCoinWidget extends StatelessWidget {
                   children: [
                     Text(
                       lang!.localeDatetime == 'id'
-                          ? data.type??''
-                          : data.type??'',
+                          ? data.titleId??''
+                          : data.titleEn??'',
                       style: Theme.of(context)
                           .textTheme
                           .titleMedium
@@ -106,7 +106,7 @@ class HistoryCoinWidget extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(lang?.localeDatetime == 'id' ? data.titleId??'' : data.titleEn??'', 
+                    Text(lang?.localeDatetime == 'id' ? data.subtitleId??'' : data.subtitleEn??'', 
                       maxLines: 2,
                       style: Theme.of(context)
                             .textTheme

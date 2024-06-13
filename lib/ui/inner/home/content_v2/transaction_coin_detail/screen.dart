@@ -66,14 +66,14 @@ class _TransactionCoinDetailScreenState extends State<TransactionCoinDetailScree
             return const Center(child: CustomLoading(),);
           }
           
-          switch (notifier.transactionDetail.status??'') {
-            case 'FAILED':
+          switch ((notifier.transactionDetail.status??'').toLowerCase()) {
+            case 'failed':
             case 'Cancel':
               titleColor = kHyppeRed;
               textTitle = lang!.localeDatetime == 'id' ? 'Gagal' : 'Failed';
               break;
-            case 'WAITING_PAYMENT':
-            case 'PENDING':
+            case 'waiting_payment':
+            case 'pending':
               titleColor = kHyppeRed;
               textTitle = lang!.localeDatetime == 'id' ? 'Menunggu Pembayaran' : 'Awating Payment';
               break;
@@ -226,11 +226,12 @@ class _TransactionCoinDetailScreenState extends State<TransactionCoinDetailScree
                         ],
                       ),
                     ),
+                    if (widget.status == 'History')
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 18.0),
                       child: ElevatedButton(
                         onPressed: () {
-                          if (notifier.transactionDetail.status == 'WAITING_PAYMENT'){
+                          if (notifier.transactionDetail.status?.toLowerCase() == 'pending'){
                             Navigator.push(context, MaterialPageRoute(builder: (context) => ViewPaymentMethod(lang: lang, transactionDetail: notifier.transactionDetail,)));
                           }else{
                             Routing().moveBack();
@@ -247,7 +248,7 @@ class _TransactionCoinDetailScreenState extends State<TransactionCoinDetailScree
                           width: 375.0 * SizeConfig.scaleDiagonal,
                           height: 44.0 * SizeConfig.scaleDiagonal,
                           child: Center(
-                            child: (notifier.transactionDetail.status == 'WAITING_PAYMENT') 
+                            child: (notifier.transactionDetail.status?.toLowerCase() == 'pending') 
                               ? Text(
                                 lang?.localeDatetime == 'id' ? 'Lihat Cara Pembayaran' : 'View Payment Method',
                                 textAlign: TextAlign.center)

@@ -1265,6 +1265,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                     argument: CommentsArgument(
                                       postID: vidData?[index].postID ?? '',
                                       fromFront: true,
+                                      giftActication: vidData?[index].giftActivation,
                                       data: vidData?[index] ?? ContentData(),
                                       pageDetail: true,
                                     ));
@@ -1403,6 +1404,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                           postID: vidData?[index].postID ?? '',
                           fromFront: true,
                           data: vidData?[index] ?? ContentData(),
+                          giftActication: vidData?[index].giftActivation,
                           pageDetail: true,
                         ));
                   },

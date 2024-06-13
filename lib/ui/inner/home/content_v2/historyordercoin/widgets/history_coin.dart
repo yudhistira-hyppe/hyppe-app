@@ -18,15 +18,15 @@ class HistoryCoinWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Color? titleColor;
     String? textTitle;
-    switch (data.status) {
-      case 'FAILED':
+    switch (data.status?.toLowerCase()) {
+      case 'failed':
         titleColor = kHyppeRed;
         textTitle = lang!.localeDatetime == 'id' ? 'Gagal' : 'Failed';
         break;
-      case 'PENDING':
-      case 'IN PROGRESS':
+      case 'pending':
+      case 'in progress':
         titleColor = kHyppeRed;
-        textTitle = lang!.localeDatetime == 'id' ? 'Menunggu Pembayaran' : 'Awating Payment';
+        textTitle = lang!.localeDatetime == 'id' ? 'Menunggu Pembayaran' : 'In Progress';
         break;
       default:
         titleColor = kHyppeGreen;
@@ -34,7 +34,7 @@ class HistoryCoinWidget extends StatelessWidget {
     }
     
     return GestureDetector(
-      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionCoinDetailScreen(invoiceid: data.noInvoice??'', title: lang?.localeDatetime == 'id' ? 'Detail Transaksi' : 'Transaction Detail',))),
+      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionCoinDetailScreen(invoiceid: data.noInvoice??'', status: 'History', title: lang?.localeDatetime == 'id' ? 'Detail Transaksi' : 'Transaction Detail',))),
       child: Container(
         width: double.infinity,
         height: SizeConfig.screenHeight! * .22,
@@ -90,14 +90,28 @@ class HistoryCoinWidget extends StatelessWidget {
             Flexible(
               child: SizedBox(
                 height: SizeConfig.screenHeight! * .2,
-                child: Text(data.package??'', 
-                  maxLines: 2,
-                  style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(
-                            fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.start,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(lang?.localeDatetime == 'id' ? data.titleId??'' : data.titleEn??'', 
+                      maxLines: 2,
+                      style: Theme.of(context)
+                            .textTheme
+                            .titleMedium
+                            ?.copyWith(
+                                fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.start,
+                    ),
+                    Text(lang?.localeDatetime == 'id' ? data.contentId??'' : data.contentEn??'', 
+                      maxLines: 2,
+                      style: Theme.of(context)
+                            .textTheme
+                            .titleSmall
+                            ?.copyWith(
+                                color: kHyppeBurem),
+                        textAlign: TextAlign.start,
+                    ),
+                  ],
                 ),
               ),
             ),

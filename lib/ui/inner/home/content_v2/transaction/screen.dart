@@ -218,7 +218,7 @@ class _TransactionState extends State<Transaction> {
                                 margin: const EdgeInsets.only(bottom: 8.0),
                                 child: ListView.builder(
                                   controller: scrollController,
-                                  physics: const BouncingScrollPhysics(),
+                                  physics: const AlwaysScrollableScrollPhysics(),
                                   itemCount: notifier.isLoadMore ? notifier.result.length + 1 : notifier.result.length,
                                   itemBuilder: (context, index) {
                                     if (notifier.result.length == index) {

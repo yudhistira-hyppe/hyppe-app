@@ -22,6 +22,8 @@ class TransactionHistoryCoinModel {
   String? vaNumber;
   String? titleId;
   String? titleEn;
+  String? subtitleId;
+  String? subtitleEn;
   String? contentId;
   String? contentEn;
 
@@ -49,6 +51,8 @@ class TransactionHistoryCoinModel {
       this.vaNumber,
       this.titleId,
       this.titleEn,
+      this.subtitleId,
+      this.subtitleEn,
       this.contentId,
       this.contentEn});
 
@@ -80,7 +84,9 @@ class TransactionHistoryCoinModel {
     }
     vaNumber = json['vaNumber'];
     titleId = json['desc_title_id'];
+    subtitleId = json['desc_subtitle_id'];
     titleEn = json['desc_title_en'];
+    subtitleEn = json['desc_subtitle_en'];
     contentId = json['desc_content_id'];
     contentEn = json['desc_content_en'];
   }
@@ -112,6 +118,8 @@ class TransactionHistoryCoinModel {
     data['vaNumber'] = vaNumber;
     data['desc_title_id'] = titleId;
     data['desc_title_en'] = titleEn;
+    data['desc_subtitle_id'] = subtitleId;
+    data['desc_subtitle_en'] = subtitleEn;
     data['desc_content_id'] = contentId;
     data['desc_content_en'] = contentEn;
     return data;

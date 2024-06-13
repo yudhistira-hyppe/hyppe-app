@@ -1670,6 +1670,7 @@ class _ScrollPicState extends State<ScrollPic>
                                       postID: pics?[index].postID ?? '',
                                       fromFront: true,
                                       data: pics?[index] ?? ContentData(),
+                                      giftActication: pics?[index].giftActivation,
                                       pageDetail: true,
                                     ));
                                 // ShowBottomSheet.onShowCommentV2(context, postID: pics?[index].postID);
@@ -1834,6 +1835,7 @@ class _ScrollPicState extends State<ScrollPic>
                           postID: pics?[index].postID ?? '',
                           fromFront: true,
                           data: pics?[index] ?? ContentData(),
+                          giftActication: pics?[index].giftActivation,
                           pageDetail: true,
                         ));
                   },

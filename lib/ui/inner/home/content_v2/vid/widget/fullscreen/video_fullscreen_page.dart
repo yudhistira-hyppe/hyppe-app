@@ -1334,7 +1334,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                       if (widget.data.allowComments ?? false)
                         buttonVideoRight(
                           onFunctionTap: () {
-                            Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: widget.data.postID ?? '', fromFront: true, data: widget.data, pageDetail: true));
+                            Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: widget.data.postID ?? '', fromFront: true, data: widget.data, pageDetail: true, giftActication: widget.data.giftActivation));
                           },
                           iconData: '${AssetPath.vectorPath}comment-shadow.svg',
                           value: widget.data.comments! > 0 ? widget.data.comments.toString() : lang?.comments ?? '',

@@ -38,7 +38,7 @@ class CommentTile extends StatelessWidget {
       children: [
         Container(
           margin: const EdgeInsets.only(top: 12),
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -64,54 +64,68 @@ class CommentTile extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              
                               if (comment?.txtMessages != '')
-                                CustomDescContent(
-                                  isloading: false,
-                                  desc: comment?.txtMessages ?? '',
-                                  trimLines: 5,
-                                  textAlign: TextAlign.start,
-                                  seeLess: ' ${notifier.language.seeLess}',
-                                  seeMore: ' ${notifier.language.seeMoreContent}',
-                                  textOverflow: TextOverflow.visible,
-                                  normStyle: Theme.of(context).textTheme.bodyText2,
-                                  hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
-                                  expandStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.primary),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    fivePx,
+                                    CustomDescContent(
+                                      isloading: false,
+                                      desc: comment?.txtMessages ?? '',
+                                      trimLines: 5,
+                                      textAlign: TextAlign.start,
+                                      seeLess: ' ${notifier.language.seeLess}',
+                                      seeMore: ' ${notifier.language.seeMoreContent}',
+                                      textOverflow: TextOverflow.visible,
+                                      normStyle: Theme.of(context).textTheme.bodyText2,
+                                      hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                                      expandStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.primary),
+                                    ),
+                                  ],
                                 ),
+                              
                               if (comment!.gift != null)
-                                Container(
-                                  padding: const EdgeInsets.only(top: 2, left: 4, right: 4, bottom: 2),
-                                  decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        colors: [const Color(0xffF56DA7).withOpacity(0.4), const Color(0xffffffff).withOpacity(0.5)],
-                                        stops: const [0.25, 0.75],
-                                        begin: Alignment.centerLeft,
-                                        end: Alignment.centerRight,
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    fivePx,
+                                    Container(
+                                      padding: const EdgeInsets.only(top: 2, left: 4, right: 4, bottom: 2),
+                                      decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                            colors: [const Color(0xffF56DA7).withOpacity(0.4), const Color(0xffffffff).withOpacity(0.5)],
+                                            stops: const [0.25, 0.75],
+                                            begin: Alignment.centerLeft,
+                                            end: Alignment.centerRight,
+                                          ),
+                                          borderRadius: BorderRadius.circular(40)),
+                                      child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          fivePx,
+                                          Text(
+                                            notifier.language.localeDatetime == 'id' ? 'Terkirim ' : 'Send to ',
+                                            style: const TextStyle(fontWeight: FontWeight.bold),
+                                          ),
+                                          Container(
+                                            margin: const EdgeInsets.only(left: 14),
+                                            width: 35 * SizeConfig.scaleDiagonal,
+                                            height: 35 * SizeConfig.scaleDiagonal,
+                                            decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(comment?.gift ?? ''))),
+                                          )
+                                        ],
                                       ),
-                                      borderRadius: BorderRadius.circular(40)),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      fivePx,
-                                      Text(
-                                        notifier.language.localeDatetime == 'id' ? 'Terkirim ' : 'Send to ',
-                                        style: const TextStyle(fontWeight: FontWeight.bold),
-                                      ),
-                                      Container(
-                                        margin: const EdgeInsets.only(left: 16),
-                                        width: 35 * SizeConfig.scaleDiagonal,
-                                        height: 35 * SizeConfig.scaleDiagonal,
-                                        decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(comment?.gift ?? ''))),
-                                      )
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 )
                             ],
                           ),
                         ),
                       ],
                     ),
-                    twoPx,
+                    fivePx,
                     InkWell(
                       onTap: () {
                         context.handleActionIsGuest(() async {
@@ -119,13 +133,13 @@ class CommentTile extends StatelessWidget {
                           notifier.onReplayCommentV2(
                             context,
                             comment: comment,
-                            parentCommentID: comment?.lineID,
+                            parentCommentID: comment.lineID,
                           );
                         });
                       },
                       child: CustomTextWidget(
                         textToDisplay: notifier.language.reply ?? 'Reply',
-                        textStyle: context.getTextTheme().overline?.copyWith(color: context.getColorScheme().primary, fontWeight: FontWeight.w700),
+                        textStyle: context.getTextTheme().labelMedium?.copyWith(color: context.getColorScheme().primary, fontWeight: FontWeight.w700),
                       ),
                     ),
                     repliesCount > 0 ? SizedBox(height: 16 * SizeConfig.scaleDiagonal) : const SizedBox.shrink(),
@@ -140,7 +154,7 @@ class CommentTile extends StatelessWidget {
                                 textStyle: context.getTextTheme().overline?.copyWith(color: Theme.of(context).colorScheme.secondary),
                                 textToDisplay: notifier.repliesComments.containsKey(logs?.comment?.lineID)
                                     ? '${_language.hideReplies}'
-                                    : "${_language.see} $repliesCount ${repliesCount > 1 ? _language.replies : _language.reply2}",
+                                    : "⎯⎯⎯     ${_language.see} $repliesCount ${repliesCount > 1 ? _language.replies : _language.reply2}",
                               ),
                             ),
                           )
@@ -155,8 +169,8 @@ class CommentTile extends StatelessWidget {
                       ShowGeneralDialog.deleteContentDialog(context, '${_language.comment}', () async {
                         notifier.deleteComment(
                           context,
-                          comment?.lineID ?? '',
-                          comment?.detailDisquss?.length ?? 0,
+                          comment.lineID ?? '',
+                          comment.detailDisquss?.length ?? 0,
                           indexComment: index,
                         );
                       });

@@ -1062,7 +1062,7 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
             if (picData!.allowComments ?? false)
               buttonRight(
                 onFunctionTap: () {
-                  Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: picData.postID ?? '', fromFront: true, data: picData));
+                  Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: picData.postID ?? '', fromFront: true, data: picData, giftActication: picData.giftActivation,));
                 },
                 iconData: '${AssetPath.vectorPath}comment-shadow.svg',
                 value: picData.comments! > 0 ? picData.comments.toString() : lang?.comments ?? '',

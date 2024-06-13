@@ -11,9 +11,9 @@ class CardCoinWidget extends StatelessWidget {
   final String title;
   final String date;
   final String? desc;
-  final String? subdesc;
+  final String? subtitle;
   final int totalCoin;
-  const CardCoinWidget({super.key, required this.title, required this.date, required this.totalCoin, this.desc, this.subdesc});
+  const CardCoinWidget({super.key, required this.title, required this.date, required this.totalCoin, this.desc, this.subtitle});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,7 @@ class CardCoinWidget extends StatelessWidget {
             color: kHyppeBurem,
           ),
           Text(
-            desc ?? '',
+            subtitle ?? '',
             style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             textAlign: TextAlign.start,
           ),
@@ -54,7 +54,7 @@ class CardCoinWidget extends StatelessWidget {
           SizedBox(
             height: SizeConfig.screenHeight! * .05,
             child: Text(
-              subdesc ?? '',
+              desc ?? '',
               style: Theme.of(context).textTheme.titleSmall?.copyWith(color: kHyppeBurem),
               textAlign: TextAlign.start,
             ),

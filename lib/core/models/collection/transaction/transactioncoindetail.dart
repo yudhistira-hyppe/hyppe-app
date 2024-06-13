@@ -5,6 +5,7 @@ class DetailTransactionCoin {
   String? noInvoice;
   String? category;
   String? product;
+  List<String>? voucherDiskon;
   String? idUser;
   int? coinDiscount;
   int? coin;
@@ -12,7 +13,8 @@ class DetailTransactionCoin {
   int? priceDiscont;
   int? price;
   int? totalPrice;
-  int? coinadminfee;
+  String? status;
+  List<Detail>? detail;
   String? createdAt;
   String? updatedAt;
   String? typeCategory;
@@ -23,7 +25,6 @@ class DetailTransactionCoin {
   String? idStream;
   String? code;
   String? namePaket;
-  String? idPaket;
   String? coa;
   String? coaDetailName;
   String? coaDetailStatus;
@@ -37,10 +38,8 @@ class DetailTransactionCoin {
   String? usernamebuyer;
   String? emailseller;
   String? usernameseller;
-  String? contentid;
   int? amount;
   String? paymentmethod;
-  String? status;
   String? description;
   String? bank;
   int? totalamount;
@@ -51,10 +50,12 @@ class DetailTransactionCoin {
   int? withdrawAmount;
   int? withdrawTotal;
   int? withdrawCost;
+  int? coinadminfee;
   String? adType;
   String? titleStream;
   String? methodename;
   String? productName;
+  String? packageId;
   String? timenow;
   String? bankname;
   String? bankcode;
@@ -63,10 +64,8 @@ class DetailTransactionCoin {
   String? atm;
   String? internetBanking;
   String? mobileBanking;
-  String? titleId;
-  String? titleEn;
-  String? contentId;
-  String? contentEn;
+  String? pemberi;
+  String? penerima;
 
   DetailTransactionCoin(
       {this.sId,
@@ -75,6 +74,7 @@ class DetailTransactionCoin {
       this.noInvoice,
       this.category,
       this.product,
+      this.voucherDiskon,
       this.idUser,
       this.coinDiscount,
       this.coin,
@@ -82,19 +82,18 @@ class DetailTransactionCoin {
       this.priceDiscont,
       this.price,
       this.totalPrice,
-      this.coinadminfee,
+      this.status,
+      this.detail,
       this.createdAt,
       this.updatedAt,
       this.typeCategory,
       this.typeUser,
       this.vaNumber,
       this.transactionFees,
-      this.contentid,
       this.biayPG,
       this.idStream,
       this.code,
       this.namePaket,
-      this.idPaket,
       this.coa,
       this.coaDetailName,
       this.coaDetailStatus,
@@ -110,7 +109,6 @@ class DetailTransactionCoin {
       this.usernameseller,
       this.amount,
       this.paymentmethod,
-      this.status,
       this.description,
       this.bank,
       this.totalamount,
@@ -121,10 +119,12 @@ class DetailTransactionCoin {
       this.withdrawAmount,
       this.withdrawTotal,
       this.withdrawCost,
+      this.coinadminfee,
       this.adType,
       this.titleStream,
       this.methodename,
       this.productName,
+      this.packageId,
       this.timenow,
       this.bankname,
       this.bankcode,
@@ -133,10 +133,8 @@ class DetailTransactionCoin {
       this.atm,
       this.internetBanking,
       this.mobileBanking,
-      this.titleEn,
-      this.titleId,
-      this.contentId,
-      this.contentEn});
+      this.pemberi,
+      this.penerima});
 
   DetailTransactionCoin.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -145,15 +143,21 @@ class DetailTransactionCoin {
     noInvoice = json['noInvoice'];
     category = json['category'];
     product = json['product'];
+    voucherDiskon = json['voucherDiskon'].cast<String>();
     idUser = json['idUser'];
     coinDiscount = json['coinDiscount'];
     coin = json['coin'];
-    contentid = json['content_id'];
     totalCoin = json['totalCoin'];
     priceDiscont = json['priceDiscont'];
     price = json['price'];
     totalPrice = json['totalPrice'];
-    coinadminfee = json['coinadminfee'];
+    status = json['status'];
+    if (json['detail'] != null) {
+      detail = <Detail>[];
+      json['detail'].forEach((v) {
+        detail!.add(Detail.fromJson(v));
+      });
+    }
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     typeCategory = json['typeCategory'];
@@ -164,7 +168,6 @@ class DetailTransactionCoin {
     idStream = json['idStream'];
     code = json['code'];
     namePaket = json['namePaket'];
-    idPaket = json['package_id'];
     coa = json['coa'];
     coaDetailName = json['coaDetailName'];
     coaDetailStatus = json['coaDetailStatus'];
@@ -180,7 +183,6 @@ class DetailTransactionCoin {
     usernameseller = json['usernameseller'];
     amount = json['amount'];
     paymentmethod = json['paymentmethod'];
-    status = json['status'];
     description = json['description'];
     bank = json['bank'];
     totalamount = json['totalamount'];
@@ -191,10 +193,12 @@ class DetailTransactionCoin {
     withdrawAmount = json['withdrawAmount'];
     withdrawTotal = json['withdrawTotal'];
     withdrawCost = json['withdrawCost'];
+    coinadminfee = json['coinadminfee'];
     adType = json['adType'];
     titleStream = json['titleStream'];
     methodename = json['methodename'];
     productName = json['productName'];
+    packageId = json['package_id'];
     timenow = json['timenow'];
     bankname = json['bankname'];
     bankcode = json['bankcode'];
@@ -203,10 +207,8 @@ class DetailTransactionCoin {
     atm = json['atm'];
     internetBanking = json['internetBanking'];
     mobileBanking = json['mobileBanking'];
-    titleId = json['desc_title_id'];
-    titleEn = json['desc_title_en'];
-    contentId = json['desc_content_id'];
-    contentEn = json['desc_content_en'];
+    pemberi = json['pemberi'];
+    penerima = json['penerima']??'';
   }
 
   Map<String, dynamic> toJson() {
@@ -217,15 +219,18 @@ class DetailTransactionCoin {
     data['noInvoice'] = noInvoice;
     data['category'] = category;
     data['product'] = product;
+    data['voucherDiskon'] = voucherDiskon;
     data['idUser'] = idUser;
     data['coinDiscount'] = coinDiscount;
     data['coin'] = coin;
-    data['content_id'] = contentid;
     data['totalCoin'] = totalCoin;
     data['priceDiscont'] = priceDiscont;
     data['price'] = price;
     data['totalPrice'] = totalPrice;
-    data['coinadminfee'] = coinadminfee;
+    data['status'] = status;
+    if (detail != null) {
+      data['detail'] = detail!.map((v) => v.toJson()).toList();
+    }
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     data['typeCategory'] = typeCategory;
@@ -236,7 +241,6 @@ class DetailTransactionCoin {
     data['idStream'] = idStream;
     data['code'] = code;
     data['namePaket'] = namePaket;
-    data['package_id'] = idPaket;
     data['coa'] = coa;
     data['coaDetailName'] = coaDetailName;
     data['coaDetailStatus'] = coaDetailStatus;
@@ -252,7 +256,6 @@ class DetailTransactionCoin {
     data['usernameseller'] = usernameseller;
     data['amount'] = amount;
     data['paymentmethod'] = paymentmethod;
-    data['status'] = status;
     data['description'] = description;
     data['bank'] = bank;
     data['totalamount'] = totalamount;
@@ -263,10 +266,12 @@ class DetailTransactionCoin {
     data['withdrawAmount'] = withdrawAmount;
     data['withdrawTotal'] = withdrawTotal;
     data['withdrawCost'] = withdrawCost;
+    data['coinadminfee'] = coinadminfee;
     data['adType'] = adType;
     data['titleStream'] = titleStream;
     data['methodename'] = methodename;
     data['productName'] = productName;
+    data['package_id'] = packageId;
     data['timenow'] = timenow;
     data['bankname'] = bankname;
     data['bankcode'] = bankcode;
@@ -275,10 +280,104 @@ class DetailTransactionCoin {
     data['atm'] = atm;
     data['internetBanking'] = internetBanking;
     data['mobileBanking'] = mobileBanking;
-    data['desc_title_id'] = titleId;
-    data['desc_title_en'] = titleEn;
-    data['desc_content_id'] = contentId;
-    data['desc_content_en'] = contentEn;
+    data['pemberi'] = pemberi;
+    data['penerima'] = penerima;
+    return data;
+  }
+}
+
+class Detail {
+  int? biayPG;
+  int? transactionFees;
+  int? amount;
+  int? totalDiskon;
+  int? totalAmount;
+  Payload? payload;
+  String? vaNumber;
+  String? partnerUserId;
+  bool? success;
+  String? txDate;
+  String? usernameDisplay;
+  String? trxExpirationDate;
+  String? partnerTrxId;
+  String? trxId;
+  String? settlementTime;
+  String? settlementStatus;
+
+  Detail(
+      {this.biayPG,
+      this.transactionFees,
+      this.amount,
+      this.totalDiskon,
+      this.totalAmount,
+      this.payload,
+      this.vaNumber,
+      this.partnerUserId,
+      this.success,
+      this.txDate,
+      this.usernameDisplay,
+      this.trxExpirationDate,
+      this.partnerTrxId,
+      this.trxId,
+      this.settlementTime,
+      this.settlementStatus});
+
+  Detail.fromJson(Map<String, dynamic> json) {
+    biayPG = json['biayPG'];
+    transactionFees = json['transactionFees'];
+    amount = json['amount'];
+    totalDiskon = json['totalDiskon'];
+    totalAmount = json['totalAmount'];
+    payload =
+        json['payload'] != null ? Payload.fromJson(json['payload']) : null;
+    vaNumber = json['va_number'];
+    partnerUserId = json['partner_user_id'];
+    success = json['success'];
+    txDate = json['tx_date'];
+    usernameDisplay = json['username_display'];
+    trxExpirationDate = json['trx_expiration_date'];
+    partnerTrxId = json['partner_trx_id'];
+    trxId = json['trx_id'];
+    settlementTime = json['settlement_time'];
+    settlementStatus = json['settlement_status'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['biayPG'] = biayPG;
+    data['transactionFees'] = transactionFees;
+    data['amount'] = amount;
+    data['totalDiskon'] = totalDiskon;
+    data['totalAmount'] = totalAmount;
+    if (payload != null) {
+      data['payload'] = payload!.toJson();
+    }
+    data['va_number'] = vaNumber;
+    data['partner_user_id'] = partnerUserId;
+    data['success'] = success;
+    data['tx_date'] = txDate;
+    data['username_display'] = usernameDisplay;
+    data['trx_expiration_date'] = trxExpirationDate;
+    data['partner_trx_id'] = partnerTrxId;
+    data['trx_id'] = trxId;
+    data['settlement_time'] = settlementTime;
+    data['settlement_status'] = settlementStatus;
+    return data;
+  }
+}
+
+class Payload {
+  String? vaNumber;
+
+  Payload({this.vaNumber});
+
+  Payload.fromJson(Map<String, dynamic> json) {
+    vaNumber = json['va_number'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['va_number'] = vaNumber;
     return data;
   }
 }
