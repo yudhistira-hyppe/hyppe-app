@@ -30,8 +30,10 @@ class _OverLiveStreamingState extends State<OverLiveStreaming> {
 
   @override
   void initState() {
-    isErrorImage = false;
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      isErrorImage = false;
+    });
   }
 
   String? displayPhotoProfileOriginal(String url) {

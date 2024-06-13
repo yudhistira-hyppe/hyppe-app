@@ -94,6 +94,8 @@ class Routes {
   static const String verificationCameraSupport = '/verification-camera-support';
   static const String previewSelfieSupport = '/preview-selfie-support';
   static const String verificationSupportSuccess = '/verification-support-success';
+  static const String descFaceVerification = '/desc-face-verification';
+  static const String cameraSelfieVerification = '/camera-selfie-verification';
 
   //delete account
   static const String deleteAccount = '/delete-account';

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/bloc/utils_v2/bloc.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/loading/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/notifier.dart';
@@ -23,8 +24,7 @@ class ProfileCompletionNotifier extends LoadingNotifier with ChangeNotifier {
   notifyNotifier() => notifyListeners();
   void onInitial(BuildContext context) {
     _clearTxt();
-    final notifierData =
-        Provider.of<SelfProfileNotifier>(context, listen: false);
+    final notifierData = Provider.of<SelfProfileNotifier>(context, listen: false);
     fullNameController.text = notifierData.user.profile?.fullName ?? "";
     genderController.text = notifierData.user.profile?.gender ?? "";
     dobController.text = notifierData.user.profile?.dob ?? "";
@@ -37,11 +37,8 @@ class ProfileCompletionNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   bool somethingChanged(BuildContext context) {
-    final notifierData =
-        Provider.of<SelfProfileNotifier>(context, listen: false);
-    return (fullNameController.text != notifierData.user.profile?.fullName ||
-            genderController.text != notifierData.user.profile?.gender ||
-            dobController.text != notifierData.user.profile?.dob) &&
+    final notifierData = Provider.of<SelfProfileNotifier>(context, listen: false);
+    return (fullNameController.text != notifierData.user.profile?.fullName || genderController.text != notifierData.user.profile?.gender || dobController.text != notifierData.user.profile?.dob) &&
         fullNameController.text.isNotEmpty;
   }
 
@@ -50,9 +47,7 @@ class ProfileCompletionNotifier extends LoadingNotifier with ChangeNotifier {
           context,
           onSave: () {
             _routing.moveBack();
-            Provider.of<AccountPreferencesNotifier>(context, listen: false)
-                .genderController
-                .text = genderController.text;
+            Provider.of<AccountPreferencesNotifier>(context, listen: false).genderController.text = genderController.text;
             notifyListeners();
           },
           onCancel: () {
@@ -60,7 +55,7 @@ class ProfileCompletionNotifier extends LoadingNotifier with ChangeNotifier {
             FocusScope.of(context).unfocus();
           },
           onChange: (value) {
-            genderController.text = value;
+            genderController.text = System().capitalizeFirstLetter(value);
             notifyListeners();
           },
           value: genderController.text,

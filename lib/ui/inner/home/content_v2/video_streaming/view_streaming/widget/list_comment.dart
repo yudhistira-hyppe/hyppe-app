@@ -139,6 +139,7 @@ class ListCommentViewer extends StatelessWidget {
                                                             style: const TextStyle(color: Colors.white),
                                                           ),
                                                           WidgetSpan(
+                                                            alignment: PlaceholderAlignment.middle,
                                                             child: type == '.svg'
                                                                 ? SvgPicture.network(
                                                                     data.urlGiftThum ?? '',

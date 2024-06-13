@@ -23,7 +23,7 @@ class _CameraVerificationState extends State<CameraVerification> with RouteAware
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'CameraVerification');
-    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     super.initState();
   }
 

@@ -14,25 +14,27 @@ class LoveSingleLootie extends StatefulWidget {
 }
 
 class _LoveSingleLootieState extends State<LoveSingleLootie> with TickerProviderStateMixin {
-  late AnimationController _controller;
+  AnimationController? _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this);
-    _controller.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        widget.onAnimationFinished();
-      } else if (status == AnimationStatus.dismissed) {
-        // widget.onAnimationFinished();
-        widget.onAnimationFinished();
-      }
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      _controller = AnimationController(vsync: this);
+      _controller?.addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          widget.onAnimationFinished();
+        } else if (status == AnimationStatus.dismissed) {
+          // widget.onAnimationFinished();
+          widget.onAnimationFinished();
+        }
+      });
     });
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
@@ -45,8 +47,8 @@ class _LoveSingleLootieState extends State<LoveSingleLootie> with TickerProvider
       height: SizeConfig.screenHeight! * 0.6,
       controller: _controller,
       onLoaded: (composition) {
-        _controller.duration = composition.duration;
-        _controller.forward().whenComplete(() => widget.onAnimationFinished());
+        _controller?.duration = composition.duration;
+        _controller?.forward().whenComplete(() => widget.onAnimationFinished());
       },
       repeat: false,
     );

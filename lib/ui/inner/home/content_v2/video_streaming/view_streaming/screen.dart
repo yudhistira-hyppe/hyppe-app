@@ -46,9 +46,11 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
   void initState() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     super.initState();
-    notifier = (Routing.navigatorKey.currentContext ?? context).read<ViewStreamingNotifier>();
-    notifier?.initViewStreaming(widget.args.data);
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      notifier = (Routing.navigatorKey.currentContext ?? context).read<ViewStreamingNotifier>();
+      notifier?.listKey = GlobalKey();
+      notifier?.initViewStreaming(widget.args.data);
       loading = false;
       setState(() {});
       commentFocusNode.addListener(() {

@@ -46,7 +46,7 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
-  final GlobalKey<AnimatedListState> listKey = GlobalKey();
+  GlobalKey<AnimatedListState> listKey = GlobalKey();
 
   final _socketService = SocketLiveService();
 
@@ -131,6 +131,27 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
   bool get buttonSheetReport => _buttonSheetReport;
   set buttonSheetReport(bool state) {
     _buttonSheetReport = state;
+    notifyListeners();
+  }
+
+  bool _buttonSheetGift = false;
+  bool get buttonSheetGift => _buttonSheetGift;
+  set buttonSheetGift(bool state) {
+    _buttonSheetGift = state;
+    notifyListeners();
+  }
+
+  bool _buttonSheetValidateUser = false;
+  bool get buttonSheetValidateUser => _buttonSheetValidateUser;
+  set buttonSheetValidateUser(bool state) {
+    _buttonSheetValidateUser = state;
+    notifyListeners();
+  }
+
+  bool _buttonSheetShare = false;
+  bool get buttonSheetShare => _buttonSheetShare;
+  set buttonSheetShare(bool state) {
+    _buttonSheetShare = state;
     notifyListeners();
   }
 
@@ -231,6 +252,17 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
           if (buttonSheetReport) {
             Navigator.pop(context);
           }
+
+          if (buttonSheetGift) {
+            Navigator.pop(context);
+          }
+
+          if (buttonSheetValidateUser) {
+            Navigator.pop(context);
+          }
+          if (buttonSheetShare) {
+            Navigator.pop(context);
+          }
         },
         onTokenPrivilegeWillExpire: (RtcConnection connection, String token) {
           debugPrint('[onTokenPrivilegeWillExpire] connection: ${connection.toJson()}, token: $token');
@@ -305,6 +337,15 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
     statusLive = StatusStream.offline;
     dataViewers = [];
     comment = [];
+    listKey.currentState?.removeAllItems((context, animation) {
+      return const SizedBox.shrink();
+    });
+
+    giftDelux = [];
+    giftBasic = [];
+    giftBasicTemp = [];
+    giftDeluxTemp = [];
+
     animationIndexes = [];
     WakelockPlus.disable();
   }
@@ -528,6 +569,7 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
               username: context.read<SelfProfileNotifier>().user.profile?.username,
             ),
           );
+          listKey.currentState?.insertItem(0, duration: const Duration(milliseconds: 500));
 
           loadingPause = false;
           notifyListeners();
@@ -701,13 +743,12 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
         } else if (messages.commentType == 'GIFT') {
           if (messages.urlGift != null) {
             if (giftDelux.isEmpty) {
+              // messages.urlGift = 'https://be-staging.oss-ap-southeast-5.aliyuncs.com/images/gift/66471897d975922b87c91578_3d.json';
               giftDelux.add(messages);
+              settingTimeDeluxe = 3;
+              startTimerDelux();
             } else {
               giftDeluxTemp.add(messages);
-            }
-            if (timerDeluxe?.isActive ?? false) {
-            } else {
-              startTimerDelux();
             }
           } else {
             if (giftBasic.length <= 2) {
@@ -759,6 +800,7 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
           // );
           totViewsEnd = messages.totalViews ?? 0;
           endLive = true;
+          isOver = true;
           notifyListeners();
 
           destoryPusher();
@@ -801,6 +843,7 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
 
   void endGiftDelux() {
     comment.insert(0, giftDelux[0]); //masukin ke comment
+    listKey.currentState?.insertItem(0, duration: const Duration(milliseconds: 500));
     giftDelux.removeAt(0); //hapus gift deluxe
     if (giftDeluxTemp.isNotEmpty) {
       giftDelux.add(giftDeluxTemp[0]);
@@ -813,6 +856,7 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
   void insertPinComment(String idComment) async {
     if (pinComment != null) {
       comment.insert(0, pinComment ?? CommentLiveModel());
+      listKey.currentState?.insertItem(0, duration: const Duration(milliseconds: 500));
     }
 
     var old = dataStreaming.commentAll?.any((item) => item.idComment == idComment);
@@ -832,19 +876,29 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
       }
     }
 
+    var index = comment.indexWhere((element) => element.idComment == idComment);
     comment.removeWhere((element) => element.idComment == idComment);
+    listKey.currentState?.removeItem(index, (BuildContext context, Animation<double> animation) {
+      return Container();
+    }, duration: const Duration(milliseconds: 500));
+
     notifyListeners();
   }
 
   void removePinComment() async {
     pinComment?.commentType = 'MESSAGGES';
     comment.insert(0, pinComment ?? CommentLiveModel());
+    listKey.currentState?.insertItem(0, duration: const Duration(milliseconds: 500));
     pinComment = null;
     notifyListeners();
   }
 
   void removeComment(String idComment) async {
+    var index = comment.indexWhere((element) => element.idComment == idComment);
     comment.removeWhere((element) => element.idComment == idComment);
+    listKey.currentState?.removeItem(index, (BuildContext context, Animation<double> animation) {
+      return Container();
+    }, duration: const Duration(milliseconds: 500));
 
     notifyListeners();
   }
@@ -870,7 +924,7 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
 
   Future<void> reportLive(BuildContext context) async {
     if (alreadyReported) {
-      showModalBottomSheet<int>(
+      showModalBottomSheet(
           backgroundColor: Colors.transparent,
           context: context,
           isScrollControlled: true,
@@ -881,7 +935,7 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
         buttonSheetReport = false;
       });
     } else {
-      showModalBottomSheet<int>(
+      showModalBottomSheet(
           backgroundColor: Colors.transparent,
           context: context,
           isScrollControlled: true,
@@ -1001,6 +1055,7 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
       if (giftBasic.isNotEmpty) {
         print("===================================haous========================");
         comment.insert(0, giftBasic[0]);
+        listKey.currentState?.insertItem(0, duration: const Duration(milliseconds: 500));
         giftBasic.removeAt(0);
         if (giftBasicTemp.isNotEmpty && giftBasic.length <= 2) {
           giftBasic.add(giftBasicTemp[0]);
@@ -1015,20 +1070,30 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
   }
 
   Timer? timerDeluxe;
+  int settingTimeDeluxe = 3;
+
   void startTimerDelux() {
-    timerDeluxe = Timer.periodic(const Duration(seconds: 4), (timer) {
-      if (giftDelux.isNotEmpty) {
-        comment.insert(0, giftDelux[0]); //masukin ke comment
-        giftDelux.removeAt(0); //hapus gift deluxe
+    const oneSec = Duration(seconds: 1);
+    timerDeluxe = Timer.periodic(oneSec, (Timer timer) async {
+      if (settingTimeDeluxe == 0) {
         if (giftDeluxTemp.isNotEmpty) {
+          comment.insert(0, giftDelux[0]); //masukin ke comment
+          listKey.currentState?.insertItem(0, duration: const Duration(milliseconds: 500));
+          giftDelux = [];
           giftDelux.add(giftDeluxTemp[0]);
           giftDeluxTemp.removeAt(0);
-          timerDeluxe?.cancel();
+          settingTimeDeluxe = 3;
+          notifyListeners();
+        } else {
+          comment.insert(0, giftDelux[0]); //masukin ke comment
+          listKey.currentState?.insertItem(0, duration: const Duration(milliseconds: 500));
+          giftDelux = [];
+          timer.cancel();
+          notifyListeners();
         }
-
-        notifyListeners();
       } else {
-        timerDeluxe?.cancel();
+        settingTimeDeluxe--;
+        notifyListeners();
       }
     });
   }

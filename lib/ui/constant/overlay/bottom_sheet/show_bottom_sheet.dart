@@ -63,6 +63,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_w
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/report/content/reportProfile.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/report/content/report_content.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_challange_periode.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/general_dialog.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/v2/user_overview_gender_content.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -1914,7 +1915,7 @@ class ShowBottomSheet {
     );
   }
 
-  onShowShareLive(BuildContext _, {bool isViewer = false}) {
+  onShowShareLive(BuildContext _, {bool isViewer = false, Function()? whencomplete}) {
     showModalBottomSheet(
         isScrollControlled: true,
         context: _,
@@ -1941,11 +1942,12 @@ class ShowBottomSheet {
             },
           );
         }).whenComplete(() {
+      whencomplete?.call();
       _.read<StreamerNotifier>().shareUsers = [];
     });
   }
 
-  onShowGiftLive(BuildContext _, {String? idViewStream}) {
+  onShowGiftLive(BuildContext _, {String? idViewStream, Function()? whencomplate}) {
     showModalBottomSheet(
         isScrollControlled: true,
         context: _,
@@ -1969,7 +1971,7 @@ class ShowBottomSheet {
                   child: OnShowGiftLiveBottomSheet(scrollController: scrollController, idViewStream: idViewStream),
                 );
               });
-        }).then((value) {});
+        }).then((value) {}).whenComplete(() => whencomplate?.call());
   }
 
   onShowGiftComment(BuildContext _, {CommentsArgument? argument, List<CommentsLogs>? comments}) {
@@ -2009,7 +2011,7 @@ class ShowBottomSheet {
             decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
             height: 125,
             // height: SizeConfig.screenHeight,
-            child: OnViewerOptions(notifier: notifier),
+            child: const OnViewerOptions(),
           ),
         );
       },
@@ -2053,5 +2055,55 @@ class ShowBottomSheet {
             child: OnShowCommentOptionLiveBottomSheet(dataComment: data, isReady: isReady),
           );
         });
+  }
+
+  static onGeneralDialog(
+    context, {
+    String? titleText,
+    String? bodyText,
+    int? maxLineTitle,
+    int? maxLineBody,
+    required Function functionPrimary,
+    Function? functionSecondary,
+    String? titleButtonPrimary,
+    String? titleButtonSecondary,
+    bool? barrierDismissible = false,
+    bool isHorizontal = true,
+    bool? fillColor = true,
+    Widget? bodyWidget,
+    Widget? topWidget,
+  }) async {
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      enableDrag: true,
+      isDismissible: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Container(
+            padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 24),
+            decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
+
+            // height: SizeConfig.screenHeight,
+            child: GeneralAlertDialog(
+              titleText: titleText,
+              bodyText: bodyText,
+              maxLineTitle: maxLineTitle,
+              maxLineBody: maxLineBody,
+              functionPrimary: functionPrimary,
+              functionSecondary: functionSecondary,
+              titleButtonPrimary: titleButtonPrimary,
+              titleButtonSecondary: titleButtonSecondary,
+              isHorizontal: isHorizontal,
+              fillColor: fillColor ?? false,
+              bodyWidget: bodyWidget,
+              topWidget: topWidget,
+            ),
+          ),
+        );
+      },
+    );
   }
 }

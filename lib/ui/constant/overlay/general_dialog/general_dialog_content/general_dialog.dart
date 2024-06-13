@@ -124,9 +124,12 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
                                     widget.functionSecondary!();
                                   }
                                 },
-                                child: CustomTextWidget(
-                                  textToDisplay: '${widget.titleButtonSecondary}',
-                                  textStyle: theme.textTheme.button?.copyWith(color: theme.colorScheme.primary, fontSize: 14),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                  child: CustomTextWidget(
+                                    textToDisplay: '${widget.titleButtonSecondary}',
+                                    textStyle: theme.textTheme.button?.copyWith(color: theme.colorScheme.primary, fontSize: 14),
+                                  ),
                                 ),
                               ),
                         eightPx
@@ -151,9 +154,10 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
       child: matchParent
           ? Container(
               width: double.infinity,
+              padding: EdgeInsets.symmetric(vertical: 12),
               child: CustomTextWidget(textToDisplay: caption, textStyle: theme.textTheme.button?.copyWith(color: textColor, fontSize: 14)),
             )
-          : CustomTextWidget(textToDisplay: caption, textStyle: theme.textTheme.button?.copyWith(color: textColor, fontSize: 14)),
+          : Container(child: CustomTextWidget(textToDisplay: caption, textStyle: theme.textTheme.button?.copyWith(color: textColor, fontSize: 14))),
       style: theme.elevatedButtonTheme.style?.copyWith(
         backgroundColor: MaterialStateProperty.all(color),
       ),

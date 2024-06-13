@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
@@ -32,7 +31,7 @@ class _PreviewSelfieSupportState extends State<PreviewSelfieSupport> {
 
   @override
   void dispose() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
     super.dispose();
   }
 
@@ -67,7 +66,12 @@ class _PreviewSelfieSupportState extends State<PreviewSelfieSupport> {
                       CustomTextButton(onPressed: () => Routing().moveBack(), child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg", defaultColor: false)),
                       GestureDetector(
                         onTap: () {
-                          notifier.onSaveSupportedDocument(context);
+                          SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+                          if (notifier.selfieOnSupportDocs) {
+                            notifier.onSaveSupportedDocument(context);
+                          } else {
+                            notifier.postVerificationData(context);
+                          }
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),

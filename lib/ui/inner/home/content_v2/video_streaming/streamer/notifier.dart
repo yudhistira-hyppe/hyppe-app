@@ -78,8 +78,8 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   int totPause = 0;
   int pageNumberUserShare = 0;
   int limitNumberUserShare = 15;
-  int settingStreamTime1 = 300; //waktu untuk streaming dalam detik (1jam = 3600 s)
-  int settingStreamTime2 = 100; // 5 menit (300 s)
+  int settingStreamTime1 = 600; //waktu untuk streaming dalam detik (1jam = 3600 s)
+  int settingStreamTime2 = 300; // 5 menit (300 s)
 
   Duration timeCountdownReported = const Duration(seconds: 30);
 
@@ -665,12 +665,10 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     textUrl = '';
     userName = '';
     _titleLive = '';
-    statusLive = StatusStream.offline;
     _items = [];
     dataViewers = [];
     comment = [];
     animationIndexes = [];
-
     commentCtrl.clear();
     inactivityTimer?.cancel();
     inactivityTimer = null;
@@ -865,7 +863,8 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
       WakelockPlus.enable();
 
       if (inactivityTimer != null) inactivityTimer?.cancel();
-      inactivityTimer = Timer(Duration(seconds: settingStreamTime1), () {
+      inactivityTimer = Timer(Duration(seconds: settingStreamTime1), () async {
+        bool showDialog = true;
         ShowGeneralDialog.generalDialog(
           Routing.navigatorKey.currentContext,
           titleText: tn?.liveBroadcastRemaining5Minutes ?? '',
@@ -879,13 +878,19 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
           barrierDismissible: true,
           isHorizontal: false,
           fillColor: false,
+          whenComplate: () => showDialog = false,
         );
+        Future.delayed(Duration(seconds: 3), () {
+          if (showDialog) {
+            Routing().moveBack();
+          }
+        });
         secondsEnd = settingStreamTime2;
         inactivityTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
           if (secondsEnd <= 0) {
+            endLive(context, true, isBack: false);
             inactivityTimer?.cancel();
             secondsEnd = 0;
-            endLive(context, true, isBack: false);
           } else {
             secondsEnd--;
             notifyListeners();
@@ -1454,16 +1459,13 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
           listKey.currentState?.insertItem(0, duration: const Duration(milliseconds: 500));
         } else if (messages.commentType == 'GIFT') {
           if (messages.urlGift != null) {
-            print("=====ada json");
             if (giftDelux.isEmpty) {
               // messages.urlGift = 'https://be-staging.oss-ap-southeast-5.aliyuncs.com/images/gift/66471897d975922b87c91578_3d.json';
               giftDelux.add(messages);
+              settingTimeDeluxe = 3;
+              startTimerDelux();
             } else {
               giftDeluxTemp.add(messages);
-            }
-            if (timerDeluxe?.isActive ?? false) {
-            } else {
-              startTimerDelux();
             }
           } else {
             if (giftBasic.length <= 2) {
@@ -1539,9 +1541,14 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   void insertPinComment(BuildContext context, bool mounted, CommentLiveModel data) async {
     if (pinComment != null) {
       comment.insert(0, pinComment ?? CommentLiveModel());
+      listKey.currentState?.insertItem(0, duration: const Duration(milliseconds: 500));
     }
     pinComment = data;
+    var index = comment.indexWhere((element) => element.idComment == data.idComment);
     comment.removeWhere((element) => element.idComment == data.idComment);
+    listKey.currentState?.removeItem(index, (BuildContext context, Animation<double> animation) {
+      return Container();
+    }, duration: const Duration(milliseconds: 500));
     Map param = {
       "_id": dataStream.sId,
       "idComment": data.idComment,
@@ -1554,6 +1561,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
 
   Future removePinComment(BuildContext context, bool mounted) async {
     comment.insert(0, pinComment ?? CommentLiveModel());
+    listKey.currentState?.insertItem(0, duration: const Duration(milliseconds: 500));
     Map param = {
       "_id": dataStream.sId,
       "idComment": pinComment?.idComment,
@@ -1568,7 +1576,11 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   void removeComment(BuildContext context, bool mounted, String idComment) async {
     Map param = {"_id": dataStream.sId, "idComment": idComment, "type": "COMMENT_DELETE"};
     updateStream(context, mounted, param).then((value) {});
+    var index = comment.indexWhere((element) => element.idComment == idComment);
     comment.removeWhere((element) => element.idComment == idComment);
+    listKey.currentState?.removeItem(index, (BuildContext context, Animation<double> animation) {
+      return Container();
+    }, duration: const Duration(milliseconds: 500));
     notifyListeners();
     Routing().moveBack();
   }
@@ -1782,6 +1794,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
     timerBasic = Timer.periodic(const Duration(seconds: 3), (timer) {
       if (giftBasic.isNotEmpty) {
         comment.insert(0, giftBasic[0]);
+        listKey.currentState?.insertItem(0, duration: const Duration(milliseconds: 500));
         giftBasic.removeAt(0);
         if (giftBasicTemp.isNotEmpty && giftBasic.length <= 2) {
           giftBasic.add(giftBasicTemp[0]);
@@ -1796,19 +1809,30 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   }
 
   Timer? timerDeluxe;
+  int settingTimeDeluxe = 3;
+
   void startTimerDelux() {
-    timerDeluxe = Timer.periodic(const Duration(seconds: 5), (timer) {
-      if (giftDelux.isNotEmpty) {
-        comment.insert(0, giftDelux[0]); //masukin ke comment
-        giftDelux.removeAt(0); //hapus gift deluxe
+    const oneSec = Duration(seconds: 1);
+    timerDeluxe = Timer.periodic(oneSec, (Timer timer) async {
+      if (settingTimeDeluxe == 0) {
         if (giftDeluxTemp.isNotEmpty) {
+          comment.insert(0, giftDelux[0]); //masukin ke comment
+          listKey.currentState?.insertItem(0, duration: const Duration(milliseconds: 500));
+          giftDelux = [];
           giftDelux.add(giftDeluxTemp[0]);
           giftDeluxTemp.removeAt(0);
+          settingTimeDeluxe = 3;
+          notifyListeners();
+        } else {
+          comment.insert(0, giftDelux[0]); //masukin ke comment
+          listKey.currentState?.insertItem(0, duration: const Duration(milliseconds: 500));
+          giftDelux = [];
+          timer.cancel();
+          notifyListeners();
         }
-
-        notifyListeners();
       } else {
-        timerDeluxe?.cancel();
+        settingTimeDeluxe--;
+        notifyListeners();
       }
     });
   }

@@ -1,5 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
@@ -8,12 +9,13 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class VerificationSupportSuccess extends StatefulWidget {
-  const VerificationSupportSuccess({Key? key}) : super(key: key);
+  final GeneralArgument? argument;
+  const VerificationSupportSuccess({Key? key, this.argument}) : super(key: key);
 
   @override
   State<VerificationSupportSuccess> createState() => _VerificationSupportSuccessState();
@@ -34,7 +36,16 @@ class _VerificationSupportSuccessState extends State<VerificationSupportSuccess>
     return Consumer<VerificationIDNotifier>(
       builder: (_, notifier, __) => WillPopScope(
         onWillPop: () async {
-          notifier.clearAndMoveToLobby();
+          if (widget.argument != null) {
+            if (!(widget.argument?.isTrue ?? false)) {
+              Routing().moveBack();
+            } else {
+              notifier.clearAndMoveToLobby();
+            }
+          } else {
+            notifier.clearAndMoveToLobby();
+          }
+
           return false;
         },
         child: Scaffold(
@@ -95,7 +106,17 @@ class _VerificationSupportSuccessState extends State<VerificationSupportSuccess>
             child: CustomElevatedButton(
               width: SizeConfig.screenWidth,
               height: 44.0 * SizeConfig.scaleDiagonal,
-              function: () => notifier.clearAndMoveToLobby(),
+              function: () {
+                if (widget.argument != null) {
+                  if (!(widget.argument?.isTrue ?? false)) {
+                    Routing().moveBack();
+                  } else {
+                    notifier.clearAndMoveToLobby();
+                  }
+                } else {
+                  notifier.clearAndMoveToLobby();
+                }
+              },
               child: CustomTextWidget(
                 textToDisplay: notifier.language.close ?? 'close',
                 textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),

@@ -87,27 +87,28 @@ class AppealStreamNotifier with ChangeNotifier {
         }
         final fetch = notifier.liveStreamFetch;
         if (fetch.postsState == LiveStreamState.getApiSuccess) {
-          if (fetch.statusStream == false) {
-            dataBanned = BannedStreamModel.fromJson(fetch.data);
-            switch (dataBanned.statusBanned) {
-              case statAppealActive:
-                Routing().moveReplacement(Routes.appealLiveSuccess, argument: GeneralArgument(isTrue: false));
-                break;
-              case statAppealActiveBanned:
-                showButton = false;
-                notifyListeners();
-                break;
-              case statAppealNoActive:
-                showButton = true;
-                notifyListeners();
-                break;
-              default:
-            }
-            // if(dataBanned.statusBanned == )
-            // if (dataBanned.statusAppeal ?? false) {
-            //   Routing().moveReplacement(Routes.appealLiveSuccess, argument: GeneralArgument(isTrue: false));
-            // }
+          // if (fetch.statusStream == false) {
+          dataBanned = BannedStreamModel.fromJson(fetch.data);
+          print("haha $dataBanned");
+          switch (dataBanned.statusBanned) {
+            case statAppealActive:
+              Routing().moveReplacement(Routes.appealLiveSuccess, argument: GeneralArgument(isTrue: false));
+              break;
+            case statAppealActiveBanned:
+              showButton = false;
+              notifyListeners();
+              break;
+            case statAppealNoActive:
+              showButton = true;
+              notifyListeners();
+              break;
+            default:
           }
+          // if(dataBanned.statusBanned == )
+          // if (dataBanned.statusAppeal ?? false) {
+          //   Routing().moveReplacement(Routes.appealLiveSuccess, argument: GeneralArgument(isTrue: false));
+          // }
+          // }
         }
       } catch (e) {
         debugPrint(e.toString());
