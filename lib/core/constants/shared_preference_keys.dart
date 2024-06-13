@@ -18,6 +18,8 @@ class SpKeys {
   static const String isShowPopAds = "isShowPopAds";
   static const String isoCode = "isoCode";
   static const String themeData = 'themeData';
+  static const String rememberMe = 'rememberMe';
+  static const String valRememberMe = 'valRememberMe';
 
   static const String isUserInOTP = 'isUserInOTP';
   // static const String isPreventRoute = 'isPreventRoute';

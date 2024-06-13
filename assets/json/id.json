@@ -1200,5 +1200,7 @@
   "contentgift": "Kontent Gift",
   "requiredgift": "Syarat Menerima Gift",
   "yourorder": "Pesanan Kamu",
-  "emptyGift": "Stok Gift akan hadir sebentar lagi, ditunggu ya✨"
+  "emptyGift": "Stok Gift akan hadir sebentar lagi, ditunggu ya✨",
+  "simpanInfoLogin": "Simpan info login",
+  "keteranganSimpanInfoLogin": "Gak perlu masukan lagi email dan kata sandi di perangkat ini"
 }
