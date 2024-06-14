@@ -96,6 +96,7 @@ class Routes {
   static const String verificationSupportSuccess = '/verification-support-success';
   static const String descFaceVerification = '/desc-face-verification';
   static const String cameraSelfieVerification = '/camera-selfie-verification';
+  static const String verifiedScreen = '/verified-screen';
 
   //delete account
   static const String deleteAccount = '/delete-account';
@@ -163,7 +164,7 @@ class Routes {
   static const String pinbuycontent = '/pin-buycontent';
   static const String pinwithdrawalcoin = '/pin-withdrawalcoin';
 
-  static const String transactioncoindetail = '/transaction-coin-detail';
+  // static const String transactioncoindetail = '/transaction-coin-detail';
   static const String paymentsuccessdetail = '/payment-success-detail';
 
   static const String aliTest = '/ali-test';

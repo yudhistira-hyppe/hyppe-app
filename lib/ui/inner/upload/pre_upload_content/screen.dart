@@ -86,7 +86,16 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
         notifier.captionController.text = notifier.hastagChallange;
         notifier.captionController.selection = const TextSelection.collapsed(offset: 0);
         notifier.setDefaultExternalLink(context);
+        if (notifier.certified){
+          notifier.showPriceCertificate = false;
+        }
+
+        if (notifier.boostContent !=null){
+          notifier.showPriceBoost = false;
+        }
       } else {
+        notifier.showPriceCertificate = false;
+        notifier.showPriceBoost = false;
         notifier.urlLink = widget.arguments.contentData?.urlLink ?? '';
         notifier.judulLink = widget.arguments.contentData?.judulLink ?? '';
         notifier.initCoinOwnershipDetail(context);
@@ -228,13 +237,12 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                             eightPx,
                             notifier.featureType != FeatureType.story ? ownershipSellingWidget(textTheme, notifier) : const SizedBox(),
                             notifier.certified ? detailTotalPrice(notifier) : Container(),
-                            if (!widget.arguments.onEdit && notifier.certified)
+                            if (notifier.showPriceCertificate)
                               ValueListenableBuilder(
                                   valueListenable: buttonactive,
                                   builder: (context, value, _) {
                                     return GestureDetector(
-                                      onTap: notifier.saldoCoin < (notifier.cointPurchaseDetail.price ?? 0)
-                                          ? () async {
+                                      onTap: () async {
                                               await Navigator.pushNamed(context, Routes.mydiscount, arguments: {
                                                 'routes': '${Routes.preUploadContent}ownership',
                                                 'totalPayment': 150,
@@ -243,16 +251,15 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                               });
                                               if (!mounted) return;
                                               await notifier.initCoinOwnershipDetail(context);
-                                            }
-                                          : null,
+                                            },
                                       child: Container(
                                         margin: const EdgeInsets.symmetric(vertical: 12.0),
                                         decoration: BoxDecoration(border: Border.all(width: .3, color: kHyppeBurem), borderRadius: BorderRadius.circular(12.0), color: kHyppeBurem.withOpacity(.03)),
                                         child: ListTile(
                                           minLeadingWidth: 10,
-                                          leading: CustomIconWidget(
+                                          leading: const CustomIconWidget(
                                             iconData: "${AssetPath.vectorPath}ic-kupon.svg",
-                                            defaultColor: notifier.saldoCoin < (notifier.cointPurchaseDetail.price ?? 0) ? false : true,
+                                            defaultColor: false,
                                           ),
                                           title: (notifier.discountOwnership!.checked ?? false)
                                               ? Column(
@@ -268,11 +275,11 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                                 )
                                               : Text(
                                                   notifier.language.discountForYou ?? 'Diskon Untukmu',
-                                                  style: TextStyle(color: notifier.saldoCoin < (notifier.cointPurchaseDetail.price ?? 0) ? kHyppeBackground : kHyppeBurem.withOpacity(.3)),
+                                                  style: TextStyle(color: kHyppeBackground),
                                                 ),
                                           trailing: Icon(
                                             Icons.arrow_forward_ios,
-                                            color: notifier.saldoCoin < (notifier.cointPurchaseDetail.price ?? 0) ? kHyppeBackground : kHyppeBurem.withOpacity(.3),
+                                            color: kHyppeBackground,
                                           ),
                                         ),
                                       ),
@@ -307,7 +314,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      !notifier.isEdit && notifier.certified
+                      notifier.showPriceCertificate
                           ? Container(
                               color: Colors.white,
                               padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -353,7 +360,6 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                         isChecking: (bool val, int saldoCoin) {
                                           notifier.saldoCoin = saldoCoin;
                                           buttonactive.value = val;
-                                          print('======= Button Active ${buttonactive.value}');
                                         },
                                       ),
                                     ),
@@ -468,7 +474,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                           child: ((widget.arguments.onEdit && notifier.updateContent) || prev.isLoadVideo)
                                               ? const CustomLoading()
                                               : CustomTextWidget(
-                                                  textToDisplay: widget.arguments.onEdit ? notifier.language.save ?? 'save' : notifier.language.confirm ?? 'confirm',
+                                                  textToDisplay: widget.arguments.onEdit ? notifier.language.confirm ?? 'Confirm' : notifier.language.confirm ?? 'Confirm',
                                                   textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                                                 )),
                                     ),
@@ -1028,7 +1034,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
 
   Widget boostWidget(TextTheme textTheme, PreUploadContentNotifier notifier) {
     return ListTile(
-      onTap: (notifier.editData?.boosted.isNotEmpty ?? [].isNotEmpty)
+      onTap: ((notifier.editData?.boosted.isNotEmpty ?? [].isNotEmpty) || (widget.arguments.onEdit && notifier.showPriceCertificate))
           ? null
           : () {
               FocusScope.of(context).unfocus();
@@ -1042,7 +1048,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
             },
       title: CustomTextWidget(
         textToDisplay: notifier.language.postBoost ?? 'Post Boost',
-        textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
+        textStyle: textTheme.caption?.copyWith(color: (widget.arguments.onEdit && notifier.showPriceCertificate) ? kHyppeBurem.withOpacity(.5) : Theme.of(context).colorScheme.secondary),
         textAlign: TextAlign.start,
       ),
       contentPadding: EdgeInsets.zero,
@@ -1095,11 +1101,11 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                   : notifier.boostContent != null
                       ? System().capitalizeFirstLetter(notifier.boostContent?.typeBoost ?? '')
                       : notifier.language.no ?? 'no',
-              textStyle: textTheme.caption?.copyWith(color: kHyppeTextLightPrimary, fontFamily: "Lato"),
+              textStyle: textTheme.caption?.copyWith(color: (widget.arguments.onEdit && notifier.showPriceCertificate) ? kHyppeBurem.withOpacity(.5) : kHyppeTextLightPrimary, fontFamily: "Lato"),
             ),
           ),
           twentyPx,
-          const Icon(Icons.arrow_forward_ios_rounded, color: kHyppeTextLightPrimary),
+          Icon(Icons.arrow_forward_ios_rounded, color:(widget.arguments.onEdit && notifier.showPriceCertificate) ? kHyppeBurem.withOpacity(.5) : kHyppeTextLightPrimary),
         ],
       ),
     );
@@ -1108,7 +1114,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
   Widget ownershipSellingWidget(TextTheme textTheme, PreUploadContentNotifier notifier) {
     // final enable = !notifier.checkChallenge;
     return ListTile(
-      onTap: () {
+      onTap: (widget.arguments.onEdit && notifier.showPriceBoost) ? null : () {
         if (!notifier.certified || statusKyc != VERIFIED) {
           System().actionReqiredIdCard(context, action: () {
             notifier.navigateToOwnership(context);
@@ -1119,7 +1125,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
       },
       title: CustomTextWidget(
         textToDisplay: notifier.language.ownershipSelling ?? '',
-        textStyle: textTheme.bodySmall?.copyWith(color: Theme.of(context).colorScheme.secondary),
+        textStyle: textTheme.bodySmall?.copyWith(color: (widget.arguments.onEdit && notifier.showPriceBoost) ? kHyppeBurem.withOpacity(.5) :Theme.of(context).colorScheme.secondary),
         textAlign: TextAlign.start,
       ),
       contentPadding: EdgeInsets.zero,
@@ -1157,22 +1163,22 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                 ShowCaseWidget.of(myContext).next();
                 controller.animateTo(0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
               },
-              child: const Padding(
+              child:  const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: CustomIconWidget(
                   iconData: '${AssetPath.vectorPath}close.svg',
-                  defaultColor: false,
+                  defaultColor: true,
                   height: 16,
                 ),
               ),
             ),
             child: CustomTextWidget(
               textToDisplay: notifier.certified ? notifier.language.yes ?? 'yes' : notifier.language.no ?? 'no',
-              textStyle: textTheme.caption?.copyWith(color: kHyppeTextLightPrimary, fontFamily: "Lato"),
+              textStyle: textTheme.caption?.copyWith(color: (widget.arguments.onEdit && notifier.showPriceBoost) ? kHyppeBurem.withOpacity(.5) : kHyppeTextLightPrimary, fontFamily: "Lato"),
             ),
           ),
           twentyPx,
-          Icon(Icons.arrow_forward_ios_rounded, color: kHyppeTextLightPrimary),
+          Icon(Icons.arrow_forward_ios_rounded, color: (widget.arguments.onEdit && notifier.showPriceBoost) ? kHyppeBurem.withOpacity(.5) : kHyppeTextLightPrimary,),
         ],
       ),
     );
@@ -1279,7 +1285,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
               'routes': '${Routes.preUploadContent}boostpost',
               'totalPayment': notifier.boostContent?.priceBoost ?? 0,
               'discount': notifier.discountBoost,
-              'productType': ContentDiscount.disccontentownership
+              'productType': ContentDiscount.discboostpost
             });
           },
           child: Container(

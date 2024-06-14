@@ -61,6 +61,7 @@ class _AddLinkPageState extends State<AddLinkPage> {
         stream.urlValidator(true);
         stream.setIsEdited(true);
         stream.setselectedPermission(true);
+        title = res['judulLink'] ?? '';
       } else {
         stream.setselectedPermission(false);
         stream.setIsEdited(false);
@@ -132,11 +133,10 @@ class _AddLinkPageState extends State<AddLinkPage> {
                 _permissionLink(notifier),
                 thirtyTwoPx,
                 if (notifier.selectedPermission) _textField(notifier),
-                thirtyTwoPx,
+                // thirtyTwoPx,
                 if (notifier.isEdited)
                   TextButton(
                       onPressed: () {
-                        print(notifier.beforeCurrentRoutes);
                         if (notifier.beforeCurrentRoutes == Routes.preUploadContent) {
                           final stream = Provider.of<PreUploadContentNotifier>(context, listen: false);
                           stream.setDefaultExternalLink(context);

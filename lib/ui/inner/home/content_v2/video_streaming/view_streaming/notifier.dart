@@ -245,6 +245,8 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
             notifyListeners();
           }
 
+          print("check-$buttonSheetProfil - $buttonSheetReport -$buttonSheetGift - $buttonSheetValidateUser - $buttonSheetShare");
+
           if (buttonSheetProfil) {
             Navigator.pop(context);
           }

@@ -292,7 +292,12 @@ class _ItemAccountState extends State<ItemAccount> {
                       if (context.read<SelfProfileNotifier>().user.profile?.username != widget.username) {
                         Routing().moveBack();
                         Future.delayed(const Duration(milliseconds: 500), () {
-                          ShowBottomSheet.onWatcherStatus(Routing.navigatorKey.currentContext ?? context, widget.email, widget.sId, isViewer: widget.isViewer);
+                          ShowBottomSheet.onWatcherStatus(
+                            Routing.navigatorKey.currentContext ?? context,
+                            widget.email,
+                            widget.sId,
+                            isViewer: widget.isViewer,
+                          );
                         });
                       }
                     }

@@ -268,7 +268,7 @@ class _DiaryTutorState extends State<DiaryTutor> with WidgetsBindingObserver, Ti
                           padding: EdgeInsets.only(left: 21.0),
                           child: GestureDetector(
                             onTap: () {
-                              Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: picData?.postID ?? '', fromFront: true, data: picData ?? ContentData()));
+                              Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: picData?.postID ?? '', fromFront: true, data: picData ?? ContentData(), giftActication: picData.giftActivation));
                               // ShowBottomSheet.onShowCommentV2(context, postID: picData?.postID);
                             },
                             child: const CustomIconWidget(

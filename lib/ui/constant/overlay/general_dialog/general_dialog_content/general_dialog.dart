@@ -154,7 +154,7 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
       child: matchParent
           ? Container(
               width: double.infinity,
-              padding: EdgeInsets.symmetric(vertical: 12),
+              // padding: EdgeInsets.symmetric(vertical: 12),
               child: CustomTextWidget(textToDisplay: caption, textStyle: theme.textTheme.button?.copyWith(color: textColor, fontSize: 14)),
             )
           : Container(child: CustomTextWidget(textToDisplay: caption, textStyle: theme.textTheme.button?.copyWith(color: textColor, fontSize: 14))),

@@ -1,4 +1,5 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -22,6 +23,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/widget/show_image_profile.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../../constant/widget/custom_desc_content_widget.dart';
 
@@ -223,6 +225,45 @@ class OtherProfileTop extends StatelessWidget {
                     ),
                   )
                 : const SizedBox.shrink(),
+              tenPx,
+            if (profile?.urlLink != '')
+              GestureDetector(
+                onTap: () async {
+                  var uri = profile?.urlLink ?? '';
+                  if (!uri.withHttp()) {
+                    uri = 'https://$uri';
+                  }
+                  if (await canLaunchUrl(Uri.parse(uri))) {
+                    await launchUrl(Uri.parse(uri));
+                  } else {
+                    throw Fluttertoast.showToast(msg: 'Could not launch $uri');
+                  }
+                },
+                child: SizedBox(
+                  width: SizeConfig.screenWidth,
+                  child: Row(
+                    children: [
+                      const CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}hyperlink.svg",
+                        defaultColor: false,
+                        color: kHyppePrimary,
+                      ),
+                      const SizedBox(
+                        width: 4.0,
+                      ),
+                      (profile?.judulLink != '')
+                          ? Text(
+                              profile?.judulLink ?? '',
+                              style: const TextStyle(color: kHyppePrimary),
+                            )
+                          : Text(
+                              profile?.urlLink ?? '',
+                              style: const TextStyle(color: kHyppePrimary),
+                            )
+                    ],
+                  ),
+                ),
+              ),
             myEmail == email
                 ? Container()
                 : Padding(

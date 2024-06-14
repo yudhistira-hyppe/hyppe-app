@@ -1368,7 +1368,7 @@ class _VideoFullProfilescreenPageState extends State<VideoFullProfilescreenPage>
           if (data.allowComments ?? false)
             buttonVideoRight(
               onFunctionTap: () {
-                Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data, pageDetail: true));
+                Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data, pageDetail: true, giftActication: data.giftActivation));
               },
               iconData: '${AssetPath.vectorPath}comment-shadow.svg',
               value: data.comments! > 0 ? data.comments.toString() : lang?.comments ?? '',

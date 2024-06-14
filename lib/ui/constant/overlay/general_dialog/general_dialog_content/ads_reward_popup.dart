@@ -26,7 +26,7 @@ class AdsRewardPopupDialog extends StatelessWidget {
             const CustomIconWidget(iconData: "${AssetPath.vectorPath}coin.svg", defaultColor: false),
             sixPx,
             CustomTextWidget(
-              textToDisplay: '+Rp. 400',
+              textToDisplay: '4 Coins',
               textStyle: theme.textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w600, color: Colors.white),
             ),
           ],

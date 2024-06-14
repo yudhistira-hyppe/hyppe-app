@@ -83,12 +83,8 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
                           Routing().move(Routes.verificationSupportSuccess, argument: GeneralArgument(isTrue: false));
                           break;
                         case VERIFIED:
-                          // ShowBottomSheet().onShowColouredSheet(
-                          //   context,
-                          //   "Your kyc status is verified",
-                          //   color: Theme.of(context).colorScheme.error,
-                          //   maxLines: 2,
-                          // );
+                          Routing().move(Routes.verifiedScreen);
+
                           break;
                         default:
                           Routing().move(Routes.verificationIDStep1);

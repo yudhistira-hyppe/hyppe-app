@@ -148,6 +148,8 @@ class ContentData {
 
   String? fullContent;
 
+  bool? giftActivation;
+
   UserProfileAvatarModel? avatar;
 
   String? visibility;
@@ -247,6 +249,7 @@ class ContentData {
     this.username,
     this.fullThumbPath,
     this.fullContentPath,
+    this.giftActivation,
     this.avatar,
     this.location,
     this.visibility,
@@ -333,7 +336,7 @@ class ContentData {
     fullThumbPath = concatThumbUri();
     fullContent = concatFullContent();
     fullContentPath = concatContentUri();
-
+    giftActivation = json['GiftActivation']??false;
     avatar = json['avatar'] != null ? UserProfileAvatarModel.fromJson(json['avatar']) : null;
     location = json['location'] ?? '';
     visibility = json['visibility'];
@@ -478,6 +481,7 @@ class ContentData {
     data['saleAmount'] = saleAmount ?? 0;
     data['saleView'] = saleView ?? false;
     data['saleLike'] = saleLike ?? false;
+    data['GiftActivation'] = giftActivation ?? false;
     if (avatar != null) {
       data['avatar'] = avatar?.toJson();
     }

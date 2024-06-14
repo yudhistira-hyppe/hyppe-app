@@ -35,6 +35,7 @@ class TransactionCoinDetailNotifier with ChangeNotifier {
       }else{
         _param.addAll({
           'noinvoice': invoiceId
+          // 'noinvoice': '2024/APP/PBC/CN/000051'
         });
       }
       

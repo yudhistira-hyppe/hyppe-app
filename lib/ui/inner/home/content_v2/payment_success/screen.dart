@@ -146,7 +146,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                                 notifier.transactionDetail.noInvoice ?? ''),
                             sixteenPx,
                             detailText('Package ID',
-                                notifier.transactionDetail.packageid ?? ''),
+                                notifier.transactionDetail.packageId ?? ''),
                             sixteenPx,
                             detailText(
                                 lang?.localeDatetime == 'id'
@@ -167,8 +167,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                                 lang?.localeDatetime == 'id'
                                     ? 'Jenis Transaksi'
                                     : 'Transaction Type',
-                                notifier.transactionDetail.jenisTransaksi ??
-                                    'Beli Coins'),
+                                    'Pembelian Coins'),
                             sixteenPx,
                             detailText(
                                 lang?.localeDatetime == 'id'

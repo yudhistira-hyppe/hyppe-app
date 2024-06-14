@@ -149,8 +149,7 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                               title: notifier.language.localeDatetime == 'id'
                                   ? 'Jenis Konten'
                                   : 'Content Type',
-                              value: System().convertTypeContent(
-                                  notifier.buyDataNew?.jenisKonten ?? '0')),
+                              value: notifier.buyDataNew?.jenisKonten ?? ''),
                           contentInfo(textTheme,
                               title: 'Creator',
                               value: notifier.buyDataNew?.creator ?? ''),

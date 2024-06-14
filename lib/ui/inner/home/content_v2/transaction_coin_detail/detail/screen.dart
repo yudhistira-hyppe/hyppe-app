@@ -76,7 +76,7 @@ class ViewPaymentMethod extends StatelessWidget {
                         tween: Tween(begin: Duration(minutes: (DateTime.parse(System().dateTimeRemoveT(transactionDetail.expiredtimeva??'')).difference(DateTime.parse(transactionDetail.timenow??'')).inMinutes)), end: Duration.zero),
                         onEnd: () {
                           // notifier.backHome();
-                          Routing().moveAndRemoveUntil(Routes.lobby, Routes.lobby);
+                          // Routing().moveAndRemoveUntil(Routes.lobby, Routes.lobby);
                         },
                         builder: (BuildContext context, Duration value, Widget? child) {
                           final minutes = value.inMinutes;

@@ -216,7 +216,7 @@ class ShowBottomSheet {
         });
   }
 
-  static onWatcherStatus(contextAsal, String email, String idMediaStreaming, {bool isViewer = false}) async {
+  static onWatcherStatus(contextAsal, String email, String idMediaStreaming, {bool isViewer = false, Function()? whenComplete}) async {
     await showModalBottomSheet(
         context: contextAsal,
         isScrollControlled: true,
@@ -237,7 +237,7 @@ class ShowBottomSheet {
               ),
             ),
           );
-        });
+        }).whenComplete(() => whenComplete?.call());
   }
 
   Future<ReactStream> onReactStreaming(context, ReactStream react, int nilai) async {

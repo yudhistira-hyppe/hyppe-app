@@ -21,7 +21,8 @@ import 'notifier.dart';
 
 class TransactionDetailScreen extends StatefulWidget {
   final String? invoiceid;
-  const TransactionDetailScreen({super.key, required this.invoiceid});
+  final String? title;
+  const TransactionDetailScreen({super.key, required this.invoiceid, required this.title});
 
   @override
   State<TransactionDetailScreen> createState() =>
@@ -59,9 +60,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
             icon: const Icon(Icons.arrow_back_ios)),
         title: CustomTextWidget(
           textStyle: theme.textTheme.titleMedium,
-          textToDisplay: lang?.localeDatetime == 'id'
-              ? 'Detail Transaksi'
-              : 'Transaction Detail',
+          textToDisplay: widget.title??'',
         ),
       ),
       body: Consumer<WithdrawalDetailNotifier>(builder: (context, notifier, _) {
@@ -76,12 +75,16 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
             titleColor = kHyppeRed;
             textTitle = lang!.localeDatetime == 'id' ? 'Batal' : 'Cancel';
             break;
+          case 'REJECTED':
+            titleColor = kHyppeRed;
+            textTitle = lang!.localeDatetime == 'id' ? 'Gagal' : 'Rejected';
+            break;
           case 'PENDING':
           case 'IN PROGRESS':
             titleColor = kHyppeRed;
             textTitle = lang!.localeDatetime == 'id'
-                ? 'Menunggu Pembayaran'
-                : 'Awating Payment';
+                ? 'Dalam Proses'
+                : 'In Progress';
             break;
           default:
             titleColor = kHyppeGreen;
@@ -197,8 +200,8 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                         ),
                         CustomTextWidget(
                           textToDisplay: lang?.localeDatetime == 'id'
-                              ? 'Rincian Saldo Diterima'
-                              : 'Received Balance Details',
+                              ? 'Rincian Penukaran Koin'
+                              : 'Coin Exchange Details',
                           textStyle:
                               const TextStyle(fontWeight: FontWeight.bold),
                         ),
@@ -225,7 +228,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                                 : 'Coin Conversion Fee',
                             System().currencyFormat(
                                 amount:
-                                    notifier.transactionDetail.transactionFee ??
+                                    notifier.transactionDetail.conversionFee ??
                                         0)),
                         const Divider(
                           thickness: .1,
@@ -237,51 +240,42 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                           textStyle:
                               const TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        Container(
-                constraints: const BoxConstraints(maxHeight: 100),
-                color: Colors.white,
-                child: Column(
-                  children: [
-                    TimelineTile(
-                  alignment: TimelineAlign.manual,
-                  lineXY: 0.1,
-                  isFirst: true,
-                  indicatorStyle: const IndicatorStyle(
-                    width: 20,
-                    color: Colors.purple,
-                  ),
-                  beforeLineStyle: const LineStyle(
-                    color: Colors.purple,
-                    thickness: 6,
-                  ),
-                ),
-                const TimelineDivider(
-                  begin: 0.1,
-                  end: 0.9,
-                  thickness: 6,
-                  color: Colors.purple,
-                ),
-                TimelineTile(
-                  alignment: TimelineAlign.manual,
-                  lineXY: 0.9,
-                  beforeLineStyle: const LineStyle(
-                    color: Colors.purple,
-                    thickness: 6,
-                  ),
-                  afterLineStyle: const LineStyle(
-                    color: Colors.deepOrange,
-                    thickness: 6,
-                  ),
-                  indicatorStyle: const IndicatorStyle(
-                    width: 20,
-                    color: Colors.cyan,
-                  ),
-                ),
-                  ],
-                ),
-                    
+                        Transform.translate(
+                          offset: const Offset(0, -32),
+                          child: ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount:
+                                notifier.transactionDetail.tracking?.length ??
+                                    0,
+                            itemBuilder: (BuildContext context, int index) {
+                              final tracking =
+                                  notifier.transactionDetail.tracking![index];
+                              return TimelineTile(
+                                  alignment: TimelineAlign.start,
+                                  lineXY: 0,
+                                  isFirst: index == 0,
+                                  isLast: index ==
+                                      notifier.transactionDetail.tracking!
+                                              .length -
+                                          1,
+                                  indicatorStyle: IndicatorStyle(
+                                    width: 16,
+                                    height: 16,
+                                    indicator:
+                                        _IndicatorExample(active: index == 0),
+                                    drawGap: true,
+                                  ),
+                                  beforeLineStyle: const LineStyle(
+                                    color: kHyppeGreen,
+                                  ),
+                                  endChild: _content(tracking, lang));
+                            },
+                          ),
                         ),
-                        sixteenPx,
+                        const Divider(
+                          thickness: .1,
+                        ),
                         const CustomTextWidget(
                           textToDisplay: 'Total',
                           textStyle: TextStyle(color: kHyppeBurem),
@@ -335,36 +329,94 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
 
   Widget _content(Tracking? tracking, LocalizationModelV2? lang) {
     return Container(
-      margin: const EdgeInsets.only(left: 10.0, top: 42),
+      margin: const EdgeInsets.only(left: 10.0),
       height: kToolbarHeight * 2,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(2.0),
         // color: Colors.red,
       ),
+      child: Transform.translate(
+        offset: const Offset(0, 32),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CustomTextWidget(
+              textToDisplay: lang?.localeDatetime == 'id'
+                  ? tracking?.titleId ?? ''
+                  : tracking?.titleEn ?? '',
+              textStyle: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            CustomTextWidget(
+              textToDisplay: DateFormat(
+                      'MMM dd, yyyy, HH:mm', lang?.localeDatetime ?? 'id')
+                  .format(DateTime.parse(
+                      tracking?.timestamp ?? DateTime.now().toString())),
+            ),
+            SizedBox(
+                width: MediaQuery.of(context).size.width * .7,
+                height: kToolbarHeight,
+                child: Text(
+                  lang?.localeDatetime == 'id'
+                      ? tracking?.descriptionId ?? ''
+                      : tracking?.descriptionEn ?? '',
+                  maxLines: 3,
+                ))
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _IndicatorExample extends StatelessWidget {
+  const _IndicatorExample({Key? key, required this.active}) : super(key: key);
+  final bool active;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          shape: BoxShape.circle, color: active ? kHyppeGreen : kHyppeBurem),
+    );
+  }
+}
+
+class _RowExample extends StatelessWidget {
+  const _RowExample({Key? key, required this.tracking, this.lang})
+      : super(key: key);
+
+  final Tracking tracking;
+  final LocalizationModelV2? lang;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           CustomTextWidget(
             textToDisplay: lang?.localeDatetime == 'id'
-                ? tracking?.titleId ?? ''
-                : tracking?.titleEn ?? '',
+                ? tracking.titleId ?? ''
+                : tracking.titleEn ?? '',
             textStyle: const TextStyle(fontWeight: FontWeight.bold),
           ),
           CustomTextWidget(
             textToDisplay:
                 DateFormat('MMM dd, yyyy, HH:mm', lang?.localeDatetime ?? 'id')
                     .format(DateTime.parse(
-                        tracking?.timestamp ?? DateTime.now().toString())),
+                        tracking.timestamp ?? DateTime.now().toString())),
           ),
           SizedBox(
               width: MediaQuery.of(context).size.width * .7,
               height: kToolbarHeight,
               child: Text(
                 lang?.localeDatetime == 'id'
-                    ? tracking?.descriptionId ?? ''
-                    : tracking?.descriptionEn ?? '',
+                    ? tracking.descriptionId ?? ''
+                    : tracking.descriptionEn ?? '',
                 maxLines: 3,
               ))
         ],

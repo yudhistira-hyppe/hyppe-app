@@ -72,14 +72,20 @@ class ListCommentViewer extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.only(top: 8),
                               child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   GestureDetector(
                                     onTap: () {
                                       final email = (context.read<SelfProfileNotifier>().user.profile?.email);
                                       if (email != notifier.comment[index].email) {
                                         context.read<ViewStreamingNotifier>().buttonSheetProfil = false;
-                                        ShowBottomSheet.onWatcherStatus(context, notifier.comment[index].email ?? '', data.sId ?? '', isViewer: true);
+                                        ShowBottomSheet.onWatcherStatus(
+                                          context,
+                                          notifier.comment[index].email ?? '',
+                                          data.sId ?? '',
+                                          isViewer: true,
+                                          whenComplete: () => notifier.buttonSheetProfil = false,
+                                        );
                                       }
                                     },
                                     child: CustomProfileImage(
@@ -105,7 +111,7 @@ class ListCommentViewer extends StatelessWidget {
                                             children: [
                                               Text.rich(TextSpan(
                                                 text: notifier.comment[index].username ?? '',
-                                                style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700),
+                                                style: TextStyle(color: const Color(0xffcecece), fontWeight: FontWeight.w700, fontSize: 14 * SizeConfig.scaleDiagonal),
                                               )),
                                               // Text(
                                               //   notifier.comment[index].username ?? '',

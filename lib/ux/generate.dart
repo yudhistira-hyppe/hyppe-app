@@ -50,6 +50,7 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/screen_full.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/see_all/diary_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/desc_face_verification/camera_selfie_verification.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/desc_face_verification/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/verified_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/withdrawalcoin/pin/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/withdrawalcoin/withdrawal_coin_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/withdrawalcoin/pages/finish_page.dart';
@@ -360,6 +361,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const DescFaceVerification());
       case Routes.cameraSelfieVerification:
         return MaterialPageRoute(builder: (_) => const CameraSelfieVerification());
+      case Routes.verifiedScreen:
+        return MaterialPageRoute(builder: (_) => const VerifiedScreen());
 
       case Routes.verificationCameraSupport:
         return MaterialPageRoute(builder: (_) => const CameraVerification());
@@ -546,8 +549,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const PinBoostpostScreen(), settings: settings);
       case Routes.pinbuycontent:
         return MaterialPageRoute(builder: (_) => PinBuyScreen(mounted: settings.arguments as dynamic), settings: settings);
-      case Routes.transactioncoindetail:
-        return MaterialPageRoute(builder: (_) => TransactionCoinDetailScreen(invoiceid: settings.arguments as String), settings: settings);
+      // case Routes.transactioncoindetail:
+      //   return MaterialPageRoute(builder: (_) => TransactionCoinDetailScreen(), settings: settings);
       case Routes.paymentsuccessdetail:
         return MaterialPageRoute(builder: (_) => PaymentSuccessScreen(map: settings.arguments as Map), settings: settings);
       case Routes.pinwithdrawalcoin:

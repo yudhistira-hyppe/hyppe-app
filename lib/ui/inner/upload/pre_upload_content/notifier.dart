@@ -135,6 +135,8 @@ class PreUploadContentNotifier with ChangeNotifier {
   bool _allowComment = true;
   bool _isShared = true;
   bool _certified = false;
+  bool _showPriceCertificate = false;
+  bool _showPriceBoost = false;
   bool _certifiedTmp = false;
   dynamic _uploadSuccess;
   List<String>? _tags;
@@ -173,6 +175,8 @@ class PreUploadContentNotifier with ChangeNotifier {
   bool get allowComment => _allowComment;
   bool get isShared => _isShared;
   bool get certified => _certified;
+  bool get showPriceCertificate => _showPriceCertificate;
+  bool get showPriceBoost => _showPriceBoost;
   bool get certifiedTmp => _certifiedTmp;
   List<String>? get tags => _tags;
   String get visibility => _visibility;
@@ -354,6 +358,16 @@ class PreUploadContentNotifier with ChangeNotifier {
     if (!val) {
       _toSell = false;
     }
+    notifyListeners();
+  }
+
+  set showPriceCertificate(bool val) {
+    _showPriceCertificate = val;
+    notifyListeners();
+  }
+
+  set showPriceBoost(bool val) {
+    _showPriceBoost = val;
     notifyListeners();
   }
 
@@ -604,6 +618,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     allowComment = true;
     isShared = true;
     certified = false;
+    showPriceCertificate = false;
     captionController.clear();
     _selectedLocation = '';
     _interestData = [];
@@ -620,6 +635,8 @@ class PreUploadContentNotifier with ChangeNotifier {
     isUpdate = false;
     _postIdPanding = '';
     _boostContent = null;
+    _showPriceBoost = false;
+    _showPriceCertificate = false;
     _tmpstartDate = DateTime(1000);
     _tmpfinsihDate = DateTime(1000);
     _tmpBoost = '';
@@ -869,7 +886,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       judulLink: judulLink,
       location: locationName == language.addLocation ? '' : locationName,
       discount: (discountOwnership!.checked ?? false) ? discountOwnership : null,
-      cointPurchaseDetail: cointPurchaseDetail,
+      cointPurchaseDetail: showPriceCertificate ? cointPurchaseDetail : null,
     );
     final fetch = notifier.postsFetch;
 
@@ -1248,6 +1265,7 @@ class PreUploadContentNotifier with ChangeNotifier {
           initCoinOwnershipDetail(context);
           Routing().moveBack();
           certified = !certified;
+          showPriceCertificate = !showPriceCertificate;
         },
         onCancel: () {
           Routing().moveBack();
@@ -1255,6 +1273,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       );
     } else {
       certified = false;
+      showPriceCertificate = false;
     }
   }
 
@@ -1634,6 +1653,7 @@ class PreUploadContentNotifier with ChangeNotifier {
 
     if (toSell && priceController.text == '') {
       toSell = false;
+
     } else {
       _privacyTitle = "${language.public}";
       privacyValue = 'PUBLIC';
@@ -1717,29 +1737,30 @@ class PreUploadContentNotifier with ChangeNotifier {
 
     if (fetch.utilsState == UtilsState.getMasterBoostSuccess) {
       boostMasterData = BoostMasterModel.fromJson(fetch.data);
-      if (boostMasterData?.pendingTransaction == 1) {
-        Routing().moveBack();
+      // if (boostMasterData?.pendingTransaction == 1) {
+      //   Routing().moveBack();
 
-        await ShowBottomSheet().onShowColouredSheet(
-          context,
-          language.otherPostsInProcessOfPayment ?? '',
-          subCaption: language.thePostisintheProcessofPayment,
-          subCaptionButton: language.viewPaymentStatus,
-          color: kHyppeRed,
-          iconSvg: '${AssetPath.vectorPath}remove.svg',
-          maxLines: 10,
-          functionSubCaption: () {
-            toTransaktion = 2;
-            Routing().moveAndPop(Routes.transaction);
-            // Routing().moveBack();
-            // Routing().moveBack();
-            // Routing().moveBack();
-            // Routing().moveBack();
-            // _onExit();
-          },
-        );
-        if (toTransaktion == 1) Routing().move(Routes.transaction);
-      }
+      //   await ShowBottomSheet().onShowColouredSheet(
+      //     context,
+      //     language.otherPostsInProcessOfPayment ?? '',
+      //     subCaption: language.thePostisintheProcessofPayment,
+      //     subCaptionButton: language.viewPaymentStatus,
+      //     color: kHyppeRed,
+      //     iconSvg: '${AssetPath.vectorPath}remove.svg',
+      //     maxLines: 10,
+      //     functionSubCaption: () {
+      //       toTransaktion = 2;
+      //       Routing().moveAndPop(Routes.transaction);
+      //       // Routing().moveBack();
+      //       // Routing().moveBack();
+      //       // Routing().moveBack();
+      //       // Routing().moveBack();
+      //       // _onExit();
+      //     },
+      //   );
+        // if (toTransaktion == 1) 
+        // Routing().move(Routes.transaction);
+      // }
       isLoading = false;
       notifyListeners();
     } else if (fetch.utilsState == UtilsState.getMasterBoostError) {
@@ -1818,6 +1839,7 @@ class PreUploadContentNotifier with ChangeNotifier {
 
       if (fetch.utilsState == UtilsState.getMasterBoostSuccess) {
         _boostContent = BoostContent.fromJson(fetch.data);
+        _showPriceBoost = true;
         _privacyTitle = language.public ?? 'PUBLIC';
         privacyValue = 'PUBLIC';
         if (!isDisc) {
@@ -1889,6 +1911,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       bool connect = await System().checkConnections();
 
       ShowGeneralDialog.loadingDialog(context);
+
       _params.addAll({
         "pin": pinController.text,
         "platform": "APP",
@@ -1910,8 +1933,9 @@ class PreUploadContentNotifier with ChangeNotifier {
         final bloc = BoostPostContentDataBloc();
         await bloc.createBoostPostContent(context, data: _params);
         final fetch = bloc.dataFetch;
+        print('============== ${fetch.dataState}');
 
-        if (fetch.dataState == BoostPostContentState.getBlocSuccess) {
+        if (bloc.dataFetch.dataState == BoostPostContentState.getBlocSuccess) {
           Routing().moveBack();
           _onExit();
           Navigator.push(
@@ -1923,10 +1947,10 @@ class PreUploadContentNotifier with ChangeNotifier {
                       )));
           pinController.clear();
           _errorPinWithdrawMsg = '';
-        }
-        if (fetch.dataState == BoostPostContentState.getBlocError) {
+        }else { 
+          print('============== ${fetch.data}');
           Routing().moveBack();
-          // notifyListeners();
+          notifyListeners();
           if (fetch.data != null) {
             ShowBottomSheet().onShowColouredSheet(context, fetch.data['message'], color: Theme.of(context).colorScheme.error);
           }

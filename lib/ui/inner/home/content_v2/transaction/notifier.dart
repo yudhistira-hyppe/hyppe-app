@@ -361,8 +361,8 @@ class TransactionNotifier extends ChangeNotifier {
       String email = SharedPreference().readStorage(SpKeys.email);
       _paramsHistory?.addAll({
         "email": email,
-        "status": ["SUCCESS", "PENDING", "IN PROGRESS", "FAILED"],
-        "page": page
+        "page": page,
+        "descending": true
       });
       
       if (filterList.firstWhere((element) => element.selected == true).index == 2){
@@ -411,7 +411,7 @@ class TransactionNotifier extends ChangeNotifier {
           break;
       }
 
-      await bloc.getHistoryTransaction(context, data: _paramsHistory);
+      await bloc.getHistoryTransaction(context, data: _paramsHistory, historyTransaksi: true);
       
       if (bloc.dataFetch.dataState == HistoryTransactionState.getBlocSuccess && bloc.dataFetch.data.isNotEmpty) {
         result = bloc.dataFetch.data;
@@ -435,9 +435,8 @@ class TransactionNotifier extends ChangeNotifier {
       String email = SharedPreference().readStorage(SpKeys.email);
       _paramsHistory?.addAll({
         "email": email,
-        "status": ["SUCCESS", "IN PROGRESS", "FAILED"],
-        // "type": ["Pembelian Coin", "Penukaran Coin"],
-        "page": page
+        "page": page,
+        "descending": true,
       });
       if (filterList.firstWhere((element) => element.selected == true).index == 2){
           _paramsHistory?.addAll({
@@ -483,7 +482,7 @@ class TransactionNotifier extends ChangeNotifier {
           break;
       }
 
-      await bloc.getHistoryTransaction(context, data: _paramsHistory);
+      await bloc.getHistoryTransaction(context, data: _paramsHistory, historyTransaksi: true);
       
       if (bloc.dataFetch.dataState == HistoryTransactionState.getBlocSuccess && bloc.dataFetch.data.isNotEmpty) {
         result.addAll(bloc.dataFetch.data);

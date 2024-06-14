@@ -58,6 +58,18 @@ class DialogInfoWidget extends StatelessWidget {
               tenPx,
               Html(
                 data: data?.description??'',
+                style: {
+                  "a": Style(
+                      color: kHyppePrimary,
+                      textDecoration: TextDecoration.underline,
+                      textDecorationThickness: 0),
+                  "ul": Style(
+                    padding: HtmlPaddings.only(left: 12),
+                  ),
+                  "li": Style(
+                    padding: HtmlPaddings.only(left: 4),
+                  )
+                },
               )
               // listText(context, number: 1, label: 'eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque'),
               // listText(context, number: 2, label: 'fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet massa'),

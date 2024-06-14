@@ -862,6 +862,7 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
                                   postID: pics[index].postID ?? '',
                                   fromFront: true,
                                   data: pics[index],
+                                  giftActication: pics[index].giftActivation,
                                   pageDetail: true,
                                 ));
                           },
@@ -940,6 +941,7 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
                       postID: pics[index].postID ?? '',
                       fromFront: true,
                       data: pics[index],
+                      giftActication: pics[index].giftActivation,
                       pageDetail: true,
                     ));
               },

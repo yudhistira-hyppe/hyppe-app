@@ -1,4 +1,5 @@
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -226,8 +227,43 @@ class _OnShowGiftCommantBottomSheetState
                 child: ButtonChallangeWidget(
                   function: () {
                     if (buttonactive) {
-                      sn.sendGift(context, sn.giftSelect ?? GiftLiveModel(),
+                      print('disini ${(sn.giftSelect?.toJson())}');
+                      if ((sn.giftSelect?.lastStock??0) < 1){
+                        FToast().init(context);
+                          if (true) FToast().removeCustomToast();
+                          FToast().showToast(
+                            child: Container(
+                              width: SizeConfig.screenWidth,
+                              decoration: BoxDecoration(color: kHyppeBorderDanger, borderRadius: BorderRadius.circular(8)),
+                              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.info_outline,
+                                    color: Colors.white,
+                                  ),
+                                  twelvePx,
+                                  Expanded(
+                                      child: Text(
+                                    (trans.localeDatetime ?? '') == 'id'
+                                        ? 'Maaf stok paket gift telah habis, silakan lihat gift lainnya.'
+                                        : 'Sorry, the gift package you want is out of stock. See other packages.',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                    ),
+                                  )),
+                                ],
+                              ),
+                            ),
+                            gravity: ToastGravity.BOTTOM,
+                            toastDuration: const Duration(seconds: 3),
+                          );
+                      }else{
+                        sn.sendGift(context, sn.giftSelect ?? GiftLiveModel(),
                           pageDetail: widget.argument?.pageDetail??false);
+                      }
+                      
                     }
                   },
                   bgColor: !buttonactive ? kHyppeDisabled : kHyppePrimary,
@@ -334,7 +370,7 @@ class _OnShowGiftCommantBottomSheetState
                                     ? SvgPicture.network(
                                         data.thumbnail ?? '',
                                         // 'https://www.svgrepo.com/show/1615/nurse.svg',
-                                        height: 40 * SizeConfig.scaleDiagonal,
+                                        height: 44 * SizeConfig.scaleDiagonal,
                                         // width: 30 * SizeConfig.scaleDiagonal,
                                         fit: BoxFit.cover,
                                         // semanticsLabel: 'A shark?!',
@@ -355,8 +391,8 @@ class _OnShowGiftCommantBottomSheetState
                                     //   )
                                     : SizedBox(
                                         // width: MediaQuery.of(context2).size.width,
-                                        width: 30 * SizeConfig.scaleDiagonal,
-                                        height: 30 * SizeConfig.scaleDiagonal,
+                                        width: 44 * SizeConfig.scaleDiagonal,
+                                        height: 44 * SizeConfig.scaleDiagonal,
                                         child: CustomCacheImage(
                                           imageUrl: data.thumbnail ?? '',
                                           imageBuilder: (_, imageProvider) {

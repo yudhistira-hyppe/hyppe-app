@@ -1569,6 +1569,7 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                         postID: data.postID ?? '',
                         fromFront: true,
                         data: data,
+                        giftActication: data.giftActivation,
                         pageDetail: false));
               },
               iconData: '${AssetPath.vectorPath}comment-shadow.svg',

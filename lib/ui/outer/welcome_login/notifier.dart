@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
@@ -65,7 +64,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
   bool _incorrect = false;
   GoogleSignInAccount? _userGoogleSignIn;
   String? googleSignInError;
-  late bool rememberMe;
+  bool rememberMe = false;
 
   double get latitude => _latitude;
   double get longitude => _longitude;
@@ -154,9 +153,9 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
 
   Future onClickLogin(BuildContext context) async {
     bool connection = await System().checkConnections();
-    print('--> welcome_login/notifier.dart onClickLogin:rememberMe:' + rememberMe.toString());
-    print('--> welcome_login/notifier.dart onClickLogin:email:' + emailController.text.toString());
-    print('--> welcome_login/notifier.dart onClickLogin:password:' + passwordController.text.toString());
+    // print('--> welcome_login/notifier.dart onClickLogin:rememberMe:' + rememberMe.toString());
+    // print('--> welcome_login/notifier.dart onClickLogin:email:' + emailController.text.toString());
+    // print('--> welcome_login/notifier.dart onClickLogin:password:' + passwordController.text.toString());
     setLoading(true);
     await System().getLocation(context).then((value) async {
       if (value) {

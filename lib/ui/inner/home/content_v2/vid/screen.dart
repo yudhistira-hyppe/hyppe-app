@@ -1599,7 +1599,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                                 padding: const EdgeInsets.only(left: 21.0),
                                                 child: GestureDetector(
                                                   onTap: () {
-                                                    Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: vidData.postID ?? '', fromFront: true, data: vidData));
+                                                    Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: vidData.postID ?? '', fromFront: true, data: vidData, giftActication: vidData.giftActivation));
                                                   },
                                                   child: const CustomIconWidget(
                                                     defaultColor: false,
@@ -1735,7 +1735,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
 
                                   GestureDetector(
                                     onTap: () {
-                                      Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: vidData.postID ?? '', fromFront: true, data: vidData));
+                                      Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: vidData.postID ?? '', fromFront: true, data: vidData, giftActication: vidData.giftActivation,));
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(vertical: 4.0),

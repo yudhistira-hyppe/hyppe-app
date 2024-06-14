@@ -98,10 +98,11 @@ class _ComponentState extends State<Component> {
                   MaterialPageRoute(
                       builder: (context) => TransactionCoinDetailScreen(
                             invoiceid: widget.data?.postID ?? '',
+                            title: 'Detail Transaksi',
                           )));
               // Routing().move(Routes.paymentsuccessdetail, argument: {'postId': widget.data?.postID??'', 'type':'Notification'});
             } else if (listTransacation.contains(eventType)) {
-              await Routing().move(Routes.transaction);
+              await Routing().move(Routes.saldoCoins);
             } else if (NotificationCategory.challange == eventType) {
               await Routing().move(Routes.chalengeDetail,
                   argument: GeneralArgument()
@@ -144,18 +145,18 @@ class _ComponentState extends State<Component> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // profile picture
-            widget.data?.eventType == 'CHALLENGE' || widget.data?.eventType == 'NOTIFY_LIVE'
+            widget.data?.eventType == 'CHALLENGE' || widget.data?.eventType == 'NOTIFY_LIVE' || System().convertEventType(widget.data?.eventType) == InteractiveEventType.kyc
                 ? Container(
-                    padding: EdgeInsets.all(16 * SizeConfig.scaleDiagonal),
+                    padding: EdgeInsets.all(8 * SizeConfig.scaleDiagonal),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFe8e8e8),
+                      color: const Color(0xFFE8E8E8),
                       borderRadius: BorderRadius.circular(
                         100,
                       ),
                     ),
                     child: CustomIconWidget(
-                      width: 20 * SizeConfig.scaleDiagonal,
-                      height: 20 * SizeConfig.scaleDiagonal,
+                      width: 30 * SizeConfig.scaleDiagonal,
+                      height: 30 * SizeConfig.scaleDiagonal,
                       iconData: "${AssetPath.vectorPath}notification-active.svg",
                       defaultColor: false,
                       color: const Color(0xFFcecece),

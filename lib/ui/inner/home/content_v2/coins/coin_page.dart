@@ -1,6 +1,5 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/bloc/transaction/historytransaction/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -17,6 +16,7 @@ import 'package:hyppe/ui/constant/widget/section_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/coins/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/coins/widgets/card_coin_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/coins/widgets/custom_listtile.dart';
+import 'package:hyppe/ui/inner/home/content_v2/detail_report/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction_coin_detail/activity_coin_detail.dart';
 import 'package:hyppe/ux/path.dart';
@@ -26,6 +26,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../transaction_coin_detail/screen.dart';
+import '../withdrawalcoin/detail/screen.dart';
 import 'widgets/coins_widget.dart';
 import 'widgets/shimmer_widget.dart';
 
@@ -92,6 +93,8 @@ class _CoinPageState extends State<CoinPage> {
         return RefreshIndicator(
           onRefresh: () async {
             await context.read<TransactionNotifier>().initSaldo(context);
+            if (!mounted) return;
+            await context.read<TransactionNotifier>().initHistory(context, mounted);
           },
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 12.0),
@@ -209,11 +212,11 @@ class _CoinPageState extends State<CoinPage> {
                     ),
                   )
                 else
-                  widgetGenerate2(cointNotif),
-                // Wrap(
-                //   alignment: WrapAlignment.center,
-                //   children: widgetGenerate(cointNotif),
-                // )
+                  // widgetGenerate2(cointNotif),
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  children: widgetGenerate(cointNotif),
+                )
               ],
             ),
           ),
@@ -222,53 +225,53 @@ class _CoinPageState extends State<CoinPage> {
     );
   }
 
-  Widget widgetGenerate2(CoinNotifier notifier) {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: notifier.result.length,
-      physics: const NeverScrollableScrollPhysics(),
-      itemBuilder: (context, i) {
-        if (notifier.result.length == i && notifier.isLoadMore) {
-          return const CustomLoading();
-        }
-        return Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: GestureDetector(
-                onTap: () {
-                  if (notifier.result[i].type == 'Pembelian Coin') {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => TransactionCoinDetailScreen(
-                                  invoiceid: notifier.result[i].noInvoice ?? '',
-                                  status: 'History',
-                                )));
-                  } else {
-                    // Fluttertoast.showToast(msg: 'Feature Not Available');
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ActifityCoinDetail(),
-                      ),
-                    );
-                  }
-                },
-                child: CardCoinWidget(
-                  title: notifier.result[i].coa ?? '',
-                  totalCoin: notifier.result[i].totalCoin ?? 0,
-                  date: DateFormat('dd MMM yyyy', lang!.localeDatetime).format(DateTime.parse(notifier.result[i].updatedAt ?? '2024-03-02')),
-                  desc: lang?.localeDatetime == 'id' ? notifier.result[i].descTitleId : notifier.result[i].descTitleEn,
-                  subdesc: lang?.localeDatetime == 'id' ? notifier.result[i].descContentId : notifier.result[i].descContentEn,
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
+  // Widget widgetGenerate2(CoinNotifier notifier) {
+  //   return ListView.builder(
+  //     shrinkWrap: true,
+  //     itemCount: notifier.result.length,
+  //     physics: const NeverScrollableScrollPhysics(),
+  //     itemBuilder: (context, i) {
+  //       if (notifier.result.length == i && notifier.isLoadMore) {
+  //         return const CustomLoading();
+  //       }
+  //       return Column(
+  //         children: [
+  //           Padding(
+  //             padding: const EdgeInsets.symmetric(vertical: 8.0),
+  //             child: GestureDetector(
+  //               onTap: () {
+  //                 if (notifier.result[i].type == 'Pembelian Coin') {
+  //                   Navigator.push(
+  //                       context,
+  //                       MaterialPageRoute(
+  //                           builder: (context) => TransactionCoinDetailScreen(
+  //                                 invoiceid: notifier.result[i].noInvoice ?? '',
+  //                                 status: 'History', title: 'Detail Coins',
+  //                               )));
+  //                 } else {
+  //                   // Fluttertoast.showToast(msg: 'Feature Not Available');
+  //                   Navigator.push(
+  //                     context,
+  //                     MaterialPageRoute(
+  //                       builder: (context) => ActifityCoinDetail(),
+  //                     ),
+  //                   );
+  //                 }
+  //               },
+  //               child: CardCoinWidget(
+  //                 title: lang?.localeDatetime == 'id' ? notifier.result[i].titleId ?? '' : notifier.result[i].titleEn ?? '',
+  //                 totalCoin: notifier.result[i].totalCoin ?? 0,
+  //                 date: DateFormat('dd MMM yyyy', lang!.localeDatetime).format(DateTime.parse(notifier.result[i].updatedAt ?? '2024-03-02')),
+  //                 desc: lang?.localeDatetime == 'id' ? notifier.result[i].contentId : notifier.result[i].contentEn,
+  //                 subtitle: lang?.localeDatetime == 'id' ? notifier.result[i].subtitleId : notifier.result[i].subtitleEn,
+  //               ),
+  //             ),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
   List<Widget> widgetGenerate(CoinNotifier notifier) {
     List<Widget> widget = [];
@@ -282,25 +285,23 @@ class _CoinPageState extends State<CoinPage> {
       Widget item = Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: GestureDetector(
-          onTap: () {
-            if (notifier.result[i].type == 'Pembelian Coin') {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => TransactionCoinDetailScreen(
-                            invoiceid: notifier.result[i].sId ?? '',
-                            status: 'History',
-                          )));
-            } else {
-              Fluttertoast.showToast(msg: 'Feature Not Available');
+          onTap: (){
+            if (notifier.result[i].type == 'Pembelian Coin'){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionCoinDetailScreen(invoiceid: notifier.result[i].noInvoice??'', title: 'Detail Coins', status: 'Activities',)));
+            }else if (notifier.result[i].coa == 'WD' || notifier.result[i].coa == 'REFUND') {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionDetailScreen(invoiceid: notifier.result[i].noInvoice??'', title: lang?.localeDatetime == 'id'
+              ? 'Detail Coins'
+              : 'Detail Coins', )));
+            }else{
+              Navigator.push(context, MaterialPageRoute(builder: (context) => DetailReport(detail: notifier.result[i],)));
             }
           },
           child: CardCoinWidget(
-            title: notifier.result[i].coa ?? '',
+            title: lang?.localeDatetime == 'id' ? notifier.result[i].titleId??'' : notifier.result[i].titleEn??'', 
             totalCoin: notifier.result[i].totalCoin ?? 0,
             date: DateFormat('dd MMM yyyy', lang!.localeDatetime).format(DateTime.parse(notifier.result[i].updatedAt ?? '2024-03-02')),
-            desc: lang?.localeDatetime == 'id' ? notifier.result[i].descTitleId : notifier.result[i].descTitleEn,
-            subdesc: lang?.localeDatetime == 'id' ? notifier.result[i].descContentId : notifier.result[i].descContentEn,
+            desc: lang?.localeDatetime == 'id' ? notifier.result[i].contentId : notifier.result[i].contentEn, 
+            subtitle: lang?.localeDatetime == 'id' ? notifier.result[i].subtitleId : notifier.result[i].subtitleEn, 
           ),
         ),
       );

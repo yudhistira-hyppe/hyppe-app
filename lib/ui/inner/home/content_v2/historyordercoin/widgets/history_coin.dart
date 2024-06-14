@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/models/collection/coins/history_order_coin.dart';
 import 'package:hyppe/core/models/collection/coins/history_transaction.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -19,15 +18,15 @@ class HistoryCoinWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Color? titleColor;
     String? textTitle;
-    switch (data.status) {
-      case 'FAILED':
+    switch (data.status?.toLowerCase()) {
+      case 'failed':
         titleColor = kHyppeRed;
-        textTitle = lang!.localeDatetime == 'id' ? 'Batal' : 'Cancel';
+        textTitle = lang!.localeDatetime == 'id' ? 'Gagal' : 'Failed';
         break;
-      case 'PENDING':
-      case 'IN PROGRESS':
+      case 'pending':
+      case 'in progress':
         titleColor = kHyppeRed;
-        textTitle = lang!.localeDatetime == 'id' ? 'Menunggu Pembayaran' : 'Awating Payment';
+        textTitle = lang!.localeDatetime == 'id' ? 'Menunggu Pembayaran' : 'In Progress';
         break;
       default:
         titleColor = kHyppeGreen;
@@ -35,7 +34,7 @@ class HistoryCoinWidget extends StatelessWidget {
     }
     
     return GestureDetector(
-      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionCoinDetailScreen(invoiceid: data.noInvoice??'',))),
+      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionCoinDetailScreen(invoiceid: data.noInvoice??'', status: 'History', title: lang?.localeDatetime == 'id' ? 'Detail Transaksi' : 'Transaction Detail',))),
       child: Container(
         width: double.infinity,
         height: SizeConfig.screenHeight! * .22,
@@ -91,14 +90,28 @@ class HistoryCoinWidget extends StatelessWidget {
             Flexible(
               child: SizedBox(
                 height: SizeConfig.screenHeight! * .2,
-                child: Text(data.descTitleId??'', 
-                  maxLines: 2,
-                  style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(
-                            fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.start,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(lang?.localeDatetime == 'id' ? data.titleId??'' : data.titleEn??'', 
+                      maxLines: 2,
+                      style: Theme.of(context)
+                            .textTheme
+                            .titleMedium
+                            ?.copyWith(
+                                fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.start,
+                    ),
+                    Text(lang?.localeDatetime == 'id' ? data.contentId??'' : data.contentEn??'', 
+                      maxLines: 2,
+                      style: Theme.of(context)
+                            .textTheme
+                            .titleSmall
+                            ?.copyWith(
+                                color: kHyppeBurem),
+                        textAlign: TextAlign.start,
+                    ),
+                  ],
                 ),
               ),
             ),

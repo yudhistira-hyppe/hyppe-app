@@ -1387,7 +1387,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                 padding: EdgeInsets.only(left: 21.0),
                                                 child: GestureDetector(
                                                   onTap: () {
-                                                    Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: picData?.postID ?? '', fromFront: true, data: picData ?? ContentData()));
+                                                    Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: picData?.postID ?? '', fromFront: true, data: picData ?? ContentData(), giftActication: picData?.giftActivation));
                                                     // ShowBottomSheet.onShowCommentV2(context, postID: picData?.postID);
                                                   },
                                                   child: const CustomIconWidget(
@@ -1524,7 +1524,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                   if (picData?.allowComments ?? false)
                                     GestureDetector(
                                       onTap: () {
-                                        Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: picData?.postID ?? '', fromFront: true, data: picData ?? ContentData()));
+                                        Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: picData?.postID ?? '', fromFront: true, data: picData ?? ContentData(), giftActication: picData?.giftActivation));
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(vertical: 4.0),

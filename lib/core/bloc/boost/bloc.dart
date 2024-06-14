@@ -19,9 +19,8 @@ class BoostPostContentDataBloc {
   setBoostPostContentFetch(BoostPostContentDataFetch val) => _dataFetch = val;
 
   Future createBoostPostContent(BuildContext context,{Map? data}) async {
-    setBoostPostContentFetch(BoostPostContentDataFetch(BoostPostContentState.loading));
     try {
-      
+      setBoostPostContentFetch(BoostPostContentDataFetch(BoostPostContentState.loading));
       String email = SharedPreference().readStorage(SpKeys.email);
       await Repos().reposPost(
         context,
@@ -58,6 +57,7 @@ class BoostPostContentDataBloc {
           BoostPostContentDataFetch(BoostPostContentState.getBlocError));
       Dio().close(force: true);
     } catch (_) {
+      print('=========error dio $_');
       setBoostPostContentFetch(
           BoostPostContentDataFetch(BoostPostContentState.getBlocError));
       Dio().close(force: true);
