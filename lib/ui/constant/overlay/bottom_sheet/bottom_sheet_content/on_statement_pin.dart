@@ -59,7 +59,8 @@ class OnStatementPinBottomSheet extends StatelessWidget {
                     width: MediaQuery.of(context).size.width,
                     function: onSave,
                     child: CustomTextWidget(
-                      textToDisplay: notifier.translate.goToSecurityPrivacy ?? '',
+                      // textToDisplay: notifier.translate.goToSecurityPrivacy ?? '',
+                      textToDisplay: notifier.translate.localeDatetime == 'id' ? 'Verifikasi Sekarang' : 'Verify Now',
                     ),
                     buttonStyle: ButtonStyle(
                       // backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.background),

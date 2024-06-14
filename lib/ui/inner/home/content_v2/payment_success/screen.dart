@@ -212,6 +212,17 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                                             .transactionFees ??
                                         0)),
                             sixteenPx,
+                            if (notifier.transactionDetail.detail?.isNotEmpty??false)
+                              if ((notifier.transactionDetail.detail?[0].totalDiskon??0) > 0)
+                              detailText(
+                                lang?.localeDatetime == 'id'
+                                    ? 'Diskon'
+                                    : 'Disccount',
+                                '- ${System().currencyFormat(
+                                    amount: notifier.transactionDetail.detail?[0].totalDiskon ??
+                                        0)}'),
+                            sixteenPx,
+
                             const Divider(
                               height: 30,
                               color: kHyppeBurem,
@@ -225,7 +236,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                                     amount: notifier
                                             .transactionDetail.totalamount ??
                                         0),
-                                showicon: true,
+                                showicon: false,
                                 bold: true)
                           ],
                         ),

@@ -22,6 +22,7 @@ import 'package:hyppe/ux/routing.dart';
 
 import 'pages/finish_page.dart';
 import 'widgets/info_dialog.dart';
+import 'widgets/setpin.dart';
 import 'widgets/text_info.dart';
 
 class WithdrawalCoinNotifier with ChangeNotifier {
@@ -167,6 +168,17 @@ class WithdrawalCoinNotifier with ChangeNotifier {
         isScrollControlled: true,
         builder: (context) {
           return TextInfo(lang: lang,);
+        }
+    );
+  }
+
+  void showButtomSheetSetPin(BuildContext context,{LocalizationModelV2? lang}) {
+    showModalBottomSheet<int>(
+        backgroundColor: Colors.transparent,
+        context: context,
+        isScrollControlled: true,
+        builder: (context) {
+          return SetPinDialog(lang: lang);
         }
     );
   }
