@@ -390,7 +390,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
             area: areaController.text,
             city: cityController.text,
             mobileNumber: mobileController.text,
-            gender: genderController.text,
+            gender: genderController.text.toUpperCase().genderToEn(),
             dateOfBirth: dobController.text,
             urlLink: urlLinkController.text,
             judulLink: titleLinkController.text,

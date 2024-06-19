@@ -14,6 +14,7 @@ import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/user_v2/kyc/ktp_model.dart';
 import 'package:hyppe/core/services/event_service.dart';
@@ -477,7 +478,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
         statusPerkawinan: '',
         pekerjaan: '',
         kewarganegaraan: '',
-        jenisKelamin: genderController.text,
+        jenisKelamin: genderController.text.toUpperCase().genderToEn(),
         tglLahir: DateFormat('yyyy-MM-dd').format(selectedBirthDate),
         onReceiveProgress: (count, total) async {
           await _eventService.notifyUploadReceiveProgress(ProgressUploadArgument(count: count.toDouble(), total: total.toDouble()));
@@ -636,8 +637,8 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   void onSaveSupportedDocument(BuildContext context) async {
     isLoading = true;
     try {
-      debugPrint('idCardFile => ' + imagePath);
-      debugPrint('selfieFile => ' + "${pickedSupportingDocs}");
+      // debugPrint('idCardFile => ' + imagePath);
+      // debugPrint('selfieFile => ' + "${pickedSupportingDocs}");
       ShowGeneralDialog.loadingKycDialog(context);
 
       final bloc = VerificationIDBloc();
@@ -656,7 +657,8 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
         statusPerkawinan: '',
         pekerjaan: '',
         kewarganegaraan: '',
-        jenisKelamin: genderController.text.toUpperCase(),
+        jenisKelamin: genderController.text.toUpperCase().genderToEn(),
+
         docFiles: pickedSupportingDocs,
         // onReceiveProgress: (count, total) async {
         //   await _eventService.notifyUploadReceiveProgress(ProgressUploadArgument(count: count, total: total));
