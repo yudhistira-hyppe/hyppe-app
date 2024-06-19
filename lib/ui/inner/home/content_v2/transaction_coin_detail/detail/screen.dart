@@ -249,9 +249,9 @@ class ViewPaymentMethod extends StatelessWidget {
         children: <Widget>[
           Container(
             padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-                color: Theme.of(context).appBarTheme.backgroundColor,
-                borderRadius: const BorderRadius.all(Radius.circular(8))),
+            decoration: const BoxDecoration(
+                // color: Theme.of(context).appBarTheme.backgroundColor,
+                borderRadius: BorderRadius.all(Radius.circular(8))),
             child: Html(
                 data: body,
                 style: {

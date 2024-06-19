@@ -109,10 +109,9 @@ class _DialogFiltersState extends State<DialogFilters> {
         controlAffinity: ListTileControlAffinity.trailing,
         title: Text(
           ' ${coinNotif.filterList[i].text}',
-          style: TextStyle(
-              color: coinNotif.filterList[i].selected ? Colors.black : Colors.grey,
-              fontWeight:
-                  coinNotif.filterList[i].selected ? FontWeight.bold : FontWeight.normal),
+          style: const TextStyle(
+              color:  Colors.black,
+              fontWeight: FontWeight.normal),
         ),
       ));
     }

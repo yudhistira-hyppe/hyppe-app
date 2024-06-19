@@ -287,12 +287,12 @@ class _PaymentWaitingState extends State<PaymentWaiting> {
           title,
           style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
         ),
-        children: <Widget>[
+        children: [
           Container(
             padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-                color: Theme.of(context).appBarTheme.backgroundColor,
-                borderRadius: const BorderRadius.all(Radius.circular(8))),
+            decoration: const BoxDecoration(
+                // color: Theme.of(context).appBarTheme.backgroundColor,
+                borderRadius: BorderRadius.all(Radius.circular(8))),
             child: Html(
                 data: body,
                 style: {

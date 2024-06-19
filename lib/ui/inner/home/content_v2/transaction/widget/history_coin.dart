@@ -72,7 +72,7 @@ class HistoryCoinWidget extends StatelessWidget {
                           : data.titleEn??'',
                       style: Theme.of(context)
                           .textTheme
-                          .titleMedium
+                          .titleSmall
                           ?.copyWith(fontWeight: FontWeight.bold),
                       textAlign: TextAlign.start,
                     ),

@@ -20,7 +20,7 @@ class _CardVirtualAccountWidgetState extends State<CardVirtualAccountWidget> {
       decoration: BoxDecoration(
         border: Border.all(width: .3, color: kHyppeBurem),
         borderRadius: BorderRadius.circular(12.0),
-        color: kHyppeBurem.withOpacity(.05)
+        color: const Color(0xffFBFBFB)
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical:8.0),

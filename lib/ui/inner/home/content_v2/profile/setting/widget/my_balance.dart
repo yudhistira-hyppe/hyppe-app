@@ -54,7 +54,7 @@ class MyBalance extends StatelessWidget {
                             onCancel: () {},
                             onSave: null,
                             title: 'Ketentuan Hyppe Coins',
-                            initialChildSize: .3,
+                            initialChildSize: .25,
                             child: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 12.0),
                               child: Column(
@@ -69,7 +69,7 @@ class MyBalance extends StatelessWidget {
                                         child: const Text('Hyppe Coins dapat dikonversi menjadi satuan rupiah. 1 hyppe Coins = Rp100'))
                                     ],
                                   ),
-                                  fivePx,
+                                  fifteenPx,
                                   Row(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [

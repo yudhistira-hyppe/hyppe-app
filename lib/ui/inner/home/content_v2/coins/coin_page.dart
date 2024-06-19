@@ -18,7 +18,6 @@ import 'package:hyppe/ui/inner/home/content_v2/coins/widgets/card_coin_widget.da
 import 'package:hyppe/ui/inner/home/content_v2/coins/widgets/custom_listtile.dart';
 import 'package:hyppe/ui/inner/home/content_v2/detail_report/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/transaction_coin_detail/activity_coin_detail.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:intl/date_symbol_data_local.dart';

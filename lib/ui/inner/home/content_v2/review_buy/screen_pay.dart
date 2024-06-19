@@ -97,10 +97,15 @@ class SuccessBuyContentCcreen extends StatelessWidget {
                     detailText(translate.localeDatetime == 'id' ? 'Harga Konten' : 'Price',
                         '${System().numberFormat(amount: data?.amount??0)} Coins'),
                     sixteenPx,
-                    if (data?.diskon != 0 || data?.diskon != null)
-                    detailText(translate.localeDatetime == 'id' ? 'Diskon' : 'Disccount',
-                        '${System().numberFormat(amount: data?.diskon??0)} Coins'),
-                    sixteenPx,
+                    if ((data?.diskon??0) > 0)
+                    Column(
+                      children: [
+                        detailText(translate.localeDatetime == 'id' ? 'Diskon' : 'Disccount',
+                        '${System().numberFormat(amount: data?.diskon!)} Coins'),
+                        sixteenPx,
+                      ],
+                    ),
+                    
                     detailText(translate.localeDatetime == 'id' ? 'Metode Pembayaran' : 'Payment Method',
                         data?.paymentmethod??''),
                     // sixteenPx,

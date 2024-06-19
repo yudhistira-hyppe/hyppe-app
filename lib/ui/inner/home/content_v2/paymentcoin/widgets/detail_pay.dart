@@ -40,7 +40,6 @@ class DetailPayWidget extends StatelessWidget {
                     ),
                     Text('- ${System().currencyFormat(amount: notifier.cointPurchaseDetail.discount??0)}',
                       style: const TextStyle(
-                          color: Colors.grey,
                           fontWeight: FontWeight.normal),
                     )
                   ],
@@ -72,7 +71,6 @@ class DetailPayWidget extends StatelessWidget {
                           tenPx,
                           Text(System().currencyFormat(amount: notifier.cointPurchaseDetail.total_payment),
                             style: const TextStyle(
-                                color: Colors.grey,
                                 fontWeight: FontWeight.normal),
                           ),
                         ],
@@ -119,7 +117,6 @@ class DetailPayWidget extends StatelessWidget {
           else
           Text(System().currencyFormat(amount: value),
             style: const TextStyle(
-                color: Colors.grey,
                 fontWeight: FontWeight.normal),
           )
         ],

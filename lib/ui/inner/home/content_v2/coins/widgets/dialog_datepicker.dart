@@ -65,7 +65,7 @@ class DialogDatePicker extends StatelessWidget {
                           initialDateTime: DateFormat('yyyy-MM-dd').parse(isStartDate ? notifier.tempSelectedDateStart : notifier.tempSelectedDateEnd),
                           maximumDate: DateTime.now(),
                           maximumYear: DateTime.now().year,
-                          minimumDate: DateTime(2020, 01, 01),
+                          minimumDate: DateFormat('yyyy-MM-dd').parse(isStartDate ? DateTime(2020, 01, 01).toString() : notifier.tempSelectedDateStart),
                           dateOrder: DatePickerDateOrder.dmy,
                           mode: CupertinoDatePickerMode.date,
                           onDateTimeChanged: (DateTime v) {
