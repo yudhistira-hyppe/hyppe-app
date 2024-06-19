@@ -467,7 +467,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
         context,
         // idcardnumber: '12312312312312312',
         // nama: 'a. taslim fuadi',
-        idcardnumber: isSupportDoc ? nikCtrl.text : idCardNumber,
+        idcardnumber: idCardNumber,
         nama: realName,
         tempatLahir: birtPlaceController.text,
         idCardFile: imagePath,

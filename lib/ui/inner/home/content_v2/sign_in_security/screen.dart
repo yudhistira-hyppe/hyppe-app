@@ -117,7 +117,7 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
         statusText = notifier.translate.unverified ?? 'Unverified';
         break;
       case REVIEW:
-        statusText = "Under Review";
+        statusText = notifier.translate.localeDatetime == 'id' ? "Ditinjau" : "Reviews";
         break;
       default:
         statusText = notifier.translate.unverified ?? 'Unverified';

@@ -139,7 +139,8 @@ class SettingNotifier extends ChangeNotifier with LoadingNotifier {
     if (userKyc != VERIFIED) {
       return ShowBottomSheet.onShowStatementPin(context, onCancel: () {}, onSave: () {
         Routing().moveAndPop(Routes.homePageSignInSecurity);
-      }, title: language.translate.verificationYourIDFirst, bodyText: language.translate.toAccessTransactionPageYouNeedToVerificationYourID);
+      // }, title: language.translate.verificationYourIDFirst, bodyText: language.translate.toAccessTransactionPageYouNeedToVerificationYourID);
+       }, title: language.translate.localeDatetime == 'id' ? 'Verifikasi akun dulu yuk!' : 'Verify your account first!', bodyText: language.translate.localeDatetime == 'id' ? 'Kamu dapat melihat transaksi akunmu, setelah melakukan verifikasi.' :'Before diving into your account\'s transactions,let\'s get you verified.');
     }
 
     Routing().move(Routes.transaction);
@@ -150,7 +151,8 @@ class SettingNotifier extends ChangeNotifier with LoadingNotifier {
     if (userKyc != VERIFIED) {
       return ShowBottomSheet.onShowStatementPin(context, onCancel: () {}, onSave: () {
         Routing().moveAndPop(Routes.homePageSignInSecurity);
-      }, title: language.translate.verificationYourIDFirst, bodyText: language.translate.toAccessTransactionPageYouNeedToVerificationYourID);
+      // }, title: language.translate.verificationYourIDFirst, bodyText: language.translate.toAccessTransactionPageYouNeedToVerificationYourID);
+      }, title: language.translate.localeDatetime == 'id' ? 'Verifikasi akun dulu yuk!' : 'Verify your account first!', bodyText: language.translate.localeDatetime == 'id' ? 'Kamu dapat melihat transaksi akunmu,  setelah melakukan verifikasi.' :'Before diving into your account\'s transactions,let\'s get you verified.');
     }
 
     Routing().move(Routes.contentgift);

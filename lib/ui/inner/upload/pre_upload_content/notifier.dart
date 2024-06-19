@@ -910,6 +910,8 @@ class PreUploadContentNotifier with ChangeNotifier {
             saleLike: _includeTotalLikes,
             saleView: _includeTotalViews,
             isShared: isShared,
+            urlLink: urlLink,
+            judulLink: judulLink
           );
       notifyListeners();
 
@@ -931,6 +933,8 @@ class PreUploadContentNotifier with ChangeNotifier {
             saleLike: _includeTotalLikes,
             saleView: _includeTotalViews,
             isShared: isShared,
+            urlLink: urlLink,
+            judulLink: judulLink
           );
 
       // print("ini kategori $_interestData");
@@ -1639,16 +1643,16 @@ class PreUploadContentNotifier with ChangeNotifier {
           priceController.clear();
         }
       }
-      // if (harga > 500000) {
-      //   if (withAlert) {
-      //     return ShowBottomSheet().onShowColouredSheet(context, language.maximumPrice ?? '', color: kHyppeDanger, iconSvg: "${AssetPath.vectorPath}remove.svg");
-      //   } else {
-      //     toSell = false;
-      //     includeTotalViews = false;
-      //     includeTotalLikes = false;
-      //     priceController.clear();
-      //   }
-      // }
+      if (harga > 10000000) {
+        if (withAlert) {
+          return ShowBottomSheet().onShowColouredSheet(context, language.maximumPrice ?? '', color: kHyppeDanger, iconSvg: "${AssetPath.vectorPath}remove.svg");
+        } else {
+          toSell = false;
+          includeTotalViews = false;
+          includeTotalLikes = false;
+          priceController.clear();
+        }
+      }
     }
 
     if (toSell && priceController.text == '') {

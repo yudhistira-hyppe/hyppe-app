@@ -198,11 +198,11 @@ class _DetailReportState extends State<DetailReport> {
                       textStyle: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     sixteenPx,
-                    detailText(lang?.localeDatetime == 'id' ? 'Hadiah Gift' : 'Reward Gift', '${System().numberFormat(amount: notifier.transactionDetail.totalCoin)} coins'),
+                    detailText(lang?.localeDatetime == 'id' ? 'Hadiah Gift' : 'Reward Gift', '${System().numberFormat(amount: notifier.transactionDetail.totalCoin??0)} coins'),
                     const Divider(
                       thickness: .1,
                     ),
-                    detailText(lang?.localeDatetime == 'id' ? 'Saldo Diterima' : 'Coins Received', System().numberFormat(amount: notifier.transactionDetail.totalCoin), showicon: true),
+                    detailText(lang?.localeDatetime == 'id' ? 'Saldo Diterima' : 'Coins Received', System().numberFormat(amount: notifier.transactionDetail.totalCoin??0), showicon: true),
                   ],
                 )
             ),
@@ -280,11 +280,11 @@ class _DetailReportState extends State<DetailReport> {
                       textStyle: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     sixteenPx,
-                    detailText(lang?.localeDatetime == 'id' ? 'Hadiah Gift' : 'Reward Gift', '${System().numberFormat(amount: notifier.transactionDetail.totalCoin)} coins'),
+                    detailText(lang?.localeDatetime == 'id' ? 'Hadiah Gift' : 'Reward Gift', '${System().numberFormat(amount: notifier.transactionDetail.totalCoin??0)} coins'),
                     const Divider(
                       thickness: .1,
                     ),
-                    detailText(lang?.localeDatetime == 'id' ? 'Saldo Diterima' : 'Coins Received', System().numberFormat(amount: notifier.transactionDetail.totalCoin), showicon: true),
+                    detailText(lang?.localeDatetime == 'id' ? 'Saldo Diterima' : 'Coins Received', System().numberFormat(amount: notifier.transactionDetail.totalCoin??0), showicon: true),
                   ],
                 )
             ),
@@ -438,7 +438,7 @@ class _DetailReportState extends State<DetailReport> {
                       textStyle: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     sixteenPx,
-                    detailText(lang?.localeDatetime == 'id' ? 'Harga Konten' : 'Item Price', '${System().numberFormat(amount: notifier.transactionDetail.coin)} coins'),
+                    detailText(lang?.localeDatetime == 'id' ? 'Harga Konten' : 'Item Price', '${System().numberFormat(amount: notifier.transactionDetail.coin??0)} coins'),
                     // sixteenPx,
                     // detailText(lang?.localeDatetime == 'id' ? 'Biaya Layanan' : 'Admin Fee', '${System().numberFormat(amount: notifier.transactionDetail.coinadminfee)} coins'),
                     const Divider(
@@ -514,11 +514,11 @@ class _DetailReportState extends State<DetailReport> {
                       textStyle: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     sixteenPx,
-                    detailText(lang?.localeDatetime == 'id' ? 'Hadiah Iklan' : 'Ad Reward', '${System().numberFormat(amount: notifier.transactionDetail.totalCoin)} coins'),
+                    detailText(lang?.localeDatetime == 'id' ? 'Hadiah Iklan' : 'Ad Reward', '${System().numberFormat(amount: notifier.transactionDetail.totalCoin??0)} coins'),
                     const Divider(
                       thickness: .1,
                     ),
-                    detailText(lang?.localeDatetime == 'id' ? 'Saldo Diterima' : 'Coins Received', System().numberFormat(amount: notifier.transactionDetail.totalCoin), showicon: true),
+                    detailText(lang?.localeDatetime == 'id' ? 'Saldo Diterima' : 'Coins Received', System().numberFormat(amount: notifier.transactionDetail.totalCoin??0), showicon: true),
                   ],
                 )
             ),
@@ -594,11 +594,11 @@ class _DetailReportState extends State<DetailReport> {
                       textStyle: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     sixteenPx,
-                    detailText(lang?.localeDatetime == 'id' ? 'Harga' : 'Price', '${System().numberFormat(amount: notifier.transactionDetail.totalCoin)} coins'),
+                    detailText(lang?.localeDatetime == 'id' ? 'Harga' : 'Price', '${System().numberFormat(amount: notifier.transactionDetail.totalCoin??0)} coins'),
                     const Divider(
                       thickness: .1,
                     ),
-                    detailText(lang?.localeDatetime == 'id' ? 'Total Pembayaran' : 'Total Payment', System().numberFormat(amount: notifier.transactionDetail.totalCoin), showicon: true),
+                    detailText(lang?.localeDatetime == 'id' ? 'Total Pembayaran' : 'Total Payment', System().numberFormat(amount: notifier.transactionDetail.totalCoin??0), showicon: true),
                   ],
                 )
             ),
@@ -670,11 +670,11 @@ class _DetailReportState extends State<DetailReport> {
                       textStyle: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     sixteenPx,
-                    detailText(lang?.localeDatetime == 'id' ? 'Biaya Admin' : 'Admin Fee', '${System().numberFormat(amount: notifier.transactionDetail.totalCoin)} coins'),
+                    detailText(lang?.localeDatetime == 'id' ? 'Biaya Admin' : 'Admin Fee', '${System().numberFormat(amount: notifier.transactionDetail.totalCoin??0)} coins'),
                     const Divider(
                       thickness: .1,
                     ),
-                    detailText(lang?.localeDatetime == 'id' ? 'Total Tagihan' : 'Total Charge', System().numberFormat(amount: notifier.transactionDetail.totalCoin), showicon: true),
+                    detailText(lang?.localeDatetime == 'id' ? 'Total Tagihan' : 'Total Charge', System().numberFormat(amount: notifier.transactionDetail.totalCoin??0), showicon: true),
                   ],
                 )
             ),
@@ -745,7 +745,7 @@ class _DetailReportState extends State<DetailReport> {
                       thickness: .1,
                     ),
                     sixteenPx,
-                    detailText(lang?.localeDatetime == 'id' ? 'Total Tagihan' : 'Total Pembayaran', System().numberFormat(amount: notifier.transactionDetail.totalCoin), showicon: true),
+                    detailText(lang?.localeDatetime == 'id' ? 'Total Tagihan' : 'Total Pembayaran', System().numberFormat(amount: notifier.transactionDetail.totalCoin??0), showicon: true),
                   ],
                 )
             ),

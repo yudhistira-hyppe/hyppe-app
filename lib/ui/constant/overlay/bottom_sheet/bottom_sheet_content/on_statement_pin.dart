@@ -29,7 +29,7 @@ class OnStatementPinBottomSheet extends StatelessWidget {
             const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
             thirtySixPx,
             Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 title == ''
                     ? Container()
@@ -59,7 +59,8 @@ class OnStatementPinBottomSheet extends StatelessWidget {
                     width: MediaQuery.of(context).size.width,
                     function: onSave,
                     child: CustomTextWidget(
-                      textToDisplay: notifier.translate.goToSecurityPrivacy ?? '',
+                      // textToDisplay: notifier.translate.goToSecurityPrivacy ?? '',
+                      textToDisplay: notifier.translate.localeDatetime == 'id' ? 'Verifikasi Sekarang' : 'Verify Now',
                     ),
                     buttonStyle: ButtonStyle(
                       // backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.background),
