@@ -299,7 +299,7 @@ class PostsBloc {
     formData.fields.add(MapEntry('urlLink', urlLink.toString()));
     formData.fields.add(MapEntry('judulLink', judulLink.toString()));
     if (certified == true){
-      formData.fields.add(MapEntry('transaction_fee', (cointPurchaseDetail?.total_payment??0).toString() ));
+      formData.fields.add(MapEntry('transaction_fee', (cointPurchaseDetail?.total_before_discount??0).toString() ));
       print('========== post disctont ${discount != null}');
       if (discount != null){
         formData.fields.add(MapEntry('discount_id', discount.id.toString()));
@@ -463,7 +463,7 @@ class PostsBloc {
     formData.fields.add(MapEntry('urlLink', urlLink.toString()));
     formData.fields.add(MapEntry('judulLink', judulLink.toString()));
     if (cointPurchaseDetail != null){
-      formData.fields.add(MapEntry('transaction_fee', (cointPurchaseDetail.total_payment??0).toString()));
+      formData.fields.add(MapEntry('transaction_fee', (cointPurchaseDetail.total_before_discount??0).toString()));
       if (discount != null){
         formData.fields.add(MapEntry('discount_id', discount.id.toString()));
         formData.fields.add(MapEntry('discount_fee', discount.nominal_discount.toString()));

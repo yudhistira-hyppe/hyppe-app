@@ -165,10 +165,9 @@ class _DialogDateState extends State<DialogDate> {
         controlAffinity: ListTileControlAffinity.trailing,
         title: Text(
           ' ${coinNotif.groupsDate[i].text}',
-          style: TextStyle(
-              color: coinNotif.groupsDate[i].selected ? Colors.black : Colors.grey,
-              fontWeight:
-                  coinNotif.groupsDate[i].selected ? FontWeight.bold : FontWeight.normal),
+          style: const TextStyle(
+              color:  Colors.black,
+              fontWeight: FontWeight.normal),
         ),
       ));
     }

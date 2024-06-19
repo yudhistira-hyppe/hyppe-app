@@ -117,6 +117,7 @@ class _PaymentWaitingState extends State<PaymentWaiting> {
                         tween: Tween(begin: const Duration(minutes: 15), end: Duration.zero),
                         onEnd: () {
                           // notifier.backHome();
+                          notifier.updatevafield(context);
                         },
                         builder: (BuildContext context, Duration value, Widget? child) {
                           final minutes = value.inMinutes;

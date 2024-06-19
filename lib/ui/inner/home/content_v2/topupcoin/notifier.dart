@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/bloc/monetization/coin/bloc.dart';
 import 'package:hyppe/core/bloc/monetization/coin/state.dart';
+import 'package:hyppe/core/bloc/monetization/maxmin/bloc.dart';
+import 'package:hyppe/core/bloc/monetization/maxmin/state.dart';
 import 'package:hyppe/core/bloc/saldo_coin/state.dart';
 import 'package:hyppe/core/models/collection/coins/coinmodel.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
@@ -23,6 +25,7 @@ class TopUpCoinNotifier with ChangeNotifier {
   }
 
   final bloc = CoinDataBloc();
+  final blocMaxmin = MaxminDataBloc();
   
   int _saldoCoin = 0;
   int get saldoCoin => _saldoCoin;
@@ -57,6 +60,28 @@ class TopUpCoinNotifier with ChangeNotifier {
   bool get isLoadMore => _isLoadMore;
   set isLoadMore(bool val){
     _isLoadMore = val;
+    notifyListeners();
+  }
+
+  Map _params={};
+  bool _isLoadMaxmin = false;
+  bool get isLoadMaxmin => _isLoadMaxmin;
+  set isLoadMaxmin(bool val){
+    _isLoadMaxmin = val;
+    notifyListeners();
+  }
+
+  bool _isValidateMaxmin = false;
+  bool get isValidateMaxmin => _isValidateMaxmin;
+  set isValidateMaxmin(bool val){
+    _isValidateMaxmin = val;
+    notifyListeners();
+  }
+
+  int _isValueMaxmin = 0;
+  int get isValueMaxmin => _isValueMaxmin;
+  set isValueMaxmin(int val){
+    _isValueMaxmin = val;
     notifyListeners();
   }
 
@@ -102,5 +127,23 @@ class TopUpCoinNotifier with ChangeNotifier {
     }
     result[result.indexWhere((element) => element.id == selected)].checked = true;
     notifyListeners();
+  }
+
+  Future<void> checkmaxmin(BuildContext context) async {
+    _params = {};
+    try{
+      isLoadMaxmin = true;
+      _params = {
+        'amount': result[result.indexWhere((element) => element.checked==true)].price
+      };
+
+      await blocMaxmin.getMaxmin(context, data: _params);
+      if (blocMaxmin.dataFetch.dataState == MaxminCoinState.getBlocSuccess) {
+        isValidateMaxmin = blocMaxmin.dataFetch.data['valid'];
+        isValueMaxmin = blocMaxmin.dataFetch.data['dailyMax'];
+      }
+    }catch(_){
+      debugPrint(_.toString());
+    }
   }
 }

@@ -21,6 +21,7 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
+import 'package:hyppe/ui/inner/home/content_v2/withdrawalcoin/widgets/setpin.dart';
 import 'package:hyppe/ux/routing.dart';
 
 import 'screen_pay.dart';
@@ -234,6 +235,17 @@ class ReviewBuyNotifier extends ChangeNotifier {
         ),
         backgroundColor: color,
       ),
+    );
+  }
+
+  void showButtomSheetSetPin(BuildContext context,{LocalizationModelV2? lang}) {
+    showModalBottomSheet<int>(
+        backgroundColor: Colors.transparent,
+        context: context,
+        isScrollControlled: true,
+        builder: (context) {
+          return SetPinDialog(lang: lang);
+        }
     );
   }
 }

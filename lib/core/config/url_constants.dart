@@ -502,6 +502,7 @@ class UrlConstants {
   static const String withdrawtransactiondetail = "$transactionRoute/withdrawtransactiondetail";
   static const String withdrawaldetail = "$transactionRoute/consolewithdrawdetail";
   static const String withdrawcoin = "$transactionRoute/withdrawcoin";
+  static const String maxmincoin = "$transactionRoute/checkcoinmaxmin";
 
   //communityGuidlenList for detail
   static const String guidlineList = "$guidlineRoute/list";
