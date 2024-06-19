@@ -18,6 +18,7 @@ import '../../../../../../../ux/path.dart';
 import '../../../../../../../ux/routing.dart';
 import '../../../../../../constant/widget/icon_button_widget.dart';
 import '../notifier.dart';
+import 'dart:math';
 
 class ListStreamersScreen extends StatefulWidget {
   const ListStreamersScreen({super.key});
@@ -443,7 +444,7 @@ class _ListStreamersScreenState extends State<ListStreamersScreen> with TickerPr
         ),
         Positioned.fill(
             child: Image.network(
-          image,
+          "$image?rundom=${Random().nextInt(100)}",
           width: double.infinity,
           height: double.infinity,
           fit: BoxFit.cover,

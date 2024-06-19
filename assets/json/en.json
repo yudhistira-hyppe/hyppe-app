@@ -1199,5 +1199,7 @@
   "contentgift": "Content Gift Settings",
   "requiredgift": "Gift Eligibility Requirements:",
   "yourorder": "Your Order",
-  "emptyGift": "Gift stock will be available shortly, stay tuned! ✨"
+  "emptyGift": "Gift stock will be available shortly, stay tuned! ✨",
+  "simpanInfoLogin": "Save login info",
+  "keteranganSimpanInfoLogin": "No need to enter email and password anymore on this device"
 }

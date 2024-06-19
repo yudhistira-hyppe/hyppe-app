@@ -23,12 +23,12 @@ class _PauseLiveViewState extends State<PauseLiveView> {
 
   @override
   void initState() {
-    setState(() {
-      loading = true;
-    });
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      setState(() {
+        loading = true;
+      });
       var notifier = Provider.of<ViewStreamingNotifier>(context, listen: false);
       if (notifier.dataStreaming.pause ?? false) {}
 

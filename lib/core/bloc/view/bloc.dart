@@ -30,10 +30,12 @@ class ViewBloc {
     required List mediaSource,
     required String description,
     required bool active,
+    required bool isView,
+    required List viewer,
   }) async {
     final email = SharedPreference().readStorage(SpKeys.email);
     final Map<String, dynamic> _data = {
-      "eventType": "VIEW",
+      "eventType": isView ? "VIEWER" : "VIEW",
       "postID": postId,
       "receiverParty": emailOwner,
       "userView": userView,
@@ -42,7 +44,8 @@ class ViewBloc {
       "createdAt": createdAt,
       "mediaSource": mediaSource,
       "description": description,
-      "active": active
+      "active": active,
+      "viewer": viewer
     };
 
     String challangedata = SharedPreference().readStorage(SpKeys.challangeData) ?? '';

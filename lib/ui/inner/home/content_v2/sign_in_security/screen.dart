@@ -1,4 +1,5 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -79,20 +80,11 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
 
                       switch (SharedPreference().readStorage(SpKeys.statusVerificationId)) {
                         case REVIEW:
-                          // ShowBottomSheet().onShowColouredSheet(
-                          //   context,
-                          //   "Your kyc request under review",
-                          //   color: Theme.of(context).colorScheme.error,
-                          //   maxLines: 2,
-                          // );
+                          Routing().move(Routes.verificationSupportSuccess, argument: GeneralArgument(isTrue: false));
                           break;
                         case VERIFIED:
-                          // ShowBottomSheet().onShowColouredSheet(
-                          //   context,
-                          //   "Your kyc status is verified",
-                          //   color: Theme.of(context).colorScheme.error,
-                          //   maxLines: 2,
-                          // );
+                          Routing().move(Routes.verifiedScreen);
+
                           break;
                         default:
                           Routing().move(Routes.verificationIDStep1);
@@ -110,59 +102,63 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
     );
   }
 
-  Container verificationStatus(BuildContext context, String status, TranslateNotifierV2 notifier) {
+  Widget verificationStatus(BuildContext context, String status, TranslateNotifierV2 notifier) {
     String statusText;
-    Color? statusColor;
-    Color? bgColor;
-    final isDark = context.isDarkMode();
+    Color statusColor = const Color(0xffE6094B);
+    Color bgColor = const Color(0xffFFE8E5);
+
     switch (status) {
       case VERIFIED:
         statusText = "Verified";
-        statusColor = isDark ? Colors.white : Colors.black87;
-        bgColor = const Color.fromRGBO(171, 34, 175, 0.08);
+        statusColor = const Color(0xff01864E);
+        bgColor = const Color(0xffE5F5ED);
         break;
       case UNVERIFIED:
         statusText = notifier.translate.unverified ?? 'Unverified';
-        statusColor = isDark ? Colors.black87 : Colors.white;
-        bgColor = kHyppePrimary;
         break;
       case REVIEW:
-        statusText = "Under Review";
-        statusColor = Colors.yellow[900];
-        bgColor = Colors.yellow[200];
+        statusText = notifier.translate.localeDatetime == 'id' ? "Ditinjau" : "Reviews";
         break;
       default:
         statusText = notifier.translate.unverified ?? 'Unverified';
-        statusColor = isDark ? Colors.black87 : Colors.white;
     }
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          if (status == 'verified')
-            Container(
-              padding: const EdgeInsets.all(5),
-              decoration: BoxDecoration(color: kHyppePrimary, borderRadius: BorderRadius.circular(10)),
-              child: const CustomIconWidget(
-                defaultColor: false,
-                height: 5,
-                width: 5,
-                iconData: "${AssetPath.vectorPath}checkmark.svg",
-              ),
-            ),
-          const SizedBox(width: 5),
-          CustomTextWidget(
-            textToDisplay: statusText,
-            textStyle: Theme.of(context).textTheme.caption?.copyWith(color: statusColor, fontWeight: status == 'verified' ? FontWeight.bold : FontWeight.normal),
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
+            color: bgColor,
+            borderRadius: BorderRadius.circular(15),
           ),
-        ],
-      ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // if (status == 'verified')
+              //   Container(
+              //     padding: const EdgeInsets.all(5),
+              //     decoration: BoxDecoration(color: kHyppePrimary, borderRadius: BorderRadius.circular(10)),
+              //     child: const CustomIconWidget(
+              //       defaultColor: false,
+              //       height: 5,
+              //       width: 5,
+              //       iconData: "${AssetPath.vectorPath}checkmark.svg",
+              //     ),
+              //   ),
+              // const SizedBox(width: 5),
+              CustomTextWidget(
+                textToDisplay: statusText,
+                textStyle: Theme.of(context).textTheme.caption?.copyWith(color: statusColor, fontWeight: FontWeight.w700),
+              ),
+            ],
+          ),
+        ),
+        const Icon(
+          Icons.chevron_right_rounded,
+          color: kHyppeTextLightPrimary,
+          size: 26,
+        )
+      ],
     );
   }
 }

@@ -26,7 +26,7 @@ class LoadingKycDialog extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(
+                const SizedBox(
                     width: 22,
                     height: 22,
                     child: CircularProgressIndicator(

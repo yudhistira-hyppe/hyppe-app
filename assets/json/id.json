@@ -778,8 +778,8 @@
   "dataDidntShow": "Apakah data yang ditampilkan tidak cocok dengan ID kamu?",
   "tapHere": "Klik di sini",
   "toAppeal": " untuk mengajukan banding",
-  "unverified": "Belum Terverifikasi",
-  "review": "Dalam Review",
+  "unverified": "Tidak Terverifikasi",
+  "review": "Ditinjau",
   "addYourHyppePinFirst": "Tambahkan PIN Hyppe Anda Terlebih Dahulu",
   "verificationYourIDFirst": "Verifikasi ID Anda Terlebih Dahulu",
   "toAccessTransactionPageYouNeedToSetYourPin": "Untuk mengakses halaman transaksi Anda perlu mengatur pin Anda",
@@ -1200,5 +1200,7 @@
   "contentgift": "Kontent Gift",
   "requiredgift": "Syarat Menerima Gift",
   "yourorder": "Pesanan Kamu",
-  "emptyGift": "Stok Gift akan hadir sebentar lagi, ditunggu ya✨"
+  "emptyGift": "Stok Gift akan hadir sebentar lagi, ditunggu ya✨",
+  "simpanInfoLogin": "Simpan info login",
+  "keteranganSimpanInfoLogin": "Gak perlu masukan lagi email dan kata sandi di perangkat ini"
 }

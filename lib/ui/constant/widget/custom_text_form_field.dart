@@ -54,7 +54,9 @@ class CustomTextFormField extends StatelessWidget {
       this.maxLength,
       this.cursorHeight,
       this.minLines,
-      this.maxLines, this.isEnabled = true, this.expand = false})
+      this.maxLines,
+      this.isEnabled = true,
+      this.expand = false})
       : super(key: key);
 
   @override

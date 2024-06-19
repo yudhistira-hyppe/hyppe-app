@@ -3,11 +3,8 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:provider/provider.dart';
-import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
-import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-import 'package:hyppe/ui/constant/widget/custom_error_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 
 class UserOverviewGenderContent extends StatefulWidget {
@@ -35,19 +32,21 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
   Future<dynamic>? _future;
 
   var gender = [
-    {'id': "Laki-laki", 'en': "Male"},
-    {'id': "Perempuan", 'en': "Female"},
-    {'id': "Lainnya", 'en': "Other"},
+    {'id': "LAKI-LAKI", 'en': "MALE"},
+    {'id': "PEREMPUAN", 'en': "FEMALE"},
+    // {'id': "Lainnya", 'en': "Other"},
   ];
 
   @override
   void initState() {
+    super.initState();
+
     // _future = widget.initFuture;
     _future = getNothink();
 
     if (widget.value.isNotEmpty) {
       for (var i = 0; i < gender.length; i++) {
-        if (widget.value == gender[i]['id']) {
+        if ((widget.value).toUpperCase() == gender[i]['id']) {
           _value = gender[i]['en'] ?? '';
           break;
         } else {
@@ -55,9 +54,6 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
         }
       }
     }
-    print('gender ${widget.value}');
-    print('gender ${_value}');
-    super.initState();
   }
 
   Future<dynamic> getNothink() async {}
@@ -102,13 +98,13 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
               itemBuilder: (context, index) {
                 var data = gender[index];
                 return RadioListTile<String>(
-                  groupValue: System().capitalizeFirstLetter(data['en'] ?? ''),
+                  groupValue: data['en'] ?? '',
                   value: _value,
                   onChanged: (value) {
                     setState(() {
                       // _value = System().capitalizeFirstLetter(System().bodyMultiLang(bodyEn: data['en'], bodyId: data['id']) ?? '');
-                      _value = System().capitalizeFirstLetter(data['en'] ?? '');
-                      widget.onChange(System().capitalizeFirstLetter(System().bodyMultiLang(bodyEn: data['en'], bodyId: data['id']) ?? ''));
+                      _value = data['en'] ?? '';
+                      widget.onChange(System().bodyMultiLang(bodyEn: data['en'], bodyId: data['id']) ?? '');
                     });
                   },
                   toggleable: true,

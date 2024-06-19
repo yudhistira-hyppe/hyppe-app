@@ -29,7 +29,7 @@ class OnStatementPinBottomSheet extends StatelessWidget {
             const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
             thirtySixPx,
             Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 title == ''
                     ? Container()

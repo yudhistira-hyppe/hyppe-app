@@ -129,7 +129,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
     countryController.text = notifierData.user.profile?.country ?? "";
     areaController.text = notifierData.user.profile?.area ?? "";
     cityController.text = notifierData.user.profile?.city ?? "";
-    genderController.text = (notifierData.user.profile?.gender ?? "").getGenderByLanguage();
+    genderController.text = System().capitalizeFirstLetter((notifierData.user.profile?.gender ?? "").getGenderByLanguage());
     dobController.text = notifierData.user.profile?.dob ?? "";
     mobileController.text = notifierData.user.profile?.mobileNumber ?? "";
     urlLinkController.text = notifierData.user.profile?.urlLink ?? "";
@@ -161,7 +161,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
             FocusScope.of(context).unfocus();
           },
           onChange: (value) {
-            genderController.text = value;
+            genderController.text = System().capitalizeFirstLetter(value);
             notifyListeners();
           },
           value: genderController.text,
@@ -390,7 +390,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
             area: areaController.text,
             city: cityController.text,
             mobileNumber: mobileController.text,
-            gender: genderController.text,
+            gender: genderController.text.toUpperCase().genderToEn(),
             dateOfBirth: dobController.text,
             urlLink: urlLinkController.text,
             judulLink: titleLinkController.text,

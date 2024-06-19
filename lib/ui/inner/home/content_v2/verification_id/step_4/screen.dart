@@ -26,8 +26,9 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationIDStep4');
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+
     super.initState();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   }
 
   @override

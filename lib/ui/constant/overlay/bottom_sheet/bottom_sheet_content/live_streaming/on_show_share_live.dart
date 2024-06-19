@@ -58,9 +58,6 @@ class _OnShowShareLiveBottomSheetState extends State<OnShowShareLiveBottomSheet>
     var trans = context.read<TranslateNotifierV2>().translate;
 
     return Consumer2<StreamerNotifier, ViewStreamingNotifier>(builder: (_, notifier, viewNotifier, __) {
-      if (widget.isViewer && viewNotifier.isOver) {
-        Navigator.pop(Routing.navigatorKey.currentContext ?? context);
-      }
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [

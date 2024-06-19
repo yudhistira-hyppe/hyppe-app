@@ -5,6 +5,7 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
@@ -14,6 +15,8 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/camera_verification.dart';
+import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class VerificationIDStep5 extends StatefulWidget {
@@ -353,11 +356,15 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                     height: 44.0 * SizeConfig.scaleDiagonal,
                     // function: () => notifier.step5CanNext ? notifier.continueSelfie(context) : null,
                     function: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CameraVerification(),
-                          ));
+                      if (notifier.isSupportDoc) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const CameraVerification(),
+                            ));
+                      } else {
+                        Routing().move(Routes.descFaceVerification);
+                      }
                     },
                     buttonStyle: notifier.step5CanNext && notifier.activeButtonForm
                         ? ButtonStyle(
@@ -373,7 +380,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                             backgroundColor: MaterialStateProperty.all(const Color(0xFFCECECE)),
                           ),
                     child: CustomTextWidget(
-                      textToDisplay: notifier.language.agreeAndContinue ?? '',
+                      textToDisplay: notifier.language.next ?? '',
                       textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                     ),
                   ),

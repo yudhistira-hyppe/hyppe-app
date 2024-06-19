@@ -48,6 +48,9 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/player/landing_diary_full.d
 import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/screen_full.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/see_all/diary_see_all_screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/desc_face_verification/camera_selfie_verification.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/desc_face_verification/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/verified_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/withdrawalcoin/pin/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/withdrawalcoin/withdrawal_coin_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/withdrawalcoin/pages/finish_page.dart';
@@ -353,7 +356,13 @@ class Generate {
       case Routes.previewSelfieSupport:
         return MaterialPageRoute(builder: (_) => const PreviewSelfieSupport());
       case Routes.verificationSupportSuccess:
-        return MaterialPageRoute(builder: (_) => const VerificationSupportSuccess());
+        return MaterialPageRoute(builder: (_) => VerificationSupportSuccess(argument: settings.arguments as GeneralArgument));
+      case Routes.descFaceVerification:
+        return MaterialPageRoute(builder: (_) => const DescFaceVerification());
+      case Routes.cameraSelfieVerification:
+        return MaterialPageRoute(builder: (_) => const CameraSelfieVerification());
+      case Routes.verifiedScreen:
+        return MaterialPageRoute(builder: (_) => const VerifiedScreen());
 
       case Routes.verificationCameraSupport:
         return MaterialPageRoute(builder: (_) => const CameraVerification());

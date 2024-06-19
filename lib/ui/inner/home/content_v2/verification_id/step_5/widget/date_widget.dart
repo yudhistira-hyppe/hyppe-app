@@ -51,6 +51,7 @@ class VerificationDate extends StatelessWidget {
                     minimumDate: DateTime(1900, 01, 01),
                     mode: CupertinoDatePickerMode.date,
                     onDateTimeChanged: (DateTime v) {
+                      print(v);
                       // notifier.dateOfBirthSelected(DateFormat("yyyy-MM-dd").format(v));
                       notifier.selectedBirthDate = v;
                     }),

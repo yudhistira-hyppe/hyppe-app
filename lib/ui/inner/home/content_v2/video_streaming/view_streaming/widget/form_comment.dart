@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -157,7 +156,8 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
               ? Container()
               : GestureDetector(
                   onTap: () {
-                    ShowBottomSheet().onShowShareLive(context, isViewer: true);
+                    notifier.buttonSheetShare = true;
+                    ShowBottomSheet().onShowShareLive(context, isViewer: true, whencomplete: (() => notifier.buttonSheetShare = false));
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8.0),
@@ -188,9 +188,17 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                   onTap: () {
                     final userKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
                     if (userKyc == VERIFIED) {
-                      ShowBottomSheet().onShowGiftLive(context, idViewStream: notifier.dataStreaming.sId);
+                      notifier.buttonSheetGift = true;
+                      ShowBottomSheet().onShowGiftLive(
+                        context,
+                        idViewStream: notifier.dataStreaming.sId,
+                        whencomplate: () {
+                          notifier.buttonSheetGift = false;
+                        },
+                      );
                     } else {
-                      context.read<SettingNotifier>().validateUserGif(context, context.read<TranslateNotifierV2>());
+                      notifier.buttonSheetValidateUser = true;
+                      context.read<SettingNotifier>().validateUserGif(context, context.read<TranslateNotifierV2>()).whenComplete(() => notifier.buttonSheetValidateUser = false);
                     }
                   },
                   onTapUp: (val) {},

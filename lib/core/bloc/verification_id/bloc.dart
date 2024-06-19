@@ -31,6 +31,7 @@ class VerificationIDBloc {
     String? pekerjaan,
     String? kewarganegaraan,
     String? jenisKelamin,
+    String? tglLahir,
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
     required String idCardFile,
@@ -56,6 +57,7 @@ class VerificationIDBloc {
       "pekerjaan": pekerjaan,
       "kewarganegaraan": kewarganegaraan,
       "jenisKelamin": jenisKelamin,
+      "tglLahir": tglLahir,
     });
     print("hasil kamera");
     print("hasil kamera ${formData.files.first.value.filename}");
@@ -81,7 +83,7 @@ class VerificationIDBloc {
         'x-auth-user': SharedPreference().readStorage(SpKeys.email),
         'x-auth-token': SharedPreference().readStorage(SpKeys.userToken),
       },
-      withAlertMessage: true,
+      withAlertMessage: false,
       withCheckConnection: true,
       host: UrlConstants.verificationID,
       onSendProgress: onSendProgress,
@@ -154,6 +156,7 @@ class VerificationIDBloc {
     String? pekerjaan,
     String? kewarganegaraan,
     String? jenisKelamin,
+    String? tglLahir,
     List<File>? docFiles,
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
@@ -178,6 +181,7 @@ class VerificationIDBloc {
       "pekerjaan": pekerjaan,
       "kewarganegaraan": kewarganegaraan,
       "jenisKelamin": jenisKelamin,
+      "tglLahir": tglLahir,
     });
 
     if (docFiles != null) {

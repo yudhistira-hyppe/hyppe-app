@@ -64,20 +64,21 @@ class _BuildButtonState extends State<BuildButton> {
                 onTap: () async {
                   widget.selectedText!(true);
                   // widget.pause!();
-                 await context.handleActionIsGuest(() async  {
-                    print('sdsdfsdf');
+                  await context.handleActionIsGuest(() async {
+                    print('--> story_page/widget/build_button.dart showMyReaction:');
+                    print(widget.data!.toJson());
                     // if (widget.pause != null) {
                     //   widget.pause!();
                     // }
                     notifier.showMyReaction(
-                      context,
-                      mounted,
-                      widget.data,
-                      // widget.storyController,
-                      widget.animationController,
-                      widget.selectedText
-                      // widget.play!,
-                    );
+                        context,
+                        mounted,
+                        widget.data,
+                        // widget.storyController,
+                        widget.animationController,
+                        widget.selectedText
+                        // widget.play!,
+                        );
                   });
                   // widget.play!();
                   // widget.selectedText!(false);

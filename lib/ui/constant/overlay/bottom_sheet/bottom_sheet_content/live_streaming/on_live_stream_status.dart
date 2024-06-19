@@ -277,8 +277,8 @@ class _ItemAccountState extends State<ItemAccount> {
   @override
   Widget build(BuildContext context) {
     final language = context.read<TranslateNotifierV2>().translate;
-    return Consumer<StreamerNotifier>(
-      builder: (_, notifier, __) => Container(
+    return Consumer2<StreamerNotifier, ViewStreamingNotifier>(
+      builder: (_, notifier, viewNotifier, __) => Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Column(
@@ -292,7 +292,18 @@ class _ItemAccountState extends State<ItemAccount> {
                       if (context.read<SelfProfileNotifier>().user.profile?.username != widget.username) {
                         Routing().moveBack();
                         Future.delayed(const Duration(milliseconds: 500), () {
-                          ShowBottomSheet.onWatcherStatus(Routing.navigatorKey.currentContext ?? context, widget.email, widget.sId, isViewer: widget.isViewer);
+                          ShowBottomSheet.onWatcherStatus(
+                            Routing.navigatorKey.currentContext ?? context,
+                            widget.email,
+                            widget.sId,
+                            isViewer: widget.isViewer,
+                            whenComplete: widget.isViewer
+                                ? () {
+                                    viewNotifier.buttonSheetProfil = false;
+                                    print("hahah ${context.read<ViewStreamingNotifier>().buttonSheetProfil}");
+                                  }
+                                : null,
+                          );
                         });
                       }
                     }

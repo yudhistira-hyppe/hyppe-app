@@ -25,11 +25,14 @@ class AllNotification extends StatelessWidget {
           return Component(
             data: notifier.data?[index],
             rightWidget: System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.follower ||
-                    System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.live || System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.following || System().convertEventType(notifier.data?[index].event) == InteractiveEventType.coin
-                    || System().convertEventType(notifier.data?[index].event) == InteractiveEventType.withdrawal
-                    || System().convertEventType(notifier.data?[index].event) == InteractiveEventType.withdrawalfailed
-                    || System().convertEventType(notifier.data?[index].event) == InteractiveEventType.withdrawalsuccess
-                    || System().convertEventType(notifier.data?[index].event) == InteractiveEventType.adsclick
+                    System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.live ||
+                    System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.kyc ||
+                    System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.following ||
+                    System().convertEventType(notifier.data?[index].event) == InteractiveEventType.coin ||
+                    System().convertEventType(notifier.data?[index].event) == InteractiveEventType.withdrawal ||
+                    System().convertEventType(notifier.data?[index].event) == InteractiveEventType.withdrawalfailed ||
+                    System().convertEventType(notifier.data?[index].event) == InteractiveEventType.withdrawalsuccess ||
+                    System().convertEventType(notifier.data?[index].event) == InteractiveEventType.adsclick
                 // notifier.data?[index].event == 'REQUEST_APPEAL'
                 // notifier.data?[index].event == 'ADMIN_FLAGING' ||
                 // notifier.data?[index].event == 'NOTSUSPENDED_APPEAL'

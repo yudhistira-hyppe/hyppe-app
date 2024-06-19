@@ -283,6 +283,14 @@ extension StringDefine on String {
     }
   }
 
+  String genderToEn() {
+    if (toLowerCase() == 'male' || toLowerCase() == 'laki-laki') {
+      return 'MALE';
+    } else {
+      return 'Female';
+    }
+  }
+
   bool canShowAds() {
     if (isNotEmpty) {
       final lastDatetime = DateFormat("yyyy-MM-dd HH:mm:ss").parse(this);
@@ -505,8 +513,8 @@ extension DurationExt on Duration {
   String detail() => [inHours.remainder(60).toString().padLeft(2, '0'), inMinutes.remainder(60).toString().padLeft(2, '0'), inSeconds.remainder(60).toString().padLeft(2, '0')].join(":");
 }
 
-extension ImageExtension on num {  
-  int cacheSize(BuildContext context) {  
-    return (this * MediaQuery.of(context).devicePixelRatio).round();  
-  }  
+extension ImageExtension on num {
+  int cacheSize(BuildContext context) {
+    return (this * MediaQuery.of(context).devicePixelRatio).round();
+  }
 }

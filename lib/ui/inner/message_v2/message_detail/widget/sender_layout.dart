@@ -2,8 +2,10 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/view_streaming_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/live_stream/link_stream_model.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 
 import 'package:hyppe/core/services/system.dart';
 
@@ -57,14 +59,19 @@ class SenderLayout extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 10.0),
                 child: GestureDetector(
                   onTap: () {
-                    Routing().move(
-                      Routes.viewStreaming,
-                      argument: ViewStreamingArgument(
-                        data: LinkStreamModel(
-                          sId: chatData?.medias.first.sId,
+                    String? idStream = SharedPreference().readStorage(SpKeys.idStream);
+                    if (idStream != null) {
+                      Routing().moveBack();
+                    } else {
+                      Routing().move(
+                        Routes.viewStreaming,
+                        argument: ViewStreamingArgument(
+                          data: LinkStreamModel(
+                            sId: chatData?.medias.first.sId,
+                          ),
                         ),
-                      ),
-                    );
+                      );
+                    }
                   },
                   child: IntrinsicHeight(
                     child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [

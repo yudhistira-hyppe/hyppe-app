@@ -5,7 +5,6 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
-import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +13,6 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/button_challange.dart';
 import 'package:hyppe/ui/inner/home/content_v2/saldo_coin/saldo_coin.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/notifier.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class OnShowGiftLiveBottomSheet extends StatefulWidget {
@@ -43,9 +41,6 @@ class _OnShowGiftLiveBottomSheetState extends State<OnShowGiftLiveBottomSheet> {
   Widget build(BuildContext context) {
     var trans = context.read<TranslateNotifierV2>().translate;
     return Consumer<ViewStreamingNotifier>(builder: (_, notifier, __) {
-      if (notifier.isOver) {
-        Navigator.pop(Routing.navigatorKey.currentContext!);
-      }
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [

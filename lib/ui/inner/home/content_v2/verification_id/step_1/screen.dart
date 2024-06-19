@@ -38,6 +38,7 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final ntfr = Provider.of<VerificationIDNotifier>(context, listen: false);
       ntfr.clearAllTempData();
+      ntfr.isSupportDoc = false;
       readFile();
       try {
         _controller.addListener(() {

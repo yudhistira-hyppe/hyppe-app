@@ -3,14 +3,18 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/arguments/progress_upload_argument.dart';
 import 'package:hyppe/core/bloc/utils_v2/bloc.dart';
 import 'package:hyppe/core/bloc/verification_id/bloc.dart';
 import 'package:hyppe/core/bloc/verification_id/state.dart';
+import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/user_v2/kyc/ktp_model.dart';
 import 'package:hyppe/core/services/event_service.dart';
@@ -20,7 +24,9 @@ import 'package:hyppe/ui/constant/entities/camera/camera_interface.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/entities/camera_devices/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/general_dialog.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:intl/intl.dart';
@@ -83,6 +89,8 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   bool get isLoading => _isLoading;
   bool proses1 = true;
   bool activeButtonForm = false;
+
+  int totFailedFaceVerification = 0;
 
   CameraNotifier cameraNotifier = CameraNotifier();
   CameraDevicesNotifier cameraDevicesNotifier = CameraDevicesNotifier();
@@ -378,7 +386,10 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
         // Routing().moveAndPop(Routes.verificationIDStep5);
         context.read<CameraNotifier>().flashOff(Routing.navigatorKey.currentContext ?? context);
         if (idCardName == "" || idCardNumber == "") {
-          ShowGeneralDialog.failedGetKTP(context, functionPrimary: () {});
+          ShowGeneralDialog.failedGetKTP(context);
+        } else {
+          activeButtonForm = true;
+          Routing().moveAndPop(Routes.verificationIDStep5);
         }
       }
     });
@@ -413,15 +424,15 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
           print("Camera Path => " + imagePath);
         }
 
-        if (selfieOnSupportDocs) {
-          // notifier.onSaveSupportedDocument(context);
-          // onPickSupportedDocument(context, true);
-          // pickedSupportingDocs!.add(filePath);
-          // Routing().moveAndPop(Routes.verificationIDStep7, argument: (cameraDirection == CameraLensDirection.back));
-          Routing().moveAndPop(Routes.previewSelfieSupport);
-        } else {
-          await postVerificationData(context);
-        }
+        // if (selfieOnSupportDocs) {
+        // notifier.onSaveSupportedDocument(context);
+        // onPickSupportedDocument(context, true);
+        // pickedSupportingDocs!.add(filePath);
+        // Routing().moveAndPop(Routes.verificationIDStep7, argument: (cameraDirection == CameraLensDirection.back));
+        Routing().moveAndPop(Routes.previewSelfieSupport);
+        // } else {
+        //   await postVerificationData(context);
+        // }
         // context.read<CameraNotifier>().flashOff();
       }
     });
@@ -443,12 +454,13 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
 
   void checked() {
     acceptTos = !acceptTos;
-    print('_acceptTos');
-    print(_acceptTos);
     notifyListeners();
   }
 
   Future<void> postVerificationData(BuildContext context) async {
+    proses1 = false;
+    notifyListeners();
+    ShowGeneralDialog.loadingKycDialog(context);
     isLoading = true;
     try {
       final bloc = VerificationIDBloc();
@@ -466,7 +478,8 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
         statusPerkawinan: '',
         pekerjaan: '',
         kewarganegaraan: '',
-        jenisKelamin: genderController.text,
+        jenisKelamin: genderController.text.toUpperCase().genderToEn(),
+        tglLahir: DateFormat('yyyy-MM-dd').format(selectedBirthDate),
         onReceiveProgress: (count, total) async {
           await _eventService.notifyUploadReceiveProgress(ProgressUploadArgument(count: count.toDouble(), total: total.toDouble()));
         },
@@ -475,7 +488,9 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
         },
       );
       final fetch = bloc.postsFetch;
+      'verification ID success ${fetch.verificationIDState}'.logger();
       if (fetch.verificationIDState == VerificationIDState.postVerificationIDSuccess) {
+        Routing().moveBack();
         'verification ID success'.logger();
         isLoading = false;
         _eventService.notifyUploadSuccess(fetch.data);
@@ -488,6 +503,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
           isLoading = true;
         }
       } else {
+        Routing().moveBack();
         isLoading = false;
         // _eventService.notifyUploadFailed(
         //   DioError(
@@ -497,8 +513,45 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
         //     error: fetch.data,
         //   ),
         // );
+        totFailedFaceVerification++;
         'verification ID failed: ${fetch.data}'.logger();
-        Routing().moveAndPop(Routes.verificationIDFailed);
+        if (totFailedFaceVerification <= 3) {
+          ShowGeneralDialog.failedGetKTP(context, faceVerification: true);
+        } else {
+          if (context.mounted) {
+            ShowBottomSheet.onGeneralDialog(context,
+                topWidget: const CustomIconWidget(
+                  iconData: "${AssetPath.vectorPath}kyc_max3_error.svg",
+                  defaultColor: false,
+                ),
+                bodyText: '',
+                titleText: System().bodyMultiLang(bodyEn: 'Process Failed', bodyId: 'Proses Gagal'),
+                bodyWidget: Container(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  child: RichText(
+                    text: TextSpan(
+                        text: System().bodyMultiLang(bodyEn: 'You have reached the maximum limit of 3 photo attempts. ', bodyId: 'Kamu telah mencapai batas maksimum 3 kali pengambilan foto. '),
+                        children: [
+                          TextSpan(
+                              text: System().bodyMultiLang(
+                                  bodyEn: 'Please upload the supporting document such as a driver`s license, family card, or passport to complete your verification.',
+                                  bodyId: 'Kamu bisa tetap melanjutkan proses verifikasi dengan melampirkan dokumen pendukung seperti SIM, Kartu Keluarga, atau Paspor untuk melengkapi data.'),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w700,
+                              )),
+                        ],
+                        style: const TextStyle(color: kHyppeTextLightPrimary)),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                isHorizontal: false,
+                titleButtonPrimary: language.uploadSupportingDocuments,
+                titleButtonSecondary: language.back,
+                functionPrimary: () {},
+                functionSecondary: () {});
+          }
+        }
+
         final UploadVerificationIDResult errorResponseData = UploadVerificationIDResult.fromJson(fetch.data);
         idVerificationResponse = errorResponseData.idMediaproofpicts;
       }
@@ -584,15 +637,17 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   void onSaveSupportedDocument(BuildContext context) async {
     isLoading = true;
     try {
-      debugPrint('idCardFile => ' + imagePath);
-      debugPrint('selfieFile => ' + "${pickedSupportingDocs}");
+      // debugPrint('idCardFile => ' + imagePath);
+      // debugPrint('selfieFile => ' + "${pickedSupportingDocs}");
       ShowGeneralDialog.loadingKycDialog(context);
 
       final bloc = VerificationIDBloc();
       await bloc
           .postVerificationIDWithSupportDocsBloc(
         context,
-        idcardnumber: idCardNumber,
+
+        idcardnumber: isSupportDoc ? nikCtrl.text : idCardNumber,
+        tglLahir: DateFormat('yyyy-MM-dd').format(selectedBirthDate),
         nama: realName,
         tempatLahir: birtPlaceController.text,
         idCardFile: imagePath,
@@ -602,7 +657,8 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
         statusPerkawinan: '',
         pekerjaan: '',
         kewarganegaraan: '',
-        jenisKelamin: genderController.text,
+        jenisKelamin: genderController.text.toUpperCase().genderToEn(),
+
         docFiles: pickedSupportingDocs,
         // onReceiveProgress: (count, total) async {
         //   await _eventService.notifyUploadReceiveProgress(ProgressUploadArgument(count: count, total: total));
@@ -630,7 +686,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
         // );
         // print('inin $_sheetResponse');
         // if (_sheetResponse) {
-        Routing().move(Routes.verificationSupportSuccess);
+        Routing().move(Routes.verificationSupportSuccess, argument: GeneralArgument(isTrue: true));
         // clearAndMoveToLobby();
         // }
       } else if (fetch.verificationIDState == VerificationIDState.loading) {
@@ -741,6 +797,8 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
     _step5CanNext = false;
     _selectedBirthDate = DateTime(1990, 1, 1, 0, 0);
     _pickedSupportingDocs = [];
+    nikCtrl.clear();
+    isSupportDoc = false;
 
     // clear all error
     _errorName = "";
@@ -800,7 +858,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
         FocusScope.of(context).unfocus();
       },
       onChange: (value) {
-        genderController.text = value;
+        genderController.text = System().capitalizeFirstLetter(value);
         notifyListeners();
       },
       value: genderController.text,

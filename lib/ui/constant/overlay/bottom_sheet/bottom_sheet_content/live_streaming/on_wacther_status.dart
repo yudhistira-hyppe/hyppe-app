@@ -36,8 +36,9 @@ class _OnWatcherStatusState extends State<OnWatcherStatus> {
   @override
   void initState() {
     super.initState();
-    context.read<ViewStreamingNotifier>().buttonSheetProfil = true;
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ViewStreamingNotifier>().buttonSheetProfil = true;
       streampro = Provider.of<StreamerNotifier>(context, listen: false);
       streampro?.getProfileNCheck(context, widget.email ?? '');
     });

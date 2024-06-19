@@ -82,6 +82,7 @@ class ShowGeneralDialog {
     bool? fillColor = true,
     Widget? bodyWidget,
     Widget? topWidget,
+    Function()? whenComplate,
   }) {
     showGeneralDialog(
       //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
@@ -112,28 +113,20 @@ class ShowGeneralDialog {
       //   animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
       //   return ScaleTransition(scale: animation, alignment: Alignment.center, child: child);
       // },
-    );
+    ).whenComplete(() {
+      whenComplate?.call();
+    });
   }
 
   static failedGetKTP(
     _, {
-    String? titleText,
-    String? bodyText,
-    int? maxLineTitle,
-    int? maxLineBody,
-    required Function functionPrimary,
-    Function? functionSecondary,
-    String? titleButtonPrimary,
-    String? titleButtonSecondary,
-    bool? barrierDismissible = false,
-    bool isHorizontal = true,
-    bool? fillColor = true,
+    bool faceVerification = false,
   }) {
     showGeneralDialog(
       //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
       context: Routing.navigatorKey.currentState!.overlay!.context,
       barrierLabel: 'Barrier',
-      barrierDismissible: barrierDismissible ?? false,
+      barrierDismissible: false,
       transitionDuration: const Duration(milliseconds: 500),
       pageBuilder: (context, animation, secondAnimation) => WillPopScope(
         onWillPop: () async {
@@ -143,16 +136,7 @@ class ShowGeneralDialog {
           // insetPadding: EdgeInsets.only(top: 30),
           alignment: Alignment.center,
           content: FailedGetKTPDialog(
-            titleText: titleText,
-            bodyText: bodyText,
-            maxLineTitle: maxLineTitle,
-            maxLineBody: maxLineBody,
-            functionPrimary: functionPrimary,
-            functionSecondary: functionSecondary,
-            titleButtonPrimary: titleButtonPrimary,
-            titleButtonSecondary: titleButtonSecondary,
-            isHorizontal: isHorizontal,
-            fillColor: fillColor ?? false,
+            faceVerification: faceVerification,
           ),
         ),
       ),
