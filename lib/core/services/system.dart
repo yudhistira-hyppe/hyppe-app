@@ -154,7 +154,12 @@ class System {
   }
 
   validateEmail(String email) {
+<<<<<<< HEAD
     return email.contains(RegExp(r"^(([^<>()[\]\\.,;:\s@\”]+(\.[^<>()[\]\\.,;:\s@\”]+)*)|(\”.+\”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$"))
+=======
+    return email.contains(RegExp(
+            r"^(([^<>()[\]\\.,;:\s@\”]+(\.[^<>()[\]\\.,;:\s@\”]+)*)|(\”.+\”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$"))
+>>>>>>> bc191dad1aa36ac6583833a13bf18b6b90165376
         ? true
         : false;
   }
@@ -1508,7 +1513,9 @@ class System {
             createdAt: data.createdAt ?? '',
             mediaSource: data.mediaSource ?? [],
             description: data.description ?? '',
-            active: data.active ?? true);
+            active: data.active ?? true,
+            isView: data.insight!.isView,
+            viewer: data.viewer ?? []);
         final fetch = notifier.viewFetch;
 
         if (!(data.insight?.isView ?? true)) {
@@ -1526,37 +1533,38 @@ class System {
   }
 
   Future<void> increaseViewCount2(BuildContext context, v2.ContentData data, {bool check = true}) async {
-    DateTime now = DateTime.now();
     try {
       // print("--> services/system.dart increaseViewCount2 post-data;postID;email:" + data.postID.toString() + ";" + data.email.toString());
       // print("--> services/system.dart increaseViewCount2 postID;data.insight-before:" + data.postID.toString() + ";" + jsonEncode(data.insight?.toJson()));
       // print("--> services/system.dart increaseViewCount2 userView: " + data.userView.toString());
+      // print("--> services/system.dart increaseViewCount2 viewer: " + data.viewer.toString());
+      // print("--> services/system.dart increaseViewCount2 isFirstView: " + data.insight!.isView.toString());
 
-      if (!(data.insight?.isView ?? true)) {
-        final notifier = ViewBloc();
-        await notifier.viewPostUserBloc(context,
-            postId: data.postID ?? '',
-            emailOwner: data.email ?? '',
-            check: check,
-            userView: data.userView ?? [],
-            userLike: data.userLike ?? [],
-            postType: data.postType ?? '',
-            saleAmount: data.saleAmount ?? 0,
-            createdAt: data.createdAt ?? '',
-            mediaSource: data.mediaSource ?? [],
-            description: data.description ?? '',
-            active: data.active ?? true);
-        final fetch = notifier.viewFetch;
+      final notifier = ViewBloc();
+      await notifier.viewPostUserBloc(context,
+          postId: data.postID ?? '',
+          emailOwner: data.email ?? '',
+          check: check,
+          userView: data.userView ?? [],
+          userLike: data.userLike ?? [],
+          postType: data.postType ?? '',
+          saleAmount: data.saleAmount ?? 0,
+          createdAt: data.createdAt ?? '',
+          mediaSource: data.mediaSource ?? [],
+          description: data.description ?? '',
+          active: data.active ?? true,
+          isView: data.insight!.isView,
+          viewer: data.viewer ?? []);
+      final fetch = notifier.viewFetch;
 
-        if (fetch.viewState == ViewState.viewUserPostSuccess) {
-          data.insight?.isView = true;
-          if (!System().isMy(data.email)) {
-            var email = SharedPreference().readStorage(SpKeys.email);
-            if (!(data.userView?.contains(email) ?? false)) {
-              data.insight?.views = (data.insight?.views ?? 0) + 1;
-            }
-            print("--> viewcount:postID;data.insight-after:" + data.postID.toString() + ";" + jsonEncode(data.insight?.toJson()));
+      if (fetch.viewState == ViewState.viewUserPostSuccess) {
+        data.insight?.isView = true;
+        if (!System().isMy(data.email)) {
+          var email = SharedPreference().readStorage(SpKeys.email);
+          if (!(data.userView?.contains(email) ?? false)) {
+            data.insight?.views = (data.insight?.views ?? 0) + 1;
           }
+          print("--> services/system.dart viewcount:postID;data.insight-after:" + data.postID.toString() + ";" + jsonEncode(data.insight?.toJson()));
         }
       }
     } catch (e) {
