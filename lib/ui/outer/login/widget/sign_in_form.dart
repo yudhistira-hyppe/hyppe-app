@@ -85,7 +85,9 @@ class _SignInFormState extends State<SignInForm> {
                   ),
                   border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
                   enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
-                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: notifier.emailFocus.hasFocus ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface)),
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide:
+                          BorderSide(color: notifier.emailFocus.hasFocus ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface)),
                   errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.error)),
                 ),
                 readOnly: notifier.isLoading
@@ -144,7 +146,11 @@ class _SignInFormState extends State<SignInForm> {
                   suffixIcon: Transform.scale(
                     scale: SizeWidget().calculateSize(1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
                     child: CustomTextButton(
-                      style: ButtonStyle(alignment: const Alignment(0.75, 0.0), minimumSize: MaterialStateProperty.all(Size.zero), padding: MaterialStateProperty.all(EdgeInsets.zero), overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                      style: ButtonStyle(
+                          alignment: const Alignment(0.75, 0.0),
+                          minimumSize: MaterialStateProperty.all(Size.zero),
+                          padding: MaterialStateProperty.all(EdgeInsets.zero),
+                          overlayColor: MaterialStateProperty.all(Colors.transparent)),
                       child: CustomIconWidget(
                         iconData: notifier.hide ? '${AssetPath.vectorPath}eye-off.svg' : '${AssetPath.vectorPath}eye.svg',
                       ),
@@ -153,7 +159,9 @@ class _SignInFormState extends State<SignInForm> {
                   ),
                   border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
                   enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
-                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: notifier.passwordFocus.hasFocus ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface)),
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide:
+                          BorderSide(color: notifier.passwordFocus.hasFocus ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface)),
                 ),
                 readOnly: notifier.isLoading
                     ? true
@@ -271,7 +279,9 @@ class _SignInFormState extends State<SignInForm> {
                 ? const CustomLoading()
                 : CustomTextWidget(
                     textToDisplay: notifier.language.logIn ?? 'Log In',
-                    textStyle: notifier.buttonDisable() ? Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText) : Theme.of(context).primaryTextTheme.button,
+                    textStyle: notifier.buttonDisable()
+                        ? Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText)
+                        : Theme.of(context).primaryTextTheme.button,
                   ),
             width: SizeConfig.screenWidth,
             height: 49 * SizeConfig.scaleDiagonal,
