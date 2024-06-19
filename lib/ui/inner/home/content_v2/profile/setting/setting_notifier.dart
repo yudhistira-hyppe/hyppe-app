@@ -81,6 +81,15 @@ class SettingNotifier extends ChangeNotifier with LoadingNotifier {
         context.read<WelcomeLoginNotifier>().password = "";
         context.read<WelcomeLoginNotifier>().emailController.text = "";
         context.read<WelcomeLoginNotifier>().passwordController.text = "";
+      } else {
+        var valRememberMe = SharedPreference().readStorage(SpKeys.valRememberMe) ?? ["", ""];
+        var preEmail = valRememberMe[0] ?? "";
+        var prePass = valRememberMe[1] ?? '';
+        context.read<WelcomeLoginNotifier>().email = preEmail;
+        context.read<WelcomeLoginNotifier>().password = prePass;
+        context.read<WelcomeLoginNotifier>().emailController.text = preEmail;
+        context.read<WelcomeLoginNotifier>().passwordController.text = prePass;
+        // context.read<WelcomeLoginNotifier>().buttonDisable();
       }
 
       print('--> login/logout profile/setting/setting_notifier.dart _resetData:rememberMe:' + SharedPreference().readStorage(SpKeys.rememberMe).toString());

@@ -40,15 +40,15 @@ class _SignInFormState extends State<SignInForm> {
     print("--> login/widget/sign_in_form rememberMe:" + rememberMe.toString());
     print("--> login/widget/sign_in_form valRememberMe:" + valRememberMe.toString());
 
-    if (rememberMe) {
-      var preEmail = valRememberMe[0] ?? "";
-      var prePass = valRememberMe[1] ?? '';
-      context.read<WelcomeLoginNotifier>().email = preEmail;
-      context.read<WelcomeLoginNotifier>().password = prePass;
-      context.read<WelcomeLoginNotifier>().emailController.text = preEmail;
-      context.read<WelcomeLoginNotifier>().passwordController.text = prePass;
-      context.read<WelcomeLoginNotifier>().buttonDisable();
-    }
+    // if (rememberMe) {
+    //   var preEmail = valRememberMe[0] ?? "";
+    //   var prePass = valRememberMe[1] ?? '';
+    //   context.read<WelcomeLoginNotifier>().email = preEmail;
+    //   context.read<WelcomeLoginNotifier>().password = prePass;
+    //   context.read<WelcomeLoginNotifier>().emailController.text = preEmail;
+    //   context.read<WelcomeLoginNotifier>().passwordController.text = prePass;
+    //   context.read<WelcomeLoginNotifier>().buttonDisable();
+    // }
 
     return Consumer<WelcomeLoginNotifier>(
       builder: (_, notifier, __) => Column(
