@@ -102,6 +102,7 @@ enum InteractiveEventType {
   adsclick,
   request,
   kyc,
+  topupfield
 }
 
 enum InteractiveEvent { initial, accept, request, done, revoke, none }

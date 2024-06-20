@@ -442,6 +442,8 @@ class System {
         return InteractiveEventType.withdrawalsuccess;
       case "KYC":
         return InteractiveEventType.kyc;
+      case "TRANSACTION FAILED":
+        return InteractiveEventType.topupfield;
       default:
         return InteractiveEventType.none;
     }
