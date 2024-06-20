@@ -1,5 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
@@ -7,6 +8,7 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_form_field.dart';
 import 'package:hyppe/ui/outer/forgot_password/forgot_password/notifier.dart';
 import 'package:hyppe/ui/outer/forgot_password/forgot_password/widget/forgot_password_title.dart';
+import 'package:hyppe/ui/outer/welcome_login/notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
@@ -14,6 +16,7 @@ import 'package:hyppe/ui/constant/widget/keyboard_disposal.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({Key? key}) : super(key: key);
@@ -50,11 +53,24 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             appBar: AppBar(
               leading: CustomIconButtonWidget(
                 color: Theme.of(context).iconTheme.color,
-                onPressed: () => Navigator.pop(context),
+                onPressed: () {
+                  var rememberMe = SharedPreference().readStorage(SpKeys.rememberMe) ?? false;
+                  var valRememberMe = SharedPreference().readStorage(SpKeys.valRememberMe) ?? ["", ""];
+                  if (rememberMe) {
+                    var preEmail = valRememberMe[0] ?? "";
+                    var prePass = valRememberMe[1] ?? '';
+                    context.read<WelcomeLoginNotifier>().email = preEmail;
+                    context.read<WelcomeLoginNotifier>().password = prePass;
+                    context.read<WelcomeLoginNotifier>().emailController.text = preEmail;
+                    context.read<WelcomeLoginNotifier>().passwordController.text = prePass;
+                    // context.read<WelcomeLoginNotifier>().buttonDisable();
+                  }
+                  Navigator.pop(context, true);
+                },
                 iconData: '${AssetPath.vectorPath}back-arrow.svg',
               ),
               title: CustomTextWidget(
-                textToDisplay: notifier.language.forgotPassword  ?? '',
+                textToDisplay: notifier.language.forgotPassword ?? '',
                 textStyle: style.bodyText1?.copyWith(fontWeight: FontWeight.w700),
               ),
             ),
@@ -75,14 +91,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       textEditingController: notifier.emailController,
                       style: Theme.of(context).textTheme.bodyText1,
                       textInputType: TextInputType.emailAddress,
-                      onChanged: (v){
+                      onChanged: (v) {
                         notifier.text = v;
-                        if(System().validateEmail(v)){
+                        if (System().validateEmail(v)) {
                           notifier.invalidEmail = null;
-                        }else{
-                          if(v.isNotEmpty){
+                        } else {
+                          if (v.isNotEmpty) {
                             notifier.invalidEmail = notifier.language.messageInvalidEmail;
-                          }else{
+                          } else {
                             notifier.invalidEmail = null;
                           }
                         }
@@ -90,11 +106,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       inputDecoration: InputDecoration(
                         contentPadding: EdgeInsets.only(left: 16, bottom: (notifier.invalidEmail != null) ? 0 : 16, right: 16),
                         labelText: notifier.language.email ?? 'Email',
-                        labelStyle: Theme.of(context)
-                            .textTheme
-                            .bodyText1
-                            ?.copyWith(color: notifier.focusNode.hasFocus || notifier.emailController.text.isNotEmpty ? Theme.of(context).colorScheme.primary : null),
-                        prefixIconConstraints: BoxConstraints(minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth())),
+                        labelStyle: Theme.of(context).textTheme.bodyText1?.copyWith(
+                            color: notifier.focusNode.hasFocus || notifier.emailController.text.isNotEmpty ? Theme.of(context).colorScheme.primary : null),
+                        prefixIconConstraints:
+                            BoxConstraints(minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth())),
                         prefixIcon: Transform.translate(
                           offset: Offset(SizeWidget().calculateSize(-5.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()), 0.0),
                           child: Transform.scale(
