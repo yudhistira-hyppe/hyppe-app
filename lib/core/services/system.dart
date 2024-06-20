@@ -1535,6 +1535,12 @@ class System {
       // print("--> services/system.dart increaseViewCount2 viewer: " + data.viewer.toString());
       // print("--> services/system.dart increaseViewCount2 isFirstView: " + data.insight!.isView.toString());
 
+      var isview = false;
+      var email = SharedPreference().readStorage(SpKeys.email);
+      if (data.userView?.contains(email) ?? false) {
+        isview = true;
+      }
+
       final notifier = ViewBloc();
       await notifier.viewPostUserBloc(context,
           postId: data.postID ?? '',
@@ -1548,18 +1554,17 @@ class System {
           mediaSource: data.mediaSource ?? [],
           description: data.description ?? '',
           active: data.active ?? true,
-          isView: data.insight!.isView,
+          isView: isview,
           viewer: data.viewer ?? []);
       final fetch = notifier.viewFetch;
 
-      if (fetch.viewState == ViewState.viewUserPostSuccess) {
+      if (fetch.viewState == ViewState.viewUserPostSuccess && !isview) {
         data.insight?.isView = true;
         if (!System().isMy(data.email)) {
-          var email = SharedPreference().readStorage(SpKeys.email);
           if (!(data.userView?.contains(email) ?? false)) {
+            data.userView?.add(email);
             data.insight?.views = (data.insight?.views ?? 0) + 1;
           }
-          print("--> services/system.dart viewcount:postID;data.insight-after:" + data.postID.toString() + ";" + jsonEncode(data.insight?.toJson()));
         }
       }
     } catch (e) {

@@ -1372,9 +1372,11 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                               List<ContentData>? pic2 = context.read<ScrollPicNotifier>().pics;
                                                               if (pic2?.isNotEmpty ?? false) {
                                                                 int idx2 = pic2!.indexWhere((e) => e.postID == value['_id']);
-                                                                pic2[idx2].insight?.isPostLiked = value['isPostLiked'];
-                                                                pic2[idx2].insight?.likes = value['likes'];
-                                                                pic2[idx2].isLiked = value['isLiked'];
+                                                                if (idx2 != -1) {
+                                                                  pic2[idx2].insight?.isPostLiked = value['isPostLiked'];
+                                                                  pic2[idx2].insight?.likes = value['likes'];
+                                                                  pic2[idx2].isLiked = value['isLiked'];
+                                                                }
                                                               }
                                                             });
                                                           }
@@ -1387,7 +1389,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                 padding: EdgeInsets.only(left: 21.0),
                                                 child: GestureDetector(
                                                   onTap: () {
-                                                    Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: picData?.postID ?? '', fromFront: true, data: picData ?? ContentData(), giftActication: picData?.giftActivation));
+                                                    Routing().move(Routes.commentsDetail,
+                                                        argument:
+                                                            CommentsArgument(postID: picData?.postID ?? '', fromFront: true, data: picData ?? ContentData(), giftActication: picData?.giftActivation));
                                                     // ShowBottomSheet.onShowCommentV2(context, postID: picData?.postID);
                                                   },
                                                   child: const CustomIconWidget(
@@ -1524,7 +1528,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                   if (picData?.allowComments ?? false)
                                     GestureDetector(
                                       onTap: () {
-                                        Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: picData?.postID ?? '', fromFront: true, data: picData ?? ContentData(), giftActication: picData?.giftActivation));
+                                        Routing().move(Routes.commentsDetail,
+                                            argument: CommentsArgument(postID: picData?.postID ?? '', fromFront: true, data: picData ?? ContentData(), giftActication: picData?.giftActivation));
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(vertical: 4.0),
