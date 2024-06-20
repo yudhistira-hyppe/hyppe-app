@@ -185,10 +185,11 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                 shape: const CircleBorder(),
                 child: InkWell(
                   splashColor: Colors.black,
-                  onTap: () {
+                  onTap: () async {
                     final userKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
                     if (userKyc == VERIFIED) {
                       notifier.buttonSheetGift = true;
+                      notifier.giftSelect = null;
                       ShowBottomSheet().onShowGiftLive(
                         context,
                         idViewStream: notifier.dataStreaming.sId,

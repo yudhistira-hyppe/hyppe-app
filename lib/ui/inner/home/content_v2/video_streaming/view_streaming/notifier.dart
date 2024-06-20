@@ -879,10 +879,12 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
     }
 
     var index = comment.indexWhere((element) => element.idComment == idComment);
-    comment.removeWhere((element) => element.idComment == idComment);
-    listKey.currentState?.removeItem(index, (BuildContext context, Animation<double> animation) {
-      return Container();
-    }, duration: const Duration(milliseconds: 500));
+    if (index > -1) {
+      comment.removeWhere((element) => element.idComment == idComment);
+      listKey.currentState?.removeItem(index, (BuildContext context, Animation<double> animation) {
+        return Container();
+      }, duration: const Duration(milliseconds: 500));
+    }
 
     notifyListeners();
   }
@@ -897,10 +899,13 @@ class ViewStreamingNotifier with ChangeNotifier, GeneralMixin {
 
   void removeComment(String idComment) async {
     var index = comment.indexWhere((element) => element.idComment == idComment);
-    comment.removeWhere((element) => element.idComment == idComment);
-    listKey.currentState?.removeItem(index, (BuildContext context, Animation<double> animation) {
-      return Container();
-    }, duration: const Duration(milliseconds: 500));
+    print("index $index");
+    if (index > -1) {
+      comment.removeWhere((element) => element.idComment == idComment);
+      listKey.currentState?.removeItem(index, (BuildContext context, Animation<double> animation) {
+        return Container();
+      }, duration: const Duration(milliseconds: 500));
+    }
 
     notifyListeners();
   }

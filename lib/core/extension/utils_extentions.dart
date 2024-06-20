@@ -287,7 +287,7 @@ extension StringDefine on String {
     if (toLowerCase() == 'male' || toLowerCase() == 'laki-laki') {
       return 'MALE';
     } else {
-      return 'Female';
+      return 'FEMALE';
     }
   }
 

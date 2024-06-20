@@ -33,6 +33,7 @@ class _PelanggaranDetailState extends State<PelanggaranDetail> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       var notifier = context.read<AppealStreamNotifier>();
+      notifier.showButton = true;
       if (widget.idBanned != null) {
         notifier.checkBeforeLive(context, mounted, idBanned: widget.idBanned);
       } else {
