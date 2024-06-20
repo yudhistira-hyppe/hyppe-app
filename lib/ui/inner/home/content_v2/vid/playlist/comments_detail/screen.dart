@@ -6,6 +6,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/models/collection/live_stream/gift_live_model.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/widget/comment_tile.dart';
@@ -307,6 +308,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                                           //     .onShowGiftComment(context, argument: widget.argument, comments: comments);
                                           // });
                                           context.handleActionIsGuest(() async {
+                                            notifier.giftSelect = null;
                                             notifier.validateUserGif(context, widget, comments, notifier.language);
                                           });
                                         },

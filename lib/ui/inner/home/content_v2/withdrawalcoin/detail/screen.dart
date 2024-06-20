@@ -70,17 +70,17 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
           );
         }
 
-        switch (notifier.transactionDetail.status ?? '') {
-          case 'FAILED':
+        switch ((notifier.transactionDetail.status ?? '').toLowerCase()) {
+          case 'failed':
             titleColor = kHyppeRed;
             textTitle = lang!.localeDatetime == 'id' ? 'Batal' : 'Cancel';
             break;
-          case 'REJECTED':
+          case 'rejected':
             titleColor = kHyppeRed;
             textTitle = lang!.localeDatetime == 'id' ? 'Gagal' : 'Rejected';
             break;
-          case 'PENDING':
-          case 'IN PROGRESS':
+          case 'pending':
+          case 'in progress':
             titleColor = kHyppeRed;
             textTitle = lang!.localeDatetime == 'id'
                 ? 'Dalam Proses'
@@ -113,7 +113,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                             CustomTextWidget(
                               textToDisplay: lang?.localeDatetime == 'id'
                                   ? 'Penukaran Coins'
-                                  : 'Withrawal',
+                                  : 'Exchanged Coins',
                               textStyle:
                                   const TextStyle(fontWeight: FontWeight.bold),
                             ),
@@ -148,8 +148,8 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                     thickness: .2,
                   ),
                   fifteenPx,
-                  const CustomTextWidget(
-                    textToDisplay: 'Penarikan Saldo Coin',
+                  CustomTextWidget(
+                    textToDisplay: lang?.localeDatetime == 'id' ? 'Menarik Saldo ${System().currencyFormat(amount: notifier.transactionDetail.amount)}' : 'Withdrawal ${System().currencyFormat(amount: notifier.transactionDetail.amount)}',
                     textStyle: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   fifteenPx,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/textfield.dart';
 import 'package:hyppe/ui/inner/home/content_v2/coins/notifier.dart';
@@ -7,7 +8,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class DialogDate extends StatefulWidget {
-  const DialogDate({super.key});
+  final LocalizationModelV2? lang;
+  const DialogDate({super.key, required this.lang});
 
   @override
   State<DialogDate> createState() => _DialogDateState();
@@ -120,11 +122,11 @@ class _DialogDateState extends State<DialogDate> {
                               ),
                               backgroundColor: kHyppePrimary
                             ),
-                            child: const SizedBox(
+                            child: SizedBox(
                               width: double.infinity,
                               height: kToolbarHeight,
                               child: Center(
-                                child: Text('Terapkan',
+                                child: Text(widget.lang?.apply??'Terapkan',
                                     textAlign: TextAlign.center),
                               ),
                             ),

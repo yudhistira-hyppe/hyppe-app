@@ -68,8 +68,8 @@ class HistoryCoinWidget extends StatelessWidget {
                   children: [
                     Text(
                       lang!.localeDatetime == 'id'
-                          ? data.titleId??''
-                          : data.titleEn??'',
+                          ? data.type == 'Penukaran Coin' ? 'Penukaran Coin' : 'Pembelian Coins'
+                          : data.type == 'Penukaran Coin' ? 'Exchanged Coins' : 'Coin Purchase',
                       style: Theme.of(context)
                           .textTheme
                           .titleSmall
