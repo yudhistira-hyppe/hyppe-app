@@ -130,7 +130,7 @@ class _MyCouponsPageState extends State<MyCouponsPage> {
               );
             }
             return RefreshLoadmore(
-                scrollController: scrollController,
+                color: kHyppePrimary,
                 isLastPage: notifier.isLastPage,
                 noMoreWidget: Container(),
                 onRefresh: () async {

@@ -210,8 +210,9 @@ class _TransactionCoinDetailScreenState extends State<TransactionCoinDetailScree
                           detailText(lang?.localeDatetime == 'id' ? 'Harga Hyppe Coin' : 'Price Hyppe Coin', System().currencyFormat(amount: notifier.transactionDetail.amount??0)),
                           sixteenPx,
                           detailText(lang?.localeDatetime == 'id' ? 'Biaya Layanan' : 'Transaction Fee', System().currencyFormat(amount: notifier.transactionDetail.transactionFees??0)),
-                          sixteenPx,
-                          detailText(lang?.localeDatetime == 'id' ? 'Total Diskon' : 'Discount', System().currencyFormat(amount: notifier.transactionDetail.priceDiscont??0)),
+                          
+                          notifier.transactionDetail.priceDiscont! > 0 ? sixteenPx : onePx,
+                          notifier.transactionDetail.priceDiscont! > 0 ? detailText(lang?.localeDatetime == 'id' ? 'Total Diskon' : 'Discount', System().currencyFormat(amount: notifier.transactionDetail.priceDiscont??0)):SizedBox.shrink(),
                           const Divider(
                             thickness: .1,
                           ),

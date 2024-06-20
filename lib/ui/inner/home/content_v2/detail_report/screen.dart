@@ -439,6 +439,9 @@ class _DetailReportState extends State<DetailReport> {
                     ),
                     sixteenPx,
                     detailText(lang?.localeDatetime == 'id' ? 'Harga Konten' : 'Item Price', '${System().numberFormat(amount: notifier.transactionDetail.coin??0)} coins'),
+                    sixteenPx,
+                    if (notifier.transactionDetail.coinDiscount! > 0)
+                      detailText(lang?.localeDatetime == 'id' ? 'Diskon' : 'Disccount', '${(notifier.transactionDetail.coinDiscount??0)} coins'),
                     // sixteenPx,
                     // detailText(lang?.localeDatetime == 'id' ? 'Biaya Layanan' : 'Admin Fee', '${System().numberFormat(amount: notifier.transactionDetail.coinadminfee)} coins'),
                     const Divider(

@@ -69,7 +69,7 @@ class _VerificationPinState extends State<VerificationPin> with AfterFirstLayout
           body: SafeArea(
             child: SingleChildScrollView(
               child: Container(
-                height: MediaQuery.of(context).size.height / 1.13,
+                height: MediaQuery.of(context).size.height / 1.5,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [

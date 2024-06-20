@@ -105,10 +105,9 @@ class _DialogTransState extends State<DialogTrans> {
         controlAffinity: ListTileControlAffinity.trailing,
         title: Text(
           ' ${coinNotif.groupsTrans[i].text}',
-          style: TextStyle(
-              color: coinNotif.groupsTrans[i].selected ? Colors.black : Colors.grey,
-              fontWeight:
-                  coinNotif.groupsTrans[i].selected ? FontWeight.bold : FontWeight.normal),
+          style: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.normal),
         ),
       ));
     }

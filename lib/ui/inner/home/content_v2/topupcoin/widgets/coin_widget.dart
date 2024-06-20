@@ -39,12 +39,54 @@ class CoinWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       CustomTextWidget(
-                        textToDisplay: 'Total Coins',
+                        textToDisplay: 'Hyppe Coins',
                         textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(),
                         textAlign: TextAlign.start,
                       ),
                       fivePx,
-                      const Center(child: Icon(Icons.info_outline, size: 12, color: kHyppeBurem,))
+                      GestureDetector(
+                      onTap: () {
+                        ShowBottomSheet.onShowStatementCoins(
+                          context,
+                          onCancel: () {},
+                          onSave: null,
+                          title: notifier.translate.localeDatetime =='id' ? 'Ketentuan Hyppe Coins' : 'Hyppe Coins Terms and Conditions',
+                          initialChildSize: .25,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                            child: Column(
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text('•'),
+                                    fivePx,
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width * .9,
+                                      child: Text(notifier.translate.localeDatetime =='id' ? 'Hyppe Coins dapat dikonversi menjadi satuan rupiah. 1 hyppe Coins = Rp100':'Hyppe Coins can be converted into IDR. 1 Hyppe Coins = IDR 100'))
+                                  ],
+                                ),
+                                fifteenPx,
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text('•'),
+                                    fivePx,
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width * .9,
+                                      child: Text(notifier.translate.localeDatetime =='id' ? 'Tidak ada pengembalian dana untuk pembelian Hyppe Coins yang telah dilakukan.': 'There are no refunds for Hyppe Coins purchases that have been made.'))
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                      child: const CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}info-icon.svg",
+                        height: 14,
+                      ),
+                    ),
                     ],
                   ),
                   fivePx,

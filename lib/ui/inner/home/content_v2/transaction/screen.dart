@@ -99,7 +99,7 @@ class _TransactionState extends State<Transaction> {
                   onPressed: () {
                     Routing().move(Routes.help);
                   },
-                  icon: const Icon(Icons.info_outline_rounded))
+                  icon: const Icon(Icons.help_outline_outlined))
             ],
           ),
           body: Padding(

@@ -229,7 +229,7 @@ class CoinNotifier with ChangeNotifier {
       String email = SharedPreference().readStorage(SpKeys.email);
       _paramsHistory?.addAll({
         "email": email,
-        "status": ["SUCCESS"],
+        "status": ["SUCCESS", "PENDING", "IN PROGRESS", "FAILED"],
         "page": page,
         "order_by":true
       });

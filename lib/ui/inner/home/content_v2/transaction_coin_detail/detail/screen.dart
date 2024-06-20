@@ -76,6 +76,7 @@ class ViewPaymentMethod extends StatelessWidget {
                         tween: Tween(begin: Duration(minutes: (DateTime.parse(System().dateTimeRemoveT(transactionDetail.expiredtimeva??'')).difference(DateTime.parse(transactionDetail.timenow??'')).inMinutes)), end: Duration.zero),
                         onEnd: () {
                           // notifier.backHome();
+                            
                           // Routing().moveAndRemoveUntil(Routes.lobby, Routes.lobby);
                         },
                         builder: (BuildContext context, Duration value, Widget? child) {
@@ -249,9 +250,9 @@ class ViewPaymentMethod extends StatelessWidget {
         children: <Widget>[
           Container(
             padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-                color: Theme.of(context).appBarTheme.backgroundColor,
-                borderRadius: const BorderRadius.all(Radius.circular(8))),
+            decoration: const BoxDecoration(
+                // color: Theme.of(context).appBarTheme.backgroundColor,
+                borderRadius: BorderRadius.all(Radius.circular(8))),
             child: Html(
                 data: body,
                 style: {

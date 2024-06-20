@@ -49,7 +49,7 @@ class CoinsWidget extends StatelessWidget {
                     onCancel: () {},
                     onSave: null,
                     title: lang?.localeDatetime =='id' ? 'Ketentuan Hyppe Coins' : 'Hyppe Coins Terms and Conditions',
-                    initialChildSize: .3,
+                    initialChildSize: .25,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
                       child: Column(
@@ -64,7 +64,7 @@ class CoinsWidget extends StatelessWidget {
                                 child: Text(lang?.localeDatetime =='id' ? 'Hyppe Coins dapat dikonversi menjadi satuan rupiah. 1 hyppe Coins = Rp100':'Hyppe Coins can be converted into IDR. 1 Hyppe Coins = IDR 100'))
                             ],
                           ),
-                          fivePx,
+                          fifteenPx,
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

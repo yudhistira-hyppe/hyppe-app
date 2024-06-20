@@ -5,8 +5,8 @@ import 'package:hyppe/core/bloc/monetization/coin/state.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/section_widget.dart';
@@ -90,9 +90,9 @@ class _TopUpCoinPageState extends State<TopUpCoinPage> {
               ),
             ),
           bottomNavigationBar: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 18.0),
+            padding: const EdgeInsets.symmetric(horizontal: 22.0, vertical: 18.0),
             child: ElevatedButton(
-              onPressed: notifier.result.where((e) => e.checked==true).isNotEmpty ? (){
+              onPressed: notifier.result.where((e) => e.checked==true).isNotEmpty ? () async {
                 if ((notifier.result.firstWhere((e) => e.checked == true).last_stock??0) < 1){
                   var warning = lang?.localeDatetime == 'id' ? 'Maaf, paket Hyppe Coins yang kamu mau sudah habis. Lihat paket lainnya.' : 'Sorry, the Hyppe Coins package you want is out of stock. See other packages.';
                   FToast().init(context);
@@ -124,7 +124,43 @@ class _TopUpCoinPageState extends State<TopUpCoinPage> {
                       toastDuration: const Duration(seconds: 3),
                     );
                 }else{
-                  Navigator.pushNamed(context, Routes.paymentCoins, arguments: notifier.result.firstWhere((e) => e.checked==true));
+                  await notifier.checkmaxmin(context);
+                  if (notifier.isValidateMaxmin){
+                    if (!mounted) return;
+                    Navigator.pushNamed(context, Routes.paymentCoins, arguments: notifier.result.firstWhere((e) => e.checked==true));
+                  }else{
+                    if (!mounted) return;
+                    FToast().init(context);
+                    if (true) FToast().removeCustomToast();
+                    FToast().showToast(
+                      child: Container(
+                        width: SizeConfig.screenWidth,
+                        decoration: BoxDecoration(color: kHyppeBorderDanger, borderRadius: BorderRadius.circular(8)),
+                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              lang?.localeDatetime == 'id' ? 'Transaksi telah menyentuh batas maksimal' : 'Daily transaction limit reached',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            fivePx,
+                            Text(
+                              lang?.localeDatetime == 'id' ? 'Kamu hanya dapat melakukan transaksi dengan batas maksimal ${System().currencyFormat(amount: notifier.isValueMaxmin)} per harinya.' : 'You can only perform transactions up to ${System().currencyFormat(amount: notifier.isValueMaxmin)} per day. Try again tomorrow!',
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        )
+                      ),
+                      gravity: ToastGravity.BOTTOM,
+                      toastDuration: const Duration(seconds: 3),
+                    );
+                  }
                 }
                 
               }:null,
