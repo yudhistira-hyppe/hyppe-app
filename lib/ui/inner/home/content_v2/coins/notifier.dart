@@ -4,6 +4,7 @@ import 'package:hyppe/core/bloc/transaction/historytransaction/bloc.dart';
 import 'package:hyppe/core/bloc/transaction/historytransaction/state.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/coins/history_transaction.dart';
+import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:intl/intl.dart';
@@ -155,13 +156,13 @@ class CoinNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void showButtomSheetTransaction(BuildContext context) {
+  void showButtomSheetTransaction(BuildContext context, {LocalizationModelV2? lang}) {
     showModalBottomSheet<int>(
         backgroundColor: Colors.transparent,
         context: context,
         isScrollControlled: true,
         builder: (context) {
-          return const DialogTrans();
+          return DialogTrans(lang: lang,);
         }
     ).whenComplete(() {
       if (!groupsTrans.firstWhere((e) => e.index == selectedTransValue).selected){
@@ -170,13 +171,13 @@ class CoinNotifier with ChangeNotifier {
     });
   }
 
-  void showButtomSheetDate(BuildContext context) {
+  void showButtomSheetDate(BuildContext context, {LocalizationModelV2? lang}) {
     showModalBottomSheet<int>(
         backgroundColor: Colors.transparent,
         context: context,
         isScrollControlled: true,
         builder: (context) {
-          return const DialogDate();
+          return DialogDate(lang: lang,);
         }
     ).whenComplete(() {
       if (!groupsDate.firstWhere((e) => e.index == selectedDateValue).selected){

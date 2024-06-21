@@ -105,6 +105,8 @@ class MainNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  void onUpdate() => notifyListeners();
+
   Future initMain(BuildContext context, {bool onUpdateProfile = false, bool isInitSocket = false, bool updateProfilePict = false}) async {
     // Connect to socket
     permsissionNotif();
@@ -311,9 +313,14 @@ class MainNotifier with ChangeNotifier {
   int _pageIndex = 3;
   int get pageIndex => _pageIndex;
   set pageIndex(int val) {
-    if (val != _pageIndex) {
-      _pageIndex = val;
-      notifyListeners();
+    print("===== $pageIndex -- $val harus beda");
+    try {
+      if (val != _pageIndex) {
+        _pageIndex = val;
+        notifyListeners();
+      }
+    } catch (e) {
+      print("error screen profile notifier $e");
     }
   }
 

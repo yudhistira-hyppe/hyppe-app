@@ -49,7 +49,7 @@ class ReviewBuyNotifier extends ChangeNotifier {
   //Discount
   DiscountModel? _discount;
   DiscountModel? get discount => _discount;
-  set discount(DiscountModel? val){
+  set discount(DiscountModel? val) {
     _discount = val;
     notifyListeners();
   }
@@ -82,7 +82,7 @@ class ReviewBuyNotifier extends ChangeNotifier {
       notifyListeners();
     }
   }
-  
+
   BuyDataNew? _buyDataNew = BuyDataNew();
   BuyDataNew? get buyDataNew => _buyDataNew;
   set buyDataNew(BuyDataNew? value) {
@@ -94,20 +94,20 @@ class ReviewBuyNotifier extends ChangeNotifier {
   Future<void> detailBuyData(BuildContext context) async {
     _param = {};
     final notifier = BuyDataNewBloc();
-    if (discount != null){
-        _param.addAll({
-          'postID': _routeArgument?.postID,
-          'price': (_routeArgument?.saleAmount??0),
-          "typeTransaction":'CONTENT',
-          'discount_id': discount?.id??'',
-        });
-      }else{
-        _param.addAll({
-          'postID': _routeArgument?.postID,
-          'price': (_routeArgument?.saleAmount??0),
-          "typeTransaction":'CONTENT',
-        });
-      }
+    if (discount != null) {
+      _param.addAll({
+        'postID': _routeArgument?.postID,
+        'price': (_routeArgument?.saleAmount ?? 0),
+        "typeTransaction": 'CONTENT',
+        'discount_id': discount?.id ?? '',
+      });
+    } else {
+      _param.addAll({
+        'postID': _routeArgument?.postID,
+        'price': (_routeArgument?.saleAmount ?? 0),
+        "typeTransaction": 'CONTENT',
+      });
+    }
 
     await notifier.getBuyDataNew(context, data: _param);
     final fetch = notifier.dataFetch;
@@ -141,80 +141,80 @@ class ReviewBuyNotifier extends ChangeNotifier {
   }
 
   Future<void> _buyContent(BuildContext context, mounted) async {
-    try{
+    try {
       bool connect = await System().checkConnections();
       if (!mounted) return;
       ShowGeneralDialog.loadingDialog(context);
       print('========== ${discount != null}');
-      var postcontent = {
-        'id': _routeArgument?.postID,
-        "qty": 1,
-        "price": buyDataNew?.price,
-        "totalAmount": buyDataNew?.price
-      };
-      if (discount != null){
+      var postcontent = {'id': _routeArgument?.postID, "qty": 1, "price": buyDataNew?.price, "totalAmount": buyDataNew?.price};
+      if (discount != null) {
         _paramTransaction.addAll({
           "pin": pinController.text,
           "postid": [postcontent],
-          "idDiscount":discount?.id??'',
-          "salelike": buyDataNew?.like??false,
-          'saleview': buyDataNew?.view??false,
+          "idDiscount": discount?.id ?? '',
+          "salelike": buyDataNew?.like ?? false,
+          'saleview': buyDataNew?.view ?? false,
           "type": 'CONTENT',
           "paymentmethod": 'COIN',
           "productCode": 'CM',
-          "platform":"APP"
+          "platform": "APP"
         });
-      }else{
+      } else {
         _paramTransaction.addAll({
           "pin": pinController.text,
           "postid": [postcontent],
           // "idDiscount":discount?.id??'',
-          "salelike": buyDataNew?.like??false,
-          'saleview': buyDataNew?.view??false,
+          "salelike": buyDataNew?.like ?? false,
+          'saleview': buyDataNew?.view ?? false,
           "type": 'CONTENT',
           "paymentmethod": 'COIN',
           "productCode": 'CM',
-          "platform":"APP"
+          "platform": "APP"
         });
       }
-      if (connect){
+      if (connect) {
         final blocPayNow = TransactionCoinBloc();
         await blocPayNow.postPayNow(context, data: _paramTransaction);
         if (blocPayNow.dataFetch.dataState == TransactionCoinState.getcBlocSuccess) {
           transactionDetail = TransactionBuyContentModel.fromJson(blocPayNow.dataFetch.data);
           if (!mounted) return;
-          
-          Navigator.push(context, MaterialPageRoute(builder: (context) => SuccessBuyContentCcreen(data: transactionDetail, lang: language,)));
+
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => SuccessBuyContentCcreen(
+                        data: transactionDetail,
+                        lang: language,
+                      )));
           pinController.clear();
           _errorPinWithdrawMsg = '';
         }
-        if (blocPayNow.dataFetch.dataState == TransactionCoinState.getNotInternet){
-          Fluttertoast.showToast(msg: language.noInternetConnection??'');
+        if (blocPayNow.dataFetch.dataState == TransactionCoinState.getNotInternet) {
+          Fluttertoast.showToast(msg: language.noInternetConnection ?? '');
         }
-        if (blocPayNow.dataFetch.dataState == TransactionCoinState.getBlocError){
+        if (blocPayNow.dataFetch.dataState == TransactionCoinState.getBlocError) {
           Routing().moveBack();
           // notifyListeners();
           if (blocPayNow.dataFetch.data != null) {
             if (!mounted) return;
             // print(blocPayNow.dataFetch.data);
-            ShowBottomSheet().onShowColouredSheet(context, blocPayNow.dataFetch.data['message'], color: Theme.of(context).colorScheme.error);
+            ShowBottomSheet().onShowColouredSheet(context, blocPayNow.dataFetch.data['message'], maxLines: 2, color: Theme.of(context).colorScheme.error);
           }
         }
-      }else{
-         ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+      } else {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
           Routing().moveBack();
           buyContent(context, mounted);
         });
       }
-      
+
       print(pinController.text);
-    }catch(_){
+    } catch (_) {
       debugPrint(_.toString());
     }
   }
 
-  void _showSnackBar(Color color, String message, String desc,
-      {Function? function}) {
+  void _showSnackBar(Color color, String message, String desc, {Function? function}) {
     Routing().showSnackBar(
       snackBar: SnackBar(
         margin: EdgeInsets.zero,
@@ -238,14 +238,13 @@ class ReviewBuyNotifier extends ChangeNotifier {
     );
   }
 
-  void showButtomSheetSetPin(BuildContext context,{LocalizationModelV2? lang}) {
+  void showButtomSheetSetPin(BuildContext context, {LocalizationModelV2? lang}) {
     showModalBottomSheet<int>(
         backgroundColor: Colors.transparent,
         context: context,
         isScrollControlled: true,
         builder: (context) {
           return SetPinDialog(lang: lang);
-        }
-    );
+        });
   }
 }

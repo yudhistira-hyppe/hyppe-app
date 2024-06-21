@@ -59,6 +59,7 @@ class PostReactionArgument {
     data['description'] = description;
     data['active'] = active;
     data['createdAt'] = createdAt;
+    data['mediaSource'] = mediaSource;
     return data;
   }
 }

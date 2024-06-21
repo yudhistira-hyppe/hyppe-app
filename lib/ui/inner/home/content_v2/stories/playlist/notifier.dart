@@ -841,17 +841,18 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
       await notifier.addPostReactionBlocV2(
         context,
         argument: PostReactionArgument(
-            eventType: 'REACTION',
-            reactionUri: reaction?.url ?? '',
-            postID: contentData?.postID ?? '',
-            receiverParty: contentData?.email ?? '',
-            userView: contentData?.userView,
-            userLike: contentData?.userLike,
-            saleAmount: contentData?.saleAmount,
-            createdAt: contentData?.createdAt,
-            mediaSource: contentData?.mediaSource,
-            description: contentData?.description,
-            active: contentData?.active),
+          eventType: 'REACTION',
+          reactionUri: reaction?.url ?? '',
+          postID: contentData?.postID ?? '',
+          receiverParty: contentData?.email ?? '',
+          userView: contentData?.userView,
+          userLike: contentData?.userLike,
+          saleAmount: contentData?.saleAmount,
+          createdAt: contentData?.createdAt,
+          mediaSource: contentData?.mediaSource,
+          description: contentData?.description,
+          active: contentData?.active,
+        ),
       );
       loadReaction = false;
     } catch (e) {

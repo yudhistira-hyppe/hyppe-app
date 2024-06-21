@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/coins/notifier.dart';
 import 'package:provider/provider.dart';
 
 class DialogTrans extends StatefulWidget {
-  const DialogTrans({super.key});
+  final LocalizationModelV2? lang;
+  const DialogTrans({super.key, required this.lang});
 
   @override
   State<DialogTrans> createState() => _DialogTransState();
@@ -70,11 +72,11 @@ class _DialogTransState extends State<DialogTrans> {
                     ),
                     backgroundColor: kHyppePrimary
                   ),
-                  child: const SizedBox(
+                  child: SizedBox(
                     width: double.infinity,
                     height: kToolbarHeight,
                     child: Center(
-                      child: Text('Terapkan',
+                      child: Text(widget.lang?.apply??'Terapkan',
                           textAlign: TextAlign.center),
                     ),
                   ),

@@ -43,11 +43,13 @@ class _MessageScreenState extends State<MessageScreen> with RouteAware {
 
   @override
   void initState() {
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'MessageScreen');
-    // notifier.initialData(context);
-    _notifier.getDiscussion(context, reload: true);
-    _scrollController.addListener(() => _notifier.scrollListener(context, _scrollController));
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      FirebaseCrashlytics.instance.setCustomKey('layout', 'MessageScreen');
+      // notifier.initialData(context);
+      _notifier.getDiscussion(context, reload: true);
+      _scrollController.addListener(() => _notifier.scrollListener(context, _scrollController));
+    });
   }
 
   @override

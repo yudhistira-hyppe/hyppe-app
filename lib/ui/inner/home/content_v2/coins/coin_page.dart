@@ -50,6 +50,7 @@ class _CoinPageState extends State<CoinPage> {
       notifier.getDateFilter(context);
       notifier.getTypeFilter(context);
       notifier.initialCoin();
+      notifier.resetSelected(context);
       notifier.initHistory(context, mounted);
       notifier.tempSelectedDateStart = DateTime.now().toString();
       notifier.tempSelectedDateEnd = DateTime.now().toString();
@@ -160,12 +161,12 @@ class _CoinPageState extends State<CoinPage> {
                       ),
                       SectionDropdownWidget(
                         title: cointNotif.selectedTransLabel,
-                        onTap: () => cointNotif.showButtomSheetTransaction(context),
+                        onTap: () => cointNotif.showButtomSheetTransaction(context, lang: lang),
                         isActive: cointNotif.groupsTrans.firstWhere((e) => e.selected == true).index == 1 ? false : true,
                       ),
                       SectionDropdownWidget(
                         title: cointNotif.selectedDateLabel,
-                        onTap: () => cointNotif.showButtomSheetDate(context),
+                        onTap: () => cointNotif.showButtomSheetDate(context, lang: lang),
                         isActive: cointNotif.groupsDate.firstWhere((e) => e.selected == true).index == 1 ? false : true,
                       ),
                     ],

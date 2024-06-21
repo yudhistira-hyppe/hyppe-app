@@ -29,10 +29,11 @@ class _SignInFormState extends State<SignInForm> {
 
   @override
   void initState() {
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'SignInForm');
-    // var notif = Provider.of<WelcomeLoginNotifier>(context, listen: false);
-
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FirebaseCrashlytics.instance.setCustomKey('layout', 'SignInForm');
+      // var notif = Provider.of<WelcomeLoginNotifier>(context, listen: false);
+    });
   }
 
   @override
@@ -85,9 +86,7 @@ class _SignInFormState extends State<SignInForm> {
                   ),
                   border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
                   enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide:
-                          BorderSide(color: notifier.emailFocus.hasFocus ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface)),
+                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: notifier.emailFocus.hasFocus ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface)),
                   errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.error)),
                 ),
                 readOnly: notifier.isLoading
@@ -159,9 +158,7 @@ class _SignInFormState extends State<SignInForm> {
                   ),
                   border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
                   enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide:
-                          BorderSide(color: notifier.passwordFocus.hasFocus ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface)),
+                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: notifier.passwordFocus.hasFocus ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface)),
                 ),
                 readOnly: notifier.isLoading
                     ? true
@@ -279,9 +276,7 @@ class _SignInFormState extends State<SignInForm> {
                 ? const CustomLoading()
                 : CustomTextWidget(
                     textToDisplay: notifier.language.logIn ?? 'Log In',
-                    textStyle: notifier.buttonDisable()
-                        ? Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText)
-                        : Theme.of(context).primaryTextTheme.button,
+                    textStyle: notifier.buttonDisable() ? Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText) : Theme.of(context).primaryTextTheme.button,
                   ),
             width: SizeConfig.screenWidth,
             height: 49 * SizeConfig.scaleDiagonal,

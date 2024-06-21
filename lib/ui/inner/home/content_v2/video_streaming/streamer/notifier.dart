@@ -78,7 +78,7 @@ class StreamerNotifier with ChangeNotifier, GeneralMixin {
   int totPause = 0;
   int pageNumberUserShare = 0;
   int limitNumberUserShare = 15;
-  int settingStreamTime1 = 600; //waktu untuk streaming dalam detik (1jam = 3600 s)
+  int settingStreamTime1 = 3600; //waktu untuk streaming dalam detik (1jam = 3600 s)
   int settingStreamTime2 = 300; // 5 menit (300 s)
 
   Duration timeCountdownReported = const Duration(seconds: 30);

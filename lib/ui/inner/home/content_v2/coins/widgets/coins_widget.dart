@@ -123,7 +123,7 @@ class CoinsWidget extends StatelessWidget {
                     child: Row(
                       children: [
                         CustomTextWidget(
-                          textToDisplay: 'Top up Coins',
+                          textToDisplay: lang?.localeDatetime =='id'?'Top up Coins':"Top up",
                           textStyle: Theme.of(context)
                               .textTheme
                               .titleSmall
@@ -162,11 +162,11 @@ class CoinsWidget extends StatelessWidget {
                     width: MediaQuery.of(context).size.width * .42,
                     height: kToolbarHeight * .5,
                     padding: const EdgeInsets.only(right: 12.0),
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Lihat Transaksi', style: TextStyle(color: kHyppeTextPrimary),),
-                        Icon(Icons.arrow_forward_ios, size: 18, color: kHyppeTextPrimary,)
+                        Text(lang?.localeDatetime =='id'?'Lihat Transaksi':'History', style: TextStyle(color: kHyppeTextPrimary),),
+                        const Icon(Icons.arrow_forward_ios, size: 18, color: kHyppeTextPrimary,)
                       ],
                     )
                   ),
@@ -189,11 +189,11 @@ class CoinsWidget extends StatelessWidget {
                     width: MediaQuery.of(context).size.width * .42,
                     height: kToolbarHeight * .5,
                     padding: const EdgeInsets.only(left: 12.0),
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Tukar Coins', style: TextStyle(color: kHyppeTextPrimary),),
-                        Icon(Icons.arrow_forward_ios, size: 18, color: kHyppeTextPrimary,)
+                        Text(lang?.localeDatetime =='id'?'Tukar Coins':'Exchange Coins', style: TextStyle(color: kHyppeTextPrimary),),
+                        const Icon(Icons.arrow_forward_ios, size: 18, color: kHyppeTextPrimary,)
                       ],
                     )
                   ),

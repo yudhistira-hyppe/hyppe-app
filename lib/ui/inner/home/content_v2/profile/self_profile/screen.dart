@@ -54,20 +54,23 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
 
   @override
   void initState() {
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'SelfProfileScreen');
-    final notifier = context.read<SelfProfileNotifier>();
-    notifier.setPageIndex(0);
-    _scrollController.addListener(() => notifier.onScrollListener(context, scrollController: _scrollController));
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FirebaseCrashlytics.instance.setCustomKey('layout', 'SelfProfileScreen');
+      final notifier = context.read<SelfProfileNotifier>();
+      notifier.setPageIndex(0);
+      _scrollController.addListener(() => notifier.onScrollListener(context, scrollController: _scrollController));
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
+    });
+
     // ShowGeneralDialog.adsRewardPop(context);
 
     // _globalKey.currentState?.innerController.addListener(() {
     //   setState(() {});
     // });
-    cekImei();
+    // cekImei();
 
     super.initState();
   }
@@ -173,9 +176,9 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    final isGuest = SharedPreference().readStorage(SpKeys.isGuest);
-    return Consumer<SelfProfileNotifier>(
-      builder: (_, notifier, __) => WillPopScope(
+
+    return Consumer2<SelfProfileNotifier, MainNotifier>(
+      builder: (_, notifier, mainNotifier, __) => WillPopScope(
         onWillPop: () async {
           if (widget.arguments?.isTrue == null) {
             'pageIndex now: 0'.logger();
@@ -214,7 +217,14 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
               splashRadius: 1,
               onPressed: () {
                 if (widget.arguments?.isTrue == null) {
-                  context.read<MainNotifier>().pageIndex = 0;
+                  try {
+                    setState(() {
+                      mainNotifier.pageIndex = 0;
+                      mainNotifier.onUpdate();
+                    });
+                  } catch (e) {
+                    print("error screen profile $e");
+                  }
                 } else {
                   // Routing().moveBack();
                   Navigator.pop(context, true);

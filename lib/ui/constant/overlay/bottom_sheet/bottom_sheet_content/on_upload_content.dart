@@ -295,31 +295,32 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                       : Container(),
                   // Text('hahaha ${isCreator}'),
 
-                  menu(
-                      isCreators: SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED,
-                      title: "HyppeLive",
-                      subTitle: notifier.language.itstimetoLIVEandinteract ?? '',
-                      icon: "${AssetPath.vectorPath}hyppeLive.svg",
-                      function: () async {
-                        if (newUser == "FALSE") {
-                          // context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
-                          // final tempIsHome = isHomeScreen;
-                          // if (tempIsHome) {
-                          //   isHomeScreen = false;
-                          // }
-                          if (SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED) {
-                            Routing().moveAndPop(Routes.streamer);
-                            // if (Platform.isAndroid) {
-                            //   Routing().moveAndPop(Routes.streamer);
-                            // } else if (Platform.isIOS) {
-                            //   Routing().moveAndPop(Routes.streameriOS);
+                  if (widget.isLive)
+                    menu(
+                        isCreators: SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED,
+                        title: "HyppeLive",
+                        subTitle: notifier.language.itstimetoLIVEandinteract ?? '',
+                        icon: "${AssetPath.vectorPath}hyppeLive.svg",
+                        function: () async {
+                          if (newUser == "FALSE") {
+                            // context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
+                            // final tempIsHome = isHomeScreen;
+                            // if (tempIsHome) {
+                            //   isHomeScreen = false;
+                            // }
+                            if (SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED) {
+                              Routing().moveAndPop(Routes.streamer);
+                              // if (Platform.isAndroid) {
+                              //   Routing().moveAndPop(Routes.streamer);
+                              // } else if (Platform.isIOS) {
+                              //   Routing().moveAndPop(Routes.streameriOS);
+                              // }
+                            }
+                            // if (tempIsHome) {
+                            //   isHomeScreen = true;
                             // }
                           }
-                          // if (tempIsHome) {
-                          //   isHomeScreen = true;
-                          // }
-                        }
-                      }),
+                        }),
 
                   thirtyTwoPx,
                 ],

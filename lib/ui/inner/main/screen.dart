@@ -9,7 +9,11 @@ import 'package:hyppe/core/services/audio_service.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/screen.dart';
+import 'package:hyppe/ui/inner/home/screen.dart';
 import 'package:hyppe/ui/inner/home/widget/profile.dart';
+import 'package:hyppe/ui/inner/notification/screen.dart';
+import 'package:hyppe/ui/inner/search_v2/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
@@ -37,6 +41,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
   late MainNotifier _mainNotifier;
+  late PreUploadContentNotifier _preUploadNotifier;
   GlobalKey keyPostButton = GlobalKey();
   bool isPagePict = true;
 
@@ -47,17 +52,21 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
 
   @override
   void initState() {
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'MainScreen');
-    _mainNotifier = Provider.of<MainNotifier>(context, listen: false);
-    _mainNotifier.globalKey = GlobalKey<NestedScrollViewState>(debugLabel: System().generateNonce());
-    _mainNotifier.pageInit(widget.args?.canShowAds ?? true);
-    print("=========init main ${_mainNotifier.globalKey}");
-
-    ScrollController(initialScrollOffset: 50.0);
-
-    SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
     super.initState();
-    _mainNotifier.setPageIndex(widget.args?.page ?? 0);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FirebaseCrashlytics.instance.setCustomKey('layout', 'MainScreen');
+      _mainNotifier = Provider.of<MainNotifier>(context, listen: false);
+      _preUploadNotifier = Provider.of<PreUploadContentNotifier>(context, listen: false);
+      _mainNotifier.globalKey = GlobalKey<NestedScrollViewState>(debugLabel: System().generateNonce());
+      _mainNotifier.pageInit(widget.args?.canShowAds ?? true);
+      print("=========init main ${_mainNotifier.globalKey}");
+
+      ScrollController(initialScrollOffset: 50.0);
+
+      SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+
+      _mainNotifier.setPageIndex(widget.args?.page ?? 0);
+    });
   }
 
   @override
@@ -66,7 +75,8 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
     final _themes = Theme.of(context);
     TranslateNotifierV2 tn = context.read<TranslateNotifierV2>();
     return Consumer<MainNotifier>(
-      builder: (consumerContext, notifier, __) {
+      builder: (_, notifier, __) {
+        print("perubahan index ${notifier.pageIndex}");
         final canShowAds = widget.args?.canShowAds ?? true;
         if (notifier.isloading) {
           Future.delayed(const Duration(milliseconds: 500), () {
@@ -99,7 +109,7 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
                         child: SizedBox(
                           child: FloatingActionButton(
                             onPressed: () {
-                              tapMenu(2, notifier, consumerContext);
+                              tapMenu(2, notifier, context);
                             },
                             // shape: RoundedRectangleBorder(),
                             // elevation: 4.0,
@@ -150,7 +160,7 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
                               GestureDetector(
                                   onTap: () {
                                     ShowCaseWidget.of(context).next();
-                                    notifier.onShowPostContent(consumerContext);
+                                    notifier.onShowPostContent(context);
                                   },
                                   child: Text(
                                     tn.translate.next ?? '',
@@ -178,7 +188,7 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
                                     // if (notifier.pageIndex == 0) {
 
                                     // } else {
-                                    tapMenu(0, notifier, consumerContext);
+                                    tapMenu(0, notifier, context);
                                     print("==== has ${notifier.scrollController.hasClients}");
                                     if (notifier.scrollController.hasClients) {
                                       if (globalTultipShow) {
@@ -215,14 +225,14 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
                                   ),
                                   onPressed: () {
                                     print("ke menu search");
-                                    tapMenu(1, notifier, consumerContext);
+                                    tapMenu(1, notifier, context);
                                   },
                                 ),
                               ),
                               Expanded(
                                 child: GestureDetector(
                                   onTap: () {
-                                    // tapMenu(2, notifier, consumerContext);
+                                    // tapMenu(2, notifier, context);
                                   },
                                   child: Container(
                                     margin: const EdgeInsets.only(bottom: 20),
@@ -244,7 +254,7 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
                                     const NotificationCircle()
                                   ]),
                                   onPressed: () {
-                                    tapMenu(3, notifier, consumerContext);
+                                    tapMenu(3, notifier, context);
                                     context.read<MainNotifier>().receivedReaction = false;
                                   },
                                 ),
@@ -254,7 +264,7 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
                                   icon: const SizedBox(width: 32, child: Profile()),
                                   onPressed: () {
                                     print(notifier.pageIndex);
-                                    tapMenu(4, notifier, consumerContext);
+                                    tapMenu(4, notifier, context);
                                   },
                                 ),
                               ),
@@ -274,7 +284,7 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
                       //         notifier.pageIndex = index;
                       //       });
                       //     } else {
-                      //       await notifier.onShowPostContent(consumerContext);
+                      //       await notifier.onShowPostContent(context);
                       //     }
                       //   },
                       //   currentIndex: notifier.pageIndex,
@@ -334,7 +344,7 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
     );
   }
 
-  void tapMenu(int index, MainNotifier notifier, consumerContext) async {
+  void tapMenu(int index, MainNotifier notifier, context) async {
     if (notifier.pageIndex == 0) {
       isPagePict = true;
     } else {
@@ -345,7 +355,7 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
     if (newUser == "TRUE" || globalTultipShow) {
       return;
     }
-    if ((Routing.navigatorKey.currentContext ?? context).read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
+    // if ((Routing.navigatorKey.currentContext ?? context).read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
     final bool? isGuest = SharedPreference().readStorage(SpKeys.isGuest);
     if (index != 2) {
       if (index == 3) {
@@ -393,9 +403,9 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
       } else {
         isactivealiplayer = true;
         print('Disini objectnya');
-        PreUploadContentNotifier pn = (Routing.navigatorKey.currentContext ?? context).read<PreUploadContentNotifier>();
-        pn.hastagChallange = '';
-        notifier.onShowPostContent(consumerContext).then((value) {
+
+        _preUploadNotifier.hastagChallange = '';
+        notifier.onShowPostContent(context).then((value) {
           print(value);
         });
       }
