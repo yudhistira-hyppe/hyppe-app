@@ -33,12 +33,12 @@ class WelcomeLoginScreen extends StatefulWidget {
 
 class _WelcomeLoginScreenState extends State<WelcomeLoginScreen> {
   TextEditingController endpoint = TextEditingController();
-  late CarouselController controller;
+  late CarouselControllerImpl controller;
 
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'WelcomeLoginScreen');
-    controller = CarouselController();
+    controller = CarouselControllerImpl();
     super.initState();
   }
 
@@ -83,7 +83,8 @@ class _WelcomeLoginScreenState extends State<WelcomeLoginScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     CustomIconWidget(
-                                      iconData: "${AssetPath.vectorPath}${data.image}",
+                                      iconData:
+                                          "${AssetPath.vectorPath}${data.image}",
                                       defaultColor: false,
                                     ),
                                     thirtySixPx,
@@ -100,7 +101,9 @@ class _WelcomeLoginScreenState extends State<WelcomeLoginScreen> {
                                               textToDisplay: data.title,
                                               textAlign: TextAlign.center,
                                               maxLines: 2,
-                                              textStyle: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+                                              textStyle: const TextStyle(
+                                                  fontSize: 24,
+                                                  fontWeight: FontWeight.w700),
                                             ),
                                           ),
                                           Positioned(
@@ -113,12 +116,22 @@ class _WelcomeLoginScreenState extends State<WelcomeLoginScreen> {
                                                   text: TextSpan(children: [
                                                     TextSpan(
                                                       text: data.desc,
-                                                      style: const TextStyle(fontSize: 14, fontFamily: 'Lato', color: Colors.black),
+                                                      style: const TextStyle(
+                                                          fontSize: 14,
+                                                          fontFamily: 'Lato',
+                                                          color: Colors.black),
                                                     ),
                                                     if (index == 3)
                                                       TextSpan(
-                                                        text: '\n#ShareWhatInspireYou',
-                                                        style: const TextStyle(fontSize: 14, fontFamily: 'Lato', color: Colors.black, fontWeight: FontWeight.bold),
+                                                        text:
+                                                            '\n#ShareWhatInspireYou',
+                                                        style: const TextStyle(
+                                                            fontSize: 14,
+                                                            fontFamily: 'Lato',
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
                                                       ),
                                                   ])))
                                         ],
@@ -137,11 +150,14 @@ class _WelcomeLoginScreenState extends State<WelcomeLoginScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              PositionWelcome(isActive: notifier.currIndex == 0),
+                              PositionWelcome(
+                                  isActive: notifier.currIndex == 0),
                               fourPx,
-                              PositionWelcome(isActive: notifier.currIndex == 1),
+                              PositionWelcome(
+                                  isActive: notifier.currIndex == 1),
                               fourPx,
-                              PositionWelcome(isActive: notifier.currIndex == 2),
+                              PositionWelcome(
+                                  isActive: notifier.currIndex == 2),
                               fourPx,
                               PositionWelcome(isActive: notifier.currIndex == 3)
                             ],
@@ -158,12 +174,20 @@ class _WelcomeLoginScreenState extends State<WelcomeLoginScreen> {
                     child: Container(
                       width: double.infinity,
                       height: 44,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: context.getColorScheme().primary.withOpacity(0.9)),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: context
+                              .getColorScheme()
+                              .primary
+                              .withOpacity(0.9)),
                       alignment: Alignment.center,
                       child: CustomTextWidget(
                         textToDisplay: notifier.language.login ?? '',
                         textAlign: TextAlign.center,
-                        textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Colors.white),
+                        textStyle: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white),
                       ),
                     ),
                   ),
@@ -177,14 +201,23 @@ class _WelcomeLoginScreenState extends State<WelcomeLoginScreen> {
                     child: Container(
                       width: double.infinity,
                       height: 44,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.transparent, border: Border.all(color: context.getColorScheme().primary, width: 1)),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: Colors.transparent,
+                          border: Border.all(
+                              color: context.getColorScheme().primary,
+                              width: 1)),
                       alignment: Alignment.center,
                       child: notifier.goToGuest
                           ? const CustomLoading()
                           : CustomTextWidget(
-                              textToDisplay: notifier.language.exploreAsGuest ?? '',
+                              textToDisplay:
+                                  notifier.language.exploreAsGuest ?? '',
                               textAlign: TextAlign.center,
-                              textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: context.getColorScheme().primary),
+                              textStyle: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                  color: context.getColorScheme().primary),
                             ),
                     ),
                   ),
@@ -246,9 +279,12 @@ class _WelcomeLoginScreenState extends State<WelcomeLoginScreen> {
             style: Theme.of(context).textTheme.bodyText1,
             textInputType: TextInputType.emailAddress,
             inputDecoration: InputDecoration(
-              contentPadding: const EdgeInsets.only(left: 16, bottom: 16, right: 16),
+              contentPadding:
+                  const EdgeInsets.only(left: 16, bottom: 16, right: 16),
               labelText: "End point test ",
-              border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
+              border: UnderlineInputBorder(
+                  borderSide:
+                      BorderSide(color: Theme.of(context).colorScheme.surface)),
             ),
           ),
           twelvePx,
@@ -256,7 +292,8 @@ class _WelcomeLoginScreenState extends State<WelcomeLoginScreen> {
               width: SizeConfig.screenWidth!,
               height: 50,
               function: () {
-                SharedPreference().writeStorage(SpKeys.endPointTest, endpoint.text);
+                SharedPreference()
+                    .writeStorage(SpKeys.endPointTest, endpoint.text);
                 print("${SharedPreference().readStorage(SpKeys.endPointTest)}");
               },
               buttonStyle: ButtonStyle(

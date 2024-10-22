@@ -19,7 +19,7 @@ class BannerPop extends StatefulWidget {
 }
 
 class _BannerPopState extends State<BannerPop> {
-  final CarouselController _controller = CarouselController();
+  final CarouselControllerImpl _controller = CarouselControllerImpl();
   int _current = 0;
 
   @override
@@ -40,7 +40,8 @@ class _BannerPopState extends State<BannerPop> {
                 ),
                 height: size.width + 20,
                 width: size.width - 20,
-                child: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+                child: LayoutBuilder(builder:
+                    (BuildContext context, BoxConstraints constraints) {
                   // return Container(
                   //   width: size.width,
                   //   margin: EdgeInsets.all(12),
@@ -56,7 +57,8 @@ class _BannerPopState extends State<BannerPop> {
                     padding: const EdgeInsets.only(bottom: 12),
                     width: size.width,
                     height: constraints.maxHeight,
-                    margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 12),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
                       child: CarouselSlider(
@@ -76,28 +78,38 @@ class _BannerPopState extends State<BannerPop> {
                             }),
                         items: notifier.bannerData
                             .map((item) => Container(
-                                  margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                                  margin: const EdgeInsets.symmetric(
+                                      vertical: 20, horizontal: 20),
                                   child: GestureDetector(
                                     onTap: () {
                                       globalChallengePopUp = false;
                                       Routing().moveBack();
-                                      Routing().move(Routes.chalengeDetail, argument: GeneralArgument()..id = item.sId);
+                                      Routing().move(Routes.chalengeDetail,
+                                          argument: GeneralArgument()
+                                            ..id = item.sId);
                                     },
                                     child: Container(
                                         alignment: Alignment.center,
                                         child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                           child: Image.network(
                                             item.bannerLandingpage ?? '',
                                             height: constraints.maxHeight,
                                             fit: BoxFit.cover,
-                                            loadingBuilder: (context, child, loadingProgress) {
-                                              if (loadingProgress == null) return child;
+                                            loadingBuilder: (context, child,
+                                                loadingProgress) {
+                                              if (loadingProgress == null)
+                                                return child;
                                               return Center(
                                                 child: Container(
                                                   height: size.width - 20,
                                                   width: SizeConfig.screenWidth,
-                                                  decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(10)),
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.black,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10)),
                                                   child: const UnconstrainedBox(
                                                     child: SizedBox(
                                                       height: 50,
@@ -160,7 +172,11 @@ class _BannerPopState extends State<BannerPop> {
                     width: _current == entry.key ? 12 : 6.0,
                     height: 6.0,
                     margin: const EdgeInsets.only(top: 30, left: 4, right: 4),
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: (_current == entry.key ? Color(0xffAB23B0) : Color(0xffcecece))),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: (_current == entry.key
+                            ? Color(0xffAB23B0)
+                            : Color(0xffcecece))),
                   ),
                 );
               }).toList(),

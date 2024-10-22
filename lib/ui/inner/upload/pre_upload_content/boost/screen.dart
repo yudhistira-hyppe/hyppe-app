@@ -38,7 +38,10 @@ class BoostUploadScreen extends StatelessWidget {
             ),
             title: CustomTextWidget(
               textToDisplay: notifier.language.postBoost ?? '',
-              textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
+              textStyle: Theme.of(context)
+                  .textTheme
+                  .headline6
+                  ?.copyWith(fontWeight: FontWeight.bold),
             ),
           ),
           body: notifier.isLoading
@@ -54,7 +57,11 @@ class BoostUploadScreen extends StatelessWidget {
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+                            boxShadow: const [
+                              BoxShadow(
+                                  color: Color.fromRGBO(0, 0, 0, 0.06),
+                                  blurRadius: 2)
+                            ],
                             color: Theme.of(context).colorScheme.background,
                           ),
                           child: Row(
@@ -71,8 +78,16 @@ class BoostUploadScreen extends StatelessWidget {
                                       child: CustomBaseCacheImage(
                                         widthPlaceHolder: 80,
                                         heightPlaceHolder: 80,
-                                        imageUrl: (notifier.editData?.isApsara ?? false) ? (notifier.editData?.mediaThumbEndPoint ?? '') : '${notifier.editData?.fullThumbPath ?? ''}',
-                                        imageBuilder: (context, imageProvider) => Container(
+                                        imageUrl: (notifier
+                                                    .editData?.isApsara ??
+                                                false)
+                                            ? (notifier.editData
+                                                    ?.mediaThumbEndPoint ??
+                                                '')
+                                            : '${notifier.editData?.fullThumbPath ?? ''}',
+                                        imageBuilder:
+                                            (context, imageProvider) =>
+                                                Container(
                                           // margin: margin,
                                           // // const EdgeInsets.symmetric(horizontal: 4.5),
                                           // width: _scaling,
@@ -82,7 +97,8 @@ class BoostUploadScreen extends StatelessWidget {
                                               image: imageProvider,
                                               fit: BoxFit.cover,
                                             ),
-                                            borderRadius: BorderRadius.circular(8.0),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
                                           ),
                                         ),
                                         errorWidget: (context, url, error) {
@@ -95,10 +111,12 @@ class BoostUploadScreen extends StatelessWidget {
                                             // child: _buildBody(context),
                                             decoration: BoxDecoration(
                                               image: const DecorationImage(
-                                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                                image: AssetImage(
+                                                    '${AssetPath.pngPath}content-error.png'),
                                                 fit: BoxFit.cover,
                                               ),
-                                              borderRadius: BorderRadius.circular(8.0),
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
                                             ),
                                           );
                                         },
@@ -110,10 +128,12 @@ class BoostUploadScreen extends StatelessWidget {
                                           // child: _buildBody(context),
                                           decoration: BoxDecoration(
                                             image: const DecorationImage(
-                                              image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                              image: AssetImage(
+                                                  '${AssetPath.pngPath}content-error.png'),
                                               fit: BoxFit.cover,
                                             ),
-                                            borderRadius: BorderRadius.circular(8.0),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
                                           ),
                                         ),
                                       ),
@@ -124,7 +144,8 @@ class BoostUploadScreen extends StatelessWidget {
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(20),
                                       ),
-                                      child: const ValidateType(editContent: false),
+                                      child: const ValidateType(
+                                          editContent: false),
                                     ),
                               sixPx,
                               Column(
@@ -132,7 +153,8 @@ class BoostUploadScreen extends StatelessWidget {
                                 children: [
                                   Container(
                                     decoration: BoxDecoration(
-                                      color: Theme.of(context).colorScheme.surface,
+                                      color:
+                                          Theme.of(context).colorScheme.surface,
                                       borderRadius: BorderRadius.circular(5),
                                     ),
                                     padding: const EdgeInsets.symmetric(
@@ -140,10 +162,15 @@ class BoostUploadScreen extends StatelessWidget {
                                       vertical: 6,
                                     ),
                                     child: CustomTextWidget(
-                                      textToDisplay: System().convertTypeContent(
-                                        System().validatePostTypeV2(notifier.featureType),
+                                      textToDisplay:
+                                          System().convertTypeContent(
+                                        System().validatePostTypeV2(
+                                            notifier.featureType),
                                       ),
-                                      textStyle: Theme.of(context).textTheme.caption?.copyWith(
+                                      textStyle: Theme.of(context)
+                                          .textTheme
+                                          .caption
+                                          ?.copyWith(
                                             fontWeight: FontWeight.w600,
                                           ),
                                     ),
@@ -152,7 +179,10 @@ class BoostUploadScreen extends StatelessWidget {
                                     width: SizeConfig.screenWidth! * 0.55,
                                     child: Text(
                                       notifier.captionController.text,
-                                      style: Theme.of(context).textTheme.caption?.copyWith(
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .caption
+                                          ?.copyWith(
                                             fontWeight: FontWeight.w600,
                                           ),
                                       maxLines: 4,
@@ -164,39 +194,54 @@ class BoostUploadScreen extends StatelessWidget {
                           ),
                         ),
                         fifteenPx,
-                        Divider(thickness: 1.0, color: Theme.of(context).dividerTheme.color?.withOpacity(0.1)),
+                        Divider(
+                            thickness: 1.0,
+                            color: Theme.of(context)
+                                .dividerTheme
+                                .color
+                                ?.withOpacity(0.1)),
                         fifteenPx,
                         Text(notifier.language.startDate ?? 'Start Date'),
                         tenPx,
                         GestureDetector(
                           onTap: () async {
                             final date = DateTime.now();
-                            final startDate = DateTime(date.year, date.month, date.day + 1);
+                            final startDate =
+                                DateTime(date.year, date.month, date.day + 1);
                             final DateTime? pickedDate = await showDatePicker(
                                 context: context,
-                                initialDate: notifier.tmpstartDate == DateTime(1000) ? startDate : notifier.tmpstartDate,
+                                initialDate:
+                                    notifier.tmpstartDate == DateTime(1000)
+                                        ? startDate
+                                        : notifier.tmpstartDate,
                                 firstDate: startDate,
                                 lastDate: DateTime(3000),
                                 builder: (context, child) {
                                   return Theme(
                                     data: Theme.of(context).copyWith(
                                       colorScheme: const ColorScheme.light(
-                                        primary: kHyppePrimary, // header background color
-                                        onPrimary: Colors.white, // header text color
-                                        onSurface: kHyppeTextLightPrimary, // body text color
+                                        primary:
+                                            kHyppePrimary, // header background color
+                                        onPrimary:
+                                            Colors.white, // header text color
+                                        onSurface:
+                                            kHyppeTextLightPrimary, // body text color
                                       ),
                                       textButtonTheme: TextButtonThemeData(
                                         style: TextButton.styleFrom(
-                                          primary: kHyppePrimary, // button text color
+                                          foregroundColor:
+                                              kHyppePrimary, // button text color
                                         ),
                                       ),
                                     ),
                                     child: child ?? Container(),
                                   );
                                 });
-                            if (pickedDate != null && pickedDate != notifier.tmpstartDate) {
+                            if (pickedDate != null &&
+                                pickedDate != notifier.tmpstartDate) {
                               notifier.tmpstartDate = pickedDate;
-                              notifier.tmpfinsihDate = DateTime(pickedDate.year, pickedDate.month, pickedDate.day + 30);
+                              notifier.tmpfinsihDate = DateTime(pickedDate.year,
+                                  pickedDate.month, pickedDate.day + 30);
                             }
                           },
                           child: Row(
@@ -206,17 +251,26 @@ class BoostUploadScreen extends StatelessWidget {
                                 notifier.tmpstartDate == DateTime(1000)
                                     ? '00/00/0000'
                                     : "${System().dateFormatter(notifier.tmpstartDate.toString(), 5)} - ${System().dateFormatter(notifier.tmpfinsihDate.toString(), 5)}",
-                                style: Theme.of(context).primaryTextTheme.bodyLarge,
+                                style: Theme.of(context)
+                                    .primaryTextTheme
+                                    .bodyLarge,
                               ),
                               const Padding(
                                 padding: EdgeInsets.only(right: 12.0),
-                                child: CustomIconWidget(iconData: "${AssetPath.vectorPath}calendar.svg"),
+                                child: CustomIconWidget(
+                                    iconData:
+                                        "${AssetPath.vectorPath}calendar.svg"),
                               )
                             ],
                           ),
                         ),
                         tenPx,
-                        Divider(thickness: 1.0, color: Theme.of(context).dividerTheme.color?.withOpacity(0.1)),
+                        Divider(
+                            thickness: 1.0,
+                            color: Theme.of(context)
+                                .dividerTheme
+                                .color
+                                ?.withOpacity(0.1)),
                         RadioListTile<String>(
                           contentPadding: EdgeInsets.zero,
                           dense: true,
@@ -231,13 +285,22 @@ class BoostUploadScreen extends StatelessWidget {
                           },
                           title: CustomTextWidget(
                             textAlign: TextAlign.left,
-                            textToDisplay: notifier.language.autoSelect ?? 'automatic',
-                            textStyle: Theme.of(context).primaryTextTheme.bodyText2?.copyWith(fontWeight: FontWeight.w700),
+                            textToDisplay:
+                                notifier.language.autoSelect ?? 'automatic',
+                            textStyle: Theme.of(context)
+                                .primaryTextTheme
+                                .bodyText2
+                                ?.copyWith(fontWeight: FontWeight.w700),
                           ),
                           activeColor: Theme.of(context).colorScheme.primary,
                           controlAffinity: ListTileControlAffinity.trailing,
                         ),
-                        Divider(thickness: 1.0, color: Theme.of(context).dividerTheme.color?.withOpacity(0.1)),
+                        Divider(
+                            thickness: 1.0,
+                            color: Theme.of(context)
+                                .dividerTheme
+                                .color
+                                ?.withOpacity(0.1)),
                         RadioListTile<String>(
                           contentPadding: EdgeInsets.zero,
                           dense: true,
@@ -248,19 +311,29 @@ class BoostUploadScreen extends StatelessWidget {
                           },
                           title: CustomTextWidget(
                             textAlign: TextAlign.left,
-                            textToDisplay: notifier.language.selectManual ?? 'manual',
-                            textStyle: Theme.of(context).primaryTextTheme.bodyText2?.copyWith(fontWeight: FontWeight.w700),
+                            textToDisplay:
+                                notifier.language.selectManual ?? 'manual',
+                            textStyle: Theme.of(context)
+                                .primaryTextTheme
+                                .bodyText2
+                                ?.copyWith(fontWeight: FontWeight.w700),
                           ),
                           activeColor: Theme.of(context).colorScheme.primary,
                           controlAffinity: ListTileControlAffinity.trailing,
                         ),
-                        Divider(thickness: 1.0, color: Theme.of(context).dividerTheme.color?.withOpacity(0.1)),
+                        Divider(
+                            thickness: 1.0,
+                            color: Theme.of(context)
+                                .dividerTheme
+                                .color
+                                ?.withOpacity(0.1)),
                         sixteenPx,
                         notifier.tmpBoostTime == ''
                             ? Container()
                             : Padding(
                                 padding: const EdgeInsets.only(bottom: 10.0),
-                                child: Text(notifier.language.boostTime ?? 'Boost Time'),
+                                child: Text(notifier.language.boostTime ??
+                                    'Boost Time'),
                               ),
                         GestureDetector(
                           onTap: notifier.tmpBoost == 'manual'
@@ -275,9 +348,17 @@ class BoostUploadScreen extends StatelessWidget {
                               children: [
                                 CustomTextWidget(
                                   textAlign: TextAlign.left,
-                                  textToDisplay: notifier.tmpBoostTime == '' ? notifier.language.boostTime ?? 'Boost Time' : notifier.tmpBoostTime,
-                                  textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(
-                                        color: notifier.tmpBoost == 'manual' ? kHyppeLightSecondary : kHyppeDisabled,
+                                  textToDisplay: notifier.tmpBoostTime == ''
+                                      ? notifier.language.boostTime ??
+                                          'Boost Time'
+                                      : notifier.tmpBoostTime,
+                                  textStyle: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      ?.copyWith(
+                                        color: notifier.tmpBoost == 'manual'
+                                            ? kHyppeLightSecondary
+                                            : kHyppeDisabled,
                                         fontWeight: FontWeight.w400,
                                       ),
                                 ),
@@ -294,13 +375,19 @@ class BoostUploadScreen extends StatelessWidget {
                           ),
                         ),
                         sixteenPx,
-                        Divider(thickness: 1.0, color: Theme.of(context).dividerTheme.color?.withOpacity(0.1)),
+                        Divider(
+                            thickness: 1.0,
+                            color: Theme.of(context)
+                                .dividerTheme
+                                .color
+                                ?.withOpacity(0.1)),
                         tenPx,
                         notifier.tmpBoostInterval == ''
                             ? Container()
                             : Padding(
                                 padding: const EdgeInsets.only(bottom: 10.0),
-                                child: Text(notifier.language.interval ?? 'Interval'),
+                                child: Text(
+                                    notifier.language.interval ?? 'Interval'),
                               ),
                         GestureDetector(
                           onTap: notifier.tmpBoost == 'manual'
@@ -315,9 +402,16 @@ class BoostUploadScreen extends StatelessWidget {
                               children: [
                                 CustomTextWidget(
                                   textAlign: TextAlign.left,
-                                  textToDisplay: notifier.tmpBoostInterval == '' ? notifier.language.interval ?? 'Interval' : notifier.tmpBoostInterval,
-                                  textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(
-                                        color: notifier.tmpBoost == 'manual' ? kHyppeLightSecondary : kHyppeDisabled,
+                                  textToDisplay: notifier.tmpBoostInterval == ''
+                                      ? notifier.language.interval ?? 'Interval'
+                                      : notifier.tmpBoostInterval,
+                                  textStyle: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      ?.copyWith(
+                                        color: notifier.tmpBoost == 'manual'
+                                            ? kHyppeLightSecondary
+                                            : kHyppeDisabled,
                                         fontWeight: FontWeight.w400,
                                       ),
                                 ),
@@ -334,7 +428,12 @@ class BoostUploadScreen extends StatelessWidget {
                           ),
                         ),
                         sixteenPx,
-                        Divider(thickness: 1.0, color: Theme.of(context).dividerTheme.color?.withOpacity(0.1)),
+                        Divider(
+                            thickness: 1.0,
+                            color: Theme.of(context)
+                                .dividerTheme
+                                .color
+                                ?.withOpacity(0.1)),
                         twentyFourPx,
                         Container(
                           padding: const EdgeInsets.all(11),
@@ -347,8 +446,12 @@ class BoostUploadScreen extends StatelessWidget {
                             color: Theme.of(context).colorScheme.surface,
                           ),
                           child: Text(
-                            notifier.language.contentWillbeBoostedfor30days ?? '',
-                            style: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeGrey),
+                            notifier.language.contentWillbeBoostedfor30days ??
+                                '',
+                            style: Theme.of(context)
+                                .textTheme
+                                .caption
+                                ?.copyWith(color: kHyppeGrey),
                           ),
                         ),
                       ],
@@ -365,12 +468,18 @@ class BoostUploadScreen extends StatelessWidget {
                           notifier.boostButton(context);
                         }
                       : null,
-              style: ButtonStyle(backgroundColor: notifier.enableBoostConfirm() ? MaterialStateProperty.all(kHyppePrimary) : MaterialStateProperty.all(kHyppeDisabled)),
+              style: ButtonStyle(
+                  backgroundColor: notifier.enableBoostConfirm()
+                      ? MaterialStateProperty.all(kHyppePrimary)
+                      : MaterialStateProperty.all(kHyppeDisabled)),
               child: notifier.isLoading
                   ? const SizedBox(height: 20, child: CustomLoading())
                   : CustomTextWidget(
                       textToDisplay: notifier.language.confirm ?? 'confirm',
-                      textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                      textStyle: Theme.of(context)
+                          .textTheme
+                          .button
+                          ?.copyWith(color: kHyppeLightButtonText),
                     ),
             ),
           ),

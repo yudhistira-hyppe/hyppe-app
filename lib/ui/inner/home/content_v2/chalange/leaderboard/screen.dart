@@ -30,9 +30,10 @@ class ChalangeScreen extends StatefulWidget {
   State<ChalangeScreen> createState() => _ChalangeScreenState();
 }
 
-class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterFirstLayoutMixin, SingleTickerProviderStateMixin {
+class _ChalangeScreenState extends State<ChalangeScreen>
+    with RouteAware, AfterFirstLayoutMixin, SingleTickerProviderStateMixin {
   final GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
-  final CarouselController _controller = CarouselController();
+  final CarouselControllerImpl _controller = CarouselControllerImpl();
 
   late TabController _tabController;
   double offset = 0.0;
@@ -61,8 +62,12 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
       _preprareTabItems();
 
       globalKey.currentState?.innerController.addListener(() {
-        if ((globalKey.currentState?.innerController.position.pixels ?? 0) >= (globalKey.currentState?.innerController.position.maxScrollExtent ?? 0) &&
-            !(globalKey.currentState?.innerController.position.outOfRange ?? true)) {}
+        if ((globalKey.currentState?.innerController.position.pixels ?? 0) >=
+                (globalKey.currentState?.innerController.position
+                        .maxScrollExtent ??
+                    0) &&
+            !(globalKey.currentState?.innerController.position.outOfRange ??
+                true)) {}
       });
 
       var cn = context.read<ChallangeNotifier>();
@@ -98,9 +103,12 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
   void afterFirstLayout(BuildContext context) {}
 
   void toHideTab(ChallangeNotifier cn) {
-    print("!!!@@@@ hide ${((cn.leaderBoardData?.onGoing == true && cn.leaderBoardData?.session == 1) || cn.leaderBoardData?.session == 1)}");
+    print(
+        "!!!@@@@ hide ${((cn.leaderBoardData?.onGoing == true && cn.leaderBoardData?.session == 1) || cn.leaderBoardData?.session == 1)}");
     print("${cn.leaderBoardData?.session}");
-    if ((cn.leaderBoardData?.onGoing == true && cn.leaderBoardData?.session == 1) || cn.leaderBoardData?.session == 1) {
+    if ((cn.leaderBoardData?.onGoing == true &&
+            cn.leaderBoardData?.session == 1) ||
+        cn.leaderBoardData?.session == 1) {
       hideTab = true;
     } else {
       hideTab = false;
@@ -116,7 +124,8 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
 
   @override
   void didChangeDependencies() {
-    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    CustomRouteObserver.routeObserver
+        .subscribe(this, ModalRoute.of(context) as PageRoute);
     super.didChangeDependencies();
   }
 
@@ -169,7 +178,9 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
               actions: [
                 IconButton(
                   onPressed: () {
-                    Routing().move(Routes.chalengeAchievement, argument: GeneralArgument(id: cn.leaderBoardData?.challengeId));
+                    Routing().move(Routes.chalengeAchievement,
+                        argument: GeneralArgument(
+                            id: cn.leaderBoardData?.challengeId));
                   },
                   icon: const CustomIconWidget(
                     iconData: "${AssetPath.vectorPath}achievement.svg",
@@ -200,7 +211,8 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                       //     },
                       //     child: Text("wkwkwkwkw")),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 24),
                         child: Text(lang?.mainChallenge ?? '',
                             style: const TextStyle(
                               fontSize: 14,
@@ -213,11 +225,13 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                         ),
                         child: NotificationListener<UserScrollNotification>(
                           onNotification: (notification) {
-                            final ScrollDirection direction = notification.direction;
+                            final ScrollDirection direction =
+                                notification.direction;
                             setState(() {
                               isDidpop = false;
                             });
-                            print("-=-=-=-=-=-=-=-=- scrolll direction $direction");
+                            print(
+                                "-=-=-=-=-=-=-=-=- scrolll direction $direction");
                             return true;
                           },
                           child: CarouselSlider(
@@ -234,13 +248,23 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                                     _currentSlidder = index;
                                     _tabController.index = 0;
 
-                                    Future.delayed(const Duration(milliseconds: 500), () {
-                                      chllangeid = cn.bannerLeaderboardData[index].sId ?? '';
-                                      if (lastchallangeid == chllangeid && !isDidpop) {
-                                        cn.getLeaderBoard(context, cn.bannerLeaderboardData[index].sId ?? '');
+                                    Future.delayed(
+                                        const Duration(milliseconds: 500), () {
+                                      chllangeid =
+                                          cn.bannerLeaderboardData[index].sId ??
+                                              '';
+                                      if (lastchallangeid == chllangeid &&
+                                          !isDidpop) {
+                                        cn.getLeaderBoard(
+                                            context,
+                                            cn.bannerLeaderboardData[index]
+                                                    .sId ??
+                                                '');
                                       }
                                     });
-                                    lastchallangeid = cn.bannerLeaderboardData[index].sId ?? '';
+                                    lastchallangeid =
+                                        cn.bannerLeaderboardData[index].sId ??
+                                            '';
                                   });
                                 }),
                             items: cn.bannerLeaderboardData
@@ -255,13 +279,16 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                                         ),
                                       ]),
                                       child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10), //
+                                        borderRadius:
+                                            BorderRadius.circular(10), //
                                         child: Image.network(
                                           item.bannerLandingpage ?? '',
                                           width: SizeConfig.screenWidth,
                                           fit: BoxFit.cover,
-                                          loadingBuilder: (context, child, loadingProgress) {
-                                            if (loadingProgress == null) return child;
+                                          loadingBuilder: (context, child,
+                                              loadingProgress) {
+                                            if (loadingProgress == null)
+                                              return child;
                                             return Center(
                                               child: Container(
                                                 height: SizeConfig.screenHeight,
@@ -305,13 +332,22 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                                     ),
                                     color: kHyppeLightButtonText,
                                   ),
-                                  labelPadding: const EdgeInsets.symmetric(vertical: 0),
+                                  labelPadding:
+                                      const EdgeInsets.symmetric(vertical: 0),
                                   labelColor: kHyppeTextLightPrimary,
-                                  unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
-                                  labelStyle: TextStyle(fontFamily: "Lato", fontWeight: FontWeight.w700, fontSize: 14 * SizeConfig.scaleDiagonal),
+                                  unselectedLabelColor: Theme.of(context)
+                                      .tabBarTheme
+                                      .unselectedLabelColor,
+                                  labelStyle: TextStyle(
+                                      fontFamily: "Lato",
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 14 * SizeConfig.scaleDiagonal),
                                   // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
                                   isScrollable: false,
-                                  unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                                  unselectedLabelStyle: TextStyle(
+                                      fontFamily: "Roboto",
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14 * SizeConfig.scaleDiagonal),
                                   controller: _tabController,
 
                                   tabs: [
@@ -321,7 +357,8 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                                         padding: const EdgeInsets.all(9),
                                         child: Text(
                                           nameTab[index],
-                                          style: const TextStyle(fontFamily: 'Lato', fontSize: 14),
+                                          style: const TextStyle(
+                                              fontFamily: 'Lato', fontSize: 14),
                                         ),
                                       ),
                                     ),
@@ -343,7 +380,8 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                                   color: kHyppeLightSurface,
                                 ),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 24),
                                   child: Text(
                                     lang?.joinOtherInterestingChallenges ?? '',
                                     style: const TextStyle(
@@ -360,15 +398,19 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                                     shrinkWrap: false,
                                     itemBuilder: (context, index) {
                                       var dateText = "";
-                                      if (cn.listChallangeData[index].onGoing == true) {
-                                        dateText = "${lang?.endsIn} ${cn.listChallangeData[index].totalDays} ${lang?.hariLagi}";
+                                      if (cn.listChallangeData[index].onGoing ==
+                                          true) {
+                                        dateText =
+                                            "${lang?.endsIn} ${cn.listChallangeData[index].totalDays} ${lang?.hariLagi}";
                                       } else {
-                                        dateText = "${lang?.startIn} ${cn.listChallangeData[index].totalDays} ${lang?.hariLagi}";
+                                        dateText =
+                                            "${lang?.startIn} ${cn.listChallangeData[index].totalDays} ${lang?.hariLagi}";
                                       }
                                       return CardChalange(
                                         data: cn.listChallangeData[index],
                                         dateText: dateText,
-                                        last: index == cn.listChallangeData.length - 1,
+                                        last: index ==
+                                            cn.listChallangeData.length - 1,
                                       );
                                     },
                                   ),

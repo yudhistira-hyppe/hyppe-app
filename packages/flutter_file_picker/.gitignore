@@ -6,9 +6,6 @@
 .packages
 .pub/
 .dart_tool/
-pubspec.lock
-
-Podfile.lock
 Pods/
 .symlinks/
 **/Flutter/App.framework/

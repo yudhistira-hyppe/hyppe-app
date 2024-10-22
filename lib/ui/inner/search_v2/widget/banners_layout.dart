@@ -21,12 +21,12 @@ class BannersLayout extends StatefulWidget {
 class _BannersLayoutState extends State<BannersLayout>
     with AfterFirstLayoutMixin {
   int currIndex = 0;
-  late CarouselController controller;
+  late CarouselControllerImpl controller;
   // late Timer _timer;
 
   @override
   void initState() {
-    controller = CarouselController();
+    controller = CarouselControllerImpl();
     super.initState();
     // _timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
     //   final values = (Routing.navigatorKey.currentContext ?? context)

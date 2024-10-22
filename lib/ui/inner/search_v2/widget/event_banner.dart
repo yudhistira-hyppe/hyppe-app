@@ -13,7 +13,7 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class EventBannerWidget extends StatefulWidget {
-  final CarouselController? controller;
+  final CarouselControllerImpl? controller;
   final Function(int)? callback;
 
   const EventBannerWidget({super.key, this.controller, this.callback});
@@ -50,7 +50,8 @@ class _EventBannerWidgetState extends State<EventBannerWidget> {
               children: [
                 Text(
                   tn.translate.comeOnJoinTheInterestingCompetition ?? '',
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                  style: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.w700),
                 ),
                 GestureDetector(
                   onTap: () {
@@ -61,7 +62,10 @@ class _EventBannerWidgetState extends State<EventBannerWidget> {
                     color: Colors.transparent,
                     child: CustomTextWidget(
                       textToDisplay: tn.translate.otherCompetitions ?? '',
-                      textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: kHyppePrimary),
+                      textStyle: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: kHyppePrimary),
                     ),
                   ),
                 ),
@@ -95,7 +99,8 @@ class _EventBannerWidgetState extends State<EventBannerWidget> {
                   : notifier.bannerSearchData
                       .map((item) => GestureDetector(
                             // onTap: () => Routing().move(Routes.chalenge),
-                            onTap: () => Routing().move(Routes.chalengeDetail, argument: GeneralArgument(id: item.sId)),
+                            onTap: () => Routing().move(Routes.chalengeDetail,
+                                argument: GeneralArgument(id: item.sId)),
                             child: Center(
                                 child: ClipRRect(
                               borderRadius: BorderRadius.circular(8),
@@ -103,7 +108,8 @@ class _EventBannerWidgetState extends State<EventBannerWidget> {
                                 item.bannerLandingpage ?? '',
                                 width: SizeConfig.screenWidth,
                                 fit: BoxFit.cover,
-                                loadingBuilder: (context, child, loadingProgress) {
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
                                   if (loadingProgress == null) return child;
                                   return Center(
                                     child: Container(
@@ -136,7 +142,11 @@ class _EventBannerWidgetState extends State<EventBannerWidget> {
                     width: _current == entry.key ? 12 : 6.0,
                     height: 6.0,
                     margin: const EdgeInsets.only(top: 12, left: 4, right: 4),
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: (_current == entry.key ? kHyppePrimary : const Color(0xffcecece))),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: (_current == entry.key
+                            ? kHyppePrimary
+                            : const Color(0xffcecece))),
                   ),
                 );
               }).toList(),

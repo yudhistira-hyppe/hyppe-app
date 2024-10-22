@@ -36,9 +36,10 @@ class SearchScreen extends StatefulWidget {
   _SearchScreenState createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTickerProviderStateMixin, AfterFirstLayoutMixin {
+class _SearchScreenState extends State<SearchScreen>
+    with RouteAware, SingleTickerProviderStateMixin, AfterFirstLayoutMixin {
   // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final CarouselController _controllerSlider = CarouselController();
+  final CarouselControllerImpl _controllerSlider = CarouselControllerImpl();
 
   late TabController _tabController;
   int _currentIndex = 0;
@@ -46,7 +47,8 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
 
   @override
   void didChangeDependencies() {
-    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    CustomRouteObserver.routeObserver
+        .subscribe(this, ModalRoute.of(context) as PageRoute);
     super.didChangeDependencies();
   }
 
@@ -75,7 +77,8 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
     );
 
     if (notifier.searchContentFirstPage?.video == null) {
-      Future.delayed(Duration.zero, () => notifier.onInitialSearchNew(context, FeatureType.vid));
+      Future.delayed(Duration.zero,
+          () => notifier.onInitialSearchNew(context, FeatureType.vid));
     }
     context.read<ReportNotifier>().setPosition(contentPosition.searchFirst);
     super.initState();
@@ -103,8 +106,11 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
   @override
   void didPopNext() {
     Future.delayed(const Duration(milliseconds: 500), () {
-      (Routing.navigatorKey.currentContext ?? context).read<ReportNotifier>().inPosition = contentPosition.searchFirst;
-      final notifier = Routing.navigatorKey.currentContext!.read<SearchNotifier>();
+      (Routing.navigatorKey.currentContext ?? context)
+          .read<ReportNotifier>()
+          .inPosition = contentPosition.searchFirst;
+      final notifier =
+          Routing.navigatorKey.currentContext!.read<SearchNotifier>();
       if (mounted) {
         debugPrint("curentslider -- ${_currentIndexSlider.toString()}");
         _controllerSlider.jumpToPage(_currentIndexSlider);
@@ -175,7 +181,8 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
               if (notifier.loadPlaylist)
                 Positioned.fill(
                     child: Container(
-                  decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
+                  decoration:
+                      BoxDecoration(color: Colors.black.withOpacity(0.5)),
                   alignment: Alignment.center,
                   child: const CustomLoading(),
                 ))
@@ -201,14 +208,17 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
       case SearchLayout.mainHashtagDetail:
         if (notifier.selectedHashtag != null) {
           return DetailHashtagScreen(
-            argument: HashtagArgument(isTitle: true, hashtag: notifier.selectedHashtag!),
+            argument: HashtagArgument(
+                isTitle: true, hashtag: notifier.selectedHashtag!),
           );
         } else {
           return FirstLayout(notifier: notifier);
         }
       case SearchLayout.hashtagDetail:
         if (notifier.selectedHashtag != null) {
-          return DetailHashtagScreen(argument: HashtagArgument(isTitle: false, hashtag: notifier.selectedHashtag!));
+          return DetailHashtagScreen(
+              argument: HashtagArgument(
+                  isTitle: false, hashtag: notifier.selectedHashtag!));
         } else {
           return FirstLayout(notifier: notifier);
         }
@@ -224,9 +234,11 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
 
 class FirstLayout extends StatefulWidget {
   final SearchNotifier notifier;
-  final CarouselController? controllerSlider;
+  final CarouselControllerImpl? controllerSlider;
   final Function(int)? callback;
-  const FirstLayout({Key? key, required this.notifier, this.controllerSlider, this.callback}) : super(key: key);
+  const FirstLayout(
+      {Key? key, required this.notifier, this.controllerSlider, this.callback})
+      : super(key: key);
 
   @override
   State<FirstLayout> createState() => _FirstLayoutState();
@@ -278,12 +290,14 @@ class _FirstLayoutState extends State<FirstLayout> {
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: CustomSearchBar(
                               hintText: notifier.language.whatAreYouFindOut,
-                              contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 16 * SizeConfig.scaleDiagonal),
                               focusNode: notifier.focusNode1,
                               controller: notifier.searchController1,
                               withShadow: true,
                               onTap: () {
-                                if (notifier.layout == SearchLayout.searchMore) {
+                                if (notifier.layout ==
+                                    SearchLayout.searchMore) {
                                   notifier.isFromComplete = true;
                                 }
                                 notifier.layout = SearchLayout.search;
@@ -291,7 +305,9 @@ class _FirstLayoutState extends State<FirstLayout> {
                             ),
                           ),
                         ),
-                        EventBannerWidget(controller: widget.controllerSlider, callback: widget.callback),
+                        EventBannerWidget(
+                            controller: widget.controllerSlider,
+                            callback: widget.callback),
                         const HashtagScreen(),
                         InterestScreen(
                           onClick: (value) {
