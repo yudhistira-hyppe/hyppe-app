@@ -13,14 +13,17 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # Firebase dependencies
   firebase_core: ^2.16.0
-  firebase_dynamic_links: ^5.0.15
-  firebase_messaging: ^14.7.1
-  google_sign_in: ^6.1.1
-  firebase_auth: ^4.8.0
-  firebase_auth_platform_interface: ^7.3.0  # Compatible with firebase_auth 4.8.0
-  firebase_crashlytics: ^3.3.3
-  firebase_analytics: ^10.8.0
+  firebase_auth: ^4.10.0
+  firebase_crashlytics: ^3.3.6
+  firebase_messaging: ^14.6.8
+  firebase_analytics: ^10.5.0
+  firebase_dynamic_links: ^5.3.6
+
+  # Other dependencies
+  google_sign_in: ^6.1.6
+  google_mlkit_text_recognition: ^0.11.0
 
   cached_network_image: ^3.2.3 # Untuk keperluan cache image
   # camera: ^0.9.4+21 # Accessing camera feature
@@ -144,8 +147,7 @@ dependencies:
   flutter_countdown_timer: ^4.1.0
   #flutter_masked_text: ^0.8.0 #currency format for input text
 
-  # google_ml_kit: ^0.12.0 # Text recognition
-  google_mlkit_text_recognition: ^0.5.0
+  
   
   flutter_sharing_intent: ^1.1.0
   receive_sharing_intent: ^1.4.5
