@@ -12,11 +12,13 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
   final TransactionHistoryModel? data;
   final LocalizationModelV2? language;
 
-  const MiddleBuySellDetailWidget({Key? key, this.data, this.language}) : super(key: key);
+  const MiddleBuySellDetailWidget({Key? key, this.data, this.language})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'MiddleBuySellDetailWidget');
+    FirebaseCrashlytics.instance
+        .setCustomKey('layout', 'MiddleBuySellDetailWidget');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -26,8 +28,10 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
           child: CustomTextWidget(
-            textToDisplay: data?.type == TransactionType.reward ? 'Ads Detail' : language?.contentDetail ?? '',
-            textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(
+            textToDisplay: data?.type == TransactionType.reward
+                ? 'Ads Detail'
+                : language?.contentDetail ?? '',
+            textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: Theme.of(context).colorScheme.onBackground,
                   fontWeight: FontWeight.bold,
                 ),
@@ -53,7 +57,8 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
                     height: 90,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
-                      image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                      image: DecorationImage(
+                          image: imageProvider, fit: BoxFit.cover),
                     ),
                   );
                 },
@@ -64,7 +69,8 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                       image: const DecorationImage(
                         fit: BoxFit.contain,
-                        image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                        image:
+                            AssetImage('${AssetPath.pngPath}content-error.png'),
                       ),
                     ),
                   );
@@ -75,7 +81,8 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                     image: const DecorationImage(
                       fit: BoxFit.contain,
-                      image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                      image:
+                          AssetImage('${AssetPath.pngPath}content-error.png'),
                     ),
                   ),
                 ),
@@ -88,15 +95,25 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomTextWidget(
-                    textToDisplay: data?.type == TransactionType.reward ? data?.description ?? '' : data?.descriptionContent ?? '',
-                    textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                    textToDisplay: data?.type == TransactionType.reward
+                        ? data?.description ?? ''
+                        : data?.descriptionContent ?? '',
+                    textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onBackground),
                     maxLines: 3,
                     textAlign: TextAlign.start,
                   ),
                   data?.type == TransactionType.reward
                       ? CustomTextWidget(
-                          textToDisplay: "${data?.duration ?? data?.skipTime }s",
-                          textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.onBackground, fontSize: 10),
+                          textToDisplay: "${data?.duration ?? data?.skipTime}s",
+                          textStyle: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground,
+                                  fontSize: 10),
                           maxLines: 3,
                           textAlign: TextAlign.start,
                         )
@@ -105,22 +122,30 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
                   CustomTextWidget(
                     textToDisplay:
                         '${(data?.like ?? false) ? data?.totallike ?? '' : ''}${(data?.like ?? false) ? ' ${language?.like}' : ''} ${(data?.like ?? false) && (data?.view ?? false) ? ' | ' : ''}${(data?.view ?? false) ? data?.totalview : ''}${(data?.view ?? false) ? ' ${language?.views}' : ''}',
-                    textStyle: Theme.of(context).textTheme.caption ?? const TextStyle(),
+                    textStyle: Theme.of(context).textTheme.bodySmall ??
+                        const TextStyle(),
                   ),
                   twelvePx,
                   Row(
                     children: [
                       data?.like ?? false
                           ? Container(
-                              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 4),
                               decoration: BoxDecoration(
                                 color: Theme.of(context).colorScheme.surface,
                                 borderRadius: BorderRadius.circular(5),
-                                boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Color.fromRGBO(0, 0, 0, 0.06),
+                                      blurRadius: 2)
+                                ],
                               ),
                               child: CustomTextWidget(
                                 textToDisplay: '${language?.like}',
-                                textStyle: Theme.of(context).textTheme.caption ?? const TextStyle(),
+                                textStyle:
+                                    Theme.of(context).textTheme.bodySmall ??
+                                        const TextStyle(),
                                 textAlign: TextAlign.start,
                               ),
                             )
@@ -128,15 +153,21 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
                       (data?.like ?? false) ? twelvePx : Container(),
                       (data?.view ?? false)
                           ? Container(
-                              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 4),
                               decoration: BoxDecoration(
                                 color: Theme.of(context).colorScheme.surface,
                                 borderRadius: BorderRadius.circular(5),
-                                boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Color.fromRGBO(0, 0, 0, 0.06),
+                                      blurRadius: 2)
+                                ],
                               ),
                               child: CustomTextWidget(
                                 textToDisplay: '${language?.views}',
-                                textStyle: Theme.of(context).textTheme.caption,
+                                textStyle:
+                                    Theme.of(context).textTheme.bodySmall,
                                 textAlign: TextAlign.start,
                               ),
                             )

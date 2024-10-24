@@ -45,7 +45,7 @@ class AdvanceTextWidget extends StatelessWidget {
       final mentionTextSpan = TextSpan(
         text: mentionText,
         style: textStyle ??
-            theme.textTheme.bodyText1?.copyWith(
+            theme.textTheme.bodyLarge?.copyWith(
               color: clickColor ?? theme.colorScheme.primary,
             ),
         recognizer: TapGestureRecognizer()
@@ -63,7 +63,7 @@ class AdvanceTextWidget extends StatelessWidget {
       // add part text to text spans
       textSpans.add(TextSpan(
         text: partText,
-        style: textStyle ?? theme.textTheme.bodyText1,
+        style: textStyle ?? theme.textTheme.bodyLarge,
       ));
     }
 

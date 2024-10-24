@@ -34,35 +34,47 @@ class UserInterestNotifier extends ChangeNotifier with LoadingNotifier {
     notifyListeners();
   }
 
-  Color interestNextButtonColor(BuildContext context, List<String> userInterested) {
-    if (!listEquals(_interestData, userInterested) && _interestData.isNotEmpty && !isLoading) {
+  Color interestNextButtonColor(
+      BuildContext context, List<String> userInterested) {
+    if (!listEquals(_interestData, userInterested) &&
+        _interestData.isNotEmpty &&
+        !isLoading) {
       return Theme.of(context).colorScheme.primary;
     } else {
       return Theme.of(context).colorScheme.surface;
     }
   }
 
-  TextStyle? interestNextTextColor(BuildContext context, List<String> userInterested) {
-    if (!listEquals(_interestData, userInterested) && _interestData.isNotEmpty) {
-      return Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText);
+  TextStyle? interestNextTextColor(
+      BuildContext context, List<String> userInterested) {
+    if (!listEquals(_interestData, userInterested) &&
+        _interestData.isNotEmpty) {
+      return Theme.of(context)
+          .textTheme
+          .labelLarge
+          ?.copyWith(color: kHyppeLightButtonText);
     } else {
-      return Theme.of(context).primaryTextTheme.button;
+      return Theme.of(context).primaryTextTheme.labelLarge;
     }
   }
 
-  Future onTapInterestButton(BuildContext context, bool fromSetting, List<String> userInterested) async {
+  Future onTapInterestButton(BuildContext context, bool fromSetting,
+      List<String> userInterested) async {
     print('simpan kesuakan');
     if (_interestData.isNotEmpty) {
       print('dari setting');
       if (fromSetting) {
         if (!listEquals(_interestData, userInterested)) {
-          final notifier = Provider.of<AccountPreferencesNotifier>(context, listen: false);
+          final notifier =
+              Provider.of<AccountPreferencesNotifier>(context, listen: false);
           await notifier.onClickSaveInterests(context, _interestData);
         }
       } else {
         print('bukan dari setting');
-        final notifier = Provider.of<AccountPreferencesNotifier>(context, listen: false);
-        await notifier.onClickSaveInterests(context, _interestData, fromSetting: false);
+        final notifier =
+            Provider.of<AccountPreferencesNotifier>(context, listen: false);
+        await notifier.onClickSaveInterests(context, _interestData,
+            fromSetting: false);
         _routing.move(Routes.signUpWelcome);
       }
     }
@@ -108,7 +120,8 @@ class UserInterestNotifier extends ChangeNotifier with LoadingNotifier {
     // return true;
   }
 
-  bool pickedInterest(String? tile) => _interestData.contains(tile) ? true : false;
+  bool pickedInterest(String? tile) =>
+      _interestData.contains(tile) ? true : false;
   bool checkedInterest() => _interestData.isNotEmpty ? true : false;
   Future onGetInterest(BuildContext context) async {
     final notifier = UtilsBlocV2();
@@ -121,7 +134,8 @@ class UserInterestNotifier extends ChangeNotifier with LoadingNotifier {
     }
   }
 
-  initUserInterest(BuildContext context, UserInterestScreenArgument arguments) async {
+  initUserInterest(
+      BuildContext context, UserInterestScreenArgument arguments) async {
     if (arguments.fromSetting) {
       _interestData = [];
       _interestData.addAll(arguments.userInterested);

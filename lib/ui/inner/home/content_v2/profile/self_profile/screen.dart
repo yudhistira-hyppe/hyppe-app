@@ -46,9 +46,11 @@ class SelfProfileScreen extends StatefulWidget {
   State<SelfProfileScreen> createState() => SelfProfileScreenState();
 }
 
-class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, AfterFirstLayoutMixin {
+class SelfProfileScreenState extends State<SelfProfileScreen>
+    with RouteAware, AfterFirstLayoutMixin {
   ScrollController _scrollController = ScrollController();
-  final GlobalKey<NestedScrollViewState> _globalKey = GlobalKey<NestedScrollViewState>();
+  final GlobalKey<NestedScrollViewState> _globalKey =
+      GlobalKey<NestedScrollViewState>();
   double heightProfileCard = 0;
   bool isloading = false;
 
@@ -58,7 +60,8 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
       FirebaseCrashlytics.instance.setCustomKey('layout', 'SelfProfileScreen');
       final notifier = context.read<SelfProfileNotifier>();
       notifier.setPageIndex(0);
-      _scrollController.addListener(() => notifier.onScrollListener(context, scrollController: _scrollController));
+      _scrollController.addListener(() => notifier.onScrollListener(context,
+          scrollController: _scrollController));
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitUp,
         DeviceOrientation.portraitDown,
@@ -90,7 +93,8 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
 
   @override
   void didChangeDependencies() {
-    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    CustomRouteObserver.routeObserver
+        .subscribe(this, ModalRoute.of(context) as PageRoute);
     super.didChangeDependencies();
   }
 
@@ -196,7 +200,7 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
             title: CustomTextWidget(
               textToDisplay: notifier.displayUserName(),
               textAlign: TextAlign.start,
-              textStyle: Theme.of(context).textTheme.subtitle1,
+              textStyle: Theme.of(context).textTheme.titleMedium,
             ),
             actions: [
               IconButton(
@@ -213,7 +217,8 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
               ),
             ],
             leading: IconButton(
-              icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
+              icon: const CustomIconWidget(
+                  iconData: "${AssetPath.vectorPath}back-arrow.svg"),
               splashRadius: 1,
               onPressed: () {
                 if (widget.arguments?.isTrue == null) {
@@ -240,7 +245,7 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
             //         child: CustomTextWidget(
             //           textToDisplay: notifier.displayUserName(),
             //           textAlign: TextAlign.start,
-            //           textStyle: Theme.of(context).textTheme.subtitle1,
+            //           textStyle: Theme.of(context).textTheme.titleMedium,
             //         ),
             //       ),
             //       IconButton(
@@ -269,7 +274,10 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
                 },
                 child: isloading
                     ? CustomScrollView(
-                        slivers: [SliverToBoxAdapter(child: BothProfileTopShimmer()), BothProfileContentShimmer()],
+                        slivers: [
+                          SliverToBoxAdapter(child: BothProfileTopShimmer()),
+                          BothProfileContentShimmer()
+                        ],
                       )
                     : !notifier.isConnect
                         ? OfflineMode(
@@ -279,7 +287,9 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
                                 setState(() {
                                   isloading = true;
                                 });
-                                await notifier.initialSelfProfile(context).then((value) => isloading = false);
+                                await notifier
+                                    .initialSelfProfile(context)
+                                    .then((value) => isloading = false);
                               }
                             },
                           )
@@ -307,30 +317,39 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
                                     onChange: (e) async {
                                       if (mounted) {
                                         heightProfileCard = e.height;
-                                        await Future.delayed(Duration(milliseconds: 300), () {
+                                        await Future.delayed(
+                                            Duration(milliseconds: 300), () {
                                           isloading = true;
                                         });
                                         // await Future.delayed(Duration(milliseconds: 1000), () {
                                         isloading = false;
                                         // });
-                                        print("=============================== height");
+                                        print(
+                                            "=============================== height");
                                         print(heightProfileCard);
                                       }
                                     },
-                                    child: Container(child: notifier.user.profile != null ? const SelfProfileTop() : BothProfileTopShimmer())),
+                                    child: Container(
+                                        child: notifier.user.profile != null
+                                            ? const SelfProfileTop()
+                                            : BothProfileTopShimmer())),
                               ),
 
                               SliverAppBar(
                                 pinned: true,
                                 flexibleSpace: const SelfProfileBottom(),
                                 automaticallyImplyLeading: false,
-                                backgroundColor: Theme.of(context).colorScheme.background,
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.background,
                               ),
-                              notifier.optionButton(_scrollController, heightProfileCard),
+                              notifier.optionButton(
+                                  _scrollController, heightProfileCard),
                               SliverList(
                                 delegate: SliverChildBuilderDelegate(
                                   (BuildContext context, int index) {
-                                    return notifier.scollLoading ? const CustomLoading(size: 4) : Container();
+                                    return notifier.scollLoading
+                                        ? const CustomLoading(size: 4)
+                                        : Container();
                                   },
                                   childCount: 1,
                                 ),
@@ -349,30 +368,36 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
                     children: [
                       Container(
                         margin: const EdgeInsets.only(bottom: 51),
-                        child: const CustomIconWidget(defaultColor: false, iconData: '${AssetPath.vectorPath}avatar.svg'),
+                        child: const CustomIconWidget(
+                            defaultColor: false,
+                            iconData: '${AssetPath.vectorPath}avatar.svg'),
                       ),
                       Container(
                           margin: const EdgeInsets.symmetric(horizontal: 54),
                           child: CustomTextWidget(
                             maxLines: 2,
-                            textToDisplay: notifier.language.messageGuest ?? 'Masuk untuk nikmati fitur seru Hyppe secara lengkap',
-                            textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                            textToDisplay: notifier.language.messageGuest ??
+                                'Masuk untuk nikmati fitur seru Hyppe secara lengkap',
+                            textStyle: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
                           )),
                       twentyFourPx,
                       CustomElevatedButton(
                         width: 259,
                         height: 36 * SizeConfig.scaleDiagonal,
                         buttonStyle: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                          backgroundColor: MaterialStateProperty.all(
+                              Theme.of(context).colorScheme.primary),
                         ),
                         function: () {
                           ShowBottomSheet().onLoginApp(context);
                         },
                         child: CustomTextWidget(
                           textToDisplay: notifier.language.login ?? 'Login',
-                          textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
-                                color: kHyppeLightButtonText,
-                              ),
+                          textStyle:
+                              Theme.of(context).textTheme.labelLarge?.copyWith(
+                                    color: kHyppeLightButtonText,
+                                  ),
                         ),
                       )
                     ],

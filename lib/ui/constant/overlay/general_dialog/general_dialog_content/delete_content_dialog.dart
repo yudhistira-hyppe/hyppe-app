@@ -31,7 +31,9 @@ class _DeleteContentDialogState extends State<DeleteContentDialog> {
     final size = MediaQuery.of(context).size;
     final _language = context.watch<TranslateNotifierV2>().translate;
     return Container(
-      decoration: BoxDecoration(color: theme.colorScheme.surface, borderRadius: BorderRadius.circular(8.0)),
+      decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(8.0)),
       height: 183,
       width: size.width * 0.9,
       child: Column(
@@ -40,14 +42,21 @@ class _DeleteContentDialogState extends State<DeleteContentDialog> {
         children: [
           CustomTextWidget(
             // textToDisplay: '${_language.deletePost} ${widget.contentTitle}',
-            textToDisplay: widget.contentTitle == 'Comment' || widget.contentTitle == 'Komentar' ? '${_language.deleteComment}' : '${_language.deletePost}',
-            textStyle: theme.textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w600),
+            textToDisplay: widget.contentTitle == 'Comment' ||
+                    widget.contentTitle == 'Komentar'
+                ? '${_language.deleteComment}'
+                : '${_language.deletePost}',
+            textStyle: theme.textTheme.titleMedium
+                ?.copyWith(fontWeight: FontWeight.w600),
           ),
           CustomTextWidget(
             maxLines: 3,
             textOverflow: TextOverflow.visible,
-            textToDisplay: widget.contentTitle == 'Comment' || widget.contentTitle == 'Komentar' ? '${_language.commentWillPermanentlyDeletedContinue}' : '${_language.afterThatThis}',
-            textStyle: theme.textTheme.bodyText1,
+            textToDisplay: widget.contentTitle == 'Comment' ||
+                    widget.contentTitle == 'Komentar'
+                ? '${_language.commentWillPermanentlyDeletedContinue}'
+                : '${_language.afterThatThis}',
+            textStyle: theme.textTheme.bodyLarge,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -75,9 +84,16 @@ class _DeleteContentDialogState extends State<DeleteContentDialog> {
     );
   }
 
-  Widget _buildButton({required ThemeData theme, required String caption, required Function function, required Color color, Color? textColor}) {
+  Widget _buildButton(
+      {required ThemeData theme,
+      required String caption,
+      required Function function,
+      required Color color,
+      Color? textColor}) {
     return CustomElevatedButton(
-      child: CustomTextWidget(textToDisplay: caption, textStyle: theme.textTheme.button?.copyWith(color: textColor)),
+      child: CustomTextWidget(
+          textToDisplay: caption,
+          textStyle: theme.textTheme.labelLarge?.copyWith(color: textColor)),
       width: 120,
       height: 42,
       function: () async {

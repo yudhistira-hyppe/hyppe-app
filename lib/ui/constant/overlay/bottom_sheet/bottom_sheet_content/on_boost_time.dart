@@ -26,12 +26,14 @@ class OnBoostTimeContent extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+                const CustomIconWidget(
+                    iconData: "${AssetPath.vectorPath}handler.svg"),
                 sixteenPx,
                 CustomTextWidget(
                   textToDisplay: notifier.language.boostTime ?? 'Boost Time',
                   // '$captionTitle ${contentData?.content.length == 1 ? contentData?.content.length : contentIndex} of ${contentData?.content.length}',
-                  textStyle: Theme.of(context).primaryTextTheme.headline6?.copyWith(),
+                  textStyle:
+                      Theme.of(context).primaryTextTheme.titleLarge?.copyWith(),
                 ),
                 thirtySixPx,
                 ListView.builder(
@@ -43,7 +45,8 @@ class OnBoostTimeContent extends StatelessWidget {
                       contentPadding: EdgeInsets.zero,
                       dense: true,
                       groupValue: notifier.tmpBoostTimeId,
-                      value: notifier.boostMasterData?.session?[index].sId ?? '',
+                      value:
+                          notifier.boostMasterData?.session?[index].sId ?? '',
                       onChanged: (val) {
                         notifier.tmpBoostTime =
                             "${System().capitalizeFirstLetter(notifier.boostMasterData?.session?[index].name ?? '')} (${notifier.boostMasterData?.session?[index].start?.substring(0, 5)} - ${notifier.boostMasterData?.session?[index].end?.substring(0, 5)} WIB)";
@@ -53,7 +56,10 @@ class OnBoostTimeContent extends StatelessWidget {
                         textAlign: TextAlign.left,
                         textToDisplay:
                             "${System().capitalizeFirstLetter(notifier.boostMasterData?.session?[index].name ?? '')} (${notifier.boostMasterData?.session?[index].start?.substring(0, 5)} - ${notifier.boostMasterData?.session?[index].end?.substring(0, 5)} WIB)",
-                        textStyle: Theme.of(context).primaryTextTheme.subtitle1?.copyWith(fontWeight: FontWeight.w700),
+                        textStyle: Theme.of(context)
+                            .primaryTextTheme
+                            .titleMedium
+                            ?.copyWith(fontWeight: FontWeight.w700),
                       ),
                       activeColor: Theme.of(context).colorScheme.primary,
                     );
@@ -66,13 +72,19 @@ class OnBoostTimeContent extends StatelessWidget {
                           Routing().moveBack();
                         }
                       : null,
-                  style: ButtonStyle(backgroundColor: notifier.tmpBoostTime != '' ? MaterialStateProperty.all(kHyppePrimary) : MaterialStateProperty.all(kHyppeDisabled)),
+                  style: ButtonStyle(
+                      backgroundColor: notifier.tmpBoostTime != ''
+                          ? MaterialStateProperty.all(kHyppePrimary)
+                          : MaterialStateProperty.all(kHyppeDisabled)),
                   child: Container(
                     width: SizeConfig.screenWidth,
                     padding: const EdgeInsets.all(10),
                     child: CustomTextWidget(
                       textToDisplay: notifier.language.save ?? 'confirm',
-                      textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                      textStyle: Theme.of(context)
+                          .textTheme
+                          .labelLarge
+                          ?.copyWith(color: kHyppeLightButtonText),
                     ),
                   ),
                 ),

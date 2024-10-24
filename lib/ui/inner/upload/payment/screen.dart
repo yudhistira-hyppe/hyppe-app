@@ -32,7 +32,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         title: CustomTextWidget(
           textToDisplay: "Payment",
           textStyle:
-              Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
+              Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 18),
         ),
         centerTitle: false,
       ),
@@ -103,7 +103,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
             textOverflow: TextOverflow.clip,
             textSpan: TextSpan(
               text: title,
-              style: Theme.of(context).textTheme.caption?.copyWith(height: 1.5),
+              style:
+                  Theme.of(context).textTheme.bodySmall?.copyWith(height: 1.5),
             ),
           ),
         ),

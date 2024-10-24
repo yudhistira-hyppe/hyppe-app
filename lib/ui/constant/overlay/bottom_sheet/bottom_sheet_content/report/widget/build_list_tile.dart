@@ -8,7 +8,8 @@ class BuildListTile extends StatelessWidget {
   final String title;
   final String? subtitle;
   final Function? onTap;
-  const BuildListTile({required this.icon, this.title = '', this.subtitle, this.onTap});
+  const BuildListTile(
+      {required this.icon, this.title = '', this.subtitle, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -16,14 +17,17 @@ class BuildListTile extends StatelessWidget {
       onTap: onTap as void Function()?,
       title: CustomTextWidget(
         textToDisplay: title,
-        textStyle: Theme.of(context).textTheme.subtitle2,
+        textStyle: Theme.of(context).textTheme.titleSmall,
         textAlign: TextAlign.start,
         textOverflow: TextOverflow.clip,
       ),
       subtitle: subtitle != null
           ? CustomTextWidget(
               textToDisplay: subtitle ?? '',
-              textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeSecondary),
+              textStyle: Theme.of(context)
+                  .textTheme
+                  .bodySmall
+                  ?.copyWith(color: kHyppeSecondary),
               textAlign: TextAlign.start,
               textOverflow: TextOverflow.clip,
             )

@@ -36,7 +36,8 @@ class _ForgotPinScreenState extends State<ForgotPinScreen> {
       builder: (_, notifier, notifier2, __) => Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
+            icon: const CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}back-arrow.svg"),
             splashRadius: 1,
             onPressed: () {
               Routing().moveBack();
@@ -51,7 +52,10 @@ class _ForgotPinScreenState extends State<ForgotPinScreen> {
           titleSpacing: 0,
           title: CustomTextWidget(
             textToDisplay: 'Set New Pin dari forgot',
-            textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 18 * SizeConfig.scaleDiagonal),
+            textStyle: Theme.of(context)
+                .textTheme
+                .bodyLarge!
+                .copyWith(fontSize: 18 * SizeConfig.scaleDiagonal),
           ),
           centerTitle: false,
         ),
@@ -68,13 +72,16 @@ class _ForgotPinScreenState extends State<ForgotPinScreen> {
                 ),
               ),
               CustomTextWidget(
-                textToDisplay: notifier2.translate.enterNewPin ?? 'Enter New Pin',
+                textToDisplay:
+                    notifier2.translate.enterNewPin ?? 'Enter New Pin',
                 textStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onBackground,
                     ),
               ),
               sixPx,
-              CustomTextWidget(textToDisplay: notifier2.translate.enterYour6DigitHyppePin ?? ''),
+              CustomTextWidget(
+                  textToDisplay:
+                      notifier2.translate.enterYour6DigitHyppePin ?? ''),
               twelvePx,
               CustomRectangleInput(notifier.pin4Controller, onChanged: (value) {
                 notifier.setPinInForgot(context, value);

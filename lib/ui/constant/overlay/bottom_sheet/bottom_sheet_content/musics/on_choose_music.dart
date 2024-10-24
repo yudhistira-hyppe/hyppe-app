@@ -22,10 +22,13 @@ import '../../../../widget/icon_button_widget.dart';
 class OnChooseMusicBottomSheet extends StatefulWidget {
   final bool isPic;
   final bool isInit;
-  const OnChooseMusicBottomSheet({Key? key, required this.isPic, this.isInit = true}) : super(key: key);
+  const OnChooseMusicBottomSheet(
+      {Key? key, required this.isPic, this.isInit = true})
+      : super(key: key);
 
   @override
-  State<OnChooseMusicBottomSheet> createState() => _OnChooseMusicBottomSheetState();
+  State<OnChooseMusicBottomSheet> createState() =>
+      _OnChooseMusicBottomSheetState();
 }
 
 class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
@@ -57,12 +60,14 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           twelvePx,
-          const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+          const CustomIconWidget(
+              iconData: "${AssetPath.vectorPath}handler.svg"),
           Container(
             margin: const EdgeInsets.only(left: 16, right: 16),
             child: CustomSearchBar(
               hintText: notifier.language.searchMusic,
-              contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
+              contentPadding:
+                  EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
               focusNode: notifier.focusNode,
               controller: notifier.searchController,
               onChanged: (value) {
@@ -74,7 +79,8 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
           !showListExp
               ? const MusicTabsScreen()
               : Container(
-                  margin: const EdgeInsets.only(left: 16, top: 10, bottom: 10, right: 10),
+                  margin: const EdgeInsets.only(
+                      left: 16, top: 10, bottom: 10, right: 10),
                   width: double.infinity,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -94,7 +100,11 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
                           child: CustomTextWidget(
                         textAlign: TextAlign.left,
                         textToDisplay: notifier.selectedType?.name ?? '',
-                        textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                        textStyle: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(
+                                fontWeight: FontWeight.w700, fontSize: 16),
                       ))
                     ],
                   ),
@@ -109,12 +119,16 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
                   : const MusicPlaceholder()),
           if (notifier.selectedMusic != null)
             Container(
-              decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), color: kHyppePrimary),
+              decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  color: kHyppePrimary),
               width: double.infinity,
-              margin: const EdgeInsets.only(left: 16, right: 16, bottom: 10, top: 8),
+              margin: const EdgeInsets.only(
+                  left: 16, right: 16, bottom: 10, top: 8),
               child: CustomTextButton(
                   onPressed: () async {
-                    final uploadNotifier = context.read<PreUploadContentNotifier>();
+                    final uploadNotifier =
+                        context.read<PreUploadContentNotifier>();
                     print('test');
                     // notifier.isLoadVideo = true;
                     await notifier.audioPlayer.stop();
@@ -130,7 +144,9 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
                       notifier.forceResetPlayer(true);
                       notifier.searchController.text = '';
                     } else {
-                      await notifier.videoMerger(context, notifier.selectedMusic!.apsaraMusicUrl?.playUrl ?? '', isInit: widget.isInit);
+                      await notifier.videoMerger(context,
+                          notifier.selectedMusic!.apsaraMusicUrl?.playUrl ?? '',
+                          isInit: widget.isInit);
                       notifier.fixSelectedMusic = notifier.selectedMusic;
                       uploadNotifier.musicSelected = notifier.selectedMusic;
                       notifier.selectedMusic = null;
@@ -143,7 +159,10 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
                   },
                   child: CustomTextWidget(
                     textToDisplay: notifier.language.select ?? 'select',
-                    textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+                    textStyle: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold),
                   )),
             )
         ],

@@ -44,7 +44,7 @@ class FilterTile extends StatelessWidget {
                 sixteenPx,
                 CustomTextWidget(
                   textToDisplay: caption,
-                  textStyle: theme.textTheme.bodyText1,
+                  textStyle: theme.textTheme.bodyLarge,
                 ),
               ],
             ),

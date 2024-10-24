@@ -39,7 +39,8 @@ class _AppealScreenState extends State<AppealScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final translate = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
+    final translate =
+        Provider.of<TranslateNotifierV2>(context, listen: false).translate;
     return Consumer<AppealNotifier>(
       builder: (context, notifier, child) => WillPopScope(
         onWillPop: () async {
@@ -52,7 +53,7 @@ class _AppealScreenState extends State<AppealScreen> {
           appBar: AppBar(
             leading: const BackButton(),
             title: CustomTextWidget(
-              textStyle: Theme.of(context).textTheme.subtitle1,
+              textStyle: Theme.of(context).textTheme.titleMedium,
               textToDisplay: '${translate.contentViolation}',
             ),
           ),
@@ -73,19 +74,23 @@ class _AppealScreenState extends State<AppealScreen> {
                   Center(
                     child: CustomTextWidget(
                       textToDisplay: translate.contentViolation ?? '',
-                      textStyle: Theme.of(context).primaryTextTheme.subtitle1,
+                      textStyle: Theme.of(context).primaryTextTheme.titleMedium,
                     ),
                   ),
                   twelvePx,
                   RichText(
                       textAlign: TextAlign.center,
                       text: TextSpan(
-                        style: Theme.of(context).textTheme.subtitle2,
-                        text: '${translate.yourContentViolatedOurCommunityGuidelinesYouCanFindOurGuidelinesHere}',
+                        style: Theme.of(context).textTheme.titleSmall,
+                        text:
+                            '${translate.yourContentViolatedOurCommunityGuidelinesYouCanFindOurGuidelinesHere}',
                         children: [
                           TextSpan(
                             text: "${translate.communityGuidelines}",
-                            style: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppeCyan),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(color: kHyppeCyan),
                           ),
                         ],
                       )),
@@ -101,10 +106,15 @@ class _AppealScreenState extends State<AppealScreen> {
                   ),
                   Text(
                     translate.appeal ?? '',
-                    style: Theme.of(context).primaryTextTheme.subtitle2?.copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context)
+                        .primaryTextTheme
+                        .titleSmall
+                        ?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   twentyPx,
-                  Text(translate.ifYouReviewedOurCommunityGuidelinesAndBelieveYourContentWasRemovedByMistakeLetUsKnowBySubmittingAnAppeal ?? ''),
+                  Text(translate
+                          .ifYouReviewedOurCommunityGuidelinesAndBelieveYourContentWasRemovedByMistakeLetUsKnowBySubmittingAnAppeal ??
+                      ''),
                   const Divider(
                     color: kHyppeLightSurface,
                   ),
@@ -112,13 +122,15 @@ class _AppealScreenState extends State<AppealScreen> {
                     children: [
                       Text(
                         translate.chooseanAppealReason ?? '',
-                        style: Theme.of(context).textTheme.overline,
+                        style: Theme.of(context).textTheme.labelSmall,
                       ),
                       sixPx,
                       Container(
                         width: 10,
                         height: 10,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(50), color: Colors.red),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: Colors.red),
                       )
                     ],
                   ),
@@ -133,19 +145,24 @@ class _AppealScreenState extends State<AppealScreen> {
                         value: notifier.appealReason,
                         onChanged: (val) {
                           if (mounted) {
-                            notifier.appealReason = notifier.appealReaseonData[index]['title'] ?? '';
+                            notifier.appealReason =
+                                notifier.appealReaseonData[index]['title'] ??
+                                    '';
                           }
                         },
                         toggleable: true,
                         title: CustomTextWidget(
                           textAlign: TextAlign.left,
-                          textToDisplay: notifier.appealReaseonData[index]['title'],
-                          textStyle: Theme.of(context).primaryTextTheme.caption,
+                          textToDisplay: notifier.appealReaseonData[index]
+                              ['title'],
+                          textStyle:
+                              Theme.of(context).primaryTextTheme.bodySmall,
                         ),
                         subtitle: CustomTextWidget(
                           textAlign: TextAlign.left,
-                          textToDisplay: notifier.appealReaseonData[index]['desc'],
-                          textStyle: Theme.of(context).textTheme.caption,
+                          textToDisplay: notifier.appealReaseonData[index]
+                              ['desc'],
+                          textStyle: Theme.of(context).textTheme.bodySmall,
                           maxLines: 5,
                         ),
                         activeColor: Theme.of(context).colorScheme.primary,
@@ -155,7 +172,7 @@ class _AppealScreenState extends State<AppealScreen> {
                   fortyTwoPx,
                   Text(
                     translate.stateYourIssue ?? '',
-                    style: Theme.of(context).textTheme.overline,
+                    style: Theme.of(context).textTheme.labelSmall,
                   ),
                   CustomTextFormField(
                     inputAreaWidth: SizeConfig.screenWidth!,
@@ -165,7 +182,7 @@ class _AppealScreenState extends State<AppealScreen> {
                       hintText: translate.pleaseprovideadditionaldetails,
                       contentPadding: EdgeInsets.all(0),
                     ),
-                    style: Theme.of(context).textTheme.caption,
+                    style: Theme.of(context).textTheme.bodySmall,
                     maxLength: 80,
                   ),
                   fortyPx,
@@ -181,12 +198,18 @@ class _AppealScreenState extends State<AppealScreen> {
                               : () {
                                   notifier.appealPost(context, widget.data);
                                 },
-                      style: ButtonStyle(backgroundColor: notifier.appealReason == '' ? MaterialStateProperty.all(kHyppeDisabled) : MaterialStateProperty.all(kHyppePrimary)),
+                      style: ButtonStyle(
+                          backgroundColor: notifier.appealReason == ''
+                              ? MaterialStateProperty.all(kHyppeDisabled)
+                              : MaterialStateProperty.all(kHyppePrimary)),
                       child: notifier.loadingAppel
                           ? CustomLoading()
                           : CustomTextWidget(
                               textToDisplay: translate.submit ?? '',
-                              textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                              textStyle: Theme.of(context)
+                                  .textTheme
+                                  .labelLarge
+                                  ?.copyWith(color: kHyppeLightButtonText),
                             ),
                     ),
                   ),

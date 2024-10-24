@@ -20,7 +20,16 @@ class OnReportContentBottomSheet extends StatelessWidget {
   final String? keyInt;
   final Function() onCompleted;
 
-  const OnReportContentBottomSheet({Key? key, required this.onCompleted, this.postData, this.type, this.onUpdate, this.adsData, this.inDetail, this.keyInt}) : super(key: key);
+  const OnReportContentBottomSheet(
+      {Key? key,
+      required this.onCompleted,
+      this.postData,
+      this.type,
+      this.onUpdate,
+      this.adsData,
+      this.inDetail,
+      this.keyInt})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -31,7 +40,8 @@ class OnReportContentBottomSheet extends StatelessWidget {
           children: [
             Padding(
               padding: EdgeInsets.all(8 * SizeConfig.scaleDiagonal),
-              child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+              child: const CustomIconWidget(
+                  iconData: "${AssetPath.vectorPath}handler.svg"),
             ),
             // ListTile(
             //   onTap: () {
@@ -40,7 +50,7 @@ class OnReportContentBottomSheet extends StatelessWidget {
             //   title: CustomTextWidget(
             //     textToDisplay: notifier.language.iDontWantToSeeThis,
             //     textAlign: TextAlign.start,
-            //     textStyle: Theme.of(context).textTheme.bodyText1.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
+            //     textStyle: Theme.of(context).textTheme.bodyLarge.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
             //   ),
             //   subtitle: CustomTextWidget(
             //     textToDisplay: notifier.language.letUsKnowWhyYouDontWantToSeeThisPost,
@@ -56,7 +66,14 @@ class OnReportContentBottomSheet extends StatelessWidget {
                 print('postData?.postID');
                 print(postData?.postID);
                 Routing().moveBack();
-                ShowBottomSheet.onReportSpamContent(context, postData: postData, type: type, onUpdate: onUpdate, adsData: adsData, inDetail: inDetail, key: keyInt, onComplete: onCompleted);
+                ShowBottomSheet.onReportSpamContent(context,
+                    postData: postData,
+                    type: type,
+                    onUpdate: onUpdate,
+                    adsData: adsData,
+                    inDetail: inDetail,
+                    key: keyInt,
+                    onComplete: onCompleted);
                 context.read<ReportNotifier>().contentData = postData;
                 context.read<ReportNotifier>().adsData = adsData;
                 context.read<ReportNotifier>().typeContent = type ?? '';
@@ -65,12 +82,18 @@ class OnReportContentBottomSheet extends StatelessWidget {
               title: CustomTextWidget(
                 textToDisplay: notifier.language.reportThisPost ?? '',
                 textAlign: TextAlign.start,
-                textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .bodyLarge
+                    ?.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
               ),
               subtitle: CustomTextWidget(
-                textToDisplay: notifier.language.thisPostIsOffensiveOrTheAccountIsHacked ?? '',
+                textToDisplay:
+                    notifier.language.thisPostIsOffensiveOrTheAccountIsHacked ??
+                        '',
                 textAlign: TextAlign.start,
-                textStyle: const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
+                textStyle:
+                    const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
               ),
               leading: const Icon(Icons.warning_amber_rounded),
               minLeadingWidth: 20,

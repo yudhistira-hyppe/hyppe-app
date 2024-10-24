@@ -20,7 +20,8 @@ class BuildStorage extends StatelessWidget {
         child: Center(
           child: GestureDetector(
             onTap: () {
-              if (!notifier.isRecordingVideo) notifier.onTapOnFrameLocalMedia(context);
+              if (!notifier.isRecordingVideo)
+                notifier.onTapOnFrameLocalMedia(context);
             },
             child: _buildIcon(context),
             // child: Container(
@@ -37,9 +38,14 @@ class BuildStorage extends StatelessWidget {
   }
 
   Widget _buildIcon(BuildContext context) {
-    if (Platform.isIOS || context.read<MakeContentNotifier>().thumbnailImageLocal == null) {
+    if (Platform.isIOS ||
+        context.read<MakeContentNotifier>().thumbnailImageLocal == null) {
       // return const Icon(Icons.photo_album, color: Colors.white);
-      return CustomIconWidget(iconData: '${AssetPath.vectorPath}ic_galery.svg', defaultColor: false, color: Colors.white,);
+      return CustomIconWidget(
+        iconData: '${AssetPath.vectorPath}ic_galery.svg',
+        defaultColor: false,
+        color: Colors.white,
+      );
     }
 
     return Container(
@@ -47,7 +53,14 @@ class BuildStorage extends StatelessWidget {
         height: 41 * SizeConfig.scaleDiagonal,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(2.0),
-            border: Border.all(width: 1.0, color: Theme.of(context).textTheme.caption?.color ?? Colors.white),
-            image: DecorationImage(fit: BoxFit.fill, image: FileImage(File(context.read<MakeContentNotifier>().thumbnailImageLocal ?? '')))));
+            border: Border.all(
+                width: 1.0,
+                color: Theme.of(context).textTheme.bodySmall?.color ??
+                    Colors.white),
+            image: DecorationImage(
+                fit: BoxFit.fill,
+                image: FileImage(File(
+                    context.read<MakeContentNotifier>().thumbnailImageLocal ??
+                        '')))));
   }
 }

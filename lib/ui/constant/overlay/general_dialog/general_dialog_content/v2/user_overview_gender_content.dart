@@ -24,7 +24,8 @@ class UserOverviewGenderContent extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<UserOverviewGenderContent> createState() => _UserOverviewGenderContentState();
+  State<UserOverviewGenderContent> createState() =>
+      _UserOverviewGenderContentState();
 }
 
 class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
@@ -89,7 +90,10 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
             CustomTextWidget(
               textAlign: TextAlign.center,
               textToDisplay: translateNotifier.translate.gender ?? 'gender',
-              textStyle: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 18),
+              textStyle: Theme.of(context)
+                  .textTheme
+                  .titleMedium
+                  ?.copyWith(fontSize: 18),
             ),
             ListView.builder(
               shrinkWrap: true,
@@ -104,15 +108,20 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
                     setState(() {
                       // _value = System().capitalizeFirstLetter(System().bodyMultiLang(bodyEn: data['en'], bodyId: data['id']) ?? '');
                       _value = data['en'] ?? '';
-                      widget.onChange(System().bodyMultiLang(bodyEn: data['en'], bodyId: data['id']) ?? '');
+                      widget.onChange(System().bodyMultiLang(
+                              bodyEn: data['en'], bodyId: data['id']) ??
+                          '');
                     });
                   },
                   toggleable: true,
                   activeColor: Theme.of(context).colorScheme.primary,
                   title: CustomTextWidget(
                     textAlign: TextAlign.left,
-                    textToDisplay: System().capitalizeFirstLetter(System().bodyMultiLang(bodyEn: data['en'], bodyId: data['id']) ?? ''),
-                    textStyle: Theme.of(context).primaryTextTheme.bodyText1,
+                    textToDisplay: System().capitalizeFirstLetter(System()
+                            .bodyMultiLang(
+                                bodyEn: data['en'], bodyId: data['id']) ??
+                        ''),
+                    textStyle: Theme.of(context).primaryTextTheme.bodyLarge,
                   ),
                   controlAffinity: ListTileControlAffinity.trailing,
                 );
@@ -134,7 +143,10 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
                 },
                 child: CustomTextWidget(
                   textToDisplay: translateNotifier.translate.save ?? 'save',
-                  textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                  textStyle: Theme.of(context)
+                      .textTheme
+                      .labelLarge
+                      ?.copyWith(color: kHyppeLightButtonText),
                 ),
               ),
             ),
@@ -149,11 +161,12 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
                   // FocusScope.of(context).unfocus();
                 },
                 buttonStyle: ButtonStyle(
-                  overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                  overlayColor:
+                      MaterialStateProperty.all<Color>(Colors.transparent),
                 ),
                 child: CustomTextWidget(
                   textToDisplay: translateNotifier.translate.cancel ?? '',
-                  textStyle: Theme.of(context).textTheme.button,
+                  textStyle: Theme.of(context).textTheme.labelLarge,
                 ),
               ),
             ),
@@ -185,7 +198,7 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
     //     CustomTextWidget(
     //       textAlign: TextAlign.center,
     //       textToDisplay: translateNotifier.translate.gender,
-    //       textStyle: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 18),
+    //       textStyle: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 18),
     //     ),
     //     Expanded(
     //       child: ListView.builder(
@@ -204,7 +217,7 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
     //             title: CustomTextWidget(
     //               textAlign: TextAlign.left,
     //               textToDisplay: notifier.genders[index],
-    //               textStyle: Theme.of(context).primaryTextTheme.bodyText1,
+    //               textStyle: Theme.of(context).primaryTextTheme.bodyLarge,
     //             ),
     //             controlAffinity: ListTileControlAffinity.trailing,
     //           );
@@ -222,7 +235,7 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
     //         function: () => Routing().moveBack(),
     //         child: CustomTextWidget(
     //           textToDisplay: translateNotifier.translate.save,
-    //           textStyle: Theme.of(context).textTheme.button,
+    //           textStyle: Theme.of(context).textTheme.labelLarge,
     //         ),
     //       ),
     //     ),
@@ -238,7 +251,7 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
     //         buttonStyle: ButtonStyle(overlayColor: MaterialStateProperty.all<Color>(Colors.transparent)),
     //         child: CustomTextWidget(
     //           textToDisplay: translateNotifier.translate.cancel,
-    //           textStyle: Theme.of(context).textTheme.button,
+    //           textStyle: Theme.of(context).textTheme.labelLarge,
     //         ),
     //       ),
     //     ),

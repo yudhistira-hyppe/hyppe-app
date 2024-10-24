@@ -1,4 +1,3 @@
- 
 // import 'package:hyppe/core/constants/asset_path.dart';
 // import 'package:hyppe/core/constants/size_config.dart';
 // import 'package:hyppe/core/models/collection/report/report.dart';
@@ -13,7 +12,6 @@
 // import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
 // import 'package:provider/provider.dart';
-  
 
 // class HyppeReport extends StatefulWidget {
 //   @override
@@ -29,7 +27,6 @@
 //     if (notifier.fromLandscapeMode) SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 //   }
 
- 
 //   @override
 //   Widget build(BuildContext context) {
 //     SizeConfig().init(context);
@@ -47,7 +44,7 @@
 //                 automaticallyImplyLeading: false,
 //                 elevation: 0.0,
 //                 title: CustomTextWidget(
-//                     textAlign: TextAlign.left, textToDisplay: notifier.appBar!, textStyle: _themes.textTheme.button.apply(fontWeightDelta: 1)),
+//                     textAlign: TextAlign.left, textToDisplay: notifier.appBar!, textStyle: _themes.textTheme.labelLarge.apply(fontWeightDelta: 1)),
 //                 actions: [
 //                   GestureDetector(
 //                     child: Container(
@@ -90,7 +87,7 @@
 //                                     title: CustomTextWidget(
 //                                         maxLines: 2,
 //                                         textAlign: TextAlign.left,
-//                                         textStyle: _themes.textTheme.bodyText2,
+//                                         textStyle: _themes.textTheme.bodyMedium,
 //                                         textToDisplay: notifier.initData!.data[index].remark!
 //                                         ),
 //                                     groupValue: notifier.selectedIndex,
@@ -113,7 +110,7 @@
 //                 child: CustomElevatedButton(
 //                     child: notifier.isLoading
 //                         ? SizedBox(width: 30 * SizeConfig.scaleDiagonal, height: 30 * SizeConfig.scaleDiagonal, child: const CustomLoading())
-//                         : CustomTextWidget(textAlign: TextAlign.left, textToDisplay: notifier.fABCaption, textStyle: _themes.textTheme.button),
+//                         : CustomTextWidget(textAlign: TextAlign.left, textToDisplay: notifier.fABCaption, textStyle: _themes.textTheme.labelLarge),
 //                     function: () => notifier.onClickButton(context),
 //                     width: 375.0 * SizeConfig.scaleDiagonal,
 //                     height: 44.0 * SizeConfig.scaleDiagonal,
@@ -124,4 +121,3 @@
 //             floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat));
 //   }
 // }
- 

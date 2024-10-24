@@ -22,7 +22,8 @@ class SuccessPageTransaction extends StatefulWidget {
 class _SuccessPageTransactionState extends State<SuccessPageTransaction> {
   @override
   void initState() {
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'SuccessPageTransaction');
+    FirebaseCrashlytics.instance
+        .setCustomKey('layout', 'SuccessPageTransaction');
     super.initState();
   }
 
@@ -46,7 +47,9 @@ class _SuccessPageTransactionState extends State<SuccessPageTransaction> {
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.4,
                   child: const Center(
-                    child: Image(image: AssetImage("${AssetPath.pngPath}verification-support-success.png")),
+                    child: Image(
+                        image: AssetImage(
+                            "${AssetPath.pngPath}verification-support-success.png")),
                   ),
                 ),
               ),
@@ -77,13 +80,18 @@ class _SuccessPageTransactionState extends State<SuccessPageTransaction> {
             },
             child: CustomTextWidget(
               textToDisplay: language.finish ?? 'selesai',
-              textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+              textStyle:
+                  textTheme.labelLarge?.copyWith(color: kHyppeLightButtonText),
             ),
             buttonStyle: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-              shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-              overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-              backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+              foregroundColor: MaterialStateProperty.all(
+                  Theme.of(context).colorScheme.primary),
+              shadowColor: MaterialStateProperty.all(
+                  Theme.of(context).colorScheme.primary),
+              overlayColor: MaterialStateProperty.all(
+                  Theme.of(context).colorScheme.primary),
+              backgroundColor: MaterialStateProperty.all(
+                  Theme.of(context).colorScheme.primary),
             ),
           ),
         ),
@@ -91,7 +99,9 @@ class _SuccessPageTransactionState extends State<SuccessPageTransaction> {
     );
   }
 
-  Widget _buildDivider(context) => Divider(thickness: 1.0, color: Theme.of(context).dividerTheme.color?.withOpacity(0.1));
+  Widget _buildDivider(context) => Divider(
+      thickness: 1.0,
+      color: Theme.of(context).dividerTheme.color?.withOpacity(0.1));
 
   Widget _unorderedList(String text) {
     return Padding(

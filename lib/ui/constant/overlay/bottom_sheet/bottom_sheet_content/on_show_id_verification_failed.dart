@@ -19,48 +19,67 @@ class OnShowIDVerificationFailedBottomSheet extends StatelessWidget {
     final translate = context.read<TranslateNotifierV2>().translate;
     return Consumer<VerificationIDNotifier>(
       builder: (_, notifier, __) => Padding(
-        padding: EdgeInsets.symmetric(vertical: 8 * SizeConfig.scaleDiagonal, horizontal: 16 * SizeConfig.scaleDiagonal),
+        padding: EdgeInsets.symmetric(
+            vertical: 8 * SizeConfig.scaleDiagonal,
+            horizontal: 16 * SizeConfig.scaleDiagonal),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+            const CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}handler.svg"),
             Image.asset("assets/png/warning.png"),
             CustomTextWidget(
               textToDisplay: translate.pleaseTryAgain ?? "Please Try Again",
-              textStyle: Theme.of(context).textTheme.subtitle1,
+              textStyle: Theme.of(context).textTheme.titleMedium,
             ),
             CustomTextWidget(
                 textOverflow: TextOverflow.visible,
                 textStyle: Theme.of(context).textTheme.bodyMedium,
-                textToDisplay: translate.theIDCardNumberAndorYourRealNamedidnotMatch ??
+                textToDisplay: translate
+                        .theIDCardNumberAndorYourRealNamedidnotMatch ??
                     "The ID card number and/or your Real Name did not match. Make sure the lighting sufficient and the ID card is in a good condition. Please try again"),
             CustomElevatedButton(
                 child: CustomTextWidget(
-                  textToDisplay: translate.uploadSupportDoc ?? "Upload Supporting Document",
-                  textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppePrimary),
+                  textToDisplay: translate.uploadSupportDoc ??
+                      "Upload Supporting Document",
+                  textStyle: Theme.of(context)
+                      .textTheme
+                      .labelLarge
+                      ?.copyWith(color: kHyppePrimary),
                 ),
                 width: double.infinity,
                 height: 50 * SizeConfig.scaleDiagonal,
                 function: () {
                   Routing().moveBack();
-                  Routing().moveAndPop(Routes.verificationIDStepSupportDocsEula);
+                  Routing()
+                      .moveAndPop(Routes.verificationIDStepSupportDocsEula);
                 }),
             CustomElevatedButton(
               child: CustomTextWidget(
-                textToDisplay: translate.retakeIdPicture ?? "Re-Take ID Picture",
-                textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                textToDisplay:
+                    translate.retakeIdPicture ?? "Re-Take ID Picture",
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: kHyppeLightButtonText),
               ),
               width: double.infinity,
               height: 50 * SizeConfig.scaleDiagonal,
               function: () => notifier.retryTakeIdCard(fromBottomSheet: true),
-              buttonStyle:
-                  ButtonStyle(backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary), overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary)),
+              buttonStyle: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primary),
+                  overlayColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primary)),
             ),
             CustomElevatedButton(
               child: CustomTextWidget(
                 textToDisplay: translate.back ?? "Back",
-                textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppePrimary),
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: kHyppePrimary),
               ),
               width: double.infinity,
               height: 50 * SizeConfig.scaleDiagonal,

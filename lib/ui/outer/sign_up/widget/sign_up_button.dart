@@ -46,9 +46,11 @@ class SignUpButton extends StatelessWidget {
               width: SizeConfig.screenWidth,
               height: 50,
               buttonStyle: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(buttonColor),
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(buttonColor),
                   overlayColor: MaterialStateProperty.all<Color>(buttonColor),
-                  foregroundColor: MaterialStateProperty.all<Color>(buttonColor),
+                  foregroundColor:
+                      MaterialStateProperty.all<Color>(buttonColor),
                   shadowColor: MaterialStateProperty.all<Color>(buttonColor)),
               function: !loading ? onTap : null,
               child: loading
@@ -58,14 +60,17 @@ class SignUpButton extends StatelessWidget {
                       textStyle: textStyle,
                     ),
             ),
-            if (!withSkipButton) SizedBox(height: SizeConfig.screenHeight! * 0.0175),
+            if (!withSkipButton)
+              SizedBox(height: SizeConfig.screenHeight! * 0.0175),
             if (withSkipButton)
               CustomTextButton(
                 onPressed: onSkipTap,
                 child: CustomTextWidget(
                   textToDisplay: notifier.translate.skip ?? 'skip',
-                  textStyle: Theme.of(context).textTheme.button?.copyWith(
-                        color: onSkipTap != null ? Theme.of(context).textTheme.button?.color : Colors.transparent,
+                  textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        color: onSkipTap != null
+                            ? Theme.of(context).textTheme.labelLarge?.color
+                            : Colors.transparent,
                       ),
                 ),
               ),
@@ -74,21 +79,27 @@ class SignUpButton extends StatelessWidget {
                 textOverflow: TextOverflow.clip,
                 textSpan: TextSpan(
                   text: "${notifier.translate.byRegisteringYouAgreeToHyppe} ",
-                  style: Theme.of(context).textTheme.bodyText2,
+                  style: Theme.of(context).textTheme.bodyMedium,
                   children: [
                     TextSpan(
                       text: "${notifier.translate.privacyPolicy} ",
-                      style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold, color: kHyppePrimary),
-                      recognizer: TapGestureRecognizer()..onTap = () => context.read<UserInterestNotifier>().goToEula(),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.bold, color: kHyppePrimary),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () =>
+                            context.read<UserInterestNotifier>().goToEula(),
                     ),
                     TextSpan(
                       text: "${notifier.translate.and} ",
-                      style: Theme.of(context).textTheme.bodyText2,
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     TextSpan(
                       text: notifier.translate.termsOfService,
-                      style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold, color: kHyppePrimary),
-                      recognizer: TapGestureRecognizer()..onTap = () => context.read<UserInterestNotifier>().goToEula(),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.bold, color: kHyppePrimary),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () =>
+                            context.read<UserInterestNotifier>().goToEula(),
                     ),
                   ],
                 ),

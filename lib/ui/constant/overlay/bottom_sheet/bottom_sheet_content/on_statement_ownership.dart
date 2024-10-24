@@ -13,18 +13,23 @@ import 'package:provider/provider.dart';
 class OnStatementOwnershipBottomSheet extends StatelessWidget {
   Function() onSave;
   Function() onCancel;
-  OnStatementOwnershipBottomSheet({Key? key, required this.onSave, required this.onCancel}) : super(key: key);
+  OnStatementOwnershipBottomSheet(
+      {Key? key, required this.onSave, required this.onCancel})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Consumer<TranslateNotifierV2>(
       key: key,
       builder: (_, notifier, __) => Padding(
-        padding: EdgeInsets.symmetric(vertical: 8 * SizeConfig.scaleDiagonal, horizontal: 16 * SizeConfig.scaleDiagonal),
+        padding: EdgeInsets.symmetric(
+            vertical: 8 * SizeConfig.scaleDiagonal,
+            horizontal: 16 * SizeConfig.scaleDiagonal),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+            const CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}handler.svg"),
             tenPx,
             const RotatedBox(
               quarterTurns: 2,
@@ -42,13 +47,17 @@ class OnStatementOwnershipBottomSheet extends StatelessWidget {
                 Center(
                   child: CustomTextWidget(
                     textToDisplay: notifier.translate.areYouSure ?? '',
-                    textStyle: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                    textStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.onBackground),
                   ),
                 ),
                 const SizedBox(height: 20),
                 CustomTextWidget(
-                  textToDisplay: notifier.translate.youNeedACertificateToMarketYourContentYouCanRegisterItLaterDoYouWantToContinue ?? '',
-                  textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                  textToDisplay: notifier.translate
+                          .youNeedACertificateToMarketYourContentYouCanRegisterItLaterDoYouWantToContinue ??
+                      '',
+                  textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onBackground),
                   maxLines: 100,
                   textAlign: TextAlign.center,
                 ),
@@ -68,7 +77,10 @@ class OnStatementOwnershipBottomSheet extends StatelessWidget {
                   shadowColor: MaterialStateProperty.all(Colors.white),
                   elevation: MaterialStateProperty.all(0),
                   side: MaterialStateProperty.all(
-                    BorderSide(color: kHyppeLightInactive1, width: 1.0, style: BorderStyle.solid),
+                    BorderSide(
+                        color: kHyppeLightInactive1,
+                        width: 1.0,
+                        style: BorderStyle.solid),
                   ),
                 )),
             tenPx,
@@ -78,7 +90,8 @@ class OnStatementOwnershipBottomSheet extends StatelessWidget {
               function: onSave,
               child: CustomTextWidget(
                 textToDisplay: notifier.translate.noIWantToRegister ?? '',
-                textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
+                textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: kHyppePrimary, fontWeight: FontWeight.bold),
               ),
             ),
           ],

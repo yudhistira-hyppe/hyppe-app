@@ -45,8 +45,10 @@ class SubCommentTile extends StatelessWidget {
           CustomProfileImage(
             width: 36,
             height: 36,
-            onTap: () => System().navigateToProfile(context, logs?.sender ?? ''),
-            imageUrl: System().showUserPicture(commentor?.avatar?.mediaEndpoint),
+            onTap: () =>
+                System().navigateToProfile(context, logs?.sender ?? ''),
+            imageUrl:
+                System().showUserPicture(commentor?.avatar?.mediaEndpoint),
             badge: commentor?.urluserBadge,
             following: true,
             onFollow: () {},
@@ -56,7 +58,10 @@ class SubCommentTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                UserTemplate(username: '${commentor?.username}', isVerified: commentor?.isIdVerified ?? false, date: logs?.createdAt ?? DateTime.now().toString()),
+                UserTemplate(
+                    username: '${commentor?.username}',
+                    isVerified: commentor?.isIdVerified ?? false,
+                    date: logs?.createdAt ?? DateTime.now().toString()),
                 twoPx,
                 Row(
                   children: [
@@ -68,9 +73,18 @@ class SubCommentTile extends StatelessWidget {
                           seeLess: ' ${notifier.language.seeLess}',
                           seeMore: ' ${notifier.language.seeMoreContent}',
                           textOverflow: TextOverflow.visible,
-                          normStyle: Theme.of(context).textTheme.bodyText2,
-                          hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
-                          expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary)),
+                          normStyle: Theme.of(context).textTheme.bodyMedium,
+                          hrefStyle: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(
+                                  color: Theme.of(context).colorScheme.primary),
+                          expandStyle: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.primary)),
                     ),
                   ],
                 ),
@@ -86,7 +100,9 @@ class SubCommentTile extends StatelessWidget {
                   },
                   child: CustomTextWidget(
                     textToDisplay: notifier.language.reply ?? 'Reply',
-                    textStyle: context.getTextTheme().overline?.copyWith(color: context.getColorScheme().primary, fontWeight: FontWeight.w700),
+                    textStyle: context.getTextTheme().labelSmall?.copyWith(
+                        color: context.getColorScheme().primary,
+                        fontWeight: FontWeight.w700),
                   ),
                 )
               ],
@@ -95,8 +111,10 @@ class SubCommentTile extends StatelessWidget {
           if (logs?.sender == email)
             InkWell(
               onTap: () {
-                ShowGeneralDialog.deleteContentDialog(context, '${notifier.language.comment}', () async {
-                  notifier.deleteComment(context, logs?.lineID ?? '', 0, parentID: parentID);
+                ShowGeneralDialog.deleteContentDialog(
+                    context, '${notifier.language.comment}', () async {
+                  notifier.deleteComment(context, logs?.lineID ?? '', 0,
+                      parentID: parentID);
                 });
               },
               child: CustomIconWidget(

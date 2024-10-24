@@ -11,7 +11,8 @@ import 'package:provider/provider.dart';
 class JangkaunStatus extends StatelessWidget {
   final int jangkauan;
   final bool isDiary;
-  const JangkaunStatus({Key? key, this.jangkauan = 0, this.isDiary = false}) : super(key: key);
+  const JangkaunStatus({Key? key, this.jangkauan = 0, this.isDiary = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,9 @@ class JangkaunStatus extends StatelessWidget {
       ),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-        margin: isDiary ? const EdgeInsets.all(0) : const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        margin: isDiary
+            ? const EdgeInsets.all(0)
+            : const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           color: isDiary ? Colors.black.withOpacity(0.3) : kHyppeLightInactive1,
@@ -40,12 +43,25 @@ class JangkaunStatus extends StatelessWidget {
                 text: TextSpan(
                     text: "${System().formatterNumber(jangkauan)} ",
                     style: isDiary
-                        ? Theme.of(context).primaryTextTheme.subtitle2?.copyWith(color: Colors.white, fontWeight: FontWeight.w700)
-                        : Theme.of(context).primaryTextTheme.subtitle2?.copyWith(fontWeight: FontWeight.w700),
+                        ? Theme.of(context)
+                            .primaryTextTheme
+                            .titleSmall
+                            ?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700)
+                        : Theme.of(context)
+                            .primaryTextTheme
+                            .titleSmall
+                            ?.copyWith(fontWeight: FontWeight.w700),
                     children: [
                   TextSpan(
                     text: "${language.reach}",
-                    style: isDiary ? Theme.of(context).textTheme.subtitle2?.copyWith(color: Colors.white) : Theme.of(context).textTheme.subtitle2?.copyWith(),
+                    style: isDiary
+                        ? Theme.of(context)
+                            .textTheme
+                            .titleSmall
+                            ?.copyWith(color: Colors.white)
+                        : Theme.of(context).textTheme.titleSmall?.copyWith(),
                   ),
                 ])),
           ],

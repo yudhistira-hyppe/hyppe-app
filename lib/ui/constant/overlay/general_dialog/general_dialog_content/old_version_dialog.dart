@@ -19,7 +19,9 @@ class OldVersionDialog extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final _language = context.watch<TranslateNotifierV2>().translate;
     return Container(
-      decoration: BoxDecoration(color: theme.colorScheme.surface, borderRadius: BorderRadius.circular(8.0)),
+      decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(8.0)),
       height: 183,
       width: size.width * 0.9,
       child: Column(
@@ -28,13 +30,14 @@ class OldVersionDialog extends StatelessWidget {
         children: [
           CustomTextWidget(
             textToDisplay: '${_language.newUpdate}',
-            textStyle: theme.textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w600),
+            textStyle: theme.textTheme.titleMedium
+                ?.copyWith(fontWeight: FontWeight.w600),
           ),
           CustomTextWidget(
             // maxLines: 2,
             textOverflow: TextOverflow.visible,
             textToDisplay: '${_language.contentNewUpdate} ',
-            textStyle: theme.textTheme.bodyText1,
+            textStyle: theme.textTheme.bodyLarge,
           ),
           _buildButton(
             caption: '${_language.updateNow} ',
@@ -48,17 +51,27 @@ class OldVersionDialog extends StatelessWidget {
     );
   }
 
-  Widget _buildButton({required ThemeData theme, required String caption, required Function function, required Color color, Color? textColor}) {
+  Widget _buildButton(
+      {required ThemeData theme,
+      required String caption,
+      required Function function,
+      required Color color,
+      Color? textColor}) {
     return CustomElevatedButton(
-      child: CustomTextWidget(textToDisplay: caption, textStyle: theme.textTheme.button?.copyWith(color: textColor)),
+      child: CustomTextWidget(
+          textToDisplay: caption,
+          textStyle: theme.textTheme.labelLarge?.copyWith(color: textColor)),
       width: 220,
       height: 42,
       function: () async {
         if (Platform.isAndroid || Platform.isIOS) {
-          final appId = Platform.isAndroid ? 'com.hyppe.hyppeapp' : 'id1545595684';
+          final appId =
+              Platform.isAndroid ? 'com.hyppe.hyppeapp' : 'id1545595684';
           final url = Uri.parse(
             // Platform.isAndroid ? "market://details?id=$appId" : "https://apps.apple.com/app/id$appId",
-            Platform.isAndroid ? "https://play.google.com/store/apps/details?id=$appId" : "https://apps.apple.com/app/id$appId",
+            Platform.isAndroid
+                ? "https://play.google.com/store/apps/details?id=$appId"
+                : "https://apps.apple.com/app/id$appId",
           );
           print(url);
 

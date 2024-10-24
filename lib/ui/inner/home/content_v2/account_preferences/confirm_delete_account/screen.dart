@@ -19,18 +19,23 @@ class HyppeConfirmDeleteAccount extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppeConfirmDeleteAccount');
+    FirebaseCrashlytics.instance
+        .setCustomKey('layout', 'HyppeConfirmDeleteAccount');
     return Consumer<AccountPreferencesNotifier>(
       builder: (_, notifier, __) => Scaffold(
         appBar: AppBar(
           title: CustomTextWidget(
             textToDisplay: notifier.language.deleteAccount ?? '',
-            textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+            textStyle: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           centerTitle: false,
           titleSpacing: 0,
           leading: IconButton(
-            icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
+            icon: const CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}back-arrow.svg"),
             splashRadius: 1,
             onPressed: () {
               Routing().moveBack();
@@ -47,13 +52,17 @@ class HyppeConfirmDeleteAccount extends StatelessWidget {
                 children: [
                   CustomTextWidget(
                     textToDisplay: notifier.language.deleteAccount ?? '',
-                    textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontWeight: FontWeight.bold),
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .bodyLarge
+                        ?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   eightPx,
                   CustomTextWidget(
                     textToDisplay:
                         "${notifier.language.tappingDeleteAccountWillDelete} ${SharedPreference().readStorage(SpKeys.email)} ${notifier.language.accountWillBeDeletedProccessAfter24Hours}",
-                    textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(),
+                    textStyle:
+                        Theme.of(context).textTheme.bodySmall?.copyWith(),
                     maxLines: 100,
                     textAlign: TextAlign.start,
                   ),
@@ -74,8 +83,11 @@ class HyppeConfirmDeleteAccount extends StatelessWidget {
                     ),
                     Expanded(
                       child: CustomTextWidget(
-                        textToDisplay: notifier.language.deletingYourAccountIsPermanent ?? '',
-                        textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(),
+                        textToDisplay:
+                            notifier.language.deletingYourAccountIsPermanent ??
+                                '',
+                        textStyle:
+                            Theme.of(context).textTheme.bodySmall?.copyWith(),
                         maxLines: 100,
                         textAlign: TextAlign.start,
                       ),
@@ -90,15 +102,26 @@ class HyppeConfirmDeleteAccount extends StatelessWidget {
                     child: notifier.isLoading
                         ? const CustomLoading()
                         : CustomTextWidget(
-                            textToDisplay: notifier.language.deleteAccount ?? '',
-                            textStyle: notifier.confirmDeleteAccount ? Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText) : Theme.of(context).primaryTextTheme.button,
+                            textToDisplay:
+                                notifier.language.deleteAccount ?? '',
+                            textStyle: notifier.confirmDeleteAccount
+                                ? Theme.of(context)
+                                    .textTheme
+                                    .labelLarge
+                                    ?.copyWith(color: kHyppeLightButtonText)
+                                : Theme.of(context).primaryTextTheme.labelLarge,
                           ),
-                    function: notifier.confirmDeleteAccount ? () => notifier.onClickDeleteAccount(context) : null,
+                    function: notifier.confirmDeleteAccount
+                        ? () => notifier.onClickDeleteAccount(context)
+                        : null,
                     buttonStyle: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
-                        notifier.confirmDeleteAccount ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface,
+                        notifier.confirmDeleteAccount
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(context).colorScheme.surface,
                       ),
-                      overlayColor: MaterialStateProperty.all(Colors.transparent),
+                      overlayColor:
+                          MaterialStateProperty.all(Colors.transparent),
                     ),
                   ),
                 ),

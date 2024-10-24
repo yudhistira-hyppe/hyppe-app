@@ -22,7 +22,14 @@ class ShareBlock extends StatefulWidget {
   final String? descriptionCas;
   final double? positionYplus;
   final int? indexTutor;
-  const ShareBlock({Key? key, this.globalKey, this.positionTooltip, this.descriptionCas, this.positionYplus, this.indexTutor}) : super(key: key);
+  const ShareBlock(
+      {Key? key,
+      this.globalKey,
+      this.positionTooltip,
+      this.descriptionCas,
+      this.positionYplus,
+      this.indexTutor})
+      : super(key: key);
 
   @override
   State<ShareBlock> createState() => _ShareBlockState();
@@ -63,22 +70,32 @@ class _ShareBlockState extends State<ShareBlock> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Routing().move(Routes.listReferral, argument: ReferralListUserArgument(modelReferral: notifier.modelReferral));
+                          Routing().move(Routes.listReferral,
+                              argument: ReferralListUserArgument(
+                                  modelReferral: notifier.modelReferral));
                         },
                         child: CustomTextWidget(
                           textToDisplay: notifier.language.hasUsed ?? '',
-                          textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: kHyppeLightSecondary,
-                              ),
+                          textStyle:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: kHyppeLightSecondary,
+                                  ),
                         ),
                       ),
                       GestureDetector(
                         onTap: () {
-                          Routing().move(Routes.listReferral, argument: ReferralListUserArgument(modelReferral: notifier.modelReferral));
+                          Routing().move(Routes.listReferral,
+                              argument: ReferralListUserArgument(
+                                  modelReferral: notifier.modelReferral));
                         },
                         child: CustomTextWidget(
-                          textToDisplay: notifier.modelReferral?.data != null ? '${notifier.modelReferral?.data}' : '0',
-                          textStyle: Theme.of(context).textTheme.button?.copyWith(
+                          textToDisplay: notifier.modelReferral?.data != null
+                              ? '${notifier.modelReferral?.data}'
+                              : '0',
+                          textStyle: Theme.of(context)
+                              .textTheme
+                              .labelLarge
+                              ?.copyWith(
                                 color: Theme.of(context).colorScheme.primary,
                               ),
                         ),
@@ -106,9 +123,10 @@ class _ShareBlockState extends State<ShareBlock> {
                         alignment: Alignment.centerLeft,
                         child: CustomTextWidget(
                           textToDisplay: notifier.referralLink,
-                          textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: kHyppeLightSecondary,
-                              ),
+                          textStyle:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: kHyppeLightSecondary,
+                                  ),
                         ),
                       ),
                       Align(
@@ -122,22 +140,36 @@ class _ShareBlockState extends State<ShareBlock> {
                           description: (mn?.tutorialData.isEmpty ?? [].isEmpty)
                               ? ''
                               : notifier.language.localeDatetime == 'id'
-                                  ? mn?.tutorialData[widget.indexTutor ?? 0].textID ?? ''
-                                  : mn?.tutorialData[widget.indexTutor ?? 0].textEn ?? '',
-                          descTextStyle: const TextStyle(fontSize: 10, color: kHyppeNotConnect),
+                                  ? mn?.tutorialData[widget.indexTutor ?? 0]
+                                          .textID ??
+                                      ''
+                                  : mn?.tutorialData[widget.indexTutor ?? 0]
+                                          .textEn ??
+                                      '',
+                          descTextStyle: const TextStyle(
+                              fontSize: 10, color: kHyppeNotConnect),
                           descriptionPadding: EdgeInsets.all(6),
                           textColor: Colors.white,
                           targetShapeBorder: const CircleBorder(),
                           positionYplus: widget.positionYplus,
                           onToolTipClick: () {
-                            context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[widget.indexTutor ?? 0].key ?? '');
-                            mn?.tutorialData[widget.indexTutor ?? 0].status = true;
+                            context.read<TutorNotifier>().postTutor(
+                                context,
+                                mn?.tutorialData[widget.indexTutor ?? 0].key ??
+                                    '');
+                            mn?.tutorialData[widget.indexTutor ?? 0].status =
+                                true;
                             ShowCaseWidget.of(context).next();
                           },
                           closeWidget: GestureDetector(
                             onTap: () {
-                              context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[widget.indexTutor ?? 0].key ?? '');
-                              mn?.tutorialData[widget.indexTutor ?? 0].status = true;
+                              context.read<TutorNotifier>().postTutor(
+                                  context,
+                                  mn?.tutorialData[widget.indexTutor ?? 0]
+                                          .key ??
+                                      '');
+                              mn?.tutorialData[widget.indexTutor ?? 0].status =
+                                  true;
                               ShowCaseWidget.of(context).next();
                             },
                             child: const Padding(
@@ -150,17 +182,26 @@ class _ShareBlockState extends State<ShareBlock> {
                             ),
                           ),
                           child: GestureDetector(
-                            onTap: () => System().shareText(dynamicLink: notifier.referralLinkText, context: context),
+                            onTap: () => System().shareText(
+                                dynamicLink: notifier.referralLinkText,
+                                context: context),
                             child: Container(
                               width: 93,
                               height: 32,
-                              decoration: BoxDecoration(color: kHyppePrimary, borderRadius: BorderRadius.circular(16)),
+                              decoration: BoxDecoration(
+                                  color: kHyppePrimary,
+                                  borderRadius: BorderRadius.circular(16)),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   CustomTextWidget(
-                                    textToDisplay: notifier.language.share ?? '',
-                                    textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                                    textToDisplay:
+                                        notifier.language.share ?? '',
+                                    textStyle: Theme.of(context)
+                                        .textTheme
+                                        .labelLarge
+                                        ?.copyWith(
+                                            color: kHyppeLightButtonText),
                                   ),
                                 ],
                               ),

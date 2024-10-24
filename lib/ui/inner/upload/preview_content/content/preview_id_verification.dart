@@ -46,7 +46,8 @@ class PreviewIDVerification extends StatelessWidget {
         Align(
           alignment: const Alignment(-0.7, 0.97),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: SizeConfig.screenWidth! * 0.05),
+            padding: EdgeInsets.symmetric(
+                horizontal: SizeConfig.screenWidth! * 0.05),
             child: Consumer<AccountPreferencesNotifier>(
               builder: (_, notifier, __) => Row(
                 // TODO: Need to be refactored, waiting for the new design
@@ -63,9 +64,16 @@ class PreviewIDVerification extends StatelessWidget {
                     },
                     child: Row(
                       children: [
-                        const CustomIconWidget(iconData: "${AssetPath.vectorPath}camera.svg", defaultColor: false),
+                        const CustomIconWidget(
+                            iconData: "${AssetPath.vectorPath}camera.svg",
+                            defaultColor: false),
                         const SizedBox(width: 8),
-                        CustomTextWidget(textToDisplay: notifier.language.retake ?? '', textStyle: Theme.of(context).textTheme.subtitle1?.apply(color: Colors.white)),
+                        CustomTextWidget(
+                            textToDisplay: notifier.language.retake ?? '',
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.apply(color: Colors.white)),
                       ],
                     ),
                   ),
@@ -75,7 +83,7 @@ class PreviewIDVerification extends StatelessWidget {
                   //         onPressed: () => Routing().moveBack(),
                   //         child: Row(
                   //           children: [
-                  //             CustomTextWidget(textToDisplay: notifier.language.close, textStyle: Theme.of(context).textTheme.subtitle1),
+                  //             CustomTextWidget(textToDisplay: notifier.language.close, textStyle: Theme.of(context).textTheme.titleMedium),
                   //             SizedBox(width: 8),
                   //             CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg", defaultColor: false),
                   //           ],
@@ -85,19 +93,27 @@ class PreviewIDVerification extends StatelessWidget {
                   //         onPressed: () async => await notifier.onUploadProofPicture(context, picture),
                   //         child: Row(
                   //           children: [
-                  //             CustomTextWidget(textToDisplay: notifier.language.upload, textStyle: Theme.of(context).textTheme.subtitle1),
+                  //             CustomTextWidget(textToDisplay: notifier.language.upload, textStyle: Theme.of(context).textTheme.titleMedium),
                   //             SizedBox(width: 8),
                   //             CustomIconWidget(iconData: "${AssetPath.vectorPath}arrow.svg", defaultColor: false),
                   //           ],
                   //         ),
                   //       ),
                   CustomTextButton(
-                    onPressed: () async => await notifier.onUploadProofPicture(context, picture),
+                    onPressed: () async =>
+                        await notifier.onUploadProofPicture(context, picture),
                     child: Row(
                       children: [
-                        CustomTextWidget(textToDisplay: notifier.language.upload ?? '', textStyle: Theme.of(context).textTheme.subtitle1?.apply(color: Colors.white)),
+                        CustomTextWidget(
+                            textToDisplay: notifier.language.upload ?? '',
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.apply(color: Colors.white)),
                         const SizedBox(width: 8),
-                        const CustomIconWidget(iconData: "${AssetPath.vectorPath}arrow.svg", defaultColor: false),
+                        const CustomIconWidget(
+                            iconData: "${AssetPath.vectorPath}arrow.svg",
+                            defaultColor: false),
                       ],
                     ),
                   ),

@@ -16,8 +16,12 @@ class UserAgreementScreen extends StatelessWidget {
       appBar: AppBar(
         leading: const BackButton(),
         title: CustomTextWidget(
-          textStyle: theme.textTheme.subtitle1,
-          textToDisplay: context.watch<TranslateNotifierV2>().translate.endUserLicenseAgreement ?? '',
+          textStyle: theme.textTheme.titleMedium,
+          textToDisplay: context
+                  .watch<TranslateNotifierV2>()
+                  .translate
+                  .endUserLicenseAgreement ??
+              '',
         ),
       ),
       body: const UserAgreementDemoScreen(),

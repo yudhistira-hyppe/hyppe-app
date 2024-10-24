@@ -48,7 +48,8 @@ class VidTutor extends StatefulWidget {
   _VidTutorState createState() => _VidTutorState();
 }
 
-class _VidTutorState extends State<VidTutor> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
+class _VidTutorState extends State<VidTutor>
+    with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
   ScrollController innerScrollController = ScrollController();
 
   bool isPrepare = false;
@@ -74,7 +75,8 @@ class _VidTutorState extends State<VidTutor> with WidgetsBindingObserver, Ticker
       'user': 'nataliajesehat',
       'avatar': "${AssetPath.pngPath}tutorstory2.png",
       'image': "${AssetPath.pngPath}tutorvid.png",
-      'desc': "Jalan-jalan ke luar negeri pake uang yang udah ditabung dari 10 tahun lalu. Healing ",
+      'desc':
+          "Jalan-jalan ke luar negeri pake uang yang udah ditabung dari 10 tahun lalu. Healing ",
       'like': '500',
       'comments': '200'
     },
@@ -82,7 +84,8 @@ class _VidTutorState extends State<VidTutor> with WidgetsBindingObserver, Ticker
       'user': 'nataliajesehat',
       'avatar': "${AssetPath.pngPath}tutorstory4.png",
       'image': "${AssetPath.pngPath}tutorvid.png",
-      'desc': "Jalan-jalan ke luar negeri pake uang yang udah ditabung dari 10 tahun lalu. Healing ",
+      'desc':
+          "Jalan-jalan ke luar negeri pake uang yang udah ditabung dari 10 tahun lalu. Healing ",
       'like': '500',
       'comments': '200'
     },
@@ -134,7 +137,6 @@ class _VidTutorState extends State<VidTutor> with WidgetsBindingObserver, Ticker
                 },
                 child: NotificationListener<UserScrollNotification>(
                   onNotification: (notification) {
-
                     return true;
                   },
                   child: ListView.builder(
@@ -169,7 +171,8 @@ class _VidTutorState extends State<VidTutor> with WidgetsBindingObserver, Ticker
             borderRadius: BorderRadius.circular(16),
             color: Colors.white,
           ),
-          padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
+          padding:
+              const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
           margin: const EdgeInsets.only(bottom: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -245,7 +248,8 @@ class _VidTutorState extends State<VidTutor> with WidgetsBindingObserver, Ticker
                               child: CustomIconWidget(
                                 defaultColor: false,
                                 color: kHyppeTextLightPrimary,
-                                iconData: '${AssetPath.vectorPath}none-like.svg',
+                                iconData:
+                                    '${AssetPath.vectorPath}none-like.svg',
                                 height: 28,
                               ),
                               onTap: () {
@@ -258,7 +262,12 @@ class _VidTutorState extends State<VidTutor> with WidgetsBindingObserver, Ticker
                           padding: EdgeInsets.only(left: 21.0),
                           child: GestureDetector(
                             onTap: () {
-                              Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: picData?.postID ?? '', fromFront: true, data: picData ?? ContentData(), giftActication: picData.giftActivation));
+                              Routing().move(Routes.commentsDetail,
+                                  argument: CommentsArgument(
+                                      postID: picData?.postID ?? '',
+                                      fromFront: true,
+                                      data: picData ?? ContentData(),
+                                      giftActication: picData.giftActivation));
                               // ShowBottomSheet.onShowCommentV2(context, postID: picData?.postID);
                             },
                             child: const CustomIconWidget(
@@ -271,7 +280,9 @@ class _VidTutorState extends State<VidTutor> with WidgetsBindingObserver, Ticker
                         ),
                         GestureDetector(
                           onTap: () {
-                            context.read<PicDetailNotifier>().createdDynamicLink(context, data: picData);
+                            context
+                                .read<PicDetailNotifier>()
+                                .createdDynamicLink(context, data: picData);
                           },
                           child: const Padding(
                             padding: EdgeInsets.only(left: 21.0),
@@ -286,13 +297,12 @@ class _VidTutorState extends State<VidTutor> with WidgetsBindingObserver, Ticker
                         Expanded(
                           child: GestureDetector(
                             onTap: () async {
-                              await context.handleActionIsGuest(() async  {
+                              await context.handleActionIsGuest(() async {
                                 await ShowBottomSheet.onBuyContent(
                                   context,
                                   data: picData,
                                 );
                               });
-
                             },
                             child: const Align(
                               alignment: Alignment.centerRight,
@@ -310,7 +320,10 @@ class _VidTutorState extends State<VidTutor> with WidgetsBindingObserver, Ticker
                     twelvePx,
                     Text(
                       "Like",
-                      style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                      style: const TextStyle(
+                          color: kHyppeTextLightPrimary,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14),
                     ),
                   ],
                 ),
@@ -318,16 +331,25 @@ class _VidTutorState extends State<VidTutor> with WidgetsBindingObserver, Ticker
               fourPx,
               CustomNewDescContent(
                 // desc: "${data?.description}",
-                email: picData?['email']??'',
+                email: picData?['email'] ?? '',
                 username: picData?['user'] ?? '',
                 desc: "${picData?['desc']}",
                 trimLines: 3,
                 textAlign: TextAlign.start,
-                seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
-                seeMore: '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
-                normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary, fontSize: 12),
-                expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                seeLess:
+                    ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
+                seeMore:
+                    '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                normStyle: const TextStyle(
+                    fontSize: 12, color: kHyppeTextLightPrimary),
+                hrefStyle: Theme.of(context)
+                    .textTheme
+                    .titleSmall
+                    ?.copyWith(color: kHyppePrimary, fontSize: 12),
+                expandStyle: Theme.of(context)
+                    .textTheme
+                    .titleSmall
+                    ?.copyWith(color: Theme.of(context).colorScheme.primary),
               ),
 
               GestureDetector(
@@ -361,8 +383,8 @@ class _VidTutorState extends State<VidTutor> with WidgetsBindingObserver, Ticker
               //                 seeLess: ' seeLess', // ${notifier2.translate.seeLess}',
               //                 seeMore: '  Selengkapnya ', //${notifier2.translate.seeMoreContent}',
               //                 normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-              //                 hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-              //                 expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+              //                 hrefStyle: Theme.of(context).textTheme.titleSmall?.copyWith(color: kHyppePrimary),
+              //                 expandStyle: Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).colorScheme.primary),
               //               ),
               //             );
               //           },
@@ -448,8 +470,15 @@ class _VidTutorState extends State<VidTutor> with WidgetsBindingObserver, Ticker
                         defaultColor: false,
                         height: 30,
                       ),
-                      Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                      Text("HyppePic ${transnot.translate.contentContainsSensitiveMaterial}",
+                      Text(
+                          transnot.translate.sensitiveContent ??
+                              'Sensitive Content',
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600)),
+                      Text(
+                          "HyppePic ${transnot.translate.contentContainsSensitiveMaterial}",
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Colors.white,
@@ -469,11 +498,14 @@ class _VidTutorState extends State<VidTutor> with WidgetsBindingObserver, Ticker
                       GestureDetector(
                         onTap: () {
                           System().increaseViewCount2(context, data);
-                          context.read<ReportNotifier>().seeContent(context, data, hyppePic);
+                          context
+                              .read<ReportNotifier>()
+                              .seeContent(context, data, hyppePic);
                         },
                         child: Container(
                           padding: const EdgeInsets.only(top: 8),
-                          margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
+                          margin: const EdgeInsets.only(
+                              bottom: 20, right: 8, left: 8),
                           width: SizeConfig.screenWidth,
                           decoration: const BoxDecoration(
                             border: Border(
@@ -485,7 +517,10 @@ class _VidTutorState extends State<VidTutor> with WidgetsBindingObserver, Ticker
                           ),
                           child: Text(
                             "${transnot.translate.see} HyppePic",
-                            style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600),
                             textAlign: TextAlign.center,
                           ),
                         ),

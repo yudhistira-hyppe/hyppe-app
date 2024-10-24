@@ -21,13 +21,15 @@ class SignUpWelcome extends StatefulWidget {
   _SignUpWelcomeState createState() => _SignUpWelcomeState();
 }
 
-class _SignUpWelcomeState extends State<SignUpWelcome> with SingleTickerProviderStateMixin {
+class _SignUpWelcomeState extends State<SignUpWelcome>
+    with SingleTickerProviderStateMixin {
   TabController? _tabController;
 
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'SignUpWelcome');
-    Provider.of<SignUpWelcomeNotifier>(context, listen: false).initWelcome(context);
+    Provider.of<SignUpWelcomeNotifier>(context, listen: false)
+        .initWelcome(context);
     _tabController = TabController(length: 5, vsync: this);
     super.initState();
     _tabController?.addListener(() => setState(() {}));
@@ -77,11 +79,16 @@ class _SignUpWelcomeState extends State<SignUpWelcome> with SingleTickerProvider
                       alignment: const Alignment(0, 0.75),
                       child: CustomTextButton(
                         onPressed: () {
-                          Routing().moveAndRemoveUntil(Routes.homeTutor, Routes.root);
+                          Routing().moveAndRemoveUntil(
+                              Routes.homeTutor, Routes.root);
                         },
                         child: CustomTextWidget(
                           textToDisplay: notifier.language.completeLater ?? '',
-                          textStyle: Theme.of(context).textTheme.button?.copyWith(color: Theme.of(context).colorScheme.primary),
+                          textStyle: Theme.of(context)
+                              .textTheme
+                              .labelLarge
+                              ?.copyWith(
+                                  color: Theme.of(context).colorScheme.primary),
                         ),
                       ),
                     )
@@ -95,21 +102,30 @@ class _SignUpWelcomeState extends State<SignUpWelcome> with SingleTickerProvider
                           width: SizeConfig.screenWidth,
                           height: 50,
                           buttonStyle: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primary),
-                              overlayColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primary),
-                              foregroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primary),
-                              shadowColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primary)),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Theme.of(context).colorScheme.primary),
+                              overlayColor: MaterialStateProperty.all<Color>(
+                                  Theme.of(context).colorScheme.primary),
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                  Theme.of(context).colorScheme.primary),
+                              shadowColor: MaterialStateProperty.all<Color>(
+                                  Theme.of(context).colorScheme.primary)),
                           function: () {
                             // context.read<SignUpCompleteProfileNotifier>().onReset();
                             /// TODO: Changed rules complete profile
                             // Routing().move(userCompleteProfile);
-                            Routing().move(Routes.accountPreferences, argument: AccountPreferenceScreenArgument(fromSignUpFlow: true));
+                            Routing().move(Routes.accountPreferences,
+                                argument: AccountPreferenceScreenArgument(
+                                    fromSignUpFlow: true));
 
                             /// End TODO
                           },
                           child: CustomTextWidget(
                             textToDisplay: notifier.language.completeNow ?? '',
-                            textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .labelLarge
+                                ?.copyWith(color: kHyppeLightButtonText),
                           ),
                         ),
                       ),

@@ -68,13 +68,15 @@ class SettingTile extends StatelessWidget {
                   tooltipPosition: positionTooltip,
                   description: descriptionCas,
                   // description: lang?.localeDatetime == 'id' ? mn?.tutorialData[indexKeySell].textID ?? '' : mn?.tutorialData[indexKeySell].textEn ?? '',
-                  descTextStyle: TextStyle(fontSize: 10, color: kHyppeNotConnect),
+                  descTextStyle:
+                      TextStyle(fontSize: 10, color: kHyppeNotConnect),
                   descriptionPadding: EdgeInsets.all(6),
                   textColor: Colors.white,
                   targetShapeBorder: const CircleBorder(),
                   positionYplus: positionYplus,
                   onToolTipClick: () {
-                    context.read<TutorNotifier>().postTutor(context, mn.tutorialData[indexTutor ?? 0].key ?? '');
+                    context.read<TutorNotifier>().postTutor(
+                        context, mn.tutorialData[indexTutor ?? 0].key ?? '');
                     mn.tutorialData[indexTutor ?? 0].status = true;
                     ShowCaseWidget.of(context).next();
                   },
@@ -82,7 +84,8 @@ class SettingTile extends StatelessWidget {
                     onTap: () {
                       try {
                         print(indexTutor);
-                        context.read<TutorNotifier>().postTutor(context, mn.tutorialData[indexTutor ?? 0].key ?? '');
+                        context.read<TutorNotifier>().postTutor(context,
+                            mn.tutorialData[indexTutor ?? 0].key ?? '');
                         mn.tutorialData[indexTutor ?? 0].status = true;
                         ShowCaseWidget.of(context).next();
                       } catch (e) {
@@ -100,7 +103,7 @@ class SettingTile extends StatelessWidget {
                   ),
                   child: CustomTextWidget(
                     textToDisplay: caption,
-                    textStyle: theme.textTheme.bodyText1,
+                    textStyle: theme.textTheme.bodyLarge,
                   ),
                 ),
               ],

@@ -36,7 +36,8 @@ class VideoThumbnail extends StatelessWidget {
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'VideoThumbnail');
     SizeConfig().init(context);
-    final isHorizon = (videoData?.metadata?.height ?? 0) < (videoData?.metadata?.width ?? 0);
+    final isHorizon =
+        (videoData?.metadata?.height ?? 0) < (videoData?.metadata?.width ?? 0);
     final lang = context.read<TranslateNotifierV2>().translate;
     return Stack(
       children: [
@@ -51,7 +52,9 @@ class VideoThumbnail extends StatelessWidget {
               memCacheHeight: 100,
               widthPlaceHolder: 80,
               heightPlaceHolder: 80,
-              imageUrl: (videoData?.isApsara ?? false) ? (videoData?.mediaThumbEndPoint ?? '') : '${videoData?.fullThumbPath ?? ''}',
+              imageUrl: (videoData?.isApsara ?? false)
+                  ? (videoData?.mediaThumbEndPoint ?? '')
+                  : '${videoData?.fullThumbPath ?? ''}',
               // imageUrl: "https://mir-s3-cdn-cf.behance.net/project_modules/max_3840/8f37ff162632759.63d906f614037.jpg",
               imageBuilder: (context, imageProvider) => Container(
                 decoration: BoxDecoration(
@@ -67,11 +70,14 @@ class VideoThumbnail extends StatelessWidget {
                   // _networklHasErrorNotifier.value++;
                 },
                 child: Container(
-                    decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                    decoration: BoxDecoration(
+                        color: kHyppeNotConnect,
+                        borderRadius: BorderRadius.circular(16)),
                     width: SizeConfig.screenWidth,
                     height: 250,
                     alignment: Alignment.center,
-                    child: CustomTextWidget(textToDisplay: lang.couldntLoadVideo ?? 'Error')),
+                    child: CustomTextWidget(
+                        textToDisplay: lang.couldntLoadVideo ?? 'Error')),
               ),
               errorWidget: (context, url, error) {
                 return GestureDetector(
@@ -79,11 +85,14 @@ class VideoThumbnail extends StatelessWidget {
                     // _networklHasErrorNotifier.value++;
                   },
                   child: Container(
-                      decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                      decoration: BoxDecoration(
+                          color: kHyppeNotConnect,
+                          borderRadius: BorderRadius.circular(16)),
                       width: SizeConfig.screenWidth,
                       height: 250,
                       alignment: Alignment.center,
-                      child: CustomTextWidget(textToDisplay: lang.couldntLoadVideo ?? 'Error')),
+                      child: CustomTextWidget(
+                          textToDisplay: lang.couldntLoadVideo ?? 'Error')),
                 );
               },
             ),
@@ -124,8 +133,13 @@ class VideoThumbnail extends StatelessWidget {
                 Visibility(
                   visible: (videoData?.saleAmount ?? 0) > 0,
                   child: Container(
-                    margin: withMargin ? const EdgeInsets.only(top: 10, right: 10) : null,
-                    padding: EdgeInsets.all(videoData?.email == SharedPreference().readStorage(SpKeys.email) ? 2.0 : 13),
+                    margin: withMargin
+                        ? const EdgeInsets.only(top: 10, right: 10)
+                        : null,
+                    padding: EdgeInsets.all(videoData?.email ==
+                            SharedPreference().readStorage(SpKeys.email)
+                        ? 2.0
+                        : 13),
                     child: const CustomIconWidget(
                       iconData: "${AssetPath.vectorPath}sale.svg",
                       defaultColor: false,
@@ -186,9 +200,12 @@ class VideoThumbnail extends StatelessWidget {
                 //   ),
                 // ),
                 Visibility(
-                  visible: (videoData?.saleAmount == 0 && (videoData?.certified ?? false)),
+                  visible: (videoData?.saleAmount == 0 &&
+                      (videoData?.certified ?? false)),
                   child: Container(
-                    margin: withMargin ? const EdgeInsets.only(top: 10, right: 10) : null,
+                    margin: withMargin
+                        ? const EdgeInsets.only(top: 10, right: 10)
+                        : null,
                     padding: const EdgeInsets.all(8.0),
                     child: const IconOwnership(correct: true),
                   ),
@@ -214,7 +231,8 @@ class VideoThumbnail extends StatelessWidget {
         Align(
           alignment: Alignment.bottomLeft,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 0).copyWith(bottom: 8),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 0).copyWith(bottom: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -241,7 +259,7 @@ class VideoThumbnail extends StatelessWidget {
                 //             ),
                 //             fourPx,
                 //             CustomTextWidget(
-                //               textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                //               textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(color: kHyppeLightButtonText),
                 //               textToDisplay: _system.formatterNumber(videoData?.insight?.likes),
                 //             )
                 //           ],
@@ -252,8 +270,13 @@ class VideoThumbnail extends StatelessWidget {
                 // ),
                 CustomBalloonWidget(
                   child: CustomTextWidget(
-                    textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
-                    textToDisplay: System().formatDuration(Duration(seconds: videoData?.metadata?.duration ?? 0).inMilliseconds),
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .bodySmall
+                        ?.copyWith(color: kHyppeLightButtonText),
+                    textToDisplay: System().formatDuration(
+                        Duration(seconds: videoData?.metadata?.duration ?? 0)
+                            .inMilliseconds),
                   ),
                 ),
               ],

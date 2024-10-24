@@ -22,6 +22,7 @@ class PinAccountNotifier extends ChangeNotifier {
     language = translate;
     notifyListeners();
   }
+
   CountdownController? _countdownController;
   bool _confirm = false;
   bool _changeSetNewPin = false;
@@ -51,7 +52,8 @@ class PinAccountNotifier extends ChangeNotifier {
   TextEditingController pin1Controller = TextEditingController(); //set new pin
   TextEditingController pin2Controller = TextEditingController(); //confirm pin
   TextEditingController pin3Controller = TextEditingController(); //curent pin
-  TextEditingController pin4Controller = TextEditingController(); //set new pin in forgot pin
+  TextEditingController pin4Controller =
+      TextEditingController(); //set new pin in forgot pin
   TextEditingController _otpController = TextEditingController();
   TextEditingController get otpController => _otpController;
   bool get changeSetNewPin => _changeSetNewPin;
@@ -207,7 +209,10 @@ class PinAccountNotifier extends ChangeNotifier {
     Routing().moveBack();
   }
 
-  Future sendVerificationMail(BuildContext context, {bool resend = false, bool checkPin = false, bool forgotPin = false}) async {
+  Future sendVerificationMail(BuildContext context,
+      {bool resend = false,
+      bool checkPin = false,
+      bool forgotPin = false}) async {
     print("check otp ==================");
     bool connect = await System().checkConnections();
     if (connect) {
@@ -223,16 +228,34 @@ class PinAccountNotifier extends ChangeNotifier {
       Map param = {};
       if (resend) {
         if (isForgotPin) {
-          param = {"type": 'FORGOT_PIN', "event": "NOTIFY_OTP", "status": "NOTIFY"};
+          param = {
+            "type": 'FORGOT_PIN',
+            "event": "NOTIFY_OTP",
+            "status": "NOTIFY"
+          };
         } else {
           param = {"type": type, "event": "NOTIFY_OTP", "status": "NOTIFY"};
         }
       } else if (checkPin) {
-        param = {"pin": _pin3, "type": "CECK_PIN", "event": "CECK_PIN", "status": "INITIAL"};
+        param = {
+          "pin": _pin3,
+          "type": "CECK_PIN",
+          "event": "CECK_PIN",
+          "status": "INITIAL"
+        };
       } else if (forgotPin) {
-        param = {"type": "FORGOT_PIN", "event": "FORGOT_PIN", "status": "INITIAL"};
+        param = {
+          "type": "FORGOT_PIN",
+          "event": "FORGOT_PIN",
+          "status": "INITIAL"
+        };
       } else {
-        param = {"pin": _pin2, "type": type, "event": type, "status": "INITIAL"};
+        param = {
+          "pin": _pin2,
+          "type": type,
+          "event": type,
+          "status": "INITIAL"
+        };
       }
 
       final notifier = TransactionBloc();
@@ -281,9 +304,19 @@ class PinAccountNotifier extends ChangeNotifier {
         type = 'CREATE_PIN';
       }
       if (fromForgot) {
-        param = {"otp": _pin4, "type": 'FORGOT_PIN', "event": "CREATE_PIN", "status": "REPLY"};
+        param = {
+          "otp": _pin4,
+          "type": 'FORGOT_PIN',
+          "event": "CREATE_PIN",
+          "status": "REPLY"
+        };
       } else {
-        param = {"otp": otpController.text, "type": type, "event": "VERIFY_OTP", "status": "REPLY"};
+        param = {
+          "otp": otpController.text,
+          "type": type,
+          "event": "VERIFY_OTP",
+          "status": "REPLY"
+        };
       }
       final notifier = TransactionBloc();
       await notifier.sendVerificationPin(context, params: param);
@@ -298,10 +331,11 @@ class PinAccountNotifier extends ChangeNotifier {
             backHome();
             ShowBottomSheet().onShowColouredSheet(
               context,
-              language.pinSuccessCreated ??'PIN is successfully created',
+              language.pinSuccessCreated ?? 'PIN is successfully created',
               color: kHyppeTextSuccess,
               iconSvg: "${AssetPath.vectorPath}valid-invert.svg",
-              subCaption: language.messagePinSuccessCreated ?? 'Your PIN has been successfully created',
+              subCaption: language.messagePinSuccessCreated ??
+                  'Your PIN has been successfully created',
             );
           } else {
             Routing().move(Routes.forgotPinScreen);
@@ -312,10 +346,11 @@ class PinAccountNotifier extends ChangeNotifier {
           backHome();
           ShowBottomSheet().onShowColouredSheet(
             context,
-            language.pinSuccessCreated ??'PIN is successfully created',
+            language.pinSuccessCreated ?? 'PIN is successfully created',
             color: kHyppeTextSuccess,
             iconSvg: "${AssetPath.vectorPath}valid-invert.svg",
-            subCaption: language.messagePinSuccessCreated ?? 'Your PIN has been successfully created',
+            subCaption: language.messagePinSuccessCreated ??
+                'Your PIN has been successfully created',
           );
         }
       }
@@ -324,7 +359,8 @@ class PinAccountNotifier extends ChangeNotifier {
         loading = false;
         notifyListeners();
         if (fetch.data != null) {
-          ShowBottomSheet().onShowColouredSheet(context, fetch.message['info'], color: Theme.of(context).colorScheme.error);
+          ShowBottomSheet().onShowColouredSheet(context, fetch.message['info'],
+              color: Theme.of(context).colorScheme.error);
         }
       }
       loading = false;
@@ -347,9 +383,17 @@ class PinAccountNotifier extends ChangeNotifier {
 
   TextStyle resendStyle(BuildContext context) {
     if (_timer != "00:00") {
-      return Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary) ?? const TextStyle();
+      return Theme.of(context)
+              .textTheme
+              .bodySmall
+              ?.copyWith(color: Theme.of(context).colorScheme.secondary) ??
+          const TextStyle();
     } else {
-      return Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.primary) ?? const TextStyle();
+      return Theme.of(context)
+              .textTheme
+              .bodySmall
+              ?.copyWith(color: Theme.of(context).colorScheme.primary) ??
+          const TextStyle();
     }
   }
 
@@ -406,9 +450,13 @@ class PinAccountNotifier extends ChangeNotifier {
 
   TextStyle verifyTextColor(BuildContext context) {
     if (otpController.text.length >= 4) {
-      return Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText) ?? const TextStyle();
+      return Theme.of(context)
+              .textTheme
+              .labelLarge
+              ?.copyWith(color: kHyppeLightButtonText) ??
+          const TextStyle();
     } else {
-      return Theme.of(context).primaryTextTheme.button ?? const TextStyle();
+      return Theme.of(context).primaryTextTheme.labelLarge ?? const TextStyle();
     }
   }
 

@@ -13,7 +13,9 @@ class CategoryMusicItem extends StatefulWidget {
   final MusicEnum myEnum;
   final MusicType type;
   final int index;
-  const CategoryMusicItem({Key? key, required this.myEnum, required this.type, required this.index}) : super(key: key);
+  const CategoryMusicItem(
+      {Key? key, required this.myEnum, required this.type, required this.index})
+      : super(key: key);
 
   @override
   State<CategoryMusicItem> createState() => _CategoryMusicItemState();
@@ -24,17 +26,17 @@ class _CategoryMusicItemState extends State<CategoryMusicItem> {
   Widget build(BuildContext context) {
     final notifier = Provider.of<PreviewContentNotifier>(context);
     return InkWell(
-      onTap: (){
+      onTap: () {
         notifier.selectedType = widget.type;
         notifier.selectedMusicEnum = widget.myEnum;
         notifier.selectedMusic = null;
         final myId = widget.type.id;
-        if(myId != null){
-          if(widget.myEnum == MusicEnum.mood){
+        if (myId != null) {
+          if (widget.myEnum == MusicEnum.mood) {
             notifier.getMusicByType(context, idMood: myId);
-          }else if(widget.myEnum == MusicEnum.genre){
+          } else if (widget.myEnum == MusicEnum.genre) {
             notifier.getMusicByType(context, idGenre: myId);
-          }else{
+          } else {
             notifier.getMusicByType(context, idTheme: myId);
           }
         }
@@ -59,9 +61,13 @@ class _CategoryMusicItemState extends State<CategoryMusicItem> {
                   ),
                 ),
                 twelvePx,
-                CustomTextWidget(textToDisplay: widget.type.name ?? '', textStyle: Theme.of(context)
-                    .textTheme
-                    .bodyText1?.copyWith(fontSize: 14, fontWeight: FontWeight.w700),),
+                CustomTextWidget(
+                  textToDisplay: widget.type.name ?? '',
+                  textStyle: Theme.of(context)
+                      .textTheme
+                      .bodyLarge
+                      ?.copyWith(fontSize: 14, fontWeight: FontWeight.w700),
+                ),
               ],
             ),
             const CustomIconWidget(

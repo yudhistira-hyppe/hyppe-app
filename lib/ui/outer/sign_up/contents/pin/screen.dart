@@ -58,12 +58,13 @@ class _SignUpPinState extends State<SignUpPin> with AfterFirstLayoutMixin {
           appBar: AppBar(
             leading: GestureDetector(
               onTap: () => notifier.onBackVerifiedEmail(),
-              child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
+              child: const CustomIconWidget(
+                  iconData: "${AssetPath.vectorPath}back-arrow.svg"),
             ),
             automaticallyImplyLeading: false,
             title: CustomTextWidget(
               textToDisplay: notifier.language.verificationCode ?? '',
-              textStyle: Theme.of(context).textTheme.headline6,
+              textStyle: Theme.of(context).textTheme.titleLarge,
             ),
           ),
           body: SingleChildScrollView(

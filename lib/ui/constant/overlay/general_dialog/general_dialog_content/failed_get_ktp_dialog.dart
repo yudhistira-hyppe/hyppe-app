@@ -12,7 +12,8 @@ import 'package:provider/provider.dart';
 
 class FailedGetKTPDialog extends StatefulWidget {
   final bool faceVerification;
-  const FailedGetKTPDialog({Key? key, this.faceVerification = false}) : super(key: key);
+  const FailedGetKTPDialog({Key? key, this.faceVerification = false})
+      : super(key: key);
 
   @override
   State<FailedGetKTPDialog> createState() => _FailedGetKTPDialogState();
@@ -32,23 +33,34 @@ class _FailedGetKTPDialogState extends State<FailedGetKTPDialog> {
     String titleSecondary = '';
 
     if (widget.faceVerification) {
-      title = _language.localeDatetime == 'id' ? 'Selfie & e-KTP tidak cocok' : 'Selfie & e-KTP Don`t Match';
-      body1 = _language.localeDatetime == 'id' ? 'Kami tidak menemukan kemiripan antara foto selfie dengan e-KTPmu. ' : 'We couldn`t find a match between your selfie and e-KTP photo. ';
-      body2 =
-          _language.localeDatetime == 'id' ? 'Pastikan wajahmu terlihat jelas dan tidak terpotong dengan pencahayaan yang cukup.' : 'Try taking another selfie with a clear face and good lighting.';
+      title = _language.localeDatetime == 'id'
+          ? 'Selfie & e-KTP tidak cocok'
+          : 'Selfie & e-KTP Don`t Match';
+      body1 = _language.localeDatetime == 'id'
+          ? 'Kami tidak menemukan kemiripan antara foto selfie dengan e-KTPmu. '
+          : 'We couldn`t find a match between your selfie and e-KTP photo. ';
+      body2 = _language.localeDatetime == 'id'
+          ? 'Pastikan wajahmu terlihat jelas dan tidak terpotong dengan pencahayaan yang cukup.'
+          : 'Try taking another selfie with a clear face and good lighting.';
 
-      titlePrimary = _language.localeDatetime == 'id' ? 'Selfie Ulang' : 'Retake Selfie';
+      titlePrimary =
+          _language.localeDatetime == 'id' ? 'Selfie Ulang' : 'Retake Selfie';
       titleSecondary = _language.localeDatetime == 'id' ? 'Banding' : 'Appeal';
     } else {
       title = _language.uploadeKTPFailed ?? 'Upload e-KTP Gagal';
-      body1 = _language.descFailedktp1 ?? 'Kami mengalami kesulitan dalam membaca e-KTPmu. ';
-      body2 = _language.descFailedktp2 ?? 'Coba lagi atau gunakan dokumen lain seperti SIM, Kartu Keluarga, atau Paspor untuk melengkapi data.';
+      body1 = _language.descFailedktp1 ??
+          'Kami mengalami kesulitan dalam membaca e-KTPmu. ';
+      body2 = _language.descFailedktp2 ??
+          'Coba lagi atau gunakan dokumen lain seperti SIM, Kartu Keluarga, atau Paspor untuk melengkapi data.';
       titlePrimary = _language.retake ?? 'Foto Ulang';
-      titleSecondary = _language.uploadSupportingDocuments ?? 'Upload Dokumen Pendukung';
+      titleSecondary =
+          _language.uploadSupportingDocuments ?? 'Upload Dokumen Pendukung';
     }
 
     return Container(
-      decoration: BoxDecoration(color: theme.colorScheme.surface, borderRadius: BorderRadius.circular(12.0)),
+      decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(12.0)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -57,14 +69,16 @@ class _FailedGetKTPDialogState extends State<FailedGetKTPDialog> {
           CustomTextWidget(
             textToDisplay: title,
             maxLines: 2,
-            textStyle: theme.textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w600),
+            textStyle: theme.textTheme.titleMedium
+                ?.copyWith(fontWeight: FontWeight.w600),
           ),
           sixteenPx,
           RichText(
             textAlign: TextAlign.center,
             text: TextSpan(
               text: body1,
-              style: const TextStyle(color: Colors.black, fontSize: 14, height: 1.3),
+              style: const TextStyle(
+                  color: Colors.black, fontSize: 14, height: 1.3),
               children: [
                 TextSpan(
                   text: body2,
@@ -106,7 +120,9 @@ class _FailedGetKTPDialogState extends State<FailedGetKTPDialog> {
                   context.read<VerificationIDNotifier>().toSupportDoc();
                 }
               },
-              style: ButtonStyle(side: MaterialStateProperty.all<BorderSide>(const BorderSide(color: kHyppePrimary))),
+              style: ButtonStyle(
+                  side: MaterialStateProperty.all<BorderSide>(
+                      const BorderSide(color: kHyppePrimary))),
               child: Text(titleSecondary),
             ),
           ),
@@ -136,7 +152,13 @@ class _FailedGetKTPDialogState extends State<FailedGetKTPDialog> {
     );
   }
 
-  Widget _buildButton({required ThemeData theme, required String caption, required Function function, required Color color, Color? textColor, bool matchParent = false}) {
+  Widget _buildButton(
+      {required ThemeData theme,
+      required String caption,
+      required Function function,
+      required Color color,
+      Color? textColor,
+      bool matchParent = false}) {
     return CustomTextButton(
       onPressed: () async {
         try {
@@ -149,9 +171,15 @@ class _FailedGetKTPDialogState extends State<FailedGetKTPDialog> {
       child: matchParent
           ? SizedBox(
               width: double.infinity,
-              child: CustomTextWidget(textToDisplay: caption, textStyle: theme.textTheme.button?.copyWith(color: textColor, fontSize: 14)),
+              child: CustomTextWidget(
+                  textToDisplay: caption,
+                  textStyle: theme.textTheme.labelLarge
+                      ?.copyWith(color: textColor, fontSize: 14)),
             )
-          : CustomTextWidget(textToDisplay: caption, textStyle: theme.textTheme.button?.copyWith(color: textColor, fontSize: 14)),
+          : CustomTextWidget(
+              textToDisplay: caption,
+              textStyle: theme.textTheme.labelLarge
+                  ?.copyWith(color: textColor, fontSize: 14)),
     );
   }
 }

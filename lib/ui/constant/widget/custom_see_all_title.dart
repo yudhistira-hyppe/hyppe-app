@@ -22,7 +22,8 @@ class CustomSeeAllTitle extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
       child: CustomTextWidget(
         textToDisplay: title,
-        textStyle: theme.textTheme.button?.copyWith(color: kHyppeLightButtonText),
+        textStyle:
+            theme.textTheme.labelLarge?.copyWith(color: kHyppeLightButtonText),
       ),
     );
   }

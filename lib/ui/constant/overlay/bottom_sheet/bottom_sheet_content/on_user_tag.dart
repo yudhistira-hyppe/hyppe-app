@@ -69,7 +69,8 @@ class _OnUserTagBottomSheetState extends State<OnUserTagBottomSheet> {
             )),
         title: CustomTextWidget(
           textToDisplay: 'Tag People',
-          textStyle: textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
+          textStyle:
+              textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.transparent,
       ),
@@ -81,7 +82,8 @@ class _OnUserTagBottomSheetState extends State<OnUserTagBottomSheet> {
             children: [
               CustomSearchBar(
                   hintText: notifier.language.search,
-                  contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
+                  contentPadding: EdgeInsets.symmetric(
+                      vertical: 16 * SizeConfig.scaleDiagonal),
                   controller: _controller,
                   onChanged: (val) {
                     if (lastInputValue != val) {
@@ -105,10 +107,13 @@ class _OnUserTagBottomSheetState extends State<OnUserTagBottomSheet> {
                                 return Column(
                                   children: [
                                     ListTile(
-                                      onTap: () => notifier.inserTagPeople(index),
+                                      onTap: () =>
+                                          notifier.inserTagPeople(index),
                                       contentPadding: EdgeInsets.zero,
-                                      title: Text("@${notifier.searchPeolpleData[index].username}"),
-                                      subtitle: Text("${notifier.searchPeolpleData[index].fullName}"),
+                                      title: Text(
+                                          "@${notifier.searchPeolpleData[index].username}"),
+                                      subtitle: Text(
+                                          "${notifier.searchPeolpleData[index].fullName}"),
                                       leading: StoryColorValidator(
                                         haveStory: false,
                                         featureType: FeatureType.pic,
@@ -116,8 +121,12 @@ class _OnUserTagBottomSheetState extends State<OnUserTagBottomSheet> {
                                           width: 50,
                                           height: 50,
                                           onTap: () {},
-                                          imageUrl: System().showUserPicture(notifier.searchPeolpleData[index].avatar?.mediaEndpoint),
-                                          badge: notifier.searchPeolpleData[index].urluserBadge,
+                                          imageUrl: System().showUserPicture(
+                                              notifier.searchPeolpleData[index]
+                                                  .avatar?.mediaEndpoint),
+                                          badge: notifier
+                                              .searchPeolpleData[index]
+                                              .urluserBadge,
                                           following: true,
                                           onFollow: () {},
                                         ),
@@ -139,7 +148,9 @@ class _OnUserTagBottomSheetState extends State<OnUserTagBottomSheet> {
                   return true;
                 },
               ),
-              notifier.isLoadingLoadMore == true ? const SizedBox(height: 30, child: CustomLoading()) : const SizedBox(),
+              notifier.isLoadingLoadMore == true
+                  ? const SizedBox(height: 30, child: CustomLoading())
+                  : const SizedBox(),
             ],
           ),
         ),

@@ -23,27 +23,27 @@ class SignUpForm extends StatelessWidget {
   final EdgeInsets? contentPadding;
   final String? errorText;
   final double? inputAreaHeight;
-  const SignUpForm({
-    Key? key,
-    required this.labelText,
-    required this.textEditingController,
-    this.focusNode,
-    this.labelStyle,
-    this.textInputType = TextInputType.text,
-    this.contentPadding,
-    this.readOnly = false,
-    this.obscure = false,
-    this.borderColor,
-    this.suffixIcon,
-    this.suffixIconSize,
-    this.prefixIcon,
-    this.prefixIconSize,
-    this.onTap,
-    this.onChange,
-    this.onChangeValue,
-    this.errorText,
-    this.inputAreaHeight
-  }) : super(key: key);
+  const SignUpForm(
+      {Key? key,
+      required this.labelText,
+      required this.textEditingController,
+      this.focusNode,
+      this.labelStyle,
+      this.textInputType = TextInputType.text,
+      this.contentPadding,
+      this.readOnly = false,
+      this.obscure = false,
+      this.borderColor,
+      this.suffixIcon,
+      this.suffixIconSize,
+      this.prefixIcon,
+      this.prefixIconSize,
+      this.onTap,
+      this.onChange,
+      this.onChangeValue,
+      this.errorText,
+      this.inputAreaHeight})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -56,10 +56,14 @@ class SignUpForm extends StatelessWidget {
           inputDecorationTheme: InputDecorationTheme(
             enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(
-                color: (onChangeValue ?? "") != "" ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary,
+                color: (onChangeValue ?? "") != ""
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.secondary,
               ),
             ),
-            focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary)),
+            focusedBorder: UnderlineInputBorder(
+                borderSide:
+                    BorderSide(color: Theme.of(context).colorScheme.primary)),
           ),
         ),
         child: CustomTextFormField(
@@ -74,33 +78,46 @@ class SignUpForm extends StatelessWidget {
           onTap: onTap,
           readOnly: readOnly,
           inputDecoration: InputDecoration(
-            contentPadding: contentPadding ?? const EdgeInsets.only(top: 0),
-            labelText: labelText,
-            labelStyle: Theme.of(context).primaryTextTheme.bodyText1!.copyWith(
-                  color:
-                      (focusNode?.hasPrimaryFocus ?? false) || (onChangeValue ?? "").isNotEmpty ? Theme.of(context).colorScheme.primary : null,
-                ),
-            prefixIconConstraints:
-                BoxConstraints(minWidth: prefixIcon != null ? SizeWidget().calculateSize(30, SizeWidget.baseWidthXD, SizeConfig.screenWidth!) : 0),
-            suffixIconConstraints:
-                BoxConstraints(minWidth: suffixIcon != null ? SizeWidget().calculateSize(30, SizeWidget.baseWidthXD, SizeConfig.screenWidth!) : 0),
-            prefixIcon: prefixIcon != null
-                ? Transform.translate(
-                    offset: Offset(SizeWidget().calculateSize(-5.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!), 0),
-                    child: Transform.scale(
-                      scale: SizeWidget().calculateSize(1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
-                      child: prefixIcon,
-                    ),
-                  )
-                : const SizedBox.shrink(),
-            suffixIcon: suffixIcon != null
-                ? Transform.scale(
-                    scale: SizeWidget().calculateSize(suffixIconSize ?? 1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
-                    child: suffixIcon,
-                  )
-                : const SizedBox.shrink(),
-            errorText: errorText
-          ),
+              contentPadding: contentPadding ?? const EdgeInsets.only(top: 0),
+              labelText: labelText,
+              labelStyle:
+                  Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(
+                        color: (focusNode?.hasPrimaryFocus ?? false) ||
+                                (onChangeValue ?? "").isNotEmpty
+                            ? Theme.of(context).colorScheme.primary
+                            : null,
+                      ),
+              prefixIconConstraints: BoxConstraints(
+                  minWidth: prefixIcon != null
+                      ? SizeWidget().calculateSize(
+                          30, SizeWidget.baseWidthXD, SizeConfig.screenWidth!)
+                      : 0),
+              suffixIconConstraints: BoxConstraints(
+                  minWidth: suffixIcon != null
+                      ? SizeWidget().calculateSize(
+                          30, SizeWidget.baseWidthXD, SizeConfig.screenWidth!)
+                      : 0),
+              prefixIcon: prefixIcon != null
+                  ? Transform.translate(
+                      offset: Offset(
+                          SizeWidget().calculateSize(-5.0,
+                              SizeWidget.baseWidthXD, SizeConfig.screenWidth!),
+                          0),
+                      child: Transform.scale(
+                        scale: SizeWidget().calculateSize(1.2,
+                            SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
+                        child: prefixIcon,
+                      ),
+                    )
+                  : const SizedBox.shrink(),
+              suffixIcon: suffixIcon != null
+                  ? Transform.scale(
+                      scale: SizeWidget().calculateSize(suffixIconSize ?? 1.2,
+                          SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
+                      child: suffixIcon,
+                    )
+                  : const SizedBox.shrink(),
+              errorText: errorText),
         ),
       ),
     );

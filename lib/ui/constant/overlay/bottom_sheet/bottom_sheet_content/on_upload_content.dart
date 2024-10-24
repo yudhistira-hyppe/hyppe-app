@@ -42,10 +42,12 @@ class OnUploadContentBottomSheet extends StatefulWidget {
   });
 
   @override
-  State<OnUploadContentBottomSheet> createState() => _OnUploadContentBottomSheetState();
+  State<OnUploadContentBottomSheet> createState() =>
+      _OnUploadContentBottomSheetState();
 }
 
-class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet> {
+class _OnUploadContentBottomSheetState
+    extends State<OnUploadContentBottomSheet> {
   GlobalKey keybutton = GlobalKey();
   String newUser = '';
 
@@ -61,11 +63,13 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       setState(() {
-        isCreator = context.read<SelfProfileNotifier>().user.profile?.creator ?? false;
+        isCreator =
+            context.read<SelfProfileNotifier>().user.profile?.creator ?? false;
       });
       newUser = SharedPreference().readStorage(SpKeys.newUser) ?? 'FALSE';
       if (newUser == "TRUE") {
-        WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(context).startShowCase([keybutton]));
+        WidgetsBinding.instance.addPostFrameCallback(
+            (_) => ShowCaseWidget.of(context).startShowCase([keybutton]));
       }
       _initPush();
     });
@@ -106,11 +110,12 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
           mainAxisSize: MainAxisSize.min,
           children: [
             sixteenPx,
-            const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+            const CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}handler.svg"),
             sixteenPx,
             CustomTextWidget(
               textToDisplay: notifier.language.postTo ?? '',
-              textStyle: Theme.of(context).textTheme.headline6,
+              textStyle: Theme.of(context).textTheme.titleLarge,
             ),
             Showcase(
               key: keybutton,
@@ -119,10 +124,12 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
               targetPadding: const EdgeInsets.only(bottom: -40),
               tooltipPosition: TooltipPosition.top,
               title: tn.comeoncreatecontentnow,
-              titleTextStyle: const TextStyle(fontSize: 12, color: kHyppeNotConnect),
+              titleTextStyle:
+                  const TextStyle(fontSize: 12, color: kHyppeNotConnect),
               titlePadding: const EdgeInsets.all(6),
               description: tn.tutorLanding6,
-              descTextStyle: const TextStyle(fontSize: 10, color: kHyppeNotConnect),
+              descTextStyle:
+                  const TextStyle(fontSize: 10, color: kHyppeNotConnect),
               descriptionPadding: EdgeInsets.all(6),
               textColor: Colors.white,
               targetShapeBorder: const CircleBorder(),
@@ -138,7 +145,8 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                     ),
                     GestureDetector(
                         onTap: () async {
-                          SharedPreference().writeStorage(SpKeys.newUser, "FALSE");
+                          SharedPreference()
+                              .writeStorage(SpKeys.newUser, "FALSE");
                           // ShowCaseWidget.of(context).next();
                           // context.read<MainNotifier>().isloading = true;
                           // unawaited(
@@ -162,19 +170,31 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                           // );
                           // await Future.delayed(const Duration(seconds: 1));
                           // context.read<HomeNotifier>().tabIndex = 0;
-                          final vid = Provider.of<PreviewVidNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
-                          final diary = Provider.of<PreviewDiaryNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
-                          final pic = Provider.of<PreviewPicNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
-                          final stories = Provider.of<PreviewStoriesNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
+                          final vid = Provider.of<PreviewVidNotifier>(
+                              Routing.navigatorKey.currentContext ?? context,
+                              listen: false);
+                          final diary = Provider.of<PreviewDiaryNotifier>(
+                              Routing.navigatorKey.currentContext ?? context,
+                              listen: false);
+                          final pic = Provider.of<PreviewPicNotifier>(
+                              Routing.navigatorKey.currentContext ?? context,
+                              listen: false);
+                          final stories = Provider.of<PreviewStoriesNotifier>(
+                              Routing.navigatorKey.currentContext ?? context,
+                              listen: false);
                           stories.storiesGroups = [];
                           vid.vidData = null;
                           diary.diaryData = null;
                           pic.pic = null;
-                          Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
+                          Routing()
+                              .moveAndRemoveUntil(Routes.lobby, Routes.root);
                         },
                         child: Text(
                           tn.understand ?? '',
-                          style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold),
                         ))
                   ],
                 ),
@@ -186,25 +206,32 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                           children: [
                             menu(
                                 title: "HyppeStory",
-                                subTitle: notifier.language.shareYourMoment ?? '',
+                                subTitle:
+                                    notifier.language.shareYourMoment ?? '',
                                 icon: "${AssetPath.vectorPath}story.svg",
                                 function: () async {
                                   if (newUser == "FALSE") {
                                     // notifier.thumbnailLocalMedia();
-                                    context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
+                                    context
+                                            .read<PreviewVidNotifier>()
+                                            .canPlayOpenApps =
+                                        false; //biar ga play di landingpage
                                     notifier.featureType = FeatureType.story;
                                     notifier.selectedDuration = 15;
                                     final tempIsHome = isHomeScreen;
                                     if (tempIsHome) {
                                       isHomeScreen = false;
                                     }
-                                    await Routing().moveAndPop(Routes.makeContent);
+                                    await Routing()
+                                        .moveAndPop(Routes.makeContent);
                                     if (tempIsHome) {
                                       isHomeScreen = true;
                                     }
                                   }
                                 }),
-                            Divider(thickness: 1, color: Theme.of(context).dividerColor),
+                            Divider(
+                                thickness: 1,
+                                color: Theme.of(context).dividerColor),
                           ],
                         )
                       : Container(),
@@ -213,11 +240,15 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                           children: [
                             menu(
                                 title: "HyppePic",
-                                subTitle: notifier.language.captureYourMoment ?? '',
+                                subTitle:
+                                    notifier.language.captureYourMoment ?? '',
                                 icon: "${AssetPath.vectorPath}pic.svg",
                                 function: () async {
                                   if (newUser == "FALSE") {
-                                    context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
+                                    context
+                                            .read<PreviewVidNotifier>()
+                                            .canPlayOpenApps =
+                                        false; //biar ga play di landingpage
                                     // notifier.thumbnailLocalMedia();
                                     notifier.featureType = FeatureType.pic;
                                     notifier.isVideo = false;
@@ -226,13 +257,16 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                                     if (tempIsHome) {
                                       isHomeScreen = false;
                                     }
-                                    await Routing().moveAndPop(Routes.makeContent);
+                                    await Routing()
+                                        .moveAndPop(Routes.makeContent);
                                     if (tempIsHome) {
                                       isHomeScreen = true;
                                     }
                                   }
                                 }),
-                            Divider(thickness: 1, color: Theme.of(context).dividerColor),
+                            Divider(
+                                thickness: 1,
+                                color: Theme.of(context).dividerColor),
                           ],
                         )
                       : Container(),
@@ -270,11 +304,16 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                           children: [
                             menu(
                                 title: "HyppeVid",
-                                subTitle: notifier.language.shareWithUsYourCreatifity ?? '',
+                                subTitle: notifier
+                                        .language.shareWithUsYourCreatifity ??
+                                    '',
                                 icon: "${AssetPath.vectorPath}vid.svg",
                                 function: () async {
                                   if (newUser == "FALSE") {
-                                    context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
+                                    context
+                                            .read<PreviewVidNotifier>()
+                                            .canPlayOpenApps =
+                                        false; //biar ga play di landingpage
                                     // notifier.thumbnailLocalMedia();
                                     notifier.featureType = FeatureType.vid;
                                     notifier.isVideo = true;
@@ -289,7 +328,9 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                                     }
                                   }
                                 }),
-                            Divider(thickness: 1, color: Theme.of(context).dividerColor),
+                            Divider(
+                                thickness: 1,
+                                color: Theme.of(context).dividerColor),
                           ],
                         )
                       : Container(),
@@ -297,9 +338,12 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
 
                   if (widget.isLive)
                     menu(
-                        isCreators: SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED,
+                        isCreators: SharedPreference()
+                                .readStorage(SpKeys.statusVerificationId) ==
+                            VERIFIED,
                         title: "HyppeLive",
-                        subTitle: notifier.language.itstimetoLIVEandinteract ?? '',
+                        subTitle:
+                            notifier.language.itstimetoLIVEandinteract ?? '',
                         icon: "${AssetPath.vectorPath}hyppeLive.svg",
                         function: () async {
                           if (newUser == "FALSE") {
@@ -308,7 +352,9 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                             // if (tempIsHome) {
                             //   isHomeScreen = false;
                             // }
-                            if (SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED) {
+                            if (SharedPreference()
+                                    .readStorage(SpKeys.statusVerificationId) ==
+                                VERIFIED) {
                               Routing().moveAndPop(Routes.streamer);
                               // if (Platform.isAndroid) {
                               //   Routing().moveAndPop(Routes.streamer);
@@ -332,7 +378,12 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
     );
   }
 
-  Widget menu({String? title, String? subTitle, String? icon, Function()? function, bool? isCreators}) {
+  Widget menu(
+      {String? title,
+      String? subTitle,
+      String? icon,
+      Function()? function,
+      bool? isCreators}) {
     return ListTile(
       visualDensity: VisualDensity.adaptivePlatformDensity,
       onTap: function,
@@ -341,7 +392,10 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
       title: CustomTextWidget(
         textToDisplay: title ?? '',
         textAlign: TextAlign.start,
-        textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18, fontWeight: FontWeight.w800, color: isCreators != null && !isCreators ? kHyppeBurem : null),
+        textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            fontSize: 18,
+            fontWeight: FontWeight.w800,
+            color: isCreators != null && !isCreators ? kHyppeBurem : null),
       ),
       subtitle: Container(
         margin: const EdgeInsets.only(top: 5),

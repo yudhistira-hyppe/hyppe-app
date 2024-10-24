@@ -42,9 +42,12 @@ class _InterestScreenState extends State<InterestScreen> {
         child: notifier.loadLandingPage
             ? _shimmerInterests(context)
             : Builder(builder: (context) {
-                final image = Image.asset(System().getPathByInterest(notifier.listInterest?[0].id ?? ''));
+                final image = Image.asset(System()
+                    .getPathByInterest(notifier.listInterest?[0].id ?? ''));
                 final completer = Completer<ui.Image>();
-                image.image.resolve(const ImageConfiguration()).addListener(ImageStreamListener((image, synchronousCall) {
+                image.image
+                    .resolve(const ImageConfiguration())
+                    .addListener(ImageStreamListener((image, synchronousCall) {
                   completer.complete(image.image);
                 }));
                 final locale = SharedPreference().readStorage(SpKeys.isoCode);
@@ -59,10 +62,14 @@ class _InterestScreenState extends State<InterestScreen> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Container(
-                              margin: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+                              margin: const EdgeInsets.only(
+                                  left: 10, right: 10, top: 10, bottom: 10),
                               child: Text(
                                 notifier.language.findYourInterests ?? ' ',
-                                style: const TextStyle(color: kHyppeLightSecondary, fontSize: 14, fontWeight: FontWeight.bold),
+                                style: const TextStyle(
+                                    color: kHyppeLightSecondary,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
                             (notifier.listInterest ?? []).isNotEmpty
@@ -76,8 +83,11 @@ class _InterestScreenState extends State<InterestScreen> {
                                           crossAxisSpacing: 10,
                                           mainAxisSpacing: 10,
                                           crossAxisCount: 2,
-                                          childAspectRatio: (snapshot.data?.width ?? 3) / (snapshot.data?.height ?? 1),
-                                          children: (notifier.listInterest ?? [])
+                                          childAspectRatio:
+                                              (snapshot.data?.width ?? 3) /
+                                                  (snapshot.data?.height ?? 1),
+                                          children: (notifier.listInterest ??
+                                                  [])
                                               .map(
                                                 (e) {
                                                   return Stack(
@@ -85,35 +95,71 @@ class _InterestScreenState extends State<InterestScreen> {
                                                       Positioned.fill(
                                                           child: Container(
                                                         width: double.infinity,
-                                                        alignment: Alignment.topRight,
-                                                        decoration: BoxDecoration(
-                                                          borderRadius: BorderRadius.circular(2),
-                                                          image: DecorationImage(
+                                                        alignment:
+                                                            Alignment.topRight,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(2),
+                                                          image:
+                                                              DecorationImage(
                                                             fit: BoxFit.contain,
-                                                            image: AssetImage(System().getPathByInterest(e.id ?? '')),
+                                                            image: AssetImage(
+                                                                System()
+                                                                    .getPathByInterest(
+                                                                        e.id ??
+                                                                            '')),
                                                           ),
                                                         ),
                                                       )),
                                                       Positioned.fill(
                                                           child: Material(
-                                                        color: Colors.transparent,
+                                                        color:
+                                                            Colors.transparent,
                                                         child: Ink(
-                                                          color: Colors.transparent,
+                                                          color: Colors
+                                                              .transparent,
                                                           child: InkWell(
-                                                            borderRadius: const BorderRadius.all(Radius.circular(8)),
+                                                            borderRadius:
+                                                                const BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            8)),
                                                             onTap: () {
-                                                              if (widget.onClick != null) {
-                                                                widget.onClick!(e);
+                                                              if (widget
+                                                                      .onClick !=
+                                                                  null) {
+                                                                widget.onClick!(
+                                                                    e);
                                                               }
                                                             },
-                                                            splashColor: context.getColorScheme().primary,
+                                                            splashColor: context
+                                                                .getColorScheme()
+                                                                .primary,
                                                             child: Container(
-                                                              width: double.infinity,
-                                                              alignment: Alignment.centerLeft,
-                                                              margin: const EdgeInsets.only(left: 12),
-                                                              child: CustomTextWidget(
-                                                                textToDisplay: isIndo ? (e.interestNameId ?? '') : (e.interestName ?? ''),
-                                                                textStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Colors.white),
+                                                              width: double
+                                                                  .infinity,
+                                                              alignment: Alignment
+                                                                  .centerLeft,
+                                                              margin:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                      left: 12),
+                                                              child:
+                                                                  CustomTextWidget(
+                                                                textToDisplay: isIndo
+                                                                    ? (e.interestNameId ??
+                                                                        '')
+                                                                    : (e.interestName ??
+                                                                        ''),
+                                                                textStyle: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .titleSmall
+                                                                    ?.copyWith(
+                                                                        color: Colors
+                                                                            .white),
                                                               ),
                                                             ),
                                                           ),
@@ -129,7 +175,10 @@ class _InterestScreenState extends State<InterestScreen> {
                                       ),
                                     ],
                                   )
-                                : SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text, margin: const EdgeInsets.only(left: 16))
+                                : SearchNoResult(
+                                    locale: notifier.language,
+                                    keyword: notifier.searchController.text,
+                                    margin: const EdgeInsets.only(left: 16))
                           ],
                         );
                       } else {

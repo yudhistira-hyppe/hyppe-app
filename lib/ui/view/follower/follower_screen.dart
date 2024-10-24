@@ -26,7 +26,8 @@ class FollowerScreen extends StatefulWidget {
   State<FollowerScreen> createState() => _FollowerScreenState();
 }
 
-class _FollowerScreenState extends State<FollowerScreen> with SingleTickerProviderStateMixin {
+class _FollowerScreenState extends State<FollowerScreen>
+    with SingleTickerProviderStateMixin {
   final notifier = FollowerNotifier();
 
   late TabController _tabController;
@@ -34,7 +35,11 @@ class _FollowerScreenState extends State<FollowerScreen> with SingleTickerProvid
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'FollowerScreen');
-    _tabController = TabController(length: 2, vsync: this, initialIndex: widget.argument.eventType == InteractiveEventType.follower ? 0 : 1);
+    _tabController = TabController(
+        length: 2,
+        vsync: this,
+        initialIndex:
+            widget.argument.eventType == InteractiveEventType.follower ? 0 : 1);
     notifier.initState(context);
     super.initState();
   }
@@ -54,7 +59,7 @@ class _FollowerScreenState extends State<FollowerScreen> with SingleTickerProvid
               leading: const BackButton(),
               title: CustomTextWidget(
                 textAlign: TextAlign.left,
-                textStyle: themes.textTheme.bodyText1,
+                textStyle: themes.textTheme.bodyLarge,
                 textToDisplay: widget.argument.username ?? '',
               ),
               bottom: TabBar(

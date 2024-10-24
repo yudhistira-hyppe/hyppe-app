@@ -19,10 +19,10 @@ class VerificationIDSuccess extends StatefulWidget {
 }
 
 class _VerificationIDSuccessState extends State<VerificationIDSuccess> {
-
   @override
   void initState() {
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationIDSuccess');
+    FirebaseCrashlytics.instance
+        .setCustomKey('layout', 'VerificationIDSuccess');
     super.initState();
   }
 
@@ -39,7 +39,9 @@ class _VerificationIDSuccessState extends State<VerificationIDSuccess> {
         },
         child: Scaffold(
           appBar: AppBar(
-            leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
+            leadingWidth: 50 *
+                (SizeConfig.screenWidth ?? context.getWidth()) /
+                SizeWidget.baseWidthXD,
             leading: CustomIconButtonWidget(
               defaultColor: true,
               iconData: "${AssetPath.vectorPath}back-arrow.svg",
@@ -48,8 +50,10 @@ class _VerificationIDSuccessState extends State<VerificationIDSuccess> {
             titleSpacing: 0,
             title: CustomTextWidget(
               textToDisplay: notifier.language.idVerification ?? '',
-              textStyle:
-                  Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
+              textStyle: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(fontSize: 18),
             ),
             centerTitle: false,
           ),
@@ -67,7 +71,8 @@ class _VerificationIDSuccessState extends State<VerificationIDSuccess> {
                   CustomTextWidget(
                       textOverflow: TextOverflow.visible,
                       textAlign: TextAlign.left,
-                      textToDisplay: notifier.language.successIdCardTitle ?? ''),
+                      textToDisplay:
+                          notifier.language.successIdCardTitle ?? ''),
                   _buildDivider(context),
                   const SizedBox(height: 10),
                   _unorderedList(notifier.language.successIdCard1 ?? ''),
@@ -89,8 +94,8 @@ class _VerificationIDSuccessState extends State<VerificationIDSuccess> {
               function: () => notifier.clearAndMoveToLobby(),
               child: CustomTextWidget(
                 textToDisplay: notifier.language.close ?? 'close',
-                textStyle:
-                    textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                textStyle: textTheme.labelLarge
+                    ?.copyWith(color: kHyppeLightButtonText),
               ),
               buttonStyle: ButtonStyle(
                 foregroundColor: MaterialStateProperty.all(

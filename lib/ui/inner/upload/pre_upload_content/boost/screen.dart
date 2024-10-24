@@ -40,7 +40,7 @@ class BoostUploadScreen extends StatelessWidget {
               textToDisplay: notifier.language.postBoost ?? '',
               textStyle: Theme.of(context)
                   .textTheme
-                  .headline6
+                  .titleLarge
                   ?.copyWith(fontWeight: FontWeight.bold),
             ),
           ),
@@ -169,7 +169,7 @@ class BoostUploadScreen extends StatelessWidget {
                                       ),
                                       textStyle: Theme.of(context)
                                           .textTheme
-                                          .caption
+                                          .bodySmall
                                           ?.copyWith(
                                             fontWeight: FontWeight.w600,
                                           ),
@@ -181,7 +181,7 @@ class BoostUploadScreen extends StatelessWidget {
                                       notifier.captionController.text,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .caption
+                                          .bodySmall
                                           ?.copyWith(
                                             fontWeight: FontWeight.w600,
                                           ),
@@ -289,7 +289,7 @@ class BoostUploadScreen extends StatelessWidget {
                                 notifier.language.autoSelect ?? 'automatic',
                             textStyle: Theme.of(context)
                                 .primaryTextTheme
-                                .bodyText2
+                                .bodyMedium
                                 ?.copyWith(fontWeight: FontWeight.w700),
                           ),
                           activeColor: Theme.of(context).colorScheme.primary,
@@ -315,7 +315,7 @@ class BoostUploadScreen extends StatelessWidget {
                                 notifier.language.selectManual ?? 'manual',
                             textStyle: Theme.of(context)
                                 .primaryTextTheme
-                                .bodyText2
+                                .bodyMedium
                                 ?.copyWith(fontWeight: FontWeight.w700),
                           ),
                           activeColor: Theme.of(context).colorScheme.primary,
@@ -354,7 +354,7 @@ class BoostUploadScreen extends StatelessWidget {
                                       : notifier.tmpBoostTime,
                                   textStyle: Theme.of(context)
                                       .textTheme
-                                      .bodyText1
+                                      .bodyLarge
                                       ?.copyWith(
                                         color: notifier.tmpBoost == 'manual'
                                             ? kHyppeLightSecondary
@@ -407,7 +407,7 @@ class BoostUploadScreen extends StatelessWidget {
                                       : notifier.tmpBoostInterval,
                                   textStyle: Theme.of(context)
                                       .textTheme
-                                      .bodyText1
+                                      .bodyLarge
                                       ?.copyWith(
                                         color: notifier.tmpBoost == 'manual'
                                             ? kHyppeLightSecondary
@@ -450,7 +450,7 @@ class BoostUploadScreen extends StatelessWidget {
                                 '',
                             style: Theme.of(context)
                                 .textTheme
-                                .caption
+                                .bodySmall
                                 ?.copyWith(color: kHyppeGrey),
                           ),
                         ),
@@ -478,7 +478,7 @@ class BoostUploadScreen extends StatelessWidget {
                       textToDisplay: notifier.language.confirm ?? 'confirm',
                       textStyle: Theme.of(context)
                           .textTheme
-                          .button
+                          .labelLarge
                           ?.copyWith(color: kHyppeLightButtonText),
                     ),
             ),

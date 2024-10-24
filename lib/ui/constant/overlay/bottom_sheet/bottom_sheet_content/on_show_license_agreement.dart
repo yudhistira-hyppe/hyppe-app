@@ -25,30 +25,45 @@ class OnShowLicenseAgreement extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
-              CustomTextWidget(textToDisplay: notifier.language.termsOfUse ?? "Terms Of Use", textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),
+              const CustomIconWidget(
+                  iconData: "${AssetPath.vectorPath}handler.svg"),
+              CustomTextWidget(
+                textToDisplay: notifier.language.termsOfUse ?? "Terms Of Use",
+                textStyle:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+              ),
               RichText(
                 text: TextSpan(
-                  style: _textTheme.bodyText2,
-                  text: '${notifier.language.byTappingAgreeAndContinueYouAgreeToOur} ',
+                  style: _textTheme.bodyMedium,
+                  text:
+                      '${notifier.language.byTappingAgreeAndContinueYouAgreeToOur} ',
                   children: [
                     TextSpan(
                       text: '${notifier.language.termsOfService} ',
-                      recognizer: TapGestureRecognizer()..onTap = () => notifier.goToEula(),
-                      style: _textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold, color: kHyppePrimary),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => notifier.goToEula(),
+                      style: _textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.bold, color: kHyppePrimary),
                       children: [
                         TextSpan(
-                          text: '${notifier.language.andAcknowledgeThatYouHaveReadOur} ',
-                          style: _textTheme.bodyText2,
+                          text:
+                              '${notifier.language.andAcknowledgeThatYouHaveReadOur} ',
+                          style: _textTheme.bodyMedium,
                           children: [
                             TextSpan(
                               text: '${notifier.language.privacyPolicy} ',
-                              recognizer: TapGestureRecognizer()..onTap = () => context.read<UserInterestNotifier>().goToEula(),
-                              style: _textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold, color: kHyppePrimary),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () => context
+                                    .read<UserInterestNotifier>()
+                                    .goToEula(),
+                              style: _textTheme.bodyMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: kHyppePrimary),
                               children: [
                                 TextSpan(
-                                  text: notifier.language.toLearnAboutHowWeCollectUseAndShareYourData,
-                                  style: _textTheme.bodyText2,
+                                  text: notifier.language
+                                      .toLearnAboutHowWeCollectUseAndShareYourData,
+                                  style: _textTheme.bodyMedium,
                                 ),
                               ],
                             )
@@ -66,17 +81,22 @@ class OnShowLicenseAgreement extends StatelessWidget {
                 width: SizeConfig.screenWidth,
                 height: 50,
                 buttonStyle: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(kHyppePrimary),
-                    overlayColor: MaterialStateProperty.all<Color>(kHyppePrimary),
-                    foregroundColor: MaterialStateProperty.all<Color>(kHyppePrimary),
-                    shadowColor: MaterialStateProperty.all<Color>(kHyppePrimary)),
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(kHyppePrimary),
+                    overlayColor:
+                        MaterialStateProperty.all<Color>(kHyppePrimary),
+                    foregroundColor:
+                        MaterialStateProperty.all<Color>(kHyppePrimary),
+                    shadowColor:
+                        MaterialStateProperty.all<Color>(kHyppePrimary)),
                 function: () => Navigator.pop(context, true),
                 child: Selector<UserInterestNotifier, bool>(
                   selector: (context, notifier) => notifier.isLoading,
                   builder: (_, value, __) {
                     return CustomTextWidget(
                       textToDisplay: notifier.language.agreeAndContinue ?? '',
-                      textStyle: _textTheme.bodyText2?.copyWith(color: kHyppeLightButtonText),
+                      textStyle: _textTheme.bodyMedium
+                          ?.copyWith(color: kHyppeLightButtonText),
                     );
                   },
                 ),

@@ -34,13 +34,15 @@ import '../../bottom_sheet/show_bottom_sheet.dart';
 class AdsPopupVideoDialog extends StatefulWidget {
   final AdsData data;
   final String auth;
-  const AdsPopupVideoDialog({Key? key, required this.data, required this.auth}) : super(key: key);
+  const AdsPopupVideoDialog({Key? key, required this.data, required this.auth})
+      : super(key: key);
 
   @override
   State<AdsPopupVideoDialog> createState() => _AdsPopupVideoDialogState();
 }
 
-class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsBindingObserver, TickerProviderStateMixin {
+class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog>
+    with WidgetsBindingObserver, TickerProviderStateMixin {
   FlutterAliplayer? fAliplayer;
   // final _sharedPrefs = SharedPreference();
   var secondsSkip = 0;
@@ -114,7 +116,6 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
   //网络状态监听
   StreamSubscription? _networkSubscriptiion;
 
-
   var loadLaunch = false;
 
   bool isMute = false;
@@ -127,7 +128,8 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
       SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
       secondsSkip = widget.data.adsSkip ?? 0;
       // _pageController.addListener(() => notifier.currentPage = _pageController.page);
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: "iklanPopUp");
+      fAliplayer =
+          FlutterAliPlayerFactory.createAliPlayer(playerId: "iklanPopUp");
 
       WidgetsBinding.instance.addObserver(this);
       bottomIndex = 0;
@@ -154,7 +156,8 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
 
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
-      fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+      fAliplayer
+          ?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
 
       if (Platform.isAndroid) {
         getExternalStorageDirectories().then((value) {
@@ -178,7 +181,9 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
     });
     fAliplayer?.setOnPrepared((playerId) {
       // Fluttertoast.showToast(msg: "OnPrepared ");
-      fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
+      fAliplayer
+          ?.getPlayerName()
+          .then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
         _videoDuration = value['duration'];
         setState(() {
@@ -189,13 +194,12 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
       isPlay = true;
     });
     fAliplayer?.setOnRenderingStart((playerId) {
-
       // Fluttertoast.showToast(msg: " OnFirstFrameShow ");
     });
     fAliplayer?.setOnVideoSizeChanged((width, height, rotation, playerId) {});
     fAliplayer?.setOnStateChanged((newState, playerId) {
       // _currentPlayerState = newState;
-      try{
+      try {
         switch (newState) {
           case FlutterAvpdef.AVPStatus_AVPStatusStarted:
             WakelockPlus.enable();
@@ -226,10 +230,9 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
             break;
           default:
         }
-      }catch(e){
+      } catch (e) {
         e.logger();
       }
-
     });
     fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
       setState(() {
@@ -443,351 +446,475 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
 
   @override
   Widget build(BuildContext context) {
-    final ratio = (widget.data.height != null && widget.data.width != null) ? widget.data.width!/widget.data.height! : 16/9;
-    return Builder(
-        builder: (context) {
-          final language = context.read<TranslateNotifierV2>().translate;
-          return SafeArea(
-            child: Material(
-              color: Colors.transparent,
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 23),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-                            child: Column(
+    final ratio = (widget.data.height != null && widget.data.width != null)
+        ? widget.data.width! / widget.data.height!
+        : 16 / 9;
+    return Builder(builder: (context) {
+      final language = context.read<TranslateNotifierV2>().translate;
+      return SafeArea(
+        child: Material(
+          color: Colors.transparent,
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 23),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 24),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Column(
+                          children: [
+                            Row(
                               children: [
-                                Row(
-                                  children: [
-                                    CustomBaseCacheImage(
-                                      imageUrl: widget.data.avatar?.fullLinkURL,
-                                      memCacheWidth: 200,
-                                      memCacheHeight: 200,
-                                      imageBuilder: (_, imageProvider) {
-                                        return Container(
-                                          width: 36,
-                                          height: 36,
-                                          decoration: BoxDecoration(
-                                            borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                            image: DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: imageProvider,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      errorWidget: (_, url, ___) {
-                                        if(url.isNotEmpty && url.withHttp()){
-                                          return ClipRRect(
-                                              borderRadius: BorderRadius.circular(18),
-                                              child: Image.network(url, width: 36, height: 36, fit: BoxFit.cover,
-                                                  loadingBuilder: (BuildContext context, Widget child,
-                                                      ImageChunkEvent? loadingProgress) {
-                                                    if (loadingProgress == null) return child;
-                                                    return Center(
-                                                      child: SizedBox(
-                                                        width: 20,
-                                                        height: 20,
-                                                        child: CircularProgressIndicator(
-                                                          value: loadingProgress.expectedTotalBytes != null
-                                                              ? loadingProgress.cumulativeBytesLoaded /
-                                                              loadingProgress.expectedTotalBytes!
-                                                              : null,
-                                                        ),
-                                                      ),
-                                                    );
-                                                  },
-                                                  errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                                                    return Container(
-                                                      width: 36,
-                                                      height: 36,
-                                                      decoration: const BoxDecoration(
-                                                        borderRadius: BorderRadius.all(Radius.circular(18)),
-                                                        image: DecorationImage(
-                                                          fit: BoxFit.cover,
-                                                          image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
-                                                        ),
-                                                      ),
-                                                    );
-                                                  }));
-                                        }
-                                        return Container(
-                                          width: 36,
-                                          height: 36,
-                                          decoration: const BoxDecoration(
-                                            borderRadius: BorderRadius.all(Radius.circular(18)),
-                                            image: DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      emptyWidget: Container(
-                                        width: 36,
-                                        height: 36,
-                                        decoration: const BoxDecoration(
-                                          borderRadius: BorderRadius.all(Radius.circular(18)),
-                                          image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
-                                          ),
+                                CustomBaseCacheImage(
+                                  imageUrl: widget.data.avatar?.fullLinkURL,
+                                  memCacheWidth: 200,
+                                  memCacheHeight: 200,
+                                  imageBuilder: (_, imageProvider) {
+                                    return Container(
+                                      width: 36,
+                                      height: 36,
+                                      decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(18)),
+                                        image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: imageProvider,
                                         ),
                                       ),
-                                    ),
-                                    twelvePx,
-                                    Expanded(child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        CustomTextWidget(textToDisplay: widget.data.username ?? '', textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700, ),),
-                                        CustomTextWidget(textToDisplay: language.sponsored ?? 'Bersponsor', textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w400, ),)
-                                      ],
-                                    ),),
-                                    twelvePx,
-                                    GestureDetector(
-                                      onTap: () {
-                                        ShowBottomSheet().onReportContent(
-                                          context,
-                                          adsData: widget.data,
-                                          type: adsPopUp,
-                                          postData: null,
-                                          onUpdate: () {
-                                            setState(() {
-                                              widget.data.isReport = true;
-                                            });
-                                          },
-                                        );
-                                      },
-                                      child: const CustomIconWidget(
-                                        defaultColor: false,
-                                        iconData: '${AssetPath.vectorPath}more.svg',
-                                        color: kHyppeTextLightPrimary,
-                                      ),
-                                    ),
-                                    tenPx,
-                                    loadingBack ? const SizedBox( height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2,)) : secondsSkip > 0 ? Container(
-                                      height: 30,
-                                      width: 30,
-                                      alignment: Alignment.center,
-                                      decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)), color: Colors.grey),
-                                      child: Text(
-                                        '$secondsSkip',
-                                        style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-                                      ),
-                                    ) : InkWell(
-                                      onTap: () async {
-                                        // setState(() {
-                                        //   loadingBack = true;
-                                        // });
-                                        // await System().adsView(widget.data, widget.data.duration?.round() ?? 10).whenComplete(() => Routing().moveBack());
-                                        // setState(() {
-                                        //   loadingBack = false;
-                                        // });
-                                        Routing().moveBack();
-                                      },
-                                      child: const Padding(
-                                        padding: EdgeInsets.only(left: 8.0),
-                                        child: CustomIconWidget(
-                                          defaultColor: false,
-                                          iconData: "${AssetPath.vectorPath}close_ads.svg",
+                                    );
+                                  },
+                                  errorWidget: (_, url, ___) {
+                                    if (url.isNotEmpty && url.withHttp()) {
+                                      return ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(18),
+                                          child: Image.network(url,
+                                              width: 36,
+                                              height: 36,
+                                              fit: BoxFit.cover, loadingBuilder:
+                                                  (BuildContext context,
+                                                      Widget child,
+                                                      ImageChunkEvent?
+                                                          loadingProgress) {
+                                            if (loadingProgress == null)
+                                              return child;
+                                            return Center(
+                                              child: SizedBox(
+                                                width: 20,
+                                                height: 20,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  value: loadingProgress
+                                                              .expectedTotalBytes !=
+                                                          null
+                                                      ? loadingProgress
+                                                              .cumulativeBytesLoaded /
+                                                          loadingProgress
+                                                              .expectedTotalBytes!
+                                                      : null,
+                                                ),
+                                              ),
+                                            );
+                                          }, errorBuilder:
+                                                  (BuildContext context,
+                                                      Object exception,
+                                                      StackTrace? stackTrace) {
+                                            return Container(
+                                              width: 36,
+                                              height: 36,
+                                              decoration: const BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(18)),
+                                                image: DecorationImage(
+                                                  fit: BoxFit.cover,
+                                                  image: AssetImage(
+                                                      '${AssetPath.pngPath}profile-error.jpg'),
+                                                ),
+                                              ),
+                                            );
+                                          }));
+                                    }
+                                    return Container(
+                                      width: 36,
+                                      height: 36,
+                                      decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(18)),
+                                        image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: AssetImage(
+                                              '${AssetPath.pngPath}profile-error.jpg'),
                                         ),
                                       ),
+                                    );
+                                  },
+                                  emptyWidget: Container(
+                                    width: 36,
+                                    height: 36,
+                                    decoration: const BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(18)),
+                                      image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: AssetImage(
+                                            '${AssetPath.pngPath}profile-error.jpg'),
+                                      ),
                                     ),
-                                  ],
+                                  ),
                                 ),
-                                Container(
-                                  padding: const EdgeInsets.only(top: 20, left: 18, right: 18),
+                                twelvePx,
+                                Expanded(
                                   child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      AspectRatio(
-                                        aspectRatio: ratio,
-                                        child: Stack(
-                                          children: [
-                                            ClipRRect(
-                                              borderRadius:
-                                              const BorderRadius.all(Radius.circular(16.0)),
-                                              child: AliPlayerView(
-                                                onCreated: onViewPlayerCreated,
-                                                x: 0,
-                                                y: 0,
-                                                height:
-                                                MediaQuery.of(context).size.width * ratio,
-                                                width: MediaQuery.of(context).size.width,
-                                              ),
+                                      CustomTextWidget(
+                                        textToDisplay:
+                                            widget.data.username ?? '',
+                                        textStyle: context
+                                            .getTextTheme()
+                                            .bodyLarge
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.w700,
                                             ),
-                                            if (_showLoading)
-                                              Positioned.fill(
-                                                child: Align(
-                                                  alignment: Alignment.center,
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.max,
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                                    children: [
-                                                      const CircularProgressIndicator(
-                                                        backgroundColor: Colors.white,
-                                                        strokeWidth: 3.0,
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 10.0,
-                                                      ),
-                                                      Text(
-                                                        "$_loadingPercent%",
-                                                        style: const TextStyle(color: Colors.white),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            Positioned(
-                                              top: 12,
-                                              right: 12,
-                                              child: Container(
-                                                padding: const EdgeInsets.all(2),
-                                                decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(5),
-                                                    color: Colors.black.withOpacity(0.5)),
-                                                child: Text(
-                                                  System.getTimeformatByMs(_currentPositionText),
-                                                  style: const TextStyle(color: Colors.white, fontSize: 11),
-                                                ),
-                                              ),
-                                            ),
-                                            Positioned(
-                                              bottom: 12,
-                                              right: 12,
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  setState(() {
-                                                    isMute = !isMute;
-                                                  });
-                                                  fAliplayer?.setMuted(isMute);
-                                                },
-                                                child: Padding(
-                                                  padding: const EdgeInsets.only(right: 2.0),
-                                                  child: CustomIconWidget(
-                                                    iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
-                                                    defaultColor: false,
-                                                    height: 24,
-                                                  ),
-                                                ),
-                                              ),),
-                                          ],
-                                        ),
                                       ),
-                                      // Image.asset('${AssetPath.pngPath}avatar_ads_exp.png', width: double.infinity, fit: BoxFit.cover,),
-                                      // Container(
-                                      //   width: double.infinity,
-                                      //   decoration: BoxDecoration(
-                                      //     image: const DecorationImage(
-                                      //       image: AssetImage('${AssetPath.pngPath}avatar_ads_exp.png'),
-                                      //       fit: BoxFit.fitWidth,
-                                      //     ),
-                                      //     borderRadius: BorderRadius.circular(12.0),
-                                      //   ),
-                                      // ),
-                                      sixteenPx,
-                                      if(widget.data.adsDescription != null)
-                                        CustomTextWidget(
-                                          maxLines: 10,
-                                          textAlign: TextAlign.justify,
-                                          textToDisplay: widget.data.adsDescription ?? '',
-                                          textStyle: context.getTextTheme().bodyText1,),
-                                      sixteenPx,
-                                      InkWell(
-                                        onTap: () async {
-                                          final data = widget.data;
-                                          if (secondsSkip < 1) {
-                                            if (data.adsUrlLink?.isEmail() ?? false) {
-                                              final email = data.adsUrlLink!.replaceAll('email:', '');
-                                              setState(() {
-                                                loadLaunch = true;
-                                              });
-
-                                              print('second close ads: $secondsVideo');
-                                              System().adsView(widget.data, secondsVideo, isClick: true).whenComplete(() {
-                                                Navigator.pop(context);
-                                                Future.delayed(const Duration(milliseconds: 800), () {
-                                                  Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
-                                                });
-                                              });
-                                            } else {
-                                              if((data.adsUrlLink ?? '').withHttp()){
-                                                try {
-                                                  final uri = Uri.parse(data.adsUrlLink ?? '');
-                                                  print('bottomAdsLayout ${data.adsUrlLink}');
-                                                  if (await canLaunchUrl(uri)) {
-                                                    setState(() {
-                                                      loadLaunch = true;
-                                                    });
-                                                    print('second close ads: $secondsVideo');
-                                                    System().adsView(widget.data, secondsVideo, isClick: true).whenComplete(() async {
-                                                      Navigator.pop(context);
-                                                      await launchUrl(
-                                                        uri,
-                                                        mode: LaunchMode.externalApplication,
-                                                      );
-                                                    });
-                                                  } else {
-                                                    throw "Could not launch $uri";
-                                                  }
-                                                } catch (e) {
-                                                  setState(() {
-                                                    loadLaunch = true;
-                                                  });
-                                                  print('second close ads: $secondsVideo');
-                                                  System().adsView(widget.data, secondsVideo, isClick: true).whenComplete(() {
-                                                    System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                                                  });
-                                                }
-                                              }
-
-                                            }
-                                          }
-                                        },
-                                        child: Builder(builder: (context) {
-                                          final learnMore = widget.data.ctaButton ?? 'Learn More';
-                                          return Container(
-                                            alignment: Alignment.center,
-                                            padding: const EdgeInsets.only(top: 10, bottom: 10),
-                                            decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(5)), color: secondsSkip < 1 ? KHyppeButtonAds : context.getColorScheme().secondary),
-                                            child: loadLaunch ? const SizedBox(width: 40, height: 20, child: CustomLoading()) : Text(
-                                              learnMore,
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w700,
-                                              ),
+                                      CustomTextWidget(
+                                        textToDisplay:
+                                            language.sponsored ?? 'Bersponsor',
+                                        textStyle: context
+                                            .getTextTheme()
+                                            .bodyMedium
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.w400,
                                             ),
-                                          );
-                                        }),
                                       )
                                     ],
                                   ),
-                                )
+                                ),
+                                twelvePx,
+                                GestureDetector(
+                                  onTap: () {
+                                    ShowBottomSheet().onReportContent(
+                                      context,
+                                      adsData: widget.data,
+                                      type: adsPopUp,
+                                      postData: null,
+                                      onUpdate: () {
+                                        setState(() {
+                                          widget.data.isReport = true;
+                                        });
+                                      },
+                                    );
+                                  },
+                                  child: const CustomIconWidget(
+                                    defaultColor: false,
+                                    iconData: '${AssetPath.vectorPath}more.svg',
+                                    color: kHyppeTextLightPrimary,
+                                  ),
+                                ),
+                                tenPx,
+                                loadingBack
+                                    ? const SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                        ))
+                                    : secondsSkip > 0
+                                        ? Container(
+                                            height: 30,
+                                            width: 30,
+                                            alignment: Alignment.center,
+                                            decoration: const BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(15)),
+                                                color: Colors.grey),
+                                            child: Text(
+                                              '$secondsSkip',
+                                              style: const TextStyle(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          )
+                                        : InkWell(
+                                            onTap: () async {
+                                              // setState(() {
+                                              //   loadingBack = true;
+                                              // });
+                                              // await System().adsView(widget.data, widget.data.duration?.round() ?? 10).whenComplete(() => Routing().moveBack());
+                                              // setState(() {
+                                              //   loadingBack = false;
+                                              // });
+                                              Routing().moveBack();
+                                            },
+                                            child: const Padding(
+                                              padding:
+                                                  EdgeInsets.only(left: 8.0),
+                                              child: CustomIconWidget(
+                                                defaultColor: false,
+                                                iconData:
+                                                    "${AssetPath.vectorPath}close_ads.svg",
+                                              ),
+                                            ),
+                                          ),
                               ],
                             ),
-                          ),
+                            Container(
+                              padding: const EdgeInsets.only(
+                                  top: 20, left: 18, right: 18),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  AspectRatio(
+                                    aspectRatio: ratio,
+                                    child: Stack(
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(16.0)),
+                                          child: AliPlayerView(
+                                            onCreated: onViewPlayerCreated,
+                                            x: 0,
+                                            y: 0,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                ratio,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                          ),
+                                        ),
+                                        if (_showLoading)
+                                          Positioned.fill(
+                                            child: Align(
+                                              alignment: Alignment.center,
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  const CircularProgressIndicator(
+                                                    backgroundColor:
+                                                        Colors.white,
+                                                    strokeWidth: 3.0,
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10.0,
+                                                  ),
+                                                  Text(
+                                                    "$_loadingPercent%",
+                                                    style: const TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        Positioned(
+                                          top: 12,
+                                          right: 12,
+                                          child: Container(
+                                            padding: const EdgeInsets.all(2),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                color: Colors.black
+                                                    .withOpacity(0.5)),
+                                            child: Text(
+                                              System.getTimeformatByMs(
+                                                  _currentPositionText),
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 11),
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          bottom: 12,
+                                          right: 12,
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                isMute = !isMute;
+                                              });
+                                              fAliplayer?.setMuted(isMute);
+                                            },
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 2.0),
+                                              child: CustomIconWidget(
+                                                iconData: isMute
+                                                    ? '${AssetPath.vectorPath}sound-off.svg'
+                                                    : '${AssetPath.vectorPath}sound-on.svg',
+                                                defaultColor: false,
+                                                height: 24,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  // Image.asset('${AssetPath.pngPath}avatar_ads_exp.png', width: double.infinity, fit: BoxFit.cover,),
+                                  // Container(
+                                  //   width: double.infinity,
+                                  //   decoration: BoxDecoration(
+                                  //     image: const DecorationImage(
+                                  //       image: AssetImage('${AssetPath.pngPath}avatar_ads_exp.png'),
+                                  //       fit: BoxFit.fitWidth,
+                                  //     ),
+                                  //     borderRadius: BorderRadius.circular(12.0),
+                                  //   ),
+                                  // ),
+                                  sixteenPx,
+                                  if (widget.data.adsDescription != null)
+                                    CustomTextWidget(
+                                      maxLines: 10,
+                                      textAlign: TextAlign.justify,
+                                      textToDisplay:
+                                          widget.data.adsDescription ?? '',
+                                      textStyle:
+                                          context.getTextTheme().bodyLarge,
+                                    ),
+                                  sixteenPx,
+                                  InkWell(
+                                    onTap: () async {
+                                      final data = widget.data;
+                                      if (secondsSkip < 1) {
+                                        if (data.adsUrlLink?.isEmail() ??
+                                            false) {
+                                          final email = data.adsUrlLink!
+                                              .replaceAll('email:', '');
+                                          setState(() {
+                                            loadLaunch = true;
+                                          });
 
-                        ],
+                                          print(
+                                              'second close ads: $secondsVideo');
+                                          System()
+                                              .adsView(
+                                                  widget.data, secondsVideo,
+                                                  isClick: true)
+                                              .whenComplete(() {
+                                            Navigator.pop(context);
+                                            Future.delayed(
+                                                const Duration(
+                                                    milliseconds: 800), () {
+                                              Routing().move(
+                                                  Routes.otherProfile,
+                                                  argument:
+                                                      OtherProfileArgument(
+                                                          senderEmail: email));
+                                            });
+                                          });
+                                        } else {
+                                          if ((data.adsUrlLink ?? '')
+                                              .withHttp()) {
+                                            try {
+                                              final uri = Uri.parse(
+                                                  data.adsUrlLink ?? '');
+                                              print(
+                                                  'bottomAdsLayout ${data.adsUrlLink}');
+                                              if (await canLaunchUrl(uri)) {
+                                                setState(() {
+                                                  loadLaunch = true;
+                                                });
+                                                print(
+                                                    'second close ads: $secondsVideo');
+                                                System()
+                                                    .adsView(widget.data,
+                                                        secondsVideo,
+                                                        isClick: true)
+                                                    .whenComplete(() async {
+                                                  Navigator.pop(context);
+                                                  await launchUrl(
+                                                    uri,
+                                                    mode: LaunchMode
+                                                        .externalApplication,
+                                                  );
+                                                });
+                                              } else {
+                                                throw "Could not launch $uri";
+                                              }
+                                            } catch (e) {
+                                              setState(() {
+                                                loadLaunch = true;
+                                              });
+                                              print(
+                                                  'second close ads: $secondsVideo');
+                                              System()
+                                                  .adsView(
+                                                      widget.data, secondsVideo,
+                                                      isClick: true)
+                                                  .whenComplete(() {
+                                                System().goToWebScreen(
+                                                    data.adsUrlLink ?? '',
+                                                    isPop: true);
+                                              });
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    child: Builder(builder: (context) {
+                                      final learnMore =
+                                          widget.data.ctaButton ?? 'Learn More';
+                                      return Container(
+                                        alignment: Alignment.center,
+                                        padding: const EdgeInsets.only(
+                                            top: 10, bottom: 10),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(5)),
+                                            color: secondsSkip < 1
+                                                ? KHyppeButtonAds
+                                                : context
+                                                    .getColorScheme()
+                                                    .secondary),
+                                        child: loadLaunch
+                                            ? const SizedBox(
+                                                width: 40,
+                                                height: 20,
+                                                child: CustomLoading())
+                                            : Text(
+                                                learnMore,
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w700,
+                                                ),
+                                              ),
+                                      );
+                                    }),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
-          );
-        }
-    );
+            ],
+          ),
+        ),
+      );
+    });
   }
 
   void start() async {

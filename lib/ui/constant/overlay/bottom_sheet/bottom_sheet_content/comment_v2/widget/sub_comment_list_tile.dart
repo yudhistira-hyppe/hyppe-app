@@ -48,13 +48,16 @@ class _SubCommentListTileState extends State<SubCommentListTile> {
               following: true,
               width: 30 * SizeConfig.scaleDiagonal,
               height: 30 * SizeConfig.scaleDiagonal,
-              imageUrl: System().showUserPicture(commentor?.avatar?.mediaEndpoint),
+              imageUrl:
+                  System().showUserPicture(commentor?.avatar?.mediaEndpoint),
               badge: commentor?.urluserBadge,
-              onTap: () => System().navigateToProfile(context, widget.data?.sender ?? ''),
+              onTap: () => System()
+                  .navigateToProfile(context, widget.data?.sender ?? ''),
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 42 * SizeConfig.scaleDiagonal),
+            padding:
+                EdgeInsets.symmetric(horizontal: 42 * SizeConfig.scaleDiagonal),
             child: Consumer<CommentNotifierV2>(
               builder: (_, notifier, __) => Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -64,15 +67,20 @@ class _SubCommentListTileState extends State<SubCommentListTile> {
                     textAlign: TextAlign.start,
                     textSpan: TextSpan(
                       text: "@" '${commentor?.username ?? ''}' "   ",
-                      style: Theme.of(context).textTheme.caption,
+                      style: Theme.of(context).textTheme.bodySmall,
                       children: [
                         TextSpan(
                           text: System().readTimestamp(
-                            DateTime.parse(System().dateTimeRemoveT(widget.data?.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+                            DateTime.parse(System().dateTimeRemoveT(
+                                    widget.data?.createdAt ??
+                                        DateTime.now().toString()))
+                                .millisecondsSinceEpoch,
                             context,
                             fullCaption: true,
                           ),
-                          style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondary),
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(context).colorScheme.secondary),
                         )
                       ],
                     ),
@@ -83,7 +91,7 @@ class _SubCommentListTileState extends State<SubCommentListTile> {
                     textAlign: TextAlign.start,
                     maxLines: null,
                     textOverflow: TextOverflow.visible,
-                    textStyle: Theme.of(context).textTheme.bodyText2,
+                    textStyle: Theme.of(context).textTheme.bodyMedium,
                   ),
                   SizedBox(height: 9 * SizeConfig.scaleDiagonal),
                   Row(
@@ -91,7 +99,8 @@ class _SubCommentListTileState extends State<SubCommentListTile> {
                       InkWell(
                         onTap: () {
                           if (widget.fromFront) {
-                            ShowBottomSheet.onShowCommentV2(context, postID: notifier.postID);
+                            ShowBottomSheet.onShowCommentV2(context,
+                                postID: notifier.postID);
                           } else {
                             notifier.showTextInput = true;
                             notifier.onReplayCommentV2(

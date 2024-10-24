@@ -26,8 +26,10 @@ class ChangePasswordNotifier with ChangeNotifier {
   bool _obscureNewPassword = true;
   bool _obscureReTypePassword = true;
   final TextEditingController newPasswordController = TextEditingController();
-  final TextEditingController reTypePasswordController = TextEditingController();
-  final TextEditingController currentPasswordController = TextEditingController();
+  final TextEditingController reTypePasswordController =
+      TextEditingController();
+  final TextEditingController currentPasswordController =
+      TextEditingController();
 
   bool get obscureCurrentPassword => _obscureCurrentPassword;
   bool get obscureNewPassword => _obscureNewPassword;
@@ -78,23 +80,37 @@ class ChangePasswordNotifier with ChangeNotifier {
 
   TextStyle saveTextColor(BuildContext context) {
     if (_buttonValidation()) {
-      return Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText) ?? const TextStyle();
+      return Theme.of(context)
+              .textTheme
+              .labelLarge
+              ?.copyWith(color: kHyppeLightButtonText) ??
+          const TextStyle();
     } else {
-      return Theme.of(context).primaryTextTheme.button ?? const TextStyle();
+      return Theme.of(context).primaryTextTheme.labelLarge ?? const TextStyle();
     }
   }
 
-  TextStyle label(BuildContext context) => Theme.of(context).textTheme.headline6?.copyWith(color: kHyppePrimary) ?? const TextStyle();
-  TextStyle text(BuildContext context) => Theme.of(context).textTheme.bodyText1 ?? const TextStyle();
-  TextStyle hint(BuildContext context) => Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).tabBarTheme.unselectedLabelColor) ?? const TextStyle();
+  TextStyle label(BuildContext context) =>
+      Theme.of(context).textTheme.titleLarge?.copyWith(color: kHyppePrimary) ??
+      const TextStyle();
+  TextStyle text(BuildContext context) =>
+      Theme.of(context).textTheme.bodyLarge ?? const TextStyle();
+  TextStyle hint(BuildContext context) =>
+      Theme.of(context).textTheme.bodyLarge?.copyWith(
+          color: Theme.of(context).tabBarTheme.unselectedLabelColor) ??
+      const TextStyle();
 
   void onClickSave(BuildContext context) async {
     bool connect = await System().checkConnections();
     if (connect) {
-      final profileNotifier = Provider.of<SelfProfileNotifier>(context, listen: false);
+      final profileNotifier =
+          Provider.of<SelfProfileNotifier>(context, listen: false);
 
-      if (!FocusScope.of(context).hasPrimaryFocus) FocusScope.of(context).unfocus();
-      if (!_system.passwordMatch(password: newPasswordController.text, confirmPassword: reTypePasswordController.text)) {
+      if (!FocusScope.of(context).hasPrimaryFocus)
+        FocusScope.of(context).unfocus();
+      if (!_system.passwordMatch(
+          password: newPasswordController.text,
+          confirmPassword: reTypePasswordController.text)) {
         ShowBottomSheet().onShowColouredSheet(
           context,
           language.incorrectPassword ?? '',
@@ -104,7 +120,8 @@ class ChangePasswordNotifier with ChangeNotifier {
           subCaption: language.checkCarefullyPasswordAndReTypePassword,
         );
         return;
-      } else if (!_system.atLeastEightCharacter(text: newPasswordController.text)) {
+      } else if (!_system.atLeastEightCharacter(
+          text: newPasswordController.text)) {
         ShowBottomSheet().onShowColouredSheet(
           context,
           language.incorrectPassword ?? '',
@@ -114,7 +131,8 @@ class ChangePasswordNotifier with ChangeNotifier {
           sizeIcon: 15,
         );
         return;
-      } else if (!_system.atLeastContainOneCharacterAndOneNumber(text: newPasswordController.text)) {
+      } else if (!_system.atLeastContainOneCharacterAndOneNumber(
+          text: newPasswordController.text)) {
         ShowBottomSheet().onShowColouredSheet(
           context,
           language.incorrectPassword ?? '',
@@ -141,7 +159,9 @@ class ChangePasswordNotifier with ChangeNotifier {
       } else {
         onSave = true;
         final notifier = UserBloc();
-        await notifier.changePasswordBloc(context, oldPass: currentPasswordController.text, newPass: reTypePasswordController.text);
+        await notifier.changePasswordBloc(context,
+            oldPass: currentPasswordController.text,
+            newPass: reTypePasswordController.text);
         final fetch = notifier.userFetch;
         if (fetch.userState == UserState.changePasswordSuccess) {
           onSave = false;
@@ -149,13 +169,16 @@ class ChangePasswordNotifier with ChangeNotifier {
           obscureNewPassword = true;
           obscureReTypePassword = true;
           clearTxt();
-          ShowBottomSheet().onShowColouredSheet(context, language.passwordChangedSuccessfully ?? '');
+          ShowBottomSheet().onShowColouredSheet(
+              context, language.passwordChangedSuccessfully ?? '');
           await context.read<SettingNotifier>().logOut(context);
         }
         if (fetch.userState == UserState.changePasswordError) {
           onSave = false;
           if (fetch.data != null) {
-            ShowBottomSheet().onShowColouredSheet(context, language.incorrectPassword ?? '', color: Theme.of(context).colorScheme.error);
+            ShowBottomSheet().onShowColouredSheet(
+                context, language.incorrectPassword ?? '',
+                color: Theme.of(context).colorScheme.error);
           }
         }
       }

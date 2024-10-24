@@ -19,7 +19,8 @@ import 'package:hyppe/core/arguments/user_otp_screen_argument.dart';
 import 'package:hyppe/ui/constant/entities/loading/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 
-class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, LoadingNotifier {
+class UserOtpNotifier extends ChangeNotifier
+    with WidgetsBindingObserver, LoadingNotifier {
   LocalizationModelV2 language = LocalizationModelV2();
   translate(LocalizationModelV2 translate) {
     language = translate;
@@ -33,7 +34,8 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
 
   late UserOtpScreenArgument argument;
 
-  final String _excededMessage = "OTP max attempt exceeded, please try after 30 minute";
+  final String _excededMessage =
+      "OTP max attempt exceeded, please try after 30 minute";
 
   bool get inCorrectCode => _inCorrectCode;
   // bool get isOTPCodeFullFilled => _isOTPCodeFullFilled;
@@ -49,7 +51,6 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
   //   _isOTPCodeFullFilled = val;
   //   notifyListeners();
   // }
-
 
   void onResetData() {
     pinController.clear();
@@ -67,9 +68,9 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
 
   // TextStyle verifyTextColor(BuildContext context) {
   //   if (isOTPCodeFullFilled) {
-  //     return Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText) ?? const TextStyle();
+  //     return Theme.of(context).textTheme.labelLarge?.copyWith(color: kHyppeLightButtonText) ?? const TextStyle();
   //   } else {
-  //     return Theme.of(context).primaryTextTheme.button ?? const TextStyle();
+  //     return Theme.of(context).primaryTextTheme.labelLarge ?? const TextStyle();
   //   }
   // }
 
@@ -90,7 +91,11 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state != AppLifecycleState.resumed) {
-      _sharedPrefs.writeStorage(SpKeys.lastTimeStampReachMaxAttempRecoverPassword, DateTime.now().subtract(const Duration(minutes: 31)).millisecondsSinceEpoch);
+      _sharedPrefs.writeStorage(
+          SpKeys.lastTimeStampReachMaxAttempRecoverPassword,
+          DateTime.now()
+              .subtract(const Duration(minutes: 31))
+              .millisecondsSinceEpoch);
     }
     super.didChangeAppLifecycleState(state);
   }
@@ -105,7 +110,10 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
   String resendString() => language.resendNewCode ?? '';
 
   TextStyle? resendStyle(BuildContext context) {
-    return Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.primary);
+    return Theme.of(context)
+        .textTheme
+        .bodySmall
+        ?.copyWith(color: Theme.of(context).colorScheme.primary);
   }
 
   // Function? onVerifyButton(BuildContext context) {
@@ -162,7 +170,7 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
   //   }
   // }
 
-  Future onVerifyButton(BuildContext context, Function afterSuccess) async{
+  Future onVerifyButton(BuildContext context, Function afterSuccess) async {
     final notifier = UserBloc();
     try {
       // update loading state
@@ -226,7 +234,8 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
       final fetch = notifier.userFetch;
 
       if (fetch.userState == UserState.RecoverSuccess) {
-        _sharedPrefs.removeValue(SpKeys.lastTimeStampReachMaxAttempRecoverPassword);
+        _sharedPrefs
+            .removeValue(SpKeys.lastTimeStampReachMaxAttempRecoverPassword);
         afterExecute();
         // ShowBottomSheet().onShowColouredSheet(
         //   context,
@@ -241,9 +250,14 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
 
   void handleShowCountdown(String? message) {
     if (message?.toLowerCase().trim() == _excededMessage.toLowerCase().trim()) {
-      final lts = _sharedPrefs.readStorage(SpKeys.lastTimeStampReachMaxAttempRecoverPassword);
+      final lts = _sharedPrefs
+          .readStorage(SpKeys.lastTimeStampReachMaxAttempRecoverPassword);
       if (lts == null) {
-        _sharedPrefs.writeStorage(SpKeys.lastTimeStampReachMaxAttempRecoverPassword, DateTime.now().subtract(const Duration(minutes: 31)).millisecondsSinceEpoch);
+        _sharedPrefs.writeStorage(
+            SpKeys.lastTimeStampReachMaxAttempRecoverPassword,
+            DateTime.now()
+                .subtract(const Duration(minutes: 31))
+                .millisecondsSinceEpoch);
       }
       notifyListeners();
     }
@@ -275,7 +289,9 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
           } catch (e) {
             print(e);
           }
-          ShowBottomSheet().onShowColouredSheet(context, language.verified ?? '', subCaption: message);
+          ShowBottomSheet().onShowColouredSheet(
+              context, language.verified ?? '',
+              subCaption: message);
           Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
         }
       }

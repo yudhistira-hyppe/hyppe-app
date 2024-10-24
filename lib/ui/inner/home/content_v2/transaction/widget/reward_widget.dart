@@ -13,7 +13,8 @@ class RewardWidget extends StatelessWidget {
   final String? title;
   final TransactionHistoryModel? data;
   final LocalizationModelV2? language;
-  const RewardWidget({Key? key, this.title, this.data, this.language}) : super(key: key);
+  const RewardWidget({Key? key, this.title, this.data, this.language})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,16 +22,21 @@ class RewardWidget extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
-        color: kHyppeBurem.withOpacity(.05),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: kHyppeBurem.withOpacity(.3))
-        // boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
-      ),
+          color: kHyppeBurem.withOpacity(.05),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: kHyppeBurem.withOpacity(.3))
+          // boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+          ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
-            context.read<TransactionNotifier>().getDetailTransactionHistory(context, id: data?.id ?? '', type: System().convertTransactionTypeToString(data?.type), jenis: data?.jenis, isReward: true);
+            context.read<TransactionNotifier>().getDetailTransactionHistory(
+                context,
+                id: data?.id ?? '',
+                type: System().convertTransactionTypeToString(data?.type),
+                jenis: data?.jenis,
+                isReward: true);
             context.read<TransactionNotifier>().navigateToDetailTransaction();
           },
           child: Container(
@@ -39,45 +45,64 @@ class RewardWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 5),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 11, vertical: 5),
                   margin: const EdgeInsets.only(bottom: 12),
                   decoration: BoxDecoration(
                     color: kHyppeGreyLight,
                     borderRadius: BorderRadius.circular(5),
-                    boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+                    boxShadow: [
+                      BoxShadow(
+                          color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)
+                    ],
                   ),
                   child: CustomTextWidget(
                     textToDisplay: title ?? '',
-                    textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeGrey),
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .labelLarge
+                        ?.copyWith(color: kHyppeGrey),
                   ),
                 ),
-                Divider(height: 0.2, thickness: 1, color: kHyppeBurem.withOpacity(.3)),
+                Divider(
+                    height: 0.2,
+                    thickness: 1,
+                    color: kHyppeBurem.withOpacity(.3)),
                 twelvePx,
                 CustomTextWidget(
                   textToDisplay: language?.reward ?? '',
-                  textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                  textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onBackground),
                 ),
                 fourPx,
                 CustomTextWidget(
                   textToDisplay: language?.fromBalance ?? '',
-                  textStyle: Theme.of(context).textTheme.caption,
+                  textStyle: Theme.of(context).textTheme.bodySmall,
                 ),
                 tenPx,
                 CustomTextWidget(
                   textToDisplay: language?.amountEarned ?? '',
-                  textStyle: Theme.of(context).textTheme.caption,
+                  textStyle: Theme.of(context).textTheme.bodySmall,
                 ),
                 fourPx,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomTextWidget(
-                      textToDisplay: '${data?.debetKredit} ${System().currencyFormat(amount: data?.totalamount)}',
-                      textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.onBackground, fontWeight: FontWeight.bold),
+                      textToDisplay:
+                          '${data?.debetKredit} ${System().currencyFormat(amount: data?.totalamount)}',
+                      textStyle: Theme.of(context)
+                          .textTheme
+                          .bodyLarge
+                          ?.copyWith(
+                              color: Theme.of(context).colorScheme.onBackground,
+                              fontWeight: FontWeight.bold),
                     ),
                     CustomTextWidget(
-                      textToDisplay: System().dateFormatter(data?.timestamp?.substring(0, 10) ?? '', 3),
-                      textStyle: Theme.of(context).textTheme.caption ?? const TextStyle(),
+                      textToDisplay: System().dateFormatter(
+                          data?.timestamp?.substring(0, 10) ?? '', 3),
+                      textStyle: Theme.of(context).textTheme.bodySmall ??
+                          const TextStyle(),
                     ),
                   ],
                 ),

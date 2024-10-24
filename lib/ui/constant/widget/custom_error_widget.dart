@@ -30,68 +30,89 @@ class CustomErrorWidget extends StatelessWidget {
 
     return Consumer2<ErrorService, TranslateNotifierV2>(
       builder: (_, value, value2, __) {
-        return isVertical ? GestureDetector(
-          onTap: () async => await value.refresh(this, function),
-          child: Padding(
-            padding: padding,
-            child: Stack(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.surface,
-                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                  ),
-                ),
-                Center(
-                  child: Flex(
-                    direction: Axis.vertical,
-                    mainAxisAlignment: MainAxisAlignment.center,
+        return isVertical
+            ? GestureDetector(
+                onTap: () async => await value.refresh(this, function),
+                child: Padding(
+                  padding: padding,
+                  child: Stack(
                     children: [
-                      CustomIconWidget(
-                        iconData: "${AssetPath.vectorPath}unexpected-error.svg",
-                        defaultColor: false,
-                        height: iconSize,
-                        width: iconSize,
+                      Container(
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.surface,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10.0)),
+                        ),
                       ),
-                      eightPx,
-                      value.refreshing(this)
-                          ? UnconstrainedBox(child: CircularProgressIndicator(color: theme.colorScheme.primary, strokeWidth: 2.0))
-                          : CustomTextWidget(textToDisplay: "${value2.translate.sorryUnexpectedError}", textStyle: theme.textTheme.subtitle1),
-                      if (errorType != ErrorType.peopleStory) fourPx,
-                      if (errorType != ErrorType.peopleStory)
-                        CustomTextWidget(
-                            textToDisplay: "${value2.translate.weAreWorkingOnFixingTheProblemBeBackSoon}",
-                            textStyle: theme.textTheme.caption?.copyWith(color: theme.colorScheme.secondary))
+                      Center(
+                        child: Flex(
+                          direction: Axis.vertical,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomIconWidget(
+                              iconData:
+                                  "${AssetPath.vectorPath}unexpected-error.svg",
+                              defaultColor: false,
+                              height: iconSize,
+                              width: iconSize,
+                            ),
+                            eightPx,
+                            value.refreshing(this)
+                                ? UnconstrainedBox(
+                                    child: CircularProgressIndicator(
+                                        color: theme.colorScheme.primary,
+                                        strokeWidth: 2.0))
+                                : CustomTextWidget(
+                                    textToDisplay:
+                                        "${value2.translate.sorryUnexpectedError}",
+                                    textStyle: theme.textTheme.titleMedium),
+                            if (errorType != ErrorType.peopleStory) fourPx,
+                            if (errorType != ErrorType.peopleStory)
+                              CustomTextWidget(
+                                  textToDisplay:
+                                      "${value2.translate.weAreWorkingOnFixingTheProblemBeBackSoon}",
+                                  textStyle: theme.textTheme.bodySmall
+                                      ?.copyWith(
+                                          color: theme.colorScheme.secondary))
+                          ],
+                        ),
+                      )
                     ],
                   ),
-                )
-              ],
-            ),
-          ),
-        ) : SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CustomIconWidget(
-                iconData: "${AssetPath.vectorPath}unexpected-error.svg",
-                defaultColor: false,
-                height: iconSize,
-                width: iconSize,
-              ),
-              eightPx,
-              value.refreshing(this)
-                  ? UnconstrainedBox(child: CircularProgressIndicator(color: theme.colorScheme.primary, strokeWidth: 2.0))
-                  : CustomTextWidget(textToDisplay: "${value2.translate.sorryUnexpectedError}", textStyle: theme.textTheme.subtitle1),
-              if (errorType != ErrorType.peopleStory) fourPx,
-              if (errorType != ErrorType.peopleStory)
-                CustomTextWidget(
-                    textToDisplay: "${value2.translate.weAreWorkingOnFixingTheProblemBeBackSoon}",
-                    textStyle: theme.textTheme.caption?.copyWith(color: theme.colorScheme.secondary))
-            ],
-          ),
-        );
+                ),
+              )
+            : SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CustomIconWidget(
+                      iconData: "${AssetPath.vectorPath}unexpected-error.svg",
+                      defaultColor: false,
+                      height: iconSize,
+                      width: iconSize,
+                    ),
+                    eightPx,
+                    value.refreshing(this)
+                        ? UnconstrainedBox(
+                            child: CircularProgressIndicator(
+                                color: theme.colorScheme.primary,
+                                strokeWidth: 2.0))
+                        : CustomTextWidget(
+                            textToDisplay:
+                                "${value2.translate.sorryUnexpectedError}",
+                            textStyle: theme.textTheme.titleMedium),
+                    if (errorType != ErrorType.peopleStory) fourPx,
+                    if (errorType != ErrorType.peopleStory)
+                      CustomTextWidget(
+                          textToDisplay:
+                              "${value2.translate.weAreWorkingOnFixingTheProblemBeBackSoon}",
+                          textStyle: theme.textTheme.bodySmall
+                              ?.copyWith(color: theme.colorScheme.secondary))
+                  ],
+                ),
+              );
       },
     );
   }

@@ -68,7 +68,8 @@ class CustomContentModeratedWidget extends StatelessWidget {
                           width: width,
                           height: height,
                           decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(Radius.circular(10)),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
                             image: DecorationImage(
                               fit: BoxFit.cover,
                               image: imageProvider,
@@ -76,32 +77,44 @@ class CustomContentModeratedWidget extends StatelessWidget {
                           ),
                         );
                       },
-                      placeHolderWidget: placeHolder ?? ClipRRect(borderRadius: BorderRadius.circular(10), child: const CustomShimmer()),
+                      placeHolderWidget: placeHolder ??
+                          ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: const CustomShimmer()),
                       errorWidget: (_, url, error) {
                         print('image url is $url $error $connectInternet');
                         if (connectInternet) {
                           return ClipRRect(
-                              borderRadius: const BorderRadius.all(Radius.circular(10)),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10)),
                               child: Image.network(
                                 url,
                                 fit: boxFitContent,
                                 width: double.infinity,
                                 height: double.infinity,
                                 errorBuilder: (_, __, ___) {
-                                  return ClipRRect(borderRadius: BorderRadius.circular(10), child: const CustomShimmer());
+                                  return ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: const CustomShimmer());
                                 },
                                 loadingBuilder: (_, child, event) {
                                   if (event == null) {
                                     return Center(child: child);
                                   } else {
-                                    return ClipRRect(borderRadius: BorderRadius.circular(10), child: const CustomShimmer());
+                                    return ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: const CustomShimmer());
                                   }
                                 },
                               ));
                         }
-                        return ClipRRect(borderRadius: BorderRadius.circular(10), child: const CustomShimmer());
+                        return ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: const CustomShimmer());
                       },
-                      emptyWidget: ClipRRect(borderRadius: BorderRadius.circular(10), child: const CustomShimmer()),
+                      emptyWidget: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: const CustomShimmer()),
                     )
                   : ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -112,7 +125,8 @@ class CustomContentModeratedWidget extends StatelessWidget {
                         height: height,
                       ),
                     ),
-              if (featureType != FeatureType.pic && featureType != FeatureType.diary)
+              if (featureType != FeatureType.pic &&
+                  featureType != FeatureType.diary)
                 CustomIconWidget(
                   defaultColor: false,
                   width: 24 * SizeConfig.scaleDiagonal,
@@ -145,7 +159,7 @@ class CustomContentModeratedWidget extends StatelessWidget {
                       eightPx,
                       CustomTextWidget(
                         textToDisplay: "in Moderate",
-                        textStyle: theme.textTheme.bodyText2,
+                        textStyle: theme.textTheme.bodyMedium,
                       )
                     ],
                   ),

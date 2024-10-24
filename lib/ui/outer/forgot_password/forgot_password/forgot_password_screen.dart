@@ -29,7 +29,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'ForgotPasswordScreen');
-    final notifier = Provider.of<ForgotPasswordNotifier>(context, listen: false);
+    final notifier =
+        Provider.of<ForgotPasswordNotifier>(context, listen: false);
     notifier.initState();
     super.initState();
   }
@@ -54,15 +55,23 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               leading: CustomIconButtonWidget(
                 color: Theme.of(context).iconTheme.color,
                 onPressed: () {
-                  var rememberMe = SharedPreference().readStorage(SpKeys.rememberMe) ?? false;
-                  var valRememberMe = SharedPreference().readStorage(SpKeys.valRememberMe) ?? ["", ""];
+                  var rememberMe =
+                      SharedPreference().readStorage(SpKeys.rememberMe) ??
+                          false;
+                  var valRememberMe =
+                      SharedPreference().readStorage(SpKeys.valRememberMe) ??
+                          ["", ""];
                   if (rememberMe) {
                     var preEmail = valRememberMe[0] ?? "";
                     var prePass = valRememberMe[1] ?? '';
                     context.read<WelcomeLoginNotifier>().email = preEmail;
                     context.read<WelcomeLoginNotifier>().password = prePass;
-                    context.read<WelcomeLoginNotifier>().emailController.text = preEmail;
-                    context.read<WelcomeLoginNotifier>().passwordController.text = prePass;
+                    context.read<WelcomeLoginNotifier>().emailController.text =
+                        preEmail;
+                    context
+                        .read<WelcomeLoginNotifier>()
+                        .passwordController
+                        .text = prePass;
                     // context.read<WelcomeLoginNotifier>().buttonDisable();
                   }
                   Navigator.pop(context, true);
@@ -71,7 +80,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               ),
               title: CustomTextWidget(
                 textToDisplay: notifier.language.forgotPassword ?? '',
-                textStyle: style.bodyText1?.copyWith(fontWeight: FontWeight.w700),
+                textStyle:
+                    style.bodyLarge?.copyWith(fontWeight: FontWeight.w700),
               ),
             ),
             body: Padding(
@@ -80,16 +90,20 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 children: [
                   ForgotPasswordTitle(
                     title: notifier.language.forgotPassword ?? '',
-                    subtitle: notifier.language.wellEmailYourCodeToResetYourPassword ?? '',
+                    subtitle: notifier
+                            .language.wellEmailYourCodeToResetYourPassword ??
+                        '',
                   ),
                   Align(
                     alignment: const Alignment(0, -0.3),
                     child: CustomTextFormField(
                       focusNode: notifier.focusNode,
-                      inputAreaHeight: (notifier.invalidEmail != null ? 70 : 55) * SizeConfig.scaleDiagonal,
+                      inputAreaHeight:
+                          (notifier.invalidEmail != null ? 70 : 55) *
+                              SizeConfig.scaleDiagonal,
                       inputAreaWidth: SizeConfig.screenWidth!,
                       textEditingController: notifier.emailController,
-                      style: Theme.of(context).textTheme.bodyText1,
+                      style: Theme.of(context).textTheme.bodyLarge,
                       textInputType: TextInputType.emailAddress,
                       onChanged: (v) {
                         notifier.text = v;
@@ -97,29 +111,52 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           notifier.invalidEmail = null;
                         } else {
                           if (v.isNotEmpty) {
-                            notifier.invalidEmail = notifier.language.messageInvalidEmail;
+                            notifier.invalidEmail =
+                                notifier.language.messageInvalidEmail;
                           } else {
                             notifier.invalidEmail = null;
                           }
                         }
                       },
                       inputDecoration: InputDecoration(
-                        contentPadding: EdgeInsets.only(left: 16, bottom: (notifier.invalidEmail != null) ? 0 : 16, right: 16),
+                        contentPadding: EdgeInsets.only(
+                            left: 16,
+                            bottom: (notifier.invalidEmail != null) ? 0 : 16,
+                            right: 16),
                         labelText: notifier.language.email ?? 'Email',
-                        labelStyle: Theme.of(context).textTheme.bodyText1?.copyWith(
-                            color: notifier.focusNode.hasFocus || notifier.emailController.text.isNotEmpty ? Theme.of(context).colorScheme.primary : null),
-                        prefixIconConstraints:
-                            BoxConstraints(minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth())),
+                        labelStyle: Theme.of(context)
+                            .textTheme
+                            .bodyLarge
+                            ?.copyWith(
+                                color: notifier.focusNode.hasFocus ||
+                                        notifier.emailController.text.isNotEmpty
+                                    ? Theme.of(context).colorScheme.primary
+                                    : null),
+                        prefixIconConstraints: BoxConstraints(
+                            minWidth: SizeWidget().calculateSize(
+                                30.0,
+                                SizeWidget.baseWidthXD,
+                                SizeConfig.screenWidth ?? context.getWidth())),
                         prefixIcon: Transform.translate(
-                          offset: Offset(SizeWidget().calculateSize(-5.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()), 0.0),
+                          offset: Offset(
+                              SizeWidget().calculateSize(
+                                  -5.0,
+                                  SizeWidget.baseWidthXD,
+                                  SizeConfig.screenWidth ?? context.getWidth()),
+                              0.0),
                           child: Transform.scale(
-                            scale: SizeWidget().calculateSize(1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
-                            child: Icon(Icons.email_outlined, color: Theme.of(context).iconTheme.color),
+                            scale: SizeWidget().calculateSize(
+                                1.2,
+                                SizeWidget.baseHeightXD,
+                                SizeConfig.screenHeight!),
+                            child: Icon(Icons.email_outlined,
+                                color: Theme.of(context).iconTheme.color),
                           ),
                         ),
                         enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
-                                color: notifier.focusNode.hasFocus || notifier.emailController.text.isNotEmpty
+                                color: notifier.focusNode.hasFocus ||
+                                        notifier.emailController.text.isNotEmpty
                                     ? Theme.of(context).colorScheme.primary
                                     : Theme.of(context).colorScheme.secondary)),
                         suffixIcon: notifier.emailSuffixIcon(),
@@ -134,10 +171,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         height: 50,
                         width: SizeConfig.screenWidth,
                         buttonStyle: ButtonStyle(
-                          shadowColor: MaterialStateProperty.all<Color>(notifier.emailNextButtonColor(context)),
-                          overlayColor: MaterialStateProperty.all<Color>(notifier.emailNextButtonColor(context)),
-                          foregroundColor: MaterialStateProperty.all<Color>(notifier.emailNextButtonColor(context)),
-                          backgroundColor: MaterialStateProperty.all<Color>(notifier.emailNextButtonColor(context)),
+                          shadowColor: MaterialStateProperty.all<Color>(
+                              notifier.emailNextButtonColor(context)),
+                          overlayColor: MaterialStateProperty.all<Color>(
+                              notifier.emailNextButtonColor(context)),
+                          foregroundColor: MaterialStateProperty.all<Color>(
+                              notifier.emailNextButtonColor(context)),
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              notifier.emailNextButtonColor(context)),
                         ),
                         function: () => notifier.onClickForgotPassword(context),
                         child: notifier.isLoading

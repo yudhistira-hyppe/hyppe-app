@@ -98,7 +98,8 @@ class OnShowSticker extends StatelessWidget {
                                     height: 24,
                                     defaultColor: false,
                                     onPressed: null,
-                                    iconData: "${AssetPath.vectorPath}search.svg",
+                                    iconData:
+                                        "${AssetPath.vectorPath}search.svg",
                                     color: Colors.white,
                                   ),
                             suffixIcon: notifier.stickerSearchActive
@@ -109,29 +110,39 @@ class OnShowSticker extends StatelessWidget {
                                       notifier.stickerTextController.text = '';
                                       notifier.stickerSearchText = '';
                                     },
-                                    iconData:"${AssetPath.vectorPath}close.svg",
+                                    iconData:
+                                        "${AssetPath.vectorPath}close.svg",
                                     color: Colors.white,
                                   )
                                 : null,
-                            hintText: notifier.stickerSearchActive ? '' : 'Cari ${notifier.stickerTab[notifier.stickerTabIndex].name} seru',
+                            hintText: notifier.stickerSearchActive
+                                ? ''
+                                : 'Cari ${notifier.stickerTab[notifier.stickerTabIndex].name} seru',
                             contentPadding: const EdgeInsets.all(16),
                             border: OutlineInputBorder(
-                              borderSide: const BorderSide(color: kHyppeTextLightPrimary),
+                              borderSide: const BorderSide(
+                                  color: kHyppeTextLightPrimary),
                               borderRadius: BorderRadius.circular(10.0),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(color: kHyppeTextLightPrimary),
+                              borderSide: const BorderSide(
+                                  color: kHyppeTextLightPrimary),
                               borderRadius: BorderRadius.circular(10.0),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(color: kHyppeTextLightPrimary),
+                              borderSide: const BorderSide(
+                                  color: kHyppeTextLightPrimary),
                               borderRadius: BorderRadius.circular(10.0),
                             ),
                             fillColor: kHyppeTextLightPrimary,
                             filled: true,
-                            hintStyle: const TextStyle(color: kHyppeLightButtonText),
+                            hintStyle:
+                                const TextStyle(color: kHyppeLightButtonText),
                           ),
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: kHyppeLightButtonText),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(color: kHyppeLightButtonText),
                           onChanged: (text) {
                             notifier.stickerSearchText = text;
                           },
@@ -151,25 +162,34 @@ class OnShowSticker extends StatelessWidget {
                 // twelvePx,
                 Builder(builder: (context) {
                   var allSticker = '';
-                  for (StickerCategoryModel cat in notifier.stickerTab[notifier.stickerTabIndex].data) {
+                  for (StickerCategoryModel cat
+                      in notifier.stickerTab[notifier.stickerTabIndex].data) {
                     allSticker = '$allSticker - ${cat.queryname}';
                   }
-                  if (!allSticker.toLowerCase().contains(notifier.stickerSearchText.toLowerCase())) {
+                  if (!allSticker
+                      .toLowerCase()
+                      .contains(notifier.stickerSearchText.toLowerCase())) {
                     return Container(
                       padding: const EdgeInsets.only(top: 80),
                       child: Column(
                         children: [
                           Text(
                             'Hasil Tidak Ditemukan',
-                            style: Theme.of(context).textTheme.headline5?.copyWith(
-                                      color: kHyppeBorderTab,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineSmall
+                                ?.copyWith(
+                                  color: kHyppeBorderTab,
+                                  fontWeight: FontWeight.w600,
+                                ),
                           ),
                           twelvePx,
                           Text(
                             'Coba gunakan kata kunci lain.',
-                            style:Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppeBorderTab),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(color: kHyppeBorderTab),
                           ),
                         ],
                       ),
@@ -183,36 +203,47 @@ class OnShowSticker extends StatelessWidget {
                       Expanded(
                         child: ListView.builder(
                           controller: notifier.stickerScrollController,
-                          itemCount: notifier.stickerTab[notifier.stickerTabIndex].data.length,
+                          itemCount: notifier
+                              .stickerTab[notifier.stickerTabIndex].data.length,
                           itemBuilder: (context, index) {
-                            var category = notifier.stickerTab[notifier.stickerTabIndex].data[index];
+                            var category = notifier
+                                .stickerTab[notifier.stickerTabIndex]
+                                .data[index];
                             if (notifier.stickerSearchActive) {
                               if (notifier.stickerSearchText == '') {
                                 return Container();
                               } else {
-                                if (category.id == '' || category.queryname.toLowerCase().contains(notifier.stickerSearchText.toLowerCase())) {
+                                if (category.id == '' ||
+                                    category.queryname.toLowerCase().contains(
+                                        notifier.stickerSearchText
+                                            .toLowerCase())) {
                                   List<StickerModel> popular = [];
                                   popular.addAll(category.data ?? []);
-                                  popular.sort((a, b) => (b.countused ?? 0).compareTo(a.countused ?? 0));
+                                  popular.sort((a, b) => (b.countused ?? 0)
+                                      .compareTo(a.countused ?? 0));
                                   return gridView(
                                     context,
                                     notifier: notifier,
-                                    tab: notifier.stickerTab[notifier.stickerTabIndex],
+                                    tab: notifier
+                                        .stickerTab[notifier.stickerTabIndex],
                                     categoryIndex: index,
                                     stickers: popular,
                                   );
                                 } else {
                                   return Container();
-                                }  
+                                }
                               }
                             }
-                            return gridView(
-                              context,
-                              notifier: notifier,
-                              tab: notifier.stickerTab[notifier.stickerTabIndex],
-                              categoryIndex: index,
-                              stickers: notifier.stickerTab[notifier.stickerTabIndex].data[index].data ?? []
-                            );
+                            return gridView(context,
+                                notifier: notifier,
+                                tab: notifier
+                                    .stickerTab[notifier.stickerTabIndex],
+                                categoryIndex: index,
+                                stickers: notifier
+                                        .stickerTab[notifier.stickerTabIndex]
+                                        .data[index]
+                                        .data ??
+                                    []);
                           },
                         ),
                       ),
@@ -241,7 +272,8 @@ class OnShowSticker extends StatelessWidget {
       onTap: () async {
         notifier.stickerTabIndex = tab.index;
         await notifier.getSticker(context, index: tab.index);
-        notifier.stickerScrollController.animateTo(0, duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
+        notifier.stickerScrollController.animateTo(0,
+            duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
         notifier.stickerScrollPosition = 0.0;
       },
       child: Column(
@@ -259,7 +291,7 @@ class OnShowSticker extends StatelessWidget {
             child: Center(
               child: CustomTextWidget(
                 textToDisplay: tab.name,
-                textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
+                textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: notifier.stickerTabIndex == tab.index
                           ? FontWeight.w700
                           : FontWeight.w400,
@@ -294,8 +326,9 @@ class OnShowSticker extends StatelessWidget {
                 double position = 0.0;
                 for (int i = 0; i < index; i++) {
                   position = position + 40.0; // 40 is height of category title
-                  int rowCount = ((tab.data[i].data?.length ?? 0) / tab.column).ceil();
-                  position = position + (rowCount * itemHeight);  
+                  int rowCount =
+                      ((tab.data[i].data?.length ?? 0) / tab.column).ceil();
+                  position = position + (rowCount * itemHeight);
                 }
                 notifier.stickerScrollController.animateTo(
                   position,
@@ -304,13 +337,17 @@ class OnShowSticker extends StatelessWidget {
                 );
               },
               child: Container(
-                decoration:  BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(45)),
-                  color: highlight(context, notifier, cat)
-                ),
+                decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(45)),
+                    color: highlight(context, notifier, cat)),
                 margin: const EdgeInsets.all(8),
                 padding: const EdgeInsets.all(8),
-                child: SizedBox(height: 24, width: 24, child: CachedNetworkImage(imageUrl: cat.kategoriicon ?? '',)),
+                child: SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: CachedNetworkImage(
+                      imageUrl: cat.kategoriicon ?? '',
+                    )),
               ),
             );
           },
@@ -321,8 +358,10 @@ class OnShowSticker extends StatelessWidget {
     }
   }
 
-  Color highlight(BuildContext context, PreviewContentNotifier notifier, StickerCategoryModel cat) {
-    if (notifier.stickerScrollPosition + 50 >= cat.heightStart && notifier.stickerScrollPosition + 50 <= cat.heightEnd) {
+  Color highlight(BuildContext context, PreviewContentNotifier notifier,
+      StickerCategoryModel cat) {
+    if (notifier.stickerScrollPosition + 50 >= cat.heightStart &&
+        notifier.stickerScrollPosition + 50 <= cat.heightEnd) {
       return Colors.black;
     }
     return Colors.transparent;
@@ -338,23 +377,40 @@ class OnShowSticker extends StatelessWidget {
     return WidgetSize(
       onChange: (Size size) {
         if (!notifier.stickerSearchActive) {
-          notifier.stickerTab[notifier.stickerTabIndex].data[categoryIndex].height = size.height;
+          notifier.stickerTab[notifier.stickerTabIndex].data[categoryIndex]
+              .height = size.height;
           if (categoryIndex == 0) {
-            notifier.stickerTab[notifier.stickerTabIndex].data[categoryIndex].heightStart = 0.0;
-            notifier.stickerTab[notifier.stickerTabIndex].data[categoryIndex].heightEnd = notifier.stickerTab[notifier.stickerTabIndex].data[categoryIndex].height;
+            notifier.stickerTab[notifier.stickerTabIndex].data[categoryIndex]
+                .heightStart = 0.0;
+            notifier.stickerTab[notifier.stickerTabIndex].data[categoryIndex]
+                    .heightEnd =
+                notifier.stickerTab[notifier.stickerTabIndex]
+                    .data[categoryIndex].height;
           } else {
-            notifier.stickerTab[notifier.stickerTabIndex].data[categoryIndex].heightStart = notifier.stickerTab[notifier.stickerTabIndex].data[categoryIndex - 1].heightEnd;
-            notifier.stickerTab[notifier.stickerTabIndex].data[categoryIndex].heightEnd = notifier.stickerTab[notifier.stickerTabIndex].data[categoryIndex - 1].heightEnd + notifier.stickerTab[notifier.stickerTabIndex].data[categoryIndex].height;
+            notifier.stickerTab[notifier.stickerTabIndex].data[categoryIndex]
+                    .heightStart =
+                notifier.stickerTab[notifier.stickerTabIndex]
+                    .data[categoryIndex - 1].heightEnd;
+            notifier.stickerTab[notifier.stickerTabIndex].data[categoryIndex]
+                .heightEnd = notifier.stickerTab[notifier.stickerTabIndex]
+                    .data[categoryIndex - 1].heightEnd +
+                notifier.stickerTab[notifier.stickerTabIndex]
+                    .data[categoryIndex].height;
           }
           // adding this code below to trigger highlight on first render
           if (categoryIndex == 0 && notifier.stickerScrollPosition == 0.0) {
-            notifier.stickerScrollController.animateTo(1, duration: const Duration(milliseconds: 50), curve: Curves.easeIn);
+            notifier.stickerScrollController.animateTo(1,
+                duration: const Duration(milliseconds: 50),
+                curve: Curves.easeIn);
           }
           size.loggerV2();
         }
       },
       child: Container(
-        constraints: BoxConstraints(minHeight: categoryIndex + 1 == tab.data.length ? (MediaQuery.of(context).size.height * 0.8) - 175 : 0),
+        constraints: BoxConstraints(
+            minHeight: categoryIndex + 1 == tab.data.length
+                ? (MediaQuery.of(context).size.height * 0.8) - 175
+                : 0),
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -373,7 +429,8 @@ class OnShowSticker extends StatelessWidget {
             Wrap(
               children: [
                 for (StickerModel sticker in stickers)
-                  renderSticker(context, notifier: notifier, tab: tab, sticker: sticker),
+                  renderSticker(context,
+                      notifier: notifier, tab: tab, sticker: sticker),
               ],
             ),
           ],
@@ -403,22 +460,23 @@ class OnShowSticker extends StatelessWidget {
           width: (MediaQuery.of(context).size.width - 32) / tab.column,
           height: (MediaQuery.of(context).size.width - 32) / tab.column,
           padding: const EdgeInsets.all(8),
-          child: (sticker.image ?? '').toLowerCase().endsWith('.gif') ? CustomGifWidget(
-            url: sticker.image ?? '',
-            isPause: false,
-          ) : CachedNetworkImage(
-            imageUrl: sticker.image ?? '',
-            progressIndicatorBuilder: (context, url, downloadProgress) => 
-               Padding(
-                 padding: EdgeInsets.all(60 / tab.column),
-                 child: CircularProgressIndicator(
-                    value: downloadProgress.progress ?? 0.0,
-                    strokeWidth: 1,
-                    color: kHyppeDisabled,
-                    backgroundColor: kHyppeTextLightPrimary,
-                  )
-               ),
-          ),
+          child: (sticker.image ?? '').toLowerCase().endsWith('.gif')
+              ? CustomGifWidget(
+                  url: sticker.image ?? '',
+                  isPause: false,
+                )
+              : CachedNetworkImage(
+                  imageUrl: sticker.image ?? '',
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      Padding(
+                          padding: EdgeInsets.all(60 / tab.column),
+                          child: CircularProgressIndicator(
+                            value: downloadProgress.progress ?? 0.0,
+                            strokeWidth: 1,
+                            color: kHyppeDisabled,
+                            backgroundColor: kHyppeTextLightPrimary,
+                          )),
+                ),
         ),
       ),
     );

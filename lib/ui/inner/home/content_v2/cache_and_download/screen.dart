@@ -44,7 +44,7 @@ class _CacheAndDownloadScreenState extends State<CacheAndDownloadScreen> {
         appBar: AppBar(
           leading: const BackButton(),
           title: CustomTextWidget(
-            textStyle: Theme.of(context).textTheme.subtitle1,
+            textStyle: Theme.of(context).textTheme.titleMedium,
             textToDisplay: '${translateNotifier.translate.cacheAndDownload}',
           ),
         ),
@@ -62,7 +62,8 @@ class _CacheAndDownloadScreenState extends State<CacheAndDownloadScreen> {
                   onTap: () {
                     ShowGeneralDialog.generalDialog(
                       context,
-                      titleText: "${translateNotifier.translate.clear} ${translateNotifier.translate.cache}",
+                      titleText:
+                          "${translateNotifier.translate.clear} ${translateNotifier.translate.cache}",
                       bodyText: "",
                       maxLineTitle: 1,
                       maxLineBody: 1,
@@ -74,8 +75,10 @@ class _CacheAndDownloadScreenState extends State<CacheAndDownloadScreen> {
                       functionSecondary: () {
                         Routing().moveBack();
                       },
-                      titleButtonPrimary: "${translateNotifier.translate.clear}",
-                      titleButtonSecondary: "${translateNotifier.translate.cancel}",
+                      titleButtonPrimary:
+                          "${translateNotifier.translate.clear}",
+                      titleButtonSecondary:
+                          "${translateNotifier.translate.cancel}",
                       barrierDismissible: false,
                     );
                   },
@@ -92,7 +95,8 @@ class _CacheAndDownloadScreenState extends State<CacheAndDownloadScreen> {
                   onTap: () {
                     ShowGeneralDialog.generalDialog(
                       context,
-                      titleText: "${translateNotifier.translate.clear} ${translateNotifier.translate.download}",
+                      titleText:
+                          "${translateNotifier.translate.clear} ${translateNotifier.translate.download}",
                       bodyText: "",
                       maxLineTitle: 1,
                       maxLineBody: 1,
@@ -104,8 +108,10 @@ class _CacheAndDownloadScreenState extends State<CacheAndDownloadScreen> {
                       functionSecondary: () {
                         Routing().moveBack();
                       },
-                      titleButtonPrimary: "${translateNotifier.translate.clear}",
-                      titleButtonSecondary: "${translateNotifier.translate.cancel}",
+                      titleButtonPrimary:
+                          "${translateNotifier.translate.clear}",
+                      titleButtonSecondary:
+                          "${translateNotifier.translate.cancel}",
                       barrierDismissible: false,
                     );
                   },
@@ -133,8 +139,10 @@ class _CacheAndDownloadScreenState extends State<CacheAndDownloadScreen> {
                       functionSecondary: () {
                         Routing().moveBack();
                       },
-                      titleButtonPrimary: "${translateNotifier.translate.clear}",
-                      titleButtonSecondary: "${translateNotifier.translate.cancel}",
+                      titleButtonPrimary:
+                          "${translateNotifier.translate.clear}",
+                      titleButtonSecondary:
+                          "${translateNotifier.translate.cancel}",
                       barrierDismissible: false,
                     );
                   },
@@ -190,7 +198,7 @@ class StorageItemWidget extends StatelessWidget {
       children: [
         CustomTextWidget(
           textToDisplay: title,
-          textStyle: Theme.of(context).textTheme.subtitle1,
+          textStyle: Theme.of(context).textTheme.titleMedium,
         ),
         eightPx,
         Row(

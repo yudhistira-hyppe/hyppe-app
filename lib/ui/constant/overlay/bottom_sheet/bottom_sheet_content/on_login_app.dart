@@ -50,34 +50,35 @@ class _OnLoginAppState extends State<OnLoginApp> {
               ],
             ),
             Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              sixteenPx,
-              CustomGesture(
-                margin: EdgeInsets.zero,
-                onTap: () async {
-                  Routing().moveBack();
-                  Routing().move(Routes.help);
-                },
-                child: const CustomIconWidget(
-                    height: 28,
-                    width: 28,
-                    iconData: "${AssetPath.vectorPath}help_circle.svg"),
-              ),
-              const Expanded(child: SizedBox.shrink()),
-              CustomGesture(
-                margin: EdgeInsets.zero,
-                onTap: () {
-                  Routing().moveBack();
-                },
-                child: const CustomIconWidget(
-                    height: 28,
-                    width: 28,
-                    iconData: "${AssetPath.vectorPath}close.svg"),
-              ),
-              sixteenPx
-            ],
-          ), ),
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                sixteenPx,
+                CustomGesture(
+                  margin: EdgeInsets.zero,
+                  onTap: () async {
+                    Routing().moveBack();
+                    Routing().move(Routes.help);
+                  },
+                  child: const CustomIconWidget(
+                      height: 28,
+                      width: 28,
+                      iconData: "${AssetPath.vectorPath}help_circle.svg"),
+                ),
+                const Expanded(child: SizedBox.shrink()),
+                CustomGesture(
+                  margin: EdgeInsets.zero,
+                  onTap: () {
+                    Routing().moveBack();
+                  },
+                  child: const CustomIconWidget(
+                      height: 28,
+                      width: 28,
+                      iconData: "${AssetPath.vectorPath}close.svg"),
+                ),
+                sixteenPx
+              ],
+            ),
+          ),
           thirtyTwoPx,
           const CustomIconWidget(
             iconData: "${AssetPath.vectorPath}ic_welcome_login.svg",
@@ -128,7 +129,10 @@ class _OnLoginAppState extends State<OnLoginApp> {
                         CustomTextWidget(
                           textToDisplay:
                               notifier.language.signInWithGoogleAccount ?? '',
-                          textStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w700) ??
+                          textStyle: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall
+                                  ?.copyWith(fontWeight: FontWeight.w700) ??
                               const TextStyle(),
                         ),
                         const Spacer(),
@@ -138,7 +142,8 @@ class _OnLoginAppState extends State<OnLoginApp> {
           ),
           Platform.isIOS
               ? Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   child: ButtomSosmed(
                     function: () => notifier.loginAppleSign(context),
                     child: notifier.isLoading
@@ -169,8 +174,10 @@ class _OnLoginAppState extends State<OnLoginApp> {
                               CustomTextWidget(
                                 textToDisplay:
                                     notifier.language.signInWithApple ?? '',
-                                textStyle:
-                                    Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w700),
+                                textStyle: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall
+                                    ?.copyWith(fontWeight: FontWeight.w700),
                               ),
                               const Spacer(),
                             ],
@@ -195,7 +202,7 @@ class _OnLoginAppState extends State<OnLoginApp> {
               twelvePx,
               CustomTextWidget(
                   textToDisplay: notifier.language.or?.toLowerCase() ?? 'or',
-                  textStyle: Theme.of(context).textTheme.bodyText2),
+                  textStyle: Theme.of(context).textTheme.bodyMedium),
               twelvePx,
               Expanded(
                 child: Container(
@@ -238,7 +245,10 @@ class _OnLoginAppState extends State<OnLoginApp> {
                   CustomTextWidget(
                     textToDisplay:
                         notifier.language.useAnotherEmailAddress ?? '',
-                    textStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w700) ??
+                    textStyle: Theme.of(context)
+                            .textTheme
+                            .titleSmall
+                            ?.copyWith(fontWeight: FontWeight.w700) ??
                         const TextStyle(),
                   ),
                   const Spacer(),
@@ -252,13 +262,13 @@ class _OnLoginAppState extends State<OnLoginApp> {
             children: [
               CustomTextWidget(
                 textToDisplay: "${notifier.language.dontHaveAnAccount}?   ",
-                textStyle: Theme.of(context).primaryTextTheme.bodyText2,
+                textStyle: Theme.of(context).primaryTextTheme.bodyMedium,
               ),
               GestureDetector(
                 onTap: () => notifier.onClickSignUpHere(),
                 child: CustomTextWidget(
                   textToDisplay: notifier.language.registerHere ?? '',
-                  textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
+                  textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.primary,
                       ),
@@ -274,24 +284,27 @@ class _OnLoginAppState extends State<OnLoginApp> {
           ),
           Align(
             alignment: Alignment.center,
-            child: RichText(text: TextSpan(
-              children: [
-                TextSpan(
-                  text: "${notifier.language.termsOfService} ",
-                  style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold, color: kHyppePrimary),
-                  recognizer: TapGestureRecognizer()..onTap = () => notifier.goToEula(),
-                ),
-                TextSpan(
-                  text: "${notifier.language.and} ",
-                  style: Theme.of(context).textTheme.bodyText2,
-                ),
-                TextSpan(
-                  text: notifier.language.privacyPolicy,
-                  style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold, color: kHyppePrimary),
-                  recognizer: TapGestureRecognizer()..onTap = () => notifier.goToEula(),
-                ),
-              ]
-            )),
+            child: RichText(
+                text: TextSpan(children: [
+              TextSpan(
+                text: "${notifier.language.termsOfService} ",
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.bold, color: kHyppePrimary),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () => notifier.goToEula(),
+              ),
+              TextSpan(
+                text: "${notifier.language.and} ",
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              TextSpan(
+                text: notifier.language.privacyPolicy,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.bold, color: kHyppePrimary),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () => notifier.goToEula(),
+              ),
+            ])),
           ),
           twentyPx
         ],

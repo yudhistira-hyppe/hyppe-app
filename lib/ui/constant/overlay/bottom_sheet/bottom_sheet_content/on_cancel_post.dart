@@ -10,7 +10,8 @@ import 'package:provider/provider.dart';
 
 class OnCancelPostBottomSheet extends StatelessWidget {
   final Function onCancel;
-  const OnCancelPostBottomSheet({Key? key, required this.onCancel}) : super(key: key);
+  const OnCancelPostBottomSheet({Key? key, required this.onCancel})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,20 +22,24 @@ class OnCancelPostBottomSheet extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+            const CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}handler.svg"),
             CustomTextWidget(
               textToDisplay: notifier.language.cancelPost ?? '',
-              textStyle: Theme.of(context).textTheme.headline6,
+              textStyle: Theme.of(context).textTheme.titleLarge,
             ),
             CustomTextWidget(
               textToDisplay: notifier.language.areYouSure ?? 'Are you sure?',
-              textStyle: Theme.of(context).textTheme.bodyText2,
+              textStyle: Theme.of(context).textTheme.bodyMedium,
               textOverflow: TextOverflow.clip,
             ),
             CustomElevatedButton(
               child: CustomTextWidget(
                 textToDisplay: notifier.language.yesCancelPost ?? '',
-                textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: kHyppeLightButtonText),
               ),
               width: double.infinity,
               height: 50,
@@ -44,19 +49,23 @@ class OnCancelPostBottomSheet extends StatelessWidget {
                 onCancel();
               },
               buttonStyle: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                  overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary)),
+                  backgroundColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primary),
+                  overlayColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primary)),
             ),
             CustomElevatedButton(
               child: CustomTextWidget(
                 textToDisplay: notifier.language.keepEditing ?? '',
-                textStyle: Theme.of(context).textTheme.button,
+                textStyle: Theme.of(context).textTheme.labelLarge,
               ),
               width: double.infinity,
               height: 50,
               function: () => Routing().moveBack(),
               buttonStyle: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.transparent), overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                  backgroundColor:
+                      MaterialStateProperty.all(Colors.transparent),
+                  overlayColor: MaterialStateProperty.all(Colors.transparent)),
             )
           ],
         ),

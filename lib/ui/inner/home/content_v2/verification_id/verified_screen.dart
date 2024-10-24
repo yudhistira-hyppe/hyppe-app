@@ -20,7 +20,8 @@ class VerifiedScreen extends StatefulWidget {
   State<VerifiedScreen> createState() => _VerifiedScreenState();
 }
 
-class _VerifiedScreenState extends State<VerifiedScreen> with SingleTickerProviderStateMixin {
+class _VerifiedScreenState extends State<VerifiedScreen>
+    with SingleTickerProviderStateMixin {
   TabController? _tabController;
 
   List slide = [
@@ -34,22 +35,28 @@ class _VerifiedScreenState extends State<VerifiedScreen> with SingleTickerProvid
     {
       'title': 'Raih Badge Pemenang & Rewards',
       'titleEn': 'Earn Badges & Rewards',
-      'desc': 'Temukan berbagai tantangan seru! Dapatkan badge pemenang dan rewards dengan berpartisipasi dalam berbagai challenge.',
-      'descEn': 'Ready for challenges? Earn badges and rewards in thrilling challenges.',
+      'desc':
+          'Temukan berbagai tantangan seru! Dapatkan badge pemenang dan rewards dengan berpartisipasi dalam berbagai challenge.',
+      'descEn':
+          'Ready for challenges? Earn badges and rewards in thrilling challenges.',
       'icon': 'verifi2.svg',
     },
     {
       'title': 'Perluas Jangakuanmu!',
       'titleEn': 'Boost Your Presence',
-      'desc': 'Fitur Boost Post hadir untuk mengoptimalkan jangkauan postinganmu.',
-      'descEn': 'Take center stage! Harness the power of Boost Post to amplify your reach.',
+      'desc':
+          'Fitur Boost Post hadir untuk mengoptimalkan jangkauan postinganmu.',
+      'descEn':
+          'Take center stage! Harness the power of Boost Post to amplify your reach.',
       'icon': 'verifi3.svg',
     },
     {
       'title': 'Mulai Jual Konten & Sertifikat Kepemilikan Konten',
       'titleEn': 'Monetize & Content Ownership',
-      'desc': 'Waktunya meraih keuntungan dari konten tanpa takut ditiru dengan sertifikat kepemilikan konten.',
-      'descEn': 'Turn creativity into earnings no imitations allowed. Grab your content ownership certificate now!',
+      'desc':
+          'Waktunya meraih keuntungan dari konten tanpa takut ditiru dengan sertifikat kepemilikan konten.',
+      'descEn':
+          'Turn creativity into earnings no imitations allowed. Grab your content ownership certificate now!',
       'hastag': '#ShareWhatInspiresYou',
       'icon': 'verifi4.svg',
     },
@@ -100,15 +107,21 @@ class _VerifiedScreenState extends State<VerifiedScreen> with SingleTickerProvid
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Container(
-                    decoration: BoxDecoration(border: Border.all(color: kHyppePrimary), borderRadius: BorderRadius.circular(8.0)),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: kHyppePrimary),
+                        borderRadius: BorderRadius.circular(8.0)),
                     child: CustomElevatedButton(
                       width: SizeConfig.screenWidth,
                       height: 50,
                       buttonStyle: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-                          overlayColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primary),
-                          foregroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primary),
-                          shadowColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primary)),
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Colors.transparent),
+                          overlayColor: MaterialStateProperty.all<Color>(
+                              Theme.of(context).colorScheme.primary),
+                          foregroundColor: MaterialStateProperty.all<Color>(
+                              Theme.of(context).colorScheme.primary),
+                          shadowColor: MaterialStateProperty.all<Color>(
+                              Theme.of(context).colorScheme.primary)),
                       function: () {
                         // context.read<SignUpCompleteProfileNotifier>().onReset();
                         /// TODO: Changed rules complete profile
@@ -118,8 +131,13 @@ class _VerifiedScreenState extends State<VerifiedScreen> with SingleTickerProvid
                         /// End TODO
                       },
                       child: CustomTextWidget(
-                        textToDisplay: System().bodyMultiLang(bodyEn: 'Close', bodyId: 'Tutup') ?? '',
-                        textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppePrimary),
+                        textToDisplay: System().bodyMultiLang(
+                                bodyEn: 'Close', bodyId: 'Tutup') ??
+                            '',
+                        textStyle: Theme.of(context)
+                            .textTheme
+                            .labelLarge
+                            ?.copyWith(color: kHyppePrimary),
                       ),
                     ),
                   ),
@@ -145,7 +163,9 @@ class _VerifiedScreenState extends State<VerifiedScreen> with SingleTickerProvid
           ),
           fortyPx,
           Text(
-            System().bodyMultiLang(bodyEn: data['titleEn'], bodyId: data['title']) ?? '',
+            System().bodyMultiLang(
+                    bodyEn: data['titleEn'], bodyId: data['title']) ??
+                '',
             textAlign: TextAlign.center,
             style: const TextStyle(
               color: kHyppeTextLightPrimary,
@@ -155,7 +175,9 @@ class _VerifiedScreenState extends State<VerifiedScreen> with SingleTickerProvid
           ),
           twelvePx,
           Text(
-            System().bodyMultiLang(bodyEn: data['descEn'], bodyId: data['desc']) ?? '',
+            System().bodyMultiLang(
+                    bodyEn: data['descEn'], bodyId: data['desc']) ??
+                '',
             textAlign: TextAlign.center,
           ),
         ],

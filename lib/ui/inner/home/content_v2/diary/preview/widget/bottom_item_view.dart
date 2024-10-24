@@ -36,8 +36,12 @@ class BottomItemView extends StatelessWidget {
                   fourPx,
                   CustomTextWidget(
                     // textToDisplay: '${data.lCount}',
-                    textToDisplay: System().formatterNumber(data?.insight?.likes ?? 0),
-                    textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
+                    textToDisplay:
+                        System().formatterNumber(data?.insight?.likes ?? 0),
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .bodySmall
+                        ?.copyWith(color: kHyppeLightButtonText),
                   )
                 ],
               ),

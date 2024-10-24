@@ -41,7 +41,7 @@ class _FAQDetailScreenState extends State<FAQDetailScreen> {
             },
           ),
           title: CustomTextWidget(
-            textStyle: Theme.of(context).textTheme.subtitle1,
+            textStyle: Theme.of(context).textTheme.titleMedium,
             textToDisplay: ' ${notifier.translate.help}',
           ),
         ),
@@ -81,8 +81,12 @@ class _FAQDetailScreenState extends State<FAQDetailScreen> {
                         itemBuilder: (context, index) {
                           return GestureDetector(
                               onTap: () async {
-                                if (widget.data.details[index].detail.isNotEmpty) {
-                                  await Routing().move(Routes.faqDetail, argument: FAQArgument(details: widget.data.details[index].detail));
+                                if (widget
+                                    .data.details[index].detail.isNotEmpty) {
+                                  await Routing().move(Routes.faqDetail,
+                                      argument: FAQArgument(
+                                          details: widget
+                                              .data.details[index].detail));
                                   if (widget.data.isLogin) {
                                     Routing().moveBack();
                                   }
@@ -90,12 +94,14 @@ class _FAQDetailScreenState extends State<FAQDetailScreen> {
                               },
                               child: Stack(
                                 children: [
-                                  if ((widget.data.details[index].detail).isNotEmpty)
+                                  if ((widget.data.details[index].detail)
+                                      .isNotEmpty)
                                     Positioned(
                                         top: 25,
                                         left: 0,
                                         child: const CustomIconWidget(
-                                          iconData: '${AssetPath.vectorPath}ic_arrow_right.svg',
+                                          iconData:
+                                              '${AssetPath.vectorPath}ic_arrow_right.svg',
                                           width: 20,
                                           height: 20,
                                           defaultColor: false,
@@ -103,8 +109,16 @@ class _FAQDetailScreenState extends State<FAQDetailScreen> {
                                         )),
                                   Container(
                                       width: double.infinity,
-                                      margin: EdgeInsets.only(top: 10, bottom: 10, left: (isAccordion ? 20 : 0)),
-                                      child: htmlText(context, widget.data.details[index].description ?? '', key: controller.text)),
+                                      margin: EdgeInsets.only(
+                                          top: 10,
+                                          bottom: 10,
+                                          left: (isAccordion ? 20 : 0)),
+                                      child: htmlText(
+                                          context,
+                                          widget.data.details[index]
+                                                  .description ??
+                                              '',
+                                          key: controller.text)),
                                 ],
                               ));
                           // child: textSearched(context, widget.data.details[index].description ?? '', controller.text),));
@@ -139,14 +153,21 @@ class _FAQDetailScreenState extends State<FAQDetailScreen> {
                             ShowBottomSheet().onShowColouredSheet(
                               context,
                               notifier.translate.thankYou ?? '',
-                              subCaption: notifier.translate.thankYouforYourFeedback ?? '',
+                              subCaption:
+                                  notifier.translate.thankYouforYourFeedback ??
+                                      '',
                             );
                             // Routing().moveAndPop(Routes.supportTicket);
                           },
-                          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppeLightSurface)),
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                  kHyppeLightSurface)),
                           child: CustomTextWidget(
                             textToDisplay: notifier.translate.no ?? '',
-                            textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppePrimary),
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .labelLarge
+                                ?.copyWith(color: kHyppePrimary),
                           ),
                         ),
                         sixPx,
@@ -157,14 +178,21 @@ class _FAQDetailScreenState extends State<FAQDetailScreen> {
                             ShowBottomSheet().onShowColouredSheet(
                               context,
                               notifier.translate.thankYou ?? '',
-                              subCaption: notifier.translate.thankYouforYourFeedback ?? '',
+                              subCaption:
+                                  notifier.translate.thankYouforYourFeedback ??
+                                      '',
                             );
                             // notifier.navigateToBankAccount();
                           },
-                          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary)),
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(kHyppePrimary)),
                           child: CustomTextWidget(
                             textToDisplay: notifier.translate.yes ?? 'yes',
-                            textStyle: Theme.of(context).textTheme.button?.copyWith(color: Colors.white),
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .labelLarge
+                                ?.copyWith(color: Colors.white),
                           ),
                         ),
                       ],
@@ -182,7 +210,8 @@ class _FAQDetailScreenState extends State<FAQDetailScreen> {
   Widget htmlText(BuildContext context, String text, {String? key}) {
     if (key != null) {
       if (key.isNotEmpty) {
-        final List<String> splits = text.split(' ').where((element) => element.isNotEmpty).toList();
+        final List<String> splits =
+            text.split(' ').where((element) => element.isNotEmpty).toList();
         final List<String> spans = [];
         for (var i = 0; i < splits.length; i++) {
           final data = splits[i];
@@ -191,7 +220,8 @@ class _FAQDetailScreenState extends State<FAQDetailScreen> {
           print(
               'compare text search : $key : ${dataLength > keyLength ? data.substring(0, (keyLength)) : 'skip scan'} : ${dataLength > keyLength ? data.substring((keyLength), (dataLength)) : 'skip scan'}');
           if (dataLength > keyLength) {
-            if (data.substring(0, keyLength).toLowerCase() == key.toLowerCase()) {
+            if (data.substring(0, keyLength).toLowerCase() ==
+                key.toLowerCase()) {
               if (i == splits.length) {
                 spans.add('<span>$key</span>');
                 spans.add(data.substring(keyLength, dataLength));
@@ -228,7 +258,10 @@ class _FAQDetailScreenState extends State<FAQDetailScreen> {
               mode: LaunchMode.externalApplication,
             );
           },
-          style: {"span": Style(color: kHyppePrimary, backgroundColor: kHyppeLightWarning)},
+          style: {
+            "span":
+                Style(color: kHyppePrimary, backgroundColor: kHyppeLightWarning)
+          },
         );
       } else {
         return Html(
@@ -258,7 +291,8 @@ class _FAQDetailScreenState extends State<FAQDetailScreen> {
 
   Widget textSearched(BuildContext context, String text, String key) {
     if (key.isNotEmpty) {
-      final List<String> splits = text.split(' ').where((element) => element.isNotEmpty).toList();
+      final List<String> splits =
+          text.split(' ').where((element) => element.isNotEmpty).toList();
       final List<TextSpan> spans = [];
       for (var i = 0; i < splits.length; i++) {
         final data = splits[i];
@@ -269,35 +303,78 @@ class _FAQDetailScreenState extends State<FAQDetailScreen> {
         if (dataLength > keyLength) {
           if (data.substring(0, keyLength).toLowerCase() == key.toLowerCase()) {
             if (i == splits.length) {
-              spans.add(TextSpan(text: key, style: Theme.of(context).primaryTextTheme.bodyText2?.copyWith().copyWith(color: kHyppePrimary, backgroundColor: kHyppeLightWarning)));
+              spans.add(TextSpan(
+                  text: key,
+                  style: Theme.of(context)
+                      .primaryTextTheme
+                      .bodyMedium
+                      ?.copyWith()
+                      .copyWith(
+                          color: kHyppePrimary,
+                          backgroundColor: kHyppeLightWarning)));
               spans.add(
-                TextSpan(text: data.substring(keyLength, dataLength), style: Theme.of(context).primaryTextTheme.bodyText2?.copyWith()),
+                TextSpan(
+                    text: data.substring(keyLength, dataLength),
+                    style: Theme.of(context)
+                        .primaryTextTheme
+                        .bodyMedium
+                        ?.copyWith()),
               );
             } else {
-              spans.add(TextSpan(text: key, style: Theme.of(context).primaryTextTheme.bodyText2?.copyWith().copyWith(color: kHyppePrimary, backgroundColor: kHyppeLightWarning)));
+              spans.add(TextSpan(
+                  text: key,
+                  style: Theme.of(context)
+                      .primaryTextTheme
+                      .bodyMedium
+                      ?.copyWith()
+                      .copyWith(
+                          color: kHyppePrimary,
+                          backgroundColor: kHyppeLightWarning)));
               spans.add(
-                TextSpan(text: '${data.substring(keyLength, dataLength)} ', style: Theme.of(context).primaryTextTheme.bodyText2?.copyWith()),
+                TextSpan(
+                    text: '${data.substring(keyLength, dataLength)} ',
+                    style: Theme.of(context)
+                        .primaryTextTheme
+                        .bodyMedium
+                        ?.copyWith()),
               );
             }
           } else {
             if (i == splits.length) {
-              spans.add(TextSpan(text: data, style: Theme.of(context).primaryTextTheme.bodyText2?.copyWith()));
+              spans.add(TextSpan(
+                  text: data,
+                  style: Theme.of(context)
+                      .primaryTextTheme
+                      .bodyMedium
+                      ?.copyWith()));
             } else {
-              spans.add(TextSpan(text: '$data ', style: Theme.of(context).primaryTextTheme.bodyText2?.copyWith()));
+              spans.add(TextSpan(
+                  text: '$data ',
+                  style: Theme.of(context)
+                      .primaryTextTheme
+                      .bodyMedium
+                      ?.copyWith()));
             }
           }
         } else {
           if (i == splits.length) {
-            spans.add(TextSpan(text: data, style: Theme.of(context).primaryTextTheme.bodyText2?.copyWith()));
+            spans.add(TextSpan(
+                text: data,
+                style:
+                    Theme.of(context).primaryTextTheme.bodyMedium?.copyWith()));
           } else {
-            spans.add(TextSpan(text: '$data ', style: Theme.of(context).primaryTextTheme.bodyText2?.copyWith()));
+            spans.add(TextSpan(
+                text: '$data ',
+                style:
+                    Theme.of(context).primaryTextTheme.bodyMedium?.copyWith()));
           }
         }
       }
 
       return Text.rich(TextSpan(children: spans));
     } else {
-      return Text(text, style: Theme.of(context).primaryTextTheme.bodyText2?.copyWith());
+      return Text(text,
+          style: Theme.of(context).primaryTextTheme.bodyMedium?.copyWith());
     }
   }
 }

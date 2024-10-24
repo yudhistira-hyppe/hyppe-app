@@ -24,7 +24,7 @@ class ChatInputWidget extends StatelessWidget {
         child: TextField(
           minLines: 1,
           maxLines: 7,
-          style: Theme.of(context).textTheme.bodyText2,
+          style: Theme.of(context).textTheme.bodyMedium,
           controller: notifier.messageController,
           keyboardType: TextInputType.text,
           textInputAction: TextInputAction.send,
@@ -34,10 +34,13 @@ class ChatInputWidget extends StatelessWidget {
             fillColor: Theme.of(context).colorScheme.background,
             hintText: "${notifier2.translate.typeAMessage}...",
             hintStyle: const TextStyle(color: Color(0xffBABABA), fontSize: 14),
-            contentPadding: const EdgeInsets.only(top: 10, bottom: 10, left: 16),
+            contentPadding:
+                const EdgeInsets.only(top: 10, bottom: 10, left: 16),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
-            enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
-            focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
+            enabledBorder:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
+            focusedBorder:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
             // prefixIcon: CustomIconButtonWidget(
             //   iconData: "${AssetPath.vectorPath}storage.svg",
             //   onPressed: () => notifier.onTapLocalMedia(context),

@@ -62,7 +62,9 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
 
   void _conditionalFunction() async {
     if (widget.function == null) {
-      widget.fromSnackBar ? Routing().removeSnackBar() : Navigator.pop<bool>(context, true);
+      widget.fromSnackBar
+          ? Routing().removeSnackBar()
+          : Navigator.pop<bool>(context, true);
     } else {
       try {
         _loading.value = true;
@@ -73,7 +75,9 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
       } catch (_) {
       } finally {
         if (mounted) {
-          widget.fromSnackBar ? Routing().removeSnackBar() : Navigator.pop<bool>(context, true);
+          widget.fromSnackBar
+              ? Routing().removeSnackBar()
+              : Navigator.pop<bool>(context, true);
         }
       }
     }
@@ -118,7 +122,8 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
                     children: [
                       sixteenPx,
                       CustomIconWidget(
-                        iconData: widget.iconSvg ?? "${AssetPath.vectorPath}valid-invert.svg",
+                        iconData: widget.iconSvg ??
+                            "${AssetPath.vectorPath}valid-invert.svg",
                         defaultColor: false,
                         height: widget.sizeIcon,
                         width: widget.sizeIcon,
@@ -126,13 +131,22 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
                       ),
                       eightPx,
                       SizedBox(
-                        width: MediaQuery.of(context).size.width - (16 + 8 + 14 + ((widget.textButton?.length ?? 0) <= 2 ? 60 : 90)),
+                        width: MediaQuery.of(context).size.width -
+                            (16 +
+                                8 +
+                                14 +
+                                ((widget.textButton?.length ?? 0) <= 2
+                                    ? 60
+                                    : 90)),
                         child: CustomTextWidget(
                           maxLines: widget.maxLines,
                           textOverflow: widget.textOverflow,
                           textToDisplay: widget.caption ?? '',
                           textAlign: TextAlign.left,
-                          textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: widget.textColor),
+                          textStyle: Theme.of(context)
+                              .textTheme
+                              .bodyLarge!
+                              .copyWith(color: widget.textColor),
                         ),
                       )
                     ],
@@ -144,18 +158,27 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
                               onTap: widget.functionSubCaption,
                               child: Container(
                                   width: SizeConfig.screenWidth,
-                                  padding: const EdgeInsets.only(left: 40, bottom: 10, top: 6),
+                                  padding: const EdgeInsets.only(
+                                      left: 40, bottom: 10, top: 6),
                                   child: Text.rich(
                                     TextSpan(
                                       text: "${widget.subCaption} ",
-                                      style: Theme.of(context).textTheme.bodyText2!.copyWith(color: widget.textColor),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(color: widget.textColor),
                                       children: [
                                         widget.subCaptionButton != null
                                             ? TextSpan(
-                                                text: '${widget.subCaptionButton}',
-                                                style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                                                text:
+                                                    '${widget.subCaptionButton}',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium!
+                                                    .copyWith(
                                                       color: widget.textColor,
-                                                      decoration: TextDecoration.underline,
+                                                      decoration: TextDecoration
+                                                          .underline,
                                                     ),
                                               )
                                             : const TextSpan()
@@ -167,7 +190,7 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
                                   //         textToDisplay: widget.subCaption ?? '',
                                   //         textOverflow: TextOverflow.visible,
                                   //         textAlign: TextAlign.left,
-                                  //         textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: kHyppeLightButtonText),
+                                  //         textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kHyppeLightButtonText),
                                   //       ),
                                   ),
                             ),
@@ -179,7 +202,9 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
               widget.subCaption != null
                   ? const SizedBox.shrink()
                   : Container(
-                      padding: EdgeInsets.only(right: (widget.textButton?.length ?? 0) <= 2 ? 0 : 10),
+                      padding: EdgeInsets.only(
+                          right:
+                              (widget.textButton?.length ?? 0) <= 2 ? 0 : 10),
                       width: (widget.textButton?.length ?? 0) <= 2 ? 50 : null,
                       height: 50,
                       child: CustomTextButton(
@@ -188,14 +213,20 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
                           valueListenable: _loading,
                           builder: (_, value, __) {
                             if (value) {
-                              return const SizedBox(height: 40, width: 40, child: CustomLoading());
+                              return const SizedBox(
+                                  height: 40,
+                                  width: 40,
+                                  child: CustomLoading());
                             }
 
                             return CustomTextWidget(
                               maxLines: 1,
                               textToDisplay: widget.textButton ?? 'Ok',
                               textAlign: TextAlign.right,
-                              textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: widget.textButtonColor),
+                              textStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(color: widget.textButtonColor),
                             );
                           },
                         ),
@@ -231,7 +262,10 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
                   textOverflow: widget.textOverflow,
                   textToDisplay: widget.caption!,
                   textAlign: TextAlign.left,
-                  textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: widget.textColor, fontSize: 10, fontWeight: FontWeight.w700),
+                  textStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      color: widget.textColor,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w700),
                 ),
               if (widget.subCaption != null)
                 CustomTextWidget(
@@ -239,7 +273,10 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
                   textOverflow: widget.textOverflow,
                   textToDisplay: widget.subCaption!,
                   textAlign: TextAlign.left,
-                  textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: widget.textColor, fontSize: 12, fontWeight: FontWeight.w400),
+                  textStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      color: widget.textColor,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400),
                 ),
             ],
           ),

@@ -59,7 +59,7 @@ class TopDetailWidget extends StatelessWidget {
         // TwoColumnWidget(
         //   data?.noinvoice ?? '',
         //   // text2: 'See Invoice',
-        //   textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
+        //   textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
         // ),
 
         TwoColumnWidget('Status', text2: data?.status),
@@ -80,7 +80,9 @@ class TopDetailWidget extends StatelessWidget {
                 ),
                 function: () {
                   System().copyToClipboard(data?.nova ?? '');
-                  ShowBottomSheet().onShowColouredSheet(context, 'Copy to clipboard', color: kHyppeLightSuccess);
+                  ShowBottomSheet().onShowColouredSheet(
+                      context, 'Copy to clipboard',
+                      color: kHyppeLightSuccess);
                 },
               )
             : Container(),
@@ -95,14 +97,18 @@ class TopDetailWidget extends StatelessWidget {
         TwoColumnWidget(
           data?.noinvoice ?? '',
           // text2: 'See Invoice',
-          textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
+          textStyle: Theme.of(context)
+              .textTheme
+              .bodySmall
+              ?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
         ),
         data?.jenis == 'BOOST_CONTENT'
             ? Container()
             : TwoColumnWidget(
                 language?.from ?? 'from',
                 text2: data?.namapenjual,
-                textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
+                textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: kHyppePrimary, fontWeight: FontWeight.bold),
               ),
         TwoColumnWidget('Status', text2: data?.status),
         // TwoColumnWidget(language?.time, text2: System().dateFormatter(data?.time ?? '', 4)),
@@ -123,7 +129,9 @@ class TopDetailWidget extends StatelessWidget {
                 ),
                 function: () {
                   System().copyToClipboard(data?.nova ?? '');
-                  ShowBottomSheet().onShowColouredSheet(context, 'Copy to clipboard', color: kHyppeLightSuccess);
+                  ShowBottomSheet().onShowColouredSheet(
+                      context, 'Copy to clipboard',
+                      color: kHyppeLightSuccess);
                 },
               )
             : Container(),
@@ -138,12 +146,18 @@ class TopDetailWidget extends StatelessWidget {
         TwoColumnWidget(
           data?.noinvoice,
           // text2: 'See Invoice',
-          textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
+          textStyle: Theme.of(context)
+              .textTheme
+              .bodySmall
+              ?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
         ),
         TwoColumnWidget(
           language?.forr ?? 'for',
           text2: data?.namapembeli,
-          textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
+          textStyle: Theme.of(context)
+              .textTheme
+              .bodySmall
+              ?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
         ),
         TwoColumnWidget('Status', text2: data?.status),
         data?.status == 'WAITING_PAYMENT'
@@ -165,38 +179,54 @@ class TopDetailWidget extends StatelessWidget {
         children: [
           CustomTextWidget(
             textToDisplay: language?.time ?? '',
-            textStyle: Theme.of(context).textTheme.caption ?? const TextStyle(),
+            textStyle:
+                Theme.of(context).textTheme.bodySmall ?? const TextStyle(),
             textAlign: TextAlign.start,
           ),
           Row(
             children: [
               CustomTextWidget(
                 textToDisplay: System().dateFormatter(data?.time ?? '', 5),
-                textStyle: Theme.of(context).textTheme.caption ?? const TextStyle(),
+                textStyle:
+                    Theme.of(context).textTheme.bodySmall ?? const TextStyle(),
                 textAlign: TextAlign.start,
               ),
               Consumer<TransactionNotifier>(
-                builder: (_, notifier, __) => notifier.minuteVa < 0 && notifier.secondVa < 0
-                    ? CustomTextWidget(
-                        textToDisplay: System().dateFormatter(data?.time ?? '', 6),
-                        textStyle: Theme.of(context).textTheme.caption ?? const TextStyle(),
-                        textAlign: TextAlign.start,
-                      )
-                    : TweenAnimationBuilder<Duration>(
-                        duration: Duration(minutes: notifier.minuteVa, seconds: notifier.secondVa),
-                        tween: Tween(begin: Duration(minutes: notifier.minuteVa, seconds: notifier.secondVa), end: Duration.zero),
-                        onEnd: () {
-                          Routing().moveBack();
-                          notifier.initTransactionHistory(context);
-                        },
-                        builder: (BuildContext context, Duration value, Widget? child) {
-                          final minutes = value.inMinutes;
-                          final seconds = value.inSeconds % 60;
-                          return CustomTextWidget(
-                            textToDisplay: ' 00 : ${minutes < 10 ? '0' : ''}$minutes : ${seconds < 10 ? '0' : ''}$seconds',
-                            textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeRed),
-                          );
-                        }),
+                builder: (_, notifier, __) =>
+                    notifier.minuteVa < 0 && notifier.secondVa < 0
+                        ? CustomTextWidget(
+                            textToDisplay:
+                                System().dateFormatter(data?.time ?? '', 6),
+                            textStyle: Theme.of(context).textTheme.bodySmall ??
+                                const TextStyle(),
+                            textAlign: TextAlign.start,
+                          )
+                        : TweenAnimationBuilder<Duration>(
+                            duration: Duration(
+                                minutes: notifier.minuteVa,
+                                seconds: notifier.secondVa),
+                            tween: Tween(
+                                begin: Duration(
+                                    minutes: notifier.minuteVa,
+                                    seconds: notifier.secondVa),
+                                end: Duration.zero),
+                            onEnd: () {
+                              Routing().moveBack();
+                              notifier.initTransactionHistory(context);
+                            },
+                            builder: (BuildContext context, Duration value,
+                                Widget? child) {
+                              final minutes = value.inMinutes;
+                              final seconds = value.inSeconds % 60;
+                              return CustomTextWidget(
+                                textToDisplay:
+                                    ' 00 : ${minutes < 10 ? '0' : ''}$minutes : ${seconds < 10 ? '0' : ''}$seconds',
+                                textStyle: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(color: kHyppeRed),
+                              );
+                            }),
               ),
             ],
           ),
@@ -211,7 +241,10 @@ class TopDetailWidget extends StatelessWidget {
         TwoColumnWidget(
           language?.forr ?? 'for',
           text2: data?.from,
-          textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
+          textStyle: Theme.of(context)
+              .textTheme
+              .bodySmall
+              ?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
         ),
         TwoColumnWidget('Status', text2: data?.status),
         TwoColumnWidget(language?.time ?? 'Time', text2: data?.timestamp),

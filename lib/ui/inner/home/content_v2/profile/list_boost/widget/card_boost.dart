@@ -43,7 +43,9 @@ class CardBoost extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.background,
         borderRadius: BorderRadius.circular(5),
-        boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+        boxShadow: [
+          BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)
+        ],
       ),
       child: Material(
         color: Colors.transparent,
@@ -58,16 +60,18 @@ class CardBoost extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomTextWidget(
-                      textToDisplay: System().convertTypeContent(data?.postType ?? ''),
-                      textStyle: Theme.of(context).primaryTextTheme.button,
+                      textToDisplay:
+                          System().convertTypeContent(data?.postType ?? ''),
+                      textStyle: Theme.of(context).primaryTextTheme.labelLarge,
                     ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         CustomTextWidget(
-                          textToDisplay: System().getStatusBoost(context, '${data?.statusBoost}'),
+                          textToDisplay: System()
+                              .getStatusBoost(context, '${data?.statusBoost}'),
                           // textToDisplay: data?.status ?? '',
-                          textStyle: Theme.of(context).textTheme.caption,
+                          textStyle: Theme.of(context).textTheme.bodySmall,
                         ),
                         sixPx,
                         CustomIconWidget(
@@ -81,7 +85,8 @@ class CardBoost extends StatelessWidget {
                   ],
                 ),
               ),
-              const Divider(height: 0.2, thickness: 1, color: Color(0xffF7F7F7)),
+              const Divider(
+                  height: 0.2, thickness: 1, color: Color(0xffF7F7F7)),
               twelvePx,
               // SelectableText("${data.apsara ? data.media.imageInfo.isEmpty ? data.media.videoList[0].coverURL : data.media.imageInfo[0].url : data?.fullThumbPath}"),
               Row(
@@ -89,14 +94,17 @@ class CardBoost extends StatelessWidget {
                   Expanded(
                     flex: 2,
                     child: CustomCacheImage(
-                      imageUrl: (data?.isApsara ?? false) ? (data?.mediaThumbEndPoint ?? '') : data?.fullThumbPath ?? '',
+                      imageUrl: (data?.isApsara ?? false)
+                          ? (data?.mediaThumbEndPoint ?? '')
+                          : data?.fullThumbPath ?? '',
                       imageBuilder: (_, imageProvider) {
                         return Container(
                           height: 52,
                           width: 52,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(6),
-                            image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                            image: DecorationImage(
+                                image: imageProvider, fit: BoxFit.cover),
                           ),
                         );
                       },
@@ -106,7 +114,8 @@ class CardBoost extends StatelessWidget {
                           decoration: const BoxDecoration(
                             image: DecorationImage(
                               fit: BoxFit.contain,
-                              image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                              image: AssetImage(
+                                  '${AssetPath.pngPath}content-error.png'),
                             ),
                           ),
                         );
@@ -116,7 +125,8 @@ class CardBoost extends StatelessWidget {
                         decoration: const BoxDecoration(
                           image: DecorationImage(
                             fit: BoxFit.contain,
-                            image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                            image: AssetImage(
+                                '${AssetPath.pngPath}content-error.png'),
                           ),
                         ),
                       ),
@@ -128,7 +138,7 @@ class CardBoost extends StatelessWidget {
                     child: CustomTextWidget(
                       maxLines: 5,
                       textToDisplay: '${data?.description}',
-                      textStyle: Theme.of(context).primaryTextTheme.caption,
+                      textStyle: Theme.of(context).primaryTextTheme.bodySmall,
                       textAlign: TextAlign.start,
                     ),
                   ),
@@ -153,8 +163,9 @@ class CardBoost extends StatelessWidget {
                           ),
                           sixPx,
                           CustomTextWidget(
-                            textToDisplay: "${System().dateFormatter(data?.boosted[0].boostDate ?? '', 5)}",
-                            textStyle: Theme.of(context).textTheme.overline,
+                            textToDisplay:
+                                "${System().dateFormatter(data?.boosted[0].boostDate ?? '', 5)}",
+                            textStyle: Theme.of(context).textTheme.labelSmall,
                           )
                         ],
                       ),
@@ -177,8 +188,9 @@ class CardBoost extends StatelessWidget {
                           ),
                           sixPx,
                           CustomTextWidget(
-                            textToDisplay: "${data?.boostJangkauan ?? '0'} ${language?.reach}",
-                            textStyle: Theme.of(context).textTheme.overline,
+                            textToDisplay:
+                                "${data?.boostJangkauan ?? '0'} ${language?.reach}",
+                            textStyle: Theme.of(context).textTheme.labelSmall,
                           )
                         ],
                       ),
@@ -190,14 +202,20 @@ class CardBoost extends StatelessWidget {
                       onTap: () {
                         switch (data?.postType) {
                           case 'pict':
-                            Routing().move(Routes.picDetail, argument: PicDetailScreenArgument(picData: data));
+                            Routing().move(Routes.picDetail,
+                                argument:
+                                    PicDetailScreenArgument(picData: data));
                             break;
                           case 'vid':
-                            return context.read<PreviewVidNotifier>().navigateToHyppeVidDetail(context, data);
+                            return context
+                                .read<PreviewVidNotifier>()
+                                .navigateToHyppeVidDetail(context, data);
                           case 'diary':
                             List<ContentData> data1 = [];
                             data1.add(data!);
-                            Routing().move(Routes.diaryDetail, argument: DiaryDetailScreenArgument(diaryData: data1, type: TypePlaylist.none));
+                            Routing().move(Routes.diaryDetail,
+                                argument: DiaryDetailScreenArgument(
+                                    diaryData: data1, type: TypePlaylist.none));
                             break;
                         }
                       },
@@ -209,7 +227,12 @@ class CardBoost extends StatelessWidget {
                         ),
                         child: CustomTextWidget(
                           textToDisplay: language?.viewDetails ?? '',
-                          textStyle: Theme.of(context).textTheme.overline?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                          textStyle: Theme.of(context)
+                              .textTheme
+                              .labelSmall
+                              ?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),

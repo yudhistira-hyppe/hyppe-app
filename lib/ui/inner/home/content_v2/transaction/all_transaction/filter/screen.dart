@@ -13,12 +13,13 @@ class AllTransactionFilter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'AllTransactionFilter');
-    return Consumer2<FilterTransactionNotifier, TranslateNotifierV2>(builder: (_, notifier, notifier2, __) {
+    return Consumer2<FilterTransactionNotifier, TranslateNotifierV2>(
+        builder: (_, notifier, notifier2, __) {
       return Scaffold(
           appBar: AppBar(
             leading: const BackButton(),
             title: CustomTextWidget(
-              textStyle: Theme.of(context).textTheme.subtitle1,
+              textStyle: Theme.of(context).textTheme.titleMedium,
               textToDisplay: 'Filters',
             ),
             actions: [
@@ -26,7 +27,11 @@ class AllTransactionFilter extends StatelessWidget {
                   onPressed: () => notifier.resetFilter(context),
                   child: CustomTextWidget(
                     textToDisplay: 'Reset',
-                    textStyle: Theme.of(context).textTheme.button?.copyWith(color: !notifier.checkButton() ? kHyppeGrey : kHyppePrimary, fontWeight: FontWeight.bold),
+                    textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        color: !notifier.checkButton()
+                            ? kHyppeGrey
+                            : kHyppePrimary,
+                        fontWeight: FontWeight.bold),
                   ))
             ],
           ),
@@ -38,10 +43,16 @@ class AllTransactionFilter extends StatelessWidget {
                   : () {
                       notifier.submitFilter(context);
                     },
-              style: ButtonStyle(backgroundColor: !notifier.checkButton() ? MaterialStateProperty.all(kHyppeDisabled) : MaterialStateProperty.all(kHyppePrimary)),
+              style: ButtonStyle(
+                  backgroundColor: !notifier.checkButton()
+                      ? MaterialStateProperty.all(kHyppeDisabled)
+                      : MaterialStateProperty.all(kHyppePrimary)),
               child: CustomTextWidget(
                 textToDisplay: 'Apply',
-                textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: kHyppeLightButtonText),
               ),
             ),
           ),
@@ -55,13 +66,19 @@ class AllTransactionFilter extends StatelessWidget {
                     children: [
                       CustomTextWidget(
                         textToDisplay: 'Date',
-                        textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: kHyppeGrey, fontWeight: FontWeight.bold),
+                        textStyle: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(
+                                color: kHyppeGrey, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.start,
                       ),
                       SizedBox(
                         width: 25,
                         child: IconButton(
-                          icon: Icon(notifier.showDate ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded),
+                          icon: Icon(notifier.showDate
+                              ? Icons.keyboard_arrow_up_rounded
+                              : Icons.keyboard_arrow_down_rounded),
                           onPressed: () {
                             notifier.showDate = !notifier.showDate;
                           },
@@ -71,7 +88,9 @@ class AllTransactionFilter extends StatelessWidget {
                     ],
                   ),
                 ),
-                notifier.showDate ? dateFilterWidget(context, notifier) : Container(),
+                notifier.showDate
+                    ? dateFilterWidget(context, notifier)
+                    : Container(),
                 const Divider(thickness: 0.5, color: kHyppeLightSurface),
                 Container(
                   padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
@@ -80,13 +99,19 @@ class AllTransactionFilter extends StatelessWidget {
                     children: [
                       CustomTextWidget(
                         textToDisplay: 'Type',
-                        textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: kHyppeGrey, fontWeight: FontWeight.bold),
+                        textStyle: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(
+                                color: kHyppeGrey, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.start,
                       ),
                       SizedBox(
                         width: 25,
                         child: IconButton(
-                          icon: Icon(notifier.showType ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded),
+                          icon: Icon(notifier.showType
+                              ? Icons.keyboard_arrow_up_rounded
+                              : Icons.keyboard_arrow_down_rounded),
                           onPressed: () {
                             notifier.showType = !notifier.showType;
                           },
@@ -104,13 +129,17 @@ class AllTransactionFilter extends StatelessWidget {
                             shrinkWrap: false,
                             itemBuilder: (context, index) {
                               return ListTile(
-                                onTap: () => notifier.pickType(notifier.filterType[index]['id']),
+                                onTap: () => notifier
+                                    .pickType(notifier.filterType[index]['id']),
                                 title: CustomTextWidget(
                                   textAlign: TextAlign.left,
-                                  textToDisplay: notifier.filterType[index]['name'],
-                                  textStyle: Theme.of(context).textTheme.titleSmall,
+                                  textToDisplay: notifier.filterType[index]
+                                      ['name'],
+                                  textStyle:
+                                      Theme.of(context).textTheme.titleSmall,
                                 ),
-                                trailing: notifier.checkType(notifier.filterType[index]['id'])
+                                trailing: notifier.checkType(
+                                        notifier.filterType[index]['id'])
                                     ? const Icon(
                                         Icons.check_box_outline_blank,
                                         color: kHyppeGrey,
@@ -128,7 +157,8 @@ class AllTransactionFilter extends StatelessWidget {
     });
   }
 
-  Widget dateFilterWidget(BuildContext context, FilterTransactionNotifier notifier) {
+  Widget dateFilterWidget(
+      BuildContext context, FilterTransactionNotifier notifier) {
     return Column(
       children: [
         ListTile(

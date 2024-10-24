@@ -66,7 +66,8 @@ class _OnListGiftState extends State<OnListGift> {
                     alignment: Alignment.center,
                     child: CustomTextWidget(
                       textToDisplay: language.giftList ?? 'List Gift',
-                      textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                      textStyle: const TextStyle(
+                          fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                   )
                 ],
@@ -86,8 +87,10 @@ class _OnListGiftState extends State<OnListGift> {
     );
   }
 
-  Widget watcherItem(ListGiftModel data, int index, LocalizationModelV2 language) {
-    final mimeType = System().extensionFiles(data.thumbnail ?? '')?.split('/')[0] ?? '';
+  Widget watcherItem(
+      ListGiftModel data, int index, LocalizationModelV2 language) {
+    final mimeType =
+        System().extensionFiles(data.thumbnail ?? '')?.split('/')[0] ?? '';
     String type = '';
     if (mimeType != '') {
       var a = mimeType.split('/');
@@ -103,7 +106,8 @@ class _OnListGiftState extends State<OnListGift> {
         children: [
           Flexible(
             child: InkWell(
-              onTap: () => System().navigateToProfile(context, data.email ?? ''),
+              onTap: () =>
+                  System().navigateToProfile(context, data.email ?? ''),
               // onTap: () => ShowBottomSheet.onWatcherStatus(context, data.email ?? '', data.sId ?? ''),
               child: Row(
                 children: [
@@ -113,7 +117,10 @@ class _OnListGiftState extends State<OnListGift> {
                           height: 50 * SizeConfig.scaleDiagonal,
                           width: 50 * SizeConfig.scaleDiagonal,
                           semanticsLabel: 'A shark?!',
-                          placeholderBuilder: (BuildContext context) => Container(padding: const EdgeInsets.all(30.0), child: const CircularProgressIndicator()),
+                          placeholderBuilder: (BuildContext context) =>
+                              Container(
+                                  padding: const EdgeInsets.all(30.0),
+                                  child: const CircularProgressIndicator()),
                         )
                       : SizedBox(
                           // width: MediaQuery.of(context2).size.width,
@@ -126,7 +133,9 @@ class _OnListGiftState extends State<OnListGift> {
                                 alignment: Alignment.topRight,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(5),
-                                  image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
+                                  image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.contain),
                                 ),
                               );
                             },
@@ -137,7 +146,8 @@ class _OnListGiftState extends State<OnListGift> {
                                   borderRadius: BorderRadius.circular(2),
                                   image: const DecorationImage(
                                     fit: BoxFit.contain,
-                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                    image: AssetImage(
+                                        '${AssetPath.pngPath}content-error.png'),
                                   ),
                                 ),
                               );
@@ -148,7 +158,8 @@ class _OnListGiftState extends State<OnListGift> {
                                 borderRadius: BorderRadius.circular(2),
                                 image: const DecorationImage(
                                   fit: BoxFit.contain,
-                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                  image: AssetImage(
+                                      '${AssetPath.pngPath}content-error.png'),
                                 ),
                               ),
                             ),
@@ -166,10 +177,11 @@ class _OnListGiftState extends State<OnListGift> {
                             RichText(
                                 text: TextSpan(
                               text: "${data.count} ",
-                              style: context.getTextTheme().bodyText2?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    color: kHyppeTextLightPrimary,
-                                  ),
+                              style:
+                                  context.getTextTheme().bodyMedium?.copyWith(
+                                        fontWeight: FontWeight.w700,
+                                        color: kHyppeTextLightPrimary,
+                                      ),
                               children: [
                                 TextSpan(
                                   text: "${data.name}",
@@ -181,10 +193,11 @@ class _OnListGiftState extends State<OnListGift> {
                             RichText(
                                 text: TextSpan(
                               text: "${language.from} ",
-                              style: context.getTextTheme().bodyText2?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    color: kHyppeBurem,
-                                  ),
+                              style:
+                                  context.getTextTheme().bodyMedium?.copyWith(
+                                        fontWeight: FontWeight.w700,
+                                        color: kHyppeBurem,
+                                      ),
                               children: [
                                 TextSpan(
                                   text: "@${data.username}",

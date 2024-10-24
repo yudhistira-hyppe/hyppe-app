@@ -27,7 +27,6 @@ class CustomRectangleInput extends StatelessWidget {
                 print('lenght of the pin: ${text.length}');
                 notifier.inCorrectCode = false;
                 if (text.length == 4) {
-
                   notifier.onVerifyButton(context, afterSuccess);
                 }
                 // notifier.isOTPCodeFullFilled = notifier.pinController.text.length == 4;
@@ -36,21 +35,21 @@ class CustomRectangleInput extends StatelessWidget {
             sixPx,
             notifier.loading
                 ? SizedBox(
-                width: 15,
-                height: 15,
-                child: CircularProgressIndicator(
-                  color: theme.colorScheme.primary,
-                  strokeWidth: 1,
-                ))
+                    width: 15,
+                    height: 15,
+                    child: CircularProgressIndicator(
+                      color: theme.colorScheme.primary,
+                      strokeWidth: 1,
+                    ))
                 : notifier.inCorrectCode
-                ? CustomTextWidget(
-              textToDisplay: notifier.language.incorrectCode ?? '',
-              textStyle:
-              Theme.of(context).textTheme.bodyText2?.copyWith(
-                color: Theme.of(context).colorScheme.error,
-              ),
-            )
-                : const SizedBox.shrink(),
+                    ? CustomTextWidget(
+                        textToDisplay: notifier.language.incorrectCode ?? '',
+                        textStyle:
+                            Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  color: Theme.of(context).colorScheme.error,
+                                ),
+                      )
+                    : const SizedBox.shrink(),
           ],
         ),
       ),

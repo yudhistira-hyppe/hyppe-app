@@ -12,24 +12,28 @@ import 'package:provider/provider.dart';
 
 class InterestUserOverviewTile extends StatefulWidget {
   @override
-  _InterestUserOverviewTileState createState() => _InterestUserOverviewTileState();
+  _InterestUserOverviewTileState createState() =>
+      _InterestUserOverviewTileState();
 }
 
 class _InterestUserOverviewTileState extends State<InterestUserOverviewTile> {
   @override
   void initState() {
-    Provider.of<UserInterestNotifier>(context, listen: false).onGetInterest(context);
+    Provider.of<UserInterestNotifier>(context, listen: false)
+        .onGetInterest(context);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'InterestUserOverviewTile');
+    FirebaseCrashlytics.instance
+        .setCustomKey('layout', 'InterestUserOverviewTile');
     return Consumer<UserInterestNotifier>(
       builder: (_, notifier, __) => GridView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+        gridDelegate:
+            const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
         itemCount: notifier.interest.isNotEmpty ? notifier.interest.length : 16,
         padding: const EdgeInsets.all(11),
         itemBuilder: (context, index) => CustomTextButton(
@@ -59,10 +63,14 @@ class _InterestUserOverviewTileState extends State<InterestUserOverviewTile> {
                               defaultColor: false,
                               width: 15,
                               height: 15,
-                              iconData: "${AssetPath.vectorPath}user-verified.svg",
+                              iconData:
+                                  "${AssetPath.vectorPath}user-verified.svg",
                             ),
                           ),
-                          visible: notifier.pickedInterest(notifier.interest[index].id) ? true : false,
+                          visible: notifier
+                                  .pickedInterest(notifier.interest[index].id)
+                              ? true
+                              : false,
                         ),
                       ),
                       Align(
@@ -77,15 +85,27 @@ class _InterestUserOverviewTileState extends State<InterestUserOverviewTile> {
                                 defaultColor: false,
                                 width: 55 * SizeConfig.scaleDiagonal,
                                 iconData: notifier.interest[index].icon ?? '',
-                                color: notifier.pickedInterest(notifier.interest[index].id) ? Theme.of(context).colorScheme.primary : Theme.of(context).iconTheme.color,
+                                color: notifier.pickedInterest(
+                                        notifier.interest[index].id)
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(context).iconTheme.color,
                               ),
                               CustomTextWidget(
                                 textAlign: TextAlign.left,
                                 textOverflow: TextOverflow.clip,
-                                textToDisplay: notifier.interest[index].interestName ?? '',
-                                textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
+                                textToDisplay:
+                                    notifier.interest[index].interestName ?? '',
+                                textStyle: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
                                       fontWeight: FontWeight.w700,
-                                      color: notifier.pickedInterest(notifier.interest[index].id) ? Theme.of(context).colorScheme.primary : null,
+                                      color: notifier.pickedInterest(
+                                              notifier.interest[index].id)
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .primary
+                                          : null,
                                     ),
                               ),
                             ],

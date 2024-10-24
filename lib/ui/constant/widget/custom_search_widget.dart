@@ -26,7 +26,8 @@ class _CustomSearchWidgetState extends State<CustomSearchWidget> {
   void initState() {
     widget.textEditingController.addListener(() {
       Future.delayed(Duration.zero, () {
-        if (widget.textEditingController.value.text.isEmpty || widget.textEditingController.value.text.length == 1) {
+        if (widget.textEditingController.value.text.isEmpty ||
+            widget.textEditingController.value.text.length == 1) {
           setState(() {});
         }
       });
@@ -59,8 +60,11 @@ class _CustomSearchWidgetState extends State<CustomSearchWidget> {
         maxLines: 1,
         onChanged: widget.onTyping,
         controller: widget.textEditingController,
-        style: themes.textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
-        onFieldSubmitted: widget.textEditingController.text.isNotEmpty ? widget.onFieldSubmitted : null,
+        style:
+            themes.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+        onFieldSubmitted: widget.textEditingController.text.isNotEmpty
+            ? widget.onFieldSubmitted
+            : null,
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
@@ -74,7 +78,7 @@ class _CustomSearchWidgetState extends State<CustomSearchWidget> {
             iconData: '${AssetPath.vectorPath}search-nav.svg',
           ),
           hintText: widget.hintText ?? 'Search',
-          hintStyle: themes.primaryTextTheme.bodyText2,
+          hintStyle: themes.primaryTextTheme.bodyMedium,
         ),
       ),
     );

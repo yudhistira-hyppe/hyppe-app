@@ -5,21 +5,24 @@ import 'package:flutter/material.dart';
 
 class PickFileErrorAlertContent extends StatelessWidget {
   final String message;
-  const PickFileErrorAlertContent({Key? key, required this.message}) : super(key: key);
+  const PickFileErrorAlertContent({Key? key, required this.message})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       content: CustomTextWidget(
-          textStyle: Theme.of(context).textTheme.bodyText1,
+          textStyle: Theme.of(context).textTheme.bodyLarge,
           textToDisplay: message,
           textOverflow: TextOverflow.visible),
       actions: [
         CustomTextButton(
           onPressed: () => Routing().moveBack(),
           child: CustomTextWidget(
-            textStyle:
-            Theme.of(context).textTheme.button?.apply(color: Theme.of(context).colorScheme.primary),
+            textStyle: Theme.of(context)
+                .textTheme
+                .labelLarge
+                ?.apply(color: Theme.of(context).colorScheme.primary),
             textToDisplay: 'Ok',
           ),
         ),

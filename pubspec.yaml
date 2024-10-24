@@ -164,8 +164,9 @@ dependencies:
   # uuid: ^3.0.4 # UUID Generator and Parser for all Dart platforms
   # stomp_dart_client: ^0.4.3 # For easy messaging interoperability
 
- 
-# dependency_overrides:
+
+dependency_overrides:
+  fading_edge_scrollview: ^4.1.1
 #  firebase_core_platform_interface: 4.5.1
 #   camera: <=0.10.0
 

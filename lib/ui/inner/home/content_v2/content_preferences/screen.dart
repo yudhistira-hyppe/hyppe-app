@@ -12,13 +12,15 @@ class ContentPreferencesScreen extends StatefulWidget {
   const ContentPreferencesScreen({super.key});
 
   @override
-  State<ContentPreferencesScreen> createState() => _ContentPreferencesScreenState();
+  State<ContentPreferencesScreen> createState() =>
+      _ContentPreferencesScreenState();
 }
 
 class _ContentPreferencesScreenState extends State<ContentPreferencesScreen> {
   @override
   void initState() {
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'ContentPreferencesScreen');
+    FirebaseCrashlytics.instance
+        .setCustomKey('layout', 'ContentPreferencesScreen');
     super.initState();
   }
 
@@ -29,12 +31,16 @@ class _ContentPreferencesScreenState extends State<ContentPreferencesScreen> {
       appBar: AppBar(
         title: CustomTextWidget(
           textToDisplay: 'Pengaturan',
-          textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+          textStyle: Theme.of(context)
+              .textTheme
+              .titleLarge
+              ?.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         centerTitle: false,
         titleSpacing: 0,
         leading: IconButton(
-          icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
+          icon: const CustomIconWidget(
+              iconData: "${AssetPath.vectorPath}back-arrow.svg"),
           splashRadius: 1,
           onPressed: () {},
         ),

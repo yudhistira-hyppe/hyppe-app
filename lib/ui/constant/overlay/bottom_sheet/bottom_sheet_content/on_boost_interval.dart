@@ -26,12 +26,14 @@ class OnBoostIntervalContent extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+                const CustomIconWidget(
+                    iconData: "${AssetPath.vectorPath}handler.svg"),
                 sixteenPx,
                 CustomTextWidget(
                   textToDisplay: notifier.language.interval ?? 'Interval',
                   // '$captionTitle ${contentData?.content.length == 1 ? contentData?.content.length : contentIndex} of ${contentData?.content.length}',
-                  textStyle: Theme.of(context).primaryTextTheme.headline6?.copyWith(),
+                  textStyle:
+                      Theme.of(context).primaryTextTheme.titleLarge?.copyWith(),
                 ),
                 thirtySixPx,
                 ListView.builder(
@@ -43,15 +45,21 @@ class OnBoostIntervalContent extends StatelessWidget {
                         contentPadding: EdgeInsets.zero,
                         dense: true,
                         groupValue: notifier.tmpBoostIntervalId,
-                        value: "${notifier.boostMasterData?.interval?[index].sId}",
+                        value:
+                            "${notifier.boostMasterData?.interval?[index].sId}",
                         onChanged: (val) {
-                          notifier.tmpBoostInterval = "${notifier.boostMasterData?.interval?[index].value} ${System().capitalizeFirstLetter(notifier.boostMasterData?.interval?[index].remark ?? '')}";
+                          notifier.tmpBoostInterval =
+                              "${notifier.boostMasterData?.interval?[index].value} ${System().capitalizeFirstLetter(notifier.boostMasterData?.interval?[index].remark ?? '')}";
                           notifier.tmpBoostIntervalId = val ?? '';
                         },
                         title: CustomTextWidget(
                           textAlign: TextAlign.left,
-                          textToDisplay: "${notifier.boostMasterData?.interval?[index].value} ${System().capitalizeFirstLetter(notifier.boostMasterData?.interval?[index].remark ?? '')}",
-                          textStyle: Theme.of(context).primaryTextTheme.subtitle1?.copyWith(fontWeight: FontWeight.w700),
+                          textToDisplay:
+                              "${notifier.boostMasterData?.interval?[index].value} ${System().capitalizeFirstLetter(notifier.boostMasterData?.interval?[index].remark ?? '')}",
+                          textStyle: Theme.of(context)
+                              .primaryTextTheme
+                              .titleMedium
+                              ?.copyWith(fontWeight: FontWeight.w700),
                         ),
                         activeColor: Theme.of(context).colorScheme.primary,
                       );
@@ -63,13 +71,19 @@ class OnBoostIntervalContent extends StatelessWidget {
                           Routing().moveBack();
                         }
                       : null,
-                  style: ButtonStyle(backgroundColor: notifier.tmpBoostIntervalId != '' ? MaterialStateProperty.all(kHyppePrimary) : MaterialStateProperty.all(kHyppeDisabled)),
+                  style: ButtonStyle(
+                      backgroundColor: notifier.tmpBoostIntervalId != ''
+                          ? MaterialStateProperty.all(kHyppePrimary)
+                          : MaterialStateProperty.all(kHyppeDisabled)),
                   child: Container(
                     width: SizeConfig.screenWidth,
                     padding: const EdgeInsets.all(10),
                     child: CustomTextWidget(
                       textToDisplay: notifier.language.save ?? 'confirm',
-                      textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                      textStyle: Theme.of(context)
+                          .textTheme
+                          .labelLarge
+                          ?.copyWith(color: kHyppeLightButtonText),
                     ),
                   ),
                 ),

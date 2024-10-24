@@ -9,7 +9,9 @@ class CustomHeaderFeature extends StatefulWidget {
   final String title;
   final Function() onPressed;
 
-  const CustomHeaderFeature({Key? key, required this.title, required this.onPressed}) : super(key: key);
+  const CustomHeaderFeature(
+      {Key? key, required this.title, required this.onPressed})
+      : super(key: key);
 
   @override
   _CustomHeaderFeatureState createState() => _CustomHeaderFeatureState();
@@ -35,7 +37,8 @@ class _CustomHeaderFeatureState extends State<CustomHeaderFeature> {
     return Container(
         width: SizeConfig.screenWidth,
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Expanded(
             flex: 9,
             child: CustomTextWidget(
@@ -43,7 +46,7 @@ class _CustomHeaderFeatureState extends State<CustomHeaderFeature> {
               maxLines: 1,
               textAlign: TextAlign.left,
               textToDisplay: "${widget.title}!",
-              textStyle: _themes.textTheme.button?.apply(
+              textStyle: _themes.textTheme.labelLarge?.apply(
                 color: _themes.bottomNavigationBarTheme.unselectedItemColor,
               ),
             ),
@@ -56,9 +59,11 @@ class _CustomHeaderFeatureState extends State<CustomHeaderFeature> {
                 onTap: widget.onPressed,
                 child: CustomTextWidget(
                   maxLines: 1,
-                  textToDisplay: context.watch<TranslateNotifierV2>().translate.seeAll ?? 'See All',
+                  textToDisplay:
+                      context.watch<TranslateNotifierV2>().translate.seeAll ??
+                          'See All',
                   textAlign: TextAlign.right,
-                  textStyle: _themes.textTheme.subtitle2?.copyWith(
+                  textStyle: _themes.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: _themes.colorScheme.primary,
                   ),

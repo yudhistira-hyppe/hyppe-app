@@ -17,7 +17,8 @@ class VidSeeAllScreen extends StatefulWidget {
   State<VidSeeAllScreen> createState() => _VidSeeAllScreenState();
 }
 
-class _VidSeeAllScreenState extends State<VidSeeAllScreen> with SingleTickerProviderStateMixin {
+class _VidSeeAllScreenState extends State<VidSeeAllScreen>
+    with SingleTickerProviderStateMixin {
   final notifier = VidSeeAllNotifier();
 
   late TabController _tabController;
@@ -53,7 +54,7 @@ class _VidSeeAllScreenState extends State<VidSeeAllScreen> with SingleTickerProv
                 CustomTextWidget(
                   textAlign: TextAlign.left,
                   textToDisplay: _language.vidsForYou ?? '',
-                  textStyle: theme.textTheme.bodyText1,
+                  textStyle: theme.textTheme.bodyLarge,
                 ),
                 eightPx,
                 const CustomSeeAllTitle(title: 'HyppeVid'),

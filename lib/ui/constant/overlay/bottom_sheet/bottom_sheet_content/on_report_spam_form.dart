@@ -30,10 +30,12 @@ class OnReportSpamFormBottomSheet extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<OnReportSpamFormBottomSheet> createState() => _OnReportSpamFormBottomSheetState();
+  State<OnReportSpamFormBottomSheet> createState() =>
+      _OnReportSpamFormBottomSheetState();
 }
 
-class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomSheet> with AfterFirstLayoutMixin {
+class _OnReportSpamFormBottomSheetState
+    extends State<OnReportSpamFormBottomSheet> with AfterFirstLayoutMixin {
   Map<String, int> report = {};
   // int _currentReport = 1;
   // static final _routing = Routing();
@@ -67,13 +69,18 @@ class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomShee
               Container(
                 color: const Color(0xffF5F5F5),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CustomTextWidget(
-                        textToDisplay: translate.translate.reportThisContent ?? '',
-                        textStyle: Theme.of(context).primaryTextTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
+                        textToDisplay:
+                            translate.translate.reportThisContent ?? '',
+                        textStyle: Theme.of(context)
+                            .primaryTextTheme
+                            .titleLarge
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       InkWell(
                           onTap: () {
@@ -101,8 +108,13 @@ class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomShee
                                 height: 20,
                               ),
                               CustomTextWidget(
-                                textToDisplay: translate.translate.whyareyoureportingthiscontent ?? '',
-                                textStyle: Theme.of(context).primaryTextTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                                textToDisplay: translate.translate
+                                        .whyareyoureportingthiscontent ??
+                                    '',
+                                textStyle: Theme.of(context)
+                                    .primaryTextTheme
+                                    .titleMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
                               ),
                               ListView.builder(
                                 physics: const NeverScrollableScrollPhysics(),
@@ -111,23 +123,41 @@ class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomShee
                                 itemBuilder: (context, index) {
                                   return RadioListTile<String>(
                                     contentPadding: const EdgeInsets.all(0),
-                                    groupValue: notifier.initData?.data[index].sId ?? '',
+                                    groupValue:
+                                        notifier.initData?.data[index].sId ??
+                                            '',
                                     value: notifier.currentReport,
                                     onChanged: (_) {
                                       setState(() {
-                                        notifier.currentReport = notifier.initData?.data[index].sId ?? '';
-                                        notifier.currentReportDesc = notifier.initData?.data[index].description ?? '';
+                                        notifier.currentReport = notifier
+                                                .initData?.data[index].sId ??
+                                            '';
+                                        notifier.currentReportDesc = notifier
+                                                .initData
+                                                ?.data[index]
+                                                .description ??
+                                            '';
                                       });
                                     },
                                     toggleable: true,
                                     title: CustomTextWidget(
                                       textAlign: TextAlign.left,
-                                      textToDisplay: notifier.titleLang(notifier.initData?.data[index].reason ?? '', notifier.initData?.data[index].reasonEn ?? ''),
-                                      textStyle: Theme.of(context).primaryTextTheme.titleSmall,
+                                      textToDisplay: notifier.titleLang(
+                                          notifier.initData?.data[index]
+                                                  .reason ??
+                                              '',
+                                          notifier.initData?.data[index]
+                                                  .reasonEn ??
+                                              ''),
+                                      textStyle: Theme.of(context)
+                                          .primaryTextTheme
+                                          .titleSmall,
                                       maxLines: 2,
                                     ),
-                                    controlAffinity: ListTileControlAffinity.trailing,
-                                    activeColor: Theme.of(context).colorScheme.primary,
+                                    controlAffinity:
+                                        ListTileControlAffinity.trailing,
+                                    activeColor:
+                                        Theme.of(context).colorScheme.primary,
                                   );
                                 },
                               ),
@@ -136,23 +166,41 @@ class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomShee
                                   width: SizeConfig.screenWidth,
                                   height: 50,
                                   buttonStyle: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all<Color>(notifier.currentReport == '' ? kHyppeDisabled : kHyppePrimary),
-                                      overlayColor: MaterialStateProperty.all<Color>(kHyppePrimary),
-                                      foregroundColor: MaterialStateProperty.all<Color>(kHyppePrimary),
-                                      shadowColor: MaterialStateProperty.all<Color>(kHyppePrimary)),
-                                  function: notifier.isLoading || notifier.currentReport == ''
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              notifier.currentReport == ''
+                                                  ? kHyppeDisabled
+                                                  : kHyppePrimary),
+                                      overlayColor:
+                                          MaterialStateProperty.all<Color>(
+                                              kHyppePrimary),
+                                      foregroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              kHyppePrimary),
+                                      shadowColor:
+                                          MaterialStateProperty.all<Color>(
+                                              kHyppePrimary)),
+                                  function: notifier.isLoading ||
+                                          notifier.currentReport == ''
                                       ? null
                                       : () {
                                           // print("notifier.currentReport ${notifier.currentReport}");
-                                          notifier.reportPost(context, inDetail: widget.inDetail, onComplete: widget.onUpdate).whenComplete(() {
+                                          notifier
+                                              .reportPost(context,
+                                                  inDetail: widget.inDetail,
+                                                  onComplete: widget.onUpdate)
+                                              .whenComplete(() {
                                             globalAfterReport = true;
                                           });
                                         },
                                   child: notifier.isLoading
                                       ? const CustomLoading()
                                       : CustomTextWidget(
-                                          textToDisplay: translate.translate.report ?? '',
-                                          textStyle: _textTheme.bodyText2?.copyWith(color: kHyppeLightButtonText),
+                                          textToDisplay:
+                                              translate.translate.report ?? '',
+                                          textStyle: _textTheme.bodyMedium
+                                              ?.copyWith(
+                                                  color: kHyppeLightButtonText),
                                         )),
                             ],
                           ),

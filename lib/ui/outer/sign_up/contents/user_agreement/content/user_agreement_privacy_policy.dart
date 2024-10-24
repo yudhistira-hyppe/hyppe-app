@@ -10,14 +10,19 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 class UserAgreementPrivacyPolicy extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'UserAgreementPrivacyPolicy');
+    FirebaseCrashlytics.instance
+        .setCustomKey('layout', 'UserAgreementPrivacyPolicy');
     final notifier = Provider.of<UserAgreementNotifier>(context);
     if (notifier.eula != null && notifier.eula?.data[1].eulaContent != null) {
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: 26),
         padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 36),
         color: const Color(0xffEEEEEE),
-        child: DynamicWidgetBuilder.build(notifier.eula?.data[1].eulaContent ?? '', context, DefaultClickListener()) ?? Container(),
+        child: DynamicWidgetBuilder.build(
+                notifier.eula?.data[1].eulaContent ?? '',
+                context,
+                DefaultClickListener()) ??
+            Container(),
       );
     } else if (notifier.isLoading) {
       return const CustomLoading();
@@ -31,7 +36,10 @@ class UserAgreementPrivacyPolicy extends StatelessWidget {
             ),
             CustomTextWidget(
               textToDisplay: notifier.language.refresh ?? '',
-              textStyle: Theme.of(context).textTheme.bodyText1?.apply(color: Colors.grey),
+              textStyle: Theme.of(context)
+                  .textTheme
+                  .bodyLarge
+                  ?.apply(color: Colors.grey),
             ),
           ],
         ),

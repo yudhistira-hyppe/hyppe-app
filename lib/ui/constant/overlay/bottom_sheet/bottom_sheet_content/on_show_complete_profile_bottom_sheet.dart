@@ -16,46 +16,58 @@ class OnShowCompleteProfileBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<TranslateNotifierV2>(
       builder: (_, notifier, __) => Padding(
-        padding: EdgeInsets.symmetric(vertical: 8 * SizeConfig.scaleDiagonal, horizontal: 16 * SizeConfig.scaleDiagonal),
+        padding: EdgeInsets.symmetric(
+            vertical: 8 * SizeConfig.scaleDiagonal,
+            horizontal: 16 * SizeConfig.scaleDiagonal),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+            const CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}handler.svg"),
             CustomTextWidget(
               textToDisplay: notifier.translate.completeProfiles ?? '',
-              textStyle: Theme.of(context).textTheme.headline6,
+              textStyle: Theme.of(context).textTheme.titleLarge,
             ),
             CustomTextWidget(
-              textToDisplay: notifier.translate.pleaseCompleteProfileToContinue ?? '',
-              textStyle: Theme.of(context).textTheme.bodyText1,
+              textToDisplay:
+                  notifier.translate.pleaseCompleteProfileToContinue ?? '',
+              textStyle: Theme.of(context).textTheme.bodyLarge,
               textOverflow: TextOverflow.clip,
             ),
             CustomElevatedButton(
               child: CustomTextWidget(
                 textToDisplay: notifier.translate.yesCompleteProfile ?? '',
-                textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: kHyppeLightButtonText),
               ),
               width: double.infinity,
               height: 50 * SizeConfig.scaleDiagonal,
               function: () {
-                Provider.of<AccountPreferencesNotifier>(context, listen: false).initialIndex = 1;
+                Provider.of<AccountPreferencesNotifier>(context, listen: false)
+                    .initialIndex = 1;
                 Routing().moveAndPop(Routes.accountPreferences);
               },
               buttonStyle: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                  overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary)),
+                  backgroundColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primary),
+                  overlayColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primary)),
             ),
             CustomElevatedButton(
               child: CustomTextWidget(
                 textToDisplay: notifier.translate.noLater ?? '',
-                textStyle: Theme.of(context).textTheme.button,
+                textStyle: Theme.of(context).textTheme.labelLarge,
               ),
               width: double.infinity,
               height: 50 * SizeConfig.scaleDiagonal,
               function: () => Routing().moveBack(),
               buttonStyle: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.transparent), overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                  backgroundColor:
+                      MaterialStateProperty.all(Colors.transparent),
+                  overlayColor: MaterialStateProperty.all(Colors.transparent)),
             )
           ],
         ),

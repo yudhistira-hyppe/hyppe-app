@@ -57,7 +57,8 @@ class NewVideoDetailScreen extends StatefulWidget {
   State<NewVideoDetailScreen> createState() => _NewVideoDetailScreenState();
 }
 
-class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterFirstLayoutMixin {
+class _NewVideoDetailScreenState extends State<NewVideoDetailScreen>
+    with AfterFirstLayoutMixin {
   bool isPlay = false;
   String email = '';
 
@@ -109,7 +110,8 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
         height = MediaQuery.of(context).size.height * 0.95;
       }
     }
-    return Consumer2<VidDetailNotifier, LikeNotifier>(builder: (context, notifier, like, _) {
+    return Consumer2<VidDetailNotifier, LikeNotifier>(
+        builder: (context, notifier, like, _) {
       final data = notifier.data;
       print("======data ${data?.postID}");
       var map = {
@@ -121,7 +123,9 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
         onWillPop: notifier.onPop,
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: orientation == Orientation.landscape || isFullPotrait ? Colors.transparent : Colors.white,
+          backgroundColor: orientation == Orientation.landscape || isFullPotrait
+              ? Colors.transparent
+              : Colors.white,
           // backgroundColor: context.getColorScheme().surface,
           body: data != null
               ? notifier.loadDetail
@@ -130,8 +134,13 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                       child: RefreshIndicator(
                         strokeWidth: 2.0,
                         color: context.getColorScheme().primary,
-                        onRefresh: () => notifier.initState(context, widget.arguments),
-                        notificationPredicate: orientation == Orientation.landscape || isFullPotrait ? (_) => false : (_) => true,
+                        onRefresh: () =>
+                            notifier.initState(context, widget.arguments),
+                        notificationPredicate:
+                            orientation == Orientation.landscape ||
+                                    isFullPotrait
+                                ? (_) => false
+                                : (_) => true,
                         child: SingleChildScrollView(
                           physics: const AlwaysScrollableScrollPhysics(),
                           child: Column(
@@ -140,27 +149,41 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                               Container(
                                 // margin: const EdgeInsets.only(left: 16, top: 12, right: 16),
                                 decoration: BoxDecoration(
-                                    boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
-                                    borderRadius: const BorderRadius.all(Radius.circular(16)),
+                                    boxShadow: const [
+                                      BoxShadow(
+                                          color: Color.fromRGBO(0, 0, 0, 0.06),
+                                          blurRadius: 2)
+                                    ],
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(16)),
                                     color: context.getColorScheme().background),
                                 child: Column(
                                   children: [
                                     Offstage(
-                                      offstage: orientation == Orientation.landscape || isFullPotrait,
-                                      child: _topDetail(context, notifier, data),
+                                      offstage: orientation ==
+                                              Orientation.landscape ||
+                                          isFullPotrait,
+                                      child:
+                                          _topDetail(context, notifier, data),
                                     ),
                                     Container(
                                       color: Colors.black,
                                       child: PlayerPage(
-                                        playMode: (widget.arguments.vidData?.isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
+                                        playMode: (widget.arguments.vidData
+                                                    ?.isApsara ??
+                                                false)
+                                            ? ModeTypeAliPLayer.auth
+                                            : ModeTypeAliPLayer.url,
                                         dataSourceMap: map,
                                         data: data,
                                         height: height,
                                         width: width,
                                         inLanding: widget.arguments.fromLAnding,
-                                        fromDeeplink: widget.arguments.fromDeepLink,
+                                        fromDeeplink:
+                                            widget.arguments.fromDeepLink,
                                         functionFullTriger: () {
-                                          print('===========hahhahahahaa===========');
+                                          print(
+                                              '===========hahhahahahaa===========');
                                           fullscreen();
                                         },
                                         listenerPlay: (state, isInit) {
@@ -175,8 +198,11 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                                       ),
                                     ),
                                     Offstage(
-                                      offstage: orientation == Orientation.landscape || isFullPotrait,
-                                      child: _middleDetail(context, notifier, like, data),
+                                      offstage: orientation ==
+                                              Orientation.landscape ||
+                                          isFullPotrait,
+                                      child: _middleDetail(
+                                          context, notifier, like, data),
                                     ),
                                   ],
                                 ),
@@ -184,10 +210,14 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                               //  if (orientation == Orientation.portrait) twelvePx,
                               (data.allowComments ?? false)
                                   ? Offstage(
-                                      offstage: orientation == Orientation.landscape || isFullPotrait,
+                                      offstage: orientation ==
+                                              Orientation.landscape ||
+                                          isFullPotrait,
                                       child: Padding(
-                                        padding: const EdgeInsets.only(top: 12.0),
-                                        child: _bottomDetail(context, notifier, data),
+                                        padding:
+                                            const EdgeInsets.only(top: 12.0),
+                                        child: _bottomDetail(
+                                            context, notifier, data),
                                       ))
                                   : Container(),
                             ],
@@ -201,7 +231,8 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
     });
   }
 
-  Widget _topDetail(BuildContext context, VidDetailNotifier notifier, ContentData data) {
+  Widget _topDetail(
+      BuildContext context, VidDetailNotifier notifier, ContentData data) {
     return Container(
       padding: const EdgeInsets.only(top: 16, right: 16, left: 16, bottom: 23),
       child: Row(
@@ -243,7 +274,8 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                   featureType: FeatureType.other,
                   // isCelebrity: viddata.privacy?.isCelebrity,
                   isCelebrity: false,
-                  imageUrl: '${System().showUserPicture(data.avatar?.mediaEndpoint)}',
+                  imageUrl:
+                      '${System().showUserPicture(data.avatar?.mediaEndpoint)}',
                   onTapOnProfileImage: () {
                     System().navigateToProfile(context, data.email ?? '');
                   },
@@ -265,7 +297,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
               //       twoPx,
               //       // CustomTextWidget(
               //       //   textToDisplay: 'France, Paris',
-              //       //   textStyle: context.getTextTheme().overline,
+              //       //   textStyle: context.getTextTheme().labelSmall,
               //       // ),
               //       if (data.location?.isNotEmpty ?? false)
               //         CustomTextWidget(
@@ -291,14 +323,18 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
               eightPx,
               if (data.email != SharedPreference().readStorage(SpKeys.email))
                 notifier.checkIsLoading
-                    ? const Center(child: SizedBox(height: 40, width: 40, child: CustomLoading()))
+                    ? const Center(
+                        child: SizedBox(
+                            height: 40, width: 40, child: CustomLoading()))
                     : notifier.statusFollowing == StatusFollowing.following
                         ? const SizedBox.shrink()
                         : CustomFollowButton(
                             checkIsLoading: notifier.checkIsLoading,
                             onPressed: () async {
                               try {
-                                await notifier.followUser(context, isUnFollow: notifier.statusFollowing == StatusFollowing.following);
+                                await notifier.followUser(context,
+                                    isUnFollow: notifier.statusFollowing ==
+                                        StatusFollowing.following);
                               } catch (e) {
                                 e.logger();
                               }
@@ -341,7 +377,8 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                               postData: data,
                               type: hyppePic,
                               adsData: null,
-                              onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
+                              onUpdate: () =>
+                                  context.read<PicDetailNotifier>().onUpdate(),
                             );
                             if (isPlay) {
                               globalAliPlayer?.play();
@@ -373,7 +410,8 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                               onDetail: true,
                               contentData: data,
                               captionTitle: hyppeVid,
-                              onUpdate: () => context.read<VidDetailNotifier>().onUpdate(),
+                              onUpdate: () =>
+                                  context.read<VidDetailNotifier>().onUpdate(),
                               isShare: data.isShared,
                             );
                             if (globalAudioPlayer != null) {
@@ -402,40 +440,54 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
     );
   }
 
-  Widget _middleDetail(BuildContext context, VidDetailNotifier notifier, LikeNotifier like, ContentData data) {
+  Widget _middleDetail(BuildContext context, VidDetailNotifier notifier,
+      LikeNotifier like, ContentData data) {
     return Column(
       children: [
-        data.email == SharedPreference().readStorage(SpKeys.email) && (data.reportedStatus == 'OWNED')
+        data.email == SharedPreference().readStorage(SpKeys.email) &&
+                (data.reportedStatus == 'OWNED')
             ? ContentViolationWidget(
                 data: data,
                 text: notifier.language.thisHyppeVidisSubjectToModeration ?? '',
               )
             : Container(),
         Container(
-          padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 16),
+          padding:
+              const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               twelvePx,
               GestureDetector(
                 onTap: () {
-                  Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data.postID, 'VIEW', 'Viewer', data.email);
+                  Provider.of<LikeNotifier>(context, listen: false)
+                      .viewLikeContent(
+                          context, data.postID, 'VIEW', 'Viewer', data.email);
                 },
                 child: Row(
                   children: [
                     CustomTextWidget(
-                      textToDisplay: System().formatterNumber(data.insight?.views),
-                      textStyle: context.getTextTheme().overline?.copyWith(fontWeight: FontWeight.w700, color: context.getColorScheme().onBackground),
+                      textToDisplay:
+                          System().formatterNumber(data.insight?.views),
+                      textStyle: context.getTextTheme().labelSmall?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: context.getColorScheme().onBackground),
                     ),
                     twoPx,
-                    CustomTextWidget(textToDisplay: '${notifier.language.views}', textStyle: context.getTextTheme().overline?.copyWith(color: context.getColorScheme().secondary)),
+                    CustomTextWidget(
+                        textToDisplay: '${notifier.language.views}',
+                        textStyle: context.getTextTheme().labelSmall?.copyWith(
+                            color: context.getColorScheme().secondary)),
                   ],
                 ),
               ),
               sixteenPx,
-              SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
+              SharedPreference().readStorage(SpKeys.statusVerificationId) ==
+                          VERIFIED &&
                       (data.boosted.isEmpty) &&
-                      (data.reportedStatus != 'OWNED' && data.reportedStatus != 'BLURRED' && data.reportedStatus2 != 'BLURRED') &&
+                      (data.reportedStatus != 'OWNED' &&
+                          data.reportedStatus != 'BLURRED' &&
+                          data.reportedStatus2 != 'BLURRED') &&
                       data.email == email
                   ? Container(
                       width: double.infinity,
@@ -445,10 +497,12 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                         marginBool: true,
                         contentData: data,
                         startState: () {
-                          SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                          SharedPreference()
+                              .writeStorage(SpKeys.isShowPopAds, true);
                         },
                         afterState: () {
-                          SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                          SharedPreference()
+                              .writeStorage(SpKeys.isShowPopAds, false);
                         },
                       ),
                     )
@@ -467,9 +521,12 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                           child: CustomIconWidget(
                             width: 20,
                             height: 20,
-                            color: (data.insight?.isPostLiked ?? false) ? null : Colors.black,
+                            color: (data.insight?.isPostLiked ?? false)
+                                ? null
+                                : Colors.black,
                             defaultColor: false,
-                            iconData: '${AssetPath.vectorPath}${(data.insight?.isPostLiked ?? false) ? 'ic_like_red.svg' : 'ic_like_stroke.svg'}',
+                            iconData:
+                                '${AssetPath.vectorPath}${(data.insight?.isPostLiked ?? false) ? 'ic_like_red.svg' : 'ic_like_stroke.svg'}',
                           ),
                         ),
                         if (data.allowComments ?? false) twentyPx,
@@ -477,7 +534,11 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                           InkWell(
                             onTap: () {
                               context.handleActionIsGuest(() {
-                                notifier.goToComments(CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data, giftActication: data.giftActivation));
+                                notifier.goToComments(CommentsArgument(
+                                    postID: data.postID ?? '',
+                                    fromFront: true,
+                                    data: data,
+                                    giftActication: data.giftActivation));
                               });
                             },
                             child: const CustomIconWidget(
@@ -505,13 +566,16 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                       ],
                     ),
                   ),
-                  if ((data.saleAmount ?? 0) > 0 && data.email != SharedPreference().readStorage(SpKeys.email))
+                  if ((data.saleAmount ?? 0) > 0 &&
+                      data.email !=
+                          SharedPreference().readStorage(SpKeys.email))
                     Container(
                       margin: const EdgeInsets.only(left: 10),
                       child: InkWell(
                         onTap: () async {
                           await context.handleActionIsGuest(() async {
-                            await ShowBottomSheet.onBuyContent(context, data: data);
+                            await ShowBottomSheet.onBuyContent(context,
+                                data: data);
                           });
                         },
                         child: const CustomIconWidget(
@@ -527,7 +591,8 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
               ),
               sixteenPx,
               CustomTextWidget(
-                textToDisplay: '${data.insight?.likes ?? 0} ${notifier.language.like}',
+                textToDisplay:
+                    '${data.insight?.likes ?? 0} ${notifier.language.like}',
                 textStyle: const TextStyle(color: kHyppeTextLightPrimary),
               ),
               fourPx,
@@ -541,42 +606,45 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                       textAlign: TextAlign.start,
                       seeLess: ' ${notifier.language.seeLess}',
                       seeMore: ' ${notifier.language.seeMoreContent}',
-                      normStyle: Theme.of(context).textTheme.subtitle2,
-                      hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                      expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
+                      normStyle: Theme.of(context).textTheme.titleSmall,
+                      hrefStyle: Theme.of(context)
+                          .textTheme
+                          .titleSmall
+                          ?.copyWith(color: kHyppePrimary),
+                      expandStyle:
+                          Theme.of(context).textTheme.titleSmall?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                       isPlay: isPlay,
                     ),
                     data.urlLink != '' || data.judulLink != ''
-                    ? RichText(
-                      text: TextSpan(
-                        children: [
-                        TextSpan(
-                          text: (data.judulLink != null)
-                              ? data.judulLink
-                              : data.urlLink,
-                          style: TextStyle(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .primary,
-                              fontWeight: FontWeight.bold),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () async {
-                              var uri = data.urlLink??'';
-                                if (!uri.withHttp()){
-                                  uri='https://$uri';
-                                }
-                                if (await canLaunchUrl(Uri.parse(uri))) {
-                                    await launchUrl(Uri.parse(uri));
-                                  } else {
-                                    throw  Fluttertoast.showToast(msg: 'Could not launch $uri');
-                                  }
-                            },
-                        )
-                      ]),
-                    )
-                    : const SizedBox.shrink(),
+                        ? RichText(
+                            text: TextSpan(children: [
+                              TextSpan(
+                                text: (data.judulLink != null)
+                                    ? data.judulLink
+                                    : data.urlLink,
+                                style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    fontWeight: FontWeight.bold),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () async {
+                                    var uri = data.urlLink ?? '';
+                                    if (!uri.withHttp()) {
+                                      uri = 'https://$uri';
+                                    }
+                                    if (await canLaunchUrl(Uri.parse(uri))) {
+                                      await launchUrl(Uri.parse(uri));
+                                    } else {
+                                      throw Fluttertoast.showToast(
+                                          msg: 'Could not launch $uri');
+                                    }
+                                  },
+                              )
+                            ]),
+                          )
+                        : const SizedBox.shrink(),
                   ],
                 ),
               ),
@@ -587,9 +655,12 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                   if (tags.isNotEmpty) {
                     return TagLabel(
                       icon: 'tag_people',
-                      label: tags.length > 1 ? '${tags.length} ${notifier.language.people}' : '${data.tagPeople?.first.username}',
+                      label: tags.length > 1
+                          ? '${tags.length} ${notifier.language.people}'
+                          : '${data.tagPeople?.first.username}',
                       function: () {
-                        notifier.showUserTag(context, data.tagPeople, data.postID);
+                        notifier.showUserTag(
+                            context, data.tagPeople, data.postID);
                         // vidNotifier.showUserTag(context, index, data.postID);
                       },
                     );
@@ -604,7 +675,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
               //     context,
               //     fullCaption: true,
               //   )}',
-              //   textStyle: context.getTextTheme().overline?.copyWith(color: context.getColorScheme().secondary),
+              //   textStyle: context.getTextTheme().labelSmall?.copyWith(color: context.getColorScheme().secondary),
               // ),
             ],
           ),
@@ -613,7 +684,8 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
     );
   }
 
-  Widget _bottomDetail(BuildContext context, VidDetailNotifier notifier, ContentData data) {
+  Widget _bottomDetail(
+      BuildContext context, VidDetailNotifier notifier, ContentData data) {
     final comment = notifier.firstComment;
     if ((comment?.disqusLogs ?? []).isEmpty) {
       return _noComment(context, notifier, data);
@@ -624,14 +696,22 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
             ? InkWell(
                 onTap: () {
                   context.handleActionIsGuest(() {
-                    notifier.goToComments(CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data, giftActication: data.giftActivation));
+                    notifier.goToComments(CommentsArgument(
+                        postID: data.postID ?? '',
+                        fromFront: true,
+                        data: data,
+                        giftActication: data.giftActivation));
                   });
                 },
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 16),
-                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                   decoration: BoxDecoration(
-                      boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+                      boxShadow: const [
+                        BoxShadow(
+                            color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)
+                      ],
                       borderRadius: const BorderRadius.all(Radius.circular(16)),
                       color: context.getColorScheme().background),
                   child: Column(
@@ -641,12 +721,24 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                         children: [
                           CustomTextWidget(
                             textToDisplay: notifier.language.comment ?? '',
-                            textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w700, color: context.getColorScheme().onBackground),
+                            textStyle: context
+                                .getTextTheme()
+                                .bodyMedium
+                                ?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color:
+                                        context.getColorScheme().onBackground),
                           ),
                           fourPx,
                           CustomTextWidget(
-                            textToDisplay: System().formatterNumber(comment?.comment ?? (data.insight?.comments ?? 0)),
-                            textStyle: context.getTextTheme().overline?.copyWith(color: context.getColorScheme().secondary),
+                            textToDisplay: System().formatterNumber(
+                                comment?.comment ??
+                                    (data.insight?.comments ?? 0)),
+                            textStyle: context
+                                .getTextTheme()
+                                .labelSmall
+                                ?.copyWith(
+                                    color: context.getColorScheme().secondary),
                           )
                         ],
                       ),
@@ -657,8 +749,10 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                           CustomProfileImage(
                             width: 36,
                             height: 36,
-                            onTap: () => System().navigateToProfile(context, comment?.disqusLogs?[0].comment?.sender ?? ''),
-                            imageUrl: System().showUserPicture(commentor?.avatar?.mediaEndpoint),
+                            onTap: () => System().navigateToProfile(context,
+                                comment?.disqusLogs?[0].comment?.sender ?? ''),
+                            imageUrl: System().showUserPicture(
+                                commentor?.avatar?.mediaEndpoint),
                             badge: commentor?.urluserBadge,
                             following: true,
                             onFollow: () {},
@@ -669,22 +763,35 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 UserTemplate(
-                                    username: '${commentor?.username}', isVerified: commentor?.isIdVerified ?? false, date: comment?.disqusLogs?[0].comment?.createdAt ?? DateTime.now().toString()),
+                                    username: '${commentor?.username}',
+                                    isVerified:
+                                        commentor?.isIdVerified ?? false,
+                                    date: comment?.disqusLogs?[0].comment
+                                            ?.createdAt ??
+                                        DateTime.now().toString()),
                                 twoPx,
                                 Row(
                                   children: [
                                     Expanded(
                                       child: CustomTextWidget(
                                         textAlign: TextAlign.start,
-                                        textToDisplay: '${comment?.disqusLogs?[0].comment?.txtMessages}',
+                                        textToDisplay:
+                                            '${comment?.disqusLogs?[0].comment?.txtMessages}',
                                         maxLines: 2,
-                                        textStyle: context.getTextTheme().caption?.copyWith(color: context.getColorScheme().onBackground),
+                                        textStyle: context
+                                            .getTextTheme()
+                                            .bodySmall
+                                            ?.copyWith(
+                                                color: context
+                                                    .getColorScheme()
+                                                    .onBackground),
                                       ),
                                     ),
                                     Container(
                                         margin: const EdgeInsets.only(right: 5),
                                         child: const CustomIconWidget(
-                                          iconData: '${AssetPath.vectorPath}arrow_down.svg',
+                                          iconData:
+                                              '${AssetPath.vectorPath}arrow_down.svg',
                                         ))
                                   ],
                                 )
@@ -701,18 +808,24 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
         : _shimmerComment(context);
   }
 
-  Widget _noComment(BuildContext context, VidDetailNotifier notifier, ContentData data) {
+  Widget _noComment(
+      BuildContext context, VidDetailNotifier notifier, ContentData data) {
     return Container(
         margin: const EdgeInsets.symmetric(horizontal: 16),
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-        decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(16)), color: context.getColorScheme().background),
+        decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(16)),
+            color: context.getColorScheme().background),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CustomTextWidget(
               textToDisplay: '${notifier.language.noCommentYet}',
-              textStyle: context.getTextTheme().bodyText2?.copyWith(color: context.getColorScheme().secondary),
+              textStyle: context
+                  .getTextTheme()
+                  .bodyMedium
+                  ?.copyWith(color: context.getColorScheme().secondary),
             ),
             eightPx,
             Row(
@@ -720,16 +833,25 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
               children: [
                 CustomTextWidget(
                   textToDisplay: '${notifier.language.beTheFirstToComment}',
-                  textStyle: context.getTextTheme().bodyText2?.copyWith(color: context.getColorScheme().secondary),
+                  textStyle: context
+                      .getTextTheme()
+                      .bodyMedium
+                      ?.copyWith(color: context.getColorScheme().secondary),
                 ),
                 fourPx,
                 InkWell(
                   onTap: () {
-                    notifier.goToComments(CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data, giftActication: data.giftActivation));
+                    notifier.goToComments(CommentsArgument(
+                        postID: data.postID ?? '',
+                        fromFront: true,
+                        data: data,
+                        giftActication: data.giftActivation));
                   },
                   child: CustomTextWidget(
                     textToDisplay: '${notifier.language.tapHere2}',
-                    textStyle: context.getTextTheme().bodyText2?.copyWith(color: context.getColorScheme().primary, fontWeight: FontWeight.w700),
+                    textStyle: context.getTextTheme().bodyMedium?.copyWith(
+                        color: context.getColorScheme().primary,
+                        fontWeight: FontWeight.w700),
                   ),
                 ),
               ],

@@ -61,7 +61,8 @@ class AdsVideoInBetween extends StatefulWidget {
   State<AdsVideoInBetween> createState() => _AdsVideoInBetweenState();
 }
 
-class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindingObserver {
+class _AdsVideoInBetweenState extends State<AdsVideoInBetween>
+    with WidgetsBindingObserver {
   FlutterAliplayer? fAliplayer;
   bool isPrepare = false;
   bool isPlay = false;
@@ -98,11 +99,14 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
     FirebaseCrashlytics.instance.setCustomKey('layout', 'AdsVideoBetween');
 
     _showLoading = true;
-    ratio = (widget.data.height != null && widget.data.width != null) ? widget.data.width! / widget.data.height! : 16 / 9;
+    ratio = (widget.data.height != null && widget.data.width != null)
+        ? widget.data.width! / widget.data.height!
+        : 16 / 9;
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       print(" ====== ====== ====== ======init lagi ga yah ======");
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: widget.data.adsId);
+      fAliplayer =
+          FlutterAliPlayerFactory.createAliPlayer(playerId: widget.data.adsId);
       // fAliplayer = player;
       WidgetsBinding.instance.addObserver(this);
       // fAliplayer?.pause();
@@ -117,7 +121,8 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
 
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
-      fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+      fAliplayer
+          ?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
       if (fAliplayer != null) {
         widget.getPlayer(fAliplayer!, widget.data.adsId ?? '');
       }
@@ -133,7 +138,9 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
     });
     fAliplayer?.setOnPrepared((playerId) {
       // Fluttertoast.showToast(msg: "OnPrepared ");
-      fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
+      fAliplayer
+          ?.getPlayerName()
+          .then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
         setState(() {
           isPrepare = true;
@@ -272,7 +279,8 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
         // Fluttertoast.showToast(msg: "${info.trackDefinition}切换成功");
       }
     });
-    fAliplayer?.setOnThumbnailPreparedListener(preparedSuccess: (playerId) {}, preparedFail: (playerId) {});
+    fAliplayer?.setOnThumbnailPreparedListener(
+        preparedSuccess: (playerId) {}, preparedFail: (playerId) {});
 
     fAliplayer?.setOnThumbnailGetListener(
         onThumbnailGetSuccess: (bitmap, range, playerId) {
@@ -404,10 +412,14 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
       setState(() {
         loadLaunch = true;
       });
-      System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
+      System()
+          .adsView(widget.data, widget.data.duration?.round() ?? 10,
+              isClick: true)
+          .whenComplete(() {
         widget.afterReport();
         Future.delayed(const Duration(milliseconds: 800), () {
-          Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+          Routing().move(Routes.otherProfile,
+              argument: OtherProfileArgument(senderEmail: email));
         });
       });
     } else {
@@ -419,7 +431,10 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
             setState(() {
               loadLaunch = true;
             });
-            System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() async {
+            System()
+                .adsView(widget.data, widget.data.duration?.round() ?? 10,
+                    isClick: true)
+                .whenComplete(() async {
               widget.afterReport();
               await launchUrl(
                 uri,
@@ -433,7 +448,10 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
           setState(() {
             loadLaunch = true;
           });
-          System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
+          System()
+              .adsView(widget.data, widget.data.duration?.round() ?? 10,
+                  isClick: true)
+              .whenComplete(() {
             widget.afterReport();
             System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
           });
@@ -485,14 +503,17 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
           // Text(widget.data.height.toString()),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(12)),
             child: Column(
               children: [
                 Row(
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: widget.data.email));
+                        Routing().move(Routes.otherProfile,
+                            argument: OtherProfileArgument(
+                                senderEmail: widget.data.email));
                       },
                       child: CustomBaseCacheImage(
                         imageUrl: widget.data.avatar?.fullLinkURL,
@@ -503,7 +524,8 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                             width: 36,
                             height: 36,
                             decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.all(Radius.circular(18)),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(18)),
                               image: DecorationImage(
                                 fit: BoxFit.cover,
                                 image: imageProvider,
@@ -519,10 +541,12 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                                   width: 36,
                                   height: 36,
                                   decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(18)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(18)),
                                     image: DecorationImage(
                                       fit: BoxFit.cover,
-                                      image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
+                                      image: AssetImage(
+                                          '${AssetPath.pngPath}profile-error.jpg'),
                                     ),
                                   ),
                                 ));
@@ -531,10 +555,12 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                             width: 36,
                             height: 36,
                             decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(18)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(18)),
                               image: DecorationImage(
                                 fit: BoxFit.cover,
-                                image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
+                                image: AssetImage(
+                                    '${AssetPath.pngPath}profile-error.jpg'),
                               ),
                             ),
                           );
@@ -546,7 +572,8 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                             borderRadius: BorderRadius.all(Radius.circular(18)),
                             image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
+                              image: AssetImage(
+                                  '${AssetPath.pngPath}profile-error.jpg'),
                             ),
                           ),
                         ),
@@ -559,15 +586,17 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                         children: [
                           CustomTextWidget(
                             textToDisplay: widget.data.username ?? '',
-                            textStyle: context.getTextTheme().caption?.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                ),
+                            textStyle:
+                                context.getTextTheme().bodySmall?.copyWith(
+                                      fontWeight: FontWeight.w700,
+                                    ),
                           ),
                           CustomTextWidget(
                             textToDisplay: language.sponsored ?? 'Sponsored',
-                            textStyle: context.getTextTheme().caption?.copyWith(
-                                  fontWeight: FontWeight.w400,
-                                ),
+                            textStyle:
+                                context.getTextTheme().bodySmall?.copyWith(
+                                      fontWeight: FontWeight.w400,
+                                    ),
                           )
                         ],
                       ),
@@ -575,7 +604,10 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                     twelvePx,
                     GestureDetector(
                       onTap: () {
-                        ShowBottomSheet().onReportContent(context, adsData: widget.data, type: adsPopUp, postData: null, onUpdate: () {
+                        ShowBottomSheet().onReportContent(context,
+                            adsData: widget.data,
+                            type: adsPopUp,
+                            postData: null, onUpdate: () {
                           setState(() {
                             widget.data.isReport = true;
                           });
@@ -610,7 +642,8 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                         onTap: () {},
                         child: Container(
                           color: Colors.white,
-                          margin: const EdgeInsets.only(top: 20, left: 0, right: 0),
+                          margin:
+                              const EdgeInsets.only(top: 20, left: 0, right: 0),
                           child: AspectRatio(
                             aspectRatio: ratio,
                             child: notifier.currentPostID == widget.data.adsId
@@ -619,22 +652,39 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                                       Stack(
                                         children: [
                                           ClipRRect(
-                                            clipBehavior: Clip.antiAliasWithSaveLayer,
-                                            borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                                            clipBehavior:
+                                                Clip.antiAliasWithSaveLayer,
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(16.0)),
                                             child: AliPlayerView(
                                               onCreated: onViewPlayerCreated,
                                               x: 0,
                                               y: 0,
-                                              height: MediaQuery.of(context).size.width * ratio,
-                                              width: MediaQuery.of(context).size.width,
-                                              aliPlayerViewType: AliPlayerViewTypeForAndroid.surfaceview,
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  ratio,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              aliPlayerViewType:
+                                                  AliPlayerViewTypeForAndroid
+                                                      .surfaceview,
                                             ),
                                           ),
                                           GestureDetector(
                                             onTap: () async {
                                               isStopPlay = '';
                                               fAliplayer?.pause();
-                                              await Routing().move(Routes.picFullScreenDetail, argument: PicFullscreenArgument(picData: widget.contentData!, index: widget.index, scrollPic: false));
+                                              await Routing().move(
+                                                  Routes.picFullScreenDetail,
+                                                  argument:
+                                                      PicFullscreenArgument(
+                                                          picData: widget
+                                                              .contentData!,
+                                                          index: widget.index,
+                                                          scrollPic: false));
                                               // await Routing().move(
                                               //   Routes.adsBetweenVidFull,
                                               //   argument: AdsArgument(
@@ -647,25 +697,31 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                                               //   ),
                                               // );
                                               if (mounted) {
-                                                Future.delayed(const Duration(milliseconds: 300), () {
+                                                Future.delayed(
+                                                    const Duration(
+                                                        milliseconds: 300), () {
                                                   isStopPlay = 'screenAds';
                                                   // fAliplayer?.seekTo(0, FlutterAvpdef.ACCURATE);
                                                   // fAliplayer?.play();
                                                 });
                                               }
                                             },
-                                            child: Container(color: Colors.transparent),
+                                            child: Container(
+                                                color: Colors.transparent),
                                           ),
                                           if (_showLoading)
                                             Align(
                                               alignment: Alignment.center,
                                               child: Column(
                                                 mainAxisSize: MainAxisSize.max,
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
                                                 children: [
                                                   const CircularProgressIndicator(
-                                                    backgroundColor: Colors.white,
+                                                    backgroundColor:
+                                                        Colors.white,
                                                     strokeWidth: 3.0,
                                                   ),
                                                   const SizedBox(
@@ -673,7 +729,8 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                                                   ),
                                                   Text(
                                                     "$_loadingPercent%",
-                                                    style: const TextStyle(color: Colors.white),
+                                                    style: const TextStyle(
+                                                        color: Colors.white),
                                                   ),
                                                 ],
                                               ),
@@ -682,11 +739,20 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                                             top: 12,
                                             right: 12,
                                             child: Container(
-                                              padding: const EdgeInsets.symmetric(horizontal: 2),
-                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.black.withOpacity(0.5)),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 2),
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                  color: Colors.black
+                                                      .withOpacity(0.5)),
                                               child: Text(
-                                                System.getTimeformatByMs(_currentPositionText),
-                                                style: const TextStyle(color: Colors.white, fontSize: 11),
+                                                System.getTimeformatByMs(
+                                                    _currentPositionText),
+                                                style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 11),
                                               ),
                                             ),
                                           ),
@@ -701,9 +767,12 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                                                 fAliplayer?.setMuted(isMute);
                                               },
                                               child: Padding(
-                                                padding: const EdgeInsets.only(right: 2.0),
+                                                padding: const EdgeInsets.only(
+                                                    right: 2.0),
                                                 child: CustomIconWidget(
-                                                  iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
+                                                  iconData: isMute
+                                                      ? '${AssetPath.vectorPath}sound-off.svg'
+                                                      : '${AssetPath.vectorPath}sound-on.svg',
                                                   defaultColor: false,
                                                   height: 24,
                                                 ),
@@ -715,7 +784,10 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                                     ],
                                   )
                                 : Container(
-                                    decoration: const BoxDecoration(color: Colors.black, borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                                    decoration: const BoxDecoration(
+                                        color: Colors.black,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(16.0))),
                                     alignment: Alignment.center,
                                     child: const CustomLoading(),
                                   ),
@@ -729,13 +801,18 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                         cta();
                       },
                       child: Builder(builder: (context) {
-                        final learnMore = (widget.data.ctaButton ?? 'Learn More');
+                        final learnMore =
+                            (widget.data.ctaButton ?? 'Learn More');
                         return Container(
                           alignment: Alignment.center,
                           padding: const EdgeInsets.only(top: 10, bottom: 10),
-                          decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)), color: KHyppeButtonAds),
+                          decoration: const BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5)),
+                              color: KHyppeButtonAds),
                           child: loadLaunch
-                              ? const SizedBox(width: 40, height: 20, child: CustomLoading())
+                              ? const SizedBox(
+                                  width: 40, height: 20, child: CustomLoading())
                               : Text(
                                   learnMore,
                                   style: const TextStyle(
@@ -758,9 +835,19 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                             seeLess: ' ${notifier.translate.seeLess}',
                             seeMore: ' ${notifier.translate.seeMoreContent}',
                             textOverflow: TextOverflow.visible,
-                            normStyle: Theme.of(context).textTheme.bodyText2,
-                            hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
-                            expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary));
+                            normStyle: Theme.of(context).textTheme.bodyMedium,
+                            hrefStyle: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
+                            expandStyle: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.primary));
                       })
                   ],
                 )

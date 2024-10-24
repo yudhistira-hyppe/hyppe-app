@@ -31,7 +31,8 @@ class Component extends StatefulWidget {
   final Widget rightWidget;
   final NotificationModel? data;
 
-  const Component({Key? key, required this.rightWidget, this.data}) : super(key: key);
+  const Component({Key? key, required this.rightWidget, this.data})
+      : super(key: key);
 
   @override
   State<Component> createState() => _ComponentState();
@@ -44,7 +45,8 @@ class _ComponentState extends State<Component> {
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'Component');
     SizeConfig().init(context);
-    final isAnnouncement = widget.data?.actionButtons != null && widget.data?.eventType == 'GENERAL';
+    final isAnnouncement = widget.data?.actionButtons != null &&
+        widget.data?.eventType == 'GENERAL';
     return InkWell(
       onTap: () async {
         print(isLoading);
@@ -61,7 +63,8 @@ class _ComponentState extends State<Component> {
                 try {
                   if (fixUrl.contains('https://share.hyppe.app/')) {
                     final uri = Uri.parse(fixUrl);
-                    final data = await FirebaseDynamicLinks.instance.getDynamicLink(uri);
+                    final data =
+                        await FirebaseDynamicLinks.instance.getDynamicLink(uri);
                     DynamicLinkService.handleDeepLink(data);
                   } else {
                     final uri = Uri.parse(fixUrl);
@@ -85,14 +88,18 @@ class _ComponentState extends State<Component> {
             setState(() {
               isLoading = true;
             });
-            context.read<NotificationNotifier>().markAsRead(context, widget.data ?? NotificationModel());
-            final eventType = System().getNotificationCategory(widget.data?.eventType ?? '');
+            context
+                .read<NotificationNotifier>()
+                .markAsRead(context, widget.data ?? NotificationModel());
+            final eventType =
+                System().getNotificationCategory(widget.data?.eventType ?? '');
             var listTransacation = [
               NotificationCategory.transactions,
               NotificationCategory.adsClick,
               NotificationCategory.adsView,
             ];
-            if (NotificationCategory.coin == System().getNotificationCategory(widget.data?.event ?? '')) {
+            if (NotificationCategory.coin ==
+                System().getNotificationCategory(widget.data?.event ?? '')) {
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -108,12 +115,20 @@ class _ComponentState extends State<Component> {
                   argument: GeneralArgument()
                     ..id = widget.data?.postID
                     ..index = widget.data?.contentEventID != null ? 1 : 0
-                    ..isTrue = widget.data?.actionButtons == "true" ? true : false
+                    ..isTrue =
+                        widget.data?.actionButtons == "true" ? true : false
                     ..title = widget.data?.title
-                    ..body = System().bodyMultiLang(bodyEn: widget.data?.body ?? widget.data?.bodyId, bodyId: widget.data?.bodyId) ?? ''
-                    ..session = widget.data?.contentEventID == null ? null : int.parse(widget.data?.contentEventID ?? '0'));
+                    ..body = System().bodyMultiLang(
+                            bodyEn: widget.data?.body ?? widget.data?.bodyId,
+                            bodyId: widget.data?.bodyId) ??
+                        ''
+                    ..session = widget.data?.contentEventID == null
+                        ? null
+                        : int.parse(widget.data?.contentEventID ?? '0'));
             } else if ("LIVE" == widget.data?.event) {
-              Routing().move(Routes.viewStreaming, argument: ViewStreamingArgument(data: LinkStreamModel(sId: widget.data?.streamId)));
+              Routing().move(Routes.viewStreaming,
+                  argument: ViewStreamingArgument(
+                      data: LinkStreamModel(sId: widget.data?.streamId)));
             } else if ("LIVE_GIFT" == widget.data?.event) {
               Routing().move(Routes.saldoCoins);
             } else if ("LIVE_BENNED" == widget.data?.event) {
@@ -121,14 +136,16 @@ class _ComponentState extends State<Component> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PelanggaranDetail(idBanned: widget.data?.dataBanned?.first.idBanned ?? ''),
+                  builder: (context) => PelanggaranDetail(
+                      idBanned: widget.data?.dataBanned?.first.idBanned ?? ''),
                 ),
               );
             } else {
               if (widget.data?.eventType == 'FOLLOWER') {
                 System().navigateToProfile(context, widget.data?.mate ?? '');
               } else {
-                await context.read<NotificationNotifier>().navigateToContent(context, widget.data?.postType, widget.data?.postID);
+                await context.read<NotificationNotifier>().navigateToContent(
+                    context, widget.data?.postType, widget.data?.postID);
               }
             }
           }
@@ -145,7 +162,10 @@ class _ComponentState extends State<Component> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // profile picture
-            widget.data?.eventType == 'CHALLENGE' || widget.data?.eventType == 'NOTIFY_LIVE' || System().convertEventType(widget.data?.eventType) == InteractiveEventType.kyc
+            widget.data?.eventType == 'CHALLENGE' ||
+                    widget.data?.eventType == 'NOTIFY_LIVE' ||
+                    System().convertEventType(widget.data?.eventType) ==
+                        InteractiveEventType.kyc
                 ? Container(
                     padding: EdgeInsets.all(8 * SizeConfig.scaleDiagonal),
                     decoration: BoxDecoration(
@@ -157,7 +177,8 @@ class _ComponentState extends State<Component> {
                     child: CustomIconWidget(
                       width: 30 * SizeConfig.scaleDiagonal,
                       height: 30 * SizeConfig.scaleDiagonal,
-                      iconData: "${AssetPath.vectorPath}notification-active.svg",
+                      iconData:
+                          "${AssetPath.vectorPath}notification-active.svg",
                       defaultColor: false,
                       color: const Color(0xFFcecece),
                     ),
@@ -177,10 +198,13 @@ class _ComponentState extends State<Component> {
                           width: 50 * SizeConfig.scaleDiagonal,
                           height: 50 * SizeConfig.scaleDiagonal,
                           onTap: () {
-                            print('ini data widget data ${widget.data?.toJson()}');
-                            System().navigateToProfile(context, widget.data?.mate ?? '');
+                            print(
+                                'ini data widget data ${widget.data?.toJson()}');
+                            System().navigateToProfile(
+                                context, widget.data?.mate ?? '');
                           },
-                          imageUrl: '${System().showUserPicture(widget.data?.senderOrReceiverInfo?.avatar?.mediaEndpoint)}',
+                          imageUrl:
+                              '${System().showUserPicture(widget.data?.senderOrReceiverInfo?.avatar?.mediaEndpoint)}',
                           badge: widget.data?.urluserBadge,
                         ),
                       ),
@@ -198,12 +222,25 @@ class _ComponentState extends State<Component> {
                           textToDisplay: widget.data?.eventType == 'CHALLENGE'
                               ? widget.data?.title ?? ''
                               : widget.data?.eventType == 'NOTIFY_LIVE'
-                                  ? (System().bodyMultiLang(bodyEn: widget.data?.title ?? widget.data?.title, bodyId: widget.data?.titleId) ?? '')
+                                  ? (System().bodyMultiLang(
+                                          bodyEn: widget.data?.title ??
+                                              widget.data?.title,
+                                          bodyId: widget.data?.titleId) ??
+                                      '')
                                   : isAnnouncement
-                                      ? (System().bodyMultiLang(bodyEn: widget.data?.titleEN ?? widget.data?.title, bodyId: widget.data?.title) ?? '')
-                                      : widget.data?.senderOrReceiverInfo?.username ?? '',
+                                      ? (System().bodyMultiLang(
+                                              bodyEn: widget.data?.titleEN ??
+                                                  widget.data?.title,
+                                              bodyId: widget.data?.title) ??
+                                          '')
+                                      : widget.data?.senderOrReceiverInfo
+                                              ?.username ??
+                                          '',
                           textAlign: TextAlign.start,
-                          textStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.bold),
+                          textStyle: Theme.of(context)
+                              .textTheme
+                              .titleSmall
+                              ?.copyWith(fontWeight: FontWeight.bold),
                           textOverflow: TextOverflow.fade,
                         ),
                         fourPx,
@@ -218,8 +255,12 @@ class _ComponentState extends State<Component> {
                           //         : null,
                           child: CustomTextWidget(
                             //textToDisplay: data?.body ?? '',
-                            textToDisplay: System().bodyMultiLang(bodyEn: widget.data?.body ?? widget.data?.bodyId, bodyId: widget.data?.bodyId) ?? '',
-                            textStyle: Theme.of(context).textTheme.caption,
+                            textToDisplay: System().bodyMultiLang(
+                                    bodyEn: widget.data?.body ??
+                                        widget.data?.bodyId,
+                                    bodyId: widget.data?.bodyId) ??
+                                '',
+                            textStyle: Theme.of(context).textTheme.bodySmall,
                             maxLines: 4,
                             textAlign: TextAlign.start,
                           ),
@@ -227,14 +268,28 @@ class _ComponentState extends State<Component> {
                         sixPx,
                         CustomTextWidget(
                           textToDisplay: widget.data?.createdAt != null
-                              ? System().readTimestamp(DateFormat("yyyy-MM-dd HH:mm:ss").parse(widget.data?.createdAt ?? '').millisecondsSinceEpoch, context, fullCaption: true)
+                              ? System().readTimestamp(
+                                  DateFormat("yyyy-MM-dd HH:mm:ss")
+                                      .parse(widget.data?.createdAt ?? '')
+                                      .millisecondsSinceEpoch,
+                                  context,
+                                  fullCaption: true)
                               : '',
-                          textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
+                          textStyle: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary),
                         ),
                       ],
                     ),
                   ),
-                  isAnnouncement ? const SizedBox.shrink() : (isLoading ? const CircularProgressIndicator() : widget.rightWidget)
+                  isAnnouncement
+                      ? const SizedBox.shrink()
+                      : (isLoading
+                          ? const CircularProgressIndicator()
+                          : widget.rightWidget)
                 ],
               ),
             )

@@ -29,7 +29,7 @@ class SettingComponent extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: CustomTextWidget(
             textToDisplay: headerCaption,
-            textStyle: theme.textTheme.subtitle2,
+            textStyle: theme.textTheme.titleSmall,
           ),
         ),
         tenPx,

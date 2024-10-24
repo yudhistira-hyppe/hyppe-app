@@ -22,22 +22,26 @@ class VerificationIDStepSupportDocsEula extends StatefulWidget {
   const VerificationIDStepSupportDocsEula({Key? key}) : super(key: key);
 
   @override
-  State<VerificationIDStepSupportDocsEula> createState() => _VerificationIDStepSupportDocsEulaState();
+  State<VerificationIDStepSupportDocsEula> createState() =>
+      _VerificationIDStepSupportDocsEulaState();
 }
 
-class _VerificationIDStepSupportDocsEulaState extends State<VerificationIDStepSupportDocsEula> {
+class _VerificationIDStepSupportDocsEulaState
+    extends State<VerificationIDStepSupportDocsEula> {
   String dataText = '';
 
   @override
   void initState() {
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationIDStepSupportDocsEula');
+    FirebaseCrashlytics.instance
+        .setCustomKey('layout', 'VerificationIDStepSupportDocsEula');
     readFile();
     super.initState();
   }
 
   readFile() async {
     String? isoCode = SharedPreference().readStorage(SpKeys.isoCode) ?? 'en';
-    var request = await rootBundle.loadString('${AssetPath.dummyMdPath}eula_kyc_$isoCode.md');
+    var request = await rootBundle
+        .loadString('${AssetPath.dummyMdPath}eula_kyc_$isoCode.md');
     setState(() {
       dataText = request;
     });
@@ -55,7 +59,9 @@ class _VerificationIDStepSupportDocsEulaState extends State<VerificationIDStepSu
         },
         child: Scaffold(
           appBar: AppBar(
-            leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
+            leadingWidth: 50 *
+                (SizeConfig.screenWidth ?? context.getWidth()) /
+                SizeWidget.baseWidthXD,
             leading: CustomIconButtonWidget(
               defaultColor: true,
               iconData: "${AssetPath.vectorPath}back-arrow.svg",
@@ -64,7 +70,10 @@ class _VerificationIDStepSupportDocsEulaState extends State<VerificationIDStepSu
             titleSpacing: 0,
             title: CustomTextWidget(
               textToDisplay: notifier.language.idVerification ?? '',
-              textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
+              textStyle: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(fontSize: 18),
             ),
             centerTitle: false,
           ),
@@ -77,11 +86,13 @@ class _VerificationIDStepSupportDocsEulaState extends State<VerificationIDStepSu
                 height: SizeConfig.screenHeight,
                 child: Markdown(
                   data: dataText,
-                  padding: EdgeInsets.only(left: 16, right: 16, bottom: 220, top: 16),
+                  padding: EdgeInsets.only(
+                      left: 16, right: 16, bottom: 220, top: 16),
                   onTapLink: (text, href, title) async {
                     try {
                       print('markdown  $text, $href, $title');
-                      await launchUrl(Uri.parse(text), mode: LaunchMode.externalApplication);
+                      await launchUrl(Uri.parse(text),
+                          mode: LaunchMode.externalApplication);
                     } catch (e) {
                       // 'error href : $e'.logger();
                     }
@@ -103,23 +114,29 @@ class _VerificationIDStepSupportDocsEulaState extends State<VerificationIDStepSu
           floatingActionButton: Container(
             height: 140 * SizeConfig.scaleDiagonal,
             padding: const EdgeInsets.only(top: 20, left: 16, right: 16),
-            color: Theme.of(context).backgroundColor,
+            color: Theme.of(context).appBarTheme.backgroundColor,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 CustomElevatedButton(
                   width: SizeConfig.screenWidth,
                   height: 44.0 * SizeConfig.scaleDiagonal,
-                  function: () => Routing().moveAndPop(Routes.verificationIDStepSupportingDocs),
+                  function: () => Routing()
+                      .moveAndPop(Routes.verificationIDStepSupportingDocs),
                   child: CustomTextWidget(
                     textToDisplay: notifier.language.agreeAndContinue ?? '',
-                    textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                    textStyle: textTheme.labelLarge
+                        ?.copyWith(color: kHyppeLightButtonText),
                   ),
                   buttonStyle: ButtonStyle(
-                    foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                    shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                    overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                    backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                    foregroundColor: MaterialStateProperty.all(
+                        Theme.of(context).colorScheme.primary),
+                    shadowColor: MaterialStateProperty.all(
+                        Theme.of(context).colorScheme.primary),
+                    overlayColor: MaterialStateProperty.all(
+                        Theme.of(context).colorScheme.primary),
+                    backgroundColor: MaterialStateProperty.all(
+                        Theme.of(context).colorScheme.primary),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -127,14 +144,16 @@ class _VerificationIDStepSupportDocsEulaState extends State<VerificationIDStepSu
                   onTap: () => notifier.backToVerificationID(),
                   child: Text(
                     notifier.language.cancel ?? '',
-                    style: textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primary),
+                    style: textTheme.titleMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.primary),
                   ),
                 ),
                 const SizedBox(height: 16),
               ],
             ),
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
           resizeToAvoidBottomInset: true,
         ),
       ),

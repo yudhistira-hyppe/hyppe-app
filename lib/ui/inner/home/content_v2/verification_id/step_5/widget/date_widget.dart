@@ -32,7 +32,8 @@ class VerificationDate extends StatelessWidget {
           CustomTextWidget(
             textAlign: TextAlign.center,
             textToDisplay: notifier.language.selectDate ?? 'Select Date',
-            textStyle: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 18),
+            textStyle:
+                Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 18),
           ),
           SizedBox(
             height: SizeConfig.screenHeight! * 0.4,
@@ -41,7 +42,8 @@ class VerificationDate extends StatelessWidget {
               child: CupertinoTheme(
                 data: CupertinoThemeData(
                   textTheme: CupertinoTextThemeData(
-                    dateTimePickerTextStyle: Theme.of(context).textTheme.bodyText1,
+                    dateTimePickerTextStyle:
+                        Theme.of(context).textTheme.bodyLarge,
                   ),
                 ),
                 child: CupertinoDatePicker(
@@ -71,7 +73,10 @@ class VerificationDate extends StatelessWidget {
               function: () => Routing().moveBack(),
               child: CustomTextWidget(
                 textToDisplay: 'Save',
-                textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: kHyppeLightButtonText),
               ),
             ),
           ),

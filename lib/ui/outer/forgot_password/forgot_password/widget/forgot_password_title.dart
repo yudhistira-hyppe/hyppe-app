@@ -22,14 +22,17 @@ class ForgotPasswordTitle extends StatelessWidget {
         children: [
           CustomTextWidget(
             textToDisplay: title,
-            textStyle: Theme.of(context).textTheme.headline5!.copyWith(fontWeight: FontWeight.bold),
+            textStyle: Theme.of(context)
+                .textTheme
+                .headlineSmall!
+                .copyWith(fontWeight: FontWeight.bold),
           ),
           eightPx,
           CustomTextWidget(
             maxLines: null,
             textToDisplay: subtitle,
             textOverflow: TextOverflow.visible,
-            textStyle: Theme.of(context).textTheme.bodyText2,
+            textStyle: Theme.of(context).textTheme.bodyMedium,
           ),
         ],
       ),

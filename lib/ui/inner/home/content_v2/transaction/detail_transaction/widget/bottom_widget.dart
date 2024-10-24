@@ -12,7 +12,8 @@ class BottomDetailWidget extends StatelessWidget {
   final TransactionHistoryModel? data;
   final LocalizationModelV2? language;
 
-  const BottomDetailWidget({Key? key, this.data, this.language}) : super(key: key);
+  const BottomDetailWidget({Key? key, this.data, this.language})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +44,7 @@ class BottomDetailWidget extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 16.0),
           child: CustomTextWidget(
             textToDisplay: language?.paymentDetails ?? '',
-            textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(
+            textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: Theme.of(context).colorScheme.onBackground,
                   fontWeight: FontWeight.bold,
                 ),
@@ -51,11 +52,18 @@ class BottomDetailWidget extends StatelessWidget {
         ),
         TwoColumnWidget(
           language?.paymentMethods,
-          text2: "${data?.bank?.replaceAll("Bank ", "")} ${data?.paymentmethode == 'VA' ? 'Virtual Account' : data?.paymentmethode}",
+          text2:
+              "${data?.bank?.replaceAll("Bank ", "")} ${data?.paymentmethode == 'VA' ? 'Virtual Account' : data?.paymentmethode}",
         ),
-        TwoColumnWidget("${language?.totalPrice} (${data?.detailTransaction?.length} Voucher)", text2: System().currencyFormat(amount: data?.amount ?? 0)),
-        data?.adminFee == 0 ? Container() : TwoColumnWidget(language?.adminFee, text2: System().currencyFormat(amount: data?.adminFee ?? 0)),
-        TwoColumnWidget(language?.serviceFee, text2: System().currencyFormat(amount: data?.serviceFee ?? 0)),
+        TwoColumnWidget(
+            "${language?.totalPrice} (${data?.detailTransaction?.length} Voucher)",
+            text2: System().currencyFormat(amount: data?.amount ?? 0)),
+        data?.adminFee == 0
+            ? Container()
+            : TwoColumnWidget(language?.adminFee,
+                text2: System().currencyFormat(amount: data?.adminFee ?? 0)),
+        TwoColumnWidget(language?.serviceFee,
+            text2: System().currencyFormat(amount: data?.serviceFee ?? 0)),
         TwoColumnWidget(
           language?.totalBelanja,
           text2: System().currencyFormat(amount: data?.totalamount ?? 0),
@@ -71,23 +79,28 @@ class BottomDetailWidget extends StatelessWidget {
       twelvePx,
       const Divider(height: 0.2, thickness: 1, color: Color(0xffF7F7F7)),
       twelvePx,
-      TwoColumnWidget(language?.withdrawalAmount ?? '', text2: System().currencyFormat(amount: data?.amount ?? 0)),
+      TwoColumnWidget(language?.withdrawalAmount ?? '',
+          text2: System().currencyFormat(amount: data?.amount ?? 0)),
       (data?.bankverificationcharge ?? 0) > 0
           ? TwoColumnWidget(
               language?.verificationBankAccount ?? '',
-              text2: System().currencyFormat(amount: data?.bankverificationcharge),
+              text2:
+                  System().currencyFormat(amount: data?.bankverificationcharge),
             )
           : Container(),
-      TwoColumnWidget(language?.adminFee ?? '', text2: System().currencyFormat(amount: data?.adminFee ?? 0)),
+      TwoColumnWidget(language?.adminFee ?? '',
+          text2: System().currencyFormat(amount: data?.adminFee ?? 0)),
       CustomTextWidget(
         textToDisplay: language?.ballanceAmount ?? '',
-        textStyle: Theme.of(context).textTheme.caption,
+        textStyle: Theme.of(context).textTheme.bodySmall,
         maxLines: 3,
       ),
       sixPx,
       CustomTextWidget(
         textToDisplay: System().currencyFormat(amount: data?.totalamount ?? 0),
-        textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.onBackground, fontWeight: FontWeight.bold),
+        textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            color: Theme.of(context).colorScheme.onBackground,
+            fontWeight: FontWeight.bold),
       ),
     ]);
   }
@@ -103,14 +116,16 @@ class BottomDetailWidget extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 16.0),
           child: CustomTextWidget(
             textToDisplay: language?.paymentDetails ?? '',
-            textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(
+            textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: Theme.of(context).colorScheme.onBackground,
                   fontWeight: FontWeight.bold,
                 ),
           ),
         ),
-        TwoColumnWidget(language?.totalPrice ?? 'total price', text2: System().currencyFormat(amount: data?.totalamount ?? 0)),
-        TwoColumnWidget(language?.totalIncome ?? 'total income', text2: System().currencyFormat(amount: data?.totalamount ?? 0)),
+        TwoColumnWidget(language?.totalPrice ?? 'total price',
+            text2: System().currencyFormat(amount: data?.totalamount ?? 0)),
+        TwoColumnWidget(language?.totalIncome ?? 'total income',
+            text2: System().currencyFormat(amount: data?.totalamount ?? 0)),
       ],
     );
   }
@@ -126,7 +141,7 @@ class BottomDetailWidget extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 16.0),
           child: CustomTextWidget(
             textToDisplay: language?.paymentDetails ?? '',
-            textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(
+            textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: Theme.of(context).colorScheme.onBackground,
                   fontWeight: FontWeight.bold,
                 ),
@@ -134,12 +149,22 @@ class BottomDetailWidget extends StatelessWidget {
         ),
         TwoColumnWidget(
           language?.paymentMethods,
-          text2: "${data?.bank?.replaceAll("Bank ", "")} ${data?.paymentmethode == 'VA' ? 'Virtual Account' : data?.paymentmethode}",
+          text2:
+              "${data?.bank?.replaceAll("Bank ", "")} ${data?.paymentmethode == 'VA' ? 'Virtual Account' : data?.paymentmethode}",
         ),
-        TwoColumnWidget(data?.jenis == 'BOOST_CONTENT' ? language?.boostPrice : language?.contentPrice, text2: System().currencyFormat(amount: data?.amount ?? 0)),
-        data?.jenis == 'BOOST_CONTENT' ? const SizedBox() : TwoColumnWidget(language?.adminFee, text2: System().currencyFormat(amount: data?.adminFee ?? 0)),
-        TwoColumnWidget(language?.serviceFee, text2: System().currencyFormat(amount: data?.serviceFee ?? 0)),
-        TwoColumnWidget(language?.totalPrice, text2: System().currencyFormat(amount: data?.totalamount ?? 0)),
+        TwoColumnWidget(
+            data?.jenis == 'BOOST_CONTENT'
+                ? language?.boostPrice
+                : language?.contentPrice,
+            text2: System().currencyFormat(amount: data?.amount ?? 0)),
+        data?.jenis == 'BOOST_CONTENT'
+            ? const SizedBox()
+            : TwoColumnWidget(language?.adminFee,
+                text2: System().currencyFormat(amount: data?.adminFee ?? 0)),
+        TwoColumnWidget(language?.serviceFee,
+            text2: System().currencyFormat(amount: data?.serviceFee ?? 0)),
+        TwoColumnWidget(language?.totalPrice,
+            text2: System().currencyFormat(amount: data?.totalamount ?? 0)),
       ],
     );
   }

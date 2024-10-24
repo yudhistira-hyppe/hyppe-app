@@ -18,20 +18,24 @@ class ContentViolationWidget extends StatelessWidget {
   final ContentData data;
   final String text;
   final double? radius;
-  const ContentViolationWidget({Key? key, required this.data, this.text = '', this.radius}) : super(key: key);
+  const ContentViolationWidget(
+      {Key? key, required this.data, this.text = '', this.radius})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'ContentViolationWidget');
-    final translate = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
+    FirebaseCrashlytics.instance
+        .setCustomKey('layout', 'ContentViolationWidget');
+    final translate =
+        Provider.of<TranslateNotifierV2>(context, listen: false).translate;
     SizeConfig().init(context);
     return GestureDetector(
       onTap: () {
         if (globalAliPlayer != null) {
           globalAliPlayer?.pause();
         }
-        System().checkConnections().then((value){
-          if(value){
+        System().checkConnections().then((value) {
+          if (value) {
             Routing().move(Routes.appeal, argument: data);
           }
         });
@@ -39,7 +43,7 @@ class ContentViolationWidget extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(radius??16),
+          borderRadius: BorderRadius.circular(radius ?? 16),
           color: Color(0xFFE6094B),
         ),
         child: Row(
@@ -53,12 +57,19 @@ class ContentViolationWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomTextWidget(
-                  textToDisplay: (translate.thisContentIsSubjectToModeration ?? ''),
-                  textStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w700),
+                  textToDisplay:
+                      (translate.thisContentIsSubjectToModeration ?? ''),
+                  textStyle: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700),
                 ),
                 CustomTextWidget(
                   textToDisplay: translate.thisMessagecanOnlyBeSeenByYou ?? '',
-                  textStyle: Theme.of(context).textTheme.overline?.copyWith(color: Colors.white),
+                  textStyle: Theme.of(context)
+                      .textTheme
+                      .labelSmall
+                      ?.copyWith(color: Colors.white),
                 ),
               ],
             ),

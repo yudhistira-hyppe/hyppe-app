@@ -113,23 +113,34 @@ class AccountPreferencesNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  TextStyle label(BuildContext context) => Theme.of(context).textTheme.headline6?.copyWith(color: kHyppePrimary) ?? const TextStyle();
-  TextStyle text(BuildContext context) => Theme.of(context).textTheme.bodyText1 ?? const TextStyle();
-  TextStyle hint(BuildContext context) => Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).tabBarTheme.unselectedLabelColor) ?? const TextStyle();
+  TextStyle label(BuildContext context) =>
+      Theme.of(context).textTheme.titleLarge?.copyWith(color: kHyppePrimary) ??
+      const TextStyle();
+  TextStyle text(BuildContext context) =>
+      Theme.of(context).textTheme.bodyLarge ?? const TextStyle();
+  TextStyle hint(BuildContext context) =>
+      Theme.of(context).textTheme.bodyLarge?.copyWith(
+          color: Theme.of(context).tabBarTheme.unselectedLabelColor) ??
+      const TextStyle();
 
-  void onInitial(BuildContext context, AccountPreferenceScreenArgument argument) {
+  void onInitial(
+      BuildContext context, AccountPreferenceScreenArgument argument) {
     _argument = argument;
     initialIndex = 0;
     _clearTxt();
-    final notifierData = Provider.of<SelfProfileNotifier>(context, listen: false);
+    final notifierData =
+        Provider.of<SelfProfileNotifier>(context, listen: false);
     userNameController.text = notifierData.user.profile?.username ?? "";
     fullNameController.text = notifierData.user.profile?.fullName ?? "";
-    emailController.text = notifierData.user.profile?.email ?? SharedPreference().readStorage(SpKeys.email) ?? "";
+    emailController.text = notifierData.user.profile?.email ??
+        SharedPreference().readStorage(SpKeys.email) ??
+        "";
     bioController.text = notifierData.user.profile?.bio ?? "";
     countryController.text = notifierData.user.profile?.country ?? "";
     areaController.text = notifierData.user.profile?.area ?? "";
     cityController.text = notifierData.user.profile?.city ?? "";
-    genderController.text = System().capitalizeFirstLetter((notifierData.user.profile?.gender ?? "").getGenderByLanguage());
+    genderController.text = System().capitalizeFirstLetter(
+        (notifierData.user.profile?.gender ?? "").getGenderByLanguage());
     dobController.text = notifierData.user.profile?.dob ?? "";
     mobileController.text = notifierData.user.profile?.mobileNumber ?? "";
     urlLinkController.text = notifierData.user.profile?.urlLink ?? "";
@@ -153,7 +164,9 @@ class AccountPreferencesNotifier extends ChangeNotifier {
           context,
           onSave: () {
             Routing().moveBack();
-            Provider.of<AccountPreferencesNotifier>(context, listen: false).genderController.text = genderController.text;
+            Provider.of<AccountPreferencesNotifier>(context, listen: false)
+                .genderController
+                .text = genderController.text;
             notifyListeners();
           },
           onCancel: () {
@@ -196,7 +209,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
   }
 
   bool somethingChanged(BuildContext context) {
-    final notifierData = Provider.of<SelfProfileNotifier>(context, listen: false);
+    final notifierData =
+        Provider.of<SelfProfileNotifier>(context, listen: false);
     return (userNameController.text != notifierData.user.profile?.username ||
             fullNameController.text != notifierData.user.profile?.fullName ||
             emailController.text != notifierData.user.profile?.email ||
@@ -220,7 +234,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
       _eventService.notifyUploadCancel(
         DioError(
           error: reason,
-          requestOptions: _dioCancelToken?.requestOptions ?? RequestOptions(path: ''),
+          requestOptions:
+              _dioCancelToken?.requestOptions ?? RequestOptions(path: ''),
         ),
       );
     } catch (e) {
@@ -236,7 +251,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
     _dioCancelToken = null;
   }
 
-  Future onClickChangeImageProfile(BuildContext context, String imageUrl) async {
+  Future onClickChangeImageProfile(
+      BuildContext context, String imageUrl) async {
     bool connect = await System().checkConnections();
     if (connect) {
       // bool _isPermissionGranted = await System().requestPermission(context, permissions: [
@@ -254,7 +270,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
           progress = "0%";
           print("dari gambar $imageUrl");
 
-          Overlay.of(context).insert(uploadProgress ?? OverlayEntry(builder: (context) => Container()));
+          Overlay.of(context).insert(uploadProgress ??
+              OverlayEntry(builder: (context) => Container()));
 
           final notifier = UserBloc();
 
@@ -265,7 +282,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
             file: _file.values.single?.single.path ?? '',
             email: SharedPreference().readStorage(SpKeys.email),
             onSendProgress: (received, total) {
-              _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received.toDouble(), total: total.toDouble()));
+              _eventService.notifyUploadSendProgress(ProgressUploadArgument(
+                  count: received.toDouble(), total: total.toDouble()));
             },
           );
 
@@ -277,12 +295,19 @@ class AccountPreferencesNotifier extends ChangeNotifier {
             progress = "${language.finishingUp}...";
             imageCache.clear();
             imageCache.clearLiveImages();
-            await context.read<SelfProfileNotifier>().getDataPerPgage(context, isReload: true);
+            await context
+                .read<SelfProfileNotifier>()
+                .getDataPerPgage(context, isReload: true);
             context.read<SelfProfileNotifier>().onUpdate();
 
-            context.read<MainNotifier>().initMain(context, onUpdateProfile: true, updateProfilePict: true).then((_) {
+            context
+                .read<MainNotifier>()
+                .initMain(context,
+                    onUpdateProfile: true, updateProfilePict: true)
+                .then((_) {
               hold = false;
-              ShowBottomSheet().onShowColouredSheet(context, language.successfullyUpdatedYourProfilePicture ?? '');
+              ShowBottomSheet().onShowColouredSheet(context,
+                  language.successfullyUpdatedYourProfilePicture ?? '');
               notifyListeners();
             }).whenComplete(() {
               print('data gambar');
@@ -290,7 +315,9 @@ class AccountPreferencesNotifier extends ChangeNotifier {
               _eventService.notifyUploadSuccess(fetch.data);
             });
           } else {
-            ShowBottomSheet().onShowColouredSheet(context, language.failedUpdatedYourProfilePicture ?? '', color: Theme.of(context).colorScheme.error);
+            ShowBottomSheet().onShowColouredSheet(
+                context, language.failedUpdatedYourProfilePicture ?? '',
+                color: Theme.of(context).colorScheme.error);
             _eventService.notifyUploadFailed(
               DioError(
                 requestOptions: RequestOptions(
@@ -319,7 +346,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
         }
       }
     } else {
-      ShowGeneralDialog.permanentlyDeniedPermission(context, permissions: language.permissionStorage ?? '');
+      ShowGeneralDialog.permanentlyDeniedPermission(context,
+          permissions: language.permissionStorage ?? '');
     }
     // } else {
     //   ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
@@ -331,7 +359,9 @@ class AccountPreferencesNotifier extends ChangeNotifier {
 
   Future onClickSaveProfile(BuildContext context) async {
     bool connect = await System().checkConnections();
-    if (!System().canOnlyContainLettersNumbersDotAndUnderscores(userNameController.text) || !System().atLeastThreeThreetyCharacter(userNameController.text)) {
+    if (!System().canOnlyContainLettersNumbersDotAndUnderscores(
+            userNameController.text) ||
+        !System().atLeastThreeThreetyCharacter(userNameController.text)) {
       await ShowBottomSheet().onShowColouredSheet(
         context,
         "${language.usernameOnlyContainLetters}",
@@ -360,7 +390,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
           progress = "0%";
           FocusScopeNode currentFocus = FocusScope.of(context);
           uploadProgress = System().createPopupDialog(ShowOverlayLoading());
-          Overlay.of(context).insert(uploadProgress ?? OverlayEntry(builder: (context) => Container()));
+          Overlay.of(context).insert(uploadProgress ??
+              OverlayEntry(builder: (context) => Container()));
 
           if (!currentFocus.hasPrimaryFocus) {
             currentFocus.unfocus();
@@ -382,7 +413,12 @@ class AccountPreferencesNotifier extends ChangeNotifier {
           print('-');
 
           SignUpCompleteProfiles _dataBio = SignUpCompleteProfiles(
-              email: emailController.text, bio: bio, fullName: fullNameController.text, username: userNameController.text, urlLink: urlLinkController.text, judulLink: titleLinkController.text);
+              email: emailController.text,
+              bio: bio,
+              fullName: fullNameController.text,
+              username: userNameController.text,
+              urlLink: urlLinkController.text,
+              judulLink: titleLinkController.text);
 
           SignUpCompleteProfiles _dataPersonalInfo = SignUpCompleteProfiles(
             email: emailController.text,
@@ -401,8 +437,10 @@ class AccountPreferencesNotifier extends ChangeNotifier {
           final notifier = UserBloc();
           final notifier2 = UserBloc();
 
-          await notifier.updateProfileBlocV2(context, data: _dataBio.toUpdateBioJson());
-          await notifier2.updateProfileBlocV2(context, data: _dataPersonalInfo.toUpdateProfileJson());
+          await notifier.updateProfileBlocV2(context,
+              data: _dataBio.toUpdateBioJson());
+          await notifier2.updateProfileBlocV2(context,
+              data: _dataPersonalInfo.toUpdateProfileJson());
 
           final fetch = notifier.userFetch;
 
@@ -413,7 +451,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
             hold = true;
             progress = "${language.finishingUp}...";
             try {
-              SelfProfileNotifier userNotifier = context.read<SelfProfileNotifier>();
+              SelfProfileNotifier userNotifier =
+                  context.read<SelfProfileNotifier>();
               userNotifier.isLoadingBio = true;
               // userNotifier.user = UserInfoModel();
 
@@ -426,21 +465,26 @@ class AccountPreferencesNotifier extends ChangeNotifier {
 
             if (_argument.fromSignUpFlow) {
               hold = false;
-              ShowBottomSheet().onShowColouredSheet(context, language.successUpdatePersonalInformation ?? '');
-              final _mainNotifier = Provider.of<MainNotifier>(context, listen: false);
+              ShowBottomSheet().onShowColouredSheet(
+                  context, language.successUpdatePersonalInformation ?? '');
+              final _mainNotifier =
+                  Provider.of<MainNotifier>(context, listen: false);
               await _mainNotifier.initMain(context, onUpdateProfile: true);
               notifyListeners();
               Routing().moveAndRemoveUntil(Routes.homeTutor, Routes.root);
             } else {
-              final _mainNotifier = Provider.of<MainNotifier>(context, listen: false);
+              final _mainNotifier =
+                  Provider.of<MainNotifier>(context, listen: false);
               await _mainNotifier.initMain(context, onUpdateProfile: true);
               hold = false;
-              ShowBottomSheet().onShowColouredSheet(context, language.successUpdatePersonalInformation ?? '');
+              ShowBottomSheet().onShowColouredSheet(
+                  context, language.successUpdatePersonalInformation ?? '');
               notifyListeners();
             }
           } else {
             if (fetch.data['messages']['info'][0] != '') {
-              if (fetch.data['messages']['info'][0] == 'Unabled to proceed, username is already in use') {
+              if (fetch.data['messages']['info'][0] ==
+                  'Unabled to proceed, username is already in use') {
                 return ShowBottomSheet().onShowColouredSheet(
                   context,
                   language.usernameisAlreadyinUse ?? '',
@@ -459,7 +503,9 @@ class AccountPreferencesNotifier extends ChangeNotifier {
               }
             }
 
-            ShowBottomSheet().onShowColouredSheet(context, language.somethingsWrong ?? '', color: Colors.red);
+            ShowBottomSheet().onShowColouredSheet(
+                context, language.somethingsWrong ?? '',
+                color: Colors.red);
           }
         } catch (e) {
           e.logger();
@@ -487,7 +533,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
 
           uploadProgress = System().createPopupDialog(ShowOverlayLoading());
 
-          Overlay.of(context).insert(uploadProgress ?? OverlayEntry(builder: (context) => Container()));
+          Overlay.of(context).insert(uploadProgress ??
+              OverlayEntry(builder: (context) => Container()));
 
           if (!currentFocus.hasPrimaryFocus) {
             currentFocus.unfocus();
@@ -508,7 +555,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
 
           final notifier2 = UserBloc();
 
-          await notifier2.updateProfileBlocV2(context, data: _dataPersonalInfo.toUpdateProfileJson());
+          await notifier2.updateProfileBlocV2(context,
+              data: _dataPersonalInfo.toUpdateProfileJson());
 
           final fetch2 = notifier2.userFetch;
 
@@ -516,10 +564,12 @@ class AccountPreferencesNotifier extends ChangeNotifier {
             hold = true;
             progress = "${language.finishingUp}...";
 
-            final _mainNotifier = Provider.of<MainNotifier>(context, listen: false);
+            final _mainNotifier =
+                Provider.of<MainNotifier>(context, listen: false);
             await _mainNotifier.initMain(context, onUpdateProfile: true);
             hold = false;
-            ShowBottomSheet().onShowColouredSheet(context, language.successUpdatePersonalInformation ?? '');
+            ShowBottomSheet().onShowColouredSheet(
+                context, language.successUpdatePersonalInformation ?? '');
             notifyListeners();
 
             Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
@@ -540,14 +590,16 @@ class AccountPreferencesNotifier extends ChangeNotifier {
     }
   }
 
-  Future onClickSaveInterests(BuildContext context, List<String> interests, {bool fromSetting = true}) async {
+  Future onClickSaveInterests(BuildContext context, List<String> interests,
+      {bool fromSetting = true}) async {
     bool connect = await System().checkConnections();
     if (connect) {
       try {
         progress = "0%";
         FocusScopeNode currentFocus = FocusScope.of(context);
         uploadProgress = System().createPopupDialog(ShowOverlayLoading());
-        Overlay.of(context).insert(uploadProgress ?? OverlayEntry(builder: (context) => Container()));
+        Overlay.of(context).insert(
+            uploadProgress ?? OverlayEntry(builder: (context) => Container()));
         if (!currentFocus.hasPrimaryFocus) {
           currentFocus.unfocus();
         }
@@ -558,16 +610,21 @@ class AccountPreferencesNotifier extends ChangeNotifier {
         );
 
         final notifier = UserBloc();
-        await notifier.updateInterestBloc(context, data: _dataPersonalInfo.toUpdateProfileJson());
+        await notifier.updateInterestBloc(context,
+            data: _dataPersonalInfo.toUpdateProfileJson());
         final fetch = notifier.userFetch;
         if (fetch.userState == UserState.updateInterestSuccess) {
           hold = true;
           progress = "${language.finishingUp}...";
-          await Provider.of<MainNotifier>(context, listen: false).initMain(context, onUpdateProfile: true);
+          await Provider.of<MainNotifier>(context, listen: false)
+              .initMain(context, onUpdateProfile: true);
           hold = false;
           // uploadProgress?.remove();
           if (fromSetting) {
-            ShowBottomSheet().onShowColouredSheet(context, language.successUpdatePersonalInformation ?? '').whenComplete(() => Routing().moveBack());
+            ShowBottomSheet()
+                .onShowColouredSheet(
+                    context, language.successUpdatePersonalInformation ?? '')
+                .whenComplete(() => Routing().moveBack());
           }
           notifyListeners();
         }
@@ -671,7 +728,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
           _assignDioCancelToken();
 
           progress = "0%";
-          Overlay.of(context).insert(uploadProgress ?? OverlayEntry(builder: (context) => Container()));
+          Overlay.of(context).insert(uploadProgress ??
+              OverlayEntry(builder: (context) => Container()));
 
           final notifier = UserBloc();
           await notifier.uploadProfilePictureBlocV2(
@@ -681,7 +739,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
             cancelToken: _dioCancelToken,
             email: SharedPreference().readStorage(SpKeys.email),
             onSendProgress: (received, total) {
-              _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received.toDouble(), total: total.toDouble()));
+              _eventService.notifyUploadSendProgress(ProgressUploadArgument(
+                  count: received.toDouble(), total: total.toDouble()));
             },
           );
 
@@ -689,17 +748,22 @@ class AccountPreferencesNotifier extends ChangeNotifier {
           if (fetch.userState == UserState.uploadProfilePictureSuccess) {
             hold = true;
             progress = "${language.finishingUp}...";
-            Provider.of<MainNotifier>(context, listen: false).initMain(context, onUpdateProfile: true).then((value) async {
+            Provider.of<MainNotifier>(context, listen: false)
+                .initMain(context, onUpdateProfile: true)
+                .then((value) async {
               hold = false;
-              await ShowBottomSheet().onShowColouredSheet(context, language.successUploadId ?? '');
+              await ShowBottomSheet()
+                  .onShowColouredSheet(context, language.successUploadId ?? '');
               _determineIdProofStatusUser(context);
 
-              final userNotifier = Provider.of<SelfProfileNotifier>(context, listen: false);
+              final userNotifier =
+                  Provider.of<SelfProfileNotifier>(context, listen: false);
 
               // force complete id proof status (KTP terverifikasi)
               userNotifier.setIdProofStatusUser(IdProofStatus.complete);
 
-              debugPrint("PROFILE STATE => ${userNotifier.user.profile?.isComplete}");
+              debugPrint(
+                  "PROFILE STATE => ${userNotifier.user.profile?.isComplete}");
               if (userNotifier.user.profile != null) {
                 if (!(userNotifier.user.profile?.isComplete ?? true)) {
                   Routing().moveAndPop(Routes.completeProfile);
@@ -732,7 +796,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
             );
           }
         } else {
-          ShowGeneralDialog.pickFileErrorAlert(context, language.somethingWentWrong ?? "");
+          ShowGeneralDialog.pickFileErrorAlert(
+              context, language.somethingWentWrong ?? "");
         }
       } catch (e) {
         _eventService.notifyUploadFailed(
@@ -753,7 +818,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
       }
     } catch (e) {
       print(e);
-      ShowGeneralDialog.pickFileErrorAlert(context, language.sorryUnexpectedErrorHasOccurred ?? '');
+      ShowGeneralDialog.pickFileErrorAlert(
+          context, language.sorryUnexpectedErrorHasOccurred ?? '');
     }
   }
 
@@ -788,12 +854,18 @@ class AccountPreferencesNotifier extends ChangeNotifier {
   }
 
   void _determineIdProofStatusUser(BuildContext context) {
-    final _selfNotifier = Provider.of<SelfProfileNotifier>(context, listen: false);
-    _selfNotifier.setIdProofStatusUser(_selfNotifier.user.profile?.idProofStatus);
+    final _selfNotifier =
+        Provider.of<SelfProfileNotifier>(context, listen: false);
+    _selfNotifier
+        .setIdProofStatusUser(_selfNotifier.user.profile?.idProofStatus);
   }
 
-  void navigateToDeleteProfile() => Routing().move(Routes.deleteAccount).whenComplete(() => notifyListeners());
-  void navigateToConfirmDeleteProfile() => Routing().move(Routes.confirmDeleteAccount).whenComplete(() => notifyListeners());
+  void navigateToDeleteProfile() => Routing()
+      .move(Routes.deleteAccount)
+      .whenComplete(() => notifyListeners());
+  void navigateToConfirmDeleteProfile() => Routing()
+      .move(Routes.confirmDeleteAccount)
+      .whenComplete(() => notifyListeners());
 
   getListDeleteOption() {
     _optionDelete = [
@@ -829,15 +901,20 @@ class AccountPreferencesNotifier extends ChangeNotifier {
     final userKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
 
     if (userKyc != VERIFIED) {
-      return ShowBottomSheet.onShowStatementPin(context, onCancel: () {}, onSave: () {
+      return ShowBottomSheet.onShowStatementPin(context, onCancel: () {},
+          onSave: () {
         Routing().moveAndPop(Routes.homePageSignInSecurity);
-      }, title: language.verificationYourIDFirst, bodyText: language.toAccessTransactionPageYouNeedToVerificationYourID);
+      },
+          title: language.verificationYourIDFirst,
+          bodyText:
+              language.toAccessTransactionPageYouNeedToVerificationYourID);
     }
 
     Navigator.pushNamed(context, Routes.addlink, arguments: {
       'routes': Routes.selfProfile,
       'urlLink': urlLinkController.text.isEmpty ? null : urlLinkController.text,
-      'judulLink': titleLinkController.text.isEmpty ? null : titleLinkController.text
+      'judulLink':
+          titleLinkController.text.isEmpty ? null : titleLinkController.text
     });
   }
 }

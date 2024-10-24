@@ -69,7 +69,7 @@ class _StoryTutorState extends State<StoryTutor> {
           padding: const EdgeInsets.only(left: 0, right: 0.0),
           itemCount: storyData.length,
           itemBuilder: (context, index) {
-            if(index == 0){
+            if (index == 0) {
               return MyFrameStoryTutor(
                 image: storyData[index]['image'],
                 user: storyData[index]['user'],
@@ -108,9 +108,7 @@ class MyFrameStoryTutor extends StatelessWidget {
                   // padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                        width: 2.0,
-                        color: kHyppeBorderTab),
+                    border: Border.all(width: 2.0, color: kHyppeBorderTab),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(2.0),
@@ -122,15 +120,20 @@ class MyFrameStoryTutor extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.all(SizeWidget.circleDiameterOutside * 0.08),
+                          padding: const EdgeInsets.all(
+                              SizeWidget.circleDiameterOutside * 0.08),
                           child: ClipRRect(
-                              borderRadius: BorderRadius.circular(SizeWidget.circleDiameterOutside * 0.25),
+                              borderRadius: BorderRadius.circular(
+                                  SizeWidget.circleDiameterOutside * 0.25),
                               child: Image.asset(
                                 image ?? '',
                                 width: SizeWidget.circleDiameterOutside,
                                 height: SizeWidget.circleDiameterOutside,
-                                errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                                  return Image.asset('${AssetPath.pngPath}profile-error.jpg', fit: BoxFit.fitWidth);
+                                errorBuilder: (BuildContext context,
+                                    Object exception, StackTrace? stackTrace) {
+                                  return Image.asset(
+                                      '${AssetPath.pngPath}profile-error.jpg',
+                                      fit: BoxFit.fitWidth);
                                 },
                                 fit: BoxFit.cover,
                               )),
@@ -150,8 +153,17 @@ class MyFrameStoryTutor extends StatelessWidget {
               width: 43,
               child: CustomTextWidget(
                 maxLines: 1,
-                textToDisplay: user == 'a' ? (context.read<TranslateNotifierV2>().translate.yourStory ?? '') : user ?? '',
-                textStyle: Theme.of(context).textTheme.overline?.copyWith(letterSpacing: 1.0),
+                textToDisplay: user == 'a'
+                    ? (context
+                            .read<TranslateNotifierV2>()
+                            .translate
+                            .yourStory ??
+                        '')
+                    : user ?? '',
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .labelSmall
+                    ?.copyWith(letterSpacing: 1.0),
               ),
             )
           ],
@@ -160,7 +172,6 @@ class MyFrameStoryTutor extends StatelessWidget {
     );
   }
 }
-
 
 class FrameStory extends StatelessWidget {
   final String? image;
@@ -195,15 +206,20 @@ class FrameStory extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(SizeWidget.circleDiameterOutside * 0.08),
+                      padding: const EdgeInsets.all(
+                          SizeWidget.circleDiameterOutside * 0.08),
                       child: ClipRRect(
-                          borderRadius: BorderRadius.circular(SizeWidget.circleDiameterOutside * 0.25),
+                          borderRadius: BorderRadius.circular(
+                              SizeWidget.circleDiameterOutside * 0.25),
                           child: Image.asset(
                             image ?? '',
                             width: SizeWidget.circleDiameterOutside,
                             height: SizeWidget.circleDiameterOutside,
-                            errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                              return Image.asset('${AssetPath.pngPath}profile-error.jpg', fit: BoxFit.fitWidth);
+                            errorBuilder: (BuildContext context,
+                                Object exception, StackTrace? stackTrace) {
+                              return Image.asset(
+                                  '${AssetPath.pngPath}profile-error.jpg',
+                                  fit: BoxFit.fitWidth);
                             },
                             fit: BoxFit.cover,
                           )),
@@ -217,8 +233,17 @@ class FrameStory extends StatelessWidget {
               width: 43,
               child: CustomTextWidget(
                 maxLines: 1,
-                textToDisplay: user == 'a' ? (context.read<TranslateNotifierV2>().translate.yourStory ?? '') : user ?? '',
-                textStyle: Theme.of(context).textTheme.overline?.copyWith(letterSpacing: 1.0),
+                textToDisplay: user == 'a'
+                    ? (context
+                            .read<TranslateNotifierV2>()
+                            .translate
+                            .yourStory ??
+                        '')
+                    : user ?? '',
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .labelSmall
+                    ?.copyWith(letterSpacing: 1.0),
               ),
             )
           ],

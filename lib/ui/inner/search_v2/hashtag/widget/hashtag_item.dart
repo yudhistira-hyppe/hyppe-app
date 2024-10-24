@@ -14,7 +14,14 @@ class HashtagItem extends StatelessWidget {
   final String countContainer;
   final Function()? onTap;
   final EdgeInsetsGeometry? padding;
-  const HashtagItem({Key? key, required this.title, required this.count, required this.countContainer, this.onTap, this.padding}) : super(key: key);
+  const HashtagItem(
+      {Key? key,
+      required this.title,
+      required this.count,
+      required this.countContainer,
+      this.onTap,
+      this.padding})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +34,19 @@ class HashtagItem extends StatelessWidget {
           onTap: onTap,
           splashColor: context.getColorScheme().primary,
           child: Container(
-            padding: padding ?? const EdgeInsets.only(left: 18, top: 10, bottom: 10, right: 16),
+            padding: padding ??
+                const EdgeInsets.only(left: 18, top: 10, bottom: 10, right: 16),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const CustomIconWidget(iconData: '${AssetPath.vectorPath}hashtag_icon.svg', width: 20, height: 20, defaultColor: false, color: kHyppeTextLightPrimary,),
+                const CustomIconWidget(
+                  iconData: '${AssetPath.vectorPath}hashtag_icon.svg',
+                  width: 20,
+                  height: 20,
+                  defaultColor: false,
+                  color: kHyppeTextLightPrimary,
+                ),
                 fourteenPx,
                 Expanded(
                   child: Column(
@@ -41,16 +55,17 @@ class HashtagItem extends StatelessWidget {
                     children: [
                       CustomTextWidget(
                         maxLines: 1,
-                        textToDisplay:
-                        '#$title',
-                        textStyle: context.getTextTheme().bodyText1?.copyWith(color: kHyppeTextLightPrimary),
+                        textToDisplay: '#$title',
+                        textStyle: context
+                            .getTextTheme()
+                            .bodyLarge
+                            ?.copyWith(color: kHyppeTextLightPrimary),
                         textAlign: TextAlign.start,
                       ),
                       fourPx,
                       Text(
                         "$count $countContainer",
-                        style: const TextStyle(
-                            fontSize: 12, color: kHyppeGrey),
+                        style: const TextStyle(fontSize: 12, color: kHyppeGrey),
                       )
                     ],
                   ),

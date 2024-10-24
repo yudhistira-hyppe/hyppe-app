@@ -48,7 +48,9 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
     // final size = MediaQuery.of(context).size;
     // final _language = context.watch<TranslateNotifierV2>().translate;
     return Container(
-      decoration: BoxDecoration(color: theme.colorScheme.surface, borderRadius: BorderRadius.circular(8.0)),
+      decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(8.0)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -58,7 +60,8 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
           CustomTextWidget(
             textToDisplay: '${widget.titleText}',
             maxLines: widget.maxLineTitle,
-            textStyle: theme.textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w600),
+            textStyle: theme.textTheme.titleMedium
+                ?.copyWith(fontWeight: FontWeight.w600),
           ),
           twelvePx,
           Visibility(
@@ -67,12 +70,16 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
               maxLines: widget.maxLineBody,
               textOverflow: TextOverflow.visible,
               textToDisplay: '${widget.bodyText}',
-              textStyle: theme.textTheme.bodyText2,
+              textStyle: theme.textTheme.bodyMedium,
             ),
           ),
           widget.bodyWidget ?? const SizedBox.shrink(),
-          widget.bodyText == null || widget.bodyText == '' ? const SizedBox.shrink() : twelvePx,
-          widget.bodyText == null || widget.bodyText == '' ? const SizedBox.shrink() : twelvePx,
+          widget.bodyText == null || widget.bodyText == ''
+              ? const SizedBox.shrink()
+              : twelvePx,
+          widget.bodyText == null || widget.bodyText == ''
+              ? const SizedBox.shrink()
+              : twelvePx,
           _isLoading
               ? const CustomLoading()
               : widget.isHorizontal
@@ -108,8 +115,12 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
                       children: [
                         _buildButton(
                           caption: '${widget.titleButtonPrimary}',
-                          textColor: widget.fillColor ? kHyppeLightButtonText : kHyppePrimary,
-                          color: widget.fillColor ? theme.colorScheme.primary : Colors.transparent,
+                          textColor: widget.fillColor
+                              ? kHyppeLightButtonText
+                              : kHyppePrimary,
+                          color: widget.fillColor
+                              ? theme.colorScheme.primary
+                              : Colors.transparent,
                           function: widget.functionPrimary,
                           matchParent: true,
                           // function: () => widget.function(),
@@ -125,10 +136,15 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
                                   }
                                 },
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 12),
                                   child: CustomTextWidget(
-                                    textToDisplay: '${widget.titleButtonSecondary}',
-                                    textStyle: theme.textTheme.button?.copyWith(color: theme.colorScheme.primary, fontSize: 14),
+                                    textToDisplay:
+                                        '${widget.titleButtonSecondary}',
+                                    textStyle: theme.textTheme.labelLarge
+                                        ?.copyWith(
+                                            color: theme.colorScheme.primary,
+                                            fontSize: 14),
                                   ),
                                 ),
                               ),
@@ -140,7 +156,13 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
     );
   }
 
-  Widget _buildButton({required ThemeData theme, required String caption, required Function function, required Color color, Color? textColor, bool matchParent = false}) {
+  Widget _buildButton(
+      {required ThemeData theme,
+      required String caption,
+      required Function function,
+      required Color color,
+      Color? textColor,
+      bool matchParent = false}) {
     return CustomTextButton(
       onPressed: () async {
         try {
@@ -155,16 +177,23 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
           ? Container(
               width: double.infinity,
               // padding: EdgeInsets.symmetric(vertical: 12),
-              child: CustomTextWidget(textToDisplay: caption, textStyle: theme.textTheme.button?.copyWith(color: textColor, fontSize: 14)),
+              child: CustomTextWidget(
+                  textToDisplay: caption,
+                  textStyle: theme.textTheme.labelLarge
+                      ?.copyWith(color: textColor, fontSize: 14)),
             )
-          : Container(child: CustomTextWidget(textToDisplay: caption, textStyle: theme.textTheme.button?.copyWith(color: textColor, fontSize: 14))),
+          : Container(
+              child: CustomTextWidget(
+                  textToDisplay: caption,
+                  textStyle: theme.textTheme.labelLarge
+                      ?.copyWith(color: textColor, fontSize: 14))),
       style: theme.elevatedButtonTheme.style?.copyWith(
         backgroundColor: MaterialStateProperty.all(color),
       ),
     );
 
     // return CustomElevatedButton(
-    //   child: CustomTextWidget(textToDisplay: caption, textStyle: theme.textTheme.button?.copyWith(color: textColor, fontSize: 10)),
+    //   child: CustomTextWidget(textToDisplay: caption, textStyle: theme.textTheme.labelLarge?.copyWith(color: textColor, fontSize: 10)),
     //   width: 120,
     //   height: 42,
     //   function: () {

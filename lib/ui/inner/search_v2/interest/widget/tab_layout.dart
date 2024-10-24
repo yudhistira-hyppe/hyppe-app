@@ -29,7 +29,8 @@ class InterestTabLayout extends StatefulWidget {
   State<InterestTabLayout> createState() => _InterestTabLayoutState();
 }
 
-class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLayoutMixin {
+class _InterestTabLayoutState extends State<InterestTabLayout>
+    with AfterFirstLayoutMixin {
   HyppeType currentType = HyppeType.HyppeVid;
 
   double heightTab = 0.0;
@@ -44,25 +45,40 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
     super.initState();
     scrollController.addListener(() {
       print(scrollController.position.maxScrollExtent);
-      if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
+      if (scrollController.offset >=
+              scrollController.position.maxScrollExtent &&
+          !scrollController.position.outOfRange) {
         final fixContext = Routing.navigatorKey.currentContext ?? context;
         final notifier = fixContext.read<SearchNotifier>();
         final key = widget.interest.id ?? '';
-        notifier.getDetailInterest(fixContext, key, reload: false, hyppe: currentType);
+        notifier.getDetailInterest(fixContext, key,
+            reload: false, hyppe: currentType);
         switch (currentType) {
           case HyppeType.HyppePic:
             if (!notifier.intHasNextPic) {
-              notifier.getDetailInterest(Routing.navigatorKey.currentContext ?? context, widget.interest.id ?? '', reload: false, hyppe: HyppeType.HyppeVid);
+              notifier.getDetailInterest(
+                  Routing.navigatorKey.currentContext ?? context,
+                  widget.interest.id ?? '',
+                  reload: false,
+                  hyppe: HyppeType.HyppeVid);
             }
             break;
           case HyppeType.HyppeDiary:
             if (!notifier.intHasNextDiary) {
-              notifier.getDetailInterest(Routing.navigatorKey.currentContext ?? context, widget.interest.id ?? '', reload: false, hyppe: HyppeType.HyppeVid);
+              notifier.getDetailInterest(
+                  Routing.navigatorKey.currentContext ?? context,
+                  widget.interest.id ?? '',
+                  reload: false,
+                  hyppe: HyppeType.HyppeVid);
             }
             break;
           case HyppeType.HyppeVid:
             if (!notifier.intHasNextVid) {
-              notifier.getDetailInterest(Routing.navigatorKey.currentContext ?? context, widget.interest.id ?? '', reload: false, hyppe: HyppeType.HyppeVid);
+              notifier.getDetailInterest(
+                  Routing.navigatorKey.currentContext ?? context,
+                  widget.interest.id ?? '',
+                  reload: false,
+                  hyppe: HyppeType.HyppeVid);
             }
             break;
         }
@@ -93,11 +109,15 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
                 child: RefreshIndicator(
                   strokeWidth: 2.0,
                   color: context.getColorScheme().primary,
-                  onRefresh: () => notifier.getDetailInterest(context, widget.interest.id ?? ''),
+                  onRefresh: () => notifier.getDetailInterest(
+                      context, widget.interest.id ?? ''),
                   child: SingleChildScrollView(
                     controller: scrollController,
                     scrollDirection: Axis.vertical,
-                    physics: notifier.isZoom && currentType == HyppeType.HyppePic ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
+                    physics:
+                        notifier.isZoom && currentType == HyppeType.HyppePic
+                            ? const NeverScrollableScrollPhysics()
+                            : const AlwaysScrollableScrollPhysics(),
                     child: Column(
                       children: [
                         MeasuredSize(
@@ -107,9 +127,12 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
                             });
                           },
                           child: Container(
-                            margin: const EdgeInsets.only(left: 16, right: 12, top: 10, bottom: 0),
+                            margin: const EdgeInsets.only(
+                                left: 16, right: 12, top: 10, bottom: 0),
                             padding: const EdgeInsets.all(3),
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: context.getColorScheme().background),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                color: context.getColorScheme().background),
                             child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -121,28 +144,59 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
                                         child: Ink(
                                           height: 36,
                                           decoration: BoxDecoration(
-                                            color: isActive ? context.getColorScheme().primary : context.getColorScheme().background,
-                                            borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                            color: isActive
+                                                ? context
+                                                    .getColorScheme()
+                                                    .primary
+                                                : context
+                                                    .getColorScheme()
+                                                    .background,
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(18)),
                                           ),
                                           child: InkWell(
                                             onTap: () {
                                               setState(() {
                                                 currentType = e;
-                                                scrollController..animateTo(0, duration: Duration(milliseconds: 70), curve: Curves.fastOutSlowIn);
+                                                scrollController
+                                                  ..animateTo(0,
+                                                      duration: Duration(
+                                                          milliseconds: 70),
+                                                      curve:
+                                                          Curves.fastOutSlowIn);
                                               });
                                             },
-                                            borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                            splashColor: context.getColorScheme().primary,
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(18)),
+                                            splashColor: context
+                                                .getColorScheme()
+                                                .primary,
                                             child: Container(
                                               alignment: Alignment.center,
                                               height: 36,
-                                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 16),
                                               decoration: const BoxDecoration(
-                                                borderRadius: BorderRadius.all(Radius.circular(18)),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(18)),
                                               ),
                                               child: CustomTextWidget(
-                                                textToDisplay: System().getTitleHyppe(e),
-                                                textStyle: context.getTextTheme().bodyText2?.copyWith(color: isActive ? context.getColorScheme().background : context.getColorScheme().secondary),
+                                                textToDisplay:
+                                                    System().getTitleHyppe(e),
+                                                textStyle: context
+                                                    .getTextTheme()
+                                                    .bodyMedium
+                                                    ?.copyWith(
+                                                        color: isActive
+                                                            ? context
+                                                                .getColorScheme()
+                                                                .background
+                                                            : context
+                                                                .getColorScheme()
+                                                                .secondary),
                                               ),
                                             ),
                                           ),
@@ -201,19 +255,29 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
           if (notifier.loadIntDetailVid) {
             return const SearchShimmer();
           }
-          return data.vid.isNotNullAndEmpty() ? VidScrollScreen(interestKey: widget.interest.id ?? '') : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
+          return data.vid.isNotNullAndEmpty()
+              ? VidScrollScreen(interestKey: widget.interest.id ?? '')
+              : SearchNoResultImage(
+                  locale: notifier.language,
+                  keyword: widget.interest.interestName ?? '');
         case HyppeType.HyppeDiary:
           if (notifier.loadIntDetailDiary) {
             return const SearchShimmer();
           }
           return data.diary.isNotNullAndEmpty()
               ? DiaryScrollScreen(interestKey: widget.interest.id ?? '')
-              : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
+              : SearchNoResultImage(
+                  locale: notifier.language,
+                  keyword: widget.interest.interestName ?? '');
         case HyppeType.HyppePic:
           if (notifier.loadIntDetailPic) {
             return const SearchShimmer();
           }
-          return data.pict.isNotNullAndEmpty() ? PicScrollScreen(interestKey: widget.interest.id ?? '') : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
+          return data.pict.isNotNullAndEmpty()
+              ? PicScrollScreen(interestKey: widget.interest.id ?? '')
+              : SearchNoResultImage(
+                  locale: notifier.language,
+                  keyword: widget.interest.interestName ?? '');
       }
     } else {
       return const SearchShimmer();

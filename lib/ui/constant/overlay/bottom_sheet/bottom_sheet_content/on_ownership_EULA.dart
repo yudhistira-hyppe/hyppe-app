@@ -13,18 +13,23 @@ import 'package:provider/provider.dart';
 class OnOwnershipEULABottomSheet extends StatelessWidget {
   Function() onSave;
   Function() onCancel;
-  OnOwnershipEULABottomSheet({Key? key, required this.onSave, required this.onCancel}) : super(key: key);
+  OnOwnershipEULABottomSheet(
+      {Key? key, required this.onSave, required this.onCancel})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Consumer<TranslateNotifierV2>(
       key: key,
       builder: (_, notifier, __) => Padding(
-        padding: EdgeInsets.symmetric(vertical: 8 * SizeConfig.scaleDiagonal, horizontal: 16 * SizeConfig.scaleDiagonal),
+        padding: EdgeInsets.symmetric(
+            vertical: 8 * SizeConfig.scaleDiagonal,
+            horizontal: 16 * SizeConfig.scaleDiagonal),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+            const CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}handler.svg"),
             tenPx,
             const RotatedBox(
               quarterTurns: 2,
@@ -41,14 +46,18 @@ class OnOwnershipEULABottomSheet extends StatelessWidget {
               children: [
                 Center(
                   child: CustomTextWidget(
-                    textToDisplay: notifier.translate.contentOwnershipRegistration ?? '',
-                    textStyle: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                    textToDisplay:
+                        notifier.translate.contentOwnershipRegistration ?? '',
+                    textStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.onBackground),
                   ),
                 ),
                 const SizedBox(height: 20),
                 CustomTextWidget(
-                  textToDisplay: notifier.translate.byRegisteringYourContent ?? '',
-                  textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                  textToDisplay:
+                      notifier.translate.byRegisteringYourContent ?? '',
+                  textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onBackground),
                   maxLines: 100,
                   textAlign: TextAlign.center,
                 ),
@@ -68,7 +77,10 @@ class OnOwnershipEULABottomSheet extends StatelessWidget {
                   shadowColor: MaterialStateProperty.all(Colors.white),
                   elevation: MaterialStateProperty.all(0),
                   side: MaterialStateProperty.all(
-                    BorderSide(color: kHyppeLightInactive1, width: 1.0, style: BorderStyle.solid),
+                    BorderSide(
+                        color: kHyppeLightInactive1,
+                        width: 1.0,
+                        style: BorderStyle.solid),
                   ),
                 )),
             tenPx,
@@ -78,7 +90,8 @@ class OnOwnershipEULABottomSheet extends StatelessWidget {
               function: onCancel,
               child: CustomTextWidget(
                 textToDisplay: notifier.translate.cancel ?? '',
-                textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
+                textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: kHyppePrimary, fontWeight: FontWeight.bold),
               ),
             ),
           ],

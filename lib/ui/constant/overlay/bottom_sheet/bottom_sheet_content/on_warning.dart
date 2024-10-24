@@ -17,23 +17,36 @@ class OnWarningBottomSheet extends StatelessWidget {
   String? bodyText;
   String? buttonText;
   String icon;
-  OnWarningBottomSheet({Key? key, this.onSave, this.onCancel, this.title, this.bodyText, this.icon = '', this.buttonText}) : super(key: key);
+  OnWarningBottomSheet(
+      {Key? key,
+      this.onSave,
+      this.onCancel,
+      this.title,
+      this.bodyText,
+      this.icon = '',
+      this.buttonText})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Consumer<TranslateNotifierV2>(
       key: key,
       builder: (_, notifier, __) => Padding(
-        padding: EdgeInsets.symmetric(vertical: 8 * SizeConfig.scaleDiagonal, horizontal: 16 * SizeConfig.scaleDiagonal),
+        padding: EdgeInsets.symmetric(
+            vertical: 8 * SizeConfig.scaleDiagonal,
+            horizontal: 16 * SizeConfig.scaleDiagonal),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+            const CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}handler.svg"),
             thirtySixPx,
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Center(child: CustomIconWidget(iconData: icon, defaultColor: false)),
+                Center(
+                    child:
+                        CustomIconWidget(iconData: icon, defaultColor: false)),
                 twelvePx,
                 title == ''
                     ? Container()
@@ -42,14 +55,21 @@ class OnWarningBottomSheet extends StatelessWidget {
                         child: Center(
                           child: CustomTextWidget(
                             textToDisplay: title ?? '',
-                            textStyle: Theme.of(context).textTheme.subtitle1?.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onBackground),
                             maxLines: 2,
                           ),
                         ),
                       ),
                 CustomTextWidget(
                   textToDisplay: bodyText ?? '',
-                  textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                  textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onBackground),
                   maxLines: 100,
                   textAlign: TextAlign.center,
                 ),
@@ -71,7 +91,10 @@ class OnWarningBottomSheet extends StatelessWidget {
                       shadowColor: MaterialStateProperty.all(Colors.white),
                       elevation: MaterialStateProperty.all(0),
                       side: MaterialStateProperty.all(
-                        BorderSide(color: kHyppeLightInactive1, width: 1.0, style: BorderStyle.solid),
+                        BorderSide(
+                            color: kHyppeLightInactive1,
+                            width: 1.0,
+                            style: BorderStyle.solid),
                       ),
                     )),
           ],

@@ -29,7 +29,9 @@ class CommentTextField extends StatelessWidget {
       builder: (_, notifier, language, __) => Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          notifier.isShowAutoComplete ? _autoComplete(context, notifier) : Container(),
+          notifier.isShowAutoComplete
+              ? _autoComplete(context, notifier)
+              : Container(),
           // _buildTextInput(notifier, language, context),
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 500),
@@ -44,7 +46,8 @@ class CommentTextField extends StatelessWidget {
             },
             child: !fromFront
                 ? _buildTextInput(notifier, language, context)
-                : notifier.commentController.text.isNotEmpty || notifier.showTextInput
+                : notifier.commentController.text.isNotEmpty ||
+                        notifier.showTextInput
                     ? _buildTextInput(notifier, language, context)
                     : const SizedBox.shrink(),
           ),
@@ -53,11 +56,13 @@ class CommentTextField extends StatelessWidget {
     );
   }
 
-  Widget _buildTextInput(CommentNotifierV2 notifier, TranslateNotifierV2 language, BuildContext context) {
+  Widget _buildTextInput(CommentNotifierV2 notifier,
+      TranslateNotifierV2 language, BuildContext context) {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Padding(
-        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         child: Container(
           width: SizeConfig.screenWidth,
           padding: const EdgeInsets.all(16),
@@ -70,17 +75,22 @@ class CommentTextField extends StatelessWidget {
             keyboardAppearance: Brightness.dark,
             controller: notifier.commentController,
             textInputAction: TextInputAction.unspecified,
-            style: Theme.of(context).textTheme.bodyText2,
+            style: Theme.of(context).textTheme.bodyMedium,
             autofocus: true,
             decoration: InputDecoration(
               filled: true,
               fillColor: Theme.of(context).colorScheme.background,
               hintText: "${language.translate.typeAMessage}...",
-              hintStyle: const TextStyle(color: Color(0xffBABABA), fontSize: 14),
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
-              focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
+              hintStyle:
+                  const TextStyle(color: Color(0xffBABABA), fontSize: 14),
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              enabledBorder:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
+              focusedBorder:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
               suffixIcon: notifier.commentController.text.isNotEmpty
                   ? notifier.loading
                       ? const CustomLoading(size: 4)
@@ -116,7 +126,8 @@ class CommentTextField extends StatelessWidget {
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Expanded(child: SizedBox(height: 50, child: CustomLoading())),
+                    Expanded(
+                        child: SizedBox(height: 50, child: CustomLoading())),
                   ],
                 )
               : notifier.searchPeolpleData.length == 0
@@ -124,7 +135,10 @@ class CommentTextField extends StatelessWidget {
                       mainAxisSize: MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Expanded(child: Center(child: Text('${notifier.language.userIsNotFound}'))),
+                        Expanded(
+                            child: Center(
+                                child: Text(
+                                    '${notifier.language.userIsNotFound}'))),
                       ],
                     )
                   : ListView.builder(
@@ -138,17 +152,21 @@ class CommentTextField extends StatelessWidget {
                               notifier.insertAutoComplete(index);
                             },
                             title: CustomTextWidget(
-                              textToDisplay: notifier.searchPeolpleData[index].fullName ?? '',
+                              textToDisplay:
+                                  notifier.searchPeolpleData[index].fullName ??
+                                      '',
                               textStyle: Theme.of(context).textTheme.bodyMedium,
                               textAlign: TextAlign.start,
                             ),
                             subtitle: CustomTextWidget(
-                              textToDisplay: notifier.searchPeolpleData[index].fullName ?? '',
+                              textToDisplay:
+                                  notifier.searchPeolpleData[index].fullName ??
+                                      '',
                               textStyle: Theme.of(context).textTheme.bodySmall,
                               textAlign: TextAlign.start,
                             ),
                             leading: Padding(
-                              padding:const  EdgeInsets.only(top: 4),
+                              padding: const EdgeInsets.only(top: 4),
                               child: StoryColorValidator(
                                 haveStory: false,
                                 featureType: FeatureType.pic,
@@ -156,8 +174,12 @@ class CommentTextField extends StatelessWidget {
                                   width: 30,
                                   height: 30,
                                   onTap: () {},
-                                  imageUrl: System().showUserPicture(notifier.searchPeolpleData[index].avatar?.mediaEndpoint),
-                                  badge: notifier.searchPeolpleData[index].urluserBadge,
+                                  imageUrl: System().showUserPicture(notifier
+                                      .searchPeolpleData[index]
+                                      .avatar
+                                      ?.mediaEndpoint),
+                                  badge: notifier
+                                      .searchPeolpleData[index].urluserBadge,
                                   following: true,
                                   onFollow: () {},
                                 ),

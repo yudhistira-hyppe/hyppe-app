@@ -11,7 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class OnShowSuccessPostContentOwnershipBottomSheet extends StatelessWidget {
-  const OnShowSuccessPostContentOwnershipBottomSheet({Key? key}) : super(key: key);
+  const OnShowSuccessPostContentOwnershipBottomSheet({Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,24 +30,25 @@ class OnShowSuccessPostContentOwnershipBottomSheet extends StatelessWidget {
             Image.asset("${AssetPath.pngPath}user-verified.png"),
             CustomTextWidget(
               textToDisplay: notifier.language.congrats ?? '',
-              textStyle: Theme.of(context).textTheme.subtitle1,
+              textStyle: Theme.of(context).textTheme.titleMedium,
             ),
             CustomRichTextWidget(
               textAlign: TextAlign.center,
               textOverflow: TextOverflow.clip,
               textSpan: TextSpan(
-                  text: notifier.language
-                      .contentOwnershipSuccessInfo ?? '',
+                  text: notifier.language.contentOwnershipSuccessInfo ?? '',
                   style: Theme.of(context)
                       .textTheme
-                      .caption?.copyWith(height: 1.6)),
+                      .bodySmall
+                      ?.copyWith(height: 1.6)),
             ),
             CustomElevatedButton(
               child: CustomTextWidget(
                 textToDisplay: notifier.language.close ?? 'close',
                 textStyle: Theme.of(context)
                     .textTheme
-                    .button?.copyWith(color: kHyppeLightButtonText),
+                    .labelLarge
+                    ?.copyWith(color: kHyppeLightButtonText),
               ),
               width: double.infinity,
               height: 50 * SizeConfig.scaleDiagonal,

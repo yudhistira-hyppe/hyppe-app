@@ -11,7 +11,8 @@ class CustomTextFieldForOverlay extends StatefulWidget {
   const CustomTextFieldForOverlay({Key? key}) : super(key: key);
 
   @override
-  _CustomTextFieldForOverlayState createState() => _CustomTextFieldForOverlayState();
+  _CustomTextFieldForOverlayState createState() =>
+      _CustomTextFieldForOverlayState();
 }
 
 class _CustomTextFieldForOverlayState extends State<CustomTextFieldForOverlay> {
@@ -50,10 +51,13 @@ class _CustomTextFieldForOverlayState extends State<CustomTextFieldForOverlay> {
                 onPressed: () {
                   if (textEditingController.text.isNotEmpty) {
                     context.read<PreviewContentNotifier>().addAdditionalItem(
-                        widgetItem: TextElement(caption: textEditingController.text),
-                        offsetItem: Offset(0.0, MediaQuery.of(context).size.height / 2));
+                        widgetItem:
+                            TextElement(caption: textEditingController.text),
+                        offsetItem: Offset(
+                            0.0, MediaQuery.of(context).size.height / 2));
                     textEditingController.clear();
-                    context.read<PreviewContentNotifier>().addTextItemMode = true;
+                    context.read<PreviewContentNotifier>().addTextItemMode =
+                        true;
                   }
                   context.read<OverlayHandlerProvider>().removeOverlay(context);
                 },
@@ -74,7 +78,10 @@ class _CustomTextFieldForOverlayState extends State<CustomTextFieldForOverlay> {
               textAlign: TextAlign.center,
               controller: textEditingController,
               textInputAction: TextInputAction.newline,
-              style: Theme.of(context).textTheme.headline4!.copyWith(fontWeight: FontWeight.w600),
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineMedium!
+                  .copyWith(fontWeight: FontWeight.w600),
               decoration: const InputDecoration(
                 border: InputBorder.none,
                 focusedBorder: InputBorder.none,

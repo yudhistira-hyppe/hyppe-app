@@ -7,16 +7,24 @@ class SignUpText extends StatelessWidget {
   final String title;
   final String description;
   final double? paddingDescription;
-  const SignUpText({Key? key, required this.title, required this.description, this.paddingDescription}) : super(key: key);
+  const SignUpText(
+      {Key? key,
+      required this.title,
+      required this.description,
+      this.paddingDescription})
+      : super(key: key);
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'SignUpText');
     return Column(
       children: [
         CustomTextWidget(
           textToDisplay: title,
-          textStyle: Theme.of(context).textTheme.headline5!.copyWith(fontWeight: FontWeight.bold),
+          textStyle: Theme.of(context)
+              .textTheme
+              .headlineSmall!
+              .copyWith(fontWeight: FontWeight.bold),
         ),
         eightPx,
         Padding(
@@ -25,7 +33,7 @@ class SignUpText extends StatelessWidget {
             maxLines: null,
             textToDisplay: description,
             textOverflow: TextOverflow.visible,
-            textStyle: Theme.of(context).textTheme.bodyText2,
+            textStyle: Theme.of(context).textTheme.bodyMedium,
           ),
         ),
       ],

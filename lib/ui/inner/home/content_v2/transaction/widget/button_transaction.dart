@@ -32,7 +32,10 @@ class ButtonTransaction extends StatelessWidget {
               ),
               child: CustomTextWidget(
                 textToDisplay: notifier2.translate.addBankAccount ?? '',
-                textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppePrimary),
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: kHyppePrimary),
               ),
             ),
           ),
@@ -51,16 +54,26 @@ class ButtonTransaction extends StatelessWidget {
                             context,
                             onCancel: () {},
                             onSave: () {
-                              Routing().moveAndPop(Routes.homePageSignInSecurity);
+                              Routing()
+                                  .moveAndPop(Routes.homePageSignInSecurity);
                             },
                             title: notifier2.translate.addYourHyppePinFirst,
-                            bodyText: notifier2.translate.toAccessTransactionPageYouNeedToSetYourPin ?? '',
+                            bodyText: notifier2.translate
+                                    .toAccessTransactionPageYouNeedToSetYourPin ??
+                                '',
                           );
                         },
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(notifier.accountBalance?.totalsaldo == 0 ? kHyppeDisabled : kHyppePrimary)),
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                      notifier.accountBalance?.totalsaldo == 0
+                          ? kHyppeDisabled
+                          : kHyppePrimary)),
               child: CustomTextWidget(
                 textToDisplay: notifier2.translate.withdrawal ?? '',
-                textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: kHyppeLightButtonText),
               ),
             ),
           ),

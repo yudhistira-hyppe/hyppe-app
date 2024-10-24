@@ -13,7 +13,6 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/ui/constant/widget/keyboard_disposal.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
- 
 
 class VerificationPin extends StatefulWidget {
   const VerificationPin({Key? key}) : super(key: key);
@@ -22,7 +21,8 @@ class VerificationPin extends StatefulWidget {
   _VerificationPinState createState() => _VerificationPinState();
 }
 
-class _VerificationPinState extends State<VerificationPin> with AfterFirstLayoutMixin {
+class _VerificationPinState extends State<VerificationPin>
+    with AfterFirstLayoutMixin {
   late SignUpPinNotifier _notifier;
 
   @override
@@ -58,12 +58,13 @@ class _VerificationPinState extends State<VerificationPin> with AfterFirstLayout
                 notifier.otpController.clear();
                 notifier.otpVerified = '';
               },
-              child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
+              child: const CustomIconWidget(
+                  iconData: "${AssetPath.vectorPath}back-arrow.svg"),
             ),
             automaticallyImplyLeading: false,
             title: CustomTextWidget(
               textToDisplay: notifier2.translate.verificationCode ?? '',
-              textStyle: Theme.of(context).textTheme.headline6,
+              textStyle: Theme.of(context).textTheme.titleLarge,
             ),
           ),
           body: SafeArea(

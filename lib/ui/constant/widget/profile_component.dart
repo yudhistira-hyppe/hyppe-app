@@ -88,7 +88,8 @@ class ProfileComponent extends StatelessWidget {
                   badge: badge,
                 ),
               ),
-              Visibility(visible: showNameAndTimeStamp, child: spaceProfileAndId),
+              Visibility(
+                  visible: showNameAndTimeStamp, child: spaceProfileAndId),
               Visibility(
                 visible: showNameAndTimeStamp,
                 child: Column(
@@ -107,18 +108,30 @@ class ProfileComponent extends StatelessWidget {
                                   ? CustomStrokeTextWidget(
                                       textToDisplay: username ?? '',
                                       maxLines: 1,
-                                      textStyle: Theme.of(context).textTheme.button?.copyWith(fontWeight: FontWeight.w700),
+                                      textStyle: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge
+                                          ?.copyWith(
+                                              fontWeight: FontWeight.w700),
                                       textAlign: TextAlign.left,
                                     )
                                   : CustomTextWidget(
                                       textToDisplay: username ?? '',
                                       maxLines: 1,
                                       textStyle: TextStyle(
-                                        fontWeight: isFullscreen ?? false ? FontWeight.bold : FontWeight.normal,
+                                        fontWeight: isFullscreen ?? false
+                                            ? FontWeight.bold
+                                            : FontWeight.normal,
                                         color: textColor,
                                         shadows: const [
-                                          Shadow(offset: Offset(0.0, 1.0), blurRadius: 2.0, color: Colors.black12),
-                                          Shadow(offset: Offset(0.0, 1.0), blurRadius: 4.0, color: Colors.black12),
+                                          Shadow(
+                                              offset: Offset(0.0, 1.0),
+                                              blurRadius: 2.0,
+                                              color: Colors.black12),
+                                          Shadow(
+                                              offset: Offset(0.0, 1.0),
+                                              blurRadius: 4.0,
+                                              color: Colors.black12),
                                         ],
                                       ),
                                       textAlign: TextAlign.left,
@@ -127,7 +140,8 @@ class ProfileComponent extends StatelessWidget {
                             if (isUserVerified) twoPx,
                             if (isUserVerified)
                               const CustomIconWidget(
-                                iconData: '${AssetPath.vectorPath}ic_verified.svg',
+                                iconData:
+                                    '${AssetPath.vectorPath}ic_verified.svg',
                                 defaultColor: false,
                                 width: 16,
                                 height: 16,
@@ -146,7 +160,10 @@ class ProfileComponent extends StatelessWidget {
                                 maxLines: 1,
                                 textToDisplay: createdAt,
                                 textAlign: TextAlign.left,
-                                textStyle: Theme.of(context).textTheme.caption?.copyWith(fontSize: 12),
+                                textStyle: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(fontSize: 12),
                               )
                             : CustomTextWidget(
                                 maxLines: 1,
@@ -156,8 +173,14 @@ class ProfileComponent extends StatelessWidget {
                                   color: textColor,
                                   fontSize: 10,
                                   shadows: const [
-                                    Shadow(offset: Offset(0.0, 1.0), blurRadius: 2.0, color: Colors.black12),
-                                    Shadow(offset: Offset(0.0, 1.0), blurRadius: 4.0, color: Colors.black12),
+                                    Shadow(
+                                        offset: Offset(0.0, 1.0),
+                                        blurRadius: 2.0,
+                                        color: Colors.black12),
+                                    Shadow(
+                                        offset: Offset(0.0, 1.0),
+                                        blurRadius: 4.0,
+                                        color: Colors.black12),
                                   ],
                                 ),
                               ),

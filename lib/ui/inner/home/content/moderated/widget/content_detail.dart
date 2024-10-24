@@ -36,11 +36,12 @@ class ContentDetail extends StatelessWidget {
             child: Stack(
               children: [
                 CustomContentModeratedWidget(
-                  isSale: (data.saleAmount ?? 0) > 0,
+                    isSale: (data.saleAmount ?? 0) > 0,
                     isSafe: true,
                     boxFitError: BoxFit.fill,
                     boxFitContent: BoxFit.contain,
-                    thumbnail: ImageUrl(data.postID, url: '${data.fullThumbPath}' + thumbnail())),
+                    thumbnail: ImageUrl(data.postID,
+                        url: '${data.fullThumbPath}' + thumbnail())),
                 CustomIconButtonWidget(
                     onPressed: () => Routing().moveBack(),
                     iconData: '${AssetPath.vectorPath}back-arrow.svg',
@@ -57,7 +58,7 @@ class ContentDetail extends StatelessWidget {
                 textAlign: TextAlign.left,
                 textToDisplay: data.description ?? '',
                 textOverflow: TextOverflow.visible,
-                textStyle: Theme.of(context).textTheme.bodyText2),
+                textStyle: Theme.of(context).textTheme.bodyMedium),
           )
         ],
       ),

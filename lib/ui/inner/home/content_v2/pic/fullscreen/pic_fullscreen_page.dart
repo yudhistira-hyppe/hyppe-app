@@ -68,9 +68,12 @@ class PicFullscreenPage extends StatefulWidget {
   State<PicFullscreenPage> createState() => _PicFullscreenPageState();
 }
 
-class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindingObserver, SingleTickerProviderStateMixin, RouteAware {
+class _PicFullscreenPageState extends State<PicFullscreenPage>
+    with WidgetsBindingObserver, SingleTickerProviderStateMixin, RouteAware {
   PageController controller = PageController();
-  late final AnimationController animatedController = AnimationController(vsync: this, duration: const Duration(seconds: 2))..repeat();
+  late final AnimationController animatedController =
+      AnimationController(vsync: this, duration: const Duration(seconds: 2))
+        ..repeat();
 
   ValueNotifier<int> networklHasErrorNotifier = ValueNotifier(0);
 
@@ -120,7 +123,8 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
     } else {
       System().disposeBlock();
     }
-    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    CustomRouteObserver.routeObserver
+        .subscribe(this, ModalRoute.of(context) as PageRoute);
     super.didChangeDependencies();
   }
 
@@ -143,8 +147,10 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
 
       pagePictLandingFull = true;
       isMuteAudioPic = notifier.isMute;
-      _lastCurPostId = widget.argument?.picData[widget.argument?.index ?? 0].postID ?? '';
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPicFullScreen');
+      _lastCurPostId =
+          widget.argument?.picData[widget.argument?.index ?? 0].postID ?? '';
+      fAliplayer =
+          FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPicFullScreen');
       WidgetsBinding.instance.addObserver(this);
       fAliplayer?.setAutoPlay(true);
       fAliplayer?.setLoop(true);
@@ -156,7 +162,8 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
 
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
-      fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+      fAliplayer
+          ?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
     });
     controller = PageController(initialPage: widget.argument?.index ?? 0);
     notifier.currIndex = widget.argument?.index ?? 0;
@@ -173,7 +180,8 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
   }
 
   //Start Music
-  void startMusic(BuildContext context, ContentData data, PreviewPicNotifier notifier) async {
+  void startMusic(BuildContext context, ContentData data,
+      PreviewPicNotifier notifier) async {
     fAliplayer?.stop();
     selectedData = data;
 
@@ -181,12 +189,14 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
     selectedData?.isDiaryPlay = false;
     if (data.reportedStatus != 'BLURRED') {
       await getMusicUrl(context, data.music?.apsaraMusic ?? '');
-      MyAudioService.instance.play(path: url, startedPlaying: () {}, stoppedPlaying: () {}, mute: notifier.isMute);
-    }else{
+      MyAudioService.instance.play(
+          path: url,
+          startedPlaying: () {},
+          stoppedPlaying: () {},
+          mute: notifier.isMute);
+    } else {
       MyAudioService.instance.stop();
     }
-
-    
 
     setState(() {
       isPause = false;
@@ -303,7 +313,8 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
         // if (context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds)) {
         fAliplayer?.play();
         if (isActivePage) {
-          final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
+          final notifier =
+              Provider.of<PreviewPicNotifier>(context, listen: false);
           if (!notifier.isMute) {
             MyAudioService.instance.playagain(false);
           }
@@ -336,19 +347,27 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
           }
         },
         child: AnnotatedRegion<SystemUiOverlayStyle>(
-          value: const SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.light, statusBarIconBrightness: Brightness.light),
-          child: Consumer2<PreviewPicNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
+          value: const SystemUiOverlayStyle(
+              statusBarColor: Colors.transparent,
+              statusBarBrightness: Brightness.light,
+              statusBarIconBrightness: Brightness.light),
+          child: Consumer2<PreviewPicNotifier, HomeNotifier>(
+              builder: (_, notifier, home, __) {
             if (notifier.pic == null && home.isLoadingPict) {
               return CustomShimmer(
-                width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                width:
+                    (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
                 height: double.infinity,
-                margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
                 padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
               );
             }
             return PageView.builder(
                 controller: controller,
-                physics: isZoom ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
+                physics: isZoom
+                    ? const NeverScrollableScrollPhysics()
+                    : const AlwaysScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
                 itemCount: notifier.pic?.length ?? 0,
                 onPageChanged: (value) {
@@ -366,14 +385,16 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                     return const CustomShimmer(
                       width: double.infinity,
                       height: double.infinity,
-                      margin: EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                      margin:
+                          EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
                       padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
                     );
                   }
 
                   return notifier.pic![index].reportedStatus == 'BLURRED'
                       ? blurContentWidget(context, notifier.pic![index])
-                      : imagePic(notifier.pic ?? [], index: index, notifier: notifier, homeNotifier: home);
+                      : imagePic(notifier.pic ?? [],
+                          index: index, notifier: notifier, homeNotifier: home);
                 });
           }),
         ),
@@ -381,8 +402,12 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
     );
   }
 
-  Widget imagePic(List<ContentData> picData, {int index = 0, PreviewPicNotifier? notifier, HomeNotifier? homeNotifier}) {
-    final isAds = picData[index].inBetweenAds != null && picData[index].postID == null;
+  Widget imagePic(List<ContentData> picData,
+      {int index = 0,
+      PreviewPicNotifier? notifier,
+      HomeNotifier? homeNotifier}) {
+    final isAds =
+        picData[index].inBetweenAds != null && picData[index].postID == null;
     return picData[index].isContentLoading ?? false
         ? Builder(builder: (context) {
             Future.delayed(const Duration(seconds: 1), () {
@@ -398,7 +423,8 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                 onVisibilityChanged: (info) async {
                   if (info.visibleFraction >= 0.8) {
                     _curIdx = index;
-                    _curPostId = picData[index].inBetweenAds?.adsId ?? index.toString();
+                    _curPostId =
+                        picData[index].inBetweenAds?.adsId ?? index.toString();
 
                     if (_lastCurPostId != _curPostId) {
                       if (mounted) {
@@ -406,17 +432,26 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                           isShowShowcase = false;
                         });
                       }
-                      final indexList = widget.argument!.picData.indexWhere((element) => element.inBetweenAds?.adsId == _curPostId);
+                      final indexList = widget.argument!.picData.indexWhere(
+                          (element) =>
+                              element.inBetweenAds?.adsId == _curPostId);
 
                       if (indexList == (widget.argument!.picData.length) - 1) {
-                        context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {});
+                        context
+                            .read<HomeNotifier>()
+                            .initNewHome(context, mounted,
+                                isreload: false, isgetMore: true)
+                            .then((value) {});
                       }
                       fAliplayer?.stop();
                       globalAudioPlayer?.pause();
                       MyAudioService.instance.stop();
                       Future.delayed(const Duration(milliseconds: 500), () {
-                        System().increaseViewCount2(context, picData[index], check: false);
-                        if ((picData[index].saleAmount ?? 0) > 0 || ((picData[index].certified ?? false) && (picData[index].saleAmount ?? 0) == 0)) {
+                        System().increaseViewCount2(context, picData[index],
+                            check: false);
+                        if ((picData[index].saleAmount ?? 0) > 0 ||
+                            ((picData[index].certified ?? false) &&
+                                (picData[index].saleAmount ?? 0) == 0)) {
                           if (mounted) {
                             setState(() {
                               isShowShowcase = true;
@@ -432,7 +467,8 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                       }
                       setState(() {
                         Future.delayed(const Duration(milliseconds: 400), () {
-                          itemHeight = widget.argument!.picData[indexList].height ?? 0;
+                          itemHeight =
+                              widget.argument!.picData[indexList].height ?? 0;
                         });
                       });
                     }
@@ -455,9 +491,11 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                             globalAdsPopUp?.pause();
                           }
                         }
-                        if (info.visibleFraction == 1 || info.visibleFraction >= 0.6) {
+                        if (info.visibleFraction == 1 ||
+                            info.visibleFraction >= 0.6) {
                           _curIdx = index;
-                          _curPostId = picData[index].postID ?? index.toString();
+                          _curPostId =
+                              picData[index].postID ?? index.toString();
                           if (_lastCurIndex > _curIdx) {}
 
                           if (_lastCurPostId != _curPostId) {
@@ -466,16 +504,22 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                                 isShowShowcase = false;
                               });
                             }
-                            final indexList = notifier!.pic?.indexWhere((element) => element.postID == _curPostId);
+                            final indexList = notifier!.pic?.indexWhere(
+                                (element) => element.postID == _curPostId);
 
                             if (indexList == (notifier.pic?.length ?? 0) - 1) {
-                              context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {});
+                              context
+                                  .read<HomeNotifier>()
+                                  .initNewHome(context, mounted,
+                                      isreload: false, isgetMore: true)
+                                  .then((value) {});
                             }
                             if (picData[index].music != null) {
                               fAliplayer?.stop();
                               globalAudioPlayer?.stop();
                               print("ada musiknya ${picData[index].music}");
-                              Future.delayed(const Duration(milliseconds: 100), () {
+                              Future.delayed(const Duration(milliseconds: 100),
+                                  () {
                                 startMusic(context, picData[index], notifier);
                               });
                             } else {
@@ -484,25 +528,45 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                               MyAudioService.instance.stop();
                             }
 
-                            Future.delayed(const Duration(milliseconds: 100), () {
+                            Future.delayed(const Duration(milliseconds: 100),
+                                () {
                               if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
-                                indexKeySell = mn?.tutorialData.indexWhere((element) => element.key == 'sell') ?? 0;
-                                indexKeyProtection = mn?.tutorialData.indexWhere((element) => element.key == 'protection') ?? 0;
+                                indexKeySell = mn?.tutorialData.indexWhere(
+                                        (element) => element.key == 'sell') ??
+                                    0;
+                                indexKeyProtection = mn?.tutorialData
+                                        .indexWhere((element) =>
+                                            element.key == 'protection') ??
+                                    0;
                                 if ((picData[index].saleAmount ?? 0) > 0) {
-                                  if (mn?.tutorialData[indexKeySell].status == false && !globalChallengePopUp) {
-                                    ShowCaseWidget.of(context).startShowCase([picData[index].keyGlobalSell ?? GlobalKey()]);
+                                  if (mn?.tutorialData[indexKeySell].status ==
+                                          false &&
+                                      !globalChallengePopUp) {
+                                    ShowCaseWidget.of(context).startShowCase([
+                                      picData[index].keyGlobalSell ??
+                                          GlobalKey()
+                                    ]);
                                   }
                                 }
-                                if (((picData[index].certified ?? false) && (picData[index].saleAmount ?? 0) == 0)) {
-                                  if (mn?.tutorialData[indexKeyProtection].status == false && !globalChallengePopUp) {
-                                    ShowCaseWidget.of(context).startShowCase([picData[index].keyGlobalOwn ?? GlobalKey()]);
+                                if (((picData[index].certified ?? false) &&
+                                    (picData[index].saleAmount ?? 0) == 0)) {
+                                  if (mn?.tutorialData[indexKeyProtection]
+                                              .status ==
+                                          false &&
+                                      !globalChallengePopUp) {
+                                    ShowCaseWidget.of(context).startShowCase([
+                                      picData[index].keyGlobalOwn ?? GlobalKey()
+                                    ]);
                                   }
                                 }
                               }
                             });
 
-                            Future.delayed(const Duration(milliseconds: 500), () {
-                              System().increaseViewCount2(context, picData[index], check: false);
+                            Future.delayed(const Duration(milliseconds: 500),
+                                () {
+                              System().increaseViewCount2(
+                                  context, picData[index],
+                                  check: false);
                             });
 
                             if (picData[index].certified ?? false) {
@@ -511,14 +575,17 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                               System().disposeBlock();
                             }
                             setState(() {
-                              Future.delayed(const Duration(milliseconds: 400), () {
-                                itemHeight = notifier.pic?[indexList ?? 0].height ?? 0;
+                              Future.delayed(const Duration(milliseconds: 400),
+                                  () {
+                                itemHeight =
+                                    notifier.pic?[indexList ?? 0].height ?? 0;
                               });
                             });
 
                             ///ADS IN BETWEEN === Hariyanto Lukman ===
                             if (!notifier.loadAds) {
-                              if ((notifier.pic?.length ?? 0) > notifier.nextAdsShowed) {
+                              if ((notifier.pic?.length ?? 0) >
+                                  notifier.nextAdsShowed) {
                                 notifier.loadAds = true;
                                 context.getInBetweenAds().then((value) {
                                   if (value != null) {
@@ -535,17 +602,23 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                           _lastCurPostId = _curPostId;
                         }
                       },
-                      child: Center(child: image(picData[index], index: index, notifier: notifier)),
+                      child: Center(
+                          child: image(picData[index],
+                              index: index, notifier: notifier)),
                     ),
                   ),
                   _buildBody(context, SizeConfig.screenWidth, picData[index]),
-                  _buttomBodyRight(picData: picData[index], notifier: notifier, index: index),
+                  _buttomBodyRight(
+                      picData: picData[index],
+                      notifier: notifier,
+                      index: index),
                   Positioned(
                     top: 0,
                     left: 0,
                     right: 0,
                     child: Container(
-                        margin: const EdgeInsets.only(top: kTextTabBarHeight - 12, left: 12.0),
+                        margin: const EdgeInsets.only(
+                            top: kTextTabBarHeight - 12, left: 12.0),
                         padding: const EdgeInsets.symmetric(vertical: 18.0),
                         width: double.infinity,
                         height: kToolbarHeight * 1.6,
@@ -563,7 +636,9 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: CustomIconWidget(
-                            iconData: notifier.isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
+                            iconData: notifier.isMute
+                                ? '${AssetPath.vectorPath}sound-off.svg'
+                                : '${AssetPath.vectorPath}sound-on.svg',
                             defaultColor: false,
                             height: 32,
                           ),
@@ -574,7 +649,8 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
               );
   }
 
-  Widget image(ContentData picData, {int index = 0, PreviewPicNotifier? notifier}) {
+  Widget image(ContentData picData,
+      {int index = 0, PreviewPicNotifier? notifier}) {
     return ValueListenableBuilder(
       valueListenable: networklHasErrorNotifier,
       builder: (BuildContext context, int count, _) {
@@ -595,7 +671,9 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
             memCacheHeight: 100,
             widthPlaceHolder: 80,
             heightPlaceHolder: 80,
-            imageUrl: (picData.isApsara ?? false) ? ("${picData.mediaEndpoint}?key=${picData.valueCache}") : ("${picData.fullThumbPath}&key=${picData.valueCache}"),
+            imageUrl: (picData.isApsara ?? false)
+                ? ("${picData.mediaEndpoint}?key=${picData.valueCache}")
+                : ("${picData.fullThumbPath}&key=${picData.valueCache}"),
             imageBuilder: (context, imageProvider) {
               return GestureDetector(
                 behavior: HitTestBehavior.translucent,
@@ -604,7 +682,9 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                   notifier!.positionDxDy = position;
                 },
                 onDoubleTap: () {
-                  context.read<LikeNotifier>().likePost(context, notifier!.pic![index]);
+                  context
+                      .read<LikeNotifier>()
+                      .likePost(context, notifier!.pic![index]);
                 },
                 onTap: () {
                   notifier!.setIsSound(!notifier.isMute);
@@ -655,7 +735,9 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
               );
             },
             emptyWidget: Container(
-                decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                decoration: BoxDecoration(
+                    color: kHyppeNotConnect,
+                    borderRadius: BorderRadius.circular(16)),
                 width: SizeConfig.screenWidth,
                 height: 250,
                 padding: const EdgeInsets.all(20),
@@ -690,7 +772,9 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                     // reloadImage(index);
                   },
                   child: Container(
-                      decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                      decoration: BoxDecoration(
+                          color: kHyppeNotConnect,
+                          borderRadius: BorderRadius.circular(16)),
                       width: SizeConfig.screenWidth,
                       height: 250,
                       padding: const EdgeInsets.all(20),
@@ -708,7 +792,8 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
     );
   }
 
-  Widget blurContentWidget(BuildContext context, ContentData data, {int index = 0, PreviewPicNotifier? notifier}) {
+  Widget blurContentWidget(BuildContext context, ContentData data,
+      {int index = 0, PreviewPicNotifier? notifier}) {
     MyAudioService.instance.stop();
     return Stack(
       children: [
@@ -728,7 +813,11 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                     defaultColor: false,
                     height: 30,
                   ),
-                  Text(lang!.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                  Text(lang!.sensitiveContent ?? 'Sensitive Content',
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600)),
                   Text("${lang!.contentContainsSensitiveMaterialNew}",
                       textAlign: TextAlign.center,
                       style: const TextStyle(
@@ -739,11 +828,14 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                   GestureDetector(
                     onTap: () {
                       System().increaseViewCount2(context, data);
-                      context.read<ReportNotifier>().seeContent(context, data, hyppePic);
+                      context
+                          .read<ReportNotifier>()
+                          .seeContent(context, data, hyppePic);
                     },
                     child: Container(
                       padding: const EdgeInsets.only(top: 8),
-                      margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
+                      margin:
+                          const EdgeInsets.only(bottom: 20, right: 8, left: 8),
                       width: SizeConfig.screenWidth,
                       decoration: const BoxDecoration(
                         border: Border(
@@ -755,7 +847,10 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                       ),
                       child: Text(
                         "${lang!.see} Pic",
-                        style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -787,20 +882,28 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                       Visibility(
                         visible: data.tagPeople?.isNotEmpty ?? false,
                         child: Container(
-                          decoration: BoxDecoration(color: kHyppeBackground.withOpacity(.4), borderRadius: BorderRadius.circular(8.0)),
-                          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+                          decoration: BoxDecoration(
+                              color: kHyppeBackground.withOpacity(.4),
+                              borderRadius: BorderRadius.circular(8.0)),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 4, vertical: 6),
                           margin: const EdgeInsets.only(right: 12.0),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
                             child: GestureDetector(
                               onTap: () {
                                 fAliplayer?.pause();
-                                context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID, title: lang!.inthisphoto, fAliplayer: fAliplayer);
+                                context.read<PicDetailNotifier>().showUserTag(
+                                    context, data.tagPeople, data.postID,
+                                    title: lang!.inthisphoto,
+                                    fAliplayer: fAliplayer);
                               },
                               child: Row(
                                 children: [
                                   const CustomIconWidget(
-                                    iconData: '${AssetPath.vectorPath}tag-people-light.svg',
+                                    iconData:
+                                        '${AssetPath.vectorPath}tag-people-light.svg',
                                     defaultColor: false,
                                     height: 18,
                                   ),
@@ -809,7 +912,8 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                                   ),
                                   Text(
                                     '${data.tagPeople!.length} ${lang!.people}',
-                                    style: const TextStyle(color: kHyppeTextPrimary),
+                                    style: const TextStyle(
+                                        color: kHyppeTextPrimary),
                                   )
                                 ],
                               ),
@@ -820,15 +924,19 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                       Visibility(
                         visible: data.location != '',
                         child: Container(
-                          decoration: BoxDecoration(color: kHyppeBackground.withOpacity(.4), borderRadius: BorderRadius.circular(8.0)),
-                          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                          decoration: BoxDecoration(
+                              color: kHyppeBackground.withOpacity(.4),
+                              borderRadius: BorderRadius.circular(8.0)),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 6, horizontal: 8),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               const CustomIconWidget(
-                                iconData: '${AssetPath.vectorPath}map-light.svg',
+                                iconData:
+                                    '${AssetPath.vectorPath}map-light.svg',
                                 defaultColor: false,
                                 height: 16,
                               ),
@@ -837,12 +945,15 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                               ),
                               Container(
                                 constraints: BoxConstraints(
-                                  maxWidth: data.tagPeople?.isNotEmpty ?? false ? SizeConfig.screenWidth! * .4 : SizeConfig.screenWidth! * .65,
+                                  maxWidth: data.tagPeople?.isNotEmpty ?? false
+                                      ? SizeConfig.screenWidth! * .4
+                                      : SizeConfig.screenWidth! * .65,
                                 ),
                                 child: Text(
                                   '${data.location}',
                                   maxLines: 1,
-                                  style: const TextStyle(color: kHyppeLightBackground),
+                                  style: const TextStyle(
+                                      color: kHyppeLightBackground),
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
@@ -876,43 +987,54 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                       },
                       seeLess: ' ${lang?.less}',
                       seeMore: ' ${lang?.more}',
-                      normStyle: const TextStyle(fontSize: 14, color: kHyppeTextPrimary),
-                      hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                      expandStyle: const TextStyle(fontSize: 14, color: kHyppeTextPrimary, fontWeight: FontWeight.bold),
+                      normStyle: const TextStyle(
+                          fontSize: 14, color: kHyppeTextPrimary),
+                      hrefStyle: Theme.of(context)
+                          .textTheme
+                          .titleSmall
+                          ?.copyWith(color: kHyppePrimary),
+                      expandStyle: const TextStyle(
+                          fontSize: 14,
+                          color: kHyppeTextPrimary,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
                 if (data.urlLink != '')
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 12.0),
-                  child: RichText(
-                    text: TextSpan(children: [
-                      TextSpan(
-                        text: (data.judulLink != null)
-                            ? data.judulLink
-                            : data.urlLink,
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontWeight: FontWeight.bold),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () async {
-                            var uri = data.urlLink??'';
-                            if (!uri.withHttp()){
-                              uri='https://$uri';
-                            }
-                            if (await canLaunchUrl(Uri.parse(uri))) {
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: RichText(
+                      text: TextSpan(children: [
+                        TextSpan(
+                          text: (data.judulLink != null)
+                              ? data.judulLink
+                              : data.urlLink,
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.bold),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () async {
+                              var uri = data.urlLink ?? '';
+                              if (!uri.withHttp()) {
+                                uri = 'https://$uri';
+                              }
+                              if (await canLaunchUrl(Uri.parse(uri))) {
                                 await launchUrl(Uri.parse(uri));
                               } else {
-                                throw  Fluttertoast.showToast(msg: 'Could not launch $uri');
+                                throw Fluttertoast.showToast(
+                                    msg: 'Could not launch $uri');
                               }
-                          },
-                      )
-                    ]),
+                            },
+                        )
+                      ]),
+                    ),
                   ),
-                ),
-                SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
+                SharedPreference().readStorage(SpKeys.statusVerificationId) ==
+                            VERIFIED &&
                         (data.boosted.isEmpty) &&
-                        (data.reportedStatus != 'OWNED' && data.reportedStatus != 'BLURRED' && data.reportedStatus2 != 'BLURRED') &&
+                        (data.reportedStatus != 'OWNED' &&
+                            data.reportedStatus != 'BLURRED' &&
+                            data.reportedStatus2 != 'BLURRED') &&
                         data.email == email
                     ? Container(
                         width: SizeConfig.screenWidth,
@@ -923,15 +1045,19 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                           marginBool: true,
                           contentData: data,
                           startState: () {
-                            SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                            SharedPreference()
+                                .writeStorage(SpKeys.isShowPopAds, true);
                           },
                           afterState: () {
-                            SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                            SharedPreference()
+                                .writeStorage(SpKeys.isShowPopAds, false);
                           },
                         ),
                       )
                     : Container(),
-                if (data.email == email && (data.boostCount ?? 0) >= 0 && (data.boosted.isNotEmpty))
+                if (data.email == email &&
+                    (data.boostCount ?? 0) >= 0 &&
+                    (data.boosted.isNotEmpty))
                   Container(
                     padding: const EdgeInsets.all(10),
                     margin: const EdgeInsets.only(bottom: 10, left: 18.0),
@@ -952,8 +1078,12 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                         Padding(
                           padding: const EdgeInsets.only(left: 13),
                           child: CustomTextWidget(
-                            textToDisplay: "${data.boostJangkauan ?? '0'} ${lang?.reach}",
-                            textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                            textToDisplay:
+                                "${data.boostJangkauan ?? '0'} ${lang?.reach}",
+                            textStyle: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                                color: kHyppeTextLightPrimary),
                           ),
                         )
                       ],
@@ -987,7 +1117,8 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                                   height: 32,
                                   decoration: BoxDecoration(
                                     color: kDefaultIconDarkColor,
-                                    borderRadius: const BorderRadius.all(Radius.circular(24)),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(24)),
                                     image: DecorationImage(
                                       fit: BoxFit.cover,
                                       image: imageProvider,
@@ -997,14 +1128,16 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                               },
                               errorWidget: (_, __, ___) {
                                 return const CustomIconWidget(
-                                  iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                  iconData:
+                                      "${AssetPath.vectorPath}music_stroke_black.svg",
                                   defaultColor: false,
                                   color: kHyppeLightIcon,
                                   height: 18,
                                 );
                               },
                               emptyWidget: const CustomIconWidget(
-                                iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                iconData:
+                                    "${AssetPath.vectorPath}music_stroke_black.svg",
                                 defaultColor: false,
                                 color: kHyppeTextPrimary,
                                 height: 18,
@@ -1017,15 +1150,25 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                         ),
                         SizedBox(
                           width: SizeConfig.screenWidth! * .56,
-                          child: _textSize(data.music?.musicTitle ?? '', const TextStyle(fontWeight: FontWeight.normal)).width > SizeConfig.screenWidth! * .56
+                          child: _textSize(
+                                          data.music?.musicTitle ?? '',
+                                          const TextStyle(
+                                              fontWeight: FontWeight.normal))
+                                      .width >
+                                  SizeConfig.screenWidth! * .56
                               ? Marquee(
                                   text: '  ${data.music?.musicTitle ?? ''}',
-                                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),
+                                  style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.white),
                                 )
                               : CustomTextWidget(
-                                  textToDisplay: " ${data.music?.musicTitle ?? ''}",
+                                  textToDisplay:
+                                      " ${data.music?.musicTitle ?? ''}",
                                   maxLines: 1,
-                                  textStyle: const TextStyle(color: kHyppeTextPrimary, fontSize: 12),
+                                  textStyle: const TextStyle(
+                                      color: kHyppeTextPrimary, fontSize: 12),
                                   textAlign: TextAlign.left,
                                 ),
                         ),
@@ -1041,7 +1184,8 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
     );
   }
 
-  Widget _buttomBodyRight({ContentData? picData, PreviewPicNotifier? notifier, int index = -1}) {
+  Widget _buttomBodyRight(
+      {ContentData? picData, PreviewPicNotifier? notifier, int index = -1}) {
     return Positioned(
       bottom: kToolbarHeight - 18,
       left: 0,
@@ -1055,29 +1199,41 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                   onFunctionTap: () {
                     likeNotifier.likePost(context, notifier!.pic![index]);
                   },
-                  iconData: '${AssetPath.vectorPath}${(picData?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'love-shadow.svg'}',
-                  value: picData!.insight!.likes! > 0 ? '${picData.insight?.likes}' : '${lang!.like}',
+                  iconData:
+                      '${AssetPath.vectorPath}${(picData?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'love-shadow.svg'}',
+                  value: picData!.insight!.likes! > 0
+                      ? '${picData.insight?.likes}'
+                      : '${lang!.like}',
                   liked: picData.insight?.isPostLiked ?? false),
             ),
             if (picData!.allowComments ?? false)
               buttonRight(
                 onFunctionTap: () {
-                  Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: picData.postID ?? '', fromFront: true, data: picData, giftActication: picData.giftActivation,));
+                  Routing().move(Routes.commentsDetail,
+                      argument: CommentsArgument(
+                        postID: picData.postID ?? '',
+                        fromFront: true,
+                        data: picData,
+                        giftActication: picData.giftActivation,
+                      ));
                 },
                 iconData: '${AssetPath.vectorPath}comment-shadow.svg',
-                value: picData.comments! > 0 ? picData.comments.toString() : lang?.comments ?? '',
+                value: picData.comments! > 0
+                    ? picData.comments.toString()
+                    : lang?.comments ?? '',
               ),
             if ((picData.isShared ?? false))
               buttonRight(
                   onFunctionTap: () async {
-                    context.read<PicDetailNotifier>().createdDynamicLink(context, data: picData);
+                    context
+                        .read<PicDetailNotifier>()
+                        .createdDynamicLink(context, data: picData);
                   },
                   iconData: '${AssetPath.vectorPath}share-shadow.svg',
                   value: lang!.share ?? 'Share'),
             if ((picData.saleAmount ?? 0) > 0 && email != picData.email)
               buttonRight(
                   onFunctionTap: () async {
-                    
                     fAliplayer?.pause();
                     notifier!.setIsSound(true);
                     setState(() {
@@ -1093,8 +1249,9 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                     } else {
                       animatedController.repeat();
                     }
-                    
-                    var res = await ShowBottomSheet.onBuyContent(context, data: picData, fAliplayer: fAliplayer);
+
+                    var res = await ShowBottomSheet.onBuyContent(context,
+                        data: picData, fAliplayer: fAliplayer);
                     print('disini $res');
                   },
                   iconData: '${AssetPath.vectorPath}ic-cart-shadow.svg',
@@ -1105,7 +1262,11 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
     );
   }
 
-  Widget buttonRight({Function()? onFunctionTap, required String iconData, required String value, bool liked = false}) {
+  Widget buttonRight(
+      {Function()? onFunctionTap,
+      required String iconData,
+      required String value,
+      bool liked = false}) {
     return InkResponse(
       onTap: onFunctionTap,
       child: Padding(
@@ -1137,10 +1298,20 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
               child: Text(
                 value,
                 textAlign: TextAlign.start,
-                style: const TextStyle(shadows: [
-                  Shadow(offset: Offset(0.0, 1.0), blurRadius: 2.0, color: Colors.black54),
-                  Shadow(offset: Offset(0.0, 1.0), blurRadius: 2.0, color: Colors.black54),
-                ], color: kHyppePrimaryTransparent, fontWeight: FontWeight.w500, fontSize: 12),
+                style: const TextStyle(
+                    shadows: [
+                      Shadow(
+                          offset: Offset(0.0, 1.0),
+                          blurRadius: 2.0,
+                          color: Colors.black54),
+                      Shadow(
+                          offset: Offset(0.0, 1.0),
+                          blurRadius: 2.0,
+                          color: Colors.black54),
+                    ],
+                    color: kHyppePrimaryTransparent,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12),
               ),
             ),
           ],
@@ -1150,10 +1321,13 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
   }
 
   Widget appBar(ContentData data, PreviewPicNotifier notifier) {
-    double widthUsername = _textSize(data.username ?? '', const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)).width;
+    double widthUsername = _textSize(data.username ?? '',
+            const TextStyle(fontWeight: FontWeight.w700, fontSize: 16))
+        .width;
     double widthDate = _textSize(
             '${System().readTimestamp(
-              DateTime.parse(System().dateTimeRemoveT(data.createdAt ?? '')).millisecondsSinceEpoch,
+              DateTime.parse(System().dateTimeRemoveT(data.createdAt ?? ''))
+                  .millisecondsSinceEpoch,
               context,
               fullCaption: true,
             )}',
@@ -1183,7 +1357,9 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                 icon: const Icon(
                   Icons.arrow_back_ios,
                   color: Colors.white,
-                  shadows: <Shadow>[Shadow(color: Colors.black54, blurRadius: 8.0)],
+                  shadows: <Shadow>[
+                    Shadow(color: Colors.black54, blurRadius: 8.0)
+                  ],
                 ),
               ),
             ),
@@ -1216,10 +1392,12 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                   });
                 },
                 featureType: FeatureType.pic,
-                imageUrl: '${System().showUserPicture(data.avatar?.mediaEndpoint)}',
+                imageUrl:
+                    '${System().showUserPicture(data.avatar?.mediaEndpoint)}',
                 badge: data.urluserBadge,
                 createdAt: '${System().readTimestamp(
-                  DateTime.parse(System().dateTimeRemoveT(data.createdAt ?? '')).millisecondsSinceEpoch,
+                  DateTime.parse(System().dateTimeRemoveT(data.createdAt ?? ''))
+                      .millisecondsSinceEpoch,
                   context,
                   fullCaption: true,
                 )}',
@@ -1231,7 +1409,9 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                   onTap: () {
                     context.handleActionIsGuest(() {
                       if (data.insight?.isloadingFollow != true) {
-                        picNot.followUser(context, data, isUnFollow: data.following, isloading: data.insight!.isloadingFollow ?? false);
+                        picNot.followUser(context, data,
+                            isUnFollow: data.following,
+                            isloading: data.insight!.isloadingFollow ?? false);
                       }
                     }).then((value) {
                       if (value) {
@@ -1250,12 +1430,21 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                         )
                       : Center(
                           child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-                            decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(8.0)),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 4, horizontal: 16),
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.white),
+                                borderRadius: BorderRadius.circular(8.0)),
                             // transform: Matrix4.translationValues(-40.0, 0.0, 0.0),
                             child: Text(
-                              (data.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
-                              style: const TextStyle(color: kHyppeLightButtonText, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                              (data.following ?? false)
+                                  ? (lang?.following ?? '')
+                                  : (lang?.follow ?? ''),
+                              style: const TextStyle(
+                                  color: kHyppeLightButtonText,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: "Lato"),
                             ),
                           ),
                         ),
@@ -1269,10 +1458,16 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
               fAliplayer?.pause();
               await context.handleActionIsGuest(() async {
                 if (data.email != email) {
-                  context.read<PreviewPicNotifier>().reportContent(context, data, fAliplayer: fAliplayer, onCompleted: () async {
+                  context
+                      .read<PreviewPicNotifier>()
+                      .reportContent(context, data, fAliplayer: fAliplayer,
+                          onCompleted: () async {
                     imageCache.clear();
                     imageCache.clearLiveImages();
-                    await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 0);
+                    await (Routing.navigatorKey.currentContext ?? context)
+                        .read<HomeNotifier>()
+                        .initNewHome(context, mounted,
+                            isreload: true, forceIndex: 0);
                   });
                 } else {
                   ShowBottomSheet().onShowOptionContent(
@@ -1282,7 +1477,10 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
                     onDetail: false,
                     isShare: data.isShared,
                     onUpdate: () {
-                      (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 0);
+                      (Routing.navigatorKey.currentContext ?? context)
+                          .read<HomeNotifier>()
+                          .initNewHome(context, mounted,
+                              isreload: true, forceIndex: 0);
                     },
                     fAliplayer: fAliplayer,
                   );
@@ -1335,7 +1533,11 @@ class _PicFullscreenPageState extends State<PicFullscreenPage> with WidgetsBindi
   }
 
   Size _textSize(String text, TextStyle style) {
-    final TextPainter textPainter = TextPainter(text: TextSpan(text: text, style: style), maxLines: 1, textDirection: TextDirection.ltr)..layout(minWidth: 0, maxWidth: double.infinity);
+    final TextPainter textPainter = TextPainter(
+        text: TextSpan(text: text, style: style),
+        maxLines: 1,
+        textDirection: TextDirection.ltr)
+      ..layout(minWidth: 0, maxWidth: double.infinity);
     return textPainter.size;
   }
 }

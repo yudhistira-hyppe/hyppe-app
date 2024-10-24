@@ -34,8 +34,11 @@ class AcceptButton extends StatelessWidget {
               eventType: System().convertEventType(data?.eventType),
             );
 
-            context.read<NotificationNotifier>().acceptUser(context, data: data, argument: argument);
-          } else if (data?.eventType == 'FOLLOWING' && data?.event == 'INITIAL') {
+            context
+                .read<NotificationNotifier>()
+                .acceptUser(context, data: data, argument: argument);
+          } else if (data?.eventType == 'FOLLOWING' &&
+              data?.event == 'INITIAL') {
             argument = FollowUserArgument(
               receiverParty: data?.mate ?? '',
               eventType: InteractiveEventType.unfollow,
@@ -51,7 +54,9 @@ class AcceptButton extends StatelessWidget {
               eventType: InteractiveEventType.following,
             );
 
-            context.read<NotificationNotifier>().acceptUser(context, data: data, argument: argument);
+            context
+                .read<NotificationNotifier>()
+                .acceptUser(context, data: data, argument: argument);
           }
         },
         style: theme.textButtonTheme.style?.copyWith(
@@ -60,7 +65,7 @@ class AcceptButton extends StatelessWidget {
         ),
         child: CustomTextWidget(
           textToDisplay: buttonText(context) ?? '',
-          textStyle: theme.textTheme.button?.copyWith(
+          textStyle: theme.textTheme.labelLarge?.copyWith(
             color: data?.event != 'ACCEPT' ? Colors.white : null,
           ),
         ),
@@ -80,11 +85,16 @@ class AcceptButton extends StatelessWidget {
 
   String? buttonText(BuildContext context) {
     final _language = Provider.of<TranslateNotifierV2>(context, listen: false);
-    if (System().convertEvent(data?.event) == InteractiveEvent.accept || System().convertEvent(data?.event) == InteractiveEvent.done) {
+    if (System().convertEvent(data?.event) == InteractiveEvent.accept ||
+        System().convertEvent(data?.event) == InteractiveEvent.done) {
       return _language.translate.following ?? 'following';
-    } else if (System().convertEventType(data?.eventType) == InteractiveEventType.follower && System().convertEvent(data?.event) == InteractiveEvent.request) {
+    } else if (System().convertEventType(data?.eventType) ==
+            InteractiveEventType.follower &&
+        System().convertEvent(data?.event) == InteractiveEvent.request) {
       return _language.translate.accept ?? 'accept';
-    } else if (System().convertEventType(data?.eventType) == InteractiveEventType.following && System().convertEvent(data?.event) == InteractiveEvent.initial) {
+    } else if (System().convertEventType(data?.eventType) ==
+            InteractiveEventType.following &&
+        System().convertEvent(data?.event) == InteractiveEvent.initial) {
       return 'Requested';
     } else {
       return _language.translate.follow;

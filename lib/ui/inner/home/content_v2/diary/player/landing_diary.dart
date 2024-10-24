@@ -69,7 +69,12 @@ class LandingDiaryPage extends StatefulWidget {
   _LandingDiaryPageState createState() => _LandingDiaryPageState();
 }
 
-class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBindingObserver, TickerProviderStateMixin, WidgetsBindingObserver, RouteAware {
+class _LandingDiaryPageState extends State<LandingDiaryPage>
+    with
+        WidgetsBindingObserver,
+        TickerProviderStateMixin,
+        WidgetsBindingObserver,
+        RouteAware {
   FlutterAliplayer? fAliplayer;
   bool isPrepare = false;
   bool isPlay = false;
@@ -117,7 +122,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
     notifier.initAdsCounter();
     lang = context.read<TranslateNotifierV2>().translate;
-    notifier.scrollController.addListener(() => notifier.scrollListener(context));
+    notifier.scrollController
+        .addListener(() => notifier.scrollListener(context));
     email = SharedPreference().readStorage(SpKeys.email);
     statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
     lastOffset = -10;
@@ -129,11 +135,17 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       WidgetsBinding.instance.addObserver(this);
       if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
-        indexKeySell = mn?.tutorialData.indexWhere((element) => element.key == 'sell') ?? 0;
-        indexKeyProtection = mn?.tutorialData.indexWhere((element) => element.key == 'protection') ?? 0;
+        indexKeySell =
+            mn?.tutorialData.indexWhere((element) => element.key == 'sell') ??
+                0;
+        indexKeyProtection = mn?.tutorialData
+                .indexWhere((element) => element.key == 'protection') ??
+            0;
       }
-      if (fAliplayer == null && fAliplayer?.getPlayerName().toString() != 'DiaryLandingpage') {
-        fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'DiaryLandingpage');
+      if (fAliplayer == null &&
+          fAliplayer?.getPlayerName().toString() != 'DiaryLandingpage') {
+        fAliplayer = FlutterAliPlayerFactory.createAliPlayer(
+            playerId: 'DiaryLandingpage');
         initAlipayer();
       }
 
@@ -180,7 +192,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     });
     fAliplayer?.setOnPrepared((playerId) {
       // Fluttertoast.showToast(msg: "OnPrepared ");
-      fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
+      fAliplayer
+          ?.getPlayerName()
+          .then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
         _videoDuration = value['duration'];
         try {
@@ -341,7 +355,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         // Fluttertoast.showToast(msg: "${info.trackDefinition}切换成功");
       }
     });
-    fAliplayer?.setOnThumbnailPreparedListener(preparedSuccess: (playerId) {}, preparedFail: (playerId) {});
+    fAliplayer?.setOnThumbnailPreparedListener(
+        preparedSuccess: (playerId) {}, preparedFail: (playerId) {});
 
     fAliplayer?.setOnThumbnailGetListener(
         onThumbnailGetSuccess: (bitmap, range, playerId) {
@@ -381,7 +396,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       homeClick = false;
       for (var i = 0; i <= itemIndex; i++) {
         if (i == itemIndex) {
-          totItemHeightParam += (notifier.diaryData?[i].height ?? 0.0) * 60 / 100;
+          totItemHeightParam +=
+              (notifier.diaryData?[i].height ?? 0.0) * 60 / 100;
         } else {
           totItemHeightParam += notifier.diaryData?[i].height ?? 0.0;
         }
@@ -393,7 +409,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
           position = notifier.diaryData?[1].height ?? 200.0;
         }
         if (mounted) {
-          widget.scrollController?.animateTo(position, duration: const Duration(milliseconds: 200), curve: Curves.ease);
+          widget.scrollController?.animateTo(position,
+              duration: const Duration(milliseconds: 200), curve: Curves.ease);
           itemIndex++;
         }
       }
@@ -401,7 +418,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       if (!homeClick) {
         for (var i = 0; i < itemIndex; i++) {
           if (i == itemIndex - 1) {
-            totItemHeightParam += (notifier.diaryData?[i].height ?? 0.0) * 75 / 100;
+            totItemHeightParam +=
+                (notifier.diaryData?[i].height ?? 0.0) * 75 / 100;
           } else if (i == itemIndex) {
           } else {
             totItemHeightParam += notifier.diaryData?[i].height ?? 0.0;
@@ -415,7 +433,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         if (offset <= totItemHeightParam && offset > 0) {
           var position = totItemHeight;
           if (mounted) {
-            widget.scrollController?.animateTo(position, duration: const Duration(milliseconds: 200), curve: Curves.ease);
+            widget.scrollController?.animateTo(position,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.ease);
             itemIndex--;
           }
         }
@@ -426,12 +446,18 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
   void vidConfig() {
     var configMap = {
-      'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
-      'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
-      'mMaxBufferDuration': GlobalSettings.mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
-      'mMaxDelayTime': GlobalSettings.mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
-      'mNetworkTimeout': GlobalSettings.mNetworkTimeout, // The network timeout period. Unit: milliseconds.
-      'mNetworkRetryCount': GlobalSettings.mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
+      'mStartBufferDuration': GlobalSettings
+          .mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
+      'mHighBufferDuration': GlobalSettings
+          .mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
+      'mMaxBufferDuration': GlobalSettings
+          .mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
+      'mMaxDelayTime': GlobalSettings
+          .mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
+      'mNetworkTimeout': GlobalSettings
+          .mNetworkTimeout, // The network timeout period. Unit: milliseconds.
+      'mNetworkRetryCount': GlobalSettings
+          .mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
       'mEnableLocalCache': GlobalSettings.mEnableCacheConfig,
       'mLocalCacheDir': GlobalSettings.mDirController,
       'mClearFrameWhenStop': true
@@ -517,7 +543,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         setState(() {});
       }
       final notifier = PostsBloc();
-      await notifier.getAuthApsara(fixContext ?? context, apsaraId: apsaraId, check: false);
+      await notifier.getAuthApsara(fixContext ?? context,
+          apsaraId: apsaraId, check: false);
       final fetch = notifier.postsFetch;
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
         Map jsonMap = json.decode(fetch.data.toString());
@@ -625,32 +652,51 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   // }
 
   _pauseScreen() async {
-    (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().removeWakelock();
+    (Routing.navigatorKey.currentContext ?? context)
+        .read<HomeNotifier>()
+        .removeWakelock();
   }
 
   void _initializeTimer() async {
-    (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initWakelockTimer(onShowInactivityWarning: _handleInactivity);
+    (Routing.navigatorKey.currentContext ?? context)
+        .read<HomeNotifier>()
+        .initWakelockTimer(onShowInactivityWarning: _handleInactivity);
   }
 
   void _handleInactivity() {
     if (isHomeScreen) {
       if (mounted) {
-        (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps = false;
-        (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().isInactiveState = true;
-        (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps = false;
+        (Routing.navigatorKey.currentContext ?? context)
+            .read<PreviewVidNotifier>()
+            .canPlayOpenApps = false;
+        (Routing.navigatorKey.currentContext ?? context)
+            .read<MainNotifier>()
+            .isInactiveState = true;
+        (Routing.navigatorKey.currentContext ?? context)
+            .read<PreviewVidNotifier>()
+            .canPlayOpenApps = false;
         fAliplayer?.pause();
         _pauseScreen();
         ShowBottomSheet().onShowColouredSheet(
           (Routing.navigatorKey.currentContext ?? context),
-          (Routing.navigatorKey.currentContext ?? context).read<TranslateNotifierV2>().translate.warningInavtivityDiary,
+          (Routing.navigatorKey.currentContext ?? context)
+              .read<TranslateNotifierV2>()
+              .translate
+              .warningInavtivityDiary,
           maxLines: 2,
           color: kHyppeLightBackground,
           textColor: kHyppeTextLightPrimary,
           textButtonColor: kHyppePrimary,
           iconSvg: 'close.svg',
-          textButton: (Routing.navigatorKey.currentContext ?? context).read<TranslateNotifierV2>().translate.stringContinue ?? '',
+          textButton: (Routing.navigatorKey.currentContext ?? context)
+                  .read<TranslateNotifierV2>()
+                  .translate
+                  .stringContinue ??
+              '',
           onClose: () {
-            (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().isInactiveState = false;
+            (Routing.navigatorKey.currentContext ?? context)
+                .read<MainNotifier>()
+                .isInactiveState = false;
             fAliplayer?.play();
             print("===========dari close");
             _initializeTimer();
@@ -663,7 +709,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
   @override
   void didChangeDependencies() {
-    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    CustomRouteObserver.routeObserver
+        .subscribe(this, ModalRoute.of(context) as PageRoute);
     super.didChangeDependencies();
   }
 
@@ -737,7 +784,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         break;
       case AppLifecycleState.resumed:
         if (isHomeScreen) _initializeTimer();
-        if (context.read<PreviewVidNotifier>().canPlayOpenApps && !context.read<MainNotifier>().isInactiveState && isActivePage) {
+        if (context.read<PreviewVidNotifier>().canPlayOpenApps &&
+            !context.read<MainNotifier>().isInactiveState &&
+            isActivePage) {
           fAliplayer?.play();
         }
         break;
@@ -792,7 +841,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
           pn.diaryData!.removeRange(0, pn.currentIndex);
           _curIdx = 0;
         });
-        widget.scrollController?.animateTo(0, duration: const Duration(milliseconds: 50), curve: Curves.ease);
+        widget.scrollController?.animateTo(0,
+            duration: const Duration(milliseconds: 50), curve: Curves.ease);
       } else if (index > pn.currentIndex) {
         print("======index44444444}");
         if (!mounted) return;
@@ -809,7 +859,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     SizeConfig().init(context);
     context.select((ErrorService value) => value.getError(ErrorType.pic));
     // AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
-    return Consumer2<PreviewDiaryNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
+    return Consumer2<PreviewDiaryNotifier, HomeNotifier>(
+        builder: (_, notifier, home, __) {
       return Container(
         width: SizeConfig.screenWidth,
         height: SizeWidget.barHyppePic,
@@ -822,16 +873,23 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                   ? ListView.builder(
                       itemBuilder: (context, index) {
                         return CustomShimmer(
-                          width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                          width: (MediaQuery.of(context).size.width -
+                                  11.5 -
+                                  11.5 -
+                                  9) /
+                              2,
                           height: 168,
                           radius: 8,
-                          margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                          padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 4.5, vertical: 10),
+                          padding: const EdgeInsets.only(
+                              left: 8.0, right: 8.0, top: 8.0),
                         );
                       },
                       itemCount: 5,
                     )
-                  : notifier.diaryData != null && (notifier.diaryData?.isEmpty ?? true)
+                  : notifier.diaryData != null &&
+                          (notifier.diaryData?.isEmpty ?? true)
                       ? const NoResultFound()
                       : NotificationListener<OverscrollIndicatorNotification>(
                           onNotification: (overscroll) {
@@ -845,20 +903,29 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: notifier.diaryData?.length,
-                            padding: const EdgeInsets.symmetric(horizontal: 11.5),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 11.5),
                             itemBuilder: (context, index) {
-                              if (notifier.diaryData == null || home.isLoadingDiary) {
+                              if (notifier.diaryData == null ||
+                                  home.isLoadingDiary) {
                                 fAliplayer?.pause();
                                 // _lastCurIndex = -1;
                                 _lastCurPostId = '';
                                 return CustomShimmer(
-                                  width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                                  width: (MediaQuery.of(context).size.width -
+                                          11.5 -
+                                          11.5 -
+                                          9) /
+                                      2,
                                   height: 168,
                                   radius: 8,
-                                  margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                                  padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 4.5, vertical: 10),
+                                  padding: const EdgeInsets.only(
+                                      left: 8.0, right: 8.0, top: 8.0),
                                 );
-                              } else if (index == notifier.diaryData?.length && notifier.hasNext) {
+                              } else if (index == notifier.diaryData?.length &&
+                                  notifier.hasNext) {
                                 return UnconstrainedBox(
                                   child: Container(
                                     alignment: Alignment.center,
@@ -884,7 +951,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     });
   }
 
-  Widget itemDiary(BuildContext context, PreviewDiaryNotifier notifier, int index, HomeNotifier homeNotifier) {
+  Widget itemDiary(BuildContext context, PreviewDiaryNotifier notifier,
+      int index, HomeNotifier homeNotifier) {
     var data = notifier.diaryData?[index];
     final isAds = data?.inBetweenAds != null && data?.postID == null;
     return data?.isContentLoading ?? false
@@ -916,7 +984,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                   /// ADS IN BETWEEN === Hariyanto Lukman ===
                   isAds
                       ? VisibilityDetector(
-                          key: Key(data?.inBetweenAds?.adsId ?? index.toString()),
+                          key: Key(
+                              data?.inBetweenAds?.adsId ?? index.toString()),
                           onVisibilityChanged: (info) {
                             if (info.visibleFraction >= 0.8) {
                               setState(() {
@@ -925,12 +994,17 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                               if (!isShowingDialog) {
                                 globalAdsPopUp?.pause();
                               }
-                              context.read<VideoNotifier>().currentPostID = data?.inBetweenAds?.adsId ?? '';
+                              context.read<VideoNotifier>().currentPostID =
+                                  data?.inBetweenAds?.adsId ?? '';
                               _curIdx = index;
 
-                              _curPostId = data?.inBetweenAds?.adsId ?? index.toString();
+                              _curPostId =
+                                  data?.inBetweenAds?.adsId ?? index.toString();
                               // if (_lastCurIndex != _curIdx) {
-                              final indexList = notifier.diaryData?.indexWhere((element) => element.inBetweenAds?.adsId == _curPostId);
+                              final indexList = notifier.diaryData?.indexWhere(
+                                  (element) =>
+                                      element.inBetweenAds?.adsId ==
+                                      _curPostId);
                               // final latIndexList = notifier.diaryData?.indexWhere((element) => element.inBetweenAds?.adsId == _lastCurPostId);
                               if (_lastCurPostId != _curPostId) {
                                 // fAliplayer?.destroy();
@@ -941,20 +1015,32 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
                                 if (mounted) {
                                   setState(() {
-                                    Future.delayed(Duration(milliseconds: 400), () {
-                                      itemHeight = notifier.diaryData?[indexList ?? 0].height ?? 0;
+                                    Future.delayed(Duration(milliseconds: 400),
+                                        () {
+                                      itemHeight = notifier
+                                              .diaryData?[indexList ?? 0]
+                                              .height ??
+                                          0;
                                     });
                                   });
                                 }
 
-                                if (indexList == (notifier.diaryData?.length ?? 0) - 1) {
-                                  Future.delayed(const Duration(milliseconds: 1000), () async {
-                                    await context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {
+                                if (indexList ==
+                                    (notifier.diaryData?.length ?? 0) - 1) {
+                                  Future.delayed(
+                                      const Duration(milliseconds: 1000),
+                                      () async {
+                                    await context
+                                        .read<HomeNotifier>()
+                                        .initNewHome(context, mounted,
+                                            isreload: false, isgetMore: true)
+                                        .then((value) {
                                       // notifier.getTemp(indexList, latIndexList, indexList);
                                     });
                                   });
                                 } else {
-                                  Future.delayed(const Duration(milliseconds: 2000), () {
+                                  Future.delayed(
+                                      const Duration(milliseconds: 2000), () {
                                     // notifier.getTemp(indexList, latIndexList, indexList);
                                   });
                                 }
@@ -970,7 +1056,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                           },
                           child: Stack(
                             children: [
-                              context.getAdsInBetween(notifier.diaryData, index, (info) {}, () {
+                              context.getAdsInBetween(
+                                  notifier.diaryData, index, (info) {}, () {
                                 notifier.setAdsData(index, null);
                               }, (player, id) {}, isStopPlay: isPlayAds),
                               Positioned.fill(
@@ -997,7 +1084,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                 borderRadius: BorderRadius.circular(16),
                                 color: Colors.white,
                               ),
-                              padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
+                              padding: const EdgeInsets.only(
+                                  top: 16, left: 16, right: 16, bottom: 16),
                               margin: const EdgeInsets.only(bottom: 16),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1010,8 +1098,10 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                   // sixteenPx,
                                   // SelectableText((data?.isApsara ?? false) ? (data?.apsaraId ?? "") : "${UrlConstants.oldVideo + notifier.diaryData![index].postID!}"),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Expanded(
                                         child: ProfileLandingPage(
@@ -1025,39 +1115,67 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                           featureType: FeatureType.other,
                                           // isCelebrity: viddata?.privacy?.isCelebrity,
                                           isCelebrity: false,
-                                          imageUrl: '${System().showUserPicture(data?.avatar?.mediaEndpoint)}',
-                                          onTapOnProfileImage: () => System().navigateToProfile(context, data?.email ?? ''),
+                                          imageUrl:
+                                              '${System().showUserPicture(data?.avatar?.mediaEndpoint)}',
+                                          onTapOnProfileImage: () => System()
+                                              .navigateToProfile(
+                                                  context, data?.email ?? ''),
                                           createdAt: '2022-02-02',
-                                          musicName: data?.music?.musicTitle ?? '',
+                                          musicName:
+                                              data?.music?.musicTitle ?? '',
                                           location: data?.location ?? '',
-                                          isIdVerified: data?.privacy?.isIdVerified,
+                                          isIdVerified:
+                                              data?.privacy?.isIdVerified,
                                           badge: data?.urluserBadge,
                                         ),
                                       ),
-                                      if (data?.email != email && (data?.isNewFollowing ?? false))
+                                      if (data?.email != email &&
+                                          (data?.isNewFollowing ?? false))
                                         Consumer<PreviewPicNotifier>(
-                                          builder: (context, picNot, child) => Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                          builder: (context, picNot, child) =>
+                                              Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0),
                                             child: GestureDetector(
                                               onTap: () {
                                                 context.handleActionIsGuest(() {
-                                                  if (data?.insight?.isloadingFollow != true) {
-                                                    picNot.followUser(context, data ?? ContentData(), isUnFollow: data?.following, isloading: data?.insight?.isloadingFollow ?? false);
+                                                  if (data?.insight
+                                                          ?.isloadingFollow !=
+                                                      true) {
+                                                    picNot.followUser(context,
+                                                        data ?? ContentData(),
+                                                        isUnFollow:
+                                                            data?.following,
+                                                        isloading: data?.insight
+                                                                ?.isloadingFollow ??
+                                                            false);
                                                   }
                                                 });
                                               },
-                                              child: data?.insight?.isloadingFollow ?? false
+                                              child: data?.insight
+                                                          ?.isloadingFollow ??
+                                                      false
                                                   ? const SizedBox(
                                                       height: 40,
                                                       width: 30,
                                                       child: Align(
-                                                        alignment: Alignment.bottomRight,
+                                                        alignment: Alignment
+                                                            .bottomRight,
                                                         child: CustomLoading(),
                                                       ),
                                                     )
                                                   : Text(
-                                                      (data?.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
-                                                      style: const TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                                                      (data?.following ?? false)
+                                                          ? (lang?.following ??
+                                                              '')
+                                                          : (lang?.follow ??
+                                                              ''),
+                                                      style: const TextStyle(
+                                                          color: kHyppePrimary,
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontFamily: "Lato"),
                                                     ),
                                             ),
                                           ),
@@ -1067,25 +1185,48 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                           context.handleActionIsGuest(() {
                                             if (data?.email != email) {
                                               // FlutterAliplayer? fAliplayer
-                                              context.read<PreviewPicNotifier>().reportContent(context, data ?? ContentData(), fAliplayer: fAliplayer, onCompleted: () async {
+                                              context
+                                                  .read<PreviewPicNotifier>()
+                                                  .reportContent(context,
+                                                      data ?? ContentData(),
+                                                      fAliplayer: fAliplayer,
+                                                      onCompleted: () async {
                                                 imageCache.clear();
                                                 imageCache.clearLiveImages();
-                                                await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 1);
+                                                await (Routing.navigatorKey
+                                                            .currentContext ??
+                                                        context)
+                                                    .read<HomeNotifier>()
+                                                    .initNewHome(
+                                                        context, mounted,
+                                                        isreload: true,
+                                                        forceIndex: 1);
                                               });
                                             } else {
                                               fAliplayer?.setMuted(true);
                                               fAliplayer?.pause();
-                                              ShowBottomSheet().onShowOptionContent(
+                                              ShowBottomSheet()
+                                                  .onShowOptionContent(
                                                 context,
-                                                contentData: data ?? ContentData(),
+                                                contentData:
+                                                    data ?? ContentData(),
                                                 captionTitle: hyppeDiary,
                                                 onDetail: false,
                                                 isShare: data?.isShared,
                                                 onUpdate: () {
-                                                  if (notifier.diaryData?.isEmpty ?? [].isEmpty) {
+                                                  if (notifier
+                                                          .diaryData?.isEmpty ??
+                                                      [].isEmpty) {
                                                     Routing().moveBack();
                                                   }
-                                                  (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 1);
+                                                  (Routing.navigatorKey
+                                                              .currentContext ??
+                                                          context)
+                                                      .read<HomeNotifier>()
+                                                      .initNewHome(
+                                                          context, mounted,
+                                                          isreload: true,
+                                                          forceIndex: 1);
                                                 },
                                                 fAliplayer: fAliplayer,
                                               );
@@ -1106,7 +1247,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                     },
                                     child: VisibilityDetector(
                                       // key: Key(index.toString()),
-                                      key: Key(data?.postID ?? index.toString()),
+                                      key:
+                                          Key(data?.postID ?? index.toString()),
                                       onVisibilityChanged: (info) {
                                         // if (info.visibleFraction == 1.0) {
                                         //   Wakelock.enable();
@@ -1115,12 +1257,18 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                           if (!isShowingDialog) {
                                             globalAdsPopUp?.pause();
                                           }
-                                          context.read<VideoNotifier>().currentPostID = data?.postID ?? '';
+                                          context
+                                                  .read<VideoNotifier>()
+                                                  .currentPostID =
+                                              data?.postID ?? '';
                                           _curIdx = index;
 
-                                          _curPostId = data?.postID ?? index.toString();
+                                          _curPostId =
+                                              data?.postID ?? index.toString();
                                           // if (_lastCurIndex != _curIdx) {
-                                          final indexList = notifier.diaryData?.indexWhere((element) => element.postID == _curPostId);
+                                          final indexList = notifier.diaryData
+                                              ?.indexWhere((element) =>
+                                                  element.postID == _curPostId);
                                           // final latIndexList = notifier.diaryData?.indexWhere((element) => element.postID == _lastCurPostId);
                                           if (_lastCurPostId != _curPostId) {
                                             // fAliplayer?.destroy();
@@ -1131,31 +1279,65 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
                                             if (mounted) {
                                               setState(() {
-                                                Future.delayed(Duration(milliseconds: 400), () {
-                                                  itemHeight = notifier.diaryData?[indexList ?? 0].height ?? 0;
+                                                Future.delayed(
+                                                    Duration(milliseconds: 400),
+                                                    () {
+                                                  itemHeight = notifier
+                                                          .diaryData?[
+                                                              indexList ?? 0]
+                                                          .height ??
+                                                      0;
                                                 });
                                               });
                                             }
                                             // final totalWithAds = notifier.diaryData?.where((element) => element.inBetweenAds != null).length;
 
-                                            Future.delayed(const Duration(milliseconds: 700), () {
-                                              start(Routing.navigatorKey.currentContext ?? context, data ?? ContentData());
-                                              System().increaseViewCount2(Routing.navigatorKey.currentContext ?? context, data ?? ContentData(), check: false);
+                                            Future.delayed(
+                                                const Duration(
+                                                    milliseconds: 700), () {
+                                              start(
+                                                  Routing.navigatorKey
+                                                          .currentContext ??
+                                                      context,
+                                                  data ?? ContentData());
+                                              System().increaseViewCount2(
+                                                  Routing.navigatorKey
+                                                          .currentContext ??
+                                                      context,
+                                                  data ?? ContentData(),
+                                                  check: false);
                                             });
                                             if (data?.certified ?? false) {
-                                              System().block(Routing.navigatorKey.currentContext ?? context);
+                                              System().block(Routing
+                                                      .navigatorKey
+                                                      .currentContext ??
+                                                  context);
                                             } else {
                                               System().disposeBlock();
                                             }
 
-                                            if (indexList == (notifier.diaryData?.length ?? 0) - 1) {
-                                              Future.delayed(const Duration(milliseconds: 1000), () async {
-                                                await context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {
+                                            if (indexList ==
+                                                (notifier.diaryData?.length ??
+                                                        0) -
+                                                    1) {
+                                              Future.delayed(
+                                                  const Duration(
+                                                      milliseconds: 1000),
+                                                  () async {
+                                                await context
+                                                    .read<HomeNotifier>()
+                                                    .initNewHome(
+                                                        context, mounted,
+                                                        isreload: false,
+                                                        isgetMore: true)
+                                                    .then((value) {
                                                   // notifier.getTemp(indexList, latIndexList, indexList);
                                                 });
                                               });
                                             } else {
-                                              Future.delayed(const Duration(milliseconds: 2000), () {
+                                              Future.delayed(
+                                                  const Duration(
+                                                      milliseconds: 2000), () {
                                                 // notifier.getTemp(indexList, latIndexList, indexList);
                                               });
                                             }
@@ -1163,11 +1345,16 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
                                           ///ADS IN BETWEEN === Hariyanto Lukman ===
                                           if (!notifier.loadAds) {
-                                            if ((notifier.diaryData?.length ?? 0) > notifier.nextAdsShowed) {
+                                            if ((notifier.diaryData?.length ??
+                                                    0) >
+                                                notifier.nextAdsShowed) {
                                               notifier.loadAds = true;
-                                              context.getInBetweenAds().then((value) {
+                                              context
+                                                  .getInBetweenAds()
+                                                  .then((value) {
                                                 if (value != null) {
-                                                  notifier.setAdsData(index, value);
+                                                  notifier.setAdsData(
+                                                      index, value);
                                                 } else {
                                                   notifier.loadAds = false;
                                                 }
@@ -1179,11 +1366,13 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                         }
                                       },
                                       child: Container(
-                                        margin: const EdgeInsets.only(bottom: 20),
+                                        margin:
+                                            const EdgeInsets.only(bottom: 20),
                                         // width: MediaQuery.of(context).size.width,
                                         // height: MediaQuery.of(context).size.width * 16.0 / 10.8,
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(30),
+                                          borderRadius:
+                                              BorderRadius.circular(30),
                                           // color: Colors.yellow,
                                         ),
                                         child: AspectRatio(
@@ -1191,32 +1380,70 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                           child: Stack(
                                             children: [
                                               // _curIdx == index
-                                              _curPostId == (data?.postID ?? index.toString())
+                                              _curPostId ==
+                                                      (data?.postID ??
+                                                          index.toString())
                                                   ? ClipRRect(
-                                                      clipBehavior: Clip.hardEdge,
-                                                      borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                                                      clipBehavior:
+                                                          Clip.hardEdge,
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                              .all(
+                                                              Radius.circular(
+                                                                  16.0)),
                                                       child: Stack(
                                                         children: [
                                                           OverflowBox(
-                                                            maxHeight: MediaQuery.of(context).size.height,
-                                                            maxWidth: MediaQuery.of(context).size.width,
-                                                            child: AliPlayerView(
-                                                              onCreated: onViewPlayerCreated,
+                                                            maxHeight:
+                                                                MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .height,
+                                                            maxWidth:
+                                                                MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width,
+                                                            child:
+                                                                AliPlayerView(
+                                                              onCreated:
+                                                                  onViewPlayerCreated,
                                                               x: 0,
                                                               y: 0,
-                                                              height: MediaQuery.of(context).size.width,
-                                                              width: MediaQuery.of(context).size.width,
-                                                              aliPlayerViewType: AliPlayerViewTypeForAndroid.textureview,
+                                                              height:
+                                                                  MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width,
+                                                              width:
+                                                                  MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width,
+                                                              aliPlayerViewType:
+                                                                  AliPlayerViewTypeForAndroid
+                                                                      .textureview,
                                                             ),
                                                           ),
                                                           Visibility(
                                                             visible: isPlay,
-                                                            child: StickerOverlay(
+                                                            child:
+                                                                StickerOverlay(
                                                               fullscreen: false,
-                                                              stickers: data?.stickers,
-                                                              width: MediaQuery.of(context).size.width,
-                                                              height: (MediaQuery.of(context).size.width) * (16 / 9),
-                                                              isPause: isPause || _showLoading,
+                                                              stickers: data
+                                                                  ?.stickers,
+                                                              width:
+                                                                  MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width,
+                                                              height: (MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width) *
+                                                                  (16 / 9),
+                                                              isPause: isPause ||
+                                                                  _showLoading,
                                                               canPause: true,
                                                             ),
                                                           ),
@@ -1240,148 +1467,270 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                                           // fAliplayer?.setMuted(isMute);
                                                         },
                                                         onDoubleTap: () {
-                                                          final _likeNotifier = context.read<LikeNotifier>();
+                                                          final _likeNotifier =
+                                                              context.read<
+                                                                  LikeNotifier>();
                                                           if (data != null) {
-                                                            _likeNotifier.likePost(context, data);
+                                                            _likeNotifier
+                                                                .likePost(
+                                                                    context,
+                                                                    data);
                                                           }
                                                         },
                                                         child: Container(
-                                                          color: Colors.transparent,
-                                                          width: SizeConfig.screenWidth,
-                                                          height: SizeConfig.screenHeight,
+                                                          color: Colors
+                                                              .transparent,
+                                                          width: SizeConfig
+                                                              .screenWidth,
+                                                          height: SizeConfig
+                                                              .screenHeight,
                                                         ),
                                                       ),
                                                     )
                                                   : Positioned.fill(
                                                       child: GestureDetector(
                                                         onTap: () {
-                                                          homeNotifier.checkConnection();
+                                                          homeNotifier
+                                                              .checkConnection();
                                                         },
                                                         child: Container(
-                                                          decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                                                          width: SizeConfig.screenWidth,
-                                                          height: SizeConfig.screenHeight,
-                                                          alignment: Alignment.center,
-                                                          padding: EdgeInsets.all(20),
-                                                          child: data?.reportedStatus == 'BLURRED'
+                                                          decoration: BoxDecoration(
+                                                              color:
+                                                                  kHyppeNotConnect,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          16)),
+                                                          width: SizeConfig
+                                                              .screenWidth,
+                                                          height: SizeConfig
+                                                              .screenHeight,
+                                                          alignment:
+                                                              Alignment.center,
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                  20),
+                                                          child: data?.reportedStatus ==
+                                                                  'BLURRED'
                                                               ? Container()
                                                               : CustomTextWidget(
-                                                                  textToDisplay: lang?.couldntLoadVideo ?? 'Error',
+                                                                  textToDisplay:
+                                                                      lang?.couldntLoadVideo ??
+                                                                          'Error',
                                                                   maxLines: 3,
                                                                 ),
                                                         ),
                                                       ),
                                                     ),
-                                              dataSelected?.postID == data?.postID && isPlay
+                                              dataSelected?.postID ==
+                                                          data?.postID &&
+                                                      isPlay
                                                   ? Container()
                                                   : CustomBaseCacheImage(
                                                       memCacheWidth: 100,
                                                       memCacheHeight: 100,
                                                       widthPlaceHolder: 80,
                                                       heightPlaceHolder: 80,
-                                                      placeHolderWidget: Container(),
-                                                      imageUrl: (data?.isApsara ?? false) ? (data?.mediaThumbEndPoint ?? "") : data?.fullThumbPath ?? '',
-                                                      imageBuilder: (context, imageProvider) => data?.reportedStatus == 'BLURRED'
-                                                          ? ClipRRect(
-                                                              borderRadius: BorderRadius.circular(20), // Image border
-                                                              child: ImageFiltered(
-                                                                imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                                                child: AspectRatio(
-                                                                  aspectRatio: 4 / 5,
-                                                                  child: Image(
+                                                      placeHolderWidget:
+                                                          Container(),
+                                                      imageUrl: (data
+                                                                  ?.isApsara ??
+                                                              false)
+                                                          ? (data?.mediaThumbEndPoint ??
+                                                              "")
+                                                          : data?.fullThumbPath ??
+                                                              '',
+                                                      imageBuilder: (context,
+                                                              imageProvider) =>
+                                                          data?.reportedStatus ==
+                                                                  'BLURRED'
+                                                              ? ClipRRect(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              20), // Image border
+                                                                  child:
+                                                                      ImageFiltered(
+                                                                    imageFilter: ImageFilter.blur(
+                                                                        sigmaX:
+                                                                            30,
+                                                                        sigmaY:
+                                                                            30),
+                                                                    child:
+                                                                        AspectRatio(
+                                                                      aspectRatio:
+                                                                          4 / 5,
+                                                                      child:
+                                                                          Image(
+                                                                        // width: SizeConfig.screenWidth,
+                                                                        // height: MediaQuery.of(context).size.width * 16.0 / 11.0,
+                                                                        image:
+                                                                            imageProvider,
+                                                                        fit: BoxFit
+                                                                            .cover,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                )
+                                                              : AspectRatio(
+                                                                  aspectRatio:
+                                                                      4 / 5,
+                                                                  child:
+                                                                      Container(
+                                                                    // const EdgeInsets.symmetric(horizontal: 4.5),
                                                                     // width: SizeConfig.screenWidth,
                                                                     // height: MediaQuery.of(context).size.width * 16.0 / 11.0,
-                                                                    image: imageProvider,
-                                                                    fit: BoxFit.cover,
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      image:
+                                                                          DecorationImage(
+                                                                        image:
+                                                                            imageProvider,
+                                                                        fit: BoxFit
+                                                                            .cover,
+                                                                      ),
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              16.0),
+                                                                    ),
                                                                   ),
                                                                 ),
-                                                              ),
-                                                            )
-                                                          : AspectRatio(
-                                                              aspectRatio: 4 / 5,
-                                                              child: Container(
-                                                                // const EdgeInsets.symmetric(horizontal: 4.5),
-                                                                // width: SizeConfig.screenWidth,
-                                                                // height: MediaQuery.of(context).size.width * 16.0 / 11.0,
-                                                                decoration: BoxDecoration(
-                                                                  image: DecorationImage(
-                                                                    image: imageProvider,
-                                                                    fit: BoxFit.cover,
-                                                                  ),
-                                                                  borderRadius: BorderRadius.circular(16.0),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                      errorWidget: (context, url, error) {
+                                                      errorWidget: (context,
+                                                          url, error) {
                                                         return GestureDetector(
                                                           onTap: () {
-                                                            homeNotifier.checkConnection();
+                                                            homeNotifier
+                                                                .checkConnection();
                                                           },
                                                           child: Container(
-                                                              decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                                                              width: SizeConfig.screenWidth,
-                                                              height: MediaQuery.of(context).size.width * 16.0 / 9.0,
-                                                              alignment: Alignment.center,
-                                                              padding: EdgeInsets.all(20),
-                                                              child: CustomTextWidget(
-                                                                textToDisplay: lang?.couldntLoadVideo ?? 'Error',
+                                                              decoration: BoxDecoration(
+                                                                  color:
+                                                                      kHyppeNotConnect,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              16)),
+                                                              width: SizeConfig
+                                                                  .screenWidth,
+                                                              height: MediaQuery
+                                                                          .of(
+                                                                              context)
+                                                                      .size
+                                                                      .width *
+                                                                  16.0 /
+                                                                  9.0,
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(20),
+                                                              child:
+                                                                  CustomTextWidget(
+                                                                textToDisplay:
+                                                                    lang?.couldntLoadVideo ??
+                                                                        'Error',
                                                                 maxLines: 3,
                                                               )),
                                                         );
                                                       },
-                                                      emptyWidget: GestureDetector(
+                                                      emptyWidget:
+                                                          GestureDetector(
                                                         onTap: () {
-                                                          homeNotifier.checkConnection();
+                                                          homeNotifier
+                                                              .checkConnection();
                                                         },
                                                         child: Container(
-                                                            decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                                                            width: SizeConfig.screenWidth,
-                                                            height: MediaQuery.of(context).size.width * 16.0 / 9.0,
-                                                            alignment: Alignment.center,
-                                                            padding: EdgeInsets.all(20),
-                                                            child: CustomTextWidget(
-                                                              textToDisplay: lang?.couldntLoadVideo ?? 'Error',
+                                                            decoration: BoxDecoration(
+                                                                color:
+                                                                    kHyppeNotConnect,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            16)),
+                                                            width: SizeConfig
+                                                                .screenWidth,
+                                                            height: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                16.0 /
+                                                                9.0,
+                                                            alignment: Alignment
+                                                                .center,
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    20),
+                                                            child:
+                                                                CustomTextWidget(
+                                                              textToDisplay:
+                                                                  lang?.couldntLoadVideo ??
+                                                                      'Error',
                                                               maxLines: 3,
                                                             )),
                                                       ),
                                                     ),
-                                              _showLoading && !homeNotifier.connectionError && data?.reportedStatus != 'BLURRED'
+                                              _showLoading &&
+                                                      !homeNotifier
+                                                          .connectionError &&
+                                                      data?.reportedStatus !=
+                                                          'BLURRED'
                                                   ? const Positioned.fill(
                                                       child: Align(
-                                                        alignment: Alignment.center,
-                                                        child: CircularProgressIndicator(),
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child:
+                                                            CircularProgressIndicator(),
                                                       ),
                                                     )
                                                   : const SizedBox.shrink(),
-                                              if (data?.reportedStatus != 'BLURRED') _buildBody(context, SizeConfig.screenWidth, data ?? ContentData()),
-                                              blurContentWidget(context, data ?? ContentData()),
+                                              if (data?.reportedStatus !=
+                                                  'BLURRED')
+                                                _buildBody(
+                                                    context,
+                                                    SizeConfig.screenWidth,
+                                                    data ?? ContentData()),
+                                              blurContentWidget(context,
+                                                  data ?? ContentData()),
                                             ],
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                  SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                                          (data?.boosted.isEmpty ?? [].isEmpty) &&
-                                          (data?.reportedStatus != 'OWNED' && data?.reportedStatus != 'BLURRED' && data?.reportedStatus2 != 'BLURRED') &&
+                                  SharedPreference().readStorage(SpKeys
+                                                  .statusVerificationId) ==
+                                              VERIFIED &&
+                                          (data?.boosted.isEmpty ??
+                                              [].isEmpty) &&
+                                          (data?.reportedStatus != 'OWNED' &&
+                                              data?.reportedStatus !=
+                                                  'BLURRED' &&
+                                              data?.reportedStatus2 !=
+                                                  'BLURRED') &&
                                           data?.email == email
                                       ? Container(
                                           width: double.infinity,
-                                          margin: const EdgeInsets.only(bottom: 16),
+                                          margin:
+                                              const EdgeInsets.only(bottom: 16),
                                           child: ButtonBoost(
                                             onDetail: false,
                                             marginBool: true,
                                             contentData: data,
                                             startState: () {
-                                              SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                                              SharedPreference().writeStorage(
+                                                  SpKeys.isShowPopAds, true);
                                             },
                                             afterState: () {
-                                              SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                                              SharedPreference().writeStorage(
+                                                  SpKeys.isShowPopAds, false);
                                             },
                                           ),
                                         )
                                       : Container(),
-                                  if (data?.email == email && (data?.boostCount ?? 0) >= 0 && (data?.boosted.isNotEmpty ?? [].isEmpty))
+                                  if (data?.email == email &&
+                                      (data?.boostCount ?? 0) >= 0 &&
+                                      (data?.boosted.isNotEmpty ?? [].isEmpty))
                                     Container(
                                       padding: const EdgeInsets.all(10),
                                       margin: EdgeInsets.only(bottom: 10),
@@ -1390,54 +1739,79 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                         color: kHyppeGreyLight,
                                       ),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         children: [
                                           const CustomIconWidget(
-                                            iconData: "${AssetPath.vectorPath}reach.svg",
+                                            iconData:
+                                                "${AssetPath.vectorPath}reach.svg",
                                             defaultColor: false,
                                             height: 24,
                                             color: kHyppeTextLightPrimary,
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.only(left: 13),
+                                            padding:
+                                                const EdgeInsets.only(left: 13),
                                             child: Text(
                                               "${data?.boostJangkauan ?? '0'} ${lang?.reach}",
-                                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w700,
+                                                  color:
+                                                      kHyppeTextLightPrimary),
                                             ),
                                           )
                                         ],
                                       ),
                                     ),
                                   Consumer<LikeNotifier>(
-                                    builder: (context, likeNotifier, child) => Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                    builder: (context, likeNotifier, child) =>
+                                        Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Row(
                                           children: [
                                             SizedBox(
                                               width: 30,
                                               child: Consumer<LikeNotifier>(
-                                                builder: (context, likeNotifier, child) => Align(
-                                                  alignment: Alignment.bottomRight,
-                                                  child: data?.insight?.isloading ?? false
+                                                builder: (context, likeNotifier,
+                                                        child) =>
+                                                    Align(
+                                                  alignment:
+                                                      Alignment.bottomRight,
+                                                  child: data?.insight
+                                                              ?.isloading ??
+                                                          false
                                                       ? const SizedBox(
                                                           height: 28,
                                                           width: 28,
-                                                          child: CircularProgressIndicator(
-                                                            color: kHyppePrimary,
+                                                          child:
+                                                              CircularProgressIndicator(
+                                                            color:
+                                                                kHyppePrimary,
                                                             strokeWidth: 2,
                                                           ),
                                                         )
                                                       : InkWell(
-                                                          child: CustomIconWidget(
+                                                          child:
+                                                              CustomIconWidget(
                                                             defaultColor: false,
-                                                            color: (data?.insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
-                                                            iconData: '${AssetPath.vectorPath}${(data?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                                            color: (data?.insight
+                                                                        ?.isPostLiked ??
+                                                                    false)
+                                                                ? kHyppeRed
+                                                                : kHyppeTextLightPrimary,
+                                                            iconData:
+                                                                '${AssetPath.vectorPath}${(data?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
                                                             height: 28,
                                                           ),
                                                           onTap: () {
                                                             if (data != null) {
-                                                              likeNotifier.likePost(context, data);
+                                                              likeNotifier
+                                                                  .likePost(
+                                                                      context,
+                                                                      data);
                                                             }
                                                           },
                                                         ),
@@ -1446,51 +1820,79 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                             ),
                                             if (data?.allowComments ?? false)
                                               Padding(
-                                                padding: const EdgeInsets.only(left: 21.0),
+                                                padding: const EdgeInsets.only(
+                                                    left: 21.0),
                                                 child: GestureDetector(
                                                   onTap: () {
-                                                    Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: data?.postID ?? '', fromFront: true, data: data ?? ContentData()));
+                                                    Routing().move(
+                                                        Routes.commentsDetail,
+                                                        argument: CommentsArgument(
+                                                            postID:
+                                                                data?.postID ??
+                                                                    '',
+                                                            fromFront: true,
+                                                            data: data ??
+                                                                ContentData()));
                                                   },
                                                   child: const CustomIconWidget(
                                                     defaultColor: false,
-                                                    color: kHyppeTextLightPrimary,
-                                                    iconData: '${AssetPath.vectorPath}comment2.svg',
+                                                    color:
+                                                        kHyppeTextLightPrimary,
+                                                    iconData:
+                                                        '${AssetPath.vectorPath}comment2.svg',
                                                     height: 24,
                                                   ),
                                                 ),
                                               ),
                                             if ((data?.isShared ?? false))
                                               Padding(
-                                                padding: EdgeInsets.only(left: 21.0),
+                                                padding:
+                                                    EdgeInsets.only(left: 21.0),
                                                 child: GestureDetector(
                                                   onTap: () {
-                                                    context.read<DiariesPlaylistNotifier>().createdDynamicLink(context, data: data);
+                                                    context
+                                                        .read<
+                                                            DiariesPlaylistNotifier>()
+                                                        .createdDynamicLink(
+                                                            context,
+                                                            data: data);
                                                   },
                                                   child: CustomIconWidget(
                                                     defaultColor: false,
-                                                    color: kHyppeTextLightPrimary,
-                                                    iconData: '${AssetPath.vectorPath}share2.svg',
+                                                    color:
+                                                        kHyppeTextLightPrimary,
+                                                    iconData:
+                                                        '${AssetPath.vectorPath}share2.svg',
                                                     height: 24,
                                                   ),
                                                 ),
                                               ),
-                                            if ((data?.saleAmount ?? 0) > 0 && email != data?.email)
+                                            if ((data?.saleAmount ?? 0) > 0 &&
+                                                email != data?.email)
                                               Expanded(
                                                 child: GestureDetector(
                                                   onTap: () async {
-                                                    context.handleActionIsGuest(() async {
+                                                    context.handleActionIsGuest(
+                                                        () async {
                                                       fAliplayer?.pause();
-                                                      await ShowBottomSheet.onBuyContent(context, data: data, fAliplayer: fAliplayer);
+                                                      await ShowBottomSheet
+                                                          .onBuyContent(context,
+                                                              data: data,
+                                                              fAliplayer:
+                                                                  fAliplayer);
                                                     });
 
                                                     // fAliplayer?.play();
                                                   },
                                                   child: const Align(
-                                                    alignment: Alignment.centerRight,
+                                                    alignment:
+                                                        Alignment.centerRight,
                                                     child: CustomIconWidget(
                                                       defaultColor: false,
-                                                      color: kHyppeTextLightPrimary,
-                                                      iconData: '${AssetPath.vectorPath}cart.svg',
+                                                      color:
+                                                          kHyppeTextLightPrimary,
+                                                      iconData:
+                                                          '${AssetPath.vectorPath}cart.svg',
                                                       height: 24,
                                                     ),
                                                   ),
@@ -1502,32 +1904,49 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                         RichText(
                                           text: TextSpan(children: [
                                             TextSpan(
-                                              text: "${data?.insight?.likes} ${lang?.like}",
+                                              text:
+                                                  "${data?.insight?.likes} ${lang?.like}",
                                               recognizer: TapGestureRecognizer()
                                                 ..onTap = () => Navigator.push(
                                                     context,
                                                     CupertinoPageRoute(
-                                                        builder: (context) => ViewLiked(
-                                                              postId: data?.postID ?? '',
+                                                        builder: (context) =>
+                                                            ViewLiked(
+                                                              postId:
+                                                                  data?.postID ??
+                                                                      '',
                                                               eventType: 'LIKE',
                                                             ))),
-                                              style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                                              style: const TextStyle(
+                                                  color: kHyppeTextLightPrimary,
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 14),
                                             ),
                                             const TextSpan(
                                               text: " . ",
-                                              style: TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 22),
+                                              style: TextStyle(
+                                                  color: kHyppeTextLightPrimary,
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 22),
                                             ),
                                             TextSpan(
-                                              text: "${data?.insight!.views?.getCountShort()} ${lang?.views}",
+                                              text:
+                                                  "${data?.insight!.views?.getCountShort()} ${lang?.views}",
                                               recognizer: TapGestureRecognizer()
                                                 ..onTap = () => Navigator.push(
                                                     context,
                                                     CupertinoPageRoute(
-                                                        builder: (context) => ViewLiked(
-                                                              postId: data?.postID ?? '',
+                                                        builder: (context) =>
+                                                            ViewLiked(
+                                                              postId:
+                                                                  data?.postID ??
+                                                                      '',
                                                               eventType: 'VIEW',
                                                             ))),
-                                              style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                                              style: const TextStyle(
+                                                  color: kHyppeTextLightPrimary,
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 14),
                                             ),
                                           ]),
                                         ),
@@ -1542,46 +1961,99 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                     desc: "${data?.description}",
                                     trimLines: 3,
                                     textAlign: TextAlign.start,
-                                    seeLess: ' ${lang?.less}', // ${notifier2.translate.seeLess}',
-                                    seeMore: '  ${lang?.more}', //${notifier2.translate.seeMoreContent}',
-                                    normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                                    hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                                    expandStyle: const TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
+                                    seeLess:
+                                        ' ${lang?.less}', // ${notifier2.translate.seeLess}',
+                                    seeMore:
+                                        '  ${lang?.more}', //${notifier2.translate.seeMoreContent}',
+                                    normStyle: const TextStyle(
+                                        fontSize: 12,
+                                        color: kHyppeTextLightPrimary),
+                                    hrefStyle: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall
+                                        ?.copyWith(color: kHyppePrimary),
+                                    expandStyle: const TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: data?.postID ?? '', fromFront: true, data: data ?? ContentData()));
+                                      Routing().move(Routes.commentsDetail,
+                                          argument: CommentsArgument(
+                                              postID: data?.postID ?? '',
+                                              fromFront: true,
+                                              data: data ?? ContentData()));
                                     },
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 4.0),
                                       child: Text(
                                         "${lang?.seeAll} ${data?.comments} ${lang?.comment}",
-                                        style: const TextStyle(fontSize: 12, color: kHyppeBurem),
+                                        style: const TextStyle(
+                                            fontSize: 12, color: kHyppeBurem),
                                       ),
                                     ),
                                   ),
                                   (data?.comment?.length ?? 0) > 0
                                       ? Padding(
-                                          padding: const EdgeInsets.only(top: 0.0),
+                                          padding:
+                                              const EdgeInsets.only(top: 0.0),
                                           child: ListView.builder(
                                             shrinkWrap: true,
-                                            physics: const NeverScrollableScrollPhysics(),
-                                            itemCount: (data?.comment?.length ?? 0) >= 2 ? 2 : 1,
-                                            itemBuilder: (context, indexComment) {
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            itemCount:
+                                                (data?.comment?.length ?? 0) >=
+                                                        2
+                                                    ? 2
+                                                    : 1,
+                                            itemBuilder:
+                                                (context, indexComment) {
                                               return Padding(
-                                                padding: const EdgeInsets.only(bottom: 6.0),
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 6.0),
                                                 child: CustomNewDescContent(
                                                   // desc: "${data??.description}",
-                                                  email: data?.comment?[indexComment].sender ?? '',
-                                                  username: data?.comment?[indexComment].userComment?.username ?? '',
-                                                  desc: data?.comment?[indexComment].txtMessages ?? '',
+                                                  email: data
+                                                          ?.comment?[
+                                                              indexComment]
+                                                          .sender ??
+                                                      '',
+                                                  username: data
+                                                          ?.comment?[
+                                                              indexComment]
+                                                          .userComment
+                                                          ?.username ??
+                                                      '',
+                                                  desc: data
+                                                          ?.comment?[
+                                                              indexComment]
+                                                          .txtMessages ??
+                                                      '',
                                                   trimLines: 3,
                                                   textAlign: TextAlign.start,
-                                                  seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
-                                                  seeMore: ' ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
-                                                  normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                                                  hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                                                  expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                                                  seeLess:
+                                                      ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
+                                                  seeMore:
+                                                      ' ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                                                  normStyle: const TextStyle(
+                                                      fontSize: 12,
+                                                      color:
+                                                          kHyppeTextLightPrimary),
+                                                  hrefStyle: Theme.of(context)
+                                                      .textTheme
+                                                      .titleSmall
+                                                      ?.copyWith(
+                                                          color: kHyppePrimary),
+                                                  expandStyle: Theme.of(context)
+                                                      .textTheme
+                                                      .titleSmall
+                                                      ?.copyWith(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .primary),
                                                 ),
                                               );
                                             },
@@ -1589,20 +2061,26 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                         )
                                       : Container(),
                                   Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 4.0),
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 4.0),
                                     child: Text(
                                       "${System().readTimestamp(
-                                        DateTime.parse(System().dateTimeRemoveT(data?.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+                                        DateTime.parse(System().dateTimeRemoveT(
+                                                data?.createdAt ??
+                                                    DateTime.now().toString()))
+                                            .millisecondsSinceEpoch,
                                         context,
                                         fullCaption: true,
                                       )}",
-                                      style: TextStyle(fontSize: 12, color: kHyppeBurem),
+                                      style: TextStyle(
+                                          fontSize: 12, color: kHyppeBurem),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            homeNotifier.isLoadingLoadmore && data == notifier.diaryData?.last
+                            homeNotifier.isLoadingLoadmore &&
+                                    data == notifier.diaryData?.last
                                 ? const Padding(
                                     padding: EdgeInsets.only(bottom: 32),
                                     child: Center(child: CustomLoading()),
@@ -1675,7 +2153,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
               child: GestureDetector(
                 onTap: () {
                   fAliplayer?.pause();
-                  context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID, fAliplayer: fAliplayer, title: lang?.inThisDiary);
+                  context.read<PicDetailNotifier>().showUserTag(
+                      context, data.tagPeople, data.postID,
+                      fAliplayer: fAliplayer, title: lang?.inThisDiary);
                 },
                 child: const CustomIconWidget(
                   iconData: '${AssetPath.vectorPath}tag_people.svg',
@@ -1693,7 +2173,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: CustomIconWidget(
-                  iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
+                  iconData: isMute
+                      ? '${AssetPath.vectorPath}sound-off.svg'
+                      : '${AssetPath.vectorPath}sound-on.svg',
                   defaultColor: false,
                   height: 24,
                 ),
@@ -1722,8 +2204,15 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                         defaultColor: false,
                         height: 30,
                       ),
-                      Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                      Text("HyppeDiary ${transnot.translate.contentContainsSensitiveMaterial}",
+                      Text(
+                          transnot.translate.sensitiveContent ??
+                              'Sensitive Content',
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600)),
+                      Text(
+                          "HyppeDiary ${transnot.translate.contentContainsSensitiveMaterial}",
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Colors.white,
@@ -1744,7 +2233,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                         onTap: () async {
                           data.reportedStatus = '';
                           start(context, data);
-                          context.read<ReportNotifier>().seeContent(context, data, hyppeDiary);
+                          context
+                              .read<ReportNotifier>()
+                              .seeContent(context, data, hyppeDiary);
                           fAliplayer?.prepare();
                           fAliplayer?.play();
                         },
@@ -1761,7 +2252,10 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                           ),
                           child: Text(
                             "${transnot.translate.see} HyppeDiary",
-                            style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600),
                             textAlign: TextAlign.center,
                           ),
                         ),

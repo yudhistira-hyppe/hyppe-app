@@ -21,7 +21,8 @@ class SearchMoreScreen extends StatefulWidget {
   _SearchMoreScreenState createState() => _SearchMoreScreenState();
 }
 
-class _SearchMoreScreenState extends State<SearchMoreScreen> with SingleTickerProviderStateMixin, AfterFirstLayoutMixin {
+class _SearchMoreScreenState extends State<SearchMoreScreen>
+    with SingleTickerProviderStateMixin, AfterFirstLayoutMixin {
   late TabController _tabController;
   // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String? lastInputValue;
@@ -52,7 +53,8 @@ class _SearchMoreScreenState extends State<SearchMoreScreen> with SingleTickerPr
     SizeConfig().init(context);
     return Consumer<SearchNotifier>(builder: (context, notifier, child) {
       final values = notifier.riwayat;
-      values?.sort((a, b) => DateTime.parse(b.datetime ?? '').compareTo(DateTime.parse(a.datetime ?? '')));
+      values?.sort((a, b) => DateTime.parse(b.datetime ?? '')
+          .compareTo(DateTime.parse(a.datetime ?? '')));
       // if(values != null){
       //   for(final data in values){
       //     print('riwayat data: ${data.toJson(withID: true)}');
@@ -81,10 +83,12 @@ class _SearchMoreScreenState extends State<SearchMoreScreen> with SingleTickerPr
                           ),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
                               child: CustomSearchBar(
                                   hintText: notifier.language.whatAreYouFindOut,
-                                  contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: 16 * SizeConfig.scaleDiagonal),
                                   focusNode: notifier.focusNode,
                                   controller: notifier.searchController,
                                   onSubmitted: (v) {
@@ -101,16 +105,23 @@ class _SearchMoreScreenState extends State<SearchMoreScreen> with SingleTickerPr
                                   onChanged: (e) {
                                     final isHashtag = e.isHashtag();
                                     if (e.length > (isHashtag ? 3 : 2)) {
-                                      Future.delayed(const Duration(milliseconds: 500), () {
-                                        if (notifier.searchController.text == e) {
+                                      Future.delayed(
+                                          const Duration(milliseconds: 500),
+                                          () {
+                                        if (notifier.searchController.text ==
+                                            e) {
                                           lastInputValue = e;
 
-                                          notifier.getDataSearch(context, typeSearch: isHashtag ? SearchLoadData.hashtag : SearchLoadData.user, forceLoad: true);
+                                          notifier.getDataSearch(context,
+                                              typeSearch: isHashtag
+                                                  ? SearchLoadData.hashtag
+                                                  : SearchLoadData.user,
+                                              forceLoad: true);
                                         } else {
                                           notifier.onUpdate();
                                         }
                                       });
-                                    }else{
+                                    } else {
                                       notifier.getHistories();
                                     }
                                   }),
@@ -127,38 +138,71 @@ class _SearchMoreScreenState extends State<SearchMoreScreen> with SingleTickerPr
                                   children: [
                                     ...[
                                       Container(
-                                        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 18),
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 5, horizontal: 18),
                                         child: CustomTextWidget(
-                                            textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w700, color: context.getColorScheme().onBackground),
+                                            textStyle: context
+                                                .getTextTheme()
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    fontWeight: FontWeight.w700,
+                                                    color: context
+                                                        .getColorScheme()
+                                                        .onBackground),
                                             textAlign: TextAlign.start,
-                                            textToDisplay: notifier.language.searchHistory ?? 'Search History'),
+                                            textToDisplay: notifier
+                                                    .language.searchHistory ??
+                                                'Search History'),
                                       ),
                                     ],
                                     ...List.generate(
                                         values.length > 4 ? 5 : values.length,
                                         (index) => InkWell(
                                               onTap: () {
-                                                notifier.searchController.text = values[index].keyword ?? '';
-                                                notifier.layout = SearchLayout.searchMore;
+                                                notifier.searchController.text =
+                                                    values[index].keyword ?? '';
+                                                notifier.layout =
+                                                    SearchLayout.searchMore;
                                               },
                                               child: Container(
-                                                padding: const EdgeInsets.only(left: 18, right: 20, top: 16, bottom: 16),
+                                                padding: const EdgeInsets.only(
+                                                    left: 18,
+                                                    right: 20,
+                                                    top: 16,
+                                                    bottom: 16),
                                                 child: Row(
-                                                  mainAxisSize: MainAxisSize.max,
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
                                                   children: [
                                                     Expanded(
                                                       child: CustomTextWidget(
-                                                          textToDisplay: values[index].keyword ?? '',
-                                                          textAlign: TextAlign.start,
-                                                          textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w400, color: context.getColorScheme().onBackground)),
+                                                          textToDisplay: values[
+                                                                      index]
+                                                                  .keyword ??
+                                                              '',
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          textStyle: context
+                                                              .getTextTheme()
+                                                              .bodyMedium
+                                                              ?.copyWith(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                  color: context
+                                                                      .getColorScheme()
+                                                                      .onBackground)),
                                                     ),
                                                     tenPx,
                                                     InkWell(
                                                       onTap: () {
-                                                        notifier.deleteHistory(values[index]);
+                                                        notifier.deleteHistory(
+                                                            values[index]);
                                                       },
-                                                      child: const CustomIconWidget(
-                                                        iconData: '${AssetPath.vectorPath}close.svg',
+                                                      child:
+                                                          const CustomIconWidget(
+                                                        iconData:
+                                                            '${AssetPath.vectorPath}close.svg',
                                                         height: 25,
                                                         width: 25,
                                                       ),

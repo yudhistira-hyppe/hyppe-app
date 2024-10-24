@@ -15,23 +15,26 @@ class TransactionHistoryInProgress extends StatefulWidget {
   const TransactionHistoryInProgress({Key? key}) : super(key: key);
 
   @override
-  State<TransactionHistoryInProgress> createState() => _TransactionHistoryInProgressState();
+  State<TransactionHistoryInProgress> createState() =>
+      _TransactionHistoryInProgressState();
 }
 
-class _TransactionHistoryInProgressState extends State<TransactionHistoryInProgress> {
+class _TransactionHistoryInProgressState
+    extends State<TransactionHistoryInProgress> {
   final ScrollController _scrollController = ScrollController();
   @override
   void initState() {
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'TransactionHistoryInProgress');
-    Future.delayed(Duration(milliseconds: 100), (){
+    FirebaseCrashlytics.instance
+        .setCustomKey('layout', 'TransactionHistoryInProgress');
+    Future.delayed(Duration(milliseconds: 100), () {
       final _notifier = context.read<TransactionNotifier>();
       _notifier.skip = 0;
       _notifier.initTransactionHistoryInProgress(context);
-      _scrollController.addListener(() => _notifier.scrollListInProgress(context, _scrollController));
+      _scrollController.addListener(
+          () => _notifier.scrollListInProgress(context, _scrollController));
     });
     super.initState();
   }
-
 
   @override
   void dispose() {
@@ -41,14 +44,13 @@ class _TransactionHistoryInProgressState extends State<TransactionHistoryInProgr
 
   @override
   Widget build(BuildContext context) {
-
     final theme = Theme.of(context);
     return Consumer2<TransactionNotifier, TranslateNotifierV2>(
       builder: (context, notifier, notifier2, child) => Scaffold(
           appBar: AppBar(
             leading: const BackButton(),
             title: CustomTextWidget(
-              textStyle: theme.textTheme.subtitle1,
+              textStyle: theme.textTheme.titleMedium,
               textToDisplay: '${notifier2.translate.transactionInProgress}',
             ),
           ),
@@ -65,7 +67,9 @@ class _TransactionHistoryInProgressState extends State<TransactionHistoryInProgr
                                 textWidget: Column(
                                 children: [
                                   CustomTextWidget(
-                                    textToDisplay: notifier2.translate.youDontHaveAnyTransactionsYet ?? '',
+                                    textToDisplay: notifier2.translate
+                                            .youDontHaveAnyTransactionsYet ??
+                                        '',
                                     maxLines: 4,
                                   ),
                                 ],
@@ -73,25 +77,32 @@ class _TransactionHistoryInProgressState extends State<TransactionHistoryInProgr
                             : ListView.builder(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
-                                itemCount: notifier.dataTransactionInProgress?.length,
+                                itemCount:
+                                    notifier.dataTransactionInProgress?.length,
                                 itemBuilder: (context, index) {
                                   String title = '';
-                                  switch (notifier.dataTransactionInProgress?[index].type) {
+                                  switch (notifier
+                                      .dataTransactionInProgress?[index].type) {
                                     case TransactionType.withdrawal:
-                                      title = notifier2.translate.withdrawal ?? '';
+                                      title =
+                                          notifier2.translate.withdrawal ?? '';
                                       return WithdrawalWidget(
                                         title: title,
                                         language: notifier2.translate,
-                                        data: notifier.dataTransactionInProgress?[index],
+                                        data: notifier
+                                            .dataTransactionInProgress?[index],
                                       );
                                     default:
                                       return BuySellWidget(
-                                        data: notifier.dataTransactionInProgress?[index],
+                                        data: notifier
+                                            .dataTransactionInProgress?[index],
                                         language: notifier2.translate,
                                       );
                                   }
                                 }),
-                        notifier.isScrollLoading ? const CustomLoading() : const SizedBox()
+                        notifier.isScrollLoading
+                            ? const CustomLoading()
+                            : const SizedBox()
                       ],
                     ),
                   ),

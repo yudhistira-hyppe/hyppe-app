@@ -34,35 +34,46 @@ class RegisterForm extends StatelessWidget {
                       child: SignUpText(
                         title: notifier.language.register ?? 'register',
                         paddingDescription: 24 * SizeConfig.scaleDiagonal,
-                        description: notifier.language.joinTheCommunityCreateOrWatchAndGetMoney ?? '',
+                        description: notifier.language
+                                .joinTheCommunityCreateOrWatchAndGetMoney ??
+                            '',
                       ),
                     ),
                     sixtyFourPx,
                     SignUpForm(
                       onChangeValue: notifier.email,
                       focusNode: notifier.emailNode,
-                      onChange: (v){
+                      onChange: (v) {
                         notifier.email = v;
-                        if(System().validateEmail(v)){
+                        if (System().validateEmail(v)) {
                           notifier.invalidEmail = null;
-                        }else{
-                          if(v.isNotEmpty){
-                            notifier.invalidEmail = notifier.language.messageInvalidEmail;
-                          }else{
+                        } else {
+                          if (v.isNotEmpty) {
+                            notifier.invalidEmail =
+                                notifier.language.messageInvalidEmail;
+                          } else {
                             notifier.invalidEmail = null;
                           }
                         }
                       },
                       labelText: notifier.language.email ?? '',
-                      suffixIcon: notifier.checkBoxSuffix(System().validateEmail(notifier.email), isEmail: true),
+                      suffixIcon: notifier.checkBoxSuffix(
+                          System().validateEmail(notifier.email),
+                          isEmail: true),
                       suffixIconSize: 1,
                       onTap: () => notifier.passwordToEmail(),
                       textInputType: TextInputType.emailAddress,
                       textEditingController: notifier.emailController,
-                      prefixIcon: Icon(Icons.email_outlined, color: Theme.of(context).iconTheme.color),
+                      prefixIcon: Icon(Icons.email_outlined,
+                          color: Theme.of(context).iconTheme.color),
                       errorText: notifier.invalidEmail,
-                      inputAreaHeight: (notifier.invalidEmail != null ? 70 : 55) * SizeConfig.scaleDiagonal,
-                      contentPadding: EdgeInsets.only(left: 16, bottom: (notifier.invalidEmail != null) ? 0 : 16, right: 16),
+                      inputAreaHeight:
+                          (notifier.invalidEmail != null ? 70 : 55) *
+                              SizeConfig.scaleDiagonal,
+                      contentPadding: EdgeInsets.only(
+                          left: 16,
+                          bottom: (notifier.invalidEmail != null) ? 0 : 16,
+                          right: 16),
                     ),
                     twentyFourPx,
                     SignUpForm(
@@ -74,26 +85,46 @@ class RegisterForm extends StatelessWidget {
                       onTap: () => notifier.emailToPassword(),
                       suffixIcon: notifier.passwordSuffixIcon(context),
                       textEditingController: notifier.passwordController,
-                      prefixIcon: const CustomIconWidget(iconData: '${AssetPath.vectorPath}lock.svg'),
+                      prefixIcon: const CustomIconWidget(
+                          iconData: '${AssetPath.vectorPath}lock.svg'),
                     ),
                     thirtySixPx,
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        notifier.checkBoxSuffix(System().atLeastEightUntilTwentyCharacter(text: notifier.passwordController.text)),
+                        notifier.checkBoxSuffix(System()
+                            .atLeastEightUntilTwentyCharacter(
+                                text: notifier.passwordController.text)),
                         CustomTextWidget(
-                          textToDisplay: notifier.language.atLeast8til20Chars ?? '',
-                          textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: context.isDarkMode() ? Colors.white : Colors.black),
+                          textToDisplay:
+                              notifier.language.atLeast8til20Chars ?? '',
+                          textStyle: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(
+                                  color: context.isDarkMode()
+                                      ? Colors.white
+                                      : Colors.black),
                         )
                       ],
                     ),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        notifier.checkBoxSuffix(System().atLeastContainOneCharacterAndOneNumber(text: notifier.passwordController.text)),
+                        notifier.checkBoxSuffix(System()
+                            .atLeastContainOneCharacterAndOneNumber(
+                                text: notifier.passwordController.text)),
                         CustomTextWidget(
-                          textToDisplay: notifier.language.atLeastContain1CharacterAnd1Number ?? '',
-                          textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: context.isDarkMode() ? Colors.white : Colors.black),
+                          textToDisplay: notifier.language
+                                  .atLeastContain1CharacterAnd1Number ??
+                              '',
+                          textStyle: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(
+                                  color: context.isDarkMode()
+                                      ? Colors.white
+                                      : Colors.black),
                         )
                       ],
                     ),
@@ -102,18 +133,28 @@ class RegisterForm extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        notifier.checkBoxSuffix(System().specialCharPass(notifier.passwordController.text)),
+                        notifier.checkBoxSuffix(System()
+                            .specialCharPass(notifier.passwordController.text)),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CustomTextWidget(
-                              textToDisplay: notifier.language.oneSpecialCharacter ?? '',
-                              textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: context.isDarkMode() ? Colors.white : Colors.black),
+                              textToDisplay:
+                                  notifier.language.oneSpecialCharacter ?? '',
+                              textStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
+                                      color: context.isDarkMode()
+                                          ? Colors.white
+                                          : Colors.black),
                             ),
                             onePx,
                             CustomTextWidget(
-                              textToDisplay: notifier.language.labelExampleSpecialChar ?? '',
-                              textStyle: Theme.of(context).textTheme.caption,
+                              textToDisplay:
+                                  notifier.language.labelExampleSpecialChar ??
+                                      '',
+                              textStyle: Theme.of(context).textTheme.bodySmall,
                             )
                           ],
                         )

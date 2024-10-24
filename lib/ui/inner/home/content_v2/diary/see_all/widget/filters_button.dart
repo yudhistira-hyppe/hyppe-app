@@ -22,8 +22,10 @@ class FiltersButton extends StatelessWidget {
       ),
       alignment: Alignment.center,
       child: CustomTextWidget(
-        textToDisplay: context.watch<TranslateNotifierV2>().translate.filters ?? 'filters',
-        textStyle: theme.textTheme.button?.copyWith(color: kHyppeLightButtonText),
+        textToDisplay:
+            context.watch<TranslateNotifierV2>().translate.filters ?? 'filters',
+        textStyle:
+            theme.textTheme.labelLarge?.copyWith(color: kHyppeLightButtonText),
       ),
     );
   }

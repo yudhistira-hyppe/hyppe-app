@@ -1670,7 +1670,8 @@ class _ScrollPicState extends State<ScrollPic>
                                       postID: pics?[index].postID ?? '',
                                       fromFront: true,
                                       data: pics?[index] ?? ContentData(),
-                                      giftActication: pics?[index].giftActivation,
+                                      giftActication:
+                                          pics?[index].giftActivation,
                                       pageDetail: true,
                                     ));
                                 // ShowBottomSheet.onShowCommentV2(context, postID: pics?[index].postID);
@@ -1793,7 +1794,7 @@ class _ScrollPicState extends State<ScrollPic>
                     fontSize: 12, color: kHyppeTextLightPrimary),
                 hrefStyle: Theme.of(context)
                     .textTheme
-                    .subtitle2
+                    .titleSmall
                     ?.copyWith(color: kHyppePrimary, fontSize: 12),
                 expandStyle: const TextStyle(
                     fontSize: 14,
@@ -1813,15 +1814,16 @@ class _ScrollPicState extends State<ScrollPic>
                           fontWeight: FontWeight.bold),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () async {
-                          var uri = pics?[index].urlLink??'';
-                          if (!uri.withHttp()){
-                            uri='https://$uri';
+                          var uri = pics?[index].urlLink ?? '';
+                          if (!uri.withHttp()) {
+                            uri = 'https://$uri';
                           }
                           if (await canLaunchUrl(Uri.parse(uri))) {
-                              await launchUrl(Uri.parse(uri));
-                            } else {
-                              throw  Fluttertoast.showToast(msg: 'Could not launch $uri');
-                            }
+                            await launchUrl(Uri.parse(uri));
+                          } else {
+                            throw Fluttertoast.showToast(
+                                msg: 'Could not launch $uri');
+                          }
                         },
                     )
                   ]),
@@ -1881,7 +1883,7 @@ class _ScrollPicState extends State<ScrollPic>
                                   fontSize: 12, color: kHyppeTextLightPrimary),
                               hrefStyle: Theme.of(context)
                                   .textTheme
-                                  .subtitle2
+                                  .titleSmall
                                   ?.copyWith(color: kHyppePrimary),
                               expandStyle: const TextStyle(
                                   fontSize: 14,

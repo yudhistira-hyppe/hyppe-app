@@ -13,11 +13,18 @@ class OnjectContentWidget extends StatelessWidget {
   final String cat;
   final String reason;
   final bool isCategory;
-  const OnjectContentWidget({Key? key, required this.data, this.cat = '', this.reason = '', this.isCategory = true}) : super(key: key);
+  const OnjectContentWidget(
+      {Key? key,
+      required this.data,
+      this.cat = '',
+      this.reason = '',
+      this.isCategory = true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final translate = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
+    final translate =
+        Provider.of<TranslateNotifierV2>(context, listen: false).translate;
 
     return Column(
       children: [
@@ -29,20 +36,22 @@ class OnjectContentWidget extends StatelessWidget {
               children: [
                 Text(
                   translate.videoDetails ?? '',
-                  style: Theme.of(context).primaryTextTheme.bodyText2,
+                  style: Theme.of(context).primaryTextTheme.bodyMedium,
                   textAlign: TextAlign.start,
                 ),
                 sixPx,
                 Text(
                   "${translate.postedOn} ${System().dateFormatter(data.createdAt ?? '', 2)}",
-                  style: Theme.of(context).textTheme.bodyText2,
+                  style: Theme.of(context).textTheme.bodyMedium,
                   textAlign: TextAlign.start,
                 ),
               ],
             )),
             const SizedBox(width: 10),
             CustomCacheImage(
-              imageUrl: (data.isApsara ?? false) ? data.mediaThumbEndPoint : data.fullThumbPath,
+              imageUrl: (data.isApsara ?? false)
+                  ? data.mediaThumbEndPoint
+                  : data.fullThumbPath,
               imageBuilder: (_, imageProvider) {
                 return Container(
                   width: 48 * SizeConfig.scaleDiagonal,
@@ -50,7 +59,8 @@ class OnjectContentWidget extends StatelessWidget {
                   alignment: Alignment.topRight,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
-                    image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                    image: DecorationImage(
+                        image: imageProvider, fit: BoxFit.cover),
                   ),
                 );
               },
@@ -63,7 +73,8 @@ class OnjectContentWidget extends StatelessWidget {
                     borderRadius: BorderRadius.circular(2),
                     image: const DecorationImage(
                       fit: BoxFit.contain,
-                      image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                      image:
+                          AssetImage('${AssetPath.pngPath}content-error.png'),
                     ),
                   ),
                 );
@@ -93,7 +104,7 @@ class OnjectContentWidget extends StatelessWidget {
                     flex: 1,
                     child: Text(
                       translate.categories ?? '',
-                      style: Theme.of(context).primaryTextTheme.bodyText2,
+                      style: Theme.of(context).primaryTextTheme.bodyMedium,
                       textAlign: TextAlign.start,
                     ),
                   ),
@@ -101,7 +112,7 @@ class OnjectContentWidget extends StatelessWidget {
                     flex: 2,
                     child: Text(
                       cat,
-                      style: Theme.of(context).textTheme.bodyText2,
+                      style: Theme.of(context).textTheme.bodyMedium,
                       textAlign: TextAlign.end,
                     ),
                   ),
@@ -116,7 +127,7 @@ class OnjectContentWidget extends StatelessWidget {
               flex: 1,
               child: Text(
                 translate.violationType ?? '',
-                style: Theme.of(context).primaryTextTheme.bodyText2,
+                style: Theme.of(context).primaryTextTheme.bodyMedium,
                 textAlign: TextAlign.start,
               ),
             ),
@@ -124,7 +135,7 @@ class OnjectContentWidget extends StatelessWidget {
               flex: 2,
               child: Text(
                 reason,
-                style: Theme.of(context).textTheme.bodyText2,
+                style: Theme.of(context).textTheme.bodyMedium,
                 textAlign: TextAlign.end,
                 maxLines: 3,
               ),

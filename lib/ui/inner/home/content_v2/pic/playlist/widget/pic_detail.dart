@@ -39,7 +39,8 @@ class PicDetail extends StatefulWidget {
 }
 
 class _PicDetailState extends State<PicDetail> {
-  final TransformationController transformationController = TransformationController();
+  final TransformationController transformationController =
+      TransformationController();
 
   void resetZooming() {
     if (transformationController.value != Matrix4.identity()) {
@@ -72,22 +73,29 @@ class _PicDetailState extends State<PicDetail> {
                 sigmaX: 30,
                 sigmaY: 30,
                 // thumbnail: picData.content[arguments].contentUrl,
-                thumbnail: (widget.arguments?.isApsara ?? false) ? widget.arguments?.mediaThumbUri : widget.arguments?.fullThumbPath,
+                thumbnail: (widget.arguments?.isApsara ?? false)
+                    ? widget.arguments?.mediaThumbUri
+                    : widget.arguments?.fullThumbPath,
               ),
               // Content
               InteractiveViewer(
                 transformationController: transformationController,
                 child: InkWell(
                   onDoubleTap: () {
-                    context.read<LikeNotifier>().likePost(context, widget.arguments ?? ContentData());
+                    context
+                        .read<LikeNotifier>()
+                        .likePost(context, widget.arguments ?? ContentData());
                   },
                   child: CustomCacheImage(
                     // imageUrl: picData.content[arguments].contentUrl,
-                    imageUrl: (widget.arguments?.isApsara ?? false) ? widget.arguments?.mediaThumbUri : widget.arguments?.fullThumbPath,
+                    imageUrl: (widget.arguments?.isApsara ?? false)
+                        ? widget.arguments?.mediaThumbUri
+                        : widget.arguments?.fullThumbPath,
                     imageBuilder: (_, imageProvider) {
                       return Container(
                         decoration: BoxDecoration(
-                          image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
+                          image: DecorationImage(
+                              image: imageProvider, fit: BoxFit.contain),
                         ),
                       );
                     },
@@ -96,7 +104,8 @@ class _PicDetailState extends State<PicDetail> {
                         decoration: const BoxDecoration(
                           image: DecorationImage(
                             fit: BoxFit.contain,
-                            image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                            image: AssetImage(
+                                '${AssetPath.pngPath}content-error.png'),
                           ),
                         ),
                       );
@@ -105,7 +114,8 @@ class _PicDetailState extends State<PicDetail> {
                       decoration: const BoxDecoration(
                         image: DecorationImage(
                           fit: BoxFit.contain,
-                          image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                          image: AssetImage(
+                              '${AssetPath.pngPath}content-error.png'),
                         ),
                       ),
                     ),
@@ -131,7 +141,8 @@ class _PicDetailState extends State<PicDetail> {
                             },
                             style: ButtonStyle(
                               alignment: Alignment.topCenter,
-                              padding: MaterialStateProperty.all(EdgeInsets.zero),
+                              padding:
+                                  MaterialStateProperty.all(EdgeInsets.zero),
                             ),
                             child: const DecoratedIconWidget(
                               Icons.arrow_back_ios,
@@ -144,42 +155,52 @@ class _PicDetailState extends State<PicDetail> {
                             following: true,
                             onFollow: () {},
                             haveStory: false,
-                            onTapOnProfileImage: () => System().navigateToProfile(context, widget.arguments?.email ?? ''),
+                            onTapOnProfileImage: () => System()
+                                .navigateToProfile(
+                                    context, widget.arguments?.email ?? ''),
                             spaceProfileAndId: eightPx,
                             featureType: FeatureType.pic,
                             username: widget.arguments?.username,
                             isCelebrity: widget.arguments?.privacy?.isCelebrity,
-                            isUserVerified: widget.arguments?.isIdVerified ?? false,
-                            imageUrl: '${System().showUserPicture(widget.arguments?.avatar?.mediaEndpoint)}',
+                            isUserVerified:
+                                widget.arguments?.isIdVerified ?? false,
+                            imageUrl:
+                                '${System().showUserPicture(widget.arguments?.avatar?.mediaEndpoint)}',
                             badge: widget.arguments?.urluserBadge,
                             createdAt: '${System().readTimestamp(
-                              DateTime.parse(System().dateTimeRemoveT(widget.arguments?.createdAt ?? '')).millisecondsSinceEpoch,
+                              DateTime.parse(System().dateTimeRemoveT(
+                                      widget.arguments?.createdAt ?? ''))
+                                  .millisecondsSinceEpoch,
                               context,
                               fullCaption: true,
                             )}',
                           ),
                         ],
                       ),
-                      widget.arguments?.email == SharedPreference().readStorage(SpKeys.email)
+                      widget.arguments?.email ==
+                              SharedPreference().readStorage(SpKeys.email)
                           ? _buildButtonV2(
                               context: context,
                               iconData: '${AssetPath.vectorPath}more.svg',
                               function: () async {
-                                await context.handleActionIsGuest(() async  {
+                                await context.handleActionIsGuest(() async {
                                   await ShowBottomSheet().onShowOptionContent(
                                     context,
-                                    contentData: widget.arguments ?? ContentData(),
+                                    contentData:
+                                        widget.arguments ?? ContentData(),
                                     captionTitle: hyppePic,
                                     isShare: widget.arguments?.isShared ?? true,
                                     // storyController: widget.storyController,
-                                    onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
+                                    onUpdate: () => context
+                                        .read<PicDetailNotifier>()
+                                        .onUpdate(),
                                   );
                                 });
-
                               },
                             )
                           : SizedBox(),
-                      widget.arguments?.email != SharedPreference().readStorage(SpKeys.email)
+                      widget.arguments?.email !=
+                              SharedPreference().readStorage(SpKeys.email)
                           ? _buildButtonV2(
                               context: context,
                               iconData: '${AssetPath.vectorPath}more.svg',
@@ -190,11 +211,12 @@ class _PicDetailState extends State<PicDetail> {
                                     postData: widget.arguments,
                                     type: hyppePic,
                                     adsData: null,
-                                    onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
+                                    onUpdate: () => context
+                                        .read<PicDetailNotifier>()
+                                        .onUpdate(),
                                   );
                                 });
-                              }
-                            )
+                              })
                           : SizedBox(),
                     ],
                   ),
@@ -223,22 +245,29 @@ class _PicDetailState extends State<PicDetail> {
                       children: [
                         sixteenPx,
                         Consumer<LikeNotifier>(
-                          builder: (context, notifier, child) => widget.arguments?.insight?.isloading ?? false
-                              ? Container(
-                                  height: 21,
-                                  width: 21,
-                                  margin: const EdgeInsets.only(left: 20),
-                                  child: const CircularProgressIndicator(
-                                    color: kHyppePrimary,
-                                    strokeWidth: 2,
-                                  ),
-                                )
-                              : _buildButtonV2(
-                                  context: context,
-                                  colorIcon: (widget.arguments?.insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeLightButtonText,
-                                  iconData: '${AssetPath.vectorPath}${(widget.arguments?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
-                                  function: () => notifier.likePost(context, widget.arguments ?? ContentData()),
-                                ),
+                          builder: (context, notifier, child) =>
+                              widget.arguments?.insight?.isloading ?? false
+                                  ? Container(
+                                      height: 21,
+                                      width: 21,
+                                      margin: const EdgeInsets.only(left: 20),
+                                      child: const CircularProgressIndicator(
+                                        color: kHyppePrimary,
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                  : _buildButtonV2(
+                                      context: context,
+                                      colorIcon: (widget.arguments?.insight
+                                                  ?.isPostLiked ??
+                                              false)
+                                          ? kHyppeRed
+                                          : kHyppeLightButtonText,
+                                      iconData:
+                                          '${AssetPath.vectorPath}${(widget.arguments?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                      function: () => notifier.likePost(context,
+                                          widget.arguments ?? ContentData()),
+                                    ),
                         ),
                         eightPx,
                         if ((widget.arguments?.allowComments ?? true))
@@ -247,27 +276,36 @@ class _PicDetailState extends State<PicDetail> {
                             iconData: '${AssetPath.vectorPath}comment.svg',
                             function: () {
                               context.handleActionIsGuest(() {
-                                ShowBottomSheet.onShowCommentV2(context, postID: widget.arguments?.postID);
+                                ShowBottomSheet.onShowCommentV2(context,
+                                    postID: widget.arguments?.postID);
                               });
                             },
                           ),
                         eightPx,
-                        if ((widget.arguments?.isShared ?? true) && widget.arguments?.visibility == 'PUBLIC')
+                        if ((widget.arguments?.isShared ?? true) &&
+                            widget.arguments?.visibility == 'PUBLIC')
                           _buildButtonV2(
                             context: context,
                             iconData: '${AssetPath.vectorPath}share.svg',
-                            function: widget.arguments != null ? () => context.read<PicDetailNotifier>().createdDynamicLink(context, data: widget.arguments) : () {},
+                            function: widget.arguments != null
+                                ? () => context
+                                    .read<PicDetailNotifier>()
+                                    .createdDynamicLink(context,
+                                        data: widget.arguments)
+                                : () {},
                           ),
                         eightPx,
-                        if ((widget.arguments?.saleAmount ?? 0) > 0 && SharedPreference().readStorage(SpKeys.email) != widget.arguments?.email)
+                        if ((widget.arguments?.saleAmount ?? 0) > 0 &&
+                            SharedPreference().readStorage(SpKeys.email) !=
+                                widget.arguments?.email)
                           _buildButtonV2(
                             context: context,
                             iconData: '${AssetPath.vectorPath}cart.svg',
                             function: () async {
                               // notifier.preventMusic = true;
-                              await context.handleActionIsGuest(() async  {
-                                
-                                ShowBottomSheet.onBuyContent(context, data: widget.arguments);
+                              await context.handleActionIsGuest(() async {
+                                ShowBottomSheet.onBuyContent(context,
+                                    data: widget.arguments);
                               });
 
                               // notifier.preventMusic = true;
@@ -286,22 +324,32 @@ class _PicDetailState extends State<PicDetail> {
                         // )
                       ],
                     ),
-                    (widget.arguments?.tagPeople?.isNotEmpty ?? false) || widget.arguments?.location != ''
+                    (widget.arguments?.tagPeople?.isNotEmpty ?? false) ||
+                            widget.arguments?.location != ''
                         ? Padding(
-                            padding: const EdgeInsets.only(left: 16, bottom: 26, top: 16),
+                            padding: const EdgeInsets.only(
+                                left: 16, bottom: 26, top: 16),
                             child: Row(
                               children: [
                                 widget.arguments?.tagPeople?.isNotEmpty ?? false
                                     ? PicTagLabel(
                                         icon: 'tag_people',
-                                        label: '${widget.arguments?.tagPeople?.length} people',
+                                        label:
+                                            '${widget.arguments?.tagPeople?.length} people',
                                         function: () {
-                                          context.read<PicDetailNotifier>().showUserTag(context, widget.arguments?.tagPeople ?? [], widget.arguments?.postID);
+                                          context
+                                              .read<PicDetailNotifier>()
+                                              .showUserTag(
+                                                  context,
+                                                  widget.arguments?.tagPeople ??
+                                                      [],
+                                                  widget.arguments?.postID);
                                         },
                                         width: 18,
                                       )
                                     : const SizedBox(),
-                                widget.arguments?.location == '' || widget.arguments?.location == null
+                                widget.arguments?.location == '' ||
+                                        widget.arguments?.location == null
                                     ? const SizedBox()
                                     : PicTagLabel(
                                         icon: 'maptag-white',
@@ -316,7 +364,9 @@ class _PicDetailState extends State<PicDetail> {
                     Padding(
                       child: Container(
                         padding: const EdgeInsets.all(2),
-                        constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
+                        constraints: BoxConstraints(
+                            maxHeight:
+                                MediaQuery.of(context).size.height * 0.5),
                         // color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
 
                         child: SingleChildScrollView(
@@ -329,9 +379,21 @@ class _PicDetailState extends State<PicDetail> {
                               textAlign: TextAlign.start,
                               seeLess: ' ${translate.seeLess}',
                               seeMore: ' ${translate.seeMoreContent}',
-                              normStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppeLightButtonText),
-                              hrefStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppePrimary),
-                              expandStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primary),
+                              normStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(color: kHyppeLightButtonText),
+                              hrefStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(color: kHyppePrimary),
+                              expandStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
                             ),
                           ],
                         )),
@@ -351,7 +413,7 @@ class _PicDetailState extends State<PicDetail> {
               //       textAlign: TextAlign.left,
               //       textOverflow: TextOverflow.visible,
               //       textToDisplay: "${picData.description}",
-              //       textStyle: Theme.of(context).textTheme.bodyText1,
+              //       textStyle: Theme.of(context).textTheme.bodyLarge,
               //     ),
               //   ),
               // ),

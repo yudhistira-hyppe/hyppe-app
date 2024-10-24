@@ -25,7 +25,8 @@ class SignInForm extends StatefulWidget {
 
 class _SignInFormState extends State<SignInForm> {
   var rememberMe = SharedPreference().readStorage(SpKeys.rememberMe) ?? false;
-  var valRememberMe = SharedPreference().readStorage(SpKeys.valRememberMe) ?? ["", ""];
+  var valRememberMe =
+      SharedPreference().readStorage(SpKeys.valRememberMe) ?? ["", ""];
 
   @override
   void initState() {
@@ -39,7 +40,8 @@ class _SignInFormState extends State<SignInForm> {
   @override
   Widget build(BuildContext context) {
     print("--> login/widget/sign_in_form rememberMe:" + rememberMe.toString());
-    print("--> login/widget/sign_in_form valRememberMe:" + valRememberMe.toString());
+    print("--> login/widget/sign_in_form valRememberMe:" +
+        valRememberMe.toString());
 
     // if (rememberMe) {
     //   var preEmail = valRememberMe[0] ?? "";
@@ -62,36 +64,59 @@ class _SignInFormState extends State<SignInForm> {
                 inputAreaHeight: 55 * SizeConfig.scaleDiagonal,
                 inputAreaWidth: SizeConfig.screenWidth!,
                 textEditingController: notifier.emailController,
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.bodyLarge,
                 textInputType: TextInputType.emailAddress,
                 onChanged: (v) {
                   notifier.email = v;
                 },
                 inputDecoration: InputDecoration(
-                  contentPadding: const EdgeInsets.only(left: 16, bottom: 16, right: 16),
-                  labelText: notifier.incorrect ? notifier.language.notAValidEmailAddress : notifier.language.email,
-                  labelStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
-                      color: notifier.emailValidator(notifier.emailController.text) != ''
+                  contentPadding:
+                      const EdgeInsets.only(left: 16, bottom: 16, right: 16),
+                  labelText: notifier.incorrect
+                      ? notifier.language.notAValidEmailAddress
+                      : notifier.language.email,
+                  labelStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      color: notifier.emailValidator(
+                                  notifier.emailController.text) !=
+                              ''
                           ? Theme.of(context).colorScheme.error
                           : notifier.emailFocus.hasFocus
                               ? Theme.of(context).colorScheme.primary
                               : null),
-                  prefixIconConstraints: BoxConstraints(minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!)),
+                  prefixIconConstraints: BoxConstraints(
+                      minWidth: SizeWidget().calculateSize(30.0,
+                          SizeWidget.baseWidthXD, SizeConfig.screenWidth!)),
                   prefixIcon: Transform.translate(
-                    offset: Offset(SizeWidget().calculateSize(-5.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!), 0.0),
+                    offset: Offset(
+                        SizeWidget().calculateSize(-5.0, SizeWidget.baseWidthXD,
+                            SizeConfig.screenWidth!),
+                        0.0),
                     child: Transform.scale(
-                      scale: SizeWidget().calculateSize(1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
-                      child: Icon(Icons.email_outlined, color: Theme.of(context).iconTheme.color),
+                      scale: SizeWidget().calculateSize(1.2,
+                          SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
+                      child: Icon(Icons.email_outlined,
+                          color: Theme.of(context).iconTheme.color),
                     ),
                   ),
-                  border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
-                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
-                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: notifier.emailFocus.hasFocus ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface)),
-                  errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.error)),
+                  border: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.surface)),
+                  enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.surface)),
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: notifier.emailFocus.hasFocus
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).colorScheme.surface)),
+                  errorBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.error)),
                 ),
                 readOnly: notifier.isLoading
                     ? true
-                    : notifier.loadingForObject(LoginNotifier.loadingForgotPasswordKey)
+                    : notifier.loadingForObject(
+                            LoginNotifier.loadingForgotPasswordKey)
                         ? true
                         : false,
                 // validator: (v) {
@@ -104,7 +129,8 @@ class _SignInFormState extends State<SignInForm> {
               ),
               fourPx,
               CustomTextWidget(
-                textToDisplay: "${notifier.emailValidator(notifier.emailController.text)}",
+                textToDisplay:
+                    "${notifier.emailValidator(notifier.emailController.text)}",
                 textAlign: TextAlign.start,
                 textStyle: const TextStyle(color: Colors.red),
               ),
@@ -115,54 +141,76 @@ class _SignInFormState extends State<SignInForm> {
                 inputAreaHeight: 55 * SizeConfig.scaleDiagonal,
                 inputAreaWidth: SizeConfig.screenWidth!,
                 textEditingController: notifier.passwordController,
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.bodyLarge,
                 obscureText: notifier.hide,
                 textInputType: TextInputType.text,
                 onChanged: (v) => notifier.password = v,
                 inputDecoration: InputDecoration(
                   isDense: true,
                   contentPadding: const EdgeInsets.only(right: 16, bottom: 16),
-                  labelText: notifier.incorrect ? notifier.language.incorrectPassword : notifier.language.password,
-                  labelStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
+                  labelText: notifier.incorrect
+                      ? notifier.language.incorrectPassword
+                      : notifier.language.password,
+                  labelStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
                       color: notifier.incorrect
                           ? Theme.of(context).colorScheme.error
                           : notifier.passwordFocus.hasFocus
                               ? Theme.of(context).colorScheme.primary
                               : null),
                   prefixIconConstraints: BoxConstraints(
-                    minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!),
+                    minWidth: SizeWidget().calculateSize(
+                        30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!),
                   ),
                   suffixIconConstraints: BoxConstraints(
-                    minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!),
+                    minWidth: SizeWidget().calculateSize(
+                        30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!),
                   ),
                   prefixIcon: Transform.translate(
-                    offset: Offset(SizeWidget().calculateSize(-5.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!), 0.0),
+                    offset: Offset(
+                        SizeWidget().calculateSize(-5.0, SizeWidget.baseWidthXD,
+                            SizeConfig.screenWidth!),
+                        0.0),
                     child: Transform.scale(
-                      scale: SizeWidget().calculateSize(1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
-                      child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}lock.svg"),
+                      scale: SizeWidget().calculateSize(1.2,
+                          SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
+                      child: const CustomIconWidget(
+                          iconData: "${AssetPath.vectorPath}lock.svg"),
                     ),
                   ),
                   suffixIcon: Transform.scale(
-                    scale: SizeWidget().calculateSize(1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
+                    scale: SizeWidget().calculateSize(
+                        1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
                     child: CustomTextButton(
                       style: ButtonStyle(
                           alignment: const Alignment(0.75, 0.0),
                           minimumSize: MaterialStateProperty.all(Size.zero),
                           padding: MaterialStateProperty.all(EdgeInsets.zero),
-                          overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                          overlayColor:
+                              MaterialStateProperty.all(Colors.transparent)),
                       child: CustomIconWidget(
-                        iconData: notifier.hide ? '${AssetPath.vectorPath}eye-off.svg' : '${AssetPath.vectorPath}eye.svg',
+                        iconData: notifier.hide
+                            ? '${AssetPath.vectorPath}eye-off.svg'
+                            : '${AssetPath.vectorPath}eye.svg',
                       ),
                       onPressed: () => notifier.hide = !notifier.hide,
                     ),
                   ),
-                  border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
-                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
-                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: notifier.passwordFocus.hasFocus ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface)),
+                  border: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.surface)),
+                  enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.surface)),
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: notifier.passwordFocus.hasFocus
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).colorScheme.surface)),
                 ),
                 readOnly: notifier.isLoading
                     ? true
-                    : notifier.loadingForObject(LoginNotifier.loadingForgotPasswordKey)
+                    : notifier.loadingForObject(
+                            LoginNotifier.loadingForgotPasswordKey)
                         ? true
                         : false,
               ),
@@ -174,7 +222,7 @@ class _SignInFormState extends State<SignInForm> {
           //   children: [
           //     CustomTextWidget(
           //       textToDisplay: "${notifier.language.forgotPassword}?",
-          //       textStyle: Theme.of(context).primaryTextTheme.button,
+          //       textStyle: Theme.of(context).primaryTextTheme.labelLarge,
           //     ),
           //     notifier.loadingForObject(LoginNotifier.loadingForgotPasswordKey)
           //         ? const CustomLoading(size: 6.3)
@@ -182,7 +230,7 @@ class _SignInFormState extends State<SignInForm> {
           //             onPressed: () => notifier.onClickForgotPassword(context),
           //             child: CustomTextWidget(
           //               textToDisplay: "${notifier.language.forgotPassword}?",
-          //               textStyle: Theme.of(context).primaryTextTheme.button.copyWith(color: kHyppePrimary),
+          //               textStyle: Theme.of(context).primaryTextTheme.labelLarge.copyWith(color: kHyppePrimary),
           //             ),
           //           ),
           //   ],
@@ -196,7 +244,10 @@ class _SignInFormState extends State<SignInForm> {
                     onPressed: () => notifier.onClickForgotPassword(context),
                     child: CustomTextWidget(
                       textToDisplay: "${notifier.language.forgotPassword}?",
-                      textStyle: Theme.of(context).primaryTextTheme.button?.copyWith(color: kHyppePrimary),
+                      textStyle: Theme.of(context)
+                          .primaryTextTheme
+                          .labelLarge
+                          ?.copyWith(color: kHyppePrimary),
                     ),
                   ),
                 ),
@@ -220,15 +271,18 @@ class _SignInFormState extends State<SignInForm> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                notifier.language.simpanInfoLogin ?? 'Simpan info login',
+                                notifier.language.simpanInfoLogin ??
+                                    'Simpan info login',
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               SizedBox(
                                 height: 10,
                               ),
                               Text(
-                                notifier.language.keteranganSimpanInfoLogin ?? 'Gak perlu masukan lagi email dan kata sandi di perangkat ini',
-                                style: TextStyle(color: Colors.black.withOpacity(0.4)),
+                                notifier.language.keteranganSimpanInfoLogin ??
+                                    'Gak perlu masukan lagi email dan kata sandi di perangkat ini',
+                                style: TextStyle(
+                                    color: Colors.black.withOpacity(0.4)),
                               )
                             ],
                           ),
@@ -238,13 +292,18 @@ class _SignInFormState extends State<SignInForm> {
                         child: Container(
                             alignment: Alignment.center,
                             child: Switch(
-                              value: SharedPreference().readStorage(SpKeys.rememberMe) ?? false,
+                              value: SharedPreference()
+                                      .readStorage(SpKeys.rememberMe) ??
+                                  false,
                               activeColor: kHyppePrimary,
                               onChanged: (bool value) {
-                                print('--> login/widget/sign_in_form switch:rememberMe:' + value.toString());
+                                print(
+                                    '--> login/widget/sign_in_form switch:rememberMe:' +
+                                        value.toString());
                                 setState(() {
                                   notifier.rememberMe = value;
-                                  SharedPreference().writeStorage(SpKeys.rememberMe, value);
+                                  SharedPreference()
+                                      .writeStorage(SpKeys.rememberMe, value);
                                 });
                               },
                             )))
@@ -257,7 +316,10 @@ class _SignInFormState extends State<SignInForm> {
           CustomElevatedButton(
             function: () {
               if (!notifier.isLoading) {
-                if (notifier.email.isNotEmpty && notifier.password.isNotEmpty && notifier.emailValidator(notifier.emailController.text) == '') {
+                if (notifier.email.isNotEmpty &&
+                    notifier.password.isNotEmpty &&
+                    notifier.emailValidator(notifier.emailController.text) ==
+                        '') {
                   notifier.onClickLogin(context);
                 }
               }
@@ -276,7 +338,12 @@ class _SignInFormState extends State<SignInForm> {
                 ? const CustomLoading()
                 : CustomTextWidget(
                     textToDisplay: notifier.language.logIn ?? 'Log In',
-                    textStyle: notifier.buttonDisable() ? Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText) : Theme.of(context).primaryTextTheme.button,
+                    textStyle: notifier.buttonDisable()
+                        ? Theme.of(context)
+                            .textTheme
+                            .labelLarge
+                            ?.copyWith(color: kHyppeLightButtonText)
+                        : Theme.of(context).primaryTextTheme.labelLarge,
                   ),
             width: SizeConfig.screenWidth,
             height: 49 * SizeConfig.scaleDiagonal,

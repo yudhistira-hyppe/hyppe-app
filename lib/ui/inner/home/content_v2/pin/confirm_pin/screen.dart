@@ -29,7 +29,8 @@ class ConfirmPin extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(
             leading: IconButton(
-              icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
+              icon: const CustomIconWidget(
+                  iconData: "${AssetPath.vectorPath}back-arrow.svg"),
               splashRadius: 1,
               onPressed: () {
                 Routing().moveBack();
@@ -40,7 +41,10 @@ class ConfirmPin extends StatelessWidget {
             titleSpacing: 0,
             title: CustomTextWidget(
               textToDisplay: notifier2.translate.confirmPin ?? '',
-              textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18 * SizeConfig.scaleDiagonal),
+              textStyle: Theme.of(context)
+                  .textTheme
+                  .bodyLarge
+                  ?.copyWith(fontSize: 18 * SizeConfig.scaleDiagonal),
             ),
             centerTitle: false,
           ),
@@ -63,17 +67,25 @@ class ConfirmPin extends StatelessWidget {
                       ),
                 ),
                 sixPx,
-                CustomTextWidget(textToDisplay: notifier2.translate.enterYour6DigitHyppePin ?? ''),
+                CustomTextWidget(
+                    textToDisplay:
+                        notifier2.translate.enterYour6DigitHyppePin ?? ''),
                 twelvePx,
                 CustomRectangleInput(
                   notifier.pin2Controller,
-                  onChanged: (value) => notifier.pinConfirmChecking(context, value),
+                  onChanged: (value) =>
+                      notifier.pinConfirmChecking(context, value),
                 ),
                 !notifier.matchingPin
                     ? CustomTextWidget(
-                        textToDisplay: notifier2.translate.enterThePinThatMatchesThePinYouFilledInEarlier ?? '',
+                        textToDisplay: notifier2.translate
+                                .enterThePinThatMatchesThePinYouFilledInEarlier ??
+                            '',
                         maxLines: 3,
-                        textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppeRed),
+                        textStyle: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(color: kHyppeRed),
                       )
                     : Container(),
               ],

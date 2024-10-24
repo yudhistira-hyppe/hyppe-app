@@ -10,7 +10,9 @@ import 'package:provider/provider.dart';
 class BuildFiltersWidget extends StatelessWidget {
   final GlobalKey? globalKey;
   final GlobalKey<ScaffoldState> scaffoldState;
-  const BuildFiltersWidget({Key? key, required this.scaffoldState, this.globalKey}) : super(key: key);
+  const BuildFiltersWidget(
+      {Key? key, required this.scaffoldState, this.globalKey})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +26,13 @@ class BuildFiltersWidget extends StatelessWidget {
               child: _buildButton(context,
                   caption: notifier.language.filter ?? '',
                   iconData: "${AssetPath.vectorPath}filters.svg",
-                  onPressed: () => context.read<PreviewContentNotifier>().isSheetOpen
+                  onPressed: () => context
+                          .read<PreviewContentNotifier>()
+                          .isSheetOpen
                       ? context.read<PreviewContentNotifier>().closeFilters()
-                      : context.read<PreviewContentNotifier>().showFilters(context, scaffoldState, globalKey)),
+                      : context
+                          .read<PreviewContentNotifier>()
+                          .showFilters(context, scaffoldState, globalKey)),
             ),
             sixteenPx,
             IgnorePointer(
@@ -34,7 +40,9 @@ class BuildFiltersWidget extends StatelessWidget {
               child: _buildButton(context,
                   caption: notifier.language.text ?? '',
                   iconData: "${AssetPath.vectorPath}texts.svg",
-                  onPressed: () => context.read<PreviewContentNotifier>().addTextItem(context)),
+                  onPressed: () => context
+                      .read<PreviewContentNotifier>()
+                      .addTextItem(context)),
             ),
           ],
         );
@@ -42,7 +50,10 @@ class BuildFiltersWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildButton(BuildContext context, {required String iconData, required String caption, required VoidCallback onPressed}) {
+  Widget _buildButton(BuildContext context,
+      {required String iconData,
+      required String caption,
+      required VoidCallback onPressed}) {
     return IconButton(
       padding: EdgeInsets.zero,
       onPressed: onPressed,
@@ -51,7 +62,9 @@ class BuildFiltersWidget extends StatelessWidget {
         children: [
           CustomIconWidget(iconData: iconData),
           sixPx,
-          CustomTextWidget(textToDisplay: caption, textStyle: Theme.of(context).textTheme.caption)
+          CustomTextWidget(
+              textToDisplay: caption,
+              textStyle: Theme.of(context).textTheme.bodySmall)
         ],
       ),
     );

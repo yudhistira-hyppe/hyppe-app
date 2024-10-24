@@ -16,16 +16,19 @@ class CommentSlider extends StatelessWidget {
       padding: EdgeInsets.all(8 * SizeConfig.scaleDiagonal),
       child: Column(
         children: [
-          const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+          const CustomIconWidget(
+              iconData: "${AssetPath.vectorPath}handler.svg"),
           SizedBox(height: 16 * SizeConfig.scaleDiagonal),
           CustomRichTextWidget(
             textSpan: TextSpan(
               text: context.read<TranslateNotifierV2>().translate.comment,
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.titleLarge,
               children: [
                 TextSpan(
                   text: " (${length ?? "0"})",
-                  style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 14),
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.secondary,
+                      fontSize: 14),
                 )
               ],
             ),

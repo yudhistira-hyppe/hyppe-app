@@ -34,7 +34,9 @@ class _ReviewSellContentScreenState extends State<ReviewSellContentScreen> {
     return Consumer<ReviewSellNotifier>(
       builder: (_, notifier, __) => Scaffold(
         appBar: AppBar(
-          leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
+          leadingWidth: 50 *
+              (SizeConfig.screenWidth ?? context.getWidth()) /
+              SizeWidget.baseWidthXD,
           leading: CustomIconButtonWidget(
             defaultColor: true,
             iconData: "${AssetPath.vectorPath}back-arrow.svg",
@@ -44,7 +46,7 @@ class _ReviewSellContentScreenState extends State<ReviewSellContentScreen> {
           title: CustomTextWidget(
             textToDisplay: notifier.language.orderSummary ?? '',
             textStyle:
-                Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
+                Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 18),
           ),
           centerTitle: false,
         ),
@@ -147,7 +149,7 @@ class _ReviewSellContentScreenState extends State<ReviewSellContentScreen> {
                   function: () => Routing().move(Routes.paymentScreen),
                   child: CustomTextWidget(
                     textToDisplay: "Proceed To Payment",
-                    textStyle: textTheme.button
+                    textStyle: textTheme.labelLarge
                         ?.copyWith(color: kHyppeLightButtonText),
                   ),
                   buttonStyle: ButtonStyle(
@@ -277,7 +279,7 @@ class _ReviewSellContentScreenState extends State<ReviewSellContentScreen> {
       child: ListTile(
         title: CustomTextWidget(
           textToDisplay: title,
-          textStyle: Theme.of(context).textTheme.subtitle2,
+          textStyle: Theme.of(context).textTheme.titleSmall,
           textAlign: TextAlign.start,
           textOverflow: TextOverflow.clip,
         ),
@@ -286,7 +288,8 @@ class _ReviewSellContentScreenState extends State<ReviewSellContentScreen> {
                 textToDisplay: subtitle,
                 textStyle: Theme.of(context)
                     .textTheme
-                    .caption?.copyWith(color: kHyppeSecondary),
+                    .bodySmall
+                    ?.copyWith(color: kHyppeSecondary),
                 textAlign: TextAlign.start,
                 textOverflow: TextOverflow.clip,
               )

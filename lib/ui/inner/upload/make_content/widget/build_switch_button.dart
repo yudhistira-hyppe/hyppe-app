@@ -27,80 +27,100 @@ class _BuildSwitchButtonState extends State<BuildSwitchButton> {
           ),
         ),
         child:
-        // notifier.isRecordingVideo
-        //     ? Padding(
-        //         padding: EdgeInsets.symmetric(horizontal: 16 * SizeConfig.scaleDiagonal),
-        //         child: Row(
-        //           crossAxisAlignment: CrossAxisAlignment.center,
-        //           mainAxisAlignment: MainAxisAlignment.center,
-        //           children: [
-        //             Expanded(
-        //               flex: 12,
-        //               child: IgnorePointer(
-        //                 ignoring: true,
-        //                 child: Slider(
-        //                   max: 1.0,
-        //                   value: notifier.progressDev,
-        //                   onChanged: (double value) {},
-        //                   inactiveColor: kHyppeTextPrimary.withOpacity(0.5),
-        //                   activeColor: Theme.of(context).colorScheme.primary,
-        //                 ),
-        //               ),
-        //             ),
-        //             fourPx,
-        //             Expanded(
-        //               flex: 2,
-        //               child: CustomTextWidget(
-        //                 textToDisplay: System().formatDuration(Duration(seconds: notifier.progressHuman).inMilliseconds),
-        //                 textStyle: Theme.of(context).textTheme.caption,
-        //               ),
-        //             )
-        //           ],
-        //         ),
-        //       )
-        //     :
-        Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  notifier.featureType == FeatureType.story || notifier.featureType == FeatureType.pic
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(top: 13 * SizeConfig.scaleDiagonal),
-                              child: GestureDetector(
-                                onTap: notifier.featureType == FeatureType.story && notifier.isVideo ? () => notifier.onActionChange(context, true) : null,
-                                child: CustomTextWidget(
-                                  textToDisplay: notifier.language.photo ?? '',
-                                  textStyle: Theme.of(context).textTheme.bodyText2,
-                                ),
-                              ),
-                            ),
-                            notifier.isVideo ? const SizedBox.shrink() : const CustomIconWidget(iconData: "${AssetPath.vectorPath}spike.svg")
-                          ],
-                        )
-                      : const SizedBox.shrink(),
-                  (notifier.featureType != FeatureType.pic) && (notifier.featureType == FeatureType.story || notifier.featureType == FeatureType.pic)
-                      ? SizedBox(width: 32 * SizeConfig.scaleDiagonal)
-                      : const SizedBox.shrink(),
-                  notifier.featureType != FeatureType.pic
-                      ? Padding(
-                          padding: EdgeInsets.only(top: 13 * SizeConfig.scaleDiagonal),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              GestureDetector(
-                                onTap: notifier.featureType == FeatureType.story && !notifier.isVideo ? () => notifier.onActionChange(context, false) : null,
-                                child: CustomTextWidget(textToDisplay: notifier.language.video ?? '', textStyle: Theme.of(context).textTheme.bodyText2),
-                              ),
-                              notifier.isVideo ? const CustomIconWidget(iconData: "${AssetPath.vectorPath}spike.svg") : const SizedBox.shrink()
-                            ],
+            // notifier.isRecordingVideo
+            //     ? Padding(
+            //         padding: EdgeInsets.symmetric(horizontal: 16 * SizeConfig.scaleDiagonal),
+            //         child: Row(
+            //           crossAxisAlignment: CrossAxisAlignment.center,
+            //           mainAxisAlignment: MainAxisAlignment.center,
+            //           children: [
+            //             Expanded(
+            //               flex: 12,
+            //               child: IgnorePointer(
+            //                 ignoring: true,
+            //                 child: Slider(
+            //                   max: 1.0,
+            //                   value: notifier.progressDev,
+            //                   onChanged: (double value) {},
+            //                   inactiveColor: kHyppeTextPrimary.withOpacity(0.5),
+            //                   activeColor: Theme.of(context).colorScheme.primary,
+            //                 ),
+            //               ),
+            //             ),
+            //             fourPx,
+            //             Expanded(
+            //               flex: 2,
+            //               child: CustomTextWidget(
+            //                 textToDisplay: System().formatDuration(Duration(seconds: notifier.progressHuman).inMilliseconds),
+            //                 textStyle: Theme.of(context).textTheme.bodySmall,
+            //               ),
+            //             )
+            //           ],
+            //         ),
+            //       )
+            //     :
+            Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            notifier.featureType == FeatureType.story ||
+                    notifier.featureType == FeatureType.pic
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding:
+                            EdgeInsets.only(top: 13 * SizeConfig.scaleDiagonal),
+                        child: GestureDetector(
+                          onTap: notifier.featureType == FeatureType.story &&
+                                  notifier.isVideo
+                              ? () => notifier.onActionChange(context, true)
+                              : null,
+                          child: CustomTextWidget(
+                            textToDisplay: notifier.language.photo ?? '',
+                            textStyle: Theme.of(context).textTheme.bodyMedium,
                           ),
-                        )
-                      : const SizedBox.shrink()
-                ],
-              ),
+                        ),
+                      ),
+                      notifier.isVideo
+                          ? const SizedBox.shrink()
+                          : const CustomIconWidget(
+                              iconData: "${AssetPath.vectorPath}spike.svg")
+                    ],
+                  )
+                : const SizedBox.shrink(),
+            (notifier.featureType != FeatureType.pic) &&
+                    (notifier.featureType == FeatureType.story ||
+                        notifier.featureType == FeatureType.pic)
+                ? SizedBox(width: 32 * SizeConfig.scaleDiagonal)
+                : const SizedBox.shrink(),
+            notifier.featureType != FeatureType.pic
+                ? Padding(
+                    padding:
+                        EdgeInsets.only(top: 13 * SizeConfig.scaleDiagonal),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: notifier.featureType == FeatureType.story &&
+                                  !notifier.isVideo
+                              ? () => notifier.onActionChange(context, false)
+                              : null,
+                          child: CustomTextWidget(
+                              textToDisplay: notifier.language.video ?? '',
+                              textStyle:
+                                  Theme.of(context).textTheme.bodyMedium),
+                        ),
+                        notifier.isVideo
+                            ? const CustomIconWidget(
+                                iconData: "${AssetPath.vectorPath}spike.svg")
+                            : const SizedBox.shrink()
+                      ],
+                    ),
+                  )
+                : const SizedBox.shrink()
+          ],
+        ),
       ),
     );
   }

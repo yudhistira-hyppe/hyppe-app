@@ -16,26 +16,28 @@ class CustomPopUpNotification extends StatelessWidget {
     return AnimatedSwitcher(
         duration: const Duration(milliseconds: 800),
         transitionBuilder: (child, animation) {
-          final _slideAnim = Tween<Offset>(begin: const Offset(0.0, -1.0), end: const Offset(0.0, 0.0)).animate(animation);
+          final _slideAnim = Tween<Offset>(
+                  begin: const Offset(0.0, -1.0), end: const Offset(0.0, 0.0))
+              .animate(animation);
           return SlideTransition(position: _slideAnim, child: child);
         },
         child:
-        // isHaveSomethingNew
-        //     ? Align(
-        //         alignment: const Alignment(0.0, -0.96),
-        //         child: Container(
-        //             height: 46,
-        //             width: MediaQuery.of(context).size.width,
-        //             margin: const EdgeInsets.symmetric(horizontal: 16),
-        //             decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: BorderRadius.all(Radius.circular(10.0))),
-        //             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        //               CustomTextWidget(
-        //                   textToDisplay: "${context.read<HomeNotifier>().language.hiYouHaveNewContentPleasePullDownToRefresh}",
-        //                   textStyle: Theme.of(context).textTheme.caption.copyWith(fontWeight: FontWeight.bold)),
-        //               eightPx,
-        //               CustomIconWidget(iconData: "${AssetPath.vectorPath}palm.svg", defaultColor: false, width: 26, height: 26)
-        //             ])))
-        //     :
-        const SizedBox.shrink());
+            // isHaveSomethingNew
+            //     ? Align(
+            //         alignment: const Alignment(0.0, -0.96),
+            //         child: Container(
+            //             height: 46,
+            //             width: MediaQuery.of(context).size.width,
+            //             margin: const EdgeInsets.symmetric(horizontal: 16),
+            //             decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: BorderRadius.all(Radius.circular(10.0))),
+            //             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            //               CustomTextWidget(
+            //                   textToDisplay: "${context.read<HomeNotifier>().language.hiYouHaveNewContentPleasePullDownToRefresh}",
+            //                   textStyle: Theme.of(context).textTheme.bodySmall.copyWith(fontWeight: FontWeight.bold)),
+            //               eightPx,
+            //               CustomIconWidget(iconData: "${AssetPath.vectorPath}palm.svg", defaultColor: false, width: 26, height: 26)
+            //             ])))
+            //     :
+            const SizedBox.shrink());
   }
 }

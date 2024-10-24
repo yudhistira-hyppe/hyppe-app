@@ -45,14 +45,16 @@ class VidDetailBottom extends StatelessWidget {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'VidDetailBottom');
     SizeConfig().init(context);
     final _themes = Theme.of(context);
-    final translate = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
+    final translate =
+        Provider.of<TranslateNotifierV2>(context, listen: false).translate;
     return Container(
       width: SizeConfig.screenWidth,
       color: _themes.colorScheme.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          data?.email == SharedPreference().readStorage(SpKeys.email) && (data?.reportedStatus == 'OWNED')
+          data?.email == SharedPreference().readStorage(SpKeys.email) &&
+                  (data?.reportedStatus == 'OWNED')
               ? ContentViolationWidget(
                   data: data!,
                   text: translate.thisHyppeVidisSubjectToModeration ?? '',
@@ -60,13 +62,19 @@ class VidDetailBottom extends StatelessWidget {
               : Container(),
           twelvePx,
           _buildDescription(context),
-          SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                  (data?.reportedStatus != 'OWNED' && data?.reportedStatus != 'BLURRED' && data?.reportedStatus2 != 'BLURRED') &&
+          SharedPreference().readStorage(SpKeys.statusVerificationId) ==
+                      VERIFIED &&
+                  (data?.reportedStatus != 'OWNED' &&
+                      data?.reportedStatus != 'BLURRED' &&
+                      data?.reportedStatus2 != 'BLURRED') &&
                   (data?.boosted.isEmpty ?? [].isEmpty) &&
                   data?.email == SharedPreference().readStorage(SpKeys.email)
               ? ButtonBoost(contentData: data)
               : Container(),
-          (data?.boosted.isNotEmpty ?? [].isEmpty) && data?.email == SharedPreference().readStorage(SpKeys.email) ? JangkaunStatus(jangkauan: data?.boostJangkauan ?? 0) : Container(),
+          (data?.boosted.isNotEmpty ?? [].isEmpty) &&
+                  data?.email == SharedPreference().readStorage(SpKeys.email)
+              ? JangkaunStatus(jangkauan: data?.boostJangkauan ?? 0)
+              : Container(),
           _buildDivider(context),
           _buildTopRightControl(context),
           fourPx,
@@ -77,7 +85,9 @@ class VidDetailBottom extends StatelessWidget {
     );
   }
 
-  Widget _buildDivider(context) => Divider(thickness: 1.0, color: Theme.of(context).dividerTheme.color?.withOpacity(0.1));
+  Widget _buildDivider(context) => Divider(
+      thickness: 1.0,
+      color: Theme.of(context).dividerTheme.color?.withOpacity(0.1));
 
   Widget _buildDescription(context) {
     return Consumer2<VidDetailNotifier, TranslateNotifierV2>(
@@ -88,7 +98,8 @@ class VidDetailBottom extends StatelessWidget {
           children: [
             Container(
               padding: const EdgeInsets.all(2),
-              constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
+              constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.5),
               child: data != null
                   ?
                   // CustomDescContent(desc: "${data?.description}")
@@ -102,27 +113,41 @@ class VidDetailBottom extends StatelessWidget {
                             textAlign: TextAlign.start,
                             seeLess: ' ${notifier2.translate.seeLess}',
                             seeMore: ' ${notifier2.translate.seeMoreContent}',
-                            normStyle: Theme.of(context).textTheme.subtitle2,
-                            hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                            expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                            normStyle: Theme.of(context).textTheme.titleSmall,
+                            hrefStyle: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(color: kHyppePrimary),
+                            expandStyle: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
                           ),
                         ],
                       ),
                     )
                   : const CustomShimmer(height: 16, radius: 4),
             ),
-            if (data?.music?.musicTitle != null) MusicStatusDetail(music: data!.music!),
+            if (data?.music?.musicTitle != null)
+              MusicStatusDetail(music: data!.music!),
             if (data?.music?.musicTitle != null) eightPx,
             data != null
                 ? Container(
                     margin: EdgeInsets.only(top: 12),
                     child: GestureDetector(
-                      onTap: () => Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data?.postID ?? '', 'VIEW', 'Viewer', data?.email),
+                      onTap: () =>
+                          Provider.of<LikeNotifier>(context, listen: false)
+                              .viewLikeContent(context, data?.postID ?? '',
+                                  'VIEW', 'Viewer', data?.email),
                       child: CustomTextWidget(
                         maxLines: 2,
                         textAlign: TextAlign.left,
-                        textStyle: Theme.of(context).textTheme.caption?.apply(color: Theme.of(context).colorScheme.secondary),
-                        textToDisplay: '${_system.formatterNumber(data?.insight?.views)} ${notifier2.translate.views}',
+                        textStyle: Theme.of(context).textTheme.bodySmall?.apply(
+                            color: Theme.of(context).colorScheme.secondary),
+                        textToDisplay:
+                            '${_system.formatterNumber(data?.insight?.views)} ${notifier2.translate.views}',
                       ),
                     ),
                   )
@@ -138,7 +163,8 @@ class VidDetailBottom extends StatelessWidget {
                                 icon: 'tag_people',
                                 label: '${data?.tagPeople?.first.username}',
                                 function: () {
-                                  notifier.showUserTag(context, data?.tagPeople, data?.postID);
+                                  notifier.showUserTag(
+                                      context, data?.tagPeople, data?.postID);
                                   // vidNotifier.showUserTag(context, index, data.postID);
                                 },
                               )
@@ -178,10 +204,17 @@ class VidDetailBottom extends StatelessWidget {
                             strokeWidth: 2,
                           ),
                         )
-                      : _buildButton(context, '${AssetPath.vectorPath}${(data?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}', "${data?.insight?.likes ?? 0}",
-                          () => notifier.likePost(context, data ?? ContentData()),
-                          colorIcon: (data?.insight?.isPostLiked ?? false) ? kHyppeRed : Theme.of(context).iconTheme.color)
-                  : _buildButton(context, '${AssetPath.vectorPath}none-like.svg', "0", () {}),
+                      : _buildButton(
+                          context,
+                          '${AssetPath.vectorPath}${(data?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                          "${data?.insight?.likes ?? 0}",
+                          () =>
+                              notifier.likePost(context, data ?? ContentData()),
+                          colorIcon: (data?.insight?.isPostLiked ?? false)
+                              ? kHyppeRed
+                              : Theme.of(context).iconTheme.color)
+                  : _buildButton(context,
+                      '${AssetPath.vectorPath}none-like.svg', "0", () {}),
             ),
             if (data?.allowComments ?? true)
               _buildButton(
@@ -189,7 +222,8 @@ class VidDetailBottom extends StatelessWidget {
                 '${AssetPath.vectorPath}comment.svg',
                 value2.translate.comment ?? '',
                 () {
-                  ShowBottomSheet.onShowCommentV2(context, postID: data?.postID);
+                  ShowBottomSheet.onShowCommentV2(context,
+                      postID: data?.postID);
                 },
               ),
             if ((data?.isShared ?? true) && data?.visibility == 'PUBLIC')
@@ -197,10 +231,13 @@ class VidDetailBottom extends StatelessWidget {
                 context,
                 '${AssetPath.vectorPath}share.svg',
                 value2.translate.share ?? '',
-                data != null ? () => value.createdDynamicLink(context, data: data) : () {},
+                data != null
+                    ? () => value.createdDynamicLink(context, data: data)
+                    : () {},
               ),
             if (data != null)
-              if ((data?.saleAmount ?? 0) > 0 && SharedPreference().readStorage(SpKeys.email) != data?.email)
+              if ((data?.saleAmount ?? 0) > 0 &&
+                  SharedPreference().readStorage(SpKeys.email) != data?.email)
                 _buildButton(
                   context,
                   '${AssetPath.vectorPath}cart.svg',
@@ -218,7 +255,8 @@ class VidDetailBottom extends StatelessWidget {
     );
   }
 
-  Widget _buildButton(context, String icon, String caption, Function onTap, {Color? colorIcon}) {
+  Widget _buildButton(context, String icon, String caption, Function onTap,
+      {Color? colorIcon}) {
     return GestureDetector(
       onTap: onTap as void Function()?,
       child: Column(
@@ -232,7 +270,7 @@ class VidDetailBottom extends StatelessWidget {
           CustomTextWidget(
             textToDisplay: caption,
             textAlign: TextAlign.left,
-            textStyle: Theme.of(context).textTheme.caption,
+            textStyle: Theme.of(context).textTheme.bodySmall,
           ),
         ],
       ),
@@ -248,15 +286,21 @@ class VidDetailBottom extends StatelessWidget {
         children: [
           _buildProfilePicture(context),
           data != null
-              ? Consumer3<VidDetailNotifier, FollowRequestUnfollowNotifier, TranslateNotifierV2>(
+              ? Consumer3<VidDetailNotifier, FollowRequestUnfollowNotifier,
+                  TranslateNotifierV2>(
                   builder: (context, value, value2, value3, child) {
-                    if (data?.email == SharedPreference().readStorage(SpKeys.email)) return const SizedBox.shrink();
+                    if (data?.email ==
+                        SharedPreference().readStorage(SpKeys.email))
+                      return const SizedBox.shrink();
                     return value.checkIsLoading
-                        ? const Center(child: SizedBox(height: 40, child: CustomLoading()))
+                        ? const Center(
+                            child: SizedBox(height: 40, child: CustomLoading()))
                         : CustomFollowButton(
                             onPressed: () async {
                               try {
-                                await value.followUser(context, isUnFollow: value.statusFollowing == StatusFollowing.following);
+                                await value.followUser(context,
+                                    isUnFollow: value.statusFollowing ==
+                                        StatusFollowing.following);
                               } catch (e) {
                                 'follow error $e'.logger();
                               }
@@ -266,7 +310,8 @@ class VidDetailBottom extends StatelessWidget {
                           );
                   },
                 )
-              : const Center(child: SizedBox(height: 40, child: CustomLoading())),
+              : const Center(
+                  child: SizedBox(height: 40, child: CustomLoading())),
         ],
       ),
     );
@@ -283,13 +328,15 @@ class VidDetailBottom extends StatelessWidget {
 
           isCelebrity: false,
           isUserVerified: data?.isIdVerified ?? false,
-          onTapOnProfileImage: () => _system.navigateToProfile(context, data?.email ?? ''),
+          onTapOnProfileImage: () =>
+              _system.navigateToProfile(context, data?.email ?? ''),
 
           featureType: FeatureType.vid,
           imageUrl: '${_system.showUserPicture(data?.avatar?.mediaEndpoint)}',
           badge: data?.urluserBadge,
           createdAt: '${_system.readTimestamp(
-            DateTime.parse(_system.dateTimeRemoveT(data?.createdAt ?? '')).millisecondsSinceEpoch,
+            DateTime.parse(_system.dateTimeRemoveT(data?.createdAt ?? ''))
+                .millisecondsSinceEpoch,
             context,
             fullCaption: true,
           )}',

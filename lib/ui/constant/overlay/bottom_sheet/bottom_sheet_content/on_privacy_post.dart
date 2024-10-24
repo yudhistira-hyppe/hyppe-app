@@ -26,7 +26,8 @@ class OnPrivacyPostBottomSheet extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<OnPrivacyPostBottomSheet> createState() => _OnPrivacyPostBottomSheetState();
+  State<OnPrivacyPostBottomSheet> createState() =>
+      _OnPrivacyPostBottomSheetState();
 }
 
 class _OnPrivacyPostBottomSheetState extends State<OnPrivacyPostBottomSheet> {
@@ -41,9 +42,19 @@ class _OnPrivacyPostBottomSheetState extends State<OnPrivacyPostBottomSheet> {
     _currentPrivacy = widget.value;
     // privacy = ["${_language.translate.public}", "${_language.translate.friends}", "${_language.translate.onlyMe}"];
     privacy = [
-      {"title": "${_language.translate.public}", "subtitle": '${_language.translate.anyoneCanView}', "icon": 'globe.svg', 'code': 'PUBLIC'},
+      {
+        "title": "${_language.translate.public}",
+        "subtitle": '${_language.translate.anyoneCanView}',
+        "icon": 'globe.svg',
+        'code': 'PUBLIC'
+      },
       // {"title": "${_language.translate.friends}", "subtitle": '${_language.translate.onlyFriendsCanView}', "icon": 'friend.svg', 'code': 'FRIEND'},
-      {"title": "${_language.translate.onlyMe}", "subtitle": '${_language.translate.onlyYouCanView}', "icon": 'person.svg', 'code': 'PRIVATE'},
+      {
+        "title": "${_language.translate.onlyMe}",
+        "subtitle": '${_language.translate.onlyYouCanView}',
+        "icon": 'person.svg',
+        'code': 'PRIVATE'
+      },
     ];
   }
 
@@ -65,7 +76,8 @@ class _OnPrivacyPostBottomSheetState extends State<OnPrivacyPostBottomSheet> {
               )),
           title: CustomTextWidget(
             textToDisplay: notifier.language.privacyPost ?? 'Privacy Post',
-            textStyle: textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
+            textStyle:
+                textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
           ),
           backgroundColor: Colors.transparent,
         ),
@@ -77,7 +89,8 @@ class _OnPrivacyPostBottomSheetState extends State<OnPrivacyPostBottomSheet> {
             children: [
               CustomTextWidget(
                 textToDisplay: 'Content Privacy',
-                textStyle: textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                textStyle: textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onBackground),
                 textAlign: TextAlign.start,
               ),
               ListView.builder(
@@ -93,7 +106,8 @@ class _OnPrivacyPostBottomSheetState extends State<OnPrivacyPostBottomSheet> {
                       if (mounted) {
                         setState(() {
                           _currentPrivacy = privacy[index]['code'];
-                          widget.onChange(privacy[index]['title'], privacy[index]['code']);
+                          widget.onChange(
+                              privacy[index]['title'], privacy[index]['code']);
                         });
                       }
                     },
@@ -106,13 +120,14 @@ class _OnPrivacyPostBottomSheetState extends State<OnPrivacyPostBottomSheet> {
                     subtitle: CustomTextWidget(
                       textAlign: TextAlign.left,
                       textToDisplay: privacy[index]['subtitle'],
-                      textStyle: Theme.of(context).primaryTextTheme.subtitle2,
+                      textStyle: Theme.of(context).primaryTextTheme.titleSmall,
                     ),
                     secondary: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: CustomIconWidget(
                         defaultColor: true,
-                        iconData: '${AssetPath.vectorPath}${privacy[index]['icon']}',
+                        iconData:
+                            '${AssetPath.vectorPath}${privacy[index]['icon']}',
                         width: 30,
                       ),
                     ),
@@ -125,7 +140,12 @@ class _OnPrivacyPostBottomSheetState extends State<OnPrivacyPostBottomSheet> {
               //-===== Allow Comment =========--
               const Divider(color: kHyppeBgNotSolve, height: 20),
 
-              CustomTextWidget(textToDisplay: notifier.language.comment ?? '', textStyle: const TextStyle(color: kHyppeTextLightPrimary, fontSize: 14, fontWeight: FontWeight.bold)),
+              CustomTextWidget(
+                  textToDisplay: notifier.language.comment ?? '',
+                  textStyle: const TextStyle(
+                      color: kHyppeTextLightPrimary,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold)),
               sixteenPx,
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -141,16 +161,20 @@ class _OnPrivacyPostBottomSheetState extends State<OnPrivacyPostBottomSheet> {
                         children: [
                           Text(
                             _language.translate.allowComment ?? '',
-                            style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
                                   color: const Color.fromRGBO(63, 63, 63, 1),
                                 ),
                           ),
                           fourPx,
                           Text(
                             _language.translate.descAllowComment ?? '',
-                            style: Theme.of(context).textTheme.caption?.copyWith(
-                                  color: kHyppeSecondary,
-                                ),
+                            style:
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: kHyppeSecondary,
+                                    ),
                           ),
                         ],
                       ),
@@ -171,7 +195,12 @@ class _OnPrivacyPostBottomSheetState extends State<OnPrivacyPostBottomSheet> {
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CustomTextWidget(textToDisplay: notifier.language.sharePost ?? '', textStyle: const TextStyle(color: kHyppeTextLightPrimary, fontSize: 14, fontWeight: FontWeight.bold)),
+                        CustomTextWidget(
+                            textToDisplay: notifier.language.sharePost ?? '',
+                            textStyle: const TextStyle(
+                                color: kHyppeTextLightPrimary,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold)),
                         sixteenPx,
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -187,14 +216,22 @@ class _OnPrivacyPostBottomSheetState extends State<OnPrivacyPostBottomSheet> {
                                   children: [
                                     Text(
                                       _language.translate.allowSharing ?? '',
-                                      style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                                            color: const Color.fromRGBO(63, 63, 63, 1),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                            color: const Color.fromRGBO(
+                                                63, 63, 63, 1),
                                           ),
                                     ),
                                     fourPx,
                                     Text(
-                                      _language.translate.descAllowSharing ?? '',
-                                      style: Theme.of(context).textTheme.caption?.copyWith(
+                                      _language.translate.descAllowSharing ??
+                                          '',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
                                             color: kHyppeSecondary,
                                           ),
                                     ),

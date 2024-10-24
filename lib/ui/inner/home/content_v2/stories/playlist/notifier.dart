@@ -220,7 +220,8 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     if (_pageController?.page == dataUserStories.length - 1) {
       return;
     }
-    _pageController?.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+    _pageController?.nextPage(
+        duration: const Duration(seconds: 1), curve: Curves.easeInOut);
   }
 
   degreeToRadian(double deg) {
@@ -263,7 +264,8 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  void makeItems(AnimationController animationController, ContentData? data, ReactionInteractive? reaction) {
+  void makeItems(AnimationController animationController, ContentData? data,
+      ReactionInteractive? reaction) {
     items.clear();
     for (int i = 0; i < 100; i++) {
       items.add(Item());
@@ -277,7 +279,8 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     animationController.forward().whenComplete(() {});
   }
 
-  Future<MusicUrl?> getMusicApsara(BuildContext context, String apsaraId) async {
+  Future<MusicUrl?> getMusicApsara(
+      BuildContext context, String apsaraId) async {
     try {
       final notifier = PostsBloc();
       await notifier.getVideoApsaraBlocV2(context, apsaraId: apsaraId);
@@ -463,11 +466,14 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   }
 
   void navigateToOtherProfile(BuildContext context, ContentData data) {
-    Provider.of<OtherProfileNotifier>(context, listen: false).userEmail = data.email;
-    _routing.move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: data.email));
+    Provider.of<OtherProfileNotifier>(context, listen: false).userEmail =
+        data.email;
+    _routing.move(Routes.otherProfile,
+        argument: OtherProfileArgument(senderEmail: data.email));
   }
 
-  void initState(BuildContext context, StoryDetailScreenArgument routeArgument) {
+  void initState(
+      BuildContext context, StoryDetailScreenArgument routeArgument) {
     _routeArgument = routeArgument;
     _currentPage = _routeArgument?.index;
 
@@ -489,7 +495,8 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
       if (data != null) {
         List<ContentData>? story = [];
         story.add(data);
-        var storys = StoriesGroup(email: data.email, username: data.username, story: story);
+        var storys = StoriesGroup(
+            email: data.email, username: data.username, story: story);
         List<StoriesGroup> groupUserStories = [];
         groupUserStories.add(storys);
         _groupUserStories = groupUserStories;
@@ -501,7 +508,8 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  void initStateGroup(BuildContext context, StoryDetailScreenArgument routeArgument) {
+  void initStateGroup(
+      BuildContext context, StoryDetailScreenArgument routeArgument) {
     // final myEmail = _sharedPrefs.readStorage(SpKeys.email);
     _routeArgument = _routeArgument;
     String email = '';
@@ -518,7 +526,10 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     if (groups != null) {
       _groupUserStories = groups;
     } else if (myGroup != null) {
-      _groupUserStories.add(StoriesGroup(email: myGroup[email]?[0].email, username: myGroup[email]?[0].username, story: myGroup[email]));
+      _groupUserStories.add(StoriesGroup(
+          email: myGroup[email]?[0].email,
+          username: myGroup[email]?[0].username,
+          story: myGroup[email]));
     }
   }
 
@@ -635,7 +646,8 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
                             //   sendAllEmoji();
                             // }
                           });
-                          makeItems(animationController, data, _data?.data[index]);
+                          makeItems(
+                              animationController, data, _data?.data[index]);
                         }
 
                         // try {
@@ -655,7 +667,10 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
                         color: Colors.transparent,
                         child: CustomTextWidget(
                           textToDisplay: _data?.data[index].icon ?? '',
-                          textStyle: Theme.of(context).textTheme.headline4?.apply(color: null),
+                          textStyle: Theme.of(context)
+                              .textTheme
+                              .headlineMedium
+                              ?.apply(color: null),
                         ),
                       ),
                     );
@@ -665,9 +680,11 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
             }
           },
           transitionBuilder: (context, animation, secondaryAnimation, child) {
-            animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
+            animation =
+                CurvedAnimation(curve: Curves.elasticOut, parent: animation);
 
-            return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
+            return ScaleTransition(
+                child: child, scale: animation, alignment: Alignment.center);
           },
         ).whenComplete(() => Future.delayed(const Duration(seconds: 3), () {
               isReactAction = false;
@@ -724,7 +741,9 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
           ..txtMessages = textEditingController.text;
 
         final notifier = MessageBlocV2();
-        await notifier.createDiscussionBloc(context, disqusArgument: param).then((value) {
+        await notifier
+            .createDiscussionBloc(context, disqusArgument: param)
+            .then((value) {
           'Your message was sent'.logger();
         });
       } finally {
@@ -750,14 +769,16 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     // );
   }
 
-  String onProfilePicShow(String? urlPic) => _system.showUserPicture(urlPic) ?? '';
+  String onProfilePicShow(String? urlPic) =>
+      _system.showUserPicture(urlPic) ?? '';
 
   List<Widget> buildItems(AnimationController animationController) {
     // print('isPreventedEmoji: $isPreventedEmoji');
     final animatedOpacity = Tween<double>(
       begin: 1.0,
       end: 0.0,
-    ).animate(CurvedAnimation(parent: animationController, curve: Curves.linear));
+    ).animate(
+        CurvedAnimation(parent: animationController, curve: Curves.linear));
     return items.map((item) {
       var tween = Tween<Offset>(
         begin: const Offset(0, 1),
@@ -862,7 +883,8 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   }
 
   bool _ableClose = true;
-  void onCloseStory(BuildContext context, bool mounted, bool isFromProfile, bool isOther) async {
+  void onCloseStory(BuildContext context, bool mounted, bool isFromProfile,
+      bool isOther) async {
     if (mounted) {
       if (_ableClose) {
         _textEditingController.clear();
@@ -870,10 +892,14 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
           _routing.moveBack();
         } else if (_routeArgument?.postID != null) {
           print('onCloseStory moveAndPop ');
-          await _routing.moveAndPop(Routes.lobby, argument: MainArgument(canShowAds: false, page: isFromProfile ? 4 : 0));
+          await _routing.moveAndPop(Routes.lobby,
+              argument:
+                  MainArgument(canShowAds: false, page: isFromProfile ? 4 : 0));
         } else {
           print('onCloseStory moveBack');
-          await Routing().moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false, page: isFromProfile ? 4 : 0));
+          await Routing().moveAndRemoveUntil(Routes.lobby, Routes.root,
+              argument:
+                  MainArgument(canShowAds: false, page: isFromProfile ? 4 : 0));
         }
         _ableClose = false;
       }
@@ -883,10 +909,12 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  bool isUserLoggedIn(String? email) => _sharedPrefs.readStorage(SpKeys.email) == email;
+  bool isUserLoggedIn(String? email) =>
+      _sharedPrefs.readStorage(SpKeys.email) == email;
 
   Future _followUser(BuildContext context) async {
-    if (_sharedPrefs.readStorage(SpKeys.email) != _dataUserStories.single.email) {
+    if (_sharedPrefs.readStorage(SpKeys.email) !=
+        _dataUserStories.single.email) {
       try {
         final notifier = FollowBloc();
         await notifier.followUserBlocV2(
@@ -909,6 +937,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   }
 
   void reportContent(BuildContext context, ContentData data) {
-    ShowBottomSheet().onReportContent(context, postData: data, type: hyppeStory);
+    ShowBottomSheet()
+        .onReportContent(context, postData: data, type: hyppeStory);
   }
 }

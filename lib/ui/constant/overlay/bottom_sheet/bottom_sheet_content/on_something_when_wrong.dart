@@ -26,15 +26,18 @@ class OnSomethingWhenWrong extends StatelessWidget {
             ),
             SizedBox(height: 35 * SizeConfig.scaleDiagonal),
             CustomTextWidget(
-              textToDisplay: notifier.translate.somethingsWrong ?? 'Something Wrong',
+              textToDisplay:
+                  notifier.translate.somethingsWrong ?? 'Something Wrong',
               textAlign: TextAlign.center,
-              textStyle: TextStyle(fontSize: 18 * SizeConfig.scaleDiagonal, fontWeight: FontWeight.bold),
+              textStyle: TextStyle(
+                  fontSize: 18 * SizeConfig.scaleDiagonal,
+                  fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 14 * SizeConfig.scaleDiagonal),
             CustomTextWidget(
               textToDisplay: notifier.translate.pleaseTryAgain ?? 'Try Again',
               textAlign: TextAlign.center,
-              textStyle: Theme.of(context).textTheme.bodyText2,
+              textStyle: Theme.of(context).textTheme.bodyMedium,
               textOverflow: TextOverflow.clip,
             )
           ],

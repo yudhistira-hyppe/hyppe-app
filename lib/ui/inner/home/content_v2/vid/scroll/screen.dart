@@ -75,7 +75,8 @@ class ScrollVid extends StatefulWidget {
   State<ScrollVid> createState() => _ScrollVidState();
 }
 
-class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
+class _ScrollVidState extends State<ScrollVid>
+    with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
   final ItemScrollController itemScrollController = ItemScrollController();
   FlutterAliplayer? fAliplayer;
   LocalizationModelV2? lang;
@@ -133,10 +134,12 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
 
   Map<int, FlutterAliplayer> dataAli = {};
 
-  final ScrollOffsetController scrollOffsetController = ScrollOffsetController();
+  final ScrollOffsetController scrollOffsetController =
+      ScrollOffsetController();
 
   /// Listener that reports the position of items when the list is scrolled.
-  final ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
+  final ItemPositionsListener itemPositionsListener =
+      ItemPositionsListener.create();
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -156,8 +159,10 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
     notifier.isLoadingLoadmore = false;
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (fAliplayer == null && fAliplayer?.getPlayerName().toString() != 'VideoProfileScroll') {
-        fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'VideoProfileScroll');
+      if (fAliplayer == null &&
+          fAliplayer?.getPlayerName().toString() != 'VideoProfileScroll') {
+        fAliplayer = FlutterAliPlayerFactory.createAliPlayer(
+            playerId: 'VideoProfileScroll');
         initAlipayer();
       }
       print("============== widget argument ${widget.arguments!.vidData}");
@@ -174,7 +179,8 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
           if (connect) {
             print("ini reload harusnya");
             if (!notifier.isLoadingLoadmore) {
-              await notifier.loadMore(context, _scrollController, widget.arguments!.pageSrc!, widget.arguments?.key ?? '');
+              await notifier.loadMore(context, _scrollController,
+                  widget.arguments!.pageSrc!, widget.arguments?.key ?? '');
               if (mounted) {
                 setState(() {
                   vidData = notifier.vidData;
@@ -219,7 +225,8 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
     try {
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
-      fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+      fAliplayer
+          ?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
 
       if (Platform.isAndroid) {
         getExternalStorageDirectories().then((value) {
@@ -254,7 +261,9 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
       });
       fAliplayer?.setOnPrepared((playerId) {
         // Fluttertoast.showToast(msg: "OnPrepared ");
-        fAliplayer?.getPlayerName().then((value) => print("getPlayerName==$value"));
+        fAliplayer
+            ?.getPlayerName()
+            .then((value) => print("getPlayerName==$value"));
         fAliplayer?.getMediaInfo().then((value) {
           print("getMediaInfo==$value");
           _videoDuration = value['duration'];
@@ -276,7 +285,8 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
       });
       fAliplayer?.setOnStateChanged((newState, playerId) {
         _currentPlayerState = newState;
-        print("aliyun : onStateChanged $newState ${_currentPlayerState = newState}");
+        print(
+            "aliyun : onStateChanged $newState ${_currentPlayerState = newState}");
         switch (newState) {
           case FlutterAvpdef.AVPStatus_AVPStatusStarted:
             // Wakelock.enable();
@@ -466,7 +476,8 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
         }
       });
 
-      fAliplayer?.setOnSubtitleShow((trackIndex, subtitleID, subtitle, playerId) {
+      fAliplayer
+          ?.setOnSubtitleShow((trackIndex, subtitleID, subtitle, playerId) {
         if (mounted) {
           setState(() {
             // extSubTitleText = subtitle;
@@ -480,12 +491,18 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
 
   void vidConfig() {
     var configMap = {
-      'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
-      'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
-      'mMaxBufferDuration': GlobalSettings.mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
-      'mMaxDelayTime': GlobalSettings.mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
-      'mNetworkTimeout': GlobalSettings.mNetworkTimeout, // The network timeout period. Unit: milliseconds.
-      'mNetworkRetryCount': GlobalSettings.mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
+      'mStartBufferDuration': GlobalSettings
+          .mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
+      'mHighBufferDuration': GlobalSettings
+          .mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
+      'mMaxBufferDuration': GlobalSettings
+          .mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
+      'mMaxDelayTime': GlobalSettings
+          .mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
+      'mNetworkTimeout': GlobalSettings
+          .mNetworkTimeout, // The network timeout period. Unit: milliseconds.
+      'mNetworkRetryCount': GlobalSettings
+          .mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
       'mEnableLocalCache': GlobalSettings.mEnableCacheConfig,
       'mLocalCacheDir': GlobalSettings.mDirController,
       'mClearFrameWhenStop': true
@@ -532,7 +549,8 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
 
   @override
   void didChangeDependencies() {
-    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    CustomRouteObserver.routeObserver
+        .subscribe(this, ModalRoute.of(context) as PageRoute);
     // await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     super.didChangeDependencies();
   }
@@ -680,7 +698,8 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
         setState(() {});
       }
       final notifier = PostsBloc();
-      await notifier.getAuthApsara(fixContext ?? context, apsaraId: apsaraId, check: false);
+      await notifier.getAuthApsara(fixContext ?? context,
+          apsaraId: apsaraId, check: false);
       final fetch = notifier.postsFetch;
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
         Map jsonMap = json.decode(fetch.data.toString());
@@ -735,7 +754,8 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
     }
   }
 
-  Future<VideoIndicator> navigateTo(List<ContentData>? vidData, int changevalue, int index) async {
+  Future<VideoIndicator> navigateTo(
+      List<ContentData>? vidData, int changevalue, int index) async {
     final navigator = Navigator.of(context, rootNavigator: true);
     return await navigator.push(
       CupertinoPageRoute(
@@ -743,14 +763,22 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
             vidData: vidData,
             enableWakelock: true,
             pageSrc: widget.arguments?.pageSrc ?? PageSrc.selfProfile,
-            thumbnail: (dataSelected?.isApsara ?? false) ? (dataSelected?.mediaThumbEndPoint ?? '') : '${dataSelected?.fullThumbPath}',
+            thumbnail: (dataSelected?.isApsara ?? false)
+                ? (dataSelected?.mediaThumbEndPoint ?? '')
+                : '${dataSelected?.fullThumbPath}',
             onClose: () {
               setState(() {
                 isPlay = true;
               });
             },
-            slider: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, dataSelected ?? ContentData()),
-            videoIndicator: VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentAdsPositionText, isMute: isMute),
+            slider: _buildContentWidget(
+                Routing.navigatorKey.currentContext ?? context,
+                dataSelected ?? ContentData()),
+            videoIndicator: VideoIndicator(
+                videoDuration: _videoDuration,
+                seekValue: changevalue,
+                positionText: _currentAdsPositionText,
+                isMute: isMute),
             index: index,
             loadMoreFunction: () {
               // widget.loadMoreFunction?.call();
@@ -777,7 +805,8 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
           return false;
         },
         child: Consumer3<ScrollVidNotifier, TranslateNotifierV2, HomeNotifier>(
-          builder: (_, vidNotifier, translateNotifier, homeNotifier, __) => SafeArea(
+          builder: (_, vidNotifier, translateNotifier, homeNotifier, __) =>
+              SafeArea(
             child: SizedBox(
               child: Column(
                 children: [
@@ -786,21 +815,42 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(transform: Matrix4.translationValues(-18.0, 0.0, 0.0), margin: const EdgeInsets.symmetric(horizontal: 10), child: widget.arguments?.titleAppbar ?? Container()),
+                        Container(
+                            transform:
+                                Matrix4.translationValues(-18.0, 0.0, 0.0),
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            child:
+                                widget.arguments?.titleAppbar ?? Container()),
                         if (vidData?.isNotEmpty ?? false)
-                          if (vidData?[indexVid].email != email && (vidData?[indexVid].isNewFollowing ?? false) && (widget.arguments?.isProfile ?? false))
+                          if (vidData?[indexVid].email != email &&
+                              (vidData?[indexVid].isNewFollowing ?? false) &&
+                              (widget.arguments?.isProfile ?? false))
                             Consumer<PreviewPicNotifier>(
                               builder: (context, picNot, child) => Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
                                 child: GestureDetector(
                                   onTap: () {
                                     context.handleActionIsGuest(() {
-                                      if (vidData?[indexVid].insight?.isloadingFollow != true) {
-                                        picNot.followUser(context, vidData![indexVid], isUnFollow: vidData?[indexVid].following, isloading: vidData?[indexVid].insight!.isloadingFollow ?? false);
+                                      if (vidData?[indexVid]
+                                              .insight
+                                              ?.isloadingFollow !=
+                                          true) {
+                                        picNot.followUser(
+                                            context, vidData![indexVid],
+                                            isUnFollow:
+                                                vidData?[indexVid].following,
+                                            isloading: vidData?[indexVid]
+                                                    .insight!
+                                                    .isloadingFollow ??
+                                                false);
                                       }
                                     });
                                   },
-                                  child: vidData?[indexVid].insight?.isloadingFollow ?? false
+                                  child: vidData?[indexVid]
+                                              .insight
+                                              ?.isloadingFollow ??
+                                          false
                                       ? const SizedBox(
                                           height: 30,
                                           width: 30,
@@ -812,8 +862,14 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                           height: 40,
                                           child: Center(
                                             child: Text(
-                                              (vidData?[indexVid].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
-                                              style: const TextStyle(color: kHyppePrimary, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                                              (vidData?[indexVid].following ??
+                                                      false)
+                                                  ? (lang?.following ?? '')
+                                                  : (lang?.follow ?? ''),
+                                              style: const TextStyle(
+                                                  color: kHyppePrimary,
+                                                  fontWeight: FontWeight.w700,
+                                                  fontFamily: "Lato"),
                                             ),
                                           ),
                                         ),
@@ -841,7 +897,10 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                 setState(() {
                                   isloading = true;
                                 });
-                                await vidNotifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '', postId: widget.arguments?.postId);
+                                await vidNotifier.reload(
+                                    context, widget.arguments!.pageSrc!,
+                                    key: widget.arguments?.key ?? '',
+                                    postId: widget.arguments?.postId);
                                 // await vidNotifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
                                 setState(() {
                                   vidData = vidNotifier.vidData;
@@ -856,7 +915,8 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                 }
                               }
                             },
-                            child: NotificationListener<OverscrollIndicatorNotification>(
+                            child: NotificationListener<
+                                OverscrollIndicatorNotification>(
                               onNotification: (overscroll) {
                                 overscroll.disallowIndicator();
                                 return false;
@@ -867,14 +927,17 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                 scrollOffsetController: scrollOffsetController,
                                 physics: const AlwaysScrollableScrollPhysics(),
                                 shrinkWrap: false,
-                                padding: const EdgeInsets.symmetric(horizontal: 11.5),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 11.5),
                                 itemCount: vidData?.length ?? 0,
                                 itemBuilder: (BuildContext context, int index) {
-                                  if (vidData == null || homeNotifier.isLoadingVid) {
+                                  if (vidData == null ||
+                                      homeNotifier.isLoadingVid) {
                                     vidData?[index].fAliplayer?.pause();
                                     // _lastCurIndex = -1;
                                     return CustomShimmer(
-                                      margin: const EdgeInsets.only(bottom: 100, right: 16, left: 16),
+                                      margin: const EdgeInsets.only(
+                                          bottom: 100, right: 16, left: 16),
                                       height: context.getHeight() / 8,
                                       width: double.infinity,
                                     );
@@ -914,7 +977,8 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
             borderRadius: BorderRadius.circular(16),
             color: Colors.white,
           ),
-          padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
+          padding:
+              const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
           margin: const EdgeInsets.only(
             top: 18,
             left: 6,
@@ -939,8 +1003,10 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                       featureType: FeatureType.other,
                       // isCelebrity: vidnotifier.diaryData?[index].privacy?.isCelebrity,
                       isCelebrity: false,
-                      imageUrl: '${System().showUserPicture(vidData?[index].avatar?.mediaEndpoint)}',
-                      onTapOnProfileImage: () => System().navigateToProfile(context, vidData?[index].email ?? ''),
+                      imageUrl:
+                          '${System().showUserPicture(vidData?[index].avatar?.mediaEndpoint)}',
+                      onTapOnProfileImage: () => System().navigateToProfile(
+                          context, vidData?[index].email ?? ''),
                       createdAt: '2022-02-02',
                       musicName: vidData?[index].music?.musicTitle ?? '',
                       location: vidData?[index].location ?? '',
@@ -948,31 +1014,46 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                       badge: vidData?[index].urluserBadge,
                     ),
                   ),
-                  if (vidData?[index].email != email && (vidData?[index].isNewFollowing ?? false) && !(widget.arguments?.isProfile ?? false))
+                  if (vidData?[index].email != email &&
+                      (vidData?[index].isNewFollowing ?? false) &&
+                      !(widget.arguments?.isProfile ?? false))
                     Consumer<PreviewPicNotifier>(
                       builder: (context, picNot, child) => Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: GestureDetector(
                           onTap: () {
                             context.handleActionIsGuest(() {
-                              if (vidData?[index].insight?.isloadingFollow != true) {
-                                picNot.followUser(context, vidData![index], isUnFollow: vidData?[index].following, isloading: vidData?[index].insight!.isloadingFollow ?? false);
+                              if (vidData?[index].insight?.isloadingFollow !=
+                                  true) {
+                                picNot.followUser(context, vidData![index],
+                                    isUnFollow: vidData?[index].following,
+                                    isloading: vidData?[index]
+                                            .insight!
+                                            .isloadingFollow ??
+                                        false);
                               }
                             });
                           },
-                          child: vidData?[index].insight?.isloadingFollow ?? false
-                              ? Container(
-                                  height: 40,
-                                  width: 30,
-                                  child: const Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: CustomLoading(),
-                                  ),
-                                )
-                              : Text(
-                                  (vidData?[index].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
-                                  style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
-                                ),
+                          child:
+                              vidData?[index].insight?.isloadingFollow ?? false
+                                  ? Container(
+                                      height: 40,
+                                      width: 30,
+                                      child: const Align(
+                                        alignment: Alignment.bottomRight,
+                                        child: CustomLoading(),
+                                      ),
+                                    )
+                                  : Text(
+                                      (vidData?[index].following ?? false)
+                                          ? (lang?.following ?? '')
+                                          : (lang?.follow ?? ''),
+                                      style: TextStyle(
+                                          color: kHyppePrimary,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: "Lato"),
+                                    ),
                         ),
                       ),
                     ),
@@ -982,13 +1063,20 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                         fAliplayer?.pause();
                         if (vidData?[index].email != email) {
                           // FlutterAliplayer? fAliplayer
-                          context.read<PreviewPicNotifier>().reportContent(context, vidData?[index] ?? ContentData(), fAliplayer: vidData?[index].fAliplayer, onCompleted: () async {
+                          context.read<PreviewPicNotifier>().reportContent(
+                              context, vidData?[index] ?? ContentData(),
+                              fAliplayer: vidData?[index].fAliplayer,
+                              onCompleted: () async {
                             bool connect = await System().checkConnections();
                             if (connect) {
                               setState(() {
                                 isloading = true;
                               });
-                              await notifier.reload(Routing.navigatorKey.currentContext ?? context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                              await notifier.reload(
+                                  Routing.navigatorKey.currentContext ??
+                                      context,
+                                  widget.arguments!.pageSrc!,
+                                  key: widget.arguments?.key ?? '');
                               setState(() {
                                 vidData = notifier.vidData;
                               });
@@ -1049,13 +1137,18 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                       Future.delayed(const Duration(milliseconds: 400), () {
                         fAliplayer?.pause();
                         try {
-                          widget.arguments?.scrollController?.jumpTo(System().scrollAuto(_cardIndex, widget.arguments?.heightTopProfile ?? 0, widget.arguments?.heightBox?.toInt() ?? 100));
+                          widget.arguments?.scrollController?.jumpTo(System()
+                              .scrollAuto(
+                                  _cardIndex,
+                                  widget.arguments?.heightTopProfile ?? 0,
+                                  widget.arguments?.heightBox?.toInt() ?? 100));
                         } catch (e) {
                           print("ini error $e");
                         }
                         try {
                           if (_curIdx != -1) {
-                            print('Vid Landing Page: pause $_curIdx ${vidData?[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
+                            print(
+                                'Vid Landing Page: pause $_curIdx ${vidData?[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
                             if (vidData?[_curIdx].fAliplayer != null) {
                               vidData?[_curIdx].fAliplayer?.pause();
                             } else {
@@ -1087,21 +1180,26 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                             ? GestureDetector(
                                 onTap: () {
                                   setState(() {
-                                    postIdVisibility = vidData?[index].postID ?? '';
+                                    postIdVisibility =
+                                        vidData?[index].postID ?? '';
                                     // fAliplayer?.stop();
                                     // fAliplayer?.clearScreen();
                                     // start(context, vidData?[index] ?? ContentData());
                                   });
                                   fAliplayer?.stop();
                                   fAliplayer?.clearScreen();
-                                  start(context, vidData?[index] ?? ContentData());
+                                  start(context,
+                                      vidData?[index] ?? ContentData());
 
-                                  System().increaseViewCount2(context, vidData![index]);
+                                  System().increaseViewCount2(
+                                      context, vidData![index]);
 
-                                  var vidNotifier = context.read<PreviewVidNotifier>();
+                                  var vidNotifier =
+                                      context.read<PreviewVidNotifier>();
                                   double position = 0.0;
                                   for (var i = 0; i < index; i++) {
-                                    position += vidNotifier.vidData?[i].height ?? 0.0;
+                                    position +=
+                                        vidNotifier.vidData?[i].height ?? 0.0;
                                   }
                                   // widget.scrollController?.animateTo(
                                   //   position,
@@ -1117,7 +1215,10 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                         color: Colors.black,
                                         borderRadius: BorderRadius.circular(16),
                                       ),
-                                      height: MediaQuery.of(context).size.width * 9.0 / 16.0,
+                                      height:
+                                          MediaQuery.of(context).size.width *
+                                              9.0 /
+                                              16.0,
                                       width: MediaQuery.of(context).size.width,
                                       child: VideoThumbnail(
                                         videoData: vidData?[index],
@@ -1141,12 +1242,18 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                           child: Align(
                                         alignment: Alignment.center,
                                         child: SizedBox(
-                                          height: MediaQuery.of(context).size.width * 9.0 / 16.0,
-                                          width: MediaQuery.of(context).size.width,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              9.0 /
+                                              16.0,
+                                          width:
+                                              MediaQuery.of(context).size.width,
                                           child: const CustomIconWidget(
                                             defaultColor: false,
                                             width: 40,
-                                            iconData: '${AssetPath.vectorPath}pause2.svg',
+                                            iconData:
+                                                '${AssetPath.vectorPath}pause2.svg',
                                             // color: kHyppeLightButtonText,
                                           ),
                                         ),
@@ -1155,15 +1262,31 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                   ],
                                 ),
                               )
-                            : videoPlayerWidget(notifier, vidData?[index] ?? ContentData(), index)
+                            : videoPlayerWidget(notifier,
+                                vidData?[index] ?? ContentData(), index)
                         : GestureDetector(
                             onTap: () {
                               notifier.checkConnection();
                             },
-                            child: Container(decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)), width: SizeConfig.screenWidth, height: 250, alignment: Alignment.center, child: CustomTextWidget(textToDisplay: lang?.couldntLoadVideo ?? 'Error')),
+                            child: Container(
+                                decoration: BoxDecoration(
+                                    color: kHyppeNotConnect,
+                                    borderRadius: BorderRadius.circular(16)),
+                                width: SizeConfig.screenWidth,
+                                height: 250,
+                                alignment: Alignment.center,
+                                child: CustomTextWidget(
+                                    textToDisplay:
+                                        lang?.couldntLoadVideo ?? 'Error')),
                           ),
               ),
-              SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED && (vidData![index].boosted.isEmpty) && (vidData?[index].reportedStatus != 'OWNED' && vidData?[index].reportedStatus != 'BLURRED' && vidData?[index].reportedStatus2 != 'BLURRED') && vidData?[index].email == email
+              SharedPreference().readStorage(SpKeys.statusVerificationId) ==
+                          VERIFIED &&
+                      (vidData![index].boosted.isEmpty) &&
+                      (vidData?[index].reportedStatus != 'OWNED' &&
+                          vidData?[index].reportedStatus != 'BLURRED' &&
+                          vidData?[index].reportedStatus2 != 'BLURRED') &&
+                      vidData?[index].email == email
                   ? Container(
                       width: double.infinity,
                       margin: const EdgeInsets.only(bottom: 16),
@@ -1172,15 +1295,20 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                         marginBool: true,
                         contentData: vidData?[index] ?? ContentData(),
                         startState: () {
-                          SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                          SharedPreference()
+                              .writeStorage(SpKeys.isShowPopAds, true);
                         },
                         afterState: () {
-                          SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                          SharedPreference()
+                              .writeStorage(SpKeys.isShowPopAds, false);
                         },
                       ),
                     )
                   : Container(),
-              vidData?[index].email == SharedPreference().readStorage(SpKeys.email) && (vidData?[index].reportedStatus == 'OWNED' || vidData?[index].reportedStatus == 'OWNED')
+              vidData?[index].email ==
+                          SharedPreference().readStorage(SpKeys.email) &&
+                      (vidData?[index].reportedStatus == 'OWNED' ||
+                          vidData?[index].reportedStatus == 'OWNED')
                   ? Padding(
                       padding: const EdgeInsets.only(bottom: 11.0),
                       child: ContentViolationWidget(
@@ -1189,7 +1317,9 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                       ),
                     )
                   : Container(),
-              if (vidData?[index].email == email && (vidData?[index].boostCount ?? 0) >= 0 && (vidData?[index].boosted.isNotEmpty ?? [].isEmpty))
+              if (vidData?[index].email == email &&
+                  (vidData?[index].boostCount ?? 0) >= 0 &&
+                  (vidData?[index].boosted.isNotEmpty ?? [].isEmpty))
                 Container(
                   padding: const EdgeInsets.all(10),
                   margin: const EdgeInsets.only(bottom: 10),
@@ -1210,7 +1340,10 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                         padding: const EdgeInsets.only(left: 13),
                         child: Text(
                           "${vidData?[index].boostJangkauan ?? '0'} ${lang?.reach}",
-                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                          style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: kHyppeTextLightPrimary),
                         ),
                       )
                     ],
@@ -1237,18 +1370,35 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                 : InkWell(
                                     child: CustomIconWidget(
                                       defaultColor: false,
-                                      color: (vidData?[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
-                                      iconData: '${AssetPath.vectorPath}${(vidData?[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                      color: (vidData?[index]
+                                                  .insight
+                                                  ?.isPostLiked ??
+                                              false)
+                                          ? kHyppeRed
+                                          : kHyppeTextLightPrimary,
+                                      iconData:
+                                          '${AssetPath.vectorPath}${(vidData?[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
                                       height: 28,
                                     ),
                                     onTap: () {
                                       if (vidData != null) {
-                                        likeNotifier.likePost(context, vidData?[index] ?? ContentData()).then((value) {
-                                          List<ContentData>? vidData = context.read<PreviewVidNotifier>().vidData;
-                                          int idx = vidData!.indexWhere((e) => e.postID == value['_id']);
-                                          vidData[idx].insight?.isPostLiked = value['isPostLiked'];
-                                          vidData[idx].insight?.likes = value['likes'];
-                                          vidData[idx].isLiked = value['isLiked'];
+                                        likeNotifier
+                                            .likePost(
+                                                context,
+                                                vidData?[index] ??
+                                                    ContentData())
+                                            .then((value) {
+                                          List<ContentData>? vidData = context
+                                              .read<PreviewVidNotifier>()
+                                              .vidData;
+                                          int idx = vidData!.indexWhere(
+                                              (e) => e.postID == value['_id']);
+                                          vidData[idx].insight?.isPostLiked =
+                                              value['isPostLiked'];
+                                          vidData[idx].insight?.likes =
+                                              value['likes'];
+                                          vidData[idx].isLiked =
+                                              value['isLiked'];
                                         });
                                       }
                                     },
@@ -1265,7 +1415,8 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                     argument: CommentsArgument(
                                       postID: vidData?[index].postID ?? '',
                                       fromFront: true,
-                                      giftActication: vidData?[index].giftActivation,
+                                      giftActication:
+                                          vidData?[index].giftActivation,
                                       data: vidData?[index] ?? ContentData(),
                                       pageDetail: true,
                                     ));
@@ -1283,7 +1434,10 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                             padding: EdgeInsets.only(left: 21.0),
                             child: GestureDetector(
                               onTap: () {
-                                context.read<VidDetailNotifier>().createdDynamicLink(context, data: vidData?[index] ?? ContentData());
+                                context
+                                    .read<VidDetailNotifier>()
+                                    .createdDynamicLink(context,
+                                        data: vidData?[index] ?? ContentData());
                               },
                               child: CustomIconWidget(
                                 defaultColor: false,
@@ -1293,7 +1447,8 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                               ),
                             ),
                           ),
-                        if ((vidData?[index].saleAmount ?? 0) > 0 && email != vidData?[index].email)
+                        if ((vidData?[index].saleAmount ?? 0) > 0 &&
+                            email != vidData?[index].email)
                           Expanded(
                             child: GestureDetector(
                               onTap: () async {
@@ -1303,7 +1458,9 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                   setState(() {
                                     isPause = !isPause;
                                   });
-                                  await ShowBottomSheet.onBuyContent(context, data: vidData?[index] ?? ContentData(), fAliplayer: vidData?[index].fAliplayer);
+                                  await ShowBottomSheet.onBuyContent(context,
+                                      data: vidData?[index] ?? ContentData(),
+                                      fAliplayer: vidData?[index].fAliplayer);
                                 });
                               },
                               child: const Align(
@@ -1323,7 +1480,8 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                     RichText(
                       text: TextSpan(children: [
                         TextSpan(
-                          text: "${vidData?[index].insight?.likes} ${lang!.like}",
+                          text:
+                              "${vidData?[index].insight?.likes} ${lang!.like}",
                           recognizer: TapGestureRecognizer()
                             ..onTap = () => Navigator.push(
                                 context,
@@ -1332,14 +1490,21 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                           postId: vidData?[index].postID ?? '',
                                           eventType: 'LIKE',
                                         ))),
-                          style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                          style: const TextStyle(
+                              color: kHyppeTextLightPrimary,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14),
                         ),
                         const TextSpan(
                           text: " • ",
-                          style: TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 16),
+                          style: TextStyle(
+                              color: kHyppeTextLightPrimary,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16),
                         ),
                         TextSpan(
-                          text: "${vidData?[index].insight!.views?.getCountShort()} ${lang!.views}",
+                          text:
+                              "${vidData?[index].insight!.views?.getCountShort()} ${lang!.views}",
                           recognizer: TapGestureRecognizer()
                             ..onTap = () => Navigator.push(
                                 context,
@@ -1348,7 +1513,10 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                           postId: vidData?[index].postID ?? '',
                                           eventType: 'VIEW',
                                         ))),
-                          style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                          style: const TextStyle(
+                              color: kHyppeTextLightPrimary,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14),
                         ),
                       ]),
                     ),
@@ -1364,37 +1532,44 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                 textAlign: TextAlign.start,
                 seeLess: ' ${lang?.less}',
                 seeMore: ' ${lang?.more}',
-                normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                hrefStyle: Theme.of(context).textTheme.titleSmall?.copyWith(color: kHyppePrimary),
-                expandStyle: const TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
+                normStyle: const TextStyle(
+                    fontSize: 12, color: kHyppeTextLightPrimary),
+                hrefStyle: Theme.of(context)
+                    .textTheme
+                    .titleSmall
+                    ?.copyWith(color: kHyppePrimary),
+                expandStyle: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
               ),
               vidData?[index].urlLink != '' || vidData?[index].judulLink != ''
-              ? RichText(
-                text: TextSpan(
-                  children: [
-                  TextSpan(
-                    text: (vidData?[index].judulLink != null) ? vidData![index].judulLink : vidData![index].urlLink,
-                    style: TextStyle(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .primary,
-                        fontWeight: FontWeight.bold),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () async {
-                        var uri = vidData?[index].urlLink??'';
-                          if (!uri.withHttp()){
-                            uri='https://$uri';
-                          }
-                          if (await canLaunchUrl(Uri.parse(uri))) {
-                              await launchUrl(Uri.parse(uri));
-                            } else {
-                              throw  Fluttertoast.showToast(msg: 'Could not launch $uri');
-                            }
-                      },
-                  )
-                ]),
-              )
-              : const SizedBox.shrink(),
+                  ? RichText(
+                      text: TextSpan(children: [
+                        TextSpan(
+                          text: (vidData?[index].judulLink != null)
+                              ? vidData![index].judulLink
+                              : vidData![index].urlLink,
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.bold),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () async {
+                              var uri = vidData?[index].urlLink ?? '';
+                              if (!uri.withHttp()) {
+                                uri = 'https://$uri';
+                              }
+                              if (await canLaunchUrl(Uri.parse(uri))) {
+                                await launchUrl(Uri.parse(uri));
+                              } else {
+                                throw Fluttertoast.showToast(
+                                    msg: 'Could not launch $uri');
+                              }
+                            },
+                        )
+                      ]),
+                    )
+                  : const SizedBox.shrink(),
               if (vidData?[index].allowComments ?? true)
                 GestureDetector(
                   onTap: () {
@@ -1422,22 +1597,45 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                       child: ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: (vidData?[index].comment?.length ?? 0) >= 2 ? 2 : 1,
+                        itemCount:
+                            (vidData?[index].comment?.length ?? 0) >= 2 ? 2 : 1,
                         itemBuilder: (context, indexComment) {
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 6.0),
                             child: CustomNewDescContent(
                               // desc: "${vidData?.description}",
-                              email: vidData?[index].comment?[indexComment].sender ?? '',
-                              username: vidData?[index].comment?[indexComment].userComment?.username ?? '',
-                              desc: vidData?[index].comment?[indexComment].txtMessages ?? '',
+                              email: vidData?[index]
+                                      .comment?[indexComment]
+                                      .sender ??
+                                  '',
+                              username: vidData?[index]
+                                      .comment?[indexComment]
+                                      .userComment
+                                      ?.username ??
+                                  '',
+                              desc: vidData?[index]
+                                      .comment?[indexComment]
+                                      .txtMessages ??
+                                  '',
                               trimLines: 2,
                               textAlign: TextAlign.start,
-                              seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
-                              seeMore: ' ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
-                              normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                              hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                              expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                              seeLess:
+                                  ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
+                              seeMore:
+                                  ' ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                              normStyle: const TextStyle(
+                                  fontSize: 12, color: kHyppeTextLightPrimary),
+                              hrefStyle: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall
+                                  ?.copyWith(color: kHyppePrimary),
+                              expandStyle: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall
+                                  ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
                             ),
                           );
                         },
@@ -1468,7 +1666,8 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
     );
   }
 
-  Widget videoPlayerWidget(ScrollVidNotifier vidNotifier, ContentData data, int index) {
+  Widget videoPlayerWidget(
+      ScrollVidNotifier vidNotifier, ContentData data, int index) {
     return GestureDetector(
       onTap: () async {
         if (isPlay) print('page fullscreen $isPause $isPlay');
@@ -1493,7 +1692,8 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
             isPause = false;
           });
         } else {
-          await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+          await SystemChrome.setEnabledSystemUIMode(
+              SystemUiMode.immersiveSticky);
           if ((data.metadata?.height ?? 0) < (data.metadata?.width ?? 0)) {
             print('Landscape VidPlayerPage');
             SystemChrome.setPreferredOrientations([
@@ -1509,14 +1709,21 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
           }
 
           fAliplayer?.pause();
-          VideoIndicator value = await navigateTo(vidNotifier.vidData, changevalue, index);
+          VideoIndicator value =
+              await navigateTo(vidNotifier.vidData, changevalue, index);
 
           if (mounted) {
             if (_curIdx != vidNotifier.lastScrollIndex) {
-              vidNotifier.itemScrollController.jumpTo(index: vidNotifier.lastScrollIndex);
+              vidNotifier.itemScrollController
+                  .jumpTo(index: vidNotifier.lastScrollIndex);
               // fAliplayer?.stop();
-              postIdVisibility = vidNotifier.vidData?[vidNotifier.lastScrollIndex].postID ?? '';
-              await start(context, vidNotifier.vidData?[vidNotifier.lastScrollIndex] ?? ContentData());
+              postIdVisibility =
+                  vidNotifier.vidData?[vidNotifier.lastScrollIndex].postID ??
+                      '';
+              await start(
+                  context,
+                  vidNotifier.vidData?[vidNotifier.lastScrollIndex] ??
+                      ContentData());
             }
             setState(() {
               _videoDuration = value.videoDuration ?? 0;
@@ -1597,8 +1804,17 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                       ),
                     ),
                   ),
-                _buildProgressBar(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height),
-                if (isPlay) SizedBox(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height, child: Offstage(offstage: _isLock, child: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, data))),
+                _buildProgressBar(MediaQuery.of(context).size.width,
+                    MediaQuery.of(context).size.height),
+                if (isPlay)
+                  SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
+                      child: Offstage(
+                          offstage: _isLock,
+                          child: _buildContentWidget(
+                              Routing.navigatorKey.currentContext ?? context,
+                              data))),
                 Positioned.fill(
                   child: Align(
                     alignment: Alignment.center,
@@ -1642,14 +1858,19 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                         child: Container(
                           margin: const EdgeInsets.only(right: 12.0),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
                             child: GestureDetector(
                               onTap: () {
                                 fAliplayer?.pause();
-                                context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID, title: lang!.inThisVideo, fAliplayer: fAliplayer);
+                                context.read<PicDetailNotifier>().showUserTag(
+                                    context, data.tagPeople, data.postID,
+                                    title: lang!.inThisVideo,
+                                    fAliplayer: fAliplayer);
                               },
                               child: const CustomIconWidget(
-                                iconData: '${AssetPath.vectorPath}tag-people-light.svg',
+                                iconData:
+                                    '${AssetPath.vectorPath}tag-people-light.svg',
                                 defaultColor: false,
                                 height: 18,
                               ),
@@ -1662,8 +1883,11 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                       : Align(
                           alignment: Alignment.bottomRight,
                           child: Text(
-                            System.getTimeformatByMs(isActiveAds ? _currentAdsPositionText : _currentPositionText),
-                            style: const TextStyle(color: Colors.white, fontSize: 11),
+                            System.getTimeformatByMs(isActiveAds
+                                ? _currentAdsPositionText
+                                : _currentPositionText),
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 11),
                           ),
                         ),
                 ],
@@ -1683,7 +1907,10 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                         gradient: LinearGradient(
                           end: const Alignment(0.0, -1),
                           begin: const Alignment(0.0, 1),
-                          colors: [const Color(0x8A000000), Colors.black12.withOpacity(0.0)],
+                          colors: [
+                            const Color(0x8A000000),
+                            Colors.black12.withOpacity(0.0)
+                          ],
                         ),
                       ),
                       // : null,
@@ -1698,15 +1925,19 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                               children: [
                                 sixPx,
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Align(
                                         alignment: Alignment.bottomLeft,
                                         child: Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
                                           child: Text(
                                             '${System.getTimeformatByMs(isActiveAds ? _currentAdsPositionText : _currentPositionText)} / ${System.getTimeformatByMs(isActiveAds ? _videoAdsDuration : _videoDuration)}',
-                                            style: const TextStyle(color: Colors.white, fontSize: 11),
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 11),
                                           ),
                                         )),
                                     GestureDetector(
@@ -1717,9 +1948,12 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                         fAliplayer?.setMuted(isMute);
                                       },
                                       child: Padding(
-                                        padding: const EdgeInsets.only(right: 2.0),
+                                        padding:
+                                            const EdgeInsets.only(right: 2.0),
                                         child: CustomIconWidget(
-                                          iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
+                                          iconData: isMute
+                                              ? '${AssetPath.vectorPath}sound-off.svg'
+                                              : '${AssetPath.vectorPath}sound-on.svg',
                                           defaultColor: false,
                                           height: 24,
                                         ),
@@ -1731,10 +1965,12 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                   data: SliderTheme.of(context).copyWith(
                                     overlayShape: SliderComponentShape.noThumb,
                                     activeTrackColor: const Color(0xAA7d7d7d),
-                                    inactiveTrackColor: const Color.fromARGB(170, 156, 155, 155),
+                                    inactiveTrackColor: const Color.fromARGB(
+                                        170, 156, 155, 155),
                                     trackHeight: 3.0,
                                     thumbColor: Colors.purple,
-                                    thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8.0),
+                                    thumbShape: const RoundSliderThumbShape(
+                                        enabledThumbRadius: 8.0),
                                   ),
                                   child: Slider(
                                       min: 0,
@@ -1745,7 +1981,9 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                           : _videoDuration == 0
                                               ? 1
                                               : _videoDuration.toDouble(),
-                                      value: isActiveAds ? _currentAdsPosition.toDouble() : _currentPosition.toDouble(),
+                                      value: isActiveAds
+                                          ? _currentAdsPosition.toDouble()
+                                          : _currentPosition.toDouble(),
                                       activeColor: Colors.purple,
                                       thumbColor: Colors.purple,
                                       onChangeStart: (value) {
@@ -1756,17 +1994,21 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                       onChangeEnd: (value) {
                                         _inSeek = false;
                                         setState(() {
-                                          if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
+                                          if (_currentPlayerState ==
+                                                  FlutterAvpdef.completion &&
+                                              _showTipsWidget) {
                                             setState(() {
                                               _showTipsWidget = false;
                                             });
                                           }
                                         });
-                                        fAliplayer?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE);
+                                        fAliplayer?.seekTo(value.ceil(),
+                                            FlutterAvpdef.ACCURATE);
                                       },
                                       onChanged: (value) {
                                         if (_thumbnailSuccess) {
-                                          fAliplayer?.requestBitmapAtPosition(value.ceil());
+                                          fAliplayer?.requestBitmapAtPosition(
+                                              value.ceil());
                                         }
                                         setState(() {
                                           _currentPosition = value.ceil();
@@ -1783,7 +2025,8 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
           );
   }
 
-  Widget _buildController(Color backgroundColor, Color iconColor, double barHeight, double width, double height, ContentData data) {
+  Widget _buildController(Color backgroundColor, Color iconColor,
+      double barHeight, double width, double height, ContentData data) {
     return AnimatedOpacity(
       opacity: onTapCtrl || isPause ? 1.0 : 0.0,
       duration: const Duration(milliseconds: 300),
@@ -1830,7 +2073,9 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
         // }
       },
       child: CustomIconWidget(
-        iconData: isPause ? '${AssetPath.vectorPath}pause2.svg' : "${AssetPath.vectorPath}pause3.svg",
+        iconData: isPause
+            ? '${AssetPath.vectorPath}pause2.svg'
+            : "${AssetPath.vectorPath}pause3.svg",
         defaultColor: false,
         width: 42,
       ),
@@ -1886,7 +2131,9 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
             left: 12,
             child: GestureDetector(
               onTap: () {
-                context.read<PicDetailNotifier>().showUserTag(context, data?.tagPeople, data?.postID, title: lang!.inThisVideo);
+                context.read<PicDetailNotifier>().showUserTag(
+                    context, data?.tagPeople, data?.postID,
+                    title: lang!.inThisVideo);
               },
               child: const CustomIconWidget(
                 iconData: '${AssetPath.vectorPath}tag_people.svg',
@@ -1906,7 +2153,9 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
-                System().formatDuration(Duration(seconds: data?.metadata?.duration ?? 0).inMilliseconds),
+                System().formatDuration(
+                    Duration(seconds: data?.metadata?.duration ?? 0)
+                        .inMilliseconds),
                 style: const TextStyle(color: Colors.white, fontSize: 10),
               ),
             )),
@@ -1965,7 +2214,9 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                   child: CustomBackgroundLayer(
                     sigmaX: 10,
                     sigmaY: 10,
-                    thumbnail: (data.isApsara ?? false) ? (data.mediaThumbEndPoint ?? '') : '${data.fullThumbPath}',
+                    thumbnail: (data.isApsara ?? false)
+                        ? (data.mediaThumbEndPoint ?? '')
+                        : '${data.fullThumbPath}',
                   ),
                 ),
               ),
@@ -1984,9 +2235,16 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                         color: Colors.white,
                       ),
                       fourPx,
-                      Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600)),
+                      Text(
+                          transnot.translate.sensitiveContent ??
+                              'Sensitive Content',
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600)),
                       fourPx,
-                      Text("${transnot.translate.contentContainsSensitiveMaterial}",
+                      Text(
+                          "${transnot.translate.contentContainsSensitiveMaterial}",
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Colors.white,
@@ -1997,15 +2255,24 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                               onTap: () async {
                                 System().checkConnections().then((value) {
                                   if (value) {
-                                    Routing().move(Routes.appeal, argument: data);
+                                    Routing()
+                                        .move(Routes.appeal, argument: data);
                                   }
                                 });
                               },
                               child: Container(
                                   padding: const EdgeInsets.all(8),
                                   margin: const EdgeInsets.only(top: 6),
-                                  decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
-                                  child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.white),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Text(
+                                      transnot.translate.appealThisWarning ??
+                                          'Appeal This Warning',
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600))),
                             )
                           : const SizedBox(),
                       thirtyTwoPx,
@@ -2042,7 +2309,10 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                       ),
                       child: Text(
                         "${transnot.translate.see} Vid",
-                        style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600),
                         textAlign: TextAlign.center,
                       ),
                     ),

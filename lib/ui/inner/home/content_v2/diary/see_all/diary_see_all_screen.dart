@@ -17,7 +17,8 @@ class DiarySeeAllScreen extends StatefulWidget {
   State<DiarySeeAllScreen> createState() => _DiarySeeAllScreenState();
 }
 
-class _DiarySeeAllScreenState extends State<DiarySeeAllScreen> with SingleTickerProviderStateMixin {
+class _DiarySeeAllScreenState extends State<DiarySeeAllScreen>
+    with SingleTickerProviderStateMixin {
   final notifier = DiarySeeAllNotifier();
 
   late TabController _tabController;
@@ -53,7 +54,7 @@ class _DiarySeeAllScreenState extends State<DiarySeeAllScreen> with SingleTicker
                 CustomTextWidget(
                   textAlign: TextAlign.left,
                   textToDisplay: _language.diariesForYou ?? '',
-                  textStyle: theme.textTheme.bodyText1,
+                  textStyle: theme.textTheme.bodyLarge,
                 ),
                 eightPx,
                 const CustomSeeAllTitle(title: 'HyppeDiary'),

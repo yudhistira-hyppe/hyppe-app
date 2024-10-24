@@ -20,7 +20,7 @@ class FiltersButton extends StatelessWidget {
       alignment: Alignment.center,
       child: CustomTextWidget(
         textToDisplay: "Filters",
-        textStyle: theme.textTheme.button,
+        textStyle: theme.textTheme.labelLarge,
       ),
     );
   }

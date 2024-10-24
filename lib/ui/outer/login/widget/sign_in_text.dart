@@ -5,14 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SignInText extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'SignInText');
     return Consumer<LoginNotifier>(
       builder: (_, notifier, __) => CustomTextWidget(
         textToDisplay: notifier.language.login ?? 'Login',
-        textStyle: Theme.of(context).primaryTextTheme.headline5,
+        textStyle: Theme.of(context).primaryTextTheme.headlineSmall,
       ),
     );
   }

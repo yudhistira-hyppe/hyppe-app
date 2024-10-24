@@ -29,13 +29,18 @@ class ReportUserFirstLayer extends StatelessWidget {
       builder: (_, notifier, __) => Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 8 * SizeConfig.scaleDiagonal),
-            child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg", defaultColor: false),
+            padding:
+                EdgeInsets.symmetric(vertical: 8 * SizeConfig.scaleDiagonal),
+            child: const CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}handler.svg",
+                defaultColor: false),
           ),
           CustomTextWidget(
-
             textToDisplay: "dummy_user",
-            textStyle: Theme.of(context).textTheme.subtitle1!.apply(color: const Color(0xffEEEEEE)),
+            textStyle: Theme.of(context)
+                .textTheme
+                .titleMedium!
+                .apply(color: const Color(0xffEEEEEE)),
           ),
           // notifier.statusFollowing != StatusFollowing.following
           //     ? SizedBox.shrink()

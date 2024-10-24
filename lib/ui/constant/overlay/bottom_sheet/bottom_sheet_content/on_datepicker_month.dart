@@ -37,7 +37,7 @@ class _OnDatepickerMonthState extends State<OnDatepickerMonth> {
 
   @override
   Widget build(BuildContext context) {
-    // TextStyle hintTextStyle = Theme.of(context).textTheme.subtitle1!.apply(color: Color(0xFF999999));
+    // TextStyle hintTextStyle = Theme.of(context).textTheme.titleMedium!.apply(color: Color(0xFF999999));
     TranslateNotifierV2 tn = context.read<TranslateNotifierV2>();
     return Consumer<ChallangeNotifier>(
       builder: (_, notifier, __) => Column(
@@ -45,7 +45,9 @@ class _OnDatepickerMonthState extends State<OnDatepickerMonth> {
           Center(
             child: Padding(
               padding: EdgeInsets.all(8 * SizeConfig.scaleDiagonal),
-              child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg", defaultColor: false),
+              child: const CustomIconWidget(
+                  iconData: "${AssetPath.vectorPath}handler.svg",
+                  defaultColor: false),
             ),
           ),
           Padding(
@@ -99,8 +101,10 @@ class _OnDatepickerMonthState extends State<OnDatepickerMonth> {
                         pickerTheme: DateTimePickerTheme(
                           backgroundColor: Colors.transparent,
                           cancelTextStyle: TextStyle(color: Colors.transparent),
-                          confirmTextStyle: TextStyle(color: Colors.transparent),
-                          itemTextStyle: TextStyle(color: kHyppeTextLightPrimary),
+                          confirmTextStyle:
+                              TextStyle(color: Colors.transparent),
+                          itemTextStyle:
+                              TextStyle(color: kHyppeTextLightPrimary),
                           titleHeight: 0.0,
                           itemHeight: 50.0,
                           pickerHeight: 100,
@@ -116,12 +120,12 @@ class _OnDatepickerMonthState extends State<OnDatepickerMonth> {
                       // Row(
                       //   crossAxisAlignment: CrossAxisAlignment.center,
                       //   children: <Widget>[
-                      //     Text('Selected Date:', style: Theme.of(context).textTheme.subtitle1),
+                      //     Text('Selected Date:', style: Theme.of(context).textTheme.titleMedium),
                       //     Container(
                       //       padding: EdgeInsets.only(left: 12.0),
                       //       child: Text(
                       //         _dateTime != null ? '${_dateTime!.year}-${_dateTime!.month.toString().padLeft(2, '0')}-${_dateTime!.day.toString().padLeft(2, '0')}' : '',
-                      //         style: Theme.of(context).textTheme.headline6,
+                      //         style: Theme.of(context).textTheme.titleLarge,
                       //       ),
                       //     ),
                       //   ],
@@ -142,7 +146,10 @@ class _OnDatepickerMonthState extends State<OnDatepickerMonth> {
                   var cn = context.read<ChallangeNotifier>();
                   print(widget.isDetail);
                   cn.getOption(
-                    ((widget.isDetail ?? false) ? cn.leaderBoardDetailData : cn.leaderBoardData) ?? LeaderboardChallangeModel(),
+                    ((widget.isDetail ?? false)
+                            ? cn.leaderBoardDetailData
+                            : cn.leaderBoardData) ??
+                        LeaderboardChallangeModel(),
                     dateTime: _dateTime,
                   );
                   Routing().moveBack();

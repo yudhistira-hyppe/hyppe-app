@@ -31,20 +31,24 @@ class PageNotFoundScreen extends StatelessWidget {
               CustomTextWidget(
                 textToDisplay: notifier.translate.pageNotFound ?? '',
                 textAlign: TextAlign.center,
-                textStyle: TextStyle(fontSize: 18 * SizeConfig.scaleDiagonal, fontWeight: FontWeight.bold),
+                textStyle: TextStyle(
+                    fontSize: 18 * SizeConfig.scaleDiagonal,
+                    fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 14 * SizeConfig.scaleDiagonal),
               CustomTextWidget(
-                textToDisplay: notifier.translate.sorryThePageWasNotFoundPleaseReturnToTheHomePage ?? '',
+                textToDisplay: notifier.translate
+                        .sorryThePageWasNotFoundPleaseReturnToTheHomePage ??
+                    '',
                 textAlign: TextAlign.center,
-                textStyle: Theme.of(context).textTheme.bodyText2,
+                textStyle: Theme.of(context).textTheme.bodyMedium,
                 textOverflow: TextOverflow.clip,
               ),
               SizedBox(height: 37 * SizeConfig.scaleDiagonal),
               CustomElevatedButton(
                 child: CustomTextWidget(
                   textToDisplay: notifier.translate.backToHome ?? '',
-                  textStyle: Theme.of(context).textTheme.button,
+                  textStyle: Theme.of(context).textTheme.labelLarge,
                 ),
                 width: 164 * SizeConfig.scaleDiagonal,
                 height: 42 * SizeConfig.scaleDiagonal,
@@ -52,8 +56,10 @@ class PageNotFoundScreen extends StatelessWidget {
                 buttonStyle: ButtonStyle(
                     elevation: MaterialStateProperty.all<double>(0.0),
                     visualDensity: VisualDensity.adaptivePlatformDensity,
-                    backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primary),
-                    shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)))),
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        Theme.of(context).colorScheme.primary),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0)))),
               ),
             ],
           ),

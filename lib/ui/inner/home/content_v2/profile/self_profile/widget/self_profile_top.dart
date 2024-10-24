@@ -31,9 +31,12 @@ class SelfProfileTop extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  void showTap(BuildContext context, List<ContentData> dataStory, SelfProfileNotifier notifier) {
+  void showTap(BuildContext context, List<ContentData> dataStory,
+      SelfProfileNotifier notifier) {
     if (dataStory.isNotEmpty) {
-      context.read<PreviewStoriesNotifier>().navigateToMyStoryGroup(context, dataStory, true);
+      context
+          .read<PreviewStoriesNotifier>()
+          .navigateToMyStoryGroup(context, dataStory, true);
     } else {
       showPict(context, notifier);
     }
@@ -99,9 +102,15 @@ class SelfProfileTop extends StatelessWidget {
                   },
                   child: StoryColorValidator(
                     isMy: false,
-                    haveStory: (sn.myStoryGroup[email]?.isEmpty ?? [].isEmpty) ? false : true,
-                    featureType: (sn.myStoryGroup[email]?.isEmpty ?? [].isEmpty) ? FeatureType.other : FeatureType.story,
-                    isView: (sn.myStoryGroup[email]?.isEmpty ?? [].isEmpty) ? false : (sn.myStoryGroup[email]?.last.isViewed ?? false),
+                    haveStory: (sn.myStoryGroup[email]?.isEmpty ?? [].isEmpty)
+                        ? false
+                        : true,
+                    featureType: (sn.myStoryGroup[email]?.isEmpty ?? [].isEmpty)
+                        ? FeatureType.other
+                        : FeatureType.story,
+                    isView: (sn.myStoryGroup[email]?.isEmpty ?? [].isEmpty)
+                        ? false
+                        : (sn.myStoryGroup[email]?.last.isViewed ?? false),
                     child: Padding(
                       padding: const EdgeInsets.all(2),
                       child: CustomProfileImage(
@@ -110,7 +119,8 @@ class SelfProfileTop extends StatelessWidget {
                         forStory: true,
                         width: 76 * SizeConfig.scaleDiagonal,
                         height: 76 * SizeConfig.scaleDiagonal,
-                        imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
+                        imageUrl: notifier.displayPhotoProfile(
+                            "${notifier.user.profile?.avatar?.mediaEndpoint}"),
                         badge: notifier.user.profile?.urluserBadge,
                         allwaysUseBadgePadding: true,
                       ),
@@ -131,7 +141,13 @@ class SelfProfileTop extends StatelessWidget {
                           SizedBox(height: 8 * SizeConfig.scaleDiagonal),
                           CustomTextWidget(
                             textToDisplay: notifier.language.posts ?? 'Posts',
-                            textStyle: Theme.of(context).textTheme.bodyMedium!.apply(color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .apply(
+                                    color: Theme.of(context)
+                                        .bottomNavigationBarTheme
+                                        .unselectedItemColor),
                           )
                         ],
                       ),
@@ -149,12 +165,20 @@ class SelfProfileTop extends StatelessWidget {
                           children: [
                             CustomTextWidget(
                               textToDisplay: notifier.displayFollowers(),
-                              textStyle: Theme.of(context).textTheme.titleMedium,
+                              textStyle:
+                                  Theme.of(context).textTheme.titleMedium,
                             ),
                             SizedBox(height: 8 * SizeConfig.scaleDiagonal),
                             CustomTextWidget(
-                              textToDisplay: notifier.language.followers ?? 'Followers',
-                              textStyle: Theme.of(context).textTheme.bodyMedium!.apply(color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
+                              textToDisplay:
+                                  notifier.language.followers ?? 'Followers',
+                              textStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .apply(
+                                      color: Theme.of(context)
+                                          .bottomNavigationBarTheme
+                                          .unselectedItemColor),
                             )
                           ],
                         ),
@@ -173,12 +197,20 @@ class SelfProfileTop extends StatelessWidget {
                           children: [
                             CustomTextWidget(
                               textToDisplay: notifier.displayFollowing(),
-                              textStyle: Theme.of(context).textTheme.titleMedium,
+                              textStyle:
+                                  Theme.of(context).textTheme.titleMedium,
                             ),
                             SizedBox(height: 8 * SizeConfig.scaleDiagonal),
                             CustomTextWidget(
-                              textToDisplay: notifier.language.following ?? 'Following',
-                              textStyle: Theme.of(context).textTheme.bodyMedium!.apply(color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
+                              textToDisplay:
+                                  notifier.language.following ?? 'Following',
+                              textStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .apply(
+                                      color: Theme.of(context)
+                                          .bottomNavigationBarTheme
+                                          .unselectedItemColor),
                             )
                           ],
                         ),
@@ -214,14 +246,14 @@ class SelfProfileTop extends StatelessWidget {
             //               children: [
             //                 CustomTextWidget(
             //                   textToDisplay: notifier.displayPostsCount(),
-            //                   textStyle: Theme.of(context).textTheme.subtitle1,
+            //                   textStyle: Theme.of(context).textTheme.titleMedium,
             //                 ),
             //                 SizedBox(height: 8 * SizeConfig.scaleDiagonal),
             //                 CustomTextWidget(
             //                   textToDisplay: notifier.language.posts,
             //                   textStyle: Theme.of(context)
             //                       .textTheme
-            //                       .bodyText2!
+            //                       .bodyMedium!
             //                       .apply(
             //                           color: Theme.of(context)
             //                               .bottomNavigationBarTheme
@@ -245,14 +277,14 @@ class SelfProfileTop extends StatelessWidget {
             //                   CustomTextWidget(
             //                     textToDisplay: notifier.displayFollowers(),
             //                     textStyle:
-            //                         Theme.of(context).textTheme.subtitle1,
+            //                         Theme.of(context).textTheme.titleMedium,
             //                   ),
             //                   SizedBox(height: 8 * SizeConfig.scaleDiagonal),
             //                   CustomTextWidget(
             //                     textToDisplay: notifier.language.followers,
             //                     textStyle: Theme.of(context)
             //                         .textTheme
-            //                         .bodyText2!
+            //                         .bodyMedium!
             //                         .apply(
             //                             color: Theme.of(context)
             //                                 .bottomNavigationBarTheme
@@ -277,14 +309,14 @@ class SelfProfileTop extends StatelessWidget {
             //                   CustomTextWidget(
             //                     textToDisplay: notifier.displayFollowing(),
             //                     textStyle:
-            //                         Theme.of(context).textTheme.subtitle1,
+            //                         Theme.of(context).textTheme.titleMedium,
             //                   ),
             //                   SizedBox(height: 8 * SizeConfig.scaleDiagonal),
             //                   CustomTextWidget(
             //                     textToDisplay: notifier.language.following,
             //                     textStyle: Theme.of(context)
             //                         .textTheme
-            //                         .bodyText2!
+            //                         .bodyMedium!
             //                         .apply(
             //                             color: Theme.of(context)
             //                                 .bottomNavigationBarTheme
@@ -316,7 +348,8 @@ class SelfProfileTop extends StatelessWidget {
                   })
                 : Container(
                     padding: const EdgeInsets.symmetric(vertical: 6),
-                    constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.3),
+                    constraints: BoxConstraints(
+                        maxHeight: MediaQuery.of(context).size.height * 0.3),
                     // color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
                     child: SingleChildScrollView(
                         child: Column(
@@ -331,9 +364,18 @@ class SelfProfileTop extends StatelessWidget {
                             textAlign: TextAlign.start,
                             seeLess: ' ${notifier.language.seeLess}',
                             seeMore: ' ${notifier.language.seeMoreContent}',
-                            normStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: kHyppeLightSecondary),
-                            hrefStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: kHyppePrimary),
-                            expandStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            normStyle: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(color: kHyppeLightSecondary),
+                            hrefStyle: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(color: kHyppePrimary),
+                            expandStyle: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
                                   color: Theme.of(context).colorScheme.primary,
                                 )),
                       ],
@@ -341,7 +383,8 @@ class SelfProfileTop extends StatelessWidget {
                   ),
             notifier.displayPlace() != null
                 ? Padding(
-                    padding: EdgeInsets.only(top: 12 * SizeConfig.scaleDiagonal),
+                    padding:
+                        EdgeInsets.only(top: 12 * SizeConfig.scaleDiagonal),
                     child: Row(
                       children: [
                         const CustomIconWidget(
@@ -406,7 +449,8 @@ class SelfProfileTop extends StatelessWidget {
                       child: CustomElevatedButton(
                         width: null,
                         height: 42 * SizeConfig.scaleDiagonal,
-                        buttonStyle: Theme.of(context).elevatedButtonTheme.style,
+                        buttonStyle:
+                            Theme.of(context).elevatedButtonTheme.style,
                         function: () => notifier.navigateToEditProfile(),
                         child: CustomTextWidget(
                           textToDisplay: notifier.language.editProfile ?? '',
@@ -419,10 +463,13 @@ class SelfProfileTop extends StatelessWidget {
                         ? CustomElevatedButton(
                             width: 167 * SizeConfig.scaleDiagonal,
                             height: 42 * SizeConfig.scaleDiagonal,
-                            buttonStyle: Theme.of(context).elevatedButtonTheme.style,
+                            buttonStyle:
+                                Theme.of(context).elevatedButtonTheme.style,
                             function: () => Routing().move(Routes.boostList),
                             child: CustomTextWidget(
-                              textToDisplay: notifier.language.boostedPostList ?? 'Boosted List',
+                              textToDisplay:
+                                  notifier.language.boostedPostList ??
+                                      'Boosted List',
                               textStyle: Theme.of(context).textTheme.labelLarge,
                             ),
                           )

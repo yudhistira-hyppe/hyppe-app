@@ -48,7 +48,8 @@ class AddBankAccount extends StatelessWidget {
                   inputAreaHeight: 55 * SizeConfig.scaleDiagonal,
                   inputAreaWidth: SizeConfig.screenWidth!,
                   textEditingController: notifier.nameAccount,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.onBackground),
                   textInputType: TextInputType.text,
                   onChanged: (v) {
                     // notifier.email = v;
@@ -56,12 +57,29 @@ class AddBankAccount extends StatelessWidget {
                   inputDecoration: InputDecoration(
                       contentPadding: const EdgeInsets.all(0),
                       labelText: notifier2.translate.bankName,
-                      labelStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.secondary, fontSize: 13),
-                      prefixIconConstraints: BoxConstraints(minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth())),
-                      border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
-                      enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
-                      focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary)),
-                      errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.error)),
+                      labelStyle: Theme.of(context)
+                          .textTheme
+                          .bodyLarge
+                          ?.copyWith(
+                              color: Theme.of(context).colorScheme.secondary,
+                              fontSize: 13),
+                      prefixIconConstraints: BoxConstraints(
+                          minWidth: SizeWidget().calculateSize(
+                              30.0,
+                              SizeWidget.baseWidthXD,
+                              SizeConfig.screenWidth ?? context.getWidth())),
+                      border: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.surface)),
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.surface)),
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.primary)),
+                      errorBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.error)),
                       suffixIcon: Transform.rotate(
                         angle: 90 * pi / 180,
                         child: const Icon(
@@ -70,7 +88,8 @@ class AddBankAccount extends StatelessWidget {
                         ),
                       )),
                   readOnly: true,
-                  onTap: () => notifier.showButtomSheetAllBankList(context, notifier2.translate, true),
+                  onTap: () => notifier.showButtomSheetAllBankList(
+                      context, notifier2.translate, true),
                 ),
                 sixteenPx,
                 CustomTextFormField(
@@ -78,7 +97,8 @@ class AddBankAccount extends StatelessWidget {
                   inputAreaHeight: 55 * SizeConfig.scaleDiagonal,
                   inputAreaWidth: SizeConfig.screenWidth!,
                   textEditingController: notifier.noBankAccount,
-                  style: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.onBackground),
                   textInputType: TextInputType.number,
                   onChanged: (v) {
                     notifier.noBank = v;
@@ -87,12 +107,26 @@ class AddBankAccount extends StatelessWidget {
                   inputDecoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(0),
                     labelText: notifier2.translate.noRek,
-                    labelStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.secondary, fontSize: 13),
-                    prefixIconConstraints: BoxConstraints(minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth())),
-                    border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
-                    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
-                    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary)),
-                    errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.error)),
+                    labelStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontSize: 13),
+                    prefixIconConstraints: BoxConstraints(
+                        minWidth: SizeWidget().calculateSize(
+                            30.0,
+                            SizeWidget.baseWidthXD,
+                            SizeConfig.screenWidth ?? context.getWidth())),
+                    border: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.surface)),
+                    enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.surface)),
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.primary)),
+                    errorBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.error)),
                     counter: Offstage(),
                   ),
                 ),
@@ -101,7 +135,8 @@ class AddBankAccount extends StatelessWidget {
                   inputAreaHeight: 55 * SizeConfig.scaleDiagonal,
                   inputAreaWidth: SizeConfig.screenWidth!,
                   textEditingController: notifier.accountOwnerName,
-                  style: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.onBackground),
                   textInputType: TextInputType.text,
                   onChanged: (v) {
                     notifier.accountOwner = v;
@@ -109,18 +144,39 @@ class AddBankAccount extends StatelessWidget {
                   inputDecoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(0),
                     labelText: notifier2.translate.accountRekName,
-                    labelStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: notifier.messageAddBankError != '' ? kHyppeDanger : Theme.of(context).colorScheme.secondary, fontSize: 13),
-                    prefixIconConstraints: BoxConstraints(minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth())),
-                    border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
-                    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
-                    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary)),
-                    errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.error)),
+                    labelStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: notifier.messageAddBankError != ''
+                            ? kHyppeDanger
+                            : Theme.of(context).colorScheme.secondary,
+                        fontSize: 13),
+                    prefixIconConstraints: BoxConstraints(
+                        minWidth: SizeWidget().calculateSize(
+                            30.0,
+                            SizeWidget.baseWidthXD,
+                            SizeConfig.screenWidth ?? context.getWidth())),
+                    border: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.surface)),
+                    enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.surface)),
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.primary)),
+                    errorBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.error)),
                   ),
                 ),
                 sixPx,
                 CustomTextWidget(
-                  textToDisplay: notifier.messageAddBankError != '' ? notifier.messageAddBankError : notifier2.translate.makeSureTheName ?? '',
-                  textStyle: Theme.of(context).textTheme.caption?.copyWith(color: notifier.messageAddBankError != '' ? kHyppeDanger : kHyppeDisabled),
+                  textToDisplay: notifier.messageAddBankError != ''
+                      ? notifier.messageAddBankError
+                      : notifier2.translate.makeSureTheName ?? '',
+                  textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: notifier.messageAddBankError != ''
+                          ? kHyppeDanger
+                          : kHyppeDisabled),
                   textAlign: TextAlign.start,
                   maxLines: 10,
                 )
@@ -141,7 +197,8 @@ class AddBankAccount extends StatelessWidget {
                       fourteenPx,
                       SizedBox(
                           width: MediaQuery.of(context).size.width * .85,
-                          child: const Text('Dengan melakukan klik tombol dibawah, kamu telah menyetujui Syarat & Ketentuan serta Kebijakan Privasi untuk menambahkan rekening.'))
+                          child: const Text(
+                              'Dengan melakukan klik tombol dibawah, kamu telah menyetujui Syarat & Ketentuan serta Kebijakan Privasi untuk menambahkan rekening.'))
                     ],
                   ),
                   twentyPx,
@@ -153,10 +210,16 @@ class AddBankAccount extends StatelessWidget {
                               notifier.confirmAddBankAccount(context);
                             }
                           : null,
-                      style: ButtonStyle(backgroundColor: notifier.checkSave() ? MaterialStateProperty.all(kHyppePrimary) : MaterialStateProperty.all(kHyppeDisabled)),
+                      style: ButtonStyle(
+                          backgroundColor: notifier.checkSave()
+                              ? MaterialStateProperty.all(kHyppePrimary)
+                              : MaterialStateProperty.all(kHyppeDisabled)),
                       child: CustomTextWidget(
                         textToDisplay: notifier2.translate.save ?? '',
-                        textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                        textStyle: Theme.of(context)
+                            .textTheme
+                            .labelLarge
+                            ?.copyWith(color: kHyppeLightButtonText),
                       ),
                     ),
                   ),

@@ -25,13 +25,13 @@ class SignUpOrGoogle extends StatelessWidget {
               children: [
                 CustomTextWidget(
                   textToDisplay: "${notifier.language.dontHaveAnAccount}?   ",
-                  textStyle: Theme.of(context).primaryTextTheme.bodyText2,
+                  textStyle: Theme.of(context).primaryTextTheme.bodyMedium,
                 ),
                 GestureDetector(
                   onTap: () => notifier.onClickSignUpHere(),
                   child: CustomTextWidget(
                     textToDisplay: notifier.language.registerHere ?? '',
-                    textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
+                    textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: Theme.of(context).colorScheme.primary,
                         ),
@@ -43,21 +43,27 @@ class SignUpOrGoogle extends StatelessWidget {
               textOverflow: TextOverflow.clip,
               textSpan: TextSpan(
                 text: "${notifier.language.byRegisteringYouAgreeToHyppe} ",
-                style: Theme.of(context).textTheme.bodyText2,
+                style: Theme.of(context).textTheme.bodyMedium,
                 children: [
                   TextSpan(
                     text: "${notifier.language.privacyPolicy} ",
-                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold, color: kHyppePrimary),
-                    recognizer: TapGestureRecognizer()..onTap = () => context.read<UserInterestNotifier>().goToEula(),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.bold, color: kHyppePrimary),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap =
+                          () => context.read<UserInterestNotifier>().goToEula(),
                   ),
                   TextSpan(
                     text: "${notifier.language.and} ",
-                    style: Theme.of(context).textTheme.bodyText2,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   TextSpan(
                     text: notifier.language.termsOfService,
-                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold, color: kHyppePrimary),
-                    recognizer: TapGestureRecognizer()..onTap = () => context.read<UserInterestNotifier>().goToEula(),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.bold, color: kHyppePrimary),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap =
+                          () => context.read<UserInterestNotifier>().goToEula(),
                   ),
                 ],
               ),
@@ -73,7 +79,7 @@ class SignUpOrGoogle extends StatelessWidget {
             //       ),
             //     ),
             //     twelvePx,
-            //     CustomTextWidget(textToDisplay: notifier.language.or, textStyle: Theme.of(context).textTheme.bodyText2),
+            //     CustomTextWidget(textToDisplay: notifier.language.or, textStyle: Theme.of(context).textTheme.bodyMedium),
             //     twelvePx,
             //     Container(
             //       width: 50,

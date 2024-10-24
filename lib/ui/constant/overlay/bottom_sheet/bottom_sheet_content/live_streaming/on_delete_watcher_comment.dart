@@ -44,34 +44,36 @@ class _OnDeleteWatcherCommentState extends State<OnDeleteWatcherComment> {
             width: 56,
             height: 56,
             following: true,
-            imageUrl: 'https://storage.googleapis.com/pai-images/52723c8072804e4493c246ca8aef68a1.jpeg',
+            imageUrl:
+                'https://storage.googleapis.com/pai-images/52723c8072804e4493c246ca8aef68a1.jpeg',
           ),
           fourPx,
           CustomTextWidget(
             textAlign: TextAlign.left,
             textToDisplay: 'Natalia Jessica',
-            textStyle: context.getTextTheme().bodyText2?.copyWith(
-              fontWeight: FontWeight.w700,
-            ),
+            textStyle: context.getTextTheme().bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
           ),
           fourPx,
           CustomTextWidget(
             textAlign: TextAlign.left,
             textToDisplay: 'natalia.jessica',
-            textStyle: context.getTextTheme().caption?.copyWith(
-                fontWeight: FontWeight.w400, color: kHyppeBurem),
+            textStyle: context
+                .getTextTheme()
+                .bodySmall
+                ?.copyWith(fontWeight: FontWeight.w400, color: kHyppeBurem),
           ),
           eightPx,
           CustomGesture(
             margin: EdgeInsets.zero,
-            onTap: () {
-
-            },
+            onTap: () {},
             child: Container(
               width: double.infinity,
               height: 44,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),),
+                borderRadius: BorderRadius.circular(8),
+              ),
               alignment: Alignment.center,
               child: CustomTextWidget(
                 textToDisplay: language.deleteComment2 ?? 'Hapus Komentar',
@@ -83,17 +85,20 @@ class _OnDeleteWatcherCommentState extends State<OnDeleteWatcherComment> {
               ),
             ),
           ),
-          Container(width: double.infinity, height: 2, color: kHyppeBorder,),
+          Container(
+            width: double.infinity,
+            height: 2,
+            color: kHyppeBorder,
+          ),
           CustomGesture(
             margin: EdgeInsets.zero,
-            onTap: () {
-
-            },
+            onTap: () {},
             child: Container(
               width: double.infinity,
               height: 44,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),),
+                borderRadius: BorderRadius.circular(8),
+              ),
               alignment: Alignment.center,
               child: CustomTextWidget(
                 textToDisplay: language.pinComment ?? 'Semat Komentar',

@@ -43,7 +43,9 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
     return Consumer<PaymentMethodNotifier>(
       builder: (_, notifier, __) => Scaffold(
         appBar: AppBar(
-          leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
+          leadingWidth: 50 *
+              (SizeConfig.screenWidth ?? context.getWidth()) /
+              SizeWidget.baseWidthXD,
           leading: CustomIconButtonWidget(
             defaultColor: true,
             iconData: "${AssetPath.vectorPath}back-arrow.svg",
@@ -52,33 +54,48 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
           titleSpacing: 0,
           title: CustomTextWidget(
             textToDisplay: notifier.language.paymentMethods ?? '',
-            textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
+            textStyle:
+                Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 18),
           ),
           centerTitle: false,
         ),
         body: notifier.data != null
             ? notifier.data?.isNotEmpty ?? false
                 ? SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 24, horizontal: 16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CustomTextWidget(textToDisplay: notifier.language.totalPayment ?? '', textStyle: textTheme.titleMedium),
+                        CustomTextWidget(
+                            textToDisplay: notifier.language.totalPayment ?? '',
+                            textStyle: textTheme.titleMedium),
                         const SizedBox(height: 5),
                         CustomTextWidget(
                           textToDisplay: widget.argument?.totalAmount != null
-                              ? System().currencyFormat(amount: widget.argument?.totalAmount?.toInt())
+                              ? System().currencyFormat(
+                                  amount: widget.argument?.totalAmount?.toInt())
                               : notifier.reviewBuyNotifier.data != null
-                                  ? System().currencyFormat(amount: notifier.reviewBuyNotifier.data?.totalAmount?.toInt())
+                                  ? System().currencyFormat(
+                                      amount: notifier
+                                          .reviewBuyNotifier.data?.totalAmount
+                                          ?.toInt())
                                   : '',
-                          textStyle: textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primary),
+                          textStyle: textTheme.titleMedium?.copyWith(
+                              color: Theme.of(context).colorScheme.primary),
                         ),
                         const SizedBox(height: 24),
-                        CustomTextWidget(textToDisplay: "Virtual Account", textStyle: textTheme.bodyMedium),
+                        CustomTextWidget(
+                            textToDisplay: "Virtual Account",
+                            textStyle: textTheme.bodyMedium),
                         const SizedBox(height: 12),
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
-                          decoration: BoxDecoration(color: Theme.of(context).appBarTheme.backgroundColor, borderRadius: const BorderRadius.all(Radius.circular(8))),
+                          decoration: BoxDecoration(
+                              color:
+                                  Theme.of(context).appBarTheme.backgroundColor,
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(8))),
                           child: Column(children: [
                             ..._getListBank(notifier),
                           ]),
@@ -100,21 +117,29 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
           height: 44.0 * SizeConfig.scaleDiagonal,
           function: () {
             if (!notifier.isLoading) {
-              notifier.submitPay(context, mounted, price: widget.argument?.totalAmount);
+              notifier.submitPay(context, mounted,
+                  price: widget.argument?.totalAmount);
             }
           },
           buttonStyle: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all(notifier.colorButton(context)),
-            shadowColor: MaterialStateProperty.all(notifier.colorButton(context)),
-            overlayColor: MaterialStateProperty.all(notifier.colorButton(context)),
-            backgroundColor: MaterialStateProperty.all(notifier.colorButton(context)),
+            foregroundColor:
+                MaterialStateProperty.all(notifier.colorButton(context)),
+            shadowColor:
+                MaterialStateProperty.all(notifier.colorButton(context)),
+            overlayColor:
+                MaterialStateProperty.all(notifier.colorButton(context)),
+            backgroundColor:
+                MaterialStateProperty.all(notifier.colorButton(context)),
           ),
           // function: () => Routing().move(Routes.paymentSummaryScreen),
           child: notifier.isLoading
               ? const CustomLoading()
               : CustomTextWidget(
-                  textToDisplay: widget.argument?.totalAmount != null ? "${notifier.language.upload} & ${notifier.language.pay}" : notifier.language.pay ?? 'pay',
-                  textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                  textToDisplay: widget.argument?.totalAmount != null
+                      ? "${notifier.language.upload} & ${notifier.language.pay}"
+                      : notifier.language.pay ?? 'pay',
+                  textStyle: textTheme.labelLarge
+                      ?.copyWith(color: kHyppeLightButtonText),
                 ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -123,7 +148,11 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
     );
   }
 
-  Widget listBank({String image = "bank_bca.png", String title = "", bool isLast = false, bool bg = true}) {
+  Widget listBank(
+      {String image = "bank_bca.png",
+      String title = "",
+      bool isLast = false,
+      bool bg = true}) {
     final textTheme = Theme.of(context).textTheme;
 
     return GestureDetector(
@@ -147,7 +176,9 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
               children: [
                 Container(
                   color: bg ? Colors.white : Colors.transparent,
-                  padding: bg ? const EdgeInsets.symmetric(vertical: 5, horizontal: 10) : null,
+                  padding: bg
+                      ? const EdgeInsets.symmetric(vertical: 5, horizontal: 10)
+                      : null,
                   child: Image.asset(
                     "${AssetPath.pngPath}$image",
                     width: 56 * SizeConfig.scaleDiagonal,
@@ -157,10 +188,12 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                 const SizedBox(
                   width: 10,
                 ),
-                CustomTextWidget(textToDisplay: title, textStyle: textTheme.bodyMedium),
+                CustomTextWidget(
+                    textToDisplay: title, textStyle: textTheme.bodyMedium),
               ],
             ),
-            const CustomIconWidget(iconData: "${AssetPath.vectorPath}chevron_right.svg"),
+            const CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}chevron_right.svg"),
           ],
         ),
       ),
@@ -182,7 +215,13 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
   }
 
   Widget bankTile(
-      {required String value, required String selected, required void Function(String?) onTap, required String icon, required String title, required bool hasBottomBorder, String? subtitle}) {
+      {required String value,
+      required String selected,
+      required void Function(String?) onTap,
+      required String icon,
+      required String title,
+      required bool hasBottomBorder,
+      String? subtitle}) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
       decoration: hasBottomBorder
@@ -199,14 +238,17 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
         contentPadding: EdgeInsets.zero,
         title: CustomTextWidget(
           textToDisplay: title,
-          textStyle: Theme.of(context).textTheme.subtitle2,
+          textStyle: Theme.of(context).textTheme.titleSmall,
           textAlign: TextAlign.start,
           textOverflow: TextOverflow.clip,
         ),
         subtitle: subtitle != null
             ? CustomTextWidget(
                 textToDisplay: subtitle,
-                textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeSecondary),
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .bodySmall
+                    ?.copyWith(color: kHyppeSecondary),
                 textAlign: TextAlign.start,
                 textOverflow: TextOverflow.clip,
               )

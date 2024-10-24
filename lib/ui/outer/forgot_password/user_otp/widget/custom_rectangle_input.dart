@@ -28,7 +28,6 @@ class CustomRectangleInput extends StatelessWidget {
                 print('lenght of the pin: ${text.length}');
                 notifier.inCorrectCode = false;
                 if (text.length == 4) {
-
                   await notifier.onVerifyButton(context, afterSuccess);
                 }
                 // notifier.isOTPCodeFullFilled = notifier.pinController.text.length == 4;
@@ -47,7 +46,7 @@ class CustomRectangleInput extends StatelessWidget {
                     ? CustomTextWidget(
                         textToDisplay: notifier.language.incorrectCode ?? '',
                         textStyle:
-                            Theme.of(context).textTheme.bodyText2?.copyWith(
+                            Theme.of(context).textTheme.bodyMedium?.copyWith(
                                   color: Theme.of(context).colorScheme.error,
                                 ),
                       )

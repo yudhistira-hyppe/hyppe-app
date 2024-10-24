@@ -17,13 +17,19 @@ class MusicItemScreen extends StatefulWidget {
   final Music music;
   final int index;
   final bool isExplored;
-  const MusicItemScreen({Key? key, required this.music, required this.index, this.isExplored = false}) : super(key: key);
+  const MusicItemScreen(
+      {Key? key,
+      required this.music,
+      required this.index,
+      this.isExplored = false})
+      : super(key: key);
 
   @override
   State<MusicItemScreen> createState() => _MusicItemScreenState();
 }
 
-class _MusicItemScreenState extends State<MusicItemScreen> with WidgetsBindingObserver {
+class _MusicItemScreenState extends State<MusicItemScreen>
+    with WidgetsBindingObserver {
   // @override
   // void dispose() {
   //   var not = context.read<PreviewContentNotifier>();
@@ -63,7 +69,8 @@ class _MusicItemScreenState extends State<MusicItemScreen> with WidgetsBindingOb
                         width: 48,
                         height: 48,
                         decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(Radius.circular(24)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(24)),
                           image: DecorationImage(
                             fit: BoxFit.cover,
                             image: imageProvider,
@@ -78,7 +85,8 @@ class _MusicItemScreenState extends State<MusicItemScreen> with WidgetsBindingOb
                         decoration: const BoxDecoration(
                           image: DecorationImage(
                             fit: BoxFit.contain,
-                            image: AssetImage('${AssetPath.vectorPath}ic_music.svg'),
+                            image: AssetImage(
+                                '${AssetPath.vectorPath}ic_music.svg'),
                           ),
                         ),
                       );
@@ -89,7 +97,8 @@ class _MusicItemScreenState extends State<MusicItemScreen> with WidgetsBindingOb
                       decoration: const BoxDecoration(
                         image: DecorationImage(
                           fit: BoxFit.contain,
-                          image: AssetImage('${AssetPath.vectorPath}ic_music.svg'),
+                          image:
+                              AssetImage('${AssetPath.vectorPath}ic_music.svg'),
                         ),
                       ),
                     ),
@@ -102,14 +111,22 @@ class _MusicItemScreenState extends State<MusicItemScreen> with WidgetsBindingOb
                       children: [
                         CustomTextWidget(
                           textToDisplay: widget.music.musicTitle ?? '',
-                          textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 14, fontWeight: FontWeight.w700),
+                          textStyle: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(
+                                  fontSize: 14, fontWeight: FontWeight.w700),
                         ),
                         fourPx,
                         CustomTextWidget(
                           textAlign: TextAlign.start,
                           maxLines: 2,
-                          textToDisplay: '${widget.music.artistName} • ${widget.music.apsaraMusicUrl?.duration?.toInt().getMinutes() ?? '00'}',
-                          textStyle: const TextStyle(color: kHyppeLightSecondary, fontSize: 12, fontWeight: FontWeight.w400),
+                          textToDisplay:
+                              '${widget.music.artistName} • ${widget.music.apsaraMusicUrl?.duration?.toInt().getMinutes() ?? '00'}',
+                          textStyle: const TextStyle(
+                              color: kHyppeLightSecondary,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400),
                         )
                       ],
                     ),
@@ -120,12 +137,15 @@ class _MusicItemScreenState extends State<MusicItemScreen> with WidgetsBindingOb
             !widget.music.isLoad
                 ? widget.music.isPlay
                     ? MusicProgress(
-                        totalSeconds: widget.music.apsaraMusicUrl?.duration?.toInt() ?? 0,
+                        totalSeconds:
+                            widget.music.apsaraMusicUrl?.duration?.toInt() ?? 0,
                         onClick: () {
                           if (!widget.isExplored) {
-                            notifier.playMusic(context, widget.music, widget.index);
+                            notifier.playMusic(
+                                context, widget.music, widget.index);
                           } else {
-                            notifier.playExpMusic(context, widget.music, widget.index);
+                            notifier.playExpMusic(
+                                context, widget.music, widget.index);
                           }
                         },
                       )
@@ -134,13 +154,17 @@ class _MusicItemScreenState extends State<MusicItemScreen> with WidgetsBindingOb
                         height: 50,
                         child: IconButton(
                           focusColor: Colors.grey,
-                          icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}play_circle.svg"),
+                          icon: const CustomIconWidget(
+                              iconData:
+                                  "${AssetPath.vectorPath}play_circle.svg"),
                           splashRadius: 1,
                           onPressed: () {
                             if (!widget.isExplored) {
-                              notifier.playMusic(context, widget.music, widget.index);
+                              notifier.playMusic(
+                                  context, widget.music, widget.index);
                             } else {
-                              notifier.playExpMusic(context, widget.music, widget.index);
+                              notifier.playExpMusic(
+                                  context, widget.music, widget.index);
                             }
                           },
                         ),

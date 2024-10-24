@@ -33,11 +33,13 @@ class MessageScreen extends StatefulWidget {
 class _MessageScreenState extends State<MessageScreen> with RouteAware {
   final _notifier = MessageNotifier();
   final ScrollController _scrollController = ScrollController();
-  final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> _globalKey =
+      GlobalKey<RefreshIndicatorState>();
 
   @override
   void didChangeDependencies() {
-    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    CustomRouteObserver.routeObserver
+        .subscribe(this, ModalRoute.of(context) as PageRoute);
     super.didChangeDependencies();
   }
 
@@ -48,7 +50,8 @@ class _MessageScreenState extends State<MessageScreen> with RouteAware {
       FirebaseCrashlytics.instance.setCustomKey('layout', 'MessageScreen');
       // notifier.initialData(context);
       _notifier.getDiscussion(context, reload: true);
-      _scrollController.addListener(() => _notifier.scrollListener(context, _scrollController));
+      _scrollController.addListener(
+          () => _notifier.scrollListener(context, _scrollController));
     });
   }
 
@@ -72,7 +75,8 @@ class _MessageScreenState extends State<MessageScreen> with RouteAware {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    final error = context.select((ErrorService value) => value.getError(ErrorType.message));
+    final error = context
+        .select((ErrorService value) => value.getError(ErrorType.message));
     return ChangeNotifierProvider<MessageNotifier>(
       create: (context) => _notifier,
       child: Consumer2<MessageNotifier, TranslateNotifierV2>(
@@ -80,17 +84,23 @@ class _MessageScreenState extends State<MessageScreen> with RouteAware {
           appBar: AppBar(
             title: CustomTextWidget(
               textToDisplay: notifier2.translate.messages ?? '',
-              textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
+              textStyle: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(fontWeight: FontWeight.bold),
             ),
           ),
-          body: context.read<ErrorService>().isInitialError(error, notifier.discussData)
+          body: context
+                  .read<ErrorService>()
+                  .isInitialError(error, notifier.discussData)
               ? Center(
                   child: SizedBox(
                     height: 198,
                     child: CustomErrorWidget(
                       errorType: ErrorType.message,
                       // function: () => notifier.initialData(context),
-                      function: () => notifier.getDiscussion(context, reload: true),
+                      function: () =>
+                          notifier.getDiscussion(context, reload: true),
                     ),
                   ),
                 )
@@ -110,9 +120,11 @@ class _MessageScreenState extends State<MessageScreen> with RouteAware {
                         flex: 13,
                         child: notifier.discussData != null
                             ? NotificationListener(
-                                onNotification: (ScrollNotification scrollInfo) {
+                                onNotification:
+                                    (ScrollNotification scrollInfo) {
                                   if (scrollInfo is ScrollStartNotification) {
-                                    Future.delayed(const Duration(milliseconds: 100), () {
+                                    Future.delayed(
+                                        const Duration(milliseconds: 100), () {
                                       notifier.getDiscussion(context);
                                     });
                                   }
@@ -123,28 +135,43 @@ class _MessageScreenState extends State<MessageScreen> with RouteAware {
                                   key: _globalKey,
                                   strokeWidth: 2.0,
                                   color: Colors.purple,
-                                  onRefresh: () => notifier.getDiscussion(context, reload: true),
+                                  onRefresh: () => notifier
+                                      .getDiscussion(context, reload: true),
                                   child: ListView.builder(
                                     controller: _scrollController,
                                     itemCount: notifier.itemCount,
                                     scrollDirection: Axis.vertical,
-                                    physics: const AlwaysScrollableScrollPhysics(),
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(),
                                     itemBuilder: (context, index) {
-                                      if (index == notifier.discussData?.length && notifier.hasNext) {
+                                      if (index ==
+                                              notifier.discussData?.length &&
+                                          notifier.hasNext) {
                                         return const CustomLoading();
                                       }
 
-                                      final discussData = notifier.discussData?[index];
+                                      final discussData =
+                                          notifier.discussData?[index];
 
                                       return InkWell(
-                                        onTap: () => notifier.onClickUser(context, discussData),
+                                        onTap: () => notifier.onClickUser(
+                                            context, discussData),
                                         onLongPress: () {
                                           // ShowBottomSheet.onLongPressTileUserMessage(context);
-                                          ShowBottomSheet.onLongPressDeleteMessage(context, data: discussData, function: () {
+                                          ShowBottomSheet
+                                              .onLongPressDeleteMessage(context,
+                                                  data: discussData,
+                                                  function: () {
                                             // print('masuk mas eko');
                                             // print(discussData.senderOrReceiverInfo.email);
                                             // print(discussData.disqusID);
-                                            notifier.deletetConversation(context, discussData?.senderOrReceiverInfo?.email ?? '', discussData?.disqusID ?? '');
+                                            notifier.deletetConversation(
+                                                context,
+                                                discussData
+                                                        ?.senderOrReceiverInfo
+                                                        ?.email ??
+                                                    '',
+                                                discussData?.disqusID ?? '');
                                           });
                                         },
                                         child: ListTile(
@@ -156,14 +183,28 @@ class _MessageScreenState extends State<MessageScreen> with RouteAware {
                                             child: CustomProfileImage(
                                               forStory: false,
                                               following: true,
-                                              onTap: () => System().navigateToProfile(context, discussData?.senderOrReceiverInfo?.email ?? ''),
+                                              onTap: () => System()
+                                                  .navigateToProfile(
+                                                      context,
+                                                      discussData
+                                                              ?.senderOrReceiverInfo
+                                                              ?.email ??
+                                                          ''),
                                               // imageUrl: notifier.userID == notifier.chatData[index].senderID
                                               //     ? '${notifier.chatData[index].picReceiverUrl + SMALL}'
                                               //     : '${notifier.chatData[index].picSenderUrl + SMALL}',
-                                              imageUrl: System().showUserPicture(discussData?.senderOrReceiverInfo?.avatar?.mediaEndpoint),
-                                              height: 50 * SizeConfig.scaleDiagonal,
-                                              width: 50 * SizeConfig.scaleDiagonal,
-                                              badge: discussData?.senderOrReceiverInfo?.urluserBadge,
+                                              imageUrl: System()
+                                                  .showUserPicture(discussData
+                                                      ?.senderOrReceiverInfo
+                                                      ?.avatar
+                                                      ?.mediaEndpoint),
+                                              height:
+                                                  50 * SizeConfig.scaleDiagonal,
+                                              width:
+                                                  50 * SizeConfig.scaleDiagonal,
+                                              badge: discussData
+                                                  ?.senderOrReceiverInfo
+                                                  ?.urluserBadge,
                                             ),
                                             // ),
                                           ),
@@ -172,7 +213,10 @@ class _MessageScreenState extends State<MessageScreen> with RouteAware {
                                             // textToDisplay: notifier.userID == notifier.chatData[index].senderID
                                             //     ? notifier.chatData[index].receiverUserName
                                             //     : notifier.chatData[index].senderName,
-                                            textToDisplay: discussData?.senderOrReceiverInfo?.fullName ?? '',
+                                            textToDisplay: discussData
+                                                    ?.senderOrReceiverInfo
+                                                    ?.fullName ??
+                                                '',
                                             textAlign: TextAlign.start,
                                             textStyle: const TextStyle(
                                               fontWeight: FontWeight.bold,
@@ -180,27 +224,49 @@ class _MessageScreenState extends State<MessageScreen> with RouteAware {
                                             ),
                                           ),
                                           subtitle: CustomTextWidget(
-                                            textToDisplay: discussData?.lastestMessage ?? '',
+                                            textToDisplay:
+                                                discussData?.lastestMessage ??
+                                                    '',
                                             textAlign: TextAlign.start,
-                                            textStyle: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondary),
+                                            textStyle: TextStyle(
+                                                fontSize: 12,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary),
                                           ),
                                           trailing: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             children: [
                                               CustomTextWidget(
-                                                textToDisplay: System().readTimestamp(
-                                                  DateTime.parse(discussData?.updatedAt ?? DateTime.now().toString()).millisecondsSinceEpoch,
+                                                textToDisplay:
+                                                    System().readTimestamp(
+                                                  DateTime.parse(discussData
+                                                              ?.updatedAt ??
+                                                          DateTime.now()
+                                                              .toString())
+                                                      .millisecondsSinceEpoch,
                                                   context,
                                                   fullCaption: true,
                                                 ),
-                                                textStyle: Theme.of(context).textTheme.caption,
+                                                textStyle: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall,
                                               ),
                                               const SizedBox(height: 8),
                                               CustomIconWidget(
-                                                iconData: "${AssetPath.vectorPath}unread.svg",
+                                                iconData:
+                                                    "${AssetPath.vectorPath}unread.svg",
                                                 defaultColor: false,
-                                                color: DateTime.now().millisecondsSinceEpoch >
-                                                        DateTime.parse(discussData?.updatedAt ?? DateTime.now().toString()).add(const Duration(minutes: 10)).millisecondsSinceEpoch
+                                                color: DateTime.now()
+                                                            .millisecondsSinceEpoch >
+                                                        DateTime.parse(discussData
+                                                                    ?.updatedAt ??
+                                                                DateTime.now()
+                                                                    .toString())
+                                                            .add(const Duration(
+                                                                minutes: 10))
+                                                            .millisecondsSinceEpoch
                                                     ? kHyppeLightIcon
                                                     : null,
                                               ),
@@ -213,7 +279,7 @@ class _MessageScreenState extends State<MessageScreen> with RouteAware {
                                           //           context,
                                           //           fullCaption: false,
                                           //         ),
-                                          //         textStyle: Theme.of(context).textTheme.caption,
+                                          //         textStyle: Theme.of(context).textTheme.bodySmall,
                                           //       )
                                           //     : Column(
                                           //         mainAxisAlignment: MainAxisAlignment.center,
@@ -224,7 +290,7 @@ class _MessageScreenState extends State<MessageScreen> with RouteAware {
                                           //               context,
                                           //               fullCaption: false,
                                           //             ),
-                                          //             textStyle: Theme.of(context).textTheme.caption,
+                                          //             textStyle: Theme.of(context).textTheme.bodySmall,
                                           //           ),
                                           //           SizedBox(height: 8),
                                           //           CustomIconWidget(
@@ -243,7 +309,8 @@ class _MessageScreenState extends State<MessageScreen> with RouteAware {
                                 itemCount: 10,
                                 shrinkWrap: true,
                                 scrollDirection: Axis.vertical,
-                                itemBuilder: (context, index) => ComponentShimmer(),
+                                itemBuilder: (context, index) =>
+                                    ComponentShimmer(),
                               ),
                       ),
                     ],

@@ -24,9 +24,12 @@ class BuildReplayCaption extends StatelessWidget {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'BuildReplayCaption');
     SizeConfig().init(context);
 
-    final double _showBottomPos = (MediaQuery.of(context).viewInsets.bottom + SizeWidget().calculateSize(60, SizeWidget.baseHeightXD, SizeConfig.screenHeight!));
+    final double _showBottomPos = (MediaQuery.of(context).viewInsets.bottom +
+        SizeWidget().calculateSize(
+            60, SizeWidget.baseHeightXD, SizeConfig.screenHeight!));
 
-    final double _hideBottomPos = (-SizeWidget().calculateSize(100, SizeWidget.baseHeightXD, SizeConfig.screenHeight!));
+    final double _hideBottomPos = (-SizeWidget()
+        .calculateSize(100, SizeWidget.baseHeightXD, SizeConfig.screenHeight!));
 
     final notifier = Provider.of<StoriesPlaylistNotifier>(context);
 
@@ -34,10 +37,12 @@ class BuildReplayCaption extends StatelessWidget {
       duration: const Duration(milliseconds: 800),
       bottom: notifier.isKeyboardActive ? _showBottomPos : _hideBottomPos,
       curve: Curves.bounceOut,
-      height: SizeWidget().calculateSize(83, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
+      height: SizeWidget()
+          .calculateSize(83, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
       child: SizedBox(
         width: SizeConfig.screenWidth,
-        height: SizeWidget().calculateSize(83, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
+        height: SizeWidget().calculateSize(
+            83, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -49,7 +54,7 @@ class BuildReplayCaption extends StatelessWidget {
             ),
             CustomTextWidget(
               textToDisplay: "Hanya Balas ke ${data?.username}",
-              textStyle: Theme.of(context).textTheme.bodyText1?.apply(
+              textStyle: Theme.of(context).textTheme.bodyLarge?.apply(
                     color: Theme.of(context).colorScheme.secondary,
                   ),
             )

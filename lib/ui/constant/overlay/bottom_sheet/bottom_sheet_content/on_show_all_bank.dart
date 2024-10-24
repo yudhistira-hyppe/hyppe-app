@@ -21,8 +21,11 @@ class onShowAllBankBottomSheet extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 8 * SizeConfig.scaleDiagonal),
-            child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg", defaultColor: false),
+            padding:
+                EdgeInsets.symmetric(vertical: 8 * SizeConfig.scaleDiagonal),
+            child: const CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}handler.svg",
+                defaultColor: false),
           ),
           notifier.data == null
               ? const CustomLoading()
@@ -31,15 +34,27 @@ class onShowAllBankBottomSheet extends StatelessWidget {
                   itemCount: notifier.data?.length,
                   itemBuilder: (context, index) {
                     return Container(
-                      decoration: const BoxDecoration(border: Border(bottom: BorderSide(width: 0.3, color: kHyppeLightInactive2)), color: Colors.transparent),
+                      decoration: const BoxDecoration(
+                          border: Border(
+                              bottom: BorderSide(
+                                  width: 0.3, color: kHyppeLightInactive2)),
+                          color: Colors.transparent),
                       child: ListTile(
                         onTap: () {
-                          context.read<TransactionNotifier>().bankInsert(notifier.data?[index] ?? BankData());
+                          context
+                              .read<TransactionNotifier>()
+                              .bankInsert(notifier.data?[index] ?? BankData());
                         },
                         title: CustomTextWidget(
                           textToDisplay: notifier.data?[index].bankname ?? '',
                           textAlign: TextAlign.start,
-                          textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                          textStyle: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground),
                         ),
                         leading: CustomCacheImage(
                           // imageUrl: picData.content[arguments].contentUrl,
@@ -49,7 +64,8 @@ class onShowAllBankBottomSheet extends StatelessWidget {
                               width: 35,
                               height: 35,
                               decoration: BoxDecoration(
-                                image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
+                                image: DecorationImage(
+                                    image: imageProvider, fit: BoxFit.contain),
                               ),
                             );
                           },
@@ -60,7 +76,8 @@ class onShowAllBankBottomSheet extends StatelessWidget {
                               decoration: const BoxDecoration(
                                 image: DecorationImage(
                                   fit: BoxFit.contain,
-                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                  image: AssetImage(
+                                      '${AssetPath.pngPath}content-error.png'),
                                 ),
                               ),
                             );
@@ -69,7 +86,8 @@ class onShowAllBankBottomSheet extends StatelessWidget {
                             decoration: const BoxDecoration(
                               image: DecorationImage(
                                 fit: BoxFit.contain,
-                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                image: AssetImage(
+                                    '${AssetPath.pngPath}content-error.png'),
                               ),
                             ),
                           ),

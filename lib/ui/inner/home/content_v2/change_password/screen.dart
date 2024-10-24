@@ -29,9 +29,11 @@ class HyppeChangePassword extends StatelessWidget {
           onWillPop: notifier.onWillPop,
           child: Scaffold(
             appBar: AppBar(
-              leadingWidth: 50 * SizeConfig.screenWidth! / SizeWidget.baseWidthXD,
+              leadingWidth:
+                  50 * SizeConfig.screenWidth! / SizeWidget.baseWidthXD,
               leading: IconButton(
-                icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
+                icon: const CustomIconWidget(
+                    iconData: "${AssetPath.vectorPath}back-arrow.svg"),
                 splashRadius: 1,
                 onPressed: () {
                   notifier.clearTxt();
@@ -40,23 +42,36 @@ class HyppeChangePassword extends StatelessWidget {
               ),
               titleSpacing: 0,
               title: CustomTextWidget(
-                textToDisplay: notifier.language.changePassword ?? 'Change Password',
-                textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 18 * SizeConfig.scaleDiagonal),
+                textToDisplay:
+                    notifier.language.changePassword ?? 'Change Password',
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .bodyLarge!
+                    .copyWith(fontSize: 18 * SizeConfig.scaleDiagonal),
               ),
               centerTitle: false,
             ),
             body: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25.0),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 15, horizontal: 25.0),
               child: Column(
                 children: [
                   RichText(
-                    text: TextSpan(text: notifier.language.createNewPassword ?? 'Change New Password', style: Theme.of(context).textTheme.bodyText1!, children: <TextSpan>[
-                      const TextSpan(text: "\n\n"),
-                      TextSpan(
-                        text: notifier.language.passwordAreCaseSensitiveAndMustBeAtLeast8Characters,
-                        style: Theme.of(context).textTheme.bodyText2!.copyWith(color: kHyppeSecondary),
-                      )
-                    ]),
+                    text: TextSpan(
+                        text: notifier.language.createNewPassword ??
+                            'Change New Password',
+                        style: Theme.of(context).textTheme.bodyLarge!,
+                        children: <TextSpan>[
+                          const TextSpan(text: "\n\n"),
+                          TextSpan(
+                            text: notifier.language
+                                .passwordAreCaseSensitiveAndMustBeAtLeast8Characters,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(color: kHyppeSecondary),
+                          )
+                        ]),
                   ),
                   TextInputChangePassword(),
                 ],
@@ -88,7 +103,8 @@ class HyppeChangePassword extends StatelessWidget {
                 // ),
               ],
             ),
-            floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
           ),
         ),
       ),

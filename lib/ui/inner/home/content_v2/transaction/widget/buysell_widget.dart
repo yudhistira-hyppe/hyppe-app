@@ -75,17 +75,21 @@ class BuySellWidget extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
-        color: kHyppeBurem.withOpacity(.05),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: kHyppeBurem.withOpacity(.3))
-        // boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
-      ),
+          color: kHyppeBurem.withOpacity(.05),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: kHyppeBurem.withOpacity(.3))
+          // boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+          ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
             if (data?.description != 'FAILED TRANSACTION') {
-              context.read<TransactionNotifier>().getDetailTransactionHistory(context, id: data?.id ?? '', type: System().convertTransactionTypeToString(data?.type), jenis: data?.jenis);
+              context.read<TransactionNotifier>().getDetailTransactionHistory(
+                  context,
+                  id: data?.id ?? '',
+                  type: System().convertTransactionTypeToString(data?.type),
+                  jenis: data?.jenis);
               context.read<TransactionNotifier>().navigateToDetailTransaction();
             }
           },
@@ -99,16 +103,24 @@ class BuySellWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 5),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 11, vertical: 5),
                       margin: const EdgeInsets.only(bottom: 12),
                       decoration: BoxDecoration(
                         color: blockColor,
                         borderRadius: BorderRadius.circular(5),
-                        boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+                        boxShadow: [
+                          BoxShadow(
+                              color: Color.fromRGBO(0, 0, 0, 0.06),
+                              blurRadius: 2)
+                        ],
                       ),
                       child: CustomTextWidget(
                         textToDisplay: title,
-                        textStyle: Theme.of(context).textTheme.button?.copyWith(color: titleColor),
+                        textStyle: Theme.of(context)
+                            .textTheme
+                            .labelLarge
+                            ?.copyWith(color: titleColor),
                       ),
                     ),
                     Expanded(
@@ -118,7 +130,7 @@ class BuySellWidget extends StatelessWidget {
                           Expanded(
                             child: CustomTextWidget(
                               textToDisplay: data?.status ?? '',
-                              textStyle: Theme.of(context).textTheme.caption,
+                              textStyle: Theme.of(context).textTheme.bodySmall,
                               textAlign: TextAlign.end,
                             ),
                           ),
@@ -126,14 +138,19 @@ class BuySellWidget extends StatelessWidget {
                           CustomIconWidget(
                             iconData: "${AssetPath.vectorPath}unread.svg",
                             defaultColor: false,
-                            color: (data?.status ?? '') == 'Cancel' ? Colors.red : Colors.green,
+                            color: (data?.status ?? '') == 'Cancel'
+                                ? Colors.red
+                                : Colors.green,
                           ),
                         ],
                       ),
                     ),
                   ],
                 ),
-                Divider(height: 0.2, thickness: 1, color: kHyppeBurem.withOpacity(.3)),
+                Divider(
+                    height: 0.2,
+                    thickness: 1,
+                    color: kHyppeBurem.withOpacity(.3)),
                 twelvePx,
                 // SelectableText("${data.apsara ? data.media.imageInfo.isEmpty ? data.media.videoList[0].coverURL : data.media.imageInfo[0].url : data?.fullThumbPath}"),
                 Row(
@@ -155,7 +172,8 @@ class BuySellWidget extends StatelessWidget {
                             height: 50,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                              image: DecorationImage(
+                                  image: imageProvider, fit: BoxFit.cover),
                             ),
                           );
                         },
@@ -165,7 +183,8 @@ class BuySellWidget extends StatelessWidget {
                             decoration: const BoxDecoration(
                               image: DecorationImage(
                                 fit: BoxFit.contain,
-                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                image: AssetImage(
+                                    '${AssetPath.pngPath}content-error.png'),
                               ),
                             ),
                           );
@@ -175,7 +194,8 @@ class BuySellWidget extends StatelessWidget {
                           decoration: const BoxDecoration(
                             image: DecorationImage(
                               fit: BoxFit.contain,
-                              image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                              image: AssetImage(
+                                  '${AssetPath.pngPath}content-error.png'),
                             ),
                           ),
                         ),
@@ -189,11 +209,17 @@ class BuySellWidget extends StatelessWidget {
                         children: [
                           CustomTextWidget(
                             textToDisplay: data?.descriptionContent ?? '',
-                            textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onBackground),
                           ),
                           CustomTextWidget(
                             textToDisplay: desc,
-                            textStyle: Theme.of(context).textTheme.caption,
+                            textStyle: Theme.of(context).textTheme.bodySmall,
                             textAlign: TextAlign.start,
                           ),
                         ],
@@ -203,20 +229,29 @@ class BuySellWidget extends StatelessWidget {
                 ),
                 twelvePx,
                 CustomTextWidget(
-                  textToDisplay: data?.type != TransactionType.buy ? language?.totalIncome ?? '' : language?.totalExpenditure ?? '',
-                  textStyle: Theme.of(context).textTheme.caption,
+                  textToDisplay: data?.type != TransactionType.buy
+                      ? language?.totalIncome ?? ''
+                      : language?.totalExpenditure ?? '',
+                  textStyle: Theme.of(context).textTheme.bodySmall,
                 ),
                 fourPx,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomTextWidget(
-                      textToDisplay: "${data?.debetKredit} ${System().currencyFormat(amount: data?.totalamount)}",
-                      textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.onBackground, fontWeight: FontWeight.bold),
+                      textToDisplay:
+                          "${data?.debetKredit} ${System().currencyFormat(amount: data?.totalamount)}",
+                      textStyle: Theme.of(context)
+                          .textTheme
+                          .bodyLarge
+                          ?.copyWith(
+                              color: Theme.of(context).colorScheme.onBackground,
+                              fontWeight: FontWeight.bold),
                     ),
                     CustomTextWidget(
-                      textToDisplay: System().dateFormatter(data?.timestamp ?? '', 3),
-                      textStyle: Theme.of(context).textTheme.caption,
+                      textToDisplay:
+                          System().dateFormatter(data?.timestamp ?? '', 3),
+                      textStyle: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],
                 ),

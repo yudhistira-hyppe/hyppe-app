@@ -20,7 +20,6 @@ class InsertReferral extends StatefulWidget {
 }
 
 class _InsertReferralState extends State<InsertReferral> {
-
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'ShareBlock');
@@ -31,7 +30,9 @@ class _InsertReferralState extends State<InsertReferral> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
+        leadingWidth: 50 *
+            (SizeConfig.screenWidth ?? context.getWidth()) /
+            SizeWidget.baseWidthXD,
         leading: CustomIconButtonWidget(
           defaultColor: true,
           iconData: "${AssetPath.vectorPath}back-arrow.svg",
@@ -40,7 +41,8 @@ class _InsertReferralState extends State<InsertReferral> {
         titleSpacing: 0,
         title: CustomTextWidget(
           textToDisplay: 'Masukkan Referal',
-          textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
+          textStyle:
+              Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 18),
         ),
         centerTitle: false,
       ),
@@ -59,7 +61,8 @@ class _InsertReferralState extends State<InsertReferral> {
                     onChanged: (value) {
                       notifier.inserReferral = value;
                     },
-                    decoration: const InputDecoration(contentPadding: EdgeInsets.all(10)),
+                    decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.all(10)),
                   ),
                 ],
               ),
@@ -87,7 +90,12 @@ class _InsertReferralState extends State<InsertReferral> {
                     ? const CustomLoading()
                     : CustomTextWidget(
                         textToDisplay: notifier.language.save ?? 'save',
-                        textStyle: notifier.buttonReferralDisable() ? Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText) : Theme.of(context).primaryTextTheme.button,
+                        textStyle: notifier.buttonReferralDisable()
+                            ? Theme.of(context)
+                                .textTheme
+                                .labelLarge
+                                ?.copyWith(color: kHyppeLightButtonText)
+                            : Theme.of(context).primaryTextTheme.labelLarge,
                       ),
                 width: SizeConfig.screenWidth,
                 height: 49 * SizeConfig.scaleDiagonal,

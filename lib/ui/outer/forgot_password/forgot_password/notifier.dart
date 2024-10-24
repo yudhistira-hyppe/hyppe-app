@@ -28,7 +28,8 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
   final FocusNode focusNode = FocusNode();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController passwordConfirmController = TextEditingController();
+  final TextEditingController passwordConfirmController =
+      TextEditingController();
   bool _loading = false;
   bool get loading => _loading;
 
@@ -110,7 +111,10 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
         final notifier = UserBloc();
         // final signUpPinNotifier = Provider.of<SignUpPinNotifier>(context, listen: false);
 
-        await notifier.recoverPasswordBloc(context, email: emailController.text, event: "RECOVER_PASS", status: 'INITIAL');
+        await notifier.recoverPasswordBloc(context,
+            email: emailController.text,
+            event: "RECOVER_PASS",
+            status: 'INITIAL');
         final fetch = notifier.userFetch;
         setLoading(false);
         if (fetch.userState == UserState.RecoverSuccess) {
@@ -146,7 +150,8 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
           print('onClickForgotPassword: error $responseCode ');
 
           if (responseCode == 800) {
-            ShowBottomSheet().onShowColouredSheet(context, language.titleEmailIsGmail ?? '',
+            ShowBottomSheet().onShowColouredSheet(
+                context, language.titleEmailIsGmail ?? '',
                 subCaption: language.messageEmailIsGmail,
                 maxLines: 3,
                 borderRadius: 8,
@@ -154,7 +159,8 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
                 color: kHyppeTextLightPrimary,
                 isArrow: true,
                 iconColor: kHyppeBorder,
-                padding: EdgeInsets.only(left: 16, right: 20, top: 12, bottom: 12),
+                padding:
+                    EdgeInsets.only(left: 16, right: 20, top: 12, bottom: 12),
                 margin: EdgeInsets.only(left: 16, right: 16, bottom: 25),
                 iconSvg: "${AssetPath.vectorPath}info_white.svg", function: () {
               _routing.moveAndRemoveUntil(Routes.welcomeLogin, Routes.root);
@@ -223,9 +229,13 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
 
   TextStyle emailNextTextColor(BuildContext context) {
     if (_system.validateEmail(text) && !isLoading) {
-      return Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText) ?? const TextStyle();
+      return Theme.of(context)
+              .textTheme
+              .labelLarge
+              ?.copyWith(color: kHyppeLightButtonText) ??
+          const TextStyle();
     } else {
-      return Theme.of(context).primaryTextTheme.button ?? const TextStyle();
+      return Theme.of(context).primaryTextTheme.labelLarge ?? const TextStyle();
     }
   }
 
@@ -240,7 +250,8 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
   bool validationRegister() {
     bool state1 = password.isNotEmpty;
     bool state2 = _system.atLeastEightUntilTwentyCharacter(text: password);
-    bool state3 = _system.atLeastContainOneCharacterAndOneNumber(text: password);
+    bool state3 =
+        _system.atLeastContainOneCharacterAndOneNumber(text: password);
     bool state4 = _system.specialCharPass(password);
     // bool state5 = System().specialCharPass(password);
     return state1 && state2 && state3 && state4;
@@ -256,9 +267,13 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
 
   TextStyle nextTextColor(BuildContext context) {
     if (validationRegister() && confirmPassword == password) {
-      return Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText) ?? const TextStyle();
+      return Theme.of(context)
+              .textTheme
+              .labelLarge
+              ?.copyWith(color: kHyppeLightButtonText) ??
+          const TextStyle();
     } else {
-      return Theme.of(context).primaryTextTheme.button ?? const TextStyle();
+      return Theme.of(context).primaryTextTheme.labelLarge ?? const TextStyle();
     }
   }
 
@@ -323,7 +338,6 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
         if (_result.userType == null) {
           ShowBottomSheet.onShowSomethingWhenWrong(context);
         } else {
-
           SharedPreference().writeStorage(SpKeys.isGuest, false);
           SharedPreference().writeStorage(SpKeys.userToken, _result.token);
           SharedPreference().writeStorage(SpKeys.email, _result.email);

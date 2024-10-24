@@ -70,7 +70,7 @@ class UploadIDVerification extends StatelessWidget {
                   textToDisplay: "ID Card",
                   textStyle: Theme.of(context)
                       .textTheme
-                      .subtitle1
+                      .titleMedium
                       ?.copyWith(color: Colors.white),
                 ),
               ],

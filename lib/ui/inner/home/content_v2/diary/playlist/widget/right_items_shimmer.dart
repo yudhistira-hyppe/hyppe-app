@@ -24,10 +24,18 @@ class RightItemsShimmer extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  _customIcon2(context, "${AssetPath.vectorPath}bookmark.svg", "Save", onTap: () {}, color: Colors.white),
-                  _customIcon2(context, "${AssetPath.vectorPath}unlike.svg", "Like", onTap: () {}, color: Colors.white),
-                  _customIcon2(context, "${AssetPath.vectorPath}comment.svg", "Comment", onTap: () {}, color: Colors.white),
-                  _customIcon2(context, "${AssetPath.vectorPath}share.svg", "Share", onTap: () {}, color: Colors.white)
+                  _customIcon2(
+                      context, "${AssetPath.vectorPath}bookmark.svg", "Save",
+                      onTap: () {}, color: Colors.white),
+                  _customIcon2(
+                      context, "${AssetPath.vectorPath}unlike.svg", "Like",
+                      onTap: () {}, color: Colors.white),
+                  _customIcon2(
+                      context, "${AssetPath.vectorPath}comment.svg", "Comment",
+                      onTap: () {}, color: Colors.white),
+                  _customIcon2(
+                      context, "${AssetPath.vectorPath}share.svg", "Share",
+                      onTap: () {}, color: Colors.white)
                 ],
               ),
             ),
@@ -53,7 +61,10 @@ class RightItemsShimmer extends StatelessWidget {
               children: [
                 _customIcon("${AssetPath.vectorPath}music_stroke_white.svg"),
                 twelvePx,
-                CustomShimmer(width: (SizeConfig.screenWidth! - 68), height: 16, radius: 4),
+                CustomShimmer(
+                    width: (SizeConfig.screenWidth! - 68),
+                    height: 16,
+                    radius: 4),
               ],
             ),
           )
@@ -70,14 +81,18 @@ class RightItemsShimmer extends StatelessWidget {
     );
   }
 
-  Widget _customIcon2(BuildContext context, String svgIcon, String caption, {Function? onTap, Key? key, Color? color}) {
+  Widget _customIcon2(BuildContext context, String svgIcon, String caption,
+      {Function? onTap, Key? key, Color? color}) {
     return CustomTextButton(
       onPressed: onTap,
       child: Column(
         children: <Widget>[
-          CustomIconWidget(iconData: svgIcon, key: key, color: color, defaultColor: false),
+          CustomIconWidget(
+              iconData: svgIcon, key: key, color: color, defaultColor: false),
           fourPx,
-          CustomTextWidget(textToDisplay: caption, textStyle: Theme.of(context).textTheme.caption)
+          CustomTextWidget(
+              textToDisplay: caption,
+              textStyle: Theme.of(context).textTheme.bodySmall)
         ],
       ),
     );

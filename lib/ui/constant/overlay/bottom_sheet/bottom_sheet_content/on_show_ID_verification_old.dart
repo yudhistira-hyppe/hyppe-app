@@ -17,20 +17,23 @@ class OnShowIDVerificationBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<PreUploadContentNotifier>(
       builder: (_, notifier, __) => Padding(
-        padding: EdgeInsets.symmetric(vertical: 8 * SizeConfig.scaleDiagonal, horizontal: 16 * SizeConfig.scaleDiagonal),
+        padding: EdgeInsets.symmetric(
+            vertical: 8 * SizeConfig.scaleDiagonal,
+            horizontal: 16 * SizeConfig.scaleDiagonal),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+            const CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}handler.svg"),
             Image.asset("assets/png/verification-need.png"),
             CustomTextWidget(
               textToDisplay: notifier.language.needVerifyId ?? '',
-              textStyle: Theme.of(context).textTheme.subtitle1,
+              textStyle: Theme.of(context).textTheme.titleMedium,
             ),
             // CustomTextWidget(
             //   textToDisplay: notifier.language.needVerifyIdDescriptions,
-            //   textStyle: Theme.of(context).textTheme.caption,
+            //   textStyle: Theme.of(context).textTheme.bodySmall,
             //   textOverflow: TextOverflow.clip,
             // ),
             Column(
@@ -45,7 +48,13 @@ class OnShowIDVerificationBottomSheet extends StatelessWidget {
                         maxLines: 20,
                         textAlign: TextAlign.start,
                         textOverflow: TextOverflow.clip,
-                        textSpan: TextSpan(text: notifier.language.needVerifyIdDescriptions ?? '', style: Theme.of(context).textTheme.caption?.copyWith(height: 1.6)),
+                        textSpan: TextSpan(
+                            text: notifier.language.needVerifyIdDescriptions ??
+                                '',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.copyWith(height: 1.6)),
                       ),
                     ),
                   ],
@@ -60,8 +69,12 @@ class OnShowIDVerificationBottomSheet extends StatelessWidget {
                         textAlign: TextAlign.start,
                         textOverflow: TextOverflow.clip,
                         textSpan: TextSpan(
-                          text: notifier.language.needVerifyIdDescriptions2 ?? '',
-                          style: Theme.of(context).textTheme.caption?.copyWith(height: 1.6),
+                          text:
+                              notifier.language.needVerifyIdDescriptions2 ?? '',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(height: 1.6),
                         ),
                       ),
                     ),
@@ -72,7 +85,10 @@ class OnShowIDVerificationBottomSheet extends StatelessWidget {
             CustomElevatedButton(
               child: CustomTextWidget(
                 textToDisplay: notifier.language.verify ?? '',
-                textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: kHyppeLightButtonText),
               ),
               width: double.infinity,
               height: 50 * SizeConfig.scaleDiagonal,
@@ -89,17 +105,23 @@ class OnShowIDVerificationBottomSheet extends StatelessWidget {
                 notifier.validateIdCard();
               },
               buttonStyle: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary), overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary)),
+                  backgroundColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primary),
+                  overlayColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primary)),
             ),
             CustomElevatedButton(
               child: CustomTextWidget(
                 textToDisplay: notifier.language.cancel ?? 'cancel',
-                textStyle: Theme.of(context).textTheme.button,
+                textStyle: Theme.of(context).textTheme.labelLarge,
               ),
               width: double.infinity,
               height: 50 * SizeConfig.scaleDiagonal,
               function: () => Routing().moveBack(),
-              buttonStyle: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.transparent), overlayColor: MaterialStateProperty.all(Colors.transparent)),
+              buttonStyle: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(Colors.transparent),
+                  overlayColor: MaterialStateProperty.all(Colors.transparent)),
             )
           ],
         ),

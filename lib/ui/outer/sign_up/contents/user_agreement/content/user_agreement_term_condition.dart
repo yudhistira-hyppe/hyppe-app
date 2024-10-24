@@ -10,10 +10,15 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 class UserAgreementTermCondition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'UserAgreementTermCondition');
+    FirebaseCrashlytics.instance
+        .setCustomKey('layout', 'UserAgreementTermCondition');
     final notifier = Provider.of<UserAgreementNotifier>(context);
     if (notifier.eula != null && notifier.eula?.data[0].eulaContent != null) {
-      return DynamicWidgetBuilder.build(notifier.eula?.data[0].eulaContent ?? '', context, DefaultClickListener()) ?? Container();
+      return DynamicWidgetBuilder.build(
+              notifier.eula?.data[0].eulaContent ?? '',
+              context,
+              DefaultClickListener()) ??
+          Container();
     } else if (notifier.isLoading) {
       return const CustomLoading();
     } else {
@@ -26,7 +31,10 @@ class UserAgreementTermCondition extends StatelessWidget {
             ),
             CustomTextWidget(
               textToDisplay: notifier.language.refresh ?? '',
-              textStyle: Theme.of(context).textTheme.bodyText1?.apply(color: Colors.grey),
+              textStyle: Theme.of(context)
+                  .textTheme
+                  .bodyLarge
+                  ?.apply(color: Colors.grey),
             ),
           ],
         ),

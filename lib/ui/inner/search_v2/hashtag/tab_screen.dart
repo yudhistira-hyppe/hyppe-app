@@ -34,7 +34,9 @@ class _HashtagTabScreenState extends State<HashtagTabScreen> {
         if (lenght != null) {
           if (lenght % 12 == 0) {
             notifier.getDataSearch(context,
-                typeSearch: SearchLoadData.hashtag, reload: false, forceLoad: true);
+                typeSearch: SearchLoadData.hashtag,
+                reload: false,
+                forceLoad: true);
           }
         }
       }
@@ -56,23 +58,26 @@ class _HashtagTabScreenState extends State<HashtagTabScreen> {
 
       // final keyword = notifier.searchController.text;
 
-      return !notifier.isLoading ? Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: CustomTextWidget(
-              textToDisplay: notifier.language.hashtags ?? 'Hashtags',
-              textStyle: context.getTextTheme().bodyText1?.copyWith(
-                  color: context.getColorScheme().onBackground,
-                  fontWeight: FontWeight.w700),
-            ),
-          ),
-          values.isNotNullAndEmpty() ? Expanded(
-              child: RefreshIndicator(
+      return !notifier.isLoading
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: CustomTextWidget(
+                    textToDisplay: notifier.language.hashtags ?? 'Hashtags',
+                    textStyle: context.getTextTheme().bodyLarge?.copyWith(
+                        color: context.getColorScheme().onBackground,
+                        fontWeight: FontWeight.w700),
+                  ),
+                ),
+                values.isNotNullAndEmpty()
+                    ? Expanded(
+                        child: RefreshIndicator(
                           strokeWidth: 2.0,
                           color: context.getColorScheme().primary,
-                          onRefresh: () => notifier.getDataSearch(context, forceLoad: true),
+                          onRefresh: () =>
+                              notifier.getDataSearch(context, forceLoad: true),
                           child: SingleChildScrollView(
                             controller: _scrollController,
                             child: Column(
@@ -85,7 +90,8 @@ class _HashtagTabScreenState extends State<HashtagTabScreen> {
                                       return HashtagItem(
                                           onTap: () {
                                             notifier.selectedHashtag = data;
-                                            if(notifier.layout == SearchLayout.searchMore){
+                                            if (notifier.layout ==
+                                                SearchLayout.searchMore) {
                                               notifier.isFromComplete = true;
                                             }
                                             notifier.layout =
@@ -101,7 +107,9 @@ class _HashtagTabScreenState extends State<HashtagTabScreen> {
                                     }
                                   },
                                 ).toList()),
-                                ...((notifier.searchHashtag?.length ?? 0) % limitSearch == 0
+                                ...((notifier.searchHashtag?.length ?? 0) %
+                                            limitSearch ==
+                                        0
                                     ? [
                                         Container(
                                           width: double.infinity,
@@ -115,23 +123,29 @@ class _HashtagTabScreenState extends State<HashtagTabScreen> {
                             ),
                           ),
                         ),
-              // ListView.builder(
-              //             controller: _scrollController,
-              //             itemCount: notifier.searchHashtag?.length ?? 0,
-              //             itemBuilder: (context, index) {
-              //               final data = notifier.searchHashtag?[index];
-              //               if (data != null) {
-              //                 return HashtagItem(
-              //                     onTap: () {},
-              //                     title: '#${data.tag}',
-              //                     count: data.total ?? 0,
-              //                     countContainer:
-              //                         notifier.language.posts ?? 'Posts');
-              //               }
-              //             }),
-              ): SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text, margin: const EdgeInsets.only(left: 16),)
-        ],
-      ): const AllSearchShimmer();
+                        // ListView.builder(
+                        //             controller: _scrollController,
+                        //             itemCount: notifier.searchHashtag?.length ?? 0,
+                        //             itemBuilder: (context, index) {
+                        //               final data = notifier.searchHashtag?[index];
+                        //               if (data != null) {
+                        //                 return HashtagItem(
+                        //                     onTap: () {},
+                        //                     title: '#${data.tag}',
+                        //                     count: data.total ?? 0,
+                        //                     countContainer:
+                        //                         notifier.language.posts ?? 'Posts');
+                        //               }
+                        //             }),
+                      )
+                    : SearchNoResult(
+                        locale: notifier.language,
+                        keyword: notifier.searchController.text,
+                        margin: const EdgeInsets.only(left: 16),
+                      )
+              ],
+            )
+          : const AllSearchShimmer();
     });
   }
 }

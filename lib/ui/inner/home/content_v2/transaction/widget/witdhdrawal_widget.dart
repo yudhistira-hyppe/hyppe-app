@@ -13,7 +13,8 @@ class WithdrawalWidget extends StatelessWidget {
   final String? title;
   final TransactionHistoryModel? data;
   final LocalizationModelV2? language;
-  const WithdrawalWidget({Key? key, this.title, this.data, this.language}) : super(key: key);
+  const WithdrawalWidget({Key? key, this.title, this.data, this.language})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,23 +30,29 @@ class WithdrawalWidget extends StatelessWidget {
     if (data?.description == 'FAILED TRANSACTION') {
       titleText = language?.moneyRefund ?? 'Pengembalian Uang';
       descText = language?.moneyRefund ?? 'Pengembalian Uang';
-      descStatus = data?.jenis == 'Disbursement' ? (language?.adminRefundAmount ?? '') : (language?.refundAmount ?? '');
+      descStatus = data?.jenis == 'Disbursement'
+          ? (language?.adminRefundAmount ?? '')
+          : (language?.refundAmount ?? '');
     }
 
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
-        color: kHyppeBurem.withOpacity(.05),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: kHyppeBurem.withOpacity(.3))
-        // boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
-      ),
+          color: kHyppeBurem.withOpacity(.05),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: kHyppeBurem.withOpacity(.3))
+          // boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+          ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
             if (data?.description != 'FAILED TRANSACTION') {
-              context.read<TransactionNotifier>().getDetailTransactionHistory(context, id: data?.id ?? '', type: System().convertTransactionTypeToString(data?.type), jenis: data?.jenis);
+              context.read<TransactionNotifier>().getDetailTransactionHistory(
+                  context,
+                  id: data?.id ?? '',
+                  type: System().convertTransactionTypeToString(data?.type),
+                  jenis: data?.jenis);
               context.read<TransactionNotifier>().navigateToDetailTransaction();
             }
           },
@@ -55,45 +62,64 @@ class WithdrawalWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 5),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 11, vertical: 5),
                   margin: const EdgeInsets.only(bottom: 12),
                   decoration: BoxDecoration(
                     color: kHyppeCyanLight,
                     borderRadius: BorderRadius.circular(5),
-                    boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+                    boxShadow: const [
+                      BoxShadow(
+                          color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)
+                    ],
                   ),
                   child: CustomTextWidget(
                     textToDisplay: titleText,
-                    textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeCyan),
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .labelLarge
+                        ?.copyWith(color: kHyppeCyan),
                   ),
                 ),
-                Divider(height: 0.2, thickness: 1, color: kHyppeBurem.withOpacity(.3)),
+                Divider(
+                    height: 0.2,
+                    thickness: 1,
+                    color: kHyppeBurem.withOpacity(.3)),
                 twelvePx,
                 CustomTextWidget(
                   textToDisplay: descText,
-                  textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                  textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onBackground),
                 ),
                 fourPx,
                 CustomTextWidget(
                   textToDisplay: language?.fromBalance ?? '',
-                  textStyle: Theme.of(context).textTheme.caption,
+                  textStyle: Theme.of(context).textTheme.bodySmall,
                 ),
                 tenPx,
                 CustomTextWidget(
                   textToDisplay: descStatus,
-                  textStyle: Theme.of(context).textTheme.caption,
+                  textStyle: Theme.of(context).textTheme.bodySmall,
                 ),
                 fourPx,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomTextWidget(
-                      textToDisplay: '${data?.debetKredit} ${System().currencyFormat(amount: data?.totalamount)}',
-                      textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.onBackground, fontWeight: FontWeight.bold),
+                      textToDisplay:
+                          '${data?.debetKredit} ${System().currencyFormat(amount: data?.totalamount)}',
+                      textStyle: Theme.of(context)
+                          .textTheme
+                          .bodyLarge
+                          ?.copyWith(
+                              color: Theme.of(context).colorScheme.onBackground,
+                              fontWeight: FontWeight.bold),
                     ),
                     CustomTextWidget(
-                      textToDisplay: System().dateFormatter(data?.timestamp?.substring(0, 10) ?? '', 3),
-                      textStyle: Theme.of(context).textTheme.caption ?? const TextStyle(),
+                      textToDisplay: System().dateFormatter(
+                          data?.timestamp?.substring(0, 10) ?? '', 3),
+                      textStyle: Theme.of(context).textTheme.bodySmall ??
+                          const TextStyle(),
                     ),
                   ],
                 ),

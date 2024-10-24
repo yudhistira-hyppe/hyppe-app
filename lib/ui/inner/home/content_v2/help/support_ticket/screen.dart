@@ -37,7 +37,7 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
         appBar: AppBar(
           leading: const BackButton(),
           title: CustomTextWidget(
-            textStyle: Theme.of(context).textTheme.subtitle1,
+            textStyle: Theme.of(context).textTheme.titleMedium,
             textToDisplay: '${notifier.translate.newTicketIssue}',
           ),
         ),
@@ -50,15 +50,22 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                 Row(
                   children: [
                     CustomTextWidget(
-                      textToDisplay: notifier.translate.categories ?? 'category',
+                      textToDisplay:
+                          notifier.translate.categories ?? 'category',
                       textAlign: TextAlign.start,
-                      textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
+                      textStyle: Theme.of(context)
+                          .textTheme
+                          .bodySmall
+                          ?.copyWith(
+                              color: Theme.of(context).colorScheme.secondary),
                     ),
                     sixPx,
                     Container(
                       width: 10,
                       height: 10,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.red),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.red),
                     )
                   ],
                 ),
@@ -68,27 +75,39 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                   },
                   contentPadding: EdgeInsets.zero,
                   title: CustomTextWidget(
-                    textToDisplay: supportNotifier.nameCategory != '' ? supportNotifier.nameCategory : notifier.translate.chooseCategoryIssue ?? '',
+                    textToDisplay: supportNotifier.nameCategory != ''
+                        ? supportNotifier.nameCategory
+                        : notifier.translate.chooseCategoryIssue ?? '',
                     textAlign: TextAlign.start,
-                    textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.secondary),
+                    textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.secondary),
                   ),
                   trailing: const Icon(Icons.arrow_forward_ios_rounded),
                   minLeadingWidth: 0,
                 ),
-                Divider(thickness: 1.0, color: Theme.of(context).dividerTheme.color?.withOpacity(0.1)),
+                Divider(
+                    thickness: 1.0,
+                    color:
+                        Theme.of(context).dividerTheme.color?.withOpacity(0.1)),
                 tenPx,
                 Row(
                   children: [
                     CustomTextWidget(
                       textToDisplay: 'Level',
                       textAlign: TextAlign.start,
-                      textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
+                      textStyle: Theme.of(context)
+                          .textTheme
+                          .bodySmall
+                          ?.copyWith(
+                              color: Theme.of(context).colorScheme.secondary),
                     ),
                     sixPx,
                     Container(
                       width: 10,
                       height: 10,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.red),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.red),
                     )
                   ],
                 ),
@@ -102,21 +121,31 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                       value: supportNotifier.levelData[index].descLevel ?? '',
                       onChanged: (val) {
                         supportNotifier.nameLevel = val ?? '';
-                        supportNotifier.idLevelTicket = supportNotifier.levelData[index].sId ?? '';
+                        supportNotifier.idLevelTicket =
+                            supportNotifier.levelData[index].sId ?? '';
                       },
                       toggleable: true,
                       title: CustomTextWidget(
                         textAlign: TextAlign.left,
-                        textToDisplay:  "${notifier.translate.ticketLevel} ${supportNotifier.levelData[index].nameLevel}",
-                        textStyle: Theme.of(context).primaryTextTheme.bodyText2,
+                        textToDisplay:
+                            "${notifier.translate.ticketLevel} ${supportNotifier.levelData[index].nameLevel}",
+                        textStyle:
+                            Theme.of(context).primaryTextTheme.bodyMedium,
                       ),
-                      subtitle: Text(
-                          supportNotifier.levelData[index].nameLevel == '1' ? notifier.translate.ticketLevel1 ?? '' :
-                          supportNotifier.levelData[index].nameLevel == '2' ? notifier.translate.ticketLevel2 ?? '' :
-                          supportNotifier.levelData[index].nameLevel == '3' ? notifier.translate.ticketLevel3 ?? '' :
-                          supportNotifier.levelData[index].nameLevel == '4' ? notifier.translate.ticketLevel4 ?? '' :
-                          'No Data'
-                      ),
+                      subtitle: Text(supportNotifier
+                                  .levelData[index].nameLevel ==
+                              '1'
+                          ? notifier.translate.ticketLevel1 ?? ''
+                          : supportNotifier.levelData[index].nameLevel == '2'
+                              ? notifier.translate.ticketLevel2 ?? ''
+                              : supportNotifier.levelData[index].nameLevel ==
+                                      '3'
+                                  ? notifier.translate.ticketLevel3 ?? ''
+                                  : supportNotifier
+                                              .levelData[index].nameLevel ==
+                                          '4'
+                                      ? notifier.translate.ticketLevel4 ?? ''
+                                      : 'No Data'),
                       controlAffinity: ListTileControlAffinity.leading,
                       activeColor: Theme.of(context).colorScheme.primary,
                     ),
@@ -126,7 +155,8 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                 CustomTextWidget(
                   textToDisplay: notifier.translate.description ?? '',
                   textAlign: TextAlign.start,
-                  textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
+                  textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.secondary),
                 ),
                 TextFormField(
                   minLines: 1,
@@ -143,10 +173,10 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                   cursorColor: const Color(0xff8A3181),
                   controller: supportNotifier.descriptionController,
                   textInputAction: TextInputAction.newline,
-                  style: Theme.of(context).primaryTextTheme.caption,
+                  style: Theme.of(context).primaryTextTheme.bodySmall,
                   decoration: InputDecoration(
                     errorBorder: InputBorder.none,
-                    hintStyle: Theme.of(context).textTheme.caption,
+                    hintStyle: Theme.of(context).textTheme.bodySmall,
                     focusedErrorBorder: InputBorder.none,
                     hintText: "${notifier.translate.insertAnyAdditionalInfo}",
                     contentPadding: const EdgeInsets.only(bottom: 5),
@@ -157,7 +187,11 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                 ),
                 Row(
                   children: [
-                    GestureDetector(onTap: () => supportNotifier.onPickSupportedDocument(context, mounted), child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}storage.svg")),
+                    GestureDetector(
+                        onTap: () => supportNotifier.onPickSupportedDocument(
+                            context, mounted),
+                        child: const CustomIconWidget(
+                            iconData: "${AssetPath.vectorPath}storage.svg")),
                     twentyFourPx,
                     // GestureDetector(onTap: () => supportNotifier.onPickSupportedDocument(context, mounted, pdf: true), child: CustomIconWidget(iconData: "${AssetPath.vectorPath}sisipkan.svg")),
                   ],
@@ -167,20 +201,26 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                   shrinkWrap: true,
                   itemCount: supportNotifier.pickedSupportingDocs?.length ?? 0,
                   itemBuilder: (context, index) => ListTile(
-                    title: Text(path.basename(supportNotifier.pickedSupportingDocs?[index].path ?? '')),
+                    title: Text(path.basename(
+                        supportNotifier.pickedSupportingDocs?[index].path ??
+                            '')),
                     // subtitle: Text(supportNotifier.pickedSupportingDocs[index].lengthSync().toString()),
                     // leading: Image.file(supportNotifier.pickedSupportingDocs[index]),
                     trailing: GestureDetector(
                       onTap: () {
                         setState(() {
                           if (supportNotifier.pickedSupportingDocs != null) {
-                            supportNotifier.pickedSupportingDocs?.removeAt(index);
+                            supportNotifier.pickedSupportingDocs
+                                ?.removeAt(index);
                           }
                         });
                       },
                       child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                          decoration: BoxDecoration(border: Border.all(color: kHyppePrimary), borderRadius: BorderRadius.circular(8)),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: kHyppePrimary),
+                              borderRadius: BorderRadius.circular(8)),
                           child: Text(
                             notifier.translate.delete ?? 'delete',
                             style: const TextStyle(color: kHyppePrimary),
@@ -211,14 +251,22 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                                 supportNotifier.createTicket(context);
                               }
                         : null,
-                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all(supportNotifier.enableButton() ? kHyppePrimary : kHyppeDisabled)),
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                            supportNotifier.enableButton()
+                                ? kHyppePrimary
+                                : kHyppeDisabled)),
                     child: supportNotifier.isLoadingCreate
                         ? const CustomLoading(
                             size: 4,
                           )
                         : CustomTextWidget(
-                            textToDisplay: notifier.translate.submit ?? 'submit',
-                            textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                            textToDisplay:
+                                notifier.translate.submit ?? 'submit',
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .labelLarge
+                                ?.copyWith(color: kHyppeLightButtonText),
                           ),
                   ),
                 ),

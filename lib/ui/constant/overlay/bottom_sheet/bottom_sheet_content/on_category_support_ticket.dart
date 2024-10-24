@@ -24,11 +24,13 @@ class OnCategorySupportTicket extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+              const CustomIconWidget(
+                  iconData: "${AssetPath.vectorPath}handler.svg"),
               sixPx,
               CustomTextWidget(
                 textToDisplay: notifier2.translate.categories ?? '',
-                textStyle: textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                textStyle: textTheme.titleMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onBackground),
                 textAlign: TextAlign.start,
               ),
               tenPx,
@@ -44,14 +46,17 @@ class OnCategorySupportTicket extends StatelessWidget {
                       value: notifier.categoryData[index].nameCategory ?? '',
                       onChanged: (val) {
                         notifier.nameCategory = val ?? '';
-                        notifier.idCategory = notifier.categoryData[index].sId ?? '';
+                        notifier.idCategory =
+                            notifier.categoryData[index].sId ?? '';
                         Routing().moveBack();
                       },
                       toggleable: true,
                       title: CustomTextWidget(
                         textAlign: TextAlign.left,
-                        textToDisplay: notifier.categoryData[index].nameCategory ?? '',
-                        textStyle: Theme.of(context).primaryTextTheme.bodyText2,
+                        textToDisplay:
+                            notifier.categoryData[index].nameCategory ?? '',
+                        textStyle:
+                            Theme.of(context).primaryTextTheme.bodyMedium,
                       ),
                       controlAffinity: ListTileControlAffinity.trailing,
                       activeColor: Theme.of(context).colorScheme.primary,

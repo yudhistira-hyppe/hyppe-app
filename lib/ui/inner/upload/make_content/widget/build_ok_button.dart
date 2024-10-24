@@ -22,18 +22,24 @@ class BuildOkButton extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const CustomIconWidget(iconData: "${AssetPath.vectorPath}checkmark.svg", defaultColor: false),
+          const CustomIconWidget(
+              iconData: "${AssetPath.vectorPath}checkmark.svg",
+              defaultColor: false),
           fivePx,
           CustomTextWidget(
-              textToDisplay: 'Ok',
-              textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText, fontWeight: FontWeight.bold),
+            textToDisplay: 'Ok',
+            textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: kHyppeLightButtonText, fontWeight: FontWeight.bold),
           ),
         ],
       ),
       buttonStyle: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-          shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)))),
-      function: () => context.read<MakeContentNotifier>().onStopRecordedVideo(context),
+          backgroundColor:
+              MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+          shape: MaterialStateProperty.all(RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(50.0)))),
+      function: () =>
+          context.read<MakeContentNotifier>().onStopRecordedVideo(context),
     );
   }
 }

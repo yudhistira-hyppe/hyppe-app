@@ -18,7 +18,8 @@ class PicSeeAllScreen extends StatefulWidget {
   State<PicSeeAllScreen> createState() => _PicSeeAllScreenState();
 }
 
-class _PicSeeAllScreenState extends State<PicSeeAllScreen> with SingleTickerProviderStateMixin, AfterFirstLayoutMixin {
+class _PicSeeAllScreenState extends State<PicSeeAllScreen>
+    with SingleTickerProviderStateMixin, AfterFirstLayoutMixin {
   final notifier = PicSeeAllNotifier();
 
   late TabController _tabController;
@@ -59,7 +60,7 @@ class _PicSeeAllScreenState extends State<PicSeeAllScreen> with SingleTickerProv
                 CustomTextWidget(
                   textAlign: TextAlign.left,
                   textToDisplay: _language.picsForYou ?? "",
-                  textStyle: theme.textTheme.bodyText1,
+                  textStyle: theme.textTheme.bodyLarge,
                 ),
                 eightPx,
                 const CustomSeeAllTitle(title: 'HyppePic'),
@@ -99,6 +100,4 @@ class _PicSeeAllScreenState extends State<PicSeeAllScreen> with SingleTickerProv
       ),
     );
   }
-
-
 }

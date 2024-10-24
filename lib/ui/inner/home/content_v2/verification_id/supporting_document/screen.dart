@@ -23,7 +23,8 @@ class _VerificationIDStepSupportingDocsState
     extends State<VerificationIDStepSupportingDocs> {
   @override
   void initState() {
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationIDStepSupportingDocs');
+    FirebaseCrashlytics.instance
+        .setCustomKey('layout', 'VerificationIDStepSupportingDocs');
     final ntfr = Provider.of<VerificationIDNotifier>(context, listen: false);
     ntfr.initSupportDocs();
     super.initState();
@@ -41,7 +42,9 @@ class _VerificationIDStepSupportingDocsState
         },
         child: Scaffold(
           appBar: AppBar(
-            leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
+            leadingWidth: 50 *
+                (SizeConfig.screenWidth ?? context.getWidth()) /
+                SizeWidget.baseWidthXD,
             leading: CustomIconButtonWidget(
               defaultColor: true,
               iconData: "${AssetPath.vectorPath}back-arrow.svg",
@@ -50,8 +53,10 @@ class _VerificationIDStepSupportingDocsState
             titleSpacing: 0,
             title: CustomTextWidget(
               textToDisplay: notifier.language.uploadSupportDoc ?? '',
-              textStyle:
-                  Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
+              textStyle: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(fontSize: 18),
             ),
             centerTitle: false,
           ),
@@ -90,7 +95,7 @@ class _VerificationIDStepSupportingDocsState
             ),
           ),
           floatingActionButton: Container(
-            color: Theme.of(context).backgroundColor,
+            color: Theme.of(context).appBarTheme.backgroundColor,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: CustomElevatedButton(
               width: SizeConfig.screenWidth,
@@ -102,8 +107,8 @@ class _VerificationIDStepSupportingDocsState
                 textToDisplay: notifier.selfiePath == ''
                     ? (notifier.language.continueSelfie ?? '')
                     : notifier.language.continueStep ?? '',
-                textStyle:
-                    textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                textStyle: textTheme.labelLarge
+                    ?.copyWith(color: kHyppeLightButtonText),
               ),
               buttonStyle: ButtonStyle(
                 foregroundColor: MaterialStateProperty.all(

@@ -32,29 +32,29 @@ class OnInternalServerErrorBottomSheet extends StatelessWidget {
           children: [
             CustomTextWidget(
               textToDisplay: (statusCode ?? 500) >= 500
-                ? '${notifier.translate.hyppeServerErrorMessageTitle}'
-                : '${notifier.translate.internalServerError}',
+                  ? '${notifier.translate.hyppeServerErrorMessageTitle}'
+                  : '${notifier.translate.internalServerError}',
               textAlign: TextAlign.center,
               textStyle: TextStyle(
-                fontSize: 18 * SizeConfig.scaleDiagonal,
-                fontWeight: FontWeight.bold,
-                color: kHyppePrimary
-              ),
+                  fontSize: 18 * SizeConfig.scaleDiagonal,
+                  fontWeight: FontWeight.bold,
+                  color: kHyppePrimary),
             ),
             SizedBox(height: 4 * SizeConfig.scaleDiagonal),
             CustomTextWidget(
               textToDisplay: (statusCode ?? 500) >= 500
-                ? '${notifier.translate.hyppeServerErrorMessageContent}'
-                : "${notifier.translate.ourSystemIsCurrentlyExperiencingTechnicalIssues} ${notifier.translate.pleaseTryAgain}",
+                  ? '${notifier.translate.hyppeServerErrorMessageContent}'
+                  : "${notifier.translate.ourSystemIsCurrentlyExperiencingTechnicalIssues} ${notifier.translate.pleaseTryAgain}",
               textAlign: TextAlign.center,
-              textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(height: 1.4),
+              textStyle:
+                  Theme.of(context).textTheme.bodyMedium?.copyWith(height: 1.4),
               textOverflow: TextOverflow.clip,
             ),
             SizedBox(height: 37 * SizeConfig.scaleDiagonal),
             Image.asset(
               (statusCode ?? 500) >= 500
-              ? "${AssetPath.pngPath}enjoying-life.png"
-              : "${AssetPath.pngPath}internal_server_error.png",
+                  ? "${AssetPath.pngPath}enjoying-life.png"
+                  : "${AssetPath.pngPath}internal_server_error.png",
               // width: 250 * SizeConfig.scaleDiagonal,
               // height: 160 * SizeConfig.scaleDiagonal,
             ),
@@ -68,7 +68,8 @@ class OnInternalServerErrorBottomSheet extends StatelessWidget {
                 } else {
                   context.read<SettingNotifier>().logOut(context);
                   await SharedPreference().logOutStorage();
-                  Routing().moveAndRemoveUntil(Routes.welcomeLogin, Routes.root);
+                  Routing()
+                      .moveAndRemoveUntil(Routes.welcomeLogin, Routes.root);
                 }
               },
               buttonStyle: ButtonStyle(
@@ -84,7 +85,7 @@ class OnInternalServerErrorBottomSheet extends StatelessWidget {
                     : notifier.translate.tryAgain ?? 'Try Again',
                 textStyle: Theme.of(context)
                     .textTheme
-                    .button
+                    .labelLarge
                     ?.copyWith(color: kHyppeLightButtonText),
               ),
             ),

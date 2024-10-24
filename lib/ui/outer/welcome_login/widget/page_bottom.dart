@@ -17,7 +17,6 @@ class PageBottom extends StatefulWidget {
 }
 
 class _PageBottomState extends State<PageBottom> {
-
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'PageBottom');
@@ -44,13 +43,19 @@ class _PageBottomState extends State<PageBottom> {
                 children: [
                   CustomTextWidget(
                     textToDisplay: notifier.language.welcomeToHyppe ?? '',
-                    textStyle: Theme.of(context).primaryTextTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
+                    textStyle: Theme.of(context)
+                        .primaryTextTheme
+                        .titleLarge
+                        ?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   eightPx,
                   CustomTextWidget(
-                    textToDisplay: notifier.language.signInToFindSomethingInterestingInTheHyppeApp ?? '',
+                    textToDisplay: notifier.language
+                            .signInToFindSomethingInterestingInTheHyppeApp ??
+                        '',
                     maxLines: 2,
-                    textStyle: Theme.of(context).primaryTextTheme.subtitle2 ?? const TextStyle(),
+                    textStyle: Theme.of(context).primaryTextTheme.titleSmall ??
+                        const TextStyle(),
                   ),
                   fortyTwoPx,
                   ButtomSosmed(
@@ -77,8 +82,12 @@ class _PageBottomState extends State<PageBottom> {
                               ),
                               const Spacer(),
                               CustomTextWidget(
-                                textToDisplay: notifier.language.signInWithGoogleAccount ?? '',
-                                textStyle: Theme.of(context).textTheme.subtitle2 ?? const TextStyle(),
+                                textToDisplay:
+                                    notifier.language.signInWithGoogleAccount ??
+                                        '',
+                                textStyle:
+                                    Theme.of(context).textTheme.titleSmall ??
+                                        const TextStyle(),
                               ),
                               const Spacer(),
                             ],
@@ -104,15 +113,22 @@ class _PageBottomState extends State<PageBottom> {
                                       ),
                                       child: CustomIconWidget(
                                         defaultColor: false,
-                                        color: Theme.of(context).colorScheme.onBackground,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onBackground,
                                         width: 20,
-                                        iconData: '${AssetPath.vectorPath}apple.svg',
+                                        iconData:
+                                            '${AssetPath.vectorPath}apple.svg',
                                       ),
                                     ),
                                     const Spacer(),
                                     CustomTextWidget(
-                                      textToDisplay: notifier.language.signInWithApple ?? '',
-                                      textStyle: Theme.of(context).textTheme.subtitle2,
+                                      textToDisplay:
+                                          notifier.language.signInWithApple ??
+                                              '',
+                                      textStyle: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall,
                                     ),
                                     const Spacer(),
                                   ],
@@ -127,18 +143,22 @@ class _PageBottomState extends State<PageBottom> {
                         child: Container(
                           height: 1,
                           decoration: BoxDecoration(
-                            border: Border.all(color: Theme.of(context).colorScheme.tertiary),
+                            border: Border.all(
+                                color: Theme.of(context).colorScheme.tertiary),
                           ),
                         ),
                       ),
                       twelvePx,
-                      CustomTextWidget(textToDisplay: notifier.language.or ?? 'or', textStyle: Theme.of(context).textTheme.bodyText2),
+                      CustomTextWidget(
+                          textToDisplay: notifier.language.or ?? 'or',
+                          textStyle: Theme.of(context).textTheme.bodyMedium),
                       twelvePx,
                       Expanded(
                         child: Container(
                           height: 1,
                           decoration: BoxDecoration(
-                            border: Border.all(color: Theme.of(context).colorScheme.tertiary),
+                            border: Border.all(
+                                color: Theme.of(context).colorScheme.tertiary),
                           ),
                         ),
                       ),
@@ -169,8 +189,10 @@ class _PageBottomState extends State<PageBottom> {
                         ),
                         const Spacer(),
                         CustomTextWidget(
-                          textToDisplay: notifier.language.useAnotherEmailAddress ?? '',
-                          textStyle: Theme.of(context).textTheme.subtitle2 ?? const TextStyle(),
+                          textToDisplay:
+                              notifier.language.useAnotherEmailAddress ?? '',
+                          textStyle: Theme.of(context).textTheme.titleSmall ??
+                              const TextStyle(),
                         ),
                         const Spacer(),
                       ],

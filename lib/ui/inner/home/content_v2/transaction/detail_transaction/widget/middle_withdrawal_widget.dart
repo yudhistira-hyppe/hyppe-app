@@ -9,11 +9,13 @@ class MiddleWithdrawalDetailWidget extends StatelessWidget {
   final TransactionHistoryModel? data;
   final LocalizationModelV2? language;
 
-  const MiddleWithdrawalDetailWidget({Key? key, this.data, this.language}) : super(key: key);
+  const MiddleWithdrawalDetailWidget({Key? key, this.data, this.language})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'MiddleWithdrawalDetailWidget');
+    FirebaseCrashlytics.instance
+        .setCustomKey('layout', 'MiddleWithdrawalDetailWidget');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -24,7 +26,7 @@ class MiddleWithdrawalDetailWidget extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 16.0),
           child: CustomTextWidget(
             textToDisplay: language?.paymentDetails ?? '',
-            textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(
+            textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: Theme.of(context).colorScheme.onBackground,
                   fontWeight: FontWeight.bold,
                 ),
@@ -32,17 +34,17 @@ class MiddleWithdrawalDetailWidget extends StatelessWidget {
         ),
         CustomTextWidget(
           textToDisplay: language?.wtihdrawalTo ?? '',
-          textStyle: Theme.of(context).textTheme.caption,
+          textStyle: Theme.of(context).textTheme.bodySmall,
         ),
         fivePx,
         fivePx,
         CustomTextWidget(
           textToDisplay: data?.namaBank ?? '',
-          textStyle: Theme.of(context).textTheme.bodyText1,
+          textStyle: Theme.of(context).textTheme.bodyLarge,
         ),
         CustomTextWidget(
           textToDisplay: "${data?.noRek} - ${data?.namaRek}",
-          textStyle: Theme.of(context).textTheme.caption,
+          textStyle: Theme.of(context).textTheme.bodySmall,
         ),
       ],
     );

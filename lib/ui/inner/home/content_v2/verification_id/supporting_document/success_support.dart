@@ -18,13 +18,16 @@ class VerificationSupportSuccess extends StatefulWidget {
   const VerificationSupportSuccess({Key? key, this.argument}) : super(key: key);
 
   @override
-  State<VerificationSupportSuccess> createState() => _VerificationSupportSuccessState();
+  State<VerificationSupportSuccess> createState() =>
+      _VerificationSupportSuccessState();
 }
 
-class _VerificationSupportSuccessState extends State<VerificationSupportSuccess> {
+class _VerificationSupportSuccessState
+    extends State<VerificationSupportSuccess> {
   @override
   void initState() {
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationSupportSuccess');
+    FirebaseCrashlytics.instance
+        .setCustomKey('layout', 'VerificationSupportSuccess');
     super.initState();
   }
 
@@ -50,14 +53,19 @@ class _VerificationSupportSuccessState extends State<VerificationSupportSuccess>
         },
         child: Scaffold(
           appBar: AppBar(
-            leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
+            leadingWidth: 50 *
+                (SizeConfig.screenWidth ?? context.getWidth()) /
+                SizeWidget.baseWidthXD,
             titleSpacing: 0,
             automaticallyImplyLeading: false,
             title: Padding(
               padding: const EdgeInsets.only(left: 16.0),
               child: CustomTextWidget(
                 textToDisplay: notifier.language.idVerification ?? '',
-                textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .titleLarge
+                    ?.copyWith(fontSize: 18),
               ),
             ),
             centerTitle: false,
@@ -72,16 +80,24 @@ class _VerificationSupportSuccessState extends State<VerificationSupportSuccess>
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.4,
                       child: const Center(
-                        child: Image(image: AssetImage("${AssetPath.pngPath}verification-support-success.png")),
+                        child: Image(
+                            image: AssetImage(
+                                "${AssetPath.pngPath}verification-support-success.png")),
                       ),
                     ),
                   ),
                   Text(
-                    notifier.language.weWillBeganProcessingYourVerification ?? '',
+                    notifier.language.weWillBeganProcessingYourVerification ??
+                        '',
                     style: TextStyle(fontWeight: FontWeight.w700),
                   ),
                   sixPx,
-                  CustomTextWidget(textOverflow: TextOverflow.visible, textAlign: TextAlign.left, textToDisplay: notifier.language.thisProcessWillTakeUpTo3WorkingDaysPleaseWait ?? ''),
+                  CustomTextWidget(
+                      textOverflow: TextOverflow.visible,
+                      textAlign: TextAlign.left,
+                      textToDisplay: notifier.language
+                              .thisProcessWillTakeUpTo3WorkingDaysPleaseWait ??
+                          ''),
                   sixPx,
                   _buildDivider(context),
                   sixPx,
@@ -95,12 +111,17 @@ class _VerificationSupportSuccessState extends State<VerificationSupportSuccess>
                   _unorderedList(notifier.language.failedIdCardInfo_3 ?? ''),
                   _unorderedList(notifier.language.failedIdCardInfo_4 ?? ''),
                   _unorderedList(notifier.language.failedIdCardInfo_5 ?? ''),
-                  CustomTextWidget(textOverflow: TextOverflow.visible, textAlign: TextAlign.left, textToDisplay: notifier.language.supportDocNotice10 ?? ''),
+                  CustomTextWidget(
+                      textOverflow: TextOverflow.visible,
+                      textAlign: TextAlign.left,
+                      textToDisplay:
+                          notifier.language.supportDocNotice10 ?? ''),
                 ],
               ),
             ),
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
           floatingActionButton: Padding(
             padding: const EdgeInsets.all(16),
             child: CustomElevatedButton(
@@ -119,13 +140,18 @@ class _VerificationSupportSuccessState extends State<VerificationSupportSuccess>
               },
               child: CustomTextWidget(
                 textToDisplay: notifier.language.close ?? 'close',
-                textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                textStyle: textTheme.labelLarge
+                    ?.copyWith(color: kHyppeLightButtonText),
               ),
               buttonStyle: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                foregroundColor: MaterialStateProperty.all(
+                    Theme.of(context).colorScheme.primary),
+                shadowColor: MaterialStateProperty.all(
+                    Theme.of(context).colorScheme.primary),
+                overlayColor: MaterialStateProperty.all(
+                    Theme.of(context).colorScheme.primary),
+                backgroundColor: MaterialStateProperty.all(
+                    Theme.of(context).colorScheme.primary),
               ),
             ),
           ),
@@ -134,7 +160,9 @@ class _VerificationSupportSuccessState extends State<VerificationSupportSuccess>
     );
   }
 
-  Widget _buildDivider(context) => Divider(thickness: 1.0, color: Theme.of(context).dividerTheme.color?.withOpacity(0.1));
+  Widget _buildDivider(context) => Divider(
+      thickness: 1.0,
+      color: Theme.of(context).dividerTheme.color?.withOpacity(0.1));
 
   Widget _unorderedList(String text) {
     return Padding(

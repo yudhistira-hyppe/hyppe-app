@@ -12,19 +12,24 @@ class LoadingDialog extends StatelessWidget {
     final theme = Theme.of(context);
     final size = MediaQuery.of(context).size;
     return Container(
-      decoration: BoxDecoration(color: theme.colorScheme.surface, borderRadius: BorderRadius.circular(8.0)),
+      decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(8.0)),
       height: 100,
       width: size.width * 0.9,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          !uploadProses ? const CustomLoading() : const ProcessUploadComponent(showAlert: false),
+          !uploadProses
+              ? const CustomLoading()
+              : const ProcessUploadComponent(showAlert: false),
           GestureDetector(
             // onTap: () => Routing().moveBack(),
             child: CustomTextWidget(
               textToDisplay: 'Loading',
-              textStyle: theme.textTheme.subtitle1!.copyWith(fontWeight: FontWeight.w600),
+              textStyle: theme.textTheme.titleMedium!
+                  .copyWith(fontWeight: FontWeight.w600),
             ),
           ),
         ],

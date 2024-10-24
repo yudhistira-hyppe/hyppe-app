@@ -23,8 +23,10 @@ class _ChatMessageListState extends State<ChatMessageList> {
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'ChatMessageList');
-    final _notifier = Provider.of<MessageDetailNotifier>(context, listen: false);
-    _notifier.scrollController.addListener(() => _notifier.scrollListener(context));
+    final _notifier =
+        Provider.of<MessageDetailNotifier>(context, listen: false);
+    _notifier.scrollController
+        .addListener(() => _notifier.scrollListener(context));
     super.initState();
   }
 
@@ -48,8 +50,9 @@ class _ChatMessageListState extends State<ChatMessageList> {
                   ),
                   twentyPx,
                   CustomTextWidget(
-                    textStyle: Theme.of(context).textTheme.subtitle1,
-                    textToDisplay: "${notifier.argument.fullnameReceiver} is on Hyppe! let's say hello🔥",
+                    textStyle: Theme.of(context).textTheme.titleMedium,
+                    textToDisplay:
+                        "${notifier.argument.fullnameReceiver} is on Hyppe! let's say hello🔥",
                   ),
                 ],
               )
@@ -67,17 +70,24 @@ class _ChatMessageListState extends State<ChatMessageList> {
                   bottom: 10 * SizeConfig.scaleDiagonal,
                 ),
                 itemBuilder: (context, index) {
-                  final discussLogs = notifier.discussData?.first.disqusLogs[index];
+                  final discussLogs =
+                      notifier.discussData?.first.disqusLogs[index];
                   return Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
-                          color: notifier.selectData == index ? kHyppeBottomNavBarIcon : Colors.transparent,
-                          padding: const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
+                          color: notifier.selectData == index
+                              ? kHyppeBottomNavBarIcon
+                              : Colors.transparent,
+                          padding: const EdgeInsets.only(
+                              left: 8, right: 8, top: 2, bottom: 2),
                           child: Row(
-                            mainAxisAlignment: notifier.isMyMessage(discussLogs?.sender) ? MainAxisAlignment.end : MainAxisAlignment.start,
+                            mainAxisAlignment:
+                                notifier.isMyMessage(discussLogs?.sender)
+                                    ? MainAxisAlignment.end
+                                    : MainAxisAlignment.start,
                             children: <Widget>[
                               notifier.isMyMessage(discussLogs?.sender)
                                   ? Flexible(

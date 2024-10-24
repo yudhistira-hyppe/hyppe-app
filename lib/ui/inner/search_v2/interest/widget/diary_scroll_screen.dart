@@ -56,13 +56,19 @@ import '../../../home/notifier_v2.dart';
 
 class DiaryScrollScreen extends StatefulWidget {
   final String interestKey;
-  const DiaryScrollScreen({Key? key, required this.interestKey}) : super(key: key);
+  const DiaryScrollScreen({Key? key, required this.interestKey})
+      : super(key: key);
 
   @override
   State<DiaryScrollScreen> createState() => _DiaryScrollScreenState();
 }
 
-class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindingObserver, TickerProviderStateMixin, WidgetsBindingObserver, RouteAware {
+class _DiaryScrollScreenState extends State<DiaryScrollScreen>
+    with
+        WidgetsBindingObserver,
+        TickerProviderStateMixin,
+        WidgetsBindingObserver,
+        RouteAware {
   FlutterAliplayer? fAliplayer;
   bool isPrepare = false;
   bool isPlay = false;
@@ -91,7 +97,6 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
 
   ContentData? dataSelected;
 
-
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'ScrollDiary');
@@ -117,7 +122,8 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
 
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
-      fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+      fAliplayer
+          ?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
       _initListener();
     });
     checkInet(notifier);
@@ -144,7 +150,9 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
     });
     fAliplayer?.setOnPrepared((playerId) {
       // Fluttertoast.showToast(msg: "OnPrepared ");
-      fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
+      fAliplayer
+          ?.getPlayerName()
+          .then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
         setState(() {
           isPrepare = true;
@@ -248,7 +256,8 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
         // Fluttertoast.showToast(msg: "${info.trackDefinition}切换成功");
       }
     });
-    fAliplayer?.setOnThumbnailPreparedListener(preparedSuccess: (playerId) {}, preparedFail: (playerId) {});
+    fAliplayer?.setOnThumbnailPreparedListener(
+        preparedSuccess: (playerId) {}, preparedFail: (playerId) {});
 
     fAliplayer?.setOnThumbnailGetListener(
         onThumbnailGetSuccess: (bitmap, range, playerId) {
@@ -302,12 +311,18 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
       // _isFirstRenderShow = false;
     });
     var configMap = {
-      'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
-      'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
-      'mMaxBufferDuration': GlobalSettings.mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
-      'mMaxDelayTime': GlobalSettings.mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
-      'mNetworkTimeout': GlobalSettings.mNetworkTimeout, // The network timeout period. Unit: milliseconds.
-      'mNetworkRetryCount': GlobalSettings.mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
+      'mStartBufferDuration': GlobalSettings
+          .mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
+      'mHighBufferDuration': GlobalSettings
+          .mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
+      'mMaxBufferDuration': GlobalSettings
+          .mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
+      'mMaxDelayTime': GlobalSettings
+          .mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
+      'mNetworkTimeout': GlobalSettings
+          .mNetworkTimeout, // The network timeout period. Unit: milliseconds.
+      'mNetworkRetryCount': GlobalSettings
+          .mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
       'mEnableLocalCache': GlobalSettings.mEnableCacheConfig,
       'mLocalCacheDir': GlobalSettings.mDirController,
       'mClearFrameWhenStop': true
@@ -355,7 +370,7 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
           region: DataSourceRelated.defaultRegion,
           playAuth: auth,
         );
-        if(mounted){
+        if (mounted) {
           setState(() {
             isloading = false;
           });
@@ -363,7 +378,7 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
         // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
       }
     } catch (e) {
-      if(mounted){
+      if (mounted) {
         setState(() {
           isloading = false;
         });
@@ -416,7 +431,11 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
     }
     if (context.getAdsCount() == 3 && adsNotifier.adsData != null) {
       fAliplayer?.pause();
-      System().adsPopUp(context, adsNotifier.adsData?.data ?? AdsData(), adsNotifier.adsData?.data?.apsaraAuth ?? '', isInAppAds: false).whenComplete(() {
+      System()
+          .adsPopUp(context, adsNotifier.adsData?.data ?? AdsData(),
+              adsNotifier.adsData?.data?.apsaraAuth ?? '',
+              isInAppAds: false)
+          .whenComplete(() {
         fAliplayer?.play();
       });
     }
@@ -424,7 +443,8 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
 
   @override
   void didChangeDependencies() {
-    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    CustomRouteObserver.routeObserver
+        .subscribe(this, ModalRoute.of(context) as PageRoute);
     super.didChangeDependencies();
   }
 
@@ -435,7 +455,9 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
       // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
     }
     fAliplayer?.stop();
-    if ((Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps) {
+    if ((Routing.navigatorKey.currentContext ?? context)
+        .read<PreviewVidNotifier>()
+        .canPlayOpenApps) {
       fAliplayer?.destroy();
     }
     super.dispose();
@@ -512,47 +534,55 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
           diaryData?.isEmpty ?? true
               ? const Expanded(child: SearchShimmer())
               : NotificationListener<OverscrollIndicatorNotification>(
-                onNotification: (overscroll) {
-                  overscroll.disallowIndicator();
-                  return false;
-                },
-                child: Column(
-                  children: List.generate(diaryData?.length ?? 0, (index){
-                    if (diaryData == null) {
-                      fAliplayer?.pause();
-                      _lastCurIndex = -1;
-                      return CustomShimmer(
-                        width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                        height: 168,
-                        radius: 8,
-                        margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                        padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                      );
-                    } else if (index == diaryData.length) {
-                      return UnconstrainedBox(
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: 80 * SizeConfig.scaleDiagonal,
-                          height: 80 * SizeConfig.scaleDiagonal,
-                          child: const CustomLoading(),
-                        ),
-                      );
-                    }
-                    if (_curIdx == 0 && diaryData[0].reportedStatus == 'BLURRED') {
-                      isPlay = false;
-                      fAliplayer?.stop();
-                    }
+                  onNotification: (overscroll) {
+                    overscroll.disallowIndicator();
+                    return false;
+                  },
+                  child: Column(
+                    children: List.generate(diaryData?.length ?? 0, (index) {
+                      if (diaryData == null) {
+                        fAliplayer?.pause();
+                        _lastCurIndex = -1;
+                        return CustomShimmer(
+                          width: (MediaQuery.of(context).size.width -
+                                  11.5 -
+                                  11.5 -
+                                  9) /
+                              2,
+                          height: 168,
+                          radius: 8,
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 4.5, vertical: 10),
+                          padding: const EdgeInsets.only(
+                              left: 8.0, right: 8.0, top: 8.0),
+                        );
+                      } else if (index == diaryData.length) {
+                        return UnconstrainedBox(
+                          child: Container(
+                            alignment: Alignment.center,
+                            width: 80 * SizeConfig.scaleDiagonal,
+                            height: 80 * SizeConfig.scaleDiagonal,
+                            child: const CustomLoading(),
+                          ),
+                        );
+                      }
+                      if (_curIdx == 0 &&
+                          diaryData[0].reportedStatus == 'BLURRED') {
+                        isPlay = false;
+                        fAliplayer?.stop();
+                      }
 
-                    return itemDiary(notifier, index, diaryData);
-                  }),
+                      return itemDiary(notifier, index, diaryData);
+                    }),
+                  ),
                 ),
-              ),
         ],
       );
     });
   }
 
-  Widget itemDiary(SearchNotifier notifier, int index, List<ContentData> diaryData) {
+  Widget itemDiary(
+      SearchNotifier notifier, int index, List<ContentData> diaryData) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
@@ -563,7 +593,8 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
         bottom: 16,
         top: 10,
         left: 6,
-        right: 6,),
+        right: 6,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -589,8 +620,10 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                   featureType: FeatureType.other,
                   // isCelebrity: viddiaryData?[index].privacy?.isCelebrity,
                   isCelebrity: false,
-                  imageUrl: '${System().showUserPicture(diaryData[index].avatar?.mediaEndpoint)}',
-                  onTapOnProfileImage: () => System().navigateToProfile(context, diaryData[index].email ?? ''),
+                  imageUrl:
+                      '${System().showUserPicture(diaryData[index].avatar?.mediaEndpoint)}',
+                  onTapOnProfileImage: () => System()
+                      .navigateToProfile(context, diaryData[index].email ?? ''),
                   createdAt: '2022-02-02',
                   musicName: diaryData[index].music?.musicTitle ?? '',
                   location: diaryData[index].location ?? '',
@@ -598,15 +631,21 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                   badge: diaryData[index].urluserBadge,
                 ),
               ),
-              if (diaryData[index].email != email && (diaryData[index].isNewFollowing ?? false))
+              if (diaryData[index].email != email &&
+                  (diaryData[index].isNewFollowing ?? false))
                 Consumer<PreviewPicNotifier>(
                   builder: (context, picNot, child) => Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: GestureDetector(
                       onTap: () {
                         context.handleActionIsGuest(() {
-                          if (diaryData[index].insight?.isloadingFollow != true) {
-                            picNot.followUser(context, diaryData[index], isUnFollow: diaryData[index].following, isloading: diaryData[index].insight!.isloadingFollow ?? false);
+                          if (diaryData[index].insight?.isloadingFollow !=
+                              true) {
+                            picNot.followUser(context, diaryData[index],
+                                isUnFollow: diaryData[index].following,
+                                isloading:
+                                    diaryData[index].insight!.isloadingFollow ??
+                                        false);
                           }
                         });
                       },
@@ -620,8 +659,14 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                               ),
                             )
                           : Text(
-                              (diaryData[index].following ?? false) ? (notifier.language.following ?? '') : (notifier.language.follow ?? ''),
-                              style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                              (diaryData[index].following ?? false)
+                                  ? (notifier.language.following ?? '')
+                                  : (notifier.language.follow ?? ''),
+                              style: TextStyle(
+                                  color: kHyppePrimary,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: "Lato"),
                             ),
                     ),
                   ),
@@ -630,19 +675,14 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                 onTap: () async {
                   fAliplayer?.setMuted(true);
                   fAliplayer?.pause();
-                  await context.handleActionIsGuest(() async  {
+                  await context.handleActionIsGuest(() async {
                     if (diaryData[index].email != email) {
                       // FlutterAliplayer? fAliplayer
-                      context.read<PreviewPicNotifier>()
-                          .reportContent(
-                          context,
-                          diaryData[index],
+                      context.read<PreviewPicNotifier>().reportContent(
+                          context, diaryData[index],
                           fAliplayer: fAliplayer,
                           key: widget.interestKey,
-                          onCompleted: (){
-
-                          }
-                      );
+                          onCompleted: () {});
                     } else {
                       fAliplayer?.setMuted(true);
                       fAliplayer?.pause();
@@ -657,7 +697,6 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                       );
                     }
                   });
-
                 },
                 child: const Icon(
                   Icons.more_vert,
@@ -675,7 +714,8 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                 if (_lastCurIndex != _curIdx) {
                   Future.delayed(const Duration(milliseconds: 400), () {
                     start(diaryData[index]);
-                    System().increaseViewCount2(context, diaryData[index], check: false);
+                    System().increaseViewCount2(context, diaryData[index],
+                        check: false);
                   });
                   if (diaryData[index].certified ?? false) {
                     System().block(context);
@@ -700,12 +740,15 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                   children: [
                     _curIdx == index
                         ? ClipRRect(
-                            borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(16.0)),
                             child: AliPlayerView(
                               onCreated: onViewPlayerCreated,
                               x: 0,
                               y: 0,
-                              height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                              height: MediaQuery.of(context).size.width *
+                                  16.0 /
+                                  9.0,
                               width: MediaQuery.of(context).size.width,
                             ),
                           )
@@ -722,8 +765,10 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                                 fAliplayer?.setMuted(isMute);
                               },
                               onDoubleTap: () {
-                                final _likeNotifier = context.read<LikeNotifier>();
-                                _likeNotifier.likePost(context, diaryData[index]);
+                                final _likeNotifier =
+                                    context.read<LikeNotifier>();
+                                _likeNotifier.likePost(
+                                    context, diaryData[index]);
                               },
                               child: Container(
                                 color: Colors.transparent,
@@ -733,76 +778,112 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                             ),
                           )
                         : Positioned.fill(
-                      child: GestureDetector(
-                        onTap: () {
-                          notifier.checkConnection();
-                        },
-                        child: Container(
-                            decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                            width: SizeConfig.screenWidth,
-                            height: SizeConfig.screenHeight,
-                            alignment: Alignment.center,
-                            child: CustomTextWidget(textToDisplay: notifier.language.couldntLoadVideo ?? 'Error')),
-                      ),
-                    ),
+                            child: GestureDetector(
+                              onTap: () {
+                                notifier.checkConnection();
+                              },
+                              child: Container(
+                                  decoration: BoxDecoration(
+                                      color: kHyppeNotConnect,
+                                      borderRadius: BorderRadius.circular(16)),
+                                  width: SizeConfig.screenWidth,
+                                  height: SizeConfig.screenHeight,
+                                  alignment: Alignment.center,
+                                  child: CustomTextWidget(
+                                      textToDisplay:
+                                          notifier.language.couldntLoadVideo ??
+                                              'Error')),
+                            ),
+                          ),
                     dataSelected?.postID == diaryData[index].postID && isPlay
                         ? Container()
                         : CustomBaseCacheImage(
-                      memCacheWidth: 100,
-                      memCacheHeight: 100,
-                      widthPlaceHolder: 80,
-                      heightPlaceHolder: 80,
-                      placeHolderWidget: Container(),
-                      imageUrl: (diaryData[index].isApsara ?? false) ? (diaryData[index].mediaThumbEndPoint ?? "") : "${diaryData[index].fullThumbPath ?? ''}",
-                      imageBuilder: (context, imageProvider) => diaryData[index].reportedStatus == 'BLURRED'
-                          ? ClipRRect(
-                        borderRadius: BorderRadius.circular(20), // Image border
-                        child: ImageFiltered(
-                          imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                          child: Image(
-                            height: MediaQuery.of(context).size.width * 16.0 / 9.0,
-                            width: MediaQuery.of(context).size.width,
-                            image: imageProvider,
+                            memCacheWidth: 100,
+                            memCacheHeight: 100,
+                            widthPlaceHolder: 80,
+                            heightPlaceHolder: 80,
+                            placeHolderWidget: Container(),
+                            imageUrl: (diaryData[index].isApsara ?? false)
+                                ? (diaryData[index].mediaThumbEndPoint ?? "")
+                                : "${diaryData[index].fullThumbPath ?? ''}",
+                            imageBuilder: (context, imageProvider) =>
+                                diaryData[index].reportedStatus == 'BLURRED'
+                                    ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(
+                                            20), // Image border
+                                        child: ImageFiltered(
+                                          imageFilter: ImageFilter.blur(
+                                              sigmaX: 30, sigmaY: 30),
+                                          child: Image(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                16.0 /
+                                                9.0,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            image: imageProvider,
+                                          ),
+                                        ),
+                                      )
+                                    : Container(
+                                        // const EdgeInsets.symmetric(horizontal: 4.5),
+                                        height:
+                                            MediaQuery.of(context).size.width *
+                                                16.0 /
+                                                9.0,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: imageProvider,
+                                            fit: BoxFit.cover,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(16.0),
+                                        ),
+                                      ),
+                            errorWidget: (context, url, error) {
+                              return GestureDetector(
+                                onTap: () {
+                                  notifier.checkConnection();
+                                },
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                        color: kHyppeNotConnect,
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
+                                    width: SizeConfig.screenWidth,
+                                    height: MediaQuery.of(context).size.width *
+                                        16.0 /
+                                        9.0,
+                                    alignment: Alignment.center,
+                                    child: CustomTextWidget(
+                                        textToDisplay: notifier
+                                                .language.couldntLoadVideo ??
+                                            'Error')),
+                              );
+                            },
+                            emptyWidget: GestureDetector(
+                              onTap: () {
+                                notifier.checkConnection();
+                              },
+                              child: Container(
+                                  decoration: BoxDecoration(
+                                      color: kHyppeNotConnect,
+                                      borderRadius: BorderRadius.circular(16)),
+                                  width: SizeConfig.screenWidth,
+                                  height: MediaQuery.of(context).size.width *
+                                      16.0 /
+                                      9.0,
+                                  alignment: Alignment.center,
+                                  child: CustomTextWidget(
+                                      textToDisplay:
+                                          notifier.language.couldntLoadVideo ??
+                                              'Error')),
+                            ),
                           ),
-                        ),
-                      )
-                          : Container(
-                        // const EdgeInsets.symmetric(horizontal: 4.5),
-                        height: MediaQuery.of(context).size.width * 16.0 / 9.0,
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.cover,
-                          ),
-                          borderRadius: BorderRadius.circular(16.0),
-                        ),
-                      ),
-                      errorWidget: (context, url, error) {
-                        return GestureDetector(
-                          onTap: () {
-                            notifier.checkConnection();
-                          },
-                          child: Container(
-                              decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                              width: SizeConfig.screenWidth,
-                              height: MediaQuery.of(context).size.width * 16.0 / 9.0,
-                              alignment: Alignment.center,
-                              child: CustomTextWidget(textToDisplay: notifier.language.couldntLoadVideo ?? 'Error')),
-                        );
-                      },
-                      emptyWidget: GestureDetector(
-                        onTap: () {
-                          notifier.checkConnection();
-                        },
-                        child: Container(
-                            decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                            width: SizeConfig.screenWidth,
-                            height: MediaQuery.of(context).size.width * 16.0 / 9.0,
-                            alignment: Alignment.center,
-                            child: CustomTextWidget(textToDisplay: notifier.language.couldntLoadVideo ?? 'Error')),
-                      ),
-                    ),
                     _showLoading
                         ? Positioned.fill(
                             child: Align(
@@ -810,16 +891,20 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                             child: CircularProgressIndicator(),
                           ))
                         : Container(),
-                    _buildBody(context, SizeConfig.screenWidth, diaryData[index]),
+                    _buildBody(
+                        context, SizeConfig.screenWidth, diaryData[index]),
                     blurContentWidget(context, diaryData[index]),
                   ],
                 ),
               ),
             ),
           ),
-          SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
+          SharedPreference().readStorage(SpKeys.statusVerificationId) ==
+                      VERIFIED &&
                   diaryData[index].boosted.isEmpty &&
-                  (diaryData[index].reportedStatus != 'OWNED' && diaryData[index].reportedStatus != 'BLURRED' && diaryData[index].reportedStatus2 != 'BLURRED') &&
+                  (diaryData[index].reportedStatus != 'OWNED' &&
+                      diaryData[index].reportedStatus != 'BLURRED' &&
+                      diaryData[index].reportedStatus2 != 'BLURRED') &&
                   diaryData[index].email == email
               ? Container(
                   width: MediaQuery.of(context).size.width,
@@ -829,24 +914,31 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                     marginBool: true,
                     contentData: diaryData[index],
                     startState: () {
-                      SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                      SharedPreference()
+                          .writeStorage(SpKeys.isShowPopAds, true);
                     },
                     afterState: () {
-                      SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                      SharedPreference()
+                          .writeStorage(SpKeys.isShowPopAds, false);
                     },
                   ),
                 )
               : Container(),
-          diaryData[index].email == SharedPreference().readStorage(SpKeys.email) && (diaryData[index].reportedStatus == 'OWNED')
+          diaryData[index].email ==
+                      SharedPreference().readStorage(SpKeys.email) &&
+                  (diaryData[index].reportedStatus == 'OWNED')
               ? Padding(
                   padding: const EdgeInsets.only(bottom: 11.0),
                   child: ContentViolationWidget(
                     data: diaryData[index],
-                    text: notifier.language.thisHyppeVidisSubjectToModeration ?? '',
+                    text: notifier.language.thisHyppeVidisSubjectToModeration ??
+                        '',
                   ),
                 )
               : Container(),
-          if (diaryData[index].email == email && (diaryData[index].boostCount ?? 0) >= 0 && diaryData[index].boosted.isNotEmpty)
+          if (diaryData[index].email == email &&
+              (diaryData[index].boostCount ?? 0) >= 0 &&
+              diaryData[index].boosted.isNotEmpty)
             Container(
               padding: const EdgeInsets.all(10),
               margin: const EdgeInsets.only(bottom: 10),
@@ -867,7 +959,10 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                     padding: const EdgeInsets.only(left: 13),
                     child: Text(
                       "${diaryData[index].boostJangkauan ?? '0'} ${notifier.language.reach}",
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          color: kHyppeTextLightPrimary),
                     ),
                   )
                 ],
@@ -896,12 +991,19 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                               : InkWell(
                                   child: CustomIconWidget(
                                     defaultColor: false,
-                                    color: (diaryData[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
-                                    iconData: '${AssetPath.vectorPath}${(diaryData[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                    color: (diaryData[index]
+                                                .insight
+                                                ?.isPostLiked ??
+                                            false)
+                                        ? kHyppeRed
+                                        : kHyppeTextLightPrimary,
+                                    iconData:
+                                        '${AssetPath.vectorPath}${(diaryData[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
                                     height: 28,
                                   ),
                                   onTap: () {
-                                    likeNotifier.likePost(context, diaryData[index]);
+                                    likeNotifier.likePost(
+                                        context, diaryData[index]);
                                   },
                                 ),
                         ),
@@ -918,7 +1020,8 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                                   postID: diaryData[index].postID ?? '',
                                   fromFront: true,
                                   data: diaryData[index],
-                                  giftActication: diaryData[index].giftActivation,
+                                  giftActication:
+                                      diaryData[index].giftActivation,
                                   pageDetail: true,
                                 ));
                           },
@@ -935,7 +1038,10 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                         padding: EdgeInsets.only(left: 21.0),
                         child: GestureDetector(
                           onTap: () {
-                            context.read<DiariesPlaylistNotifier>().createdDynamicLink(context, data: diaryData[index]);
+                            context
+                                .read<DiariesPlaylistNotifier>()
+                                .createdDynamicLink(context,
+                                    data: diaryData[index]);
                           },
                           child: CustomIconWidget(
                             defaultColor: false,
@@ -945,16 +1051,18 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                           ),
                         ),
                       ),
-                    if ((diaryData[index].saleAmount ?? 0) > 0 && email != diaryData[index].email)
+                    if ((diaryData[index].saleAmount ?? 0) > 0 &&
+                        email != diaryData[index].email)
                       Expanded(
                         child: GestureDetector(
                           onTap: () async {
-                            await context.handleActionIsGuest(() async  {
+                            await context.handleActionIsGuest(() async {
                               fAliplayer?.pause();
-                              await ShowBottomSheet.onBuyContent(context, data: diaryData[index], fAliplayer: fAliplayer);
+                              await ShowBottomSheet.onBuyContent(context,
+                                  data: diaryData[index],
+                                  fAliplayer: fAliplayer);
                               // fAliplayer?.play();
                             });
-
                           },
                           child: const Align(
                             alignment: Alignment.centerRight,
@@ -972,7 +1080,10 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                 twelvePx,
                 Text(
                   "${diaryData[index].insight?.likes}  ${notifier.language.like}",
-                  style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                  style: const TextStyle(
+                      color: kHyppeTextLightPrimary,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14),
                 ),
               ],
             ),
@@ -980,16 +1091,25 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
           twelvePx,
           CustomNewDescContent(
             // desc: "${data?.description}",
-            email: diaryData[index].email??'',
+            email: diaryData[index].email ?? '',
             username: diaryData[index].username ?? '',
             desc: "${diaryData[index].description}",
             trimLines: 2,
             textAlign: TextAlign.start,
-            seeLess: ' ${notifier.language.seeLess}', // ${notifier2.translate.seeLess}',
-            seeMore: '  ${notifier.language.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
-            normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-            hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-            expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+            seeLess:
+                ' ${notifier.language.seeLess}', // ${notifier2.translate.seeLess}',
+            seeMore:
+                '  ${notifier.language.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+            normStyle:
+                const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
+            hrefStyle: Theme.of(context)
+                .textTheme
+                .titleSmall
+                ?.copyWith(color: kHyppePrimary),
+            expandStyle: Theme.of(context)
+                .textTheme
+                .titleSmall
+                ?.copyWith(color: Theme.of(context).colorScheme.primary),
           ),
           GestureDetector(
             onTap: () {
@@ -1017,21 +1137,39 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                   child: ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: (diaryData[index].comment?.length ?? 0) >= 2 ? 2 : 1,
+                    itemCount:
+                        (diaryData[index].comment?.length ?? 0) >= 2 ? 2 : 1,
                     itemBuilder: (context, indexComment) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 6.0),
                         child: CustomNewDescContent(
                           // desc: "${diaryData?[index]?.description}",
-                          username: diaryData[index].comment?[indexComment].userComment?.username ?? '',
-                          desc: diaryData[index].comment?[indexComment].txtMessages ?? '',
+                          username: diaryData[index]
+                                  .comment?[indexComment]
+                                  .userComment
+                                  ?.username ??
+                              '',
+                          desc: diaryData[index]
+                                  .comment?[indexComment]
+                                  .txtMessages ??
+                              '',
                           trimLines: 2,
                           textAlign: TextAlign.start,
-                          seeLess: ' ${notifier.language.seeLess}', // ${notifier2.translate.seeLess}',
-                          seeMore: ' ${notifier.language.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
-                          normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                          hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                          expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                          seeLess:
+                              ' ${notifier.language.seeLess}', // ${notifier2.translate.seeLess}',
+                          seeMore:
+                              ' ${notifier.language.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                          normStyle: const TextStyle(
+                              fontSize: 12, color: kHyppeTextLightPrimary),
+                          hrefStyle: Theme.of(context)
+                              .textTheme
+                              .titleSmall
+                              ?.copyWith(color: kHyppePrimary),
+                          expandStyle: Theme.of(context)
+                              .textTheme
+                              .titleSmall
+                              ?.copyWith(
+                                  color: Theme.of(context).colorScheme.primary),
                         ),
                       );
                     },
@@ -1042,7 +1180,10 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
             padding: const EdgeInsets.symmetric(vertical: 4.0),
             child: Text(
               "${System().readTimestamp(
-                DateTime.parse(System().dateTimeRemoveT(diaryData[index].createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+                DateTime.parse(System().dateTimeRemoveT(
+                        diaryData[index].createdAt ??
+                            DateTime.now().toString()))
+                    .millisecondsSinceEpoch,
                 context,
                 fullCaption: true,
               )}",
@@ -1068,7 +1209,9 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
               left: 12,
               child: GestureDetector(
                 onTap: () {
-                  context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID);
+                  context
+                      .read<PicDetailNotifier>()
+                      .showUserTag(context, data.tagPeople, data.postID);
                 },
                 child: const CustomIconWidget(
                   iconData: '${AssetPath.vectorPath}tag_people.svg',
@@ -1089,7 +1232,9 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: CustomIconWidget(
-                  iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
+                  iconData: isMute
+                      ? '${AssetPath.vectorPath}sound-off.svg'
+                      : '${AssetPath.vectorPath}sound-on.svg',
                   defaultColor: false,
                   height: 24,
                 ),
@@ -1118,8 +1263,15 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                         defaultColor: false,
                         height: 30,
                       ),
-                      Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                      Text("HyppeDiary ${transnot.translate.contentContainsSensitiveMaterial}",
+                      Text(
+                          transnot.translate.sensitiveContent ??
+                              'Sensitive Content',
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600)),
+                      Text(
+                          "HyppeDiary ${transnot.translate.contentContainsSensitiveMaterial}",
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Colors.white,
@@ -1140,13 +1292,16 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                         onTap: () {
                           data.reportedStatus = '';
                           start(data);
-                          context.read<ReportNotifier>().seeContent(context, data, hyppeDiary);
+                          context
+                              .read<ReportNotifier>()
+                              .seeContent(context, data, hyppeDiary);
                           fAliplayer?.prepare();
                           fAliplayer?.play();
                         },
                         child: Container(
                           padding: const EdgeInsets.only(top: 8),
-                          margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
+                          margin: const EdgeInsets.only(
+                              bottom: 20, right: 8, left: 8),
                           width: SizeConfig.screenWidth,
                           decoration: const BoxDecoration(
                             border: Border(
@@ -1158,7 +1313,10 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                           ),
                           child: Text(
                             "${transnot.translate.see} HyppeDiary",
-                            style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600),
                             textAlign: TextAlign.center,
                           ),
                         ),

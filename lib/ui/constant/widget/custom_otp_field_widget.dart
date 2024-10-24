@@ -33,15 +33,14 @@ class CustomOTPFieldWidget extends StatelessWidget {
           shape: PinCodeFieldShape.box,
           fieldHeight: 50,
           fieldWidth: 50,
-          activeColor:
-              isWrong ? kHyppeBorderDanger : theme.colorScheme.primary,
+          activeColor: isWrong ? kHyppeBorderDanger : theme.colorScheme.primary,
           inactiveColor: theme.colorScheme.primary,
           selectedColor: theme.colorScheme.primary,
           borderRadius: const BorderRadius.all(Radius.circular(8)),
           borderWidth: 1,
           fieldOuterPadding: const EdgeInsets.only(left: 5, right: 5)),
       textStyle:
-          theme.textTheme.headline5!.copyWith(fontWeight: FontWeight.bold),
+          theme.textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold),
       keyboardType: TextInputType.number,
       inputFormatters: [
         FilteringTextInputFormatter.digitsOnly,

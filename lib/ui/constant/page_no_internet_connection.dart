@@ -33,15 +33,20 @@ class PageNoInternetConnection extends StatelessWidget {
               ),
               SizedBox(height: 35 * SizeConfig.scaleDiagonal),
               CustomTextWidget(
-                textToDisplay: notifier.translate.noInternetConnection ?? 'No Internet Connection',
+                textToDisplay: notifier.translate.noInternetConnection ??
+                    'No Internet Connection',
                 textAlign: TextAlign.center,
-                textStyle: TextStyle(fontSize: 18 * SizeConfig.scaleDiagonal, fontWeight: FontWeight.bold),
+                textStyle: TextStyle(
+                    fontSize: 18 * SizeConfig.scaleDiagonal,
+                    fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 14 * SizeConfig.scaleDiagonal),
               CustomTextWidget(
-                textToDisplay: notifier.translate.pleaseCheckYourInternetConnectionAgain ?? '',
+                textToDisplay:
+                    notifier.translate.pleaseCheckYourInternetConnectionAgain ??
+                        '',
                 textAlign: TextAlign.center,
-                textStyle: Theme.of(context).textTheme.bodyText2,
+                textStyle: Theme.of(context).textTheme.bodyMedium,
                 textOverflow: TextOverflow.clip,
               ),
               SizedBox(height: 37 * SizeConfig.scaleDiagonal),
@@ -49,11 +54,11 @@ class PageNoInternetConnection extends StatelessWidget {
                 valueListenable: _isLoading,
                 builder: (_, value, __) {
                   if (value) const CustomLoading();
-                  
+
                   return CustomElevatedButton(
                     child: CustomTextWidget(
                       textToDisplay: notifier.translate.tryAgain ?? 'Try Again',
-                      textStyle: Theme.of(context).textTheme.button,
+                      textStyle: Theme.of(context).textTheme.labelLarge,
                     ),
                     width: 164 * SizeConfig.scaleDiagonal,
                     height: 42 * SizeConfig.scaleDiagonal,
@@ -61,8 +66,10 @@ class PageNoInternetConnection extends StatelessWidget {
                     buttonStyle: ButtonStyle(
                         elevation: MaterialStateProperty.all<double>(0.0),
                         visualDensity: VisualDensity.adaptivePlatformDensity,
-                        backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primary),
-                        shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)))),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Theme.of(context).colorScheme.primary),
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0)))),
                   );
                 },
               )

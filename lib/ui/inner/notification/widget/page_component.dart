@@ -35,13 +35,15 @@ class PageComponent extends StatefulWidget {
 
 class _PageComponentState extends State<PageComponent> {
   final ScrollController _scrollController = ScrollController();
-  final GlobalKey<RefreshIndicatorState> _key = GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> _key =
+      GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'PageComponent');
     final _notifier = Provider.of<NotificationNotifier>(context, listen: false);
-    _scrollController.addListener(() => _notifier.scrollListener(context, _scrollController));
+    _scrollController.addListener(
+        () => _notifier.scrollListener(context, _scrollController));
     super.initState();
   }
 
@@ -61,7 +63,9 @@ class _PageComponentState extends State<PageComponent> {
         imageCache.clear();
         imageCache.clearLiveImages();
         FcmService().setHaveNotification(false);
-        await context.read<NotificationNotifier>().getNotifications(context, reload: true);
+        await context
+            .read<NotificationNotifier>()
+            .getNotifications(context, reload: true);
       },
       child: _buildWidget(),
     );
@@ -70,7 +74,8 @@ class _PageComponentState extends State<PageComponent> {
   Widget _buildWidget() {
     final mediaQuery = MediaQuery.of(context);
 
-    if (context.read<NotificationNotifier>().data != null && (widget.data?.isEmpty ?? true)) {
+    if (context.read<NotificationNotifier>().data != null &&
+        (widget.data?.isEmpty ?? true)) {
       return SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         scrollDirection: Axis.vertical,
@@ -88,13 +93,18 @@ class _PageComponentState extends State<PageComponent> {
               ),
               eightPx,
               CustomTextWidget(
-                textStyle: Theme.of(context).textTheme.subtitle1,
-                textToDisplay: "${context.read<NotificationNotifier>().language.emptyNotification}",
+                textStyle: Theme.of(context).textTheme.titleMedium,
+                textToDisplay:
+                    "${context.read<NotificationNotifier>().language.emptyNotification}",
               ),
               eightPx,
               CustomTextWidget(
-                textToDisplay: "${context.read<NotificationNotifier>().language.whenThereIsNewNotificationItWillGoesHere}",
-                textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
+                textToDisplay:
+                    "${context.read<NotificationNotifier>().language.whenThereIsNewNotificationItWillGoesHere}",
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .bodySmall
+                    ?.copyWith(color: Theme.of(context).colorScheme.secondary),
               )
             ],
           ),

@@ -24,7 +24,8 @@ class ReceiverLayout extends StatelessWidget {
   final DisqusLogs? chatData;
   final String? created;
 
-  const ReceiverLayout({Key? key, this.chatData, this.created}) : super(key: key);
+  const ReceiverLayout({Key? key, this.chatData, this.created})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +37,8 @@ class ReceiverLayout extends StatelessWidget {
     Widget shareLive = Container();
     if (chatData?.medias.isNotEmpty ?? [].isNotEmpty) {
       if (chatData?.medias.first.sId != null) {
-        var orginial = chatData?.medias.first.user?.avatar?.mediaEndpoint!.split('/');
+        var orginial =
+            chatData?.medias.first.user?.avatar?.mediaEndpoint!.split('/');
         var endpoint = "/profilepict/orignal/${orginial?.last}";
         shareLive = Container(
           padding: EdgeInsets.only(bottom: 10 * SizeConfig.scaleDiagonal),
@@ -54,7 +56,8 @@ class ReceiverLayout extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 10.0),
                 child: GestureDetector(
                   onTap: () {
-                    String? idStream = SharedPreference().readStorage(SpKeys.idStream);
+                    String? idStream =
+                        SharedPreference().readStorage(SpKeys.idStream);
                     if (idStream != null) {
                       Routing().moveBack();
                     } else {
@@ -69,127 +72,178 @@ class ReceiverLayout extends StatelessWidget {
                     }
                   },
                   child: IntrinsicHeight(
-                    child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                      Container(width: 2, color: kHyppeRank4),
-                      twelvePx,
-                      Expanded(
-                        child: IntrinsicHeight(
-                          child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                            ClipRRect(
-                              borderRadius: const BorderRadius.only(topRight: Radius.circular(8)),
-                              child: Stack(
-                                children: [
-                                  CustomCacheImage(
-                                    imageUrl: System().showUserPicture(endpoint),
-                                    imageBuilder: (context, imageProvider) {
-                                      return ClipRRect(
-                                        borderRadius: const BorderRadius.only(topRight: Radius.circular(8)),
-                                        child: Image(
-                                          image: imageProvider,
-                                          fit: BoxFit.fitHeight,
-                                          width: SizeConfig.screenWidth,
-                                          // height: picData?.imageHeightTemp == 0 || (picData?.imageHeightTemp ?? 0) <= 100 ? null : picData?.imageHeightTemp,
-                                        ),
-                                      );
-                                    },
-                                    emptyWidget: ClipRRect(
-                                      borderRadius: const BorderRadius.only(topRight: Radius.circular(8)),
-                                      child: Image(
-                                        image: const AssetImage('${AssetPath.pngPath}profile-error.jpg'),
-                                        fit: BoxFit.fitHeight,
-                                        width: SizeConfig.screenWidth,
-                                        // height: picData?.imageHeightTemp == 0 || (picData?.imageHeightTemp ?? 0) <= 100 ? null : picData?.imageHeightTemp,
-                                      ),
-                                    ),
-                                    errorWidget: (_, __, ___) {
-                                      return ClipRRect(
-                                        borderRadius: const BorderRadius.only(topRight: Radius.circular(8)),
-                                        child: Image(
-                                          image: const AssetImage('${AssetPath.pngPath}profile-error.jpg'),
-                                          fit: BoxFit.fitHeight,
-                                          width: SizeConfig.screenWidth,
-                                          // height: picData?.imageHeightTemp == 0 || (picData?.imageHeightTemp ?? 0) <= 100 ? null : picData?.imageHeightTemp,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  Positioned.fill(
-                                      child: Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Padding(
-                                      padding: EdgeInsets.all(8.0 * SizeConfig.scaleDiagonal),
-                                      child: Row(
-                                        // crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Container(width: 2, color: kHyppeRank4),
+                          twelvePx,
+                          Expanded(
+                            child: IntrinsicHeight(
+                              child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: const BorderRadius.only(
+                                          topRight: Radius.circular(8)),
+                                      child: Stack(
                                         children: [
-                                          CustomProfileImage(
-                                            cacheKey: '',
-                                            following: true,
-                                            forStory: false,
-                                            width: 26 * SizeConfig.scaleDiagonal,
-                                            height: 26 * SizeConfig.scaleDiagonal,
-                                            imageUrl: System().showUserPicture(chatData?.medias.first.user?.avatar?.mediaEndpoint),
-                                            allwaysUseBadgePadding: true,
-                                          ),
-                                          sixPx,
-                                          Expanded(
-                                            child: Text(
-                                              chatData?.medias.first.user?.username ?? '',
-                                              style: const TextStyle(color: kHyppeTextPrimary),
+                                          CustomCacheImage(
+                                            imageUrl: System()
+                                                .showUserPicture(endpoint),
+                                            imageBuilder:
+                                                (context, imageProvider) {
+                                              return ClipRRect(
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                        topRight:
+                                                            Radius.circular(8)),
+                                                child: Image(
+                                                  image: imageProvider,
+                                                  fit: BoxFit.fitHeight,
+                                                  width: SizeConfig.screenWidth,
+                                                  // height: picData?.imageHeightTemp == 0 || (picData?.imageHeightTemp ?? 0) <= 100 ? null : picData?.imageHeightTemp,
+                                                ),
+                                              );
+                                            },
+                                            emptyWidget: ClipRRect(
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                      topRight:
+                                                          Radius.circular(8)),
+                                              child: Image(
+                                                image: const AssetImage(
+                                                    '${AssetPath.pngPath}profile-error.jpg'),
+                                                fit: BoxFit.fitHeight,
+                                                width: SizeConfig.screenWidth,
+                                                // height: picData?.imageHeightTemp == 0 || (picData?.imageHeightTemp ?? 0) <= 100 ? null : picData?.imageHeightTemp,
+                                              ),
                                             ),
+                                            errorWidget: (_, __, ___) {
+                                              return ClipRRect(
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                        topRight:
+                                                            Radius.circular(8)),
+                                                child: Image(
+                                                  image: const AssetImage(
+                                                      '${AssetPath.pngPath}profile-error.jpg'),
+                                                  fit: BoxFit.fitHeight,
+                                                  width: SizeConfig.screenWidth,
+                                                  // height: picData?.imageHeightTemp == 0 || (picData?.imageHeightTemp ?? 0) <= 100 ? null : picData?.imageHeightTemp,
+                                                ),
+                                              );
+                                            },
                                           ),
-                                          Container(
-                                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                                            decoration: BoxDecoration(
-                                              color: kHyppeLightDanger,
-                                              borderRadius: BorderRadius.circular(4),
+                                          Positioned.fill(
+                                              child: Align(
+                                            alignment: Alignment.topLeft,
+                                            child: Padding(
+                                              padding: EdgeInsets.all(8.0 *
+                                                  SizeConfig.scaleDiagonal),
+                                              child: Row(
+                                                // crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  CustomProfileImage(
+                                                    cacheKey: '',
+                                                    following: true,
+                                                    forStory: false,
+                                                    width: 26 *
+                                                        SizeConfig
+                                                            .scaleDiagonal,
+                                                    height: 26 *
+                                                        SizeConfig
+                                                            .scaleDiagonal,
+                                                    imageUrl: System()
+                                                        .showUserPicture(chatData
+                                                            ?.medias
+                                                            .first
+                                                            .user
+                                                            ?.avatar
+                                                            ?.mediaEndpoint),
+                                                    allwaysUseBadgePadding:
+                                                        true,
+                                                  ),
+                                                  sixPx,
+                                                  Expanded(
+                                                    child: Text(
+                                                      chatData?.medias.first
+                                                              .user?.username ??
+                                                          '',
+                                                      style: const TextStyle(
+                                                          color:
+                                                              kHyppeTextPrimary),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 12,
+                                                        vertical: 4),
+                                                    decoration: BoxDecoration(
+                                                      color: kHyppeLightDanger,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              4),
+                                                    ),
+                                                    child: const Text(
+                                                      'LIVE',
+                                                      style: TextStyle(
+                                                          color:
+                                                              kHyppeTextPrimary),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                            child: const Text(
-                                              'LIVE',
-                                              style: TextStyle(color: kHyppeTextPrimary),
-                                            ),
-                                          ),
+                                          )),
                                         ],
                                       ),
                                     ),
-                                  )),
-                                ],
-                              ),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 12),
+                                      decoration: const BoxDecoration(
+                                        color: kHyppePrimary,
+                                        borderRadius: BorderRadius.only(
+                                            bottomRight: Radius.circular(8)),
+                                      ),
+                                      child: Center(
+                                          child: Text(
+                                        (chatData?.medias.first.status ?? false)
+                                            ? translate.localeDatetime == 'id'
+                                                ? "Tonton Siaran LIVE"
+                                                : "Watch LIVE"
+                                            : translate.localeDatetime == 'id'
+                                                ? "Siaran LIVE berakhir"
+                                                : "LIVE has ended",
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      )),
+                                    ),
+                                  ]),
                             ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              decoration: const BoxDecoration(
-                                color: kHyppePrimary,
-                                borderRadius: BorderRadius.only(bottomRight: Radius.circular(8)),
-                              ),
-                              child: Center(
-                                  child: Text(
-                                (chatData?.medias.first.status ?? false)
-                                    ? translate.localeDatetime == 'id'
-                                        ? "Tonton Siaran LIVE"
-                                        : "Watch LIVE"
-                                    : translate.localeDatetime == 'id'
-                                        ? "Siaran LIVE berakhir"
-                                        : "LIVE has ended",
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              )),
-                            ),
-                          ]),
-                        ),
-                      ),
-                    ]),
+                          ),
+                        ]),
                   ),
                 ),
               ),
-              if (chatData?.txtMessages == '@${notifMessage.argument.usernameReceiver} mengirim kamu LIVE' || chatData?.txtMessages == '@${notifMessage.argument.usernameReceiver} send you a LIVE')
+              if (chatData?.txtMessages ==
+                      '@${notifMessage.argument.usernameReceiver} mengirim kamu LIVE' ||
+                  chatData?.txtMessages ==
+                      '@${notifMessage.argument.usernameReceiver} send you a LIVE')
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: CustomTextWidget(
                     textAlign: TextAlign.end,
-                    textStyle: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 10),
-                    textToDisplay: chatData?.createdAt == null ? "" : System().dateFormatter(chatData?.createdAt ?? '', 1),
+                    textStyle: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontSize: 10),
+                    textToDisplay: chatData?.createdAt == null
+                        ? ""
+                        : System().dateFormatter(chatData?.createdAt ?? '', 1),
                     // textToDisplay: chatData?.createdAt == null ? "" : System().dateFormatter(created ?? '', 1),
                   ),
                 ),
@@ -203,7 +257,10 @@ class ReceiverLayout extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         shareLive,
-        if (chatData?.txtMessages != '@${notifMessage.argument.usernameReceiver} mengirim kamu LIVE' && chatData?.txtMessages != '@${notifMessage.argument.usernameReceiver} send you a LIVE')
+        if (chatData?.txtMessages !=
+                '@${notifMessage.argument.usernameReceiver} mengirim kamu LIVE' &&
+            chatData?.txtMessages !=
+                '@${notifMessage.argument.usernameReceiver} send you a LIVE')
           Container(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
@@ -222,7 +279,8 @@ class ReceiverLayout extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  if ((chatData?.medias.isNotEmpty ?? false) && chatData?.medias.first.sId == null)
+                  if ((chatData?.medias.isNotEmpty ?? false) &&
+                      chatData?.medias.first.sId == null)
                     ContentMessageLayout(
                       message: chatData,
                     ),
@@ -230,13 +288,18 @@ class ReceiverLayout extends StatelessWidget {
                     // textToDisplay: chatData.message,
                     textAlign: TextAlign.start,
                     textOverflow: TextOverflow.clip,
-                    textStyle: Theme.of(context).textTheme.bodyText2,
-                    textToDisplay: chatData?.txtMessages ?? chatData?.reactionIcon ?? '',
+                    textStyle: Theme.of(context).textTheme.bodyMedium,
+                    textToDisplay:
+                        chatData?.txtMessages ?? chatData?.reactionIcon ?? '',
                   ),
                   CustomTextWidget(
                     textAlign: TextAlign.end,
-                    textStyle: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 10),
-                    textToDisplay: chatData?.createdAt == null ? "" : System().dateFormatter(chatData?.createdAt ?? '', 1),
+                    textStyle: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontSize: 10),
+                    textToDisplay: chatData?.createdAt == null
+                        ? ""
+                        : System().dateFormatter(chatData?.createdAt ?? '', 1),
                     // textToDisplay: chatData?.createdAt == null ? "" : System().dateFormatter(created ?? '', 1),
                   ),
                 ],

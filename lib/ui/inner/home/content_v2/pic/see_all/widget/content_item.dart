@@ -41,7 +41,8 @@ class ContentItem extends StatelessWidget {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'ContentItem');
     final size = MediaQuery.of(context).size;
     final notifier = context.watch<PicSeeAllNotifier>();
-    final error = context.select((ErrorService value) => value.getError(ErrorType.pic));
+    final error =
+        context.select((ErrorService value) => value.getError(ErrorType.pic));
 
     return context.read<ErrorService>().isInitialError(error, notifier.picData)
         ? CustomErrorWidget(
@@ -73,7 +74,8 @@ class ContentItem extends StatelessWidget {
                     itemBuilder: (context, index) {
                       if (notifier.picData == null) {
                         return const CustomLoading();
-                      } else if (index == notifier.picData?.length && notifier.hasNext) {
+                      } else if (index == notifier.picData?.length &&
+                          notifier.hasNext) {
                         return const CustomLoading();
                       }
 
@@ -95,14 +97,21 @@ class ContentItem extends StatelessWidget {
                                   featureType: FeatureType.pic,
                                   isCelebrity: data?.privacy?.isCelebrity,
                                   isUserVerified: data?.isIdVerified ?? false,
-                                  imageUrl: '${System().showUserPicture(data?.avatar?.mediaEndpoint)}',
+                                  imageUrl:
+                                      '${System().showUserPicture(data?.avatar?.mediaEndpoint)}',
                                   badge: data?.urluserBadge,
-                                  onTapOnProfileImage: () => System().navigateToProfile(context, data?.email ?? ''),
-                                  createdAt: '${System().readTimestamp(DateTime.parse(System().dateTimeRemoveT(data?.createdAt ?? '')).millisecondsSinceEpoch, context, fullCaption: true)}',
+                                  onTapOnProfileImage: () => System()
+                                      .navigateToProfile(
+                                          context, data?.email ?? ''),
+                                  createdAt:
+                                      '${System().readTimestamp(DateTime.parse(System().dateTimeRemoveT(data?.createdAt ?? '')).millisecondsSinceEpoch, context, fullCaption: true)}',
                                 ),
-                                data?.email != SharedPreference().readStorage(SpKeys.email)
+                                data?.email !=
+                                        SharedPreference()
+                                            .readStorage(SpKeys.email)
                                     ? GestureDetector(
-                                        onTap: () => ShowBottomSheet().onReportContent(
+                                        onTap: () =>
+                                            ShowBottomSheet().onReportContent(
                                               context,
                                               postData: data,
                                               type: hyppePic,
@@ -120,14 +129,23 @@ class ContentItem extends StatelessWidget {
                                   aspectRatio: 16 / 9,
                                   child: (data?.reportedStatus == "BLURRED")
                                       ? GestureDetector(
-                                          onTap: () => () => context.read<PreviewPicNotifier>().navigateToSlidedDetailPic(context, index), //notifier.navigateToHyppePicDetail(context, data),
+                                          onTap: () => () => context
+                                              .read<PreviewPicNotifier>()
+                                              .navigateToSlidedDetailPic(
+                                                  context,
+                                                  index), //notifier.navigateToHyppePicDetail(context, data),
                                           child: PichTumbnailReport(
                                             pictData: data,
                                             seeContent: false,
                                           ),
                                         )
                                       : ContentThumbnail(
-                                          picData: data, fn: () => context.read<PreviewPicNotifier>().navigateToSlidedDetailPic(context, index) //  notifier.navigateToHyppePicDetail(context, data),
+                                          picData: data,
+                                          fn: () => context
+                                              .read<PreviewPicNotifier>()
+                                              .navigateToSlidedDetailPic(
+                                                  context,
+                                                  index) //  notifier.navigateToHyppePicDetail(context, data),
                                           ),
                                 ),
                                 (data?.saleAmount ?? 0) > 0
@@ -136,7 +154,8 @@ class ContentItem extends StatelessWidget {
                                         child: Padding(
                                           padding: EdgeInsets.all(4.0),
                                           child: CustomIconWidget(
-                                            iconData: "${AssetPath.vectorPath}sale.svg",
+                                            iconData:
+                                                "${AssetPath.vectorPath}sale.svg",
                                             height: 22,
                                             defaultColor: false,
                                           ),
@@ -144,22 +163,31 @@ class ContentItem extends StatelessWidget {
                                     : Container()
                               ],
                             ),
-                            (data?.tagPeople?.length ?? 0) != 0 || data?.location != ''
+                            (data?.tagPeople?.length ?? 0) != 0 ||
+                                    data?.location != ''
                                 ? Padding(
-                                    padding: const EdgeInsets.only(bottom: 10, top: 16),
+                                    padding: const EdgeInsets.only(
+                                        bottom: 10, top: 16),
                                     child: Row(
                                       children: [
                                         (data?.tagPeople?.length ?? 0) != 0
                                             ? TagLabel(
                                                 icon: 'tag_people',
-                                                label: '${data?.tagPeople?.length} people ',
+                                                label:
+                                                    '${data?.tagPeople?.length} people ',
                                                 function: () {
-                                                  context.read<PicDetailNotifier>().showUserTag(context, data?.tagPeople, data?.postID);
+                                                  context
+                                                      .read<PicDetailNotifier>()
+                                                      .showUserTag(
+                                                          context,
+                                                          data?.tagPeople,
+                                                          data?.postID);
                                                   // vidNotifier.showUserTag(context, index, data.postID);
                                                 },
                                               )
                                             : const SizedBox(),
-                                        data?.location == '' || data?.location == null
+                                        data?.location == '' ||
+                                                data?.location == null
                                             ? const SizedBox()
                                             : TagLabel(
                                                 icon: 'maptag',
@@ -173,7 +201,8 @@ class ContentItem extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.only(top: 13.0),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   SizedBox(
                                     width: 240,
@@ -181,8 +210,12 @@ class ContentItem extends StatelessWidget {
                                       desc: "${data?.description}",
                                       trimLines: 2,
                                       textAlign: TextAlign.start,
-                                      normStyle: Theme.of(context).textTheme.caption,
-                                      hrefStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppePrimary),
+                                      normStyle:
+                                          Theme.of(context).textTheme.bodySmall,
+                                      hrefStyle: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(color: kHyppePrimary),
                                     ),
                                   ),
                                   // Expanded(
@@ -190,37 +223,51 @@ class ContentItem extends StatelessWidget {
                                   //     maxLines: 2,
                                   //     textAlign: TextAlign.left,
                                   //     textToDisplay: "${data?.description} ${data?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
-                                  //     textStyle: Theme.of(context).textTheme.caption,
+                                  //     textStyle: Theme.of(context).textTheme.bodySmall,
                                   //   ),
                                   // ),
                                   eightPx,
                                   Align(
                                     alignment: Alignment.bottomRight,
                                     child: Consumer<LikeNotifier>(
-                                      builder: (context, notifier, child) => data?.insight?.isloading ?? false
-                                          ? const SizedBox(
-                                              height: 21,
-                                              width: 21,
-                                              child: CircularProgressIndicator(
-                                                color: kHyppePrimary,
-                                                strokeWidth: 2,
-                                              ),
-                                            )
-                                          : InkWell(
-                                              child: CustomIconWidget(
-                                                defaultColor: false,
-                                                color: data?.isLiked == true ? kHyppeRed : Theme.of(context).iconTheme.color,
-                                                iconData: '${AssetPath.vectorPath}${data?.isLiked == true ? 'liked.svg' : 'none-like.svg'}',
-                                              ),
-                                              onTap: () => notifier.likePost(context, data ?? ContentData()),
-                                            ),
+                                      builder: (context, notifier, child) =>
+                                          data?.insight?.isloading ?? false
+                                              ? const SizedBox(
+                                                  height: 21,
+                                                  width: 21,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    color: kHyppePrimary,
+                                                    strokeWidth: 2,
+                                                  ),
+                                                )
+                                              : InkWell(
+                                                  child: CustomIconWidget(
+                                                    defaultColor: false,
+                                                    color: data?.isLiked == true
+                                                        ? kHyppeRed
+                                                        : Theme.of(context)
+                                                            .iconTheme
+                                                            .color,
+                                                    iconData:
+                                                        '${AssetPath.vectorPath}${data?.isLiked == true ? 'liked.svg' : 'none-like.svg'}',
+                                                  ),
+                                                  onTap: () =>
+                                                      notifier.likePost(
+                                                          context,
+                                                          data ??
+                                                              ContentData()),
+                                                ),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
                             if (data?.music?.musicTitle != null) fourPx,
-                            if (data?.music?.musicTitle != null) Container(alignment: Alignment.centerLeft, child: MusicStatusDetail(music: data!.music!))
+                            if (data?.music?.musicTitle != null)
+                              Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: MusicStatusDetail(music: data!.music!))
                           ],
                         ),
                       );

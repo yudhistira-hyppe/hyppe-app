@@ -49,14 +49,21 @@ class CustomSearchBar extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 16),
       decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.background,
-          boxShadow: withShadow ? const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.5), blurRadius: 7)] : null,
+          boxShadow: withShadow
+              ? const [
+                  BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.5), blurRadius: 7)
+                ]
+              : null,
           borderRadius: const BorderRadius.all(Radius.circular(4))),
       child: TextField(
         readOnly: readOnly,
         focusNode: focusNode,
         controller: controller,
         autofocus: autoFocus,
-        style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w400),
+        style: Theme.of(context)
+            .textTheme
+            .bodyMedium
+            ?.copyWith(fontWeight: FontWeight.w400),
         decoration: inputDecoration ??
             InputDecoration(
                 suffixIcon: onPressedRightIcon != null
@@ -72,7 +79,10 @@ class CustomSearchBar extends StatelessWidget {
                   onPressed: onPressedIcon,
                   iconData: "${AssetPath.vectorPath}search.svg",
                 ),
-                hintStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppeBurem),
+                hintStyle: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(color: kHyppeBurem),
                 hintText: hintText,
                 contentPadding: contentPadding,
                 border: InputBorder.none,

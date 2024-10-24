@@ -28,7 +28,8 @@ class _AllTransactionState extends State<AllTransaction> {
   List filterList = [];
   int _select = 0;
   final ScrollController _scrollController = ScrollController();
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
 
   void selected(val) {
     setState(() {
@@ -40,7 +41,8 @@ class _AllTransactionState extends State<AllTransaction> {
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'AllTransaction');
     var _notifier = context.read<FilterTransactionNotifier>();
-    _scrollController.addListener(() => _notifier.scrollList(context, _scrollController));
+    _scrollController
+        .addListener(() => _notifier.scrollList(context, _scrollController));
     super.initState();
   }
 
@@ -52,7 +54,7 @@ class _AllTransactionState extends State<AllTransaction> {
           appBar: AppBar(
             leading: const BackButton(),
             title: CustomTextWidget(
-              textStyle: Theme.of(context).textTheme.subtitle1,
+              textStyle: Theme.of(context).textTheme.titleMedium,
               textToDisplay: '${notifier2.translate.transaction}',
             ),
           ),
@@ -95,27 +97,47 @@ class _AllTransactionState extends State<AllTransaction> {
                               notifier.newFilterList.length,
                               (index) => GestureDetector(
                                 onTap: () {
-                                  notifier.filter(context, notifier.newFilterList[index]['id']);
-                                  notifier.filterSelected(context, notifier.newFilterList[index]['id']);
-                                  if (notifier.newFilterList[index]['id'] != 1) {
-                                    selected(notifier.newFilterList[index]['id']);
+                                  notifier.filter(context,
+                                      notifier.newFilterList[index]['id']);
+                                  notifier.filterSelected(context,
+                                      notifier.newFilterList[index]['id']);
+                                  if (notifier.newFilterList[index]['id'] !=
+                                      1) {
+                                    selected(
+                                        notifier.newFilterList[index]['id']);
                                   }
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(5.0),
                                   child: Chip(
                                       // selected: notifier.pickedVisibility(notifier.newFilterList[index]['id']),
-                                      backgroundColor: notifier.newFilterList[index]['selected'] ? Theme.of(context).colorScheme.onSecondary : Theme.of(context).backgroundColor,
+                                      backgroundColor: notifier
+                                              .newFilterList[index]['selected']
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .onSecondary
+                                          : Theme.of(context)
+                                              .appBarTheme
+                                              .backgroundColor,
                                       shape: StadiumBorder(
                                           side: BorderSide(
-                                        color: notifier.newFilterList[index]['selected'] ? kHyppePrimary : kHyppeLightSecondary,
+                                        color: notifier.newFilterList[index]
+                                                ['selected']
+                                            ? kHyppePrimary
+                                            : kHyppeLightSecondary,
                                       )),
                                       label: CustomTextWidget(
-                                        textToDisplay: notifier.newFilterList[index]['name'],
+                                        textToDisplay: notifier
+                                            .newFilterList[index]['name'],
                                         textStyle: Theme.of(context)
                                             .textTheme
                                             .bodyMedium
-                                            ?.copyWith(color: notifier.newFilterList[index]['selected'] ? kHyppePrimary : kHyppeSecondary, fontWeight: FontWeight.bold),
+                                            ?.copyWith(
+                                                color: notifier.newFilterList[
+                                                        index]['selected']
+                                                    ? kHyppePrimary
+                                                    : kHyppeSecondary,
+                                                fontWeight: FontWeight.bold),
                                       )),
                                 ),
                               ),
@@ -130,7 +152,8 @@ class _AllTransactionState extends State<AllTransaction> {
                               notifier.filterList.length,
                               (index) => GestureDetector(
                                 onTap: () {
-                                  notifier.filter(context, notifier.filterList[index]['id']);
+                                  notifier.filter(context,
+                                      notifier.filterList[index]['id']);
                                   if (notifier.filterList[index]['id'] != 1) {
                                     selected(notifier.filterList[index]['id']);
                                   }
@@ -139,22 +162,42 @@ class _AllTransactionState extends State<AllTransaction> {
                                   padding: const EdgeInsets.all(5.0),
                                   child: Chip(
                                       // selected: notifier.pickedVisibility(notifier.filterList[index]['id']),
-                                      avatar: notifier.filterList[index]['icon'] == ''
+                                      avatar: notifier.filterList[index]
+                                                  ['icon'] ==
+                                              ''
                                           ? null
                                           : CustomIconWidget(
-                                              iconData: '${AssetPath.vectorPath}${notifier.filterList[index]['icon']}',
+                                              iconData:
+                                                  '${AssetPath.vectorPath}${notifier.filterList[index]['icon']}',
                                             ),
-                                      backgroundColor: _select == notifier.filterList[index]['id'] ? Theme.of(context).colorScheme.onSecondary : Theme.of(context).backgroundColor,
+                                      backgroundColor: _select ==
+                                              notifier.filterList[index]['id']
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .onSecondary
+                                          : Theme.of(context)
+                                              .appBarTheme
+                                              .backgroundColor,
                                       shape: StadiumBorder(
                                           side: BorderSide(
-                                        color: _select == notifier.filterList[index]['id'] ? kHyppePrimary : kHyppeLightSecondary,
+                                        color: _select ==
+                                                notifier.filterList[index]['id']
+                                            ? kHyppePrimary
+                                            : kHyppeLightSecondary,
                                       )),
                                       label: CustomTextWidget(
-                                        textToDisplay: notifier.filterList[index]['name'],
+                                        textToDisplay:
+                                            notifier.filterList[index]['name'],
                                         textStyle: Theme.of(context)
                                             .textTheme
                                             .bodyMedium
-                                            ?.copyWith(color: _select == notifier.filterList[index]['id'] ? kHyppePrimary : kHyppeSecondary, fontWeight: FontWeight.bold),
+                                            ?.copyWith(
+                                                color: _select ==
+                                                        notifier.filterList[
+                                                            index]['id']
+                                                    ? kHyppePrimary
+                                                    : kHyppeSecondary,
+                                                fontWeight: FontWeight.bold),
                                       )),
                                 ),
                               ),
@@ -169,7 +212,9 @@ class _AllTransactionState extends State<AllTransaction> {
                             textWidget: Column(
                             children: [
                               CustomTextWidget(
-                                textToDisplay: notifier2.translate.youDontHaveAnyTransactionsYet ?? '',
+                                textToDisplay: notifier2.translate
+                                        .youDontHaveAnyTransactionsYet ??
+                                    '',
                                 maxLines: 4,
                               ),
                             ],
@@ -182,38 +227,55 @@ class _AllTransactionState extends State<AllTransaction> {
                                 itemCount: notifier.dataAllTransaction?.length,
                                 itemBuilder: (context, index) {
                                   String title = '';
-                                  switch (notifier.dataAllTransaction?[index].type) {
+                                  switch (notifier
+                                      .dataAllTransaction?[index].type) {
                                     case TransactionType.withdrawal:
-                                      title = notifier2.translate.withdrawal ?? '';
+                                      title =
+                                          notifier2.translate.withdrawal ?? '';
                                       return WithdrawalWidget(
                                         title: title,
                                         language: notifier2.translate,
-                                        data: notifier.dataAllTransaction?[index],
+                                        data:
+                                            notifier.dataAllTransaction?[index],
                                       );
                                     case TransactionType.reward:
                                       title = notifier2.translate.reward ?? '';
                                       return RewardWidget(
                                         title: title,
                                         language: notifier2.translate,
-                                        data: notifier.dataAllTransaction?[index],
+                                        data:
+                                            notifier.dataAllTransaction?[index],
                                       );
                                     default:
-                                      if (notifier.dataAllTransaction?[index].jenis == "VOUCHER") {
+                                      if (notifier.dataAllTransaction?[index]
+                                              .jenis ==
+                                          "VOUCHER") {
                                         return VoucherWidget(
-                                          data: notifier.dataAllTransaction?[index],
+                                          data: notifier
+                                              .dataAllTransaction?[index],
                                           language: notifier2.translate,
                                         );
-                                      } else if (notifier.dataAllTransaction?[index].jenis == "Disbursement") {
-                                        return WithdrawalWidget(title: title, language: notifier2.translate, data: notifier.dataAllTransaction?[index]);
+                                      } else if (notifier
+                                              .dataAllTransaction?[index]
+                                              .jenis ==
+                                          "Disbursement") {
+                                        return WithdrawalWidget(
+                                            title: title,
+                                            language: notifier2.translate,
+                                            data: notifier
+                                                .dataAllTransaction?[index]);
                                       }
                                       return BuySellWidget(
-                                        data: notifier.dataAllTransaction?[index],
+                                        data:
+                                            notifier.dataAllTransaction?[index],
                                         language: notifier2.translate,
                                       );
                                   }
                                 }),
                           ),
-                notifier.isScrollLoading ? const CustomLoading() : const SizedBox(),
+                notifier.isScrollLoading
+                    ? const CustomLoading()
+                    : const SizedBox(),
               ]),
             ),
           ),

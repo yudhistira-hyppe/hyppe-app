@@ -34,11 +34,18 @@ class OtpFieldWidget extends StatelessWidget {
           animationType: AnimationType.scale,
           pinTheme: PinTheme(
             shape: PinCodeFieldShape.underline,
-            activeColor: notifier.matchingPin ? theme.colorScheme.primary : theme.colorScheme.error,
-            inactiveColor: notifier.matchingPin ? theme.colorScheme.primary : theme.colorScheme.error,
-            selectedColor: notifier.matchingPin ? theme.colorScheme.primary : theme.colorScheme.error,
+            activeColor: notifier.matchingPin
+                ? theme.colorScheme.primary
+                : theme.colorScheme.error,
+            inactiveColor: notifier.matchingPin
+                ? theme.colorScheme.primary
+                : theme.colorScheme.error,
+            selectedColor: notifier.matchingPin
+                ? theme.colorScheme.primary
+                : theme.colorScheme.error,
           ),
-          textStyle: theme.textTheme.headline5!.copyWith(fontWeight: FontWeight.bold),
+          textStyle: theme.textTheme.headlineSmall!
+              .copyWith(fontWeight: FontWeight.bold),
           keyboardType: TextInputType.number,
           inputFormatters: [
             FilteringTextInputFormatter.digitsOnly,
@@ -56,7 +63,10 @@ class OtpFieldWidget extends StatelessWidget {
           hintCharacter: '●',
           obscuringWidget: CustomTextWidget(
             textToDisplay: '●',
-            textStyle: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Theme.of(context).colorScheme.onBackground),
+            textStyle: Theme.of(context)
+                .textTheme
+                .headlineSmall!
+                .copyWith(color: Theme.of(context).colorScheme.onBackground),
           ),
           blinkWhenObscuring: true,
           obscuringCharacter: '●'),

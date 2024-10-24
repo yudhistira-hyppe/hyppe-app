@@ -17,8 +17,11 @@ class BuildTopWidget extends StatelessWidget {
   Widget build(BuildContext context) => Consumer<PreviewContentNotifier>(
         builder: (context, notifier, child) {
           final isActive = notifier.ableShare();
-          final bgButton = isActive ? context.getColorScheme().primary : context.getColorScheme().secondary;
-          final textButton = isActive ? kHyppeLightButtonText : const Color(0xffE8E8E8);
+          final bgButton = isActive
+              ? context.getColorScheme().primary
+              : context.getColorScheme().secondary;
+          final textButton =
+              isActive ? kHyppeLightButtonText : const Color(0xffE8E8E8);
           return SafeArea(
             child: Container(
               color: Colors.transparent,
@@ -52,13 +55,15 @@ class BuildTopWidget extends StatelessWidget {
                       child: CustomTextButton(
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(bgButton),
-                          padding: MaterialStateProperty.all(const EdgeInsets.only(top: 0.0, bottom: 0.0)),
+                          padding: MaterialStateProperty.all(
+                              const EdgeInsets.only(top: 0.0, bottom: 0.0)),
                         ),
                         onPressed: () {
                           if (isActive) {
                             if (notifier.addTextItemMode) {
                               notifier.applyTextItem(globalKey);
-                            } else if (notifier.featureType == FeatureType.story) {
+                            } else if (notifier.featureType ==
+                                FeatureType.story) {
                               notifier.postStoryContent(context);
                             } else {
                               notifier.forceResetPlayer(true);
@@ -72,7 +77,10 @@ class BuildTopWidget extends StatelessWidget {
                               : notifier.featureType == FeatureType.story
                                   ? (notifier.language.post ?? 'post')
                                   : (notifier.language.next ?? 'next'),
-                          textStyle: Theme.of(context).textTheme.button?.copyWith(color: textButton),
+                          textStyle: Theme.of(context)
+                              .textTheme
+                              .labelLarge
+                              ?.copyWith(color: textButton),
                         ),
                       ),
                     ),

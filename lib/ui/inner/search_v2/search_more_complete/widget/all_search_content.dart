@@ -24,7 +24,9 @@ import '../../widget/grid_content_view.dart';
 class AllSearchContent extends StatefulWidget {
   final String keyword;
   final TabController tabController;
-  const AllSearchContent({Key? key, required this.tabController, required this.keyword}) : super(key: key);
+  const AllSearchContent(
+      {Key? key, required this.tabController, required this.keyword})
+      : super(key: key);
 
   @override
   State<AllSearchContent> createState() => _AllSearchContentState();
@@ -62,7 +64,11 @@ class _AllSearchContentState extends State<AllSearchContent> {
       final pics = notifier.searchPic;
       final tags = notifier.searchHashtag;
       final users = notifier.searchUsers;
-      final isAllEmpty = !vids.isNotNullAndEmpty() && !diaries.isNotNullAndEmpty() && !pics.isNotNullAndEmpty() && !tags.isNotNullAndEmpty() && !users.isNotNullAndEmpty();
+      final isAllEmpty = !vids.isNotNullAndEmpty() &&
+          !diaries.isNotNullAndEmpty() &&
+          !pics.isNotNullAndEmpty() &&
+          !tags.isNotNullAndEmpty() &&
+          !users.isNotNullAndEmpty();
       return !notifier.isLoading
           ? RefreshIndicator(
               strokeWidth: 2.0,
@@ -107,7 +113,9 @@ class _AllSearchContentState extends State<AllSearchContent> {
         children: [
           CustomTextWidget(
             textToDisplay: notifier.language.content ?? 'Contents',
-            textStyle: context.getTextTheme().bodyText1?.copyWith(color: context.getColorScheme().onBackground, fontWeight: FontWeight.w700),
+            textStyle: context.getTextTheme().bodyLarge?.copyWith(
+                color: context.getColorScheme().onBackground,
+                fontWeight: FontWeight.w700),
             textAlign: TextAlign.start,
           ),
           Container(
@@ -119,30 +127,54 @@ class _AllSearchContentState extends State<AllSearchContent> {
                   final isActive = e == notifier.mainContentTab;
                   return Expanded(
                     child: Container(
-                      margin: const EdgeInsets.only(right: 12, top: 10, bottom: 16),
+                      margin:
+                          const EdgeInsets.only(right: 12, top: 10, bottom: 16),
                       child: Material(
                         color: Colors.transparent,
                         child: Ink(
                           height: 36,
                           decoration: BoxDecoration(
-                            color: isActive ? context.getColorScheme().primary : context.getColorScheme().background,
-                            borderRadius: const BorderRadius.all(Radius.circular(18)),
+                            color: isActive
+                                ? context.getColorScheme().primary
+                                : context.getColorScheme().background,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(18)),
                           ),
                           child: InkWell(
                             onTap: () {
                               notifier.mainContentTab = e;
                             },
-                            borderRadius: const BorderRadius.all(Radius.circular(18)),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(18)),
                             splashColor: context.getColorScheme().primary,
                             child: Container(
                               alignment: Alignment.center,
                               height: 36,
-                              padding: const EdgeInsets.symmetric(horizontal: 16),
-                              decoration:
-                                  BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(18)), border: !isActive ? Border.all(color: context.getColorScheme().secondary, width: 1) : null),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(18)),
+                                  border: !isActive
+                                      ? Border.all(
+                                          color: context
+                                              .getColorScheme()
+                                              .secondary,
+                                          width: 1)
+                                      : null),
                               child: CustomTextWidget(
                                 textToDisplay: System().getTitleHyppe(e),
-                                textStyle: context.getTextTheme().bodyText2?.copyWith(color: isActive ? context.getColorScheme().background : context.getColorScheme().secondary),
+                                textStyle: context
+                                    .getTextTheme()
+                                    .bodyMedium
+                                    ?.copyWith(
+                                        color: isActive
+                                            ? context
+                                                .getColorScheme()
+                                                .background
+                                            : context
+                                                .getColorScheme()
+                                                .secondary),
                               ),
                             ),
                           ),
@@ -169,22 +201,45 @@ class _AllSearchContentState extends State<AllSearchContent> {
             switch (type) {
               case HyppeType.HyppePic:
                 return fixPic.isNotNullAndEmpty()
-                    ? GridContentView(type: type, data: fixPic ?? [], isLoading: false, keyword: widget.keyword, api: TypeApiSearch.normal, controller: _scrollController, heightTab: 0.0)
+                    ? GridContentView(
+                        type: type,
+                        data: fixPic ?? [],
+                        isLoading: false,
+                        keyword: widget.keyword,
+                        api: TypeApiSearch.normal,
+                        controller: _scrollController,
+                        heightTab: 0.0)
                     : SearchNoResultImage(
                         locale: notifier.language,
                         keyword: notifier.searchController.text,
                       );
               case HyppeType.HyppeDiary:
                 return fixDiary.isNotNullAndEmpty()
-                    ? GridContentView(type: type, data: fixDiary ?? [], isLoading: false, keyword: widget.keyword, api: TypeApiSearch.normal, controller: _scrollController, heightTab: 0.0)
+                    ? GridContentView(
+                        type: type,
+                        data: fixDiary ?? [],
+                        isLoading: false,
+                        keyword: widget.keyword,
+                        api: TypeApiSearch.normal,
+                        controller: _scrollController,
+                        heightTab: 0.0)
                     : SearchNoResultImage(
                         locale: notifier.language,
                         keyword: notifier.searchController.text,
                       );
               case HyppeType.HyppeVid:
                 return fixVid.isNotNullAndEmpty()
-                    ? GridContentView(type: type, data: fixVid ?? [], isLoading: false, keyword: widget.keyword, api: TypeApiSearch.normal, controller: _scrollController, heightTab: 0.0)
-                    : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text);
+                    ? GridContentView(
+                        type: type,
+                        data: fixVid ?? [],
+                        isLoading: false,
+                        keyword: widget.keyword,
+                        api: TypeApiSearch.normal,
+                        controller: _scrollController,
+                        heightTab: 0.0)
+                    : SearchNoResultImage(
+                        locale: notifier.language,
+                        keyword: notifier.searchController.text);
             }
           })
         ],
@@ -215,19 +270,27 @@ class _AllSearchContentState extends State<AllSearchContent> {
                     Expanded(
                       child: CustomTextWidget(
                         textToDisplay: notifier.language.account ?? 'Account',
-                        textStyle: context.getTextTheme().bodyText1?.copyWith(color: context.getColorScheme().onBackground, fontWeight: FontWeight.w700),
+                        textStyle: context.getTextTheme().bodyLarge?.copyWith(
+                            color: context.getColorScheme().onBackground,
+                            fontWeight: FontWeight.w700),
                         textAlign: TextAlign.start,
                       ),
                     ),
                     GestureDetector(
                       onTap: () {
-                        widget.tabController.animateTo(1, duration: const Duration(seconds: 1));
+                        widget.tabController
+                            .animateTo(1, duration: const Duration(seconds: 1));
                       },
                       child: Row(
                         children: [
                           CustomTextWidget(
                             textToDisplay: notifier.language.other ?? 'Other',
-                            textStyle: context.getTextTheme().bodyText2?.copyWith(color: kHyppeBurem, fontWeight: FontWeight.w400),
+                            textStyle: context
+                                .getTextTheme()
+                                .bodyMedium
+                                ?.copyWith(
+                                    color: kHyppeBurem,
+                                    fontWeight: FontWeight.w400),
                             textAlign: TextAlign.start,
                           ),
                           const CustomIconWidget(
@@ -248,16 +311,27 @@ class _AllSearchContentState extends State<AllSearchContent> {
                       ? Column(
                           children: [
                             ...List.generate(
-                              (users?.length ?? 0) >= 3 ? 3 : users?.length ?? 0,
+                              (users?.length ?? 0) >= 3
+                                  ? 3
+                                  : users?.length ?? 0,
                               (index) => Padding(
                                 padding: const EdgeInsets.all(2.0),
                                 child: ListTile(
-                                  onTap: () => _system.navigateToProfile(context, users?[index].email ?? ''),
+                                  onTap: () => _system.navigateToProfile(
+                                      context, users?[index].email ?? ''),
                                   contentPadding: EdgeInsets.zero,
                                   title: Text("${users?[index].fullName}"),
                                   subtitle: Text(
-                                    isIndo ? (users?[index].statusID?.capitalizeFirstofEach ?? '') : (users?[index].statusEN?.capitalizeFirstofEach ?? ''),
-                                    style: context.getTextTheme().caption,
+                                    isIndo
+                                        ? (users?[index]
+                                                .statusID
+                                                ?.capitalizeFirstofEach ??
+                                            '')
+                                        : (users?[index]
+                                                .statusEN
+                                                ?.capitalizeFirstofEach ??
+                                            ''),
+                                    style: context.getTextTheme().bodySmall,
                                   ),
                                   leading: StoryColorValidator(
                                     haveStory: false,
@@ -266,7 +340,11 @@ class _AllSearchContentState extends State<AllSearchContent> {
                                       width: 50,
                                       height: 50,
                                       onTap: () {},
-                                      imageUrl: System().showUserPicture(users?[index].avatar?[0].mediaEndpoint?.split('_')[0]),
+                                      imageUrl: System().showUserPicture(
+                                          users?[index]
+                                              .avatar?[0]
+                                              .mediaEndpoint
+                                              ?.split('_')[0]),
                                       badge: users?[index].urluserBadge,
                                       following: true,
                                       onFollow: () {},
@@ -277,8 +355,12 @@ class _AllSearchContentState extends State<AllSearchContent> {
                             ),
                           ],
                         )
-                      : SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text)
-                  : SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text),
+                      : SearchNoResult(
+                          locale: notifier.language,
+                          keyword: notifier.searchController.text)
+                  : SearchNoResult(
+                      locale: notifier.language,
+                      keyword: notifier.searchController.text),
             ],
           ),
         ),
@@ -299,19 +381,27 @@ class _AllSearchContentState extends State<AllSearchContent> {
                     Expanded(
                       child: CustomTextWidget(
                         textToDisplay: notifier.language.hashtags ?? 'Hashtags',
-                        textStyle: context.getTextTheme().bodyText1?.copyWith(color: context.getColorScheme().onBackground, fontWeight: FontWeight.w700),
+                        textStyle: context.getTextTheme().bodyLarge?.copyWith(
+                            color: context.getColorScheme().onBackground,
+                            fontWeight: FontWeight.w700),
                         textAlign: TextAlign.start,
                       ),
                     ),
                     GestureDetector(
                       onTap: () {
-                        widget.tabController.animateTo(3, duration: const Duration(seconds: 1));
+                        widget.tabController
+                            .animateTo(3, duration: const Duration(seconds: 1));
                       },
                       child: Row(
                         children: [
                           CustomTextWidget(
                             textToDisplay: notifier.language.other ?? 'Other',
-                            textStyle: context.getTextTheme().bodyText2?.copyWith(color: kHyppeBurem, fontWeight: FontWeight.w400),
+                            textStyle: context
+                                .getTextTheme()
+                                .bodyMedium
+                                ?.copyWith(
+                                    color: kHyppeBurem,
+                                    fontWeight: FontWeight.w400),
                             textAlign: TextAlign.start,
                           ),
                           const CustomIconWidget(
@@ -338,15 +428,19 @@ class _AllSearchContentState extends State<AllSearchContent> {
                               return HashtagItem(
                                   onTap: () {
                                     notifier.selectedHashtag = data;
-                                    if (notifier.layout == SearchLayout.searchMore) {
+                                    if (notifier.layout ==
+                                        SearchLayout.searchMore) {
                                       notifier.isFromComplete = true;
                                     }
-                                    notifier.layout = SearchLayout.mainHashtagDetail;
+                                    notifier.layout =
+                                        SearchLayout.mainHashtagDetail;
                                   },
-                                  padding: const EdgeInsets.only(top: 10, bottom: 10),
+                                  padding: const EdgeInsets.only(
+                                      top: 10, bottom: 10),
                                   title: '${data.tag}',
                                   count: data.total ?? 0,
-                                  countContainer: notifier.language.posts ?? 'Posts');
+                                  countContainer:
+                                      notifier.language.posts ?? 'Posts');
                             } else {
                               return Container();
                             }
@@ -354,7 +448,9 @@ class _AllSearchContentState extends State<AllSearchContent> {
                         ),
                       ],
                     )
-                  : SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text),
+                  : SearchNoResult(
+                      locale: notifier.language,
+                      keyword: notifier.searchController.text),
             ],
           ),
         ),

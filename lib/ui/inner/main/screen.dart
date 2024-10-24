@@ -56,8 +56,10 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       FirebaseCrashlytics.instance.setCustomKey('layout', 'MainScreen');
       _mainNotifier = Provider.of<MainNotifier>(context, listen: false);
-      _preUploadNotifier = Provider.of<PreUploadContentNotifier>(context, listen: false);
-      _mainNotifier.globalKey = GlobalKey<NestedScrollViewState>(debugLabel: System().generateNonce());
+      _preUploadNotifier =
+          Provider.of<PreUploadContentNotifier>(context, listen: false);
+      _mainNotifier.globalKey = GlobalKey<NestedScrollViewState>(
+          debugLabel: System().generateNonce());
       _mainNotifier.pageInit(widget.args?.canShowAds ?? true);
       print("=========init main ${_mainNotifier.globalKey}");
 
@@ -99,13 +101,15 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
                 builder: Builder(
                   builder: (context) {
                     return Scaffold(
-                      backgroundColor: _themes.backgroundColor,
+                      backgroundColor: _themes.appBarTheme.backgroundColor,
                       body: AnimatedSwitcher(
                         duration: const Duration(milliseconds: 250),
-                        child: notifier.mainScreen(context, canShowAds, keyPostButton),
+                        child: notifier.mainScreen(
+                            context, canShowAds, keyPostButton),
                       ),
                       floatingActionButton: Visibility(
-                        visible: MediaQuery.of(context).viewInsets.bottom == 0.0,
+                        visible:
+                            MediaQuery.of(context).viewInsets.bottom == 0.0,
                         child: SizedBox(
                           child: FloatingActionButton(
                             onPressed: () {
@@ -124,14 +128,16 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
                                 defaultColor: false,
                                 color: Colors.white,
                                 // color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
-                                iconData: '${AssetPath.vectorPath}logo-purple.svg',
+                                iconData:
+                                    '${AssetPath.vectorPath}logo-purple.svg',
                                 height: 20,
                               ),
                             ),
                           ),
                         ),
                       ),
-                      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+                      floatingActionButtonLocation:
+                          FloatingActionButtonLocation.centerDocked,
 
                       bottomNavigationBar: Showcase(
                         key: keyPostButton,
@@ -139,9 +145,11 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
                         overlayOpacity: 0,
                         tooltipPosition: TooltipPosition.top,
                         title: "Upload",
-                        titleTextStyle: const TextStyle(fontSize: 12, color: kHyppeNotConnect),
+                        titleTextStyle: const TextStyle(
+                            fontSize: 12, color: kHyppeNotConnect),
                         titlePadding: const EdgeInsets.all(6),
-                        descTextStyle: const TextStyle(fontSize: 10, color: kHyppeNotConnect),
+                        descTextStyle: const TextStyle(
+                            fontSize: 10, color: kHyppeNotConnect),
                         descriptionPadding: const EdgeInsets.all(6),
                         description: tn.translate.tutorLanding5,
                         // tooltipBackgroundColor: Theme.of(context).primaryColor,
@@ -155,7 +163,8 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
                             children: [
                               const Text(
                                 "5/6",
-                                style: TextStyle(color: kHyppeBurem, fontSize: 10),
+                                style:
+                                    TextStyle(color: kHyppeBurem, fontSize: 10),
                               ),
                               GestureDetector(
                                   onTap: () {
@@ -164,7 +173,10 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
                                   },
                                   child: Text(
                                     tn.translate.next ?? '',
-                                    style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold),
                                   ))
                             ],
                           ),
@@ -180,8 +192,13 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
                                 child: IconButton(
                                   icon: CustomIconWidget(
                                     defaultColor: false,
-                                    color: notifier.pageIndex == 0 ? kHyppeTextLightPrimary : _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
-                                    iconData: notifier.pageIndex == 0 ? '${AssetPath.vectorPath}home-active.svg' : '${AssetPath.vectorPath}home.svg',
+                                    color: notifier.pageIndex == 0
+                                        ? kHyppeTextLightPrimary
+                                        : _themes.bottomNavigationBarTheme
+                                            .unselectedIconTheme?.color,
+                                    iconData: notifier.pageIndex == 0
+                                        ? '${AssetPath.vectorPath}home-active.svg'
+                                        : '${AssetPath.vectorPath}home.svg',
                                   ),
                                   onPressed: () async {
                                     print(notifier.pageIndex);
@@ -189,15 +206,20 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
 
                                     // } else {
                                     tapMenu(0, notifier, context);
-                                    print("==== has ${notifier.scrollController.hasClients}");
+                                    print(
+                                        "==== has ${notifier.scrollController.hasClients}");
                                     if (notifier.scrollController.hasClients) {
                                       if (globalTultipShow) {
                                         return;
                                       }
                                       if (mounted) {
                                         homeClick = true;
-                                        if (notifier.scrollController.offset > 0) {
-                                          notifier.scrollController.animateTo(0, duration: const Duration(milliseconds: 1000), curve: Curves.ease);
+                                        if (notifier.scrollController.offset >
+                                            0) {
+                                          notifier.scrollController.animateTo(0,
+                                              duration: const Duration(
+                                                  milliseconds: 1000),
+                                              curve: Curves.ease);
                                         }
                                       }
                                       // Routing.navigatorKey.currentState?.overlay?.context
@@ -210,7 +232,9 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
                                       //   notifier.scrollController.animateTo(0, duration: const Duration(milliseconds: 200), curve: Curves.elasticOut);
                                       // });
                                     }
-                                    Future.delayed(const Duration(milliseconds: 1000), () {});
+                                    Future.delayed(
+                                        const Duration(milliseconds: 1000),
+                                        () {});
 
                                     // }
                                   },
@@ -220,8 +244,13 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
                                 child: IconButton(
                                   icon: CustomIconWidget(
                                     defaultColor: false,
-                                    color: notifier.pageIndex == 1 ? kHyppeTextLightPrimary : _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
-                                    iconData: notifier.pageIndex == 1 ? '${AssetPath.vectorPath}search-active.svg' : '${AssetPath.vectorPath}search-nav.svg',
+                                    color: notifier.pageIndex == 1
+                                        ? kHyppeTextLightPrimary
+                                        : _themes.bottomNavigationBarTheme
+                                            .unselectedIconTheme?.color,
+                                    iconData: notifier.pageIndex == 1
+                                        ? '${AssetPath.vectorPath}search-active.svg'
+                                        : '${AssetPath.vectorPath}search-nav.svg',
                                   ),
                                   onPressed: () {
                                     print("ke menu search");
@@ -248,20 +277,28 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
                                   icon: Stack(children: [
                                     CustomIconWidget(
                                       defaultColor: false,
-                                      color: notifier.pageIndex == 3 ? kHyppeTextLightPrimary : _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
-                                      iconData: notifier.pageIndex == 3 ? '${AssetPath.vectorPath}notification-active.svg' : '${AssetPath.vectorPath}notification.svg',
+                                      color: notifier.pageIndex == 3
+                                          ? kHyppeTextLightPrimary
+                                          : _themes.bottomNavigationBarTheme
+                                              .unselectedIconTheme?.color,
+                                      iconData: notifier.pageIndex == 3
+                                          ? '${AssetPath.vectorPath}notification-active.svg'
+                                          : '${AssetPath.vectorPath}notification.svg',
                                     ),
                                     const NotificationCircle()
                                   ]),
                                   onPressed: () {
                                     tapMenu(3, notifier, context);
-                                    context.read<MainNotifier>().receivedReaction = false;
+                                    context
+                                        .read<MainNotifier>()
+                                        .receivedReaction = false;
                                   },
                                 ),
                               ),
                               Expanded(
                                 child: IconButton(
-                                  icon: const SizedBox(width: 32, child: Profile()),
+                                  icon: const SizedBox(
+                                      width: 32, child: Profile()),
                                   onPressed: () {
                                     print(notifier.pageIndex);
                                     tapMenu(4, notifier, context);
@@ -361,7 +398,8 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
       if (index == 3) {
         if (isGuest ?? false) {
           isactivealiplayer = true;
-          ShowBottomSheet().onLoginApp(Routing.navigatorKey.currentContext ?? context);
+          ShowBottomSheet()
+              .onLoginApp(Routing.navigatorKey.currentContext ?? context);
         } else {
           setState(() {
             'pageIndex now: $index'.logger();
@@ -382,7 +420,8 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
         });
         if (isGuest ?? false) {
           isactivealiplayer = true;
-          ShowBottomSheet().onLoginApp(Routing.navigatorKey.currentContext ?? context);
+          ShowBottomSheet()
+              .onLoginApp(Routing.navigatorKey.currentContext ?? context);
         }
       } else {
         setState(() {
@@ -394,7 +433,9 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
       MyAudioService.instance.pause();
       if (isGuest ?? false) {
         isactivealiplayer = true;
-        ShowBottomSheet().onLoginApp(Routing.navigatorKey.currentContext ?? context).whenComplete(() {
+        ShowBottomSheet()
+            .onLoginApp(Routing.navigatorKey.currentContext ?? context)
+            .whenComplete(() {
           print("----index $isPagePict");
           if (isPagePict) {
             MyAudioService.instance.playagain(false);

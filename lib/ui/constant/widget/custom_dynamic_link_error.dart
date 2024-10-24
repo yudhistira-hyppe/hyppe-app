@@ -9,7 +9,8 @@ import 'package:provider/provider.dart';
 class CustomDynamicLinkErrorWidget extends StatelessWidget {
   final Function? function;
 
-  const CustomDynamicLinkErrorWidget({Key? key, this.function}) : super(key: key);
+  const CustomDynamicLinkErrorWidget({Key? key, this.function})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +35,16 @@ class CustomDynamicLinkErrorWidget extends StatelessWidget {
                   defaultColor: false,
                 ),
                 eightPx,
-                CustomTextWidget(textToDisplay: _language.sorryTheresNothingHere ?? '', textStyle: theme.textTheme.subtitle1),
+                CustomTextWidget(
+                    textToDisplay: _language.sorryTheresNothingHere ?? '',
+                    textStyle: theme.textTheme.titleMedium),
                 fourPx,
                 CustomTextWidget(
-                    textToDisplay: _language.theContentMayHaveBeenRemovedOrTheLinkMayBeBroken ?? '',
-                    textStyle: theme.textTheme.caption?.copyWith(color: theme.colorScheme.secondary))
+                    textToDisplay: _language
+                            .theContentMayHaveBeenRemovedOrTheLinkMayBeBroken ??
+                        '',
+                    textStyle: theme.textTheme.bodySmall
+                        ?.copyWith(color: theme.colorScheme.secondary))
               ],
             ),
           )

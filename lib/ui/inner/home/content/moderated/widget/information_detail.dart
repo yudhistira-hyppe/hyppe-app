@@ -17,9 +17,6 @@ class InformationDetail extends StatefulWidget {
 }
 
 class _InformationDetailState extends State<InformationDetail> {
-
-
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -58,7 +55,10 @@ class _InformationDetailState extends State<InformationDetail> {
               CustomTextWidget(
                 textAlign: TextAlign.left,
                 textToDisplay: 'Visibility',
-                textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w600),
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(fontWeight: FontWeight.w600),
               )
             ],
           ),
@@ -66,12 +66,15 @@ class _InformationDetailState extends State<InformationDetail> {
           CustomTextWidget(
               maxLines: 2,
               textAlign: TextAlign.left,
-              textStyle: Theme.of(context).textTheme.bodyText2,
-              textToDisplay: 'Your content contains pornographic or violent content so we have to block your content.')
+              textStyle: Theme.of(context).textTheme.bodyMedium,
+              textToDisplay:
+                  'Your content contains pornographic or violent content so we have to block your content.')
         ],
       ),
       padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0), color: Theme.of(context).colorScheme.surface),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4.0),
+          color: Theme.of(context).colorScheme.surface),
     );
   }
 
@@ -81,12 +84,18 @@ class _InformationDetailState extends State<InformationDetail> {
       function: () => Routing().moveBack(),
       width: MediaQuery.of(context).size.width,
       buttonStyle: Theme.of(context).elevatedButtonTheme.style?.copyWith(
-          backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.background),
-          overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.surface),
-          side: MaterialStateProperty.all(BorderSide(color: Theme.of(context).colorScheme.primary))),
+          backgroundColor: MaterialStateProperty.all(
+              Theme.of(context).colorScheme.background),
+          overlayColor:
+              MaterialStateProperty.all(Theme.of(context).colorScheme.surface),
+          side: MaterialStateProperty.all(
+              BorderSide(color: Theme.of(context).colorScheme.primary))),
       child: CustomTextWidget(
         textToDisplay: context.read<TranslateNotifierV2>().translate.back ?? "",
-        textStyle: Theme.of(context).textTheme.button?.copyWith(color: Theme.of(context).colorScheme.primary),
+        textStyle: Theme.of(context)
+            .textTheme
+            .labelLarge
+            ?.copyWith(color: Theme.of(context).colorScheme.primary),
       ),
     );
   }
@@ -99,21 +108,24 @@ class _InformationDetailState extends State<InformationDetail> {
           TextSpan(
             text:
                 'Explicit content meant to be sexually gratifying is not allowed on Hyppe. Posting pornography may result in content removal. Videos containing fetish content will be removed or age-restricted. In most cases, violent, graphic, or humiliating fetishes are not allowed on Hyppe.\n\n',
-            style: Theme.of(context).textTheme.bodyText2,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
           TextSpan(
             text:
                 "If you find content that violates this policy, report it. If you've found a few videos or comments that you would like to report, you can report the content.\n\n",
-            style: Theme.of(context).textTheme.bodyText2,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
           TextSpan(
             text:
                 "Sexually explicit content featuring minors and content that sexually exploits minors is not allowed on Hyppe. We report content containing child sexual abuse imagery to the National Center for Missing and Exploited Children, who work with global law enforcement agencies.",
-            style: Theme.of(context).textTheme.bodyText2,
+            style: Theme.of(context).textTheme.bodyMedium,
           )
         ],
       ),
-      style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w600),
+      style: Theme.of(context)
+          .textTheme
+          .bodyMedium
+          ?.copyWith(fontWeight: FontWeight.w600),
     );
   }
 

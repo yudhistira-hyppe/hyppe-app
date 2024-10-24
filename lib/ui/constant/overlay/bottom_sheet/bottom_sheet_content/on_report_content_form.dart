@@ -13,10 +13,12 @@ class OnReportContentFormBottomSheet extends StatefulWidget {
   const OnReportContentFormBottomSheet({Key? key}) : super(key: key);
 
   @override
-  State<OnReportContentFormBottomSheet> createState() => _OnReportContentFormBottomSheetState();
+  State<OnReportContentFormBottomSheet> createState() =>
+      _OnReportContentFormBottomSheetState();
 }
 
-class _OnReportContentFormBottomSheetState extends State<OnReportContentFormBottomSheet> {
+class _OnReportContentFormBottomSheetState
+    extends State<OnReportContentFormBottomSheet> {
   Map<String, int> report = {};
   int _currentReport = 1;
   static final _routing = Routing();
@@ -62,7 +64,10 @@ class _OnReportContentFormBottomSheetState extends State<OnReportContentFormBott
                         children: [
                           CustomTextWidget(
                             textToDisplay: 'Dont want to see this',
-                            textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontWeight: FontWeight.bold),
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .titleLarge!
+                                .copyWith(fontWeight: FontWeight.bold),
                           ),
                           InkWell(
                               onTap: () {
@@ -78,7 +83,10 @@ class _OnReportContentFormBottomSheetState extends State<OnReportContentFormBott
                   ),
                   CustomTextWidget(
                     textToDisplay: "Tell us why you don't want to see this",
-                    textStyle: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
@@ -98,7 +106,8 @@ class _OnReportContentFormBottomSheetState extends State<OnReportContentFormBott
                         title: CustomTextWidget(
                           textAlign: TextAlign.left,
                           textToDisplay: report.keys.toList()[index],
-                          textStyle: Theme.of(context).primaryTextTheme.titleSmall,
+                          textStyle:
+                              Theme.of(context).primaryTextTheme.titleSmall,
                         ),
                         controlAffinity: ListTileControlAffinity.trailing,
                         activeColor: Theme.of(context).colorScheme.primary,
@@ -111,23 +120,29 @@ class _OnReportContentFormBottomSheetState extends State<OnReportContentFormBott
                 width: SizeConfig.screenWidth,
                 height: 50,
                 buttonStyle: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(kHyppePrimary),
-                    overlayColor: MaterialStateProperty.all<Color>(kHyppePrimary),
-                    foregroundColor: MaterialStateProperty.all<Color>(kHyppePrimary),
-                    shadowColor: MaterialStateProperty.all<Color>(kHyppePrimary)),
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(kHyppePrimary),
+                    overlayColor:
+                        MaterialStateProperty.all<Color>(kHyppePrimary),
+                    foregroundColor:
+                        MaterialStateProperty.all<Color>(kHyppePrimary),
+                    shadowColor:
+                        MaterialStateProperty.all<Color>(kHyppePrimary)),
                 function: () {
                   print('asd');
                   Navigator.pop(context, true);
 
                   // _showMessage("Your feedback will help us to improve your experience.");
-                  _showMessage(" Thanks for letting us know", "Your feedback will help us to improve your experience.");
+                  _showMessage(" Thanks for letting us know",
+                      "Your feedback will help us to improve your experience.");
                 },
                 child: Selector<UserInterestNotifier, bool>(
                   selector: (context, notifier) => notifier.isLoading,
                   builder: (_, value, __) {
                     return CustomTextWidget(
                       textToDisplay: 'Submit',
-                      textStyle: _textTheme.bodyText2!.copyWith(color: kHyppeLightButtonText),
+                      textStyle: _textTheme.bodyMedium!
+                          .copyWith(color: kHyppeLightButtonText),
                     );
                   },
                 ),

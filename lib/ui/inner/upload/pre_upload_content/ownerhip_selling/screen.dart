@@ -53,7 +53,10 @@ class _OwnershipSellingScreenState extends State<OwnershipSellingScreen> {
           ),
           title: CustomTextWidget(
             textToDisplay: notifier.language.ownershipSelling ?? '',
-            textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
+            textStyle: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(fontWeight: FontWeight.bold),
           ),
         ),
         body: notifier.isloadingSetting
@@ -69,18 +72,25 @@ class _OwnershipSellingScreenState extends State<OwnershipSellingScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CustomTextWidget(
-                            textToDisplay: notifier.language.registerContentOwnership ?? '',
-                            textStyle: Theme.of(context).primaryTextTheme.bodyText2,
+                            textToDisplay:
+                                notifier.language.registerContentOwnership ??
+                                    '',
+                            textStyle:
+                                Theme.of(context).primaryTextTheme.bodyMedium,
                           ),
                           CustomCheckButton(
                             value: notifier.certified,
                             onChanged: (value) {
-                              if (notifier.isEdit && notifier.certified && notifier.ownershipEULA) {
+                              if (notifier.isEdit &&
+                                  notifier.certified &&
+                                  notifier.ownershipEULA) {
                               } else {
                                 notifier.onOwnershipEULA(context);
                               }
                             },
-                            disable: notifier.isEdit && notifier.certified && notifier.ownershipEULA,
+                            disable: notifier.isEdit &&
+                                notifier.certified &&
+                                notifier.ownershipEULA,
                           ),
                         ],
                       ),
@@ -89,8 +99,11 @@ class _OwnershipSellingScreenState extends State<OwnershipSellingScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 CustomTextWidget(
-                                  textToDisplay: notifier.language.sellContent ?? '',
-                                  textStyle: Theme.of(context).primaryTextTheme.bodyText2,
+                                  textToDisplay:
+                                      notifier.language.sellContent ?? '',
+                                  textStyle: Theme.of(context)
+                                      .primaryTextTheme
+                                      .bodyMedium,
                                 ),
                                 CustomSwitchButton(
                                   value: notifier.toSell,
@@ -110,18 +123,29 @@ class _OwnershipSellingScreenState extends State<OwnershipSellingScreen> {
                                       ShowBottomSheet().onShowColouredSheet(
                                         context,
                                         'Tidak dapat menjual konten ini',
-                                        subCaption: 'Kamu tidak dapat menjual konten ini karena konten ini sedang terdaftar di challenge',
+                                        subCaption:
+                                            'Kamu tidak dapat menjual konten ini karena konten ini sedang terdaftar di challenge',
                                         maxLines: 3,
                                         borderRadius: 8,
                                         color: kHyppeBorderDanger,
-                                        iconSvg: "${AssetPath.vectorPath}info-moderate.svg",
+                                        iconSvg:
+                                            "${AssetPath.vectorPath}info-moderate.svg",
                                         iconColor: Colors.white,
-                                        padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 12),
-                                        margin: EdgeInsets.only(left: 10, right: 10, bottom: SizeConfig.scaleDiagonal * 60),
+                                        padding: const EdgeInsets.only(
+                                            left: 16,
+                                            right: 16,
+                                            top: 12,
+                                            bottom: 12),
+                                        margin: EdgeInsets.only(
+                                            left: 10,
+                                            right: 10,
+                                            bottom:
+                                                SizeConfig.scaleDiagonal * 60),
                                         closeWidget: GestureDetector(
                                           onTap: () => Routing().moveBack(),
                                           child: const CustomIconWidget(
-                                            iconData: "${AssetPath.vectorPath}close_ads.svg",
+                                            iconData:
+                                                "${AssetPath.vectorPath}close_ads.svg",
                                             defaultColor: false,
                                             color: Colors.white,
                                           ),
@@ -143,8 +167,11 @@ class _OwnershipSellingScreenState extends State<OwnershipSellingScreen> {
                           fivePx,
                           Expanded(
                             child: CustomTextWidget(
-                              textToDisplay: notifier.language.marketContent1 ?? '',
-                              textStyle: Theme.of(context).textTheme.caption ?? const TextStyle(),
+                              textToDisplay:
+                                  notifier.language.marketContent1 ?? '',
+                              textStyle:
+                                  Theme.of(context).textTheme.bodySmall ??
+                                      const TextStyle(),
                               maxLines: 3,
                               textAlign: TextAlign.start,
                             ),
@@ -167,36 +194,49 @@ class _OwnershipSellingScreenState extends State<OwnershipSellingScreen> {
                                       ),
                                     ),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          notifier.language.includeTotalViews ?? '',
-                                          style: Theme.of(context).textTheme.bodyText2,
+                                          notifier.language.includeTotalViews ??
+                                              '',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium,
                                         ),
                                         CustomCheckButton(
                                           value: notifier.includeTotalViews,
-                                          onChanged: (value) => notifier.includeTotalViews = value ?? false,
+                                          onChanged: (value) =>
+                                              notifier.includeTotalViews =
+                                                  value ?? false,
                                         ),
                                       ],
                                     ),
                                   ),
-                                  SizedBox(height: 10 * SizeConfig.scaleDiagonal),
+                                  SizedBox(
+                                      height: 10 * SizeConfig.scaleDiagonal),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        notifier.language.includeTotalLikes ?? '',
-                                        style: Theme.of(context).textTheme.bodyText2,
+                                        notifier.language.includeTotalLikes ??
+                                            '',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
                                       ),
                                       CustomCheckButton(
                                           value: notifier.includeTotalLikes,
                                           onChanged: (value) {
                                             //print("Like" + value.toString());
-                                            notifier.includeTotalLikes = value ?? false;
+                                            notifier.includeTotalLikes =
+                                                value ?? false;
                                           }),
                                     ],
                                   ),
-                                  SizedBox(height: 10 * SizeConfig.scaleDiagonal),
+                                  SizedBox(
+                                      height: 10 * SizeConfig.scaleDiagonal),
                                 ],
                               )
                             : Container(),
@@ -205,8 +245,14 @@ class _OwnershipSellingScreenState extends State<OwnershipSellingScreen> {
                                 alignment: AlignmentDirectional.bottomStart,
                                 children: [
                                   Container(
-                                    padding: const EdgeInsets.only(left: 35, right: 10),
-                                    decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: BorderRadius.all(Radius.circular(8))
+                                    padding: const EdgeInsets.only(
+                                        left: 35, right: 10),
+                                    decoration: BoxDecoration(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .surface,
+                                        borderRadius:
+                                            BorderRadius.all(Radius.circular(8))
                                         // border: Border(
                                         //   bottom: BorderSide(
                                         //     color:
@@ -219,12 +265,14 @@ class _OwnershipSellingScreenState extends State<OwnershipSellingScreen> {
                                       maxLines: 1,
                                       validator: (String? input) {
                                         if (input?.isEmpty ?? true) {
-                                          return notifier.language.pleaseSetPrice;
+                                          return notifier
+                                              .language.pleaseSetPrice;
                                         } else {
                                           return null;
                                         }
                                       },
-                                      enabled: notifier.isSavedPrice ? false : true,
+                                      enabled:
+                                          notifier.isSavedPrice ? false : true,
                                       controller: notifier.priceController,
                                       onChanged: (val) {
                                         if (val.isNotEmpty) {
@@ -238,42 +286,67 @@ class _OwnershipSellingScreenState extends State<OwnershipSellingScreen> {
                                       cursorColor: const Color(0xff8A3181),
                                       textInputAction: TextInputAction.done,
                                       keyboardType: TextInputType.number,
-                                      inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly, CurrencyInputFormatter()], // Only numbers can be entered
-                                      style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.digitsOnly,
+                                        CurrencyInputFormatter()
+                                      ], // Only numbers can be entered
+                                      style: textTheme.bodyMedium?.copyWith(
+                                          fontWeight: FontWeight.bold),
                                       decoration: InputDecoration(
                                         errorBorder: InputBorder.none,
-                                        hintStyle: textTheme.bodyText2,
+                                        hintStyle: textTheme.bodyMedium,
                                         enabledBorder: InputBorder.none,
                                         focusedBorder: InputBorder.none,
                                         disabledBorder: InputBorder.none,
                                         focusedErrorBorder: InputBorder.none,
-                                        contentPadding: const EdgeInsets.only(bottom: 2),
+                                        contentPadding:
+                                            const EdgeInsets.only(bottom: 2),
                                       ),
                                     ),
                                   ),
                                   const Padding(
-                                    padding: EdgeInsets.only(bottom: 18, left: 10),
+                                    padding:
+                                        EdgeInsets.only(bottom: 18, left: 10),
                                     child: CustomIconWidget(
-                                      iconData: "${AssetPath.vectorPath}ic-coin.svg",
+                                      iconData:
+                                          "${AssetPath.vectorPath}ic-coin.svg",
                                       height: 18,
                                       defaultColor: false,
                                     ),
                                     // Text(
                                     //   notifier.language.rp ?? 'Rp',
-                                    //   style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
+                                    //   style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
                                     // ),
                                   ),
                                   Positioned(
                                     right: 4,
                                     top: 8,
                                     child: GestureDetector(
-                                      onTap: () => FocusScope.of(context).unfocus(),
+                                      onTap: () =>
+                                          FocusScope.of(context).unfocus(),
                                       child: Container(
-                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: notifier.priceController.text != '' ? kHyppePrimary : kHyppeDisabled),
-                                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            color:
+                                                notifier.priceController.text !=
+                                                        ''
+                                                    ? kHyppePrimary
+                                                    : kHyppeDisabled),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8, horizontal: 12),
                                         child: Text(
                                           notifier.language.setPrice ?? '',
-                                          style: Theme.of(context).textTheme.caption?.copyWith(color: notifier.priceController.text != '' ? kHyppeLightButtonText : kHyppeSecondary),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall
+                                              ?.copyWith(
+                                                  color: notifier
+                                                              .priceController
+                                                              .text !=
+                                                          ''
+                                                      ? kHyppeLightButtonText
+                                                      : kHyppeSecondary),
                                         ),
                                       ),
                                     ),
@@ -281,11 +354,16 @@ class _OwnershipSellingScreenState extends State<OwnershipSellingScreen> {
                                 ],
                               )
                             : Container(),
-                        notifier.toSell && notifier.isWarning && notifier.priceController.text != ''
+                        notifier.toSell &&
+                                notifier.isWarning &&
+                                notifier.priceController.text != ''
                             ? CustomTextWidget(
                                 textAlign: TextAlign.start,
-                                textToDisplay:
-                                    notifier.language.localeDatetime == 'id' ? 'Wajib diisi dengan harga kelipatan = 10 (contoh 10, 20,...dst)' : 'Price must be a multiple of 10 (e.g., 10, 20, etc.)',
+                                textToDisplay: notifier
+                                            .language.localeDatetime ==
+                                        'id'
+                                    ? 'Wajib diisi dengan harga kelipatan = 10 (contoh 10, 20,...dst)'
+                                    : 'Price must be a multiple of 10 (e.g., 10, 20, etc.)',
                                 textStyle: const TextStyle(color: kHyppeDanger),
                               )
                             : Container()
@@ -299,17 +377,25 @@ class _OwnershipSellingScreenState extends State<OwnershipSellingScreen> {
           child: CustomTextButton(
             onPressed: notifier.certified
                 ? () {
-                    if (!notifier.toSell && (notifier.priceController.text == '' || notifier.priceController.text == '0')) {
+                    if (!notifier.toSell &&
+                        (notifier.priceController.text == '' ||
+                            notifier.priceController.text == '0')) {
                       Routing().moveBack();
                     } else {
                       notifier.submitOwnership(context, withAlert: true);
                     }
                   }
                 : null,
-            style: ButtonStyle(backgroundColor: notifier.certified ? MaterialStateProperty.all(kHyppePrimary) : MaterialStateProperty.all(kHyppeDisabled)),
+            style: ButtonStyle(
+                backgroundColor: notifier.certified
+                    ? MaterialStateProperty.all(kHyppePrimary)
+                    : MaterialStateProperty.all(kHyppeDisabled)),
             child: CustomTextWidget(
               textToDisplay: notifier.language.confirm ?? 'confirm',
-              textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+              textStyle: Theme.of(context)
+                  .textTheme
+                  .labelLarge
+                  ?.copyWith(color: kHyppeLightButtonText),
             ),
           ),
         ),

@@ -20,7 +20,8 @@ class BankAccount extends StatefulWidget {
 
 class _BankAccountState extends State<BankAccount> {
   final ScrollController _scrollController = ScrollController();
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'BankAccount');
@@ -48,7 +49,9 @@ class _BankAccountState extends State<BankAccount> {
             textToDisplay: '${notifier2.translate.bankAccount}',
           ),
           actions: [
-            IconButton(onPressed: ()=>notifier.showDialogHelp(context), icon: const Icon(Icons.info_outline)),
+            IconButton(
+                onPressed: () => notifier.showDialogHelp(context),
+                icon: const Icon(Icons.info_outline)),
             // CustomTextButton(
             //   onPressed: () {
             //     notifier.showDialogHelp(context);
@@ -77,10 +80,20 @@ class _BankAccountState extends State<BankAccount> {
                     textWidget: Column(
                     children: [
                       CustomTextWidget(
-                          textToDisplay: notifier2.translate.noSavedAccountYet ?? '', textStyle: Theme.of(context).textTheme.subtitle1?.copyWith(color: Theme.of(context).colorScheme.onBackground)),
+                          textToDisplay:
+                              notifier2.translate.noSavedAccountYet ?? '',
+                          textStyle: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground)),
                       eightPx,
                       CustomTextWidget(
-                        textToDisplay: notifier2.translate.addYourBankAccountForAnEasierWithdraw ?? '',
+                        textToDisplay: notifier2.translate
+                                .addYourBankAccountForAnEasierWithdraw ??
+                            '',
                         maxLines: 4,
                       ),
                     ],
@@ -164,12 +177,19 @@ class _BankAccountState extends State<BankAccount> {
             onPressed: (notifier.dataAcccount?.length ?? 0) >= 3
                 ? null
                 : () {
-                    notifier.showButtomSheetAllBankList(context, notifier2.translate, false);
+                    notifier.showButtomSheetAllBankList(
+                        context, notifier2.translate, false);
                   },
-            style: ButtonStyle(backgroundColor: (notifier.dataAcccount?.length ?? 0) >= 3 ? MaterialStateProperty.all(kHyppeDisabled) : MaterialStateProperty.all(kHyppePrimary)),
+            style: ButtonStyle(
+                backgroundColor: (notifier.dataAcccount?.length ?? 0) >= 3
+                    ? MaterialStateProperty.all(kHyppeDisabled)
+                    : MaterialStateProperty.all(kHyppePrimary)),
             child: CustomTextWidget(
               textToDisplay: notifier2.translate.addBankAccount ?? '',
-              textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+              textStyle: Theme.of(context)
+                  .textTheme
+                  .labelLarge
+                  ?.copyWith(color: kHyppeLightButtonText),
             ),
           ),
         ),

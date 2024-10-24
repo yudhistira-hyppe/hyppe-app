@@ -19,8 +19,10 @@ class SearchNoResult extends StatelessWidget {
     return Container(
       margin: margin,
       child: CustomTextWidget(
-        textToDisplay: keyword.isEmpty ? '${locale.noData}' :'${locale.noResultsFor} "$keyword"',
-        textStyle: context.getTextTheme().bodyText1,
+        textToDisplay: keyword.isEmpty
+            ? '${locale.noData}'
+            : '${locale.noResultsFor} "$keyword"',
+        textStyle: context.getTextTheme().bodyLarge,
       ),
     );
   }

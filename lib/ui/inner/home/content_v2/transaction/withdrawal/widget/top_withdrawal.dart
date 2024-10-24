@@ -15,7 +15,8 @@ import 'package:provider/provider.dart';
 
 class TopWithdrawalWodget extends StatelessWidget {
   final LocalizationModelV2 translate;
-  const TopWithdrawalWodget({Key? key, required this.translate}) : super(key: key);
+  const TopWithdrawalWodget({Key? key, required this.translate})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,7 @@ class TopWithdrawalWodget extends StatelessWidget {
               children: [
                 CustomTextWidget(
                   textToDisplay: 'Hyppe Ballance',
-                  textStyle: Theme.of(context).textTheme.subtitle2,
+                  textStyle: Theme.of(context).textTheme.titleSmall,
                 ),
                 fivePx,
                 GestureDetector(
@@ -55,13 +56,17 @@ class TopWithdrawalWodget extends StatelessWidget {
             ),
             twelvePx,
             CustomTextWidget(
-              textToDisplay: System().currencyFormat(amount: notifier.accountBalance?.totalsaldo ?? 0),
-              textStyle: Theme.of(context).primaryTextTheme.headline5?.copyWith(fontWeight: FontWeight.w700),
+              textToDisplay: System().currencyFormat(
+                  amount: notifier.accountBalance?.totalsaldo ?? 0),
+              textStyle: Theme.of(context)
+                  .primaryTextTheme
+                  .headlineSmall
+                  ?.copyWith(fontWeight: FontWeight.w700),
             ),
             thirtyTwoPx,
             CustomTextWidget(
               textToDisplay: 'Amount',
-              textStyle: Theme.of(context).textTheme.subtitle2,
+              textStyle: Theme.of(context).textTheme.titleSmall,
             ),
             twentyPx,
             Stack(
@@ -91,11 +96,14 @@ class TopWithdrawalWodget extends StatelessWidget {
                         formatter: NumberFormat.decimalPattern('id'),
                       )
                     ], // Only numbers can be entered
-                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
                     decoration: InputDecoration(
                       fillColor: kHyppePrimary,
                       errorBorder: InputBorder.none,
-                      hintStyle: Theme.of(context).textTheme.bodyText2,
+                      hintStyle: Theme.of(context).textTheme.bodyMedium,
                       enabledBorder: InputBorder.none,
                       focusedBorder: InputBorder.none,
                       disabledBorder: InputBorder.none,
@@ -105,15 +113,21 @@ class TopWithdrawalWodget extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)),
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(8),
+                        bottomLeft: Radius.circular(8)),
                     border: Border.all(color: kHyppeLightInactive1),
                     color: kHyppeLightSurface,
                   ),
                   child: Text(
                     translate.rp ?? 'Rp',
-                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -121,9 +135,13 @@ class TopWithdrawalWodget extends StatelessWidget {
             ),
             fivePx,
             CustomTextWidget(
-              textToDisplay: notifier.errorNoBalance != '' ? notifier.errorNoBalance : "Minimum Withdrawal Rp 50.000",
+              textToDisplay: notifier.errorNoBalance != ''
+                  ? notifier.errorNoBalance
+                  : "Minimum Withdrawal Rp 50.000",
               textStyle: TextStyle(
-                color: notifier.errorNoBalance != '' ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.secondary,
+                color: notifier.errorNoBalance != ''
+                    ? Theme.of(context).colorScheme.error
+                    : Theme.of(context).colorScheme.secondary,
               ),
             ),
             twentyFourPx,
@@ -136,18 +154,27 @@ class TopWithdrawalWodget extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                      notifier.amountWithdrawalController.text = System().numberFormat(amount: (index + 1) * 50000);
-                      notifier.amountWithDrawal = ((index + 1) * 50000).toString();
+                      notifier.amountWithdrawalController.text =
+                          System().numberFormat(amount: (index + 1) * 50000);
+                      notifier.amountWithDrawal =
+                          ((index + 1) * 50000).toString();
                     },
                     child: Container(
                       margin: const EdgeInsets.only(right: 10),
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.background,
-                        borderRadius: const BorderRadius.all(Radius.circular(10)),
-                        border: Border.all(color: notifier.amountWithDrawal == ((index + 1) * 50000).toString() ? kHyppePrimary : kHyppeLightInactive1),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                        border: Border.all(
+                            color: notifier.amountWithDrawal ==
+                                    ((index + 1) * 50000).toString()
+                                ? kHyppePrimary
+                                : kHyppeLightInactive1),
                       ),
-                      child: Text('${System().currencyFormat(amount: (index + 1) * 50000)} '),
+                      child: Text(
+                          '${System().currencyFormat(amount: (index + 1) * 50000)} '),
                     ),
                   );
                 },

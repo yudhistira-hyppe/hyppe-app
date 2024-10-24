@@ -15,7 +15,8 @@ class ButtonWithdrawalWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'ButtonWithdrawalWidget');
+    FirebaseCrashlytics.instance
+        .setCustomKey('layout', 'ButtonWithdrawalWidget');
     return Consumer<TransactionNotifier>(
       builder: (_, notifier, __) => SizedBox(
         width: SizeConfig.screenWidth,
@@ -28,12 +29,18 @@ class ButtonWithdrawalWidget extends StatelessWidget {
                   }
                 }
               : null,
-          style: ButtonStyle(backgroundColor: notifier.withdrawalButton() ? MaterialStateProperty.all(kHyppePrimary) : MaterialStateProperty.all(kHyppeDisabled)),
+          style: ButtonStyle(
+              backgroundColor: notifier.withdrawalButton()
+                  ? MaterialStateProperty.all(kHyppePrimary)
+                  : MaterialStateProperty.all(kHyppeDisabled)),
           child: notifier.isLoadingSummaryWithdraw
               ? const CustomLoading()
               : CustomTextWidget(
                   textToDisplay: translate?.next ?? '',
-                  textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                  textStyle: Theme.of(context)
+                      .textTheme
+                      .labelLarge
+                      ?.copyWith(color: kHyppeLightButtonText),
                 ),
         ),
       ),

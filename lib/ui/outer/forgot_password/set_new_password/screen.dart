@@ -28,11 +28,11 @@ class SetNewPassword extends StatefulWidget {
 }
 
 class _SetNewPasswordState extends State<SetNewPassword> {
-
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'SetNewPassword');
-    final notifier = Provider.of<ForgotPasswordNotifier>(context, listen: false);
+    final notifier =
+        Provider.of<ForgotPasswordNotifier>(context, listen: false);
     notifier.initStateNewPass();
     super.initState();
   }
@@ -42,7 +42,10 @@ class _SetNewPasswordState extends State<SetNewPassword> {
     final translate = context.read<TranslateNotifierV2>().translate;
     return Consumer<ForgotPasswordNotifier>(
       builder: (_, notifier, __) {
-        final isMatch = notifier.passwordConfirmController.text.isNotEmpty ? notifier.passwordController.text == notifier.passwordConfirmController.text : true;
+        final isMatch = notifier.passwordConfirmController.text.isNotEmpty
+            ? notifier.passwordController.text ==
+                notifier.passwordConfirmController.text
+            : true;
         return Scaffold(
           appBar: AppBar(
             leading: CustomIconButtonWidget(
@@ -58,7 +61,10 @@ class _SetNewPasswordState extends State<SetNewPassword> {
             ),
             title: CustomTextWidget(
               textToDisplay: translate.createNewPassword ?? '',
-              textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontWeight: FontWeight.w700),
+              textStyle: Theme.of(context)
+                  .textTheme
+                  .bodyLarge
+                  ?.copyWith(fontWeight: FontWeight.w700),
             ),
           ),
           body: SafeArea(
@@ -84,53 +90,92 @@ class _SetNewPasswordState extends State<SetNewPassword> {
                             inputAreaHeight: 55 * SizeConfig.scaleDiagonal,
                             inputAreaWidth: SizeConfig.screenWidth!,
                             textEditingController: notifier.passwordController,
-                            style: Theme.of(context).textTheme.bodyText1,
+                            style: Theme.of(context).textTheme.bodyLarge,
                             obscureText: notifier.hidePassword,
-                            inputFormatter: [FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9!@#\$%^&*_]'))],
+                            inputFormatter: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp('[a-zA-Z0-9!@#\$%^&*_]'))
+                            ],
                             textInputType: TextInputType.visiblePassword,
                             onChanged: (v) => notifier.password = v,
                             inputDecoration: InputDecoration(
                               counterText: '',
                               hintText: notifier.language.enterPassword,
                               isDense: true,
-                              contentPadding: const EdgeInsets.only(right: 16, bottom: 16),
+                              contentPadding:
+                                  const EdgeInsets.only(right: 16, bottom: 16),
                               labelText: notifier.language.newPassword,
-                              labelStyle: Theme.of(context).textTheme.bodyText1!.copyWith(),
+                              labelStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(),
                               //     color: notifier.incorrect
                               //         ? Theme.of(context).colorScheme.error
                               //         : notifier.passwordFocus.hasFocus
                               //             ? Theme.of(context).colorScheme.primary
                               //             : null),
                               prefixIconConstraints: BoxConstraints(
-                                minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!),
+                                minWidth: SizeWidget().calculateSize(
+                                    30.0,
+                                    SizeWidget.baseWidthXD,
+                                    SizeConfig.screenWidth!),
                               ),
                               suffixIconConstraints: BoxConstraints(
-                                minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!),
+                                minWidth: SizeWidget().calculateSize(
+                                    30.0,
+                                    SizeWidget.baseWidthXD,
+                                    SizeConfig.screenWidth!),
                               ),
                               prefixIcon: Transform.translate(
-                                offset: Offset(SizeWidget().calculateSize(-5.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!), 0.0),
+                                offset: Offset(
+                                    SizeWidget().calculateSize(
+                                        -5.0,
+                                        SizeWidget.baseWidthXD,
+                                        SizeConfig.screenWidth!),
+                                    0.0),
                                 child: Transform.scale(
-                                  scale: SizeWidget().calculateSize(1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
-                                  child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}lock.svg"),
+                                  scale: SizeWidget().calculateSize(
+                                      1.2,
+                                      SizeWidget.baseHeightXD,
+                                      SizeConfig.screenHeight!),
+                                  child: const CustomIconWidget(
+                                      iconData:
+                                          "${AssetPath.vectorPath}lock.svg"),
                                 ),
                               ),
                               suffixIcon: Transform.scale(
-                                scale: SizeWidget().calculateSize(1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
+                                scale: SizeWidget().calculateSize(
+                                    1.2,
+                                    SizeWidget.baseHeightXD,
+                                    SizeConfig.screenHeight!),
                                 child: CustomTextButton(
                                   style: ButtonStyle(
                                     alignment: const Alignment(0.75, 0.0),
-                                    minimumSize: MaterialStateProperty.all(Size.zero),
-                                    padding: MaterialStateProperty.all(EdgeInsets.zero),
+                                    minimumSize:
+                                        MaterialStateProperty.all(Size.zero),
+                                    padding: MaterialStateProperty.all(
+                                        EdgeInsets.zero),
                                     // overlayColor: MaterialStateProperty.all(Colors.transparent),
                                   ),
                                   child: CustomIconWidget(
-                                    iconData: notifier.hidePassword ? '${AssetPath.vectorPath}eye-off.svg' : '${AssetPath.vectorPath}eye.svg',
+                                    iconData: notifier.hidePassword
+                                        ? '${AssetPath.vectorPath}eye-off.svg'
+                                        : '${AssetPath.vectorPath}eye.svg',
                                   ),
-                                  onPressed: () => notifier.hidePassword = !notifier.hidePassword,
+                                  onPressed: () => notifier.hidePassword =
+                                      !notifier.hidePassword,
                                 ),
                               ),
-                              border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
-                              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
+                              border: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .surface)),
+                              enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .surface)),
                               // focusedBorder:
                               // UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
                             ),
@@ -141,83 +186,154 @@ class _SetNewPasswordState extends State<SetNewPassword> {
                             // focusNode: notifier.passwordFocus,
                             isEnabled: notifier.validationRegister(),
                             obscuringCharacter: '*',
-                            inputAreaHeight: (isMatch ? 55 : 70) * SizeConfig.scaleDiagonal,
+                            inputAreaHeight:
+                                (isMatch ? 55 : 70) * SizeConfig.scaleDiagonal,
                             inputAreaWidth: SizeConfig.screenWidth!,
-                            textEditingController: notifier.passwordConfirmController,
-                            style: Theme.of(context).textTheme.bodyText1,
+                            textEditingController:
+                                notifier.passwordConfirmController,
+                            style: Theme.of(context).textTheme.bodyLarge,
                             obscureText: notifier.hideConfirmPassword,
                             textInputType: TextInputType.visiblePassword,
-                            inputFormatter: [FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9!@#\$%^&*_]'))],
+                            inputFormatter: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp('[a-zA-Z0-9!@#\$%^&*_]'))
+                            ],
                             onChanged: (v) => notifier.confirmPassword = v,
                             inputDecoration: InputDecoration(
                                 hintText: notifier.language.enterPassword,
                                 counterText: '',
                                 isDense: true,
-                                contentPadding: EdgeInsets.only(right: 16, bottom: !isMatch ? 0 : 16),
+                                contentPadding: EdgeInsets.only(
+                                    right: 16, bottom: !isMatch ? 0 : 16),
                                 labelText: notifier.language.rewriteNewPassword,
-                                labelStyle: Theme.of(context).textTheme.bodyText1!.copyWith(),
+                                labelStyle: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .copyWith(),
                                 //     color: notifier.incorrect
                                 //         ? Theme.of(context).colorScheme.error
                                 //         : notifier.passwordFocus.hasFocus
                                 //             ? Theme.of(context).colorScheme.primary
                                 //             : null),
                                 prefixIconConstraints: BoxConstraints(
-                                  minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!),
+                                  minWidth: SizeWidget().calculateSize(
+                                      30.0,
+                                      SizeWidget.baseWidthXD,
+                                      SizeConfig.screenWidth!),
                                 ),
                                 suffixIconConstraints: BoxConstraints(
-                                  minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!),
+                                  minWidth: SizeWidget().calculateSize(
+                                      30.0,
+                                      SizeWidget.baseWidthXD,
+                                      SizeConfig.screenWidth!),
                                 ),
                                 prefixIcon: Transform.translate(
-                                  offset: Offset(SizeWidget().calculateSize(-5.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!), 0.0),
+                                  offset: Offset(
+                                      SizeWidget().calculateSize(
+                                          -5.0,
+                                          SizeWidget.baseWidthXD,
+                                          SizeConfig.screenWidth!),
+                                      0.0),
                                   child: Transform.scale(
-                                    scale: SizeWidget().calculateSize(1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
-                                    child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}lock.svg"),
+                                    scale: SizeWidget().calculateSize(
+                                        1.2,
+                                        SizeWidget.baseHeightXD,
+                                        SizeConfig.screenHeight!),
+                                    child: const CustomIconWidget(
+                                        iconData:
+                                            "${AssetPath.vectorPath}lock.svg"),
                                   ),
                                 ),
                                 suffixIcon: Transform.scale(
-                                  scale: SizeWidget().calculateSize(1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
+                                  scale: SizeWidget().calculateSize(
+                                      1.2,
+                                      SizeWidget.baseHeightXD,
+                                      SizeConfig.screenHeight!),
                                   child: CustomTextButton(
                                     style: ButtonStyle(
                                         alignment: const Alignment(0.75, 0.0),
-                                        minimumSize: MaterialStateProperty.all(Size.zero),
-                                        padding: MaterialStateProperty.all(EdgeInsets.zero),
-                                        overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                                        minimumSize: MaterialStateProperty.all(
+                                            Size.zero),
+                                        padding: MaterialStateProperty.all(
+                                            EdgeInsets.zero),
+                                        overlayColor: MaterialStateProperty.all(
+                                            Colors.transparent)),
                                     child: CustomIconWidget(
-                                      iconData: notifier.hideConfirmPassword ? '${AssetPath.vectorPath}eye-off.svg' : '${AssetPath.vectorPath}eye.svg',
+                                      iconData: notifier.hideConfirmPassword
+                                          ? '${AssetPath.vectorPath}eye-off.svg'
+                                          : '${AssetPath.vectorPath}eye.svg',
                                     ),
-                                    onPressed: () => notifier.hideConfirmPassword = !notifier.hideConfirmPassword,
+                                    onPressed: () =>
+                                        notifier.hideConfirmPassword =
+                                            !notifier.hideConfirmPassword,
                                   ),
                                 ),
-                                border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
-                                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
+                                border: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .surface)),
+                                enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .surface)),
                                 // focusedBorder:
                                 //     UnderlineInputBorder(borderSide: BorderSide(color: notifier.passwordFocus.hasFocus ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface)),
-                                errorText: isMatch ? null : notifier.language.passwordDoesntMatch),
+                                errorText: isMatch
+                                    ? null
+                                    : notifier.language.passwordDoesntMatch),
                             maxLength: 20,
                           ),
                           sixteenPx,
                           CustomTextWidget(
-                            textToDisplay: notifier.language.yourPasswordMustBeAtLeast ?? '',
-                            textStyle: TextStyle(color: context.isDarkMode() ? Colors.white : Colors.black, fontWeight: FontWeight.w700, fontSize: 16),
+                            textToDisplay:
+                                notifier.language.yourPasswordMustBeAtLeast ??
+                                    '',
+                            textStyle: TextStyle(
+                                color: context.isDarkMode()
+                                    ? Colors.white
+                                    : Colors.black,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 16),
                           ),
                           eightPx,
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              notifier.checkBoxSuffix(System().atLeastEightUntilTwentyCharacter(text: notifier.passwordController.text)),
+                              notifier.checkBoxSuffix(System()
+                                  .atLeastEightUntilTwentyCharacter(
+                                      text: notifier.passwordController.text)),
                               CustomTextWidget(
-                                textToDisplay: notifier.language.atLeast8til20Chars ?? '',
-                                textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: context.isDarkMode() ? Colors.white : Colors.black),
+                                textToDisplay:
+                                    notifier.language.atLeast8til20Chars ?? '',
+                                textStyle: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(
+                                        color: context.isDarkMode()
+                                            ? Colors.white
+                                            : Colors.black),
                               )
                             ],
                           ),
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              notifier.checkBoxSuffix(System().atLeastContainOneCharacterAndOneNumber(text: notifier.passwordController.text)),
+                              notifier.checkBoxSuffix(System()
+                                  .atLeastContainOneCharacterAndOneNumber(
+                                      text: notifier.passwordController.text)),
                               CustomTextWidget(
-                                textToDisplay: notifier.language.atLeastContain1CharacterAnd1Number ?? '',
-                                textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: context.isDarkMode() ? Colors.white : Colors.black),
+                                textToDisplay: notifier.language
+                                        .atLeastContain1CharacterAnd1Number ??
+                                    '',
+                                textStyle: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(
+                                        color: context.isDarkMode()
+                                            ? Colors.white
+                                            : Colors.black),
                               )
                             ],
                           ),
@@ -226,18 +342,30 @@ class _SetNewPasswordState extends State<SetNewPassword> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              notifier.checkBoxSuffix(System().specialCharPass(notifier.passwordController.text)),
+                              notifier.checkBoxSuffix(System().specialCharPass(
+                                  notifier.passwordController.text)),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   CustomTextWidget(
-                                    textToDisplay: notifier.language.oneSpecialCharacter ?? '',
-                                    textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: context.isDarkMode() ? Colors.white : Colors.black),
+                                    textToDisplay:
+                                        notifier.language.oneSpecialCharacter ??
+                                            '',
+                                    textStyle: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.copyWith(
+                                            color: context.isDarkMode()
+                                                ? Colors.white
+                                                : Colors.black),
                                   ),
                                   onePx,
                                   CustomTextWidget(
-                                    textToDisplay: notifier.language.labelExampleSpecialChar ?? '',
-                                    textStyle: Theme.of(context).textTheme.caption,
+                                    textToDisplay: notifier
+                                            .language.labelExampleSpecialChar ??
+                                        '',
+                                    textStyle:
+                                        Theme.of(context).textTheme.bodySmall,
                                   )
                                 ],
                               )
@@ -251,17 +379,22 @@ class _SetNewPasswordState extends State<SetNewPassword> {
                     width: SizeConfig.screenWidth,
                     height: 50,
                     buttonStyle: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(notifier.nextButtonColor(context)),
-                        overlayColor: MaterialStateProperty.all<Color>(notifier.nextButtonColor(context)),
-                        foregroundColor: MaterialStateProperty.all<Color>(notifier.nextButtonColor(context)),
-                        shadowColor: MaterialStateProperty.all<Color>(notifier.nextButtonColor(context))),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            notifier.nextButtonColor(context)),
+                        overlayColor: MaterialStateProperty.all<Color>(
+                            notifier.nextButtonColor(context)),
+                        foregroundColor: MaterialStateProperty.all<Color>(
+                            notifier.nextButtonColor(context)),
+                        shadowColor: MaterialStateProperty.all<Color>(
+                            notifier.nextButtonColor(context))),
                     function: () {
                       notifier.nextButton(context, mounted);
                     },
                     child: notifier.loading
                         ? const CustomLoading()
                         : CustomTextWidget(
-                            textToDisplay: notifier.language.resetPassword ?? 'Reset Password',
+                            textToDisplay: notifier.language.resetPassword ??
+                                'Reset Password',
                             textStyle: notifier.nextTextColor(context),
                           ),
                   ),

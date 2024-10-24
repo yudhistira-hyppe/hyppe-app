@@ -11,7 +11,8 @@ import 'package:flutter/material.dart';
 class OnShowFilters extends StatelessWidget {
   final String file;
   final GlobalKey? globalKey;
-  const OnShowFilters({Key? key, required this.file, this.globalKey}) : super(key: key);
+  const OnShowFilters({Key? key, required this.file, this.globalKey})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,8 @@ class OnShowFilters extends StatelessWidget {
       width: SizeConfig.screenWidth,
       decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
-          borderRadius: const BorderRadius.only(topLeft: Radius.circular(10.0), topRight: Radius.circular(10.0))),
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(10.0), topRight: Radius.circular(10.0))),
       child: Column(
         children: [
           Expanded(
@@ -33,25 +35,32 @@ class OnShowFilters extends StatelessWidget {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: GestureDetector(
-                    onTap: () => context.read<PreviewContentNotifier>().setFilterMatrix(FILTERS.values.toList()[index]),
+                    onTap: () => context
+                        .read<PreviewContentNotifier>()
+                        .setFilterMatrix(FILTERS.values.toList()[index]),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         CustomTextWidget(
                             textToDisplay: FILTERS.keys.toList()[index],
-                            textStyle: Theme.of(context).textTheme.caption?.copyWith(fontWeight: FontWeight.w600)),
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.copyWith(fontWeight: FontWeight.w600)),
                         eightPx,
                         ClipRRect(
                           borderRadius: BorderRadius.circular(4.0),
                           child: ColorFiltered(
-                            colorFilter: ColorFilter.matrix(FILTERS.values.toList()[index]),
+                            colorFilter: ColorFilter.matrix(
+                                FILTERS.values.toList()[index]),
                             child: Image.file(
                               File(file),
                               width: 62,
                               height: 80,
                               fit: BoxFit.cover,
                               filterQuality: FilterQuality.high,
-                              frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                              frameBuilder: (context, child, frame,
+                                  wasSynchronouslyLoaded) {
                                 if (wasSynchronouslyLoaded) {
                                   return child;
                                 }
@@ -75,14 +84,18 @@ class OnShowFilters extends StatelessWidget {
           CustomElevatedButton(
             width: 81,
             height: 30,
-            function: () => context.read<PreviewContentNotifier>().applyFilters(globalKey: globalKey),
+            function: () => context
+                .read<PreviewContentNotifier>()
+                .applyFilters(globalKey: globalKey),
             buttonStyle: Theme.of(context).elevatedButtonTheme.style?.copyWith(
-                backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)))),
+                backgroundColor: MaterialStateProperty.all(
+                    Theme.of(context).colorScheme.primary),
+                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50.0)))),
             child: Consumer<PreviewContentNotifier>(
               builder: (_, notifier, __) => CustomTextWidget(
                 textToDisplay: notifier.language.done ?? 'done',
-                textStyle: Theme.of(context).textTheme.button,
+                textStyle: Theme.of(context).textTheme.labelLarge,
               ),
             ),
           )

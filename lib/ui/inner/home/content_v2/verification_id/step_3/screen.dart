@@ -24,7 +24,8 @@ class VerificationIDStep3 extends StatefulWidget {
   State<VerificationIDStep3> createState() => _VerificationIDStep3State();
 }
 
-class _VerificationIDStep3State extends State<VerificationIDStep3> with AfterFirstLayoutMixin {
+class _VerificationIDStep3State extends State<VerificationIDStep3>
+    with AfterFirstLayoutMixin {
   late CameraDevicesNotifier notifier;
   @override
   void initState() {
@@ -45,7 +46,9 @@ class _VerificationIDStep3State extends State<VerificationIDStep3> with AfterFir
     return Consumer<VerificationIDNotifier>(
       builder: (_, notifier, __) => Scaffold(
         appBar: AppBar(
-          leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
+          leadingWidth: 50 *
+              (SizeConfig.screenWidth ?? context.getWidth()) /
+              SizeWidget.baseWidthXD,
           leading: CustomIconButtonWidget(
             defaultColor: true,
             iconData: "${AssetPath.vectorPath}back-arrow.svg",
@@ -54,7 +57,8 @@ class _VerificationIDStep3State extends State<VerificationIDStep3> with AfterFir
           titleSpacing: 0,
           title: CustomTextWidget(
             textToDisplay: notifier.language.idVerification ?? '',
-            textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
+            textStyle:
+                Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 18),
           ),
           centerTitle: false,
         ),
@@ -68,7 +72,8 @@ class _VerificationIDStep3State extends State<VerificationIDStep3> with AfterFir
                 Center(
                   child: Text(
                     notifier.language.ektpPhoto ?? 'E-KTP Photo',
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.w700),
                   ),
                 ),
                 twentyFourPx,
@@ -98,21 +103,26 @@ class _VerificationIDStep3State extends State<VerificationIDStep3> with AfterFir
           ),
         ),
         floatingActionButton: Container(
-          color: Theme.of(context).backgroundColor,
+          color: Theme.of(context).appBarTheme.backgroundColor,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           child: CustomElevatedButton(
             width: SizeConfig.screenWidth,
             height: 44.0 * SizeConfig.scaleDiagonal,
             function: () => Routing().moveAndPop(Routes.verificationIDStep4),
             buttonStyle: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-              shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-              overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-              backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+              foregroundColor: MaterialStateProperty.all(
+                  Theme.of(context).colorScheme.primary),
+              shadowColor: MaterialStateProperty.all(
+                  Theme.of(context).colorScheme.primary),
+              overlayColor: MaterialStateProperty.all(
+                  Theme.of(context).colorScheme.primary),
+              backgroundColor: MaterialStateProperty.all(
+                  Theme.of(context).colorScheme.primary),
             ),
             child: CustomTextWidget(
               textToDisplay: notifier.language.openCamera ?? '',
-              textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+              textStyle:
+                  textTheme.labelLarge?.copyWith(color: kHyppeLightButtonText),
             ),
           ),
         ),

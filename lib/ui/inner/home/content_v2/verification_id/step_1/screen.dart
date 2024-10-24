@@ -42,7 +42,8 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
       readFile();
       try {
         _controller.addListener(() {
-          if (_controller.offset >= _controller.position.maxScrollExtent && !_controller.position.outOfRange) {
+          if (_controller.offset >= _controller.position.maxScrollExtent &&
+              !_controller.position.outOfRange) {
             setState(() {
               finishScroll = true;
             });
@@ -58,14 +59,16 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
       } catch (e) {
         print("error $e");
       }
-      FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationIDStep1');
+      FirebaseCrashlytics.instance
+          .setCustomKey('layout', 'VerificationIDStep1');
     });
   }
 
   readFile() async {
     String? isoCode = SharedPreference().readStorage(SpKeys.isoCode) ?? 'en';
 
-    var request = await rootBundle.loadString('${AssetPath.dummyMdPath}eula_kyc_$isoCode.md');
+    var request = await rootBundle
+        .loadString('${AssetPath.dummyMdPath}eula_kyc_$isoCode.md');
     setState(() {
       dataText = request;
     });
@@ -78,7 +81,9 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
     return Consumer<VerificationIDNotifier>(
       builder: (_, notifier, __) => Scaffold(
         appBar: AppBar(
-          leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
+          leadingWidth: 50 *
+              (SizeConfig.screenWidth ?? context.getWidth()) /
+              SizeWidget.baseWidthXD,
           leading: CustomIconButtonWidget(
             defaultColor: true,
             iconData: "${AssetPath.vectorPath}back-arrow.svg",
@@ -87,7 +92,8 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
           titleSpacing: 0,
           title: CustomTextWidget(
             textToDisplay: notifier.language.userAgreement ?? '',
-            textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
+            textStyle:
+                Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 18),
           ),
           centerTitle: false,
         ),
@@ -106,10 +112,12 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               data: dataText,
-              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 220, top: 16),
+              padding: const EdgeInsets.only(
+                  left: 16, right: 16, bottom: 220, top: 16),
               onTapLink: (text, href, title) async {
                 try {
-                  await launchUrl(Uri.parse(text), mode: LaunchMode.externalApplication);
+                  await launchUrl(Uri.parse(text),
+                      mode: LaunchMode.externalApplication);
                 } catch (e) {
                   // 'error href : $e'.logger();
                 }
@@ -131,7 +139,7 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
         bottomSheet: Container(
           // height: 120 * SizeConfig.scaleDiagonal,
           // padding: const EdgeInsets.only(left: 16, right: 16),
-          color: Theme.of(context).backgroundColor,
+          color: Theme.of(context).appBarTheme.backgroundColor,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.end,
@@ -152,8 +160,10 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
                           }
                         },
                         checkColor: Colors.white,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-                        fillColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4)),
+                        fillColor: MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
                           if (states.contains(MaterialState.disabled)) {
                             return Colors.orange.withOpacity(.32);
                           }
@@ -183,20 +193,29 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
                   },
                   buttonStyle: finishScroll && agree
                       ? ButtonStyle(
-                          foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                          shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                          overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                          backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                          foregroundColor: MaterialStateProperty.all(
+                              Theme.of(context).colorScheme.primary),
+                          shadowColor: MaterialStateProperty.all(
+                              Theme.of(context).colorScheme.primary),
+                          overlayColor: MaterialStateProperty.all(
+                              Theme.of(context).colorScheme.primary),
+                          backgroundColor: MaterialStateProperty.all(
+                              Theme.of(context).colorScheme.primary),
                         )
                       : ButtonStyle(
-                          foregroundColor: MaterialStateProperty.all(const Color(0xFFCECECE)),
-                          shadowColor: MaterialStateProperty.all(const Color(0xFFCECECE)),
-                          overlayColor: MaterialStateProperty.all(const Color(0xFFCECECE)),
-                          backgroundColor: MaterialStateProperty.all(const Color(0xFFCECECE)),
+                          foregroundColor: MaterialStateProperty.all(
+                              const Color(0xFFCECECE)),
+                          shadowColor: MaterialStateProperty.all(
+                              const Color(0xFFCECECE)),
+                          overlayColor: MaterialStateProperty.all(
+                              const Color(0xFFCECECE)),
+                          backgroundColor: MaterialStateProperty.all(
+                              const Color(0xFFCECECE)),
                         ),
                   child: CustomTextWidget(
                     textToDisplay: notifier.language.agreeAndContinue ?? '',
-                    textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                    textStyle: textTheme.labelLarge
+                        ?.copyWith(color: kHyppeLightButtonText),
                   ),
                 ),
               ),

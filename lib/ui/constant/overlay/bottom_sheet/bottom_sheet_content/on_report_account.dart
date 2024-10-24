@@ -27,10 +27,12 @@ class OnReportAccountBottomSheet extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<OnReportAccountBottomSheet> createState() => _OnReportAccountBottomSheetState();
+  State<OnReportAccountBottomSheet> createState() =>
+      _OnReportAccountBottomSheetState();
 }
 
-class _OnReportAccountBottomSheetState extends State<OnReportAccountBottomSheet> {
+class _OnReportAccountBottomSheetState
+    extends State<OnReportAccountBottomSheet> {
   Map<String, int> report = {};
   // int _currentReport = 1;
   // static final _routing = Routing();
@@ -60,13 +62,19 @@ class _OnReportAccountBottomSheetState extends State<OnReportAccountBottomSheet>
               Container(
                 color: const Color(0xffF5F5F5),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CustomTextWidget(
-                        textToDisplay: widget.type == 'block' ? "${translate.translate.blockThisAccount}" : "${translate.translate.reportThisAccount}",
-                        textStyle: Theme.of(context).primaryTextTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
+                        textToDisplay: widget.type == 'block'
+                            ? "${translate.translate.blockThisAccount}"
+                            : "${translate.translate.reportThisAccount}",
+                        textStyle: Theme.of(context)
+                            .primaryTextTheme
+                            .titleLarge
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       InkWell(
                           onTap: () {
@@ -104,23 +112,41 @@ class _OnReportAccountBottomSheetState extends State<OnReportAccountBottomSheet>
                                 itemBuilder: (context, index) {
                                   return RadioListTile<String>(
                                     contentPadding: const EdgeInsets.all(0),
-                                    groupValue: notifier.initData?.data[index].sId ?? '',
+                                    groupValue:
+                                        notifier.initData?.data[index].sId ??
+                                            '',
                                     value: notifier.currentReport,
                                     onChanged: (_) {
                                       setState(() {
-                                        notifier.currentReport = notifier.initData?.data[index].sId ?? '';
-                                        notifier.currentReportDesc = notifier.initData?.data[index].description ?? '';
+                                        notifier.currentReport = notifier
+                                                .initData?.data[index].sId ??
+                                            '';
+                                        notifier.currentReportDesc = notifier
+                                                .initData
+                                                ?.data[index]
+                                                .description ??
+                                            '';
                                       });
                                     },
                                     toggleable: true,
                                     title: CustomTextWidget(
                                       textAlign: TextAlign.left,
-                                      textToDisplay: notifier.titleLang(notifier.initData?.data[index].reason ?? '', notifier.initData?.data[index].reasonEn ?? ''),
-                                      textStyle: Theme.of(context).primaryTextTheme.titleSmall,
+                                      textToDisplay: notifier.titleLang(
+                                          notifier.initData?.data[index]
+                                                  .reason ??
+                                              '',
+                                          notifier.initData?.data[index]
+                                                  .reasonEn ??
+                                              ''),
+                                      textStyle: Theme.of(context)
+                                          .primaryTextTheme
+                                          .titleSmall,
                                       maxLines: 2,
                                     ),
-                                    controlAffinity: ListTileControlAffinity.trailing,
-                                    activeColor: Theme.of(context).colorScheme.primary,
+                                    controlAffinity:
+                                        ListTileControlAffinity.trailing,
+                                    activeColor:
+                                        Theme.of(context).colorScheme.primary,
                                   );
                                 },
                               ),
@@ -129,25 +155,41 @@ class _OnReportAccountBottomSheetState extends State<OnReportAccountBottomSheet>
                                   width: SizeConfig.screenWidth,
                                   height: 50,
                                   buttonStyle: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all<Color>(kHyppePrimary),
-                                      overlayColor: MaterialStateProperty.all<Color>(kHyppePrimary),
-                                      foregroundColor: MaterialStateProperty.all<Color>(kHyppePrimary),
-                                      shadowColor: MaterialStateProperty.all<Color>(kHyppePrimary)),
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              kHyppePrimary),
+                                      overlayColor:
+                                          MaterialStateProperty.all<Color>(
+                                              kHyppePrimary),
+                                      foregroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              kHyppePrimary),
+                                      shadowColor:
+                                          MaterialStateProperty.all<Color>(
+                                              kHyppePrimary)),
                                   function: () {
                                     Routing().moveBack();
                                     Routing().moveBack();
                                     if (widget.type == 'block') {
-                                      ShowBottomSheet().onShowColouredSheet(context, "Thanks for letting us know",
-                                          subCaption: "You will not see content post from this user anymore. It will take at most 1 hour before all content from this user are hidden from you..");
+                                      ShowBottomSheet().onShowColouredSheet(
+                                          context, "Thanks for letting us know",
+                                          subCaption:
+                                              "You will not see content post from this user anymore. It will take at most 1 hour before all content from this user are hidden from you..");
                                     } else {
-                                      ShowBottomSheet().onShowColouredSheet(context, "Thanks for letting us know", subCaption: "Your feedback will help us to improve your experience.");
+                                      ShowBottomSheet().onShowColouredSheet(
+                                          context, "Thanks for letting us know",
+                                          subCaption:
+                                              "Your feedback will help us to improve your experience.");
                                     }
                                   },
                                   child: notifier.isLoading
                                       ? const CustomLoading()
                                       : CustomTextWidget(
-                                          textToDisplay: translate.translate.submit ?? '',
-                                          textStyle: _textTheme.bodyText2?.copyWith(color: kHyppeLightButtonText),
+                                          textToDisplay:
+                                              translate.translate.submit ?? '',
+                                          textStyle: _textTheme.bodyMedium
+                                              ?.copyWith(
+                                                  color: kHyppeLightButtonText),
                                         )),
                             ],
                           ),

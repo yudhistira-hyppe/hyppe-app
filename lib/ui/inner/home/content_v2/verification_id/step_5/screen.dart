@@ -26,7 +26,8 @@ class VerificationIDStep5 extends StatefulWidget {
   State<VerificationIDStep5> createState() => _VerificationIDStep5State();
 }
 
-class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFirstLayoutMixin {
+class _VerificationIDStep5State extends State<VerificationIDStep5>
+    with AfterFirstLayoutMixin {
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -57,7 +58,9 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
+            leadingWidth: 50 *
+                (SizeConfig.screenWidth ?? context.getWidth()) /
+                SizeWidget.baseWidthXD,
             leading: CustomIconButtonWidget(
               defaultColor: true,
               iconData: "${AssetPath.vectorPath}back-arrow.svg",
@@ -66,7 +69,10 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
             titleSpacing: 0,
             title: CustomTextWidget(
               textToDisplay: notifier.language.idVerification ?? '',
-              textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
+              textStyle: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(fontSize: 18),
             ),
             centerTitle: false,
           ),
@@ -84,7 +90,8 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                           decoration: BoxDecoration(
                             color: kHyppeRank4,
                             border: Border.all(color: kHyppeRank2),
@@ -93,7 +100,8 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                           child: const Row(
                             children: [
                               CustomIconWidget(
-                                iconData: "${AssetPath.vectorPath}info-icon.svg",
+                                iconData:
+                                    "${AssetPath.vectorPath}info-icon.svg",
                                 color: kHyppeTextLightPrimary,
                                 defaultColor: false,
                               ),
@@ -101,24 +109,38 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                               Expanded(
                                   child: Text(
                                 'Proses verifikasi ini hanya dapat dilakukan satu kali, pastikan data sudah sesuai dengan E-KTP Kamu.',
-                                style: TextStyle(fontSize: 10, fontFamily: 'Lato', color: kHyppeTextLightPrimary),
+                                style: TextStyle(
+                                    fontSize: 10,
+                                    fontFamily: 'Lato',
+                                    color: kHyppeTextLightPrimary),
                               )),
                             ],
                           ),
                         ),
                         twentyFourPx,
-                        _disabledInputText(title: notifier.language.fullName ?? '', value: notifier.idCardName.toUpperCase()),
+                        _disabledInputText(
+                            title: notifier.language.fullName ?? '',
+                            value: notifier.idCardName.toUpperCase()),
                         if (notifier.errorName != '')
                           CustomTextWidget(
                             textToDisplay: notifier.errorName,
-                            textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.red),
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(color: Colors.red),
                           ),
                         const SizedBox(height: 16),
-                        if (!notifier.isSupportDoc) _disabledInputText(title: notifier.language.eKtpNumber ?? '', value: notifier.idCardNumber),
+                        if (!notifier.isSupportDoc)
+                          _disabledInputText(
+                              title: notifier.language.eKtpNumber ?? '',
+                              value: notifier.idCardNumber),
                         if (notifier.errorKtp != '')
                           CustomTextWidget(
                             textToDisplay: notifier.errorKtp,
-                            textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.red),
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(color: Colors.red),
                           ),
                         if (!notifier.isSupportDoc) const SizedBox(height: 16),
                         if (notifier.isSupportDoc)
@@ -126,8 +148,10 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               CustomTextWidget(
-                                textToDisplay: notifier.language.eKtpNumber ?? '',
-                                textStyle: textTheme.bodySmall?.copyWith(color: kHyppeTextLightPrimary),
+                                textToDisplay:
+                                    notifier.language.eKtpNumber ?? '',
+                                textStyle: textTheme.bodySmall
+                                    ?.copyWith(color: kHyppeTextLightPrimary),
                               ),
                               tenPx,
                               TextFormField(
@@ -141,13 +165,14 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
                                   errorBorder: InputBorder.none,
-                                  hintStyle: textTheme.bodyText2,
+                                  hintStyle: textTheme.bodyMedium,
                                   enabledBorder: InputBorder.none,
                                   focusedBorder: InputBorder.none,
                                   disabledBorder: InputBorder.none,
                                   focusedErrorBorder: InputBorder.none,
                                   counterText: "",
-                                  contentPadding: const EdgeInsets.symmetric(vertical: 5),
+                                  contentPadding:
+                                      const EdgeInsets.symmetric(vertical: 5),
                                   isDense: true,
                                   border: InputBorder.none,
                                 ),
@@ -161,7 +186,8 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                           ),
                         CustomTextWidget(
                           textToDisplay: notifier.language.gender ?? 'gender',
-                          textStyle: textTheme.bodySmall?.copyWith(color: kHyppeTextLightPrimary),
+                          textStyle: textTheme.bodySmall
+                              ?.copyWith(color: kHyppeTextLightPrimary),
                         ),
                         tenPx,
                         GestureDetector(
@@ -175,14 +201,17 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                                 heightFactor: 1,
                                 child: RotatedBox(
                                   quarterTurns: -45,
-                                  child: CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
+                                  child: CustomIconWidget(
+                                      iconData:
+                                          "${AssetPath.vectorPath}back-arrow.svg"),
                                 ),
                               ),
                               TextFormField(
                                 maxLines: 1,
                                 validator: (String? input) {
                                   if (input?.isEmpty ?? true) {
-                                    return notifier.language.selectGenderInfo ?? '';
+                                    return notifier.language.selectGenderInfo ??
+                                        '';
                                   } else {
                                     return null;
                                   }
@@ -195,13 +224,14 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                                 controller: notifier.genderController,
                                 decoration: InputDecoration(
                                   errorBorder: InputBorder.none,
-                                  hintStyle: textTheme.bodyText2,
+                                  hintStyle: textTheme.bodyMedium,
                                   enabledBorder: InputBorder.none,
                                   focusedBorder: InputBorder.none,
                                   disabledBorder: InputBorder.none,
                                   focusedErrorBorder: InputBorder.none,
                                   counterText: "",
-                                  contentPadding: const EdgeInsets.symmetric(vertical: 5),
+                                  contentPadding:
+                                      const EdgeInsets.symmetric(vertical: 5),
                                   isDense: true,
                                   border: InputBorder.none,
                                 ),
@@ -216,12 +246,16 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                         if (notifier.errorGender != '')
                           CustomTextWidget(
                             textToDisplay: notifier.errorGender,
-                            textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.red),
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(color: Colors.red),
                           ),
                         const SizedBox(height: 16),
                         CustomTextWidget(
                           textToDisplay: notifier.language.dateOfBirth ?? '',
-                          textStyle: textTheme.bodySmall?.copyWith(color: kHyppeTextLightPrimary),
+                          textStyle: textTheme.bodySmall
+                              ?.copyWith(color: kHyppeTextLightPrimary),
                         ),
                         tenPx,
                         Row(
@@ -241,13 +275,14 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                                 controller: notifier.birtDateController,
                                 decoration: InputDecoration(
                                   errorBorder: InputBorder.none,
-                                  hintStyle: textTheme.bodyText2,
+                                  hintStyle: textTheme.bodyMedium,
                                   enabledBorder: InputBorder.none,
                                   focusedBorder: InputBorder.none,
                                   disabledBorder: InputBorder.none,
                                   focusedErrorBorder: InputBorder.none,
                                   counterText: "",
-                                  contentPadding: const EdgeInsets.symmetric(vertical: 5),
+                                  contentPadding:
+                                      const EdgeInsets.symmetric(vertical: 5),
                                   isDense: true,
                                   border: InputBorder.none,
                                 ),
@@ -272,12 +307,16 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                         if (notifier.errorDateBirth != '')
                           CustomTextWidget(
                             textToDisplay: notifier.errorDateBirth,
-                            textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.red),
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(color: Colors.red),
                           ),
                         const SizedBox(height: 16),
                         CustomTextWidget(
                           textToDisplay: notifier.language.placeBirth ?? '',
-                          textStyle: textTheme.bodySmall?.copyWith(color: kHyppeTextLightPrimary),
+                          textStyle: textTheme.bodySmall
+                              ?.copyWith(color: kHyppeTextLightPrimary),
                         ),
                         tenPx,
                         TextFormField(
@@ -296,13 +335,14 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                           controller: notifier.birtPlaceController,
                           decoration: InputDecoration(
                             errorBorder: InputBorder.none,
-                            hintStyle: textTheme.bodyText2,
+                            hintStyle: textTheme.bodyMedium,
                             enabledBorder: InputBorder.none,
                             focusedBorder: InputBorder.none,
                             disabledBorder: InputBorder.none,
                             focusedErrorBorder: InputBorder.none,
                             counterText: "",
-                            contentPadding: const EdgeInsets.symmetric(vertical: 5),
+                            contentPadding:
+                                const EdgeInsets.symmetric(vertical: 5),
                             isDense: true,
                             border: InputBorder.none,
                           ),
@@ -314,7 +354,10 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                         if (notifier.errorPlaceBirth != '')
                           CustomTextWidget(
                             textToDisplay: notifier.errorPlaceBirth,
-                            textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.red),
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(color: Colors.red),
                           ),
                       ],
                     ),
@@ -323,14 +366,15 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
           bottomSheet: Container(
             // height: 120 * SizeConfig.scaleDiagonal,
             // padding: const EdgeInsets.only(left: 16, right: 16),
-            color: Theme.of(context).backgroundColor,
+            color: Theme.of(context).appBarTheme.backgroundColor,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 sixteenPx,
                 Container(
-                  padding: const EdgeInsets.only(left: 6, right: 16, bottom: 16),
+                  padding:
+                      const EdgeInsets.only(left: 6, right: 16, bottom: 16),
                   child: Row(
                     children: [
                       Checkbox(
@@ -338,7 +382,8 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                         value: notifier.acceptTos,
                         activeColor: kHyppePrimary,
                         onChanged: (e) => notifier.checked(),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4)),
                       ),
                       sixPx,
                       Expanded(
@@ -366,22 +411,32 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                         Routing().move(Routes.descFaceVerification);
                       }
                     },
-                    buttonStyle: notifier.step5CanNext && notifier.activeButtonForm
-                        ? ButtonStyle(
-                            foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                            shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                            overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                            backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                          )
-                        : ButtonStyle(
-                            foregroundColor: MaterialStateProperty.all(const Color(0xFFCECECE)),
-                            shadowColor: MaterialStateProperty.all(const Color(0xFFCECECE)),
-                            overlayColor: MaterialStateProperty.all(const Color(0xFFCECECE)),
-                            backgroundColor: MaterialStateProperty.all(const Color(0xFFCECECE)),
-                          ),
+                    buttonStyle:
+                        notifier.step5CanNext && notifier.activeButtonForm
+                            ? ButtonStyle(
+                                foregroundColor: MaterialStateProperty.all(
+                                    Theme.of(context).colorScheme.primary),
+                                shadowColor: MaterialStateProperty.all(
+                                    Theme.of(context).colorScheme.primary),
+                                overlayColor: MaterialStateProperty.all(
+                                    Theme.of(context).colorScheme.primary),
+                                backgroundColor: MaterialStateProperty.all(
+                                    Theme.of(context).colorScheme.primary),
+                              )
+                            : ButtonStyle(
+                                foregroundColor: MaterialStateProperty.all(
+                                    const Color(0xFFCECECE)),
+                                shadowColor: MaterialStateProperty.all(
+                                    const Color(0xFFCECECE)),
+                                overlayColor: MaterialStateProperty.all(
+                                    const Color(0xFFCECECE)),
+                                backgroundColor: MaterialStateProperty.all(
+                                    const Color(0xFFCECECE)),
+                              ),
                     child: CustomTextWidget(
                       textToDisplay: notifier.language.next ?? '',
-                      textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                      textStyle: textTheme.labelLarge
+                          ?.copyWith(color: kHyppeLightButtonText),
                     ),
                   ),
                 ),
@@ -403,7 +458,8 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
     );
   }
 
-  Widget _disabledInputText({required String title, required String value, bool? infoIcon}) {
+  Widget _disabledInputText(
+      {required String title, required String value, bool? infoIcon}) {
     final textTheme = Theme.of(context).textTheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -424,7 +480,8 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
             if (infoIcon != null && infoIcon)
               GestureDetector(
                 onTap: () => ShowBottomSheet.onShowInfoIDCard(context),
-                child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}info-icon.svg"),
+                child: const CustomIconWidget(
+                    iconData: "${AssetPath.vectorPath}info-icon.svg"),
               )
           ],
         ),
@@ -434,5 +491,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
     );
   }
 
-  Widget _buildDivider(context) => Divider(thickness: 1.0, color: Theme.of(context).dividerTheme.color?.withOpacity(0.1));
+  Widget _buildDivider(context) => Divider(
+      thickness: 1.0,
+      color: Theme.of(context).dividerTheme.color?.withOpacity(0.1));
 }

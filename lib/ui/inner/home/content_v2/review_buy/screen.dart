@@ -139,7 +139,8 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                         children: [
                           contentInfo(textTheme,
                               title: notifier.language.certificateNumber ?? ' ',
-                              value: notifier.buyDataNew?.nomorSertifikat ?? ''),
+                              value:
+                                  notifier.buyDataNew?.nomorSertifikat ?? ''),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 5),
                             child: SizedBox(
@@ -181,7 +182,7 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                           contentInfo(textTheme,
                               title: notifier.language.sellingPrice ?? '',
                               value:
-                                  '${System().numberFormat(amount: (notifier.buyDataNew?.price??0).toInt())} Coins'),
+                                  '${System().numberFormat(amount: (notifier.buyDataNew?.price ?? 0).toInt())} Coins'),
                           if (notifier.discount != null)
                             Column(
                               children: [
@@ -191,7 +192,7 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                                 contentInfo(textTheme,
                                     title: notifier.language.discount ?? '',
                                     value:
-                                        '- ${System().numberFormat(amount: notifier.discount?.nominal_discount??0)} Coins'),
+                                        '- ${System().numberFormat(amount: notifier.discount?.nominal_discount ?? 0)} Coins'),
                                 Padding(
                                   padding: const EdgeInsets.all(10),
                                   child: Row(
@@ -266,13 +267,13 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                     GestureDetector(
                       onTap: () async {
                         Navigator.pushNamed(context, Routes.mydiscount,
-                          arguments: {
-                            'routes': Routes.reviewBuyContent,
-                            'totalPayment': notifier.data?.price?.toInt(),
-                            'discount': notifier.discount,
-                            'productType':
-                                ContentDiscount.disccontentmarketplase
-                          });
+                            arguments: {
+                              'routes': Routes.reviewBuyContent,
+                              'totalPayment': notifier.data?.price?.toInt(),
+                              'discount': notifier.discount,
+                              'productType':
+                                  ContentDiscount.disccontentmarketplase
+                            });
                       },
                       child: Container(
                         margin: const EdgeInsets.symmetric(vertical: 12.0),
@@ -324,10 +325,10 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                       // if (!isloading)
                       AnimatedOpacity(
                         opacity: isloading ? 0.0 : 1.0,
-                          duration: const Duration(milliseconds: 300),
-                          child: SaldoCoinWidget(
-                          transactionCoin: notifier.buyDataNew?.total??0,
-                          isChecking: (bool val, int saldoCoin){
+                        duration: const Duration(milliseconds: 300),
+                        child: SaldoCoinWidget(
+                          transactionCoin: notifier.buyDataNew?.total ?? 0,
+                          isChecking: (bool val, int saldoCoin) {
                             buttonactive = val;
                             setState(() {});
                           },
@@ -338,13 +339,15 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                       ElevatedButton(
                         onPressed: buttonactive
                             ? () {
-                                final setPin = SharedPreference().readStorage(SpKeys.setPin);
-                                if (setPin == 'true'){
-                                  Routing().move(Routes.pinbuycontent, argument: mounted);
-                                }else{
-                                  notifier.showButtomSheetSetPin(context, lang: notifier.language);
+                                final setPin = SharedPreference()
+                                    .readStorage(SpKeys.setPin);
+                                if (setPin == 'true') {
+                                  Routing().move(Routes.pinbuycontent,
+                                      argument: mounted);
+                                } else {
+                                  notifier.showButtomSheetSetPin(context,
+                                      lang: notifier.language);
                                 }
-                                
                               }
                             : null,
                         style: ElevatedButton.styleFrom(
@@ -386,7 +389,7 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
             child: CustomTextWidget(
               textAlign: TextAlign.left,
               textToDisplay: title,
-              textStyle: textTheme.caption
+              textStyle: textTheme.bodySmall
                   ?.copyWith(color: Theme.of(context).hintColor),
             ),
           ),
@@ -395,7 +398,7 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
               textAlign: TextAlign.right,
               maxLines: 3,
               textToDisplay: value,
-              textStyle: textTheme.caption
+              textStyle: textTheme.bodySmall
                   ?.copyWith(color: Theme.of(context).hintColor),
             ),
           ),

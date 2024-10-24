@@ -16,7 +16,7 @@ class AccountPreferencesBirthContent extends StatelessWidget {
           child: CupertinoTheme(
             data: CupertinoThemeData(
               textTheme: CupertinoTextThemeData(
-                dateTimePickerTextStyle: Theme.of(context).textTheme.bodyText1,
+                dateTimePickerTextStyle: Theme.of(context).textTheme.bodyLarge,
               ),
             ),
             child: CupertinoDatePicker(
@@ -25,7 +25,8 @@ class AccountPreferencesBirthContent extends StatelessWidget {
               maximumYear: DateTime.now().year,
               minimumDate: DateTime(1900, 01, 01),
               mode: CupertinoDatePickerMode.date,
-              onDateTimeChanged: (DateTime v) => notifier.dateOfBirthSelected(DateFormat("yyyy-MM-dd").format(v)),
+              onDateTimeChanged: (DateTime v) => notifier
+                  .dateOfBirthSelected(DateFormat("yyyy-MM-dd").format(v)),
             ),
           ),
         ),

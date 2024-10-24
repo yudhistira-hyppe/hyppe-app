@@ -19,7 +19,11 @@ class AdsCTALayout extends StatefulWidget {
   final AdsData adsData;
   final Function() onClose;
   final String postId;
-  const AdsCTALayout({super.key, required this.adsData, required this.onClose, required this.postId});
+  const AdsCTALayout(
+      {super.key,
+      required this.adsData,
+      required this.onClose,
+      required this.postId});
 
   @override
   State<AdsCTALayout> createState() => _AdsCTALayoutState();
@@ -91,7 +95,8 @@ class _AdsCTALayoutState extends State<AdsCTALayout> {
                     borderRadius: BorderRadius.all(Radius.circular(18)),
                     image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
+                      image:
+                          AssetImage('${AssetPath.pngPath}profile-error.jpg'),
                     ),
                   ),
                 );
@@ -116,7 +121,8 @@ class _AdsCTALayoutState extends State<AdsCTALayout> {
                 children: [
                   CustomTextWidget(
                     textToDisplay: widget.adsData.fullName ?? '',
-                    textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w700, color: Colors.black),
+                    textStyle: context.getTextTheme().bodySmall?.copyWith(
+                        fontWeight: FontWeight.w700, color: Colors.black),
                   ),
                   fourPx,
                   Row(
@@ -124,13 +130,14 @@ class _AdsCTALayoutState extends State<AdsCTALayout> {
                     children: [
                       CustomTextWidget(
                         textToDisplay: 'Ad ·',
-                        textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w700, color: Colors.black),
+                        textStyle: context.getTextTheme().bodySmall?.copyWith(
+                            fontWeight: FontWeight.w700, color: Colors.black),
                       ),
                       Expanded(
                           child: CustomTextWidget(
                         textAlign: TextAlign.start,
                         textToDisplay: ' ${widget.adsData.adsUrlLink}',
-                        textStyle: context.getTextTheme().caption,
+                        textStyle: context.getTextTheme().bodySmall,
                         maxLines: 1,
                         textOverflow: TextOverflow.ellipsis,
                       )),
@@ -143,21 +150,29 @@ class _AdsCTALayoutState extends State<AdsCTALayout> {
               color: Colors.transparent,
               child: Ink(
                 width: 120,
-                decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(5)), color: notifier.secondsSkip <= 0 ? KHyppeButtonAds : context.getColorScheme().secondary),
+                decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(5)),
+                    color: notifier.secondsSkip <= 0
+                        ? KHyppeButtonAds
+                        : context.getColorScheme().secondary),
                 child: InkWell(
                   splashColor: context.getColorScheme().secondary,
                   onTap: () async {
                     if (notifier.secondsSkip <= 0) {
                       final data = widget.adsData;
-                      final secondsVideo = widget.adsData.duration?.round() ?? 10;
+                      final secondsVideo =
+                          widget.adsData.duration?.round() ?? 10;
                       if (!loadLaunch) {
                         if (data.adsUrlLink?.isEmail() ?? false) {
-                          final email = data.adsUrlLink!.replaceAll('email:', '');
+                          final email =
+                              data.adsUrlLink!.replaceAll('email:', '');
                           setState(() {
                             loadLaunch = true;
                           });
                           print('second close ads: $secondsVideo');
-                          System().adsView(data, secondsVideo, isClick: true).whenComplete(() {
+                          System()
+                              .adsView(data, secondsVideo, isClick: true)
+                              .whenComplete(() {
                             notifier.adsAliplayer?.stop();
                             notifier.adsCurrentPosition = 0;
                             notifier.adsCurrentPositionText = 0;
@@ -166,8 +181,11 @@ class _AdsCTALayoutState extends State<AdsCTALayout> {
                             notifier.isShowingAds = false;
                             notifier.setMapAdsContent(widget.postId, null);
                             widget.onClose();
-                            Future.delayed(const Duration(milliseconds: 800), () {
-                              Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+                            Future.delayed(const Duration(milliseconds: 800),
+                                () {
+                              Routing().move(Routes.otherProfile,
+                                  argument:
+                                      OtherProfileArgument(senderEmail: email));
                             });
                             setState(() {
                               loadLaunch = false;
@@ -183,14 +201,17 @@ class _AdsCTALayoutState extends State<AdsCTALayout> {
                                   loadLaunch = true;
                                 });
                                 print('second close ads: $secondsVideo');
-                                System().adsView(data, secondsVideo, isClick: true).whenComplete(() async {
+                                System()
+                                    .adsView(data, secondsVideo, isClick: true)
+                                    .whenComplete(() async {
                                   notifier.adsAliplayer?.stop();
                                   notifier.adsCurrentPosition = 0;
                                   notifier.adsCurrentPositionText = 0;
                                   notifier.hasShowedAds = true;
                                   notifier.tempAdsData = null;
                                   notifier.isShowingAds = false;
-                                  notifier.setMapAdsContent(widget.postId, null);
+                                  notifier.setMapAdsContent(
+                                      widget.postId, null);
                                   widget.onClose();
                                   await launchUrl(
                                     uri,
@@ -207,7 +228,9 @@ class _AdsCTALayoutState extends State<AdsCTALayout> {
                               });
                               print('second close ads: $secondsVideo');
                               // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                              System().adsView(data, secondsVideo, isClick: true).whenComplete(() {
+                              System()
+                                  .adsView(data, secondsVideo, isClick: true)
+                                  .whenComplete(() {
                                 notifier.adsAliplayer?.stop();
                                 notifier.adsCurrentPosition = 0;
                                 notifier.adsCurrentPositionText = 0;
@@ -217,7 +240,8 @@ class _AdsCTALayoutState extends State<AdsCTALayout> {
                                 notifier.setMapAdsContent(widget.postId, null);
                                 notifier.isPlay = true;
                                 widget.onClose();
-                                System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+                                System().goToWebScreen(data.adsUrlLink ?? '',
+                                    isPop: true);
                               });
                             } finally {
                               setState(() {

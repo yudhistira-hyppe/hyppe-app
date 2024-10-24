@@ -22,13 +22,16 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_c
 class ProcessUploadComponent extends StatefulWidget {
   final double topMargin;
   final bool showAlert;
-  const ProcessUploadComponent({Key? key, this.topMargin = 10.0, this.showAlert = true}) : super(key: key);
+  const ProcessUploadComponent(
+      {Key? key, this.topMargin = 10.0, this.showAlert = true})
+      : super(key: key);
 
   @override
   State<ProcessUploadComponent> createState() => _ProcessUploadComponentState();
 }
 
-class _ProcessUploadComponentState extends State<ProcessUploadComponent> with UploadEventHandler {
+class _ProcessUploadComponentState extends State<ProcessUploadComponent>
+    with UploadEventHandler {
   final Routing _routing = Routing();
   final EventService _eventService = EventService();
   final TranslateNotifierV2 _language = TranslateNotifierV2();
@@ -38,8 +41,12 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
 
   @override
   void initState() {
-    _uploadNotifier = Provider.of<UploadNotifier>(materialAppKey.currentContext ?? context, listen: false);
-    _preUploadContentNotifier = Provider.of<PreUploadContentNotifier>(materialAppKey.currentContext ?? context, listen: false);
+    _uploadNotifier = Provider.of<UploadNotifier>(
+        materialAppKey.currentContext ?? context,
+        listen: false);
+    _preUploadContentNotifier = Provider.of<PreUploadContentNotifier>(
+        materialAppKey.currentContext ?? context,
+        listen: false);
     _eventService.addUploadHandler(EventKey.uploadEventKey, this);
     print("================initState");
     super.initState();
@@ -84,16 +91,19 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
     print("================onUploadSuccess");
     _uploadNotifier.isUploading = false;
     'Upload Success with message ${response.statusMessage}'.logger();
-    _uploadNotifier.message = "${_language.translate.contentCreatedSuccessfully}";
+    _uploadNotifier.message =
+        "${_language.translate.contentCreatedSuccessfully}";
     if (widget.showAlert) {
       _uploadNotifier.reset();
       //bool isCheckedOwnership = _eventService.streamService.uploadContentWithOwnership as bool;
-      bool isCheckedOwnership = _preUploadContentNotifier.certifiedTmp; // get certified status
+      bool isCheckedOwnership =
+          _preUploadContentNotifier.certifiedTmp; // get certified status
 
       'Upload Success with certified checked $isCheckedOwnership'.logger();
 
       if (isCheckedOwnership) {
-        ShowBottomSheet.onShowSuccessPostContentOwnership(Routing.navigatorKey.currentContext ?? context);
+        ShowBottomSheet.onShowSuccessPostContentOwnership(
+            Routing.navigatorKey.currentContext ?? context);
       } else {
         ShowBottomSheet().onShowColouredSheet(
           Routing.navigatorKey.currentContext ?? context,
@@ -106,7 +116,10 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
             print("==-=-=-=-= home click $homeClick");
             // notifier.scrollController.animateTo(0, duration: const Duration(milliseconds: 1000), curve: Curves.ease);
             try {
-              if (mounted) context.read<MainNotifier>().scrollController.animateTo(0, duration: const Duration(milliseconds: 1000), curve: Curves.ease);
+              if (mounted)
+                context.read<MainNotifier>().scrollController.animateTo(0,
+                    duration: const Duration(milliseconds: 1000),
+                    curve: Curves.ease);
             } catch (e) {
               print("==-=-=-=-= home  $e");
             }
@@ -120,8 +133,11 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
   void onUploadFailed(dio.DioError message) {
     _uploadNotifier.isUploading = false;
     'Upload Failed with message ${message.message}'.logger();
-    _uploadNotifier.message = '${_language.translate.contentCreatedFailedWithMessage} ${message.message}';
-    ShowBottomSheet().onShowColouredSheet(Routing.navigatorKey.currentContext ?? context, _uploadNotifier.message, color: kHyppeDanger, maxLines: 2, iconSvg: 'close.svg');
+    _uploadNotifier.message =
+        '${_language.translate.contentCreatedFailedWithMessage} ${message.message}';
+    ShowBottomSheet().onShowColouredSheet(
+        Routing.navigatorKey.currentContext ?? context, _uploadNotifier.message,
+        color: kHyppeDanger, maxLines: 2, iconSvg: 'close.svg');
     // _showSnackBar(color: kHyppeDanger, message: _uploadNotifier.message, icon: 'close.svg');
     _uploadNotifier.reset();
   }
@@ -149,15 +165,20 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
           children: [
             CustomTextWidget(
               textToDisplay: notifier.message,
-              textStyle: Theme.of(context).textTheme.caption,
+              textStyle: Theme.of(context).textTheme.bodySmall,
             ),
             tenPx,
             ClipRRect(
               borderRadius: BorderRadius.circular(40.0),
               child: LinearProgressIndicator(
                 value: notifier.progress,
-                backgroundColor: Theme.of(context).textTheme.button?.color?.withOpacity(0.4),
-                valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.primary),
+                backgroundColor: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.color
+                    ?.withOpacity(0.4),
+                valueColor: AlwaysStoppedAnimation<Color>(
+                    Theme.of(context).colorScheme.primary),
               ),
             )
           ],
@@ -226,9 +247,9 @@ class UploadNotifier extends ChangeNotifier {
 
   set isUploading(bool value) {
     var res = SharedPreference().readStorage(SpKeys.uploadContent) is bool;
-    if (value && res && progress < 1){
-       _isUploading = value;
-       notifyListeners();
+    if (value && res && progress < 1) {
+      _isUploading = value;
+      notifyListeners();
     }
   }
 

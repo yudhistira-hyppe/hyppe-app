@@ -32,15 +32,17 @@ class _OnQRCodeState extends State<OnQRCode> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: Platform.isIOS ? 50 : 0),
+            padding: EdgeInsets.only(
+                top: 20, left: 20, right: 20, bottom: Platform.isIOS ? 50 : 0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+                const CustomIconWidget(
+                    iconData: "${AssetPath.vectorPath}handler.svg"),
                 sixteenPx,
                 CustomTextWidget(
                   textToDisplay: notifier.language.postTo ?? '',
-                  textStyle: Theme.of(context).textTheme.headline6,
+                  textStyle: Theme.of(context).textTheme.titleLarge,
                 ),
                 QrImageView(
                   data: notifier.referralLink,
@@ -50,7 +52,7 @@ class _OnQRCodeState extends State<OnQRCode> {
                 sixteenPx,
                 CustomTextWidget(
                   textToDisplay: 'QR Code',
-                  textStyle: Theme.of(context).textTheme.headline6,
+                  textStyle: Theme.of(context).textTheme.titleLarge,
                 ),
                 const Text(
                   'Undang temanmu ke Hyppe sekarang!',
@@ -67,7 +69,8 @@ class _OnQRCodeState extends State<OnQRCode> {
                   borderColor: kHyppePrimary,
                   textColors: kHyppeTextPrimary,
                   function: () {
-                    System().shareText(dynamicLink: notifier.referralLink, context: context);
+                    System().shareText(
+                        dynamicLink: notifier.referralLink, context: context);
                     // navigate(context, tn, cn, widgetTwo: widgetTwo);
                   },
                 ),

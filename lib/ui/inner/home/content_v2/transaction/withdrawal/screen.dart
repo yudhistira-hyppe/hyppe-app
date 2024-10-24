@@ -25,7 +25,7 @@ class WithdrawalScreen extends StatelessWidget {
           appBar: AppBar(
             leading: const BackButton(),
             title: CustomTextWidget(
-              textStyle: Theme.of(context).textTheme.subtitle1,
+              textStyle: Theme.of(context).textTheme.titleMedium,
               textToDisplay: '${notifier2.translate.withdrawal}',
             ),
           ),

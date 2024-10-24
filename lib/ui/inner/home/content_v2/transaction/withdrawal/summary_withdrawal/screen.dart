@@ -16,13 +16,14 @@ class SummaryWithdrawalScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'SummaryWithdrawalScreen');
+    FirebaseCrashlytics.instance
+        .setCustomKey('layout', 'SummaryWithdrawalScreen');
     return Consumer2<TransactionNotifier, TranslateNotifierV2>(
       builder: (_, notifier, notifier2, __) => Scaffold(
         appBar: AppBar(
           leading: const BackButton(),
           title: CustomTextWidget(
-            textStyle: Theme.of(context).textTheme.subtitle1,
+            textStyle: Theme.of(context).textTheme.titleMedium,
             textToDisplay: '${notifier2.translate.detailTransaction}',
           ),
         ),
@@ -47,34 +48,54 @@ class SummaryWithdrawalScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomTextWidget(
-                      textToDisplay: notifier2.translate.detailTransaction ?? '',
-                      textStyle: Theme.of(context).primaryTextTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+                      textToDisplay:
+                          notifier2.translate.detailTransaction ?? '',
+                      textStyle: Theme.of(context)
+                          .primaryTextTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     twentyPx,
-                    TwoColumnWidget(notifier2.translate.transferTo, text2: notifier.withdarawalSummarymodel?.name),
+                    TwoColumnWidget(notifier2.translate.transferTo,
+                        text2: notifier.withdarawalSummarymodel?.name),
                     sixPx,
-                    TwoColumnWidget(notifier2.translate.bankName, text2: notifier.withdarawalSummarymodel?.bankName),
+                    TwoColumnWidget(notifier2.translate.bankName,
+                        text2: notifier.withdarawalSummarymodel?.bankName),
                     sixPx,
-                    TwoColumnWidget(notifier2.translate.bankAccount, text2: notifier.withdarawalSummarymodel?.bankAccount),
+                    TwoColumnWidget(notifier2.translate.bankAccount,
+                        text2: notifier.withdarawalSummarymodel?.bankAccount),
                     sixPx,
                     const Divider(
                       color: kHyppeLightSurface,
                     ),
                     sixPx,
-                    TwoColumnWidget(notifier2.translate.withdrawalAmount, text2: System().currencyFormat(amount: notifier.withdarawalSummarymodel?.amount)),
-                    notifier.withdarawalSummarymodel?.chargeInquiry != null && (notifier.withdarawalSummarymodel?.chargeInquiry ?? 0) > 0
+                    TwoColumnWidget(notifier2.translate.withdrawalAmount,
+                        text2: System().currencyFormat(
+                            amount: notifier.withdarawalSummarymodel?.amount)),
+                    notifier.withdarawalSummarymodel?.chargeInquiry != null &&
+                            (notifier.withdarawalSummarymodel?.chargeInquiry ??
+                                    0) >
+                                0
                         ? Padding(
                             padding: const EdgeInsets.only(top: 6.0),
                             child: TwoColumnWidget(
                               notifier2.translate.verificationBankAccount,
-                              text2: System().currencyFormat(amount: notifier.withdarawalSummarymodel?.chargeInquiry),
+                              text2: System().currencyFormat(
+                                  amount: notifier
+                                      .withdarawalSummarymodel?.chargeInquiry),
                             ),
                           )
                         : Container(),
                     sixPx,
-                    TwoColumnWidget(notifier2.translate.adminFee, text2: System().currencyFormat(amount: notifier.withdarawalSummarymodel?.adminFee)),
+                    TwoColumnWidget(notifier2.translate.adminFee,
+                        text2: System().currencyFormat(
+                            amount:
+                                notifier.withdarawalSummarymodel?.adminFee)),
                     sixPx,
-                    TwoColumnWidget(notifier2.translate.withdrawal, text2: System().currencyFormat(amount: notifier.withdarawalSummarymodel?.totalAmount)),
+                    TwoColumnWidget(notifier2.translate.withdrawal,
+                        text2: System().currencyFormat(
+                            amount:
+                                notifier.withdarawalSummarymodel?.totalAmount)),
                   ],
                 ),
               ),
@@ -94,7 +115,9 @@ class SummaryWithdrawalScreen extends StatelessWidget {
                   color: kHyppeLightSurface,
                 ),
                 child: Text(
-                  notifier2.translate.theBalanceWillBeTransferredToTheDesignatedAccount ?? '',
+                  notifier2.translate
+                          .theBalanceWillBeTransferredToTheDesignatedAccount ??
+                      '',
                   style: Theme.of(context).textTheme.bodySmall,
                   maxLines: 5,
                 ),
@@ -119,7 +142,9 @@ class SummaryWithdrawalScreen extends StatelessWidget {
                 width: SizeConfig.screenWidth,
                 child: CustomTextButton(
                   onPressed: () => notifier.navigateToPin(),
-                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary)),
+                  style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all(kHyppePrimary)),
                   child: Text(
                     notifier2.translate.withdrawal ?? 'Withdrawal',
                     style: const TextStyle(color: kHyppeLightButtonText),

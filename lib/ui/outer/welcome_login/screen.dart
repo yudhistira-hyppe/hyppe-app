@@ -276,7 +276,7 @@ class _WelcomeLoginScreenState extends State<WelcomeLoginScreen> {
             inputAreaHeight: 55 * SizeConfig.scaleDiagonal,
             inputAreaWidth: SizeConfig.screenWidth!,
             textEditingController: endpoint,
-            style: Theme.of(context).textTheme.bodyText1,
+            style: Theme.of(context).textTheme.bodyLarge,
             textInputType: TextInputType.emailAddress,
             inputDecoration: InputDecoration(
               contentPadding:

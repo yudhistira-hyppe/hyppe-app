@@ -72,36 +72,37 @@ class _OnShowGiftCommantBottomSheetState
           // fifteenPx,
           Container(
             color: context.getColorScheme().surface,
-            padding: const EdgeInsets.only(
-                          bottom: 12, left: 16, right: 16, top: 10),
+            padding:
+                const EdgeInsets.only(bottom: 12, left: 16, right: 16, top: 10),
             child: Column(
               children: [
                 notifier.isShowAutoComplete
-                  ? const AutoCompleteUserTagComment()
-                  : Row(
-                      children: List.generate(emoji.length, (index) {
-                        return Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              context.handleActionIsGuest(() async {
-                                final currentText = notifier.commentController.text;
-                                notifier.commentController.text =
-                                    "$currentText${emoji[index]}";
-                                notifier.commentController.selection =
-                                    TextSelection.fromPosition(TextPosition(
-                                        offset: notifier
-                                            .commentController.text.length));
-                                notifier.onUpdate();
-                              });
-                            },
-                            child: CustomTextWidget(
-                              textToDisplay: emoji[index],
-                              textStyle: const TextStyle(fontSize: 24),
+                    ? const AutoCompleteUserTagComment()
+                    : Row(
+                        children: List.generate(emoji.length, (index) {
+                          return Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                context.handleActionIsGuest(() async {
+                                  final currentText =
+                                      notifier.commentController.text;
+                                  notifier.commentController.text =
+                                      "$currentText${emoji[index]}";
+                                  notifier.commentController.selection =
+                                      TextSelection.fromPosition(TextPosition(
+                                          offset: notifier
+                                              .commentController.text.length));
+                                  notifier.onUpdate();
+                                });
+                              },
+                              child: CustomTextWidget(
+                                textToDisplay: emoji[index],
+                                textStyle: const TextStyle(fontSize: 24),
+                              ),
                             ),
-                          ),
-                        );
-                      }),
-                    ),
+                          );
+                        }),
+                      ),
                 tenPx,
                 Row(
                   children: [
@@ -109,35 +110,25 @@ class _OnShowGiftCommantBottomSheetState
                       child: TextField(
                         controller: notifier.commentController,
                         // focusNode: notifier.inputNode,
-                        style: Theme.of(context).textTheme.bodyText2,
+                        style: Theme.of(context).textTheme.bodyMedium,
                         decoration: InputDecoration(
                           filled: true,
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(50),
                               borderSide: BorderSide(
-                                  color: context
-                                      .getColorScheme()
-                                      .surface)),
+                                  color: context.getColorScheme().surface)),
                           enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(50),
                               borderSide: BorderSide(
-                                  color: context
-                                      .getColorScheme()
-                                      .surface)),
-                          fillColor: Theme.of(context)
-                              .colorScheme
-                              .background,
+                                  color: context.getColorScheme().surface)),
+                          fillColor: Theme.of(context).colorScheme.background,
                           focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(50),
                               borderSide: BorderSide(
-                                  color: context
-                                      .getColorScheme()
-                                      .surface)),
-                          hintText:
-                              "${notifier.language.typeAMessage}...",
+                                  color: context.getColorScheme().surface)),
+                          hintText: "${notifier.language.typeAMessage}...",
                           prefixIcon: Container(
-                            margin: const EdgeInsets.only(
-                                right: 5, left: 5),
+                            margin: const EdgeInsets.only(right: 5, left: 5),
                             child: Builder(builder: (context) {
                               final urlImage = context
                                   .read<SelfProfileNotifier>()
@@ -148,31 +139,29 @@ class _OnShowGiftCommantBottomSheetState
                               return CustomProfileImage(
                                 width: 26,
                                 height: 26,
-                                imageUrl: System().showUserPicture(
-                                    widget.comments
-                                            ?.first
-                                            .comment
-                                            ?.senderInfo
-                                            ?.avatar
-                                            ?.mediaEndpoint ??
-                                        (urlImage ?? '')),
+                                imageUrl: System().showUserPicture(widget
+                                        .comments
+                                        ?.first
+                                        .comment
+                                        ?.senderInfo
+                                        ?.avatar
+                                        ?.mediaEndpoint ??
+                                    (urlImage ?? '')),
                                 badge: widget.comments?.first.comment
                                     ?.senderInfo?.urluserBadge,
                                 following: true,
                               );
                             }),
                           ),
-                          prefixIconConstraints: const BoxConstraints(
-                              minWidth: 0, minHeight: 0),
-                          suffixIcon: notifier
-                                  .commentController.text.isNotEmpty
+                          prefixIconConstraints:
+                              const BoxConstraints(minWidth: 0, minHeight: 0),
+                          suffixIcon: notifier.commentController.text.isNotEmpty
                               ? notifier.loading
                                   ? const CustomLoading(size: 4)
                                   : CustomTextButton(
                                       child: CustomTextWidget(
                                         textToDisplay:
-                                            notifier.language.send ??
-                                                '',
+                                            notifier.language.send ?? '',
                                         textStyle: TextStyle(
                                           color: Theme.of(context)
                                               .colorScheme
@@ -182,15 +171,14 @@ class _OnShowGiftCommantBottomSheetState
                                         ),
                                       ),
                                       onPressed: () async {
-                                        await notifier.addComment(
-                                            context,
-                                            pageDetail: widget
-                                                .argument?.pageDetail);
+                                        await notifier.addComment(context,
+                                            pageDetail:
+                                                widget.argument?.pageDetail);
                                         if (context.mounted) {
                                           notifier.initState(
                                             context,
                                             widget.argument?.postID,
-                                            widget.argument?.fromFront??false,
+                                            widget.argument?.fromFront ?? false,
                                             widget.argument?.parentComment,
                                           );
                                         }
@@ -228,42 +216,44 @@ class _OnShowGiftCommantBottomSheetState
                   function: () {
                     if (buttonactive) {
                       print('disini ${(sn.giftSelect?.toJson())}');
-                      if ((sn.giftSelect?.lastStock??0) < 1){
+                      if ((sn.giftSelect?.lastStock ?? 0) < 1) {
                         FToast().init(context);
-                          if (true) FToast().removeCustomToast();
-                          FToast().showToast(
-                            child: Container(
-                              width: SizeConfig.screenWidth,
-                              decoration: BoxDecoration(color: kHyppeBorderDanger, borderRadius: BorderRadius.circular(8)),
-                              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.info_outline,
+                        if (true) FToast().removeCustomToast();
+                        FToast().showToast(
+                          child: Container(
+                            width: SizeConfig.screenWidth,
+                            decoration: BoxDecoration(
+                                color: kHyppeBorderDanger,
+                                borderRadius: BorderRadius.circular(8)),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 12, horizontal: 16),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.info_outline,
+                                  color: Colors.white,
+                                ),
+                                twelvePx,
+                                Expanded(
+                                    child: Text(
+                                  (trans.localeDatetime ?? '') == 'id'
+                                      ? 'Maaf stok paket gift telah habis, silakan lihat gift lainnya.'
+                                      : 'Sorry, the gift package you want is out of stock. See other packages.',
+                                  style: const TextStyle(
                                     color: Colors.white,
+                                    fontSize: 12,
                                   ),
-                                  twelvePx,
-                                  Expanded(
-                                      child: Text(
-                                    (trans.localeDatetime ?? '') == 'id'
-                                        ? 'Maaf stok paket gift telah habis, silakan lihat gift lainnya.'
-                                        : 'Sorry, the gift package you want is out of stock. See other packages.',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                    ),
-                                  )),
-                                ],
-                              ),
+                                )),
+                              ],
                             ),
-                            gravity: ToastGravity.BOTTOM,
-                            toastDuration: const Duration(seconds: 3),
-                          );
-                      }else{
+                          ),
+                          gravity: ToastGravity.BOTTOM,
+                          toastDuration: const Duration(seconds: 3),
+                        );
+                      } else {
                         sn.sendGift(context, sn.giftSelect ?? GiftLiveModel(),
-                          pageDetail: widget.argument?.pageDetail??false);
+                            pageDetail: widget.argument?.pageDetail ?? false);
                       }
-                      
                     }
                   },
                   bgColor: !buttonactive ? kHyppeDisabled : kHyppePrimary,

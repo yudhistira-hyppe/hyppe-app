@@ -11,7 +11,8 @@ import '../../../../../widget/custom_text_button.dart';
 class MusicTypeItem extends StatefulWidget {
   final MusicGroupType group;
   final int index;
-  const MusicTypeItem({Key? key, required this.group, required this.index}) : super(key: key);
+  const MusicTypeItem({Key? key, required this.group, required this.index})
+      : super(key: key);
 
   @override
   State<MusicTypeItem> createState() => _MusicTypeItemState();
@@ -21,50 +22,78 @@ class _MusicTypeItemState extends State<MusicTypeItem> {
   @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<PreviewContentNotifier>(context);
-    final list = widget.group.group == notifier.language.theme ? notifier.listThemes : widget.group.group == notifier.language.genre ? notifier.listGenres : notifier.listMoods;
+    final list = widget.group.group == notifier.language.theme
+        ? notifier.listThemes
+        : widget.group.group == notifier.language.genre
+            ? notifier.listGenres
+            : notifier.listMoods;
     List<MusicType> sortList = [];
-    if(list.isNotEmpty){
-      if(list.length >= 3){
+    if (list.isNotEmpty) {
+      if (list.length >= 3) {
         sortList = [list[0], list[1], list[2]];
-      }else if(list.length >= 2){
+      } else if (list.length >= 2) {
         sortList = [list[0], list[1]];
-      }else{
+      } else {
         sortList = [list[0]];
       }
     }
-    final myEnum = widget.group.group == notifier.language.theme ? MusicEnum.theme : widget.group.group == notifier.language.genre ? MusicEnum.genre : MusicEnum.mood;
-    return list.isNotEmpty ? Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-            margin: const EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    final myEnum = widget.group.group == notifier.language.theme
+        ? MusicEnum.theme
+        : widget.group.group == notifier.language.genre
+            ? MusicEnum.genre
+            : MusicEnum.mood;
+    return list.isNotEmpty
+        ? Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                CustomTextWidget(
-                  textToDisplay: widget.group.group,
-                  textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w700, fontSize: 16)),
-                if(list.length > 3)
-                CustomTextButton(
-                    onPressed: (){
-                      notifier.setMusicGroupState(widget.index, !widget.group.isSeeAll);
-                    },
-                    child: CustomTextWidget(
-                      textToDisplay: !widget.group.isSeeAll ? notifier.language.seeAll ?? 'See all' : notifier.language.seeSome ?? 'See some',
-                      textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w700, fontSize: 14)))
+                Container(
+                  margin: const EdgeInsets.only(
+                      left: 16, right: 16, top: 10, bottom: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomTextWidget(
+                          textToDisplay: widget.group.group,
+                          textStyle: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(
+                                  fontWeight: FontWeight.w700, fontSize: 16)),
+                      if (list.length > 3)
+                        CustomTextButton(
+                            onPressed: () {
+                              notifier.setMusicGroupState(
+                                  widget.index, !widget.group.isSeeAll);
+                            },
+                            child: CustomTextWidget(
+                                textToDisplay: !widget.group.isSeeAll
+                                    ? notifier.language.seeAll ?? 'See all'
+                                    : notifier.language.seeSome ?? 'See some',
+                                textStyle: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 14)))
+                    ],
+                  ),
+                ),
+                Column(
+                  children: (!widget.group.isSeeAll ? sortList : list).map((e) {
+                    final indexType =
+                        (!widget.group.isSeeAll ? sortList : list).indexOf(e);
+                    return CategoryMusicItem(
+                        myEnum: myEnum,
+                        type: list[indexType],
+                        index: indexType);
+                  }).toList(),
+                )
               ],
             ),
-          ),
-          Column(
-            children: (!widget.group.isSeeAll ? sortList : list).map((e){
-
-              final indexType = (!widget.group.isSeeAll ? sortList : list).indexOf(e);
-              return CategoryMusicItem(myEnum: myEnum, type: list[indexType], index: indexType);
-            }).toList(),
           )
-        ],
-      ),
-    ) : const SizedBox(height: 0,);
+        : const SizedBox(
+            height: 0,
+          );
   }
 }

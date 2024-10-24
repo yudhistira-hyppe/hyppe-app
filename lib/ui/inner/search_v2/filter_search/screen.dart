@@ -13,24 +13,29 @@ class FilterSearchScreen extends StatelessWidget {
   const FilterSearchScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'FilterSearchScreen');
     return Consumer<SearchNotifier>(
       builder: (context, notifier, child) => Scaffold(
         appBar: AppBar(
           leading: GestureDetector(
             onTap: () => Routing().moveBack(),
-            child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg"),
+            child: const CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}close.svg"),
           ),
           title: CustomTextWidget(
             textToDisplay: notifier.language.filters ?? 'filters',
-            textStyle: Theme.of(context).primaryTextTheme.headline6!.copyWith(fontWeight: FontWeight.bold),
+            textStyle: Theme.of(context)
+                .primaryTextTheme
+                .titleLarge!
+                .copyWith(fontWeight: FontWeight.bold),
           ),
           actions: [
             CustomTextButton(
               child: CustomTextWidget(
                 textToDisplay: "Reset",
-                textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(fontWeight: FontWeight.bold, color: kHyppePrimary),
+                textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    fontWeight: FontWeight.bold, color: kHyppePrimary),
               ),
               onPressed: () {},
             ),
@@ -57,7 +62,7 @@ class FilterSearchScreen extends StatelessWidget {
                   title: CustomTextWidget(
                     textAlign: TextAlign.left,
                     textToDisplay: "", //_genders[index],
-                    textStyle: Theme.of(context).primaryTextTheme.bodyText1,
+                    textStyle: Theme.of(context).primaryTextTheme.bodyLarge,
                   ),
                   controlAffinity: ListTileControlAffinity.trailing,
                 );

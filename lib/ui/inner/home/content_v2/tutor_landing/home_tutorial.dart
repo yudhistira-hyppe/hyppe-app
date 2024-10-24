@@ -27,13 +27,12 @@ class HomeTutorScreen extends StatefulWidget {
   State<HomeTutorScreen> createState() => _HomeTutorScreenState();
 }
 
-class _HomeTutorScreenState extends State<HomeTutorScreen> with AfterFirstLayoutMixin {
+class _HomeTutorScreenState extends State<HomeTutorScreen>
+    with AfterFirstLayoutMixin {
   GlobalKey keyPostButton = GlobalKey();
 
   @override
-  void afterFirstLayout(BuildContext context) {
-
-  }
+  void afterFirstLayout(BuildContext context) {}
 
   @override
   void initState() {
@@ -68,13 +67,15 @@ class _HomeTutorScreenState extends State<HomeTutorScreen> with AfterFirstLayout
                 builder: Builder(
                   builder: (context) {
                     return Scaffold(
-                      backgroundColor: _themes.backgroundColor,
+                      backgroundColor: _themes.appBarTheme.backgroundColor,
                       body: AnimatedSwitcher(
                         duration: const Duration(milliseconds: 250),
-                        child: TutorLandingScreen(canShowAds: false, keyButton: keyPostButton),
+                        child: TutorLandingScreen(
+                            canShowAds: false, keyButton: keyPostButton),
                       ),
                       floatingActionButton: Visibility(
-                        visible: MediaQuery.of(context).viewInsets.bottom == 0.0,
+                        visible:
+                            MediaQuery.of(context).viewInsets.bottom == 0.0,
                         child: SizedBox(
                           child: FloatingActionButton(
                             onPressed: () {
@@ -93,23 +94,27 @@ class _HomeTutorScreenState extends State<HomeTutorScreen> with AfterFirstLayout
                                 defaultColor: false,
                                 color: Colors.white,
                                 // color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
-                                iconData: '${AssetPath.vectorPath}logo-purple.svg',
+                                iconData:
+                                    '${AssetPath.vectorPath}logo-purple.svg',
                                 height: 20,
                               ),
                             ),
                           ),
                         ),
                       ),
-                      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+                      floatingActionButtonLocation:
+                          FloatingActionButtonLocation.centerDocked,
                       bottomNavigationBar: Showcase(
                         key: keyPostButton,
                         tooltipBackgroundColor: kHyppeTextLightPrimary,
                         overlayOpacity: 0,
                         tooltipPosition: TooltipPosition.top,
                         title: "Upload",
-                        titleTextStyle: const TextStyle(fontSize: 12, color: kHyppeNotConnect),
+                        titleTextStyle: const TextStyle(
+                            fontSize: 12, color: kHyppeNotConnect),
                         titlePadding: const EdgeInsets.all(6),
-                        descTextStyle: const TextStyle(fontSize: 10, color: kHyppeNotConnect),
+                        descTextStyle: const TextStyle(
+                            fontSize: 10, color: kHyppeNotConnect),
                         descriptionPadding: const EdgeInsets.all(6),
                         description: tn.translate.tutorLanding5,
                         // tooltipBackgroundColor: Theme.of(context).primaryColor,
@@ -123,7 +128,8 @@ class _HomeTutorScreenState extends State<HomeTutorScreen> with AfterFirstLayout
                             children: [
                               const Text(
                                 "5/6",
-                                style: TextStyle(color: kHyppeBurem, fontSize: 10),
+                                style:
+                                    TextStyle(color: kHyppeBurem, fontSize: 10),
                               ),
                               GestureDetector(
                                   onTap: () {
@@ -132,7 +138,10 @@ class _HomeTutorScreenState extends State<HomeTutorScreen> with AfterFirstLayout
                                   },
                                   child: Text(
                                     tn.translate.next ?? '',
-                                    style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold),
                                   ))
                             ],
                           ),
@@ -148,8 +157,13 @@ class _HomeTutorScreenState extends State<HomeTutorScreen> with AfterFirstLayout
                                 child: IconButton(
                                   icon: CustomIconWidget(
                                     defaultColor: false,
-                                    color: notifier.pageIndex == 0 ? kHyppeTextLightPrimary : _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
-                                    iconData: notifier.pageIndex == 0 ? '${AssetPath.vectorPath}home-active.svg' : '${AssetPath.vectorPath}home.svg',
+                                    color: notifier.pageIndex == 0
+                                        ? kHyppeTextLightPrimary
+                                        : _themes.bottomNavigationBarTheme
+                                            .unselectedIconTheme?.color,
+                                    iconData: notifier.pageIndex == 0
+                                        ? '${AssetPath.vectorPath}home-active.svg'
+                                        : '${AssetPath.vectorPath}home.svg',
                                   ),
                                   onPressed: () async {
                                     print(notifier.pageIndex);
@@ -162,7 +176,10 @@ class _HomeTutorScreenState extends State<HomeTutorScreen> with AfterFirstLayout
                                         return;
                                       }
                                       homeClick = true;
-                                      notifier.scrollController.animateTo(0, duration: const Duration(milliseconds: 1000), curve: Curves.ease);
+                                      notifier.scrollController.animateTo(0,
+                                          duration: const Duration(
+                                              milliseconds: 1000),
+                                          curve: Curves.ease);
                                       // Routing.navigatorKey.currentState?.overlay?.context
                                       //     .read<MainNotifier>()
                                       //     .globalKey
@@ -173,7 +190,9 @@ class _HomeTutorScreenState extends State<HomeTutorScreen> with AfterFirstLayout
                                       //   notifier.scrollController.animateTo(0, duration: const Duration(milliseconds: 200), curve: Curves.elasticOut);
                                       // });
                                     }
-                                    Future.delayed(const Duration(milliseconds: 1000), () {});
+                                    Future.delayed(
+                                        const Duration(milliseconds: 1000),
+                                        () {});
 
                                     // }
                                   },
@@ -183,8 +202,13 @@ class _HomeTutorScreenState extends State<HomeTutorScreen> with AfterFirstLayout
                                 child: IconButton(
                                   icon: CustomIconWidget(
                                     defaultColor: false,
-                                    color: notifier.pageIndex == 1 ? kHyppeTextLightPrimary : _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
-                                    iconData: notifier.pageIndex == 1 ? '${AssetPath.vectorPath}search-active.svg' : '${AssetPath.vectorPath}search-nav.svg',
+                                    color: notifier.pageIndex == 1
+                                        ? kHyppeTextLightPrimary
+                                        : _themes.bottomNavigationBarTheme
+                                            .unselectedIconTheme?.color,
+                                    iconData: notifier.pageIndex == 1
+                                        ? '${AssetPath.vectorPath}search-active.svg'
+                                        : '${AssetPath.vectorPath}search-nav.svg',
                                   ),
                                   onPressed: () {
                                     print("ke menu search");
@@ -211,20 +235,28 @@ class _HomeTutorScreenState extends State<HomeTutorScreen> with AfterFirstLayout
                                   icon: Stack(children: [
                                     CustomIconWidget(
                                       defaultColor: false,
-                                      color: notifier.pageIndex == 3 ? kHyppeTextLightPrimary : _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
-                                      iconData: notifier.pageIndex == 3 ? '${AssetPath.vectorPath}notification-active.svg' : '${AssetPath.vectorPath}notification.svg',
+                                      color: notifier.pageIndex == 3
+                                          ? kHyppeTextLightPrimary
+                                          : _themes.bottomNavigationBarTheme
+                                              .unselectedIconTheme?.color,
+                                      iconData: notifier.pageIndex == 3
+                                          ? '${AssetPath.vectorPath}notification-active.svg'
+                                          : '${AssetPath.vectorPath}notification.svg',
                                     ),
                                     const NotificationCircle()
                                   ]),
                                   onPressed: () {
                                     tapMenu(3, notifier, consumerContext);
-                                    context.read<MainNotifier>().receivedReaction = false;
+                                    context
+                                        .read<MainNotifier>()
+                                        .receivedReaction = false;
                                   },
                                 ),
                               ),
                               Expanded(
                                 child: IconButton(
-                                  icon: const SizedBox(width: 32, child: Profile()),
+                                  icon: const SizedBox(
+                                      width: 32, child: Profile()),
                                   onPressed: () {
                                     print(notifier.pageIndex);
                                     tapMenu(4, notifier, consumerContext);
@@ -248,7 +280,8 @@ class _HomeTutorScreenState extends State<HomeTutorScreen> with AfterFirstLayout
     if (newUser == "TRUE" || globalTultipShow) {
       return;
     }
-    if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
+    if (context.read<OverlayHandlerProvider>().overlayActive)
+      context.read<OverlayHandlerProvider>().removeOverlay(context);
     if (index != 2) {
       setState(() {
         'pageIndex now: $index'.logger();

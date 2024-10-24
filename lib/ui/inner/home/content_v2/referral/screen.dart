@@ -45,11 +45,17 @@ class _ReferralState extends State<Referral> {
     mn = Provider.of<MainNotifier>(context, listen: false);
     super.initState();
     if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
-      indexKeyShare = mn?.tutorialData.indexWhere((element) => element.key == 'shareRefferal') ?? 0;
-      indexCode = mn?.tutorialData.indexWhere((element) => element.key == 'codeRefferal') ?? 0;
+      indexKeyShare = mn?.tutorialData
+              .indexWhere((element) => element.key == 'shareRefferal') ??
+          0;
+      indexCode = mn?.tutorialData
+              .indexWhere((element) => element.key == 'codeRefferal') ??
+          0;
 
-      if (mn?.tutorialData[indexKeyShare].status == false && mn?.tutorialData[indexCode].status == false) {
-        WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(myContext).startShowCase([keyShare, keyCode]));
+      if (mn?.tutorialData[indexKeyShare].status == false &&
+          mn?.tutorialData[indexCode].status == false) {
+        WidgetsBinding.instance.addPostFrameCallback((_) =>
+            ShowCaseWidget.of(myContext).startShowCase([keyShare, keyCode]));
       }
     }
   }
@@ -72,7 +78,8 @@ class _ReferralState extends State<Referral> {
           myContext = context;
           return Scaffold(
             appBar: AppBar(
-              leadingWidth: 50 * SizeConfig.screenWidth! / SizeWidget.baseWidthXD,
+              leadingWidth:
+                  50 * SizeConfig.screenWidth! / SizeWidget.baseWidthXD,
               leading: CustomIconButtonWidget(
                 defaultColor: true,
                 iconData: "${AssetPath.vectorPath}back-arrow.svg",
@@ -85,7 +92,10 @@ class _ReferralState extends State<Referral> {
               titleSpacing: 0,
               title: CustomTextWidget(
                 textToDisplay: notifier.language.referralID ?? '',
-                textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .titleLarge!
+                    .copyWith(fontSize: 18),
               ),
               centerTitle: false,
             ),
@@ -112,18 +122,31 @@ class _ReferralState extends State<Referral> {
                               const Spacer(),
                               notifier.modelReferral?.parent == null
                                   ? textInputReff(notifier.language)
-                                  : notifier.modelReferral?.parent == null || notifier.modelReferral?.parent == ""
+                                  : notifier.modelReferral?.parent == null ||
+                                          notifier.modelReferral?.parent == ""
                                       ? textInputReff(notifier.language)
                                       : Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
-                                            Text('Diundang oleh: ', style: Theme.of(context).textTheme.subtitle1),
+                                            Text('Diundang oleh: ',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleMedium),
                                             Container(
                                               padding: const EdgeInsets.all(5),
-                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: kHyppeLightSurface),
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  color: kHyppeLightSurface),
                                               child: Text(
                                                 '${notifier.modelReferral?.parent}',
-                                                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Theme.of(context).colorScheme.primary),
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w700,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary),
                                               ),
                                             ),
                                           ],

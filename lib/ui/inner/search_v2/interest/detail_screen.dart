@@ -21,7 +21,8 @@ class InterestDetailScreen extends StatefulWidget {
   State<InterestDetailScreen> createState() => _InterestDetailScreenState();
 }
 
-class _InterestDetailScreenState extends State<InterestDetailScreen> with RouteAware, SingleTickerProviderStateMixin, AfterFirstLayoutMixin{
+class _InterestDetailScreenState extends State<InterestDetailScreen>
+    with RouteAware, SingleTickerProviderStateMixin, AfterFirstLayoutMixin {
   late TabController _tabController;
   // int _selectedIndex = 0;
   // final ScrollController _scrollController = ScrollController();
@@ -39,25 +40,25 @@ class _InterestDetailScreenState extends State<InterestDetailScreen> with RouteA
 
   @override
   void didChangeDependencies() {
-    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    CustomRouteObserver.routeObserver
+        .subscribe(this, ModalRoute.of(context) as PageRoute);
     super.didChangeDependencies();
   }
 
   @override
   void didPopNext() {
-
-    final notifier = Routing.navigatorKey.currentContext!.read<SearchNotifier>();
+    final notifier =
+        Routing.navigatorKey.currentContext!.read<SearchNotifier>();
     Future.delayed(Duration(milliseconds: 500), () {
-      try{
+      try {
         var jumpTo = heightTab + notifier.heightIndex - 10;
         print("jumpt ====== ${jumpTo}");
         print("jumpt ====== ${heightTab}");
         print("jumpt ====== ${notifier.heightIndex}");
         // _scrollController.jumpTo(jumpTo.toDouble());
-      }catch(e){
+      } catch (e) {
         print('jumpt error: $e');
       }
-
     });
 
     super.didPopNext();
@@ -101,7 +102,7 @@ class _InterestDetailScreenState extends State<InterestDetailScreen> with RouteA
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<SearchNotifier>(builder: (context, notifier, _){
+    return Consumer<SearchNotifier>(builder: (context, notifier, _) {
       return Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,
@@ -116,10 +117,11 @@ class _InterestDetailScreenState extends State<InterestDetailScreen> with RouteA
                   color: Theme.of(context).colorScheme.onSurface,
                 ),
                 CustomTextWidget(
-                  textToDisplay: notifier.language.moreContents ?? 'More Contents',
+                  textToDisplay:
+                      notifier.language.moreContents ?? 'More Contents',
                   textStyle: context
                       .getTextTheme()
-                      .bodyText1
+                      .bodyLarge
                       ?.copyWith(fontWeight: FontWeight.w700),
                 ),
               ],
@@ -131,19 +133,30 @@ class _InterestDetailScreenState extends State<InterestDetailScreen> with RouteA
                 TabBar(
                   controller: _tabController,
                   isScrollable: true,
-                  indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
-
-                  tabs: (notifier.listInterest ?? []).map((e) {
-                    return Container(
-                      padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 13),
-                      child: Center(
-                        child: Text(
-                            context.isIndo() ? (e.interestNameId ?? '') : (e.interestName ?? ''),
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                      ),
-                    );
-                  }).toList().sublist(0, (notifier.listInterest ?? []).length > 6 ? 6 : (notifier.listInterest ?? []).length),
+                  indicator: UnderlineTabIndicator(
+                      borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.primary,
+                          width: 2.0)),
+                  tabs: (notifier.listInterest ?? [])
+                      .map((e) {
+                        return Container(
+                          padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 13),
+                          child: Center(
+                            child: Text(
+                              context.isIndo()
+                                  ? (e.interestNameId ?? '')
+                                  : (e.interestName ?? ''),
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                          ),
+                        );
+                      })
+                      .toList()
+                      .sublist(
+                          0,
+                          (notifier.listInterest ?? []).length > 6
+                              ? 6
+                              : (notifier.listInterest ?? []).length),
                 ),
                 Expanded(
                   child: Padding(
@@ -151,20 +164,22 @@ class _InterestDetailScreenState extends State<InterestDetailScreen> with RouteA
                     child: TabBarView(
                       physics: const NeverScrollableScrollPhysics(),
                       controller: _tabController,
-                      children: (notifier.listInterest ?? []).map((e) {
-
-                        return InterestTabLayout(interest: e);
-
-                      }).toList().sublist(0, (notifier.listInterest ?? []).length > 6 ? 6 : (notifier.listInterest ?? []).length),
+                      children: (notifier.listInterest ?? [])
+                          .map((e) {
+                            return InterestTabLayout(interest: e);
+                          })
+                          .toList()
+                          .sublist(
+                              0,
+                              (notifier.listInterest ?? []).length > 6
+                                  ? 6
+                                  : (notifier.listInterest ?? []).length),
                     ),
                   ),
                 )
               ],
             ),
-          )
-      );
+          ));
     });
   }
-
-
 }

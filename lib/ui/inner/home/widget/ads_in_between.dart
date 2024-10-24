@@ -30,7 +30,14 @@ class AdsInBetween extends StatefulWidget {
   final AdsData data;
   final bool isVideo;
   final Function() afterReport;
-  const AdsInBetween({Key? key, required this.data, required this.contentData, required this.index, required this.afterReport, required this.isVideo}) : super(key: key);
+  const AdsInBetween(
+      {Key? key,
+      required this.data,
+      required this.contentData,
+      required this.index,
+      required this.afterReport,
+      required this.isVideo})
+      : super(key: key);
 
   @override
   State<AdsInBetween> createState() => _AdsInBetweenState();
@@ -52,10 +59,14 @@ class _AdsInBetweenState extends State<AdsInBetween> {
       setState(() {
         loadLaunch = true;
       });
-      System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
+      System()
+          .adsView(widget.data, widget.data.duration?.round() ?? 10,
+              isClick: true)
+          .whenComplete(() {
         widget.afterReport();
         Future.delayed(const Duration(milliseconds: 800), () {
-          Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+          Routing().move(Routes.otherProfile,
+              argument: OtherProfileArgument(senderEmail: email));
         });
       });
     } else {
@@ -68,7 +79,10 @@ class _AdsInBetweenState extends State<AdsInBetween> {
             setState(() {
               loadLaunch = true;
             });
-            System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() async {
+            System()
+                .adsView(widget.data, widget.data.duration?.round() ?? 10,
+                    isClick: true)
+                .whenComplete(() async {
               widget.afterReport();
               await launchUrl(
                 uri,
@@ -82,7 +96,10 @@ class _AdsInBetweenState extends State<AdsInBetween> {
           setState(() {
             loadLaunch = true;
           });
-          System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
+          System()
+              .adsView(widget.data, widget.data.duration?.round() ?? 10,
+                  isClick: true)
+              .whenComplete(() {
             widget.afterReport();
             System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
           });
@@ -102,7 +119,8 @@ class _AdsInBetweenState extends State<AdsInBetween> {
         children: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(12)),
             child: Column(
               children: [
                 Row(
@@ -147,7 +165,9 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                       },
                       child: GestureDetector(
                         onTap: () {
-                          Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: widget.data.email));
+                          Routing().move(Routes.otherProfile,
+                              argument: OtherProfileArgument(
+                                  senderEmail: widget.data.email));
                         },
                         child: CustomBaseCacheImage(
                           imageUrl: widget.data.avatar?.fullLinkURL,
@@ -158,7 +178,8 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                               width: 36,
                               height: 36,
                               decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(18)),
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
                                   image: imageProvider,
@@ -170,26 +191,41 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                             if (url.isNotEmpty && url.withHttp()) {
                               return ClipRRect(
                                   borderRadius: BorderRadius.circular(18),
-                                  child: Image.network(url, width: 36, height: 36, fit: BoxFit.cover, loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                                  child: Image.network(url,
+                                      width: 36, height: 36, fit: BoxFit.cover,
+                                      loadingBuilder: (BuildContext context,
+                                          Widget child,
+                                          ImageChunkEvent? loadingProgress) {
                                     if (loadingProgress == null) return child;
                                     return Center(
                                       child: SizedBox(
                                         width: 20,
                                         height: 20,
                                         child: CircularProgressIndicator(
-                                          value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                                          value: loadingProgress
+                                                      .expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  loadingProgress
+                                                      .expectedTotalBytes!
+                                              : null,
                                         ),
                                       ),
                                     );
-                                  }, errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                                  }, errorBuilder: (BuildContext context,
+                                          Object exception,
+                                          StackTrace? stackTrace) {
                                     return Container(
                                       width: 36,
                                       height: 36,
                                       decoration: const BoxDecoration(
-                                        borderRadius: BorderRadius.all(Radius.circular(18)),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(18)),
                                         image: DecorationImage(
                                           fit: BoxFit.cover,
-                                          image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
+                                          image: AssetImage(
+                                              '${AssetPath.pngPath}profile-error.jpg'),
                                         ),
                                       ),
                                     );
@@ -199,10 +235,12 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                               width: 36,
                               height: 36,
                               decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(18)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(18)),
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
+                                  image: AssetImage(
+                                      '${AssetPath.pngPath}profile-error.jpg'),
                                 ),
                               ),
                             );
@@ -211,10 +249,12 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                             width: 36,
                             height: 36,
                             decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(18)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(18)),
                               image: DecorationImage(
                                 fit: BoxFit.cover,
-                                image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
+                                image: AssetImage(
+                                    '${AssetPath.pngPath}profile-error.jpg'),
                               ),
                             ),
                           ),
@@ -228,15 +268,17 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                         children: [
                           CustomTextWidget(
                             textToDisplay: widget.data.username ?? '',
-                            textStyle: context.getTextTheme().caption?.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                ),
+                            textStyle:
+                                context.getTextTheme().bodySmall?.copyWith(
+                                      fontWeight: FontWeight.w700,
+                                    ),
                           ),
                           CustomTextWidget(
                             textToDisplay: language.sponsored ?? 'Sponsored',
-                            textStyle: context.getTextTheme().caption?.copyWith(
-                                  fontWeight: FontWeight.w400,
-                                ),
+                            textStyle:
+                                context.getTextTheme().bodySmall?.copyWith(
+                                      fontWeight: FontWeight.w400,
+                                    ),
                           )
                         ],
                       ),
@@ -244,7 +286,10 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                     twelvePx,
                     GestureDetector(
                       onTap: () {
-                        ShowBottomSheet().onReportContent(context, adsData: widget.data, type: adsPopUp, postData: null, onUpdate: () {
+                        ShowBottomSheet().onReportContent(context,
+                            adsData: widget.data,
+                            type: adsPopUp,
+                            postData: null, onUpdate: () {
                           setState(() {
                             widget.data.isReport = true;
                           });
@@ -271,7 +316,8 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                         heightPlaceHolder: 80,
                         imageUrl: widget.data.mediaUri,
                         imageBuilder: (context, imageProvider) => ClipRRect(
-                          borderRadius: BorderRadius.circular(20), // Image border
+                          borderRadius:
+                              BorderRadius.circular(20), // Image border
                           child: Image(
                             image: imageProvider,
                             fit: BoxFit.fitHeight,
@@ -279,24 +325,30 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                           ),
                         ),
                         emptyWidget: Container(
-                            decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                            decoration: BoxDecoration(
+                                color: kHyppeNotConnect,
+                                borderRadius: BorderRadius.circular(16)),
                             width: context.getWidth(),
                             height: 250,
                             padding: const EdgeInsets.all(20),
                             alignment: Alignment.center,
                             child: CustomTextWidget(
-                              textToDisplay: language.couldntLoadImage ?? 'Error',
+                              textToDisplay:
+                                  language.couldntLoadImage ?? 'Error',
                               maxLines: 3,
                             )),
                         errorWidget: (context, url, error) {
                           return Container(
-                              decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                              decoration: BoxDecoration(
+                                  color: kHyppeNotConnect,
+                                  borderRadius: BorderRadius.circular(16)),
                               width: context.getWidth(),
                               height: 250,
                               padding: const EdgeInsets.all(20),
                               alignment: Alignment.center,
                               child: CustomTextWidget(
-                                textToDisplay: language.couldntLoadImage ?? 'Error',
+                                textToDisplay:
+                                    language.couldntLoadImage ?? 'Error',
                                 maxLines: 3,
                               ));
                         },
@@ -307,13 +359,20 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                           cta();
                         },
                         child: Builder(builder: (context) {
-                          final learnMore = (widget.data.ctaButton ?? 'Learn More');
+                          final learnMore =
+                              (widget.data.ctaButton ?? 'Learn More');
                           return Container(
                             alignment: Alignment.center,
                             padding: const EdgeInsets.only(top: 10, bottom: 10),
-                            decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)), color: KHyppeButtonAds),
+                            decoration: const BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                color: KHyppeButtonAds),
                             child: loadLaunch
-                                ? const SizedBox(width: 40, height: 20, child: CustomLoading())
+                                ? const SizedBox(
+                                    width: 40,
+                                    height: 20,
+                                    child: CustomLoading())
                                 : Text(
                                     learnMore,
                                     style: const TextStyle(
@@ -336,9 +395,21 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                               seeLess: ' ${notifier.translate.seeLess}',
                               seeMore: ' ${notifier.translate.seeMoreContent}',
                               textOverflow: TextOverflow.visible,
-                              normStyle: Theme.of(context).textTheme.bodyText2,
-                              hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
-                              expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary));
+                              normStyle: Theme.of(context).textTheme.bodyMedium,
+                              hrefStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
+                              expandStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary));
                         })
                     ],
                   ),

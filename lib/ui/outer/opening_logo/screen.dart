@@ -39,7 +39,8 @@ class _OpeningLogoState extends State<OpeningLogo> with AfterFirstLayoutMixin {
   @override
   Widget build(BuildContext context) {
     final _textTheme = Theme.of(context).textTheme;
-    bool _themeState = SharedPreference().readStorage(SpKeys.themeData) ?? false;
+    bool _themeState =
+        SharedPreference().readStorage(SpKeys.themeData) ?? false;
     return Scaffold(
       body: Center(
         child: Column(
@@ -48,35 +49,41 @@ class _OpeningLogoState extends State<OpeningLogo> with AfterFirstLayoutMixin {
             const SizedBox(),
             CustomIconWidget(
               defaultColor: false,
-              iconData: _themeState ? '${AssetPath.vectorPath}logo.svg' : '${AssetPath.vectorPath}logo_splash_screem.svg',
+              iconData: _themeState
+                  ? '${AssetPath.vectorPath}logo.svg'
+                  : '${AssetPath.vectorPath}logo_splash_screem.svg',
             ),
             Column(
               children: [
                 CustomIconWidget(
                   defaultColor: false,
-                  iconData: _themeState ? '${AssetPath.vectorPath}logo_kemendag_kominfo-white.svg' : '${AssetPath.vectorPath}logo_kemendag_kominfo.svg',
+                  iconData: _themeState
+                      ? '${AssetPath.vectorPath}logo_kemendag_kominfo-white.svg'
+                      : '${AssetPath.vectorPath}logo_kemendag_kominfo.svg',
                 ),
                 const SizedBox(
                   height: 5,
                 ),
                 RichText(
                   text: TextSpan(
-                    style: _textTheme.bodyText2,
+                    style: _textTheme.bodyMedium,
                     text: 'Hyppe telah terdaftar di ',
                     children: [
                       TextSpan(
                         text: 'Kemendag',
                         // recognizer: TapGestureRecognizer()..onTap = () => notifier.goToEula(),
-                        style: _textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
+                        style: _textTheme.bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
                         children: [
                           TextSpan(
                             text: ' & ',
-                            style: _textTheme.bodyText2,
+                            style: _textTheme.bodyMedium,
                             children: [
                               TextSpan(
                                 text: 'Kominfo ',
                                 // recognizer: TapGestureRecognizer()..onTap = () => context.read<UserInterestNotifier>().goToEula(),
-                                style: _textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
+                                style: _textTheme.bodyMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
                               )
                             ],
                           )

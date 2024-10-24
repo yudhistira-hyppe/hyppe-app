@@ -15,25 +15,32 @@ import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 class UserCompleteProfileLocationProvinceContent extends StatefulWidget {
   final String country;
   final Function(String) onSelected;
-  const UserCompleteProfileLocationProvinceContent({Key? key, required this.onSelected, required this.country}) : super(key: key);
+  const UserCompleteProfileLocationProvinceContent(
+      {Key? key, required this.onSelected, required this.country})
+      : super(key: key);
   @override
-  _UserCompleteProfileLocationProvinceContentState createState() => _UserCompleteProfileLocationProvinceContentState();
+  _UserCompleteProfileLocationProvinceContentState createState() =>
+      _UserCompleteProfileLocationProvinceContentState();
 }
 
-class _UserCompleteProfileLocationProvinceContentState extends State<UserCompleteProfileLocationProvinceContent> {
+class _UserCompleteProfileLocationProvinceContentState
+    extends State<UserCompleteProfileLocationProvinceContent> {
   final ScrollController _scroll = ScrollController();
   @override
   void initState() {
-    final notifier = Provider.of<UserCompleteProfileNotifier>(context, listen: false);
+    final notifier =
+        Provider.of<UserCompleteProfileNotifier>(context, listen: false);
     notifier.provinceData.clear();
     notifier.initPageLength();
     notifier.initProvince(context, country: widget.country, reload: true);
     _scroll.addListener(() {
-      if (_scroll.offset >= _scroll.position.maxScrollExtent && !_scroll.position.outOfRange) {
+      if (_scroll.offset >= _scroll.position.maxScrollExtent &&
+          !_scroll.position.outOfRange) {
         if (notifier.hasNext) {
           notifier.loadMore = !notifier.loadMore;
           notifier.page++;
-          notifier.initProvince(context, country: widget.country, reload: false);
+          notifier.initProvince(context,
+              country: widget.country, reload: false);
         }
       }
     });
@@ -43,14 +50,17 @@ class _UserCompleteProfileLocationProvinceContentState extends State<UserComplet
   @override
   Widget build(BuildContext context) {
     final notifier = context.watch<UserCompleteProfileNotifier>();
-    final error = context.select((ErrorService value) => value.getError(ErrorType.getStates));
+    final error = context
+        .select((ErrorService value) => value.getError(ErrorType.getStates));
 
-    if (context.read<ErrorService>().isInitialError(error, notifier.provinceData.isEmpty ? null : notifier.provinceData.isEmpty)) {
+    if (context.read<ErrorService>().isInitialError(error,
+        notifier.provinceData.isEmpty ? null : notifier.provinceData.isEmpty)) {
       return Center(
         child: SizedBox(
           height: SizeConfig.screenHeight! * 0.8,
           child: CustomErrorWidget(
-            function: () => notifier.initProvince(context, country: widget.country, reload: true),
+            function: () => notifier.initProvince(context,
+                country: widget.country, reload: true),
             errorType: ErrorType.getStates,
           ),
         ),
@@ -66,7 +76,8 @@ class _UserCompleteProfileLocationProvinceContentState extends State<UserComplet
                 children: [
                   const RotatedBox(
                     quarterTurns: 1,
-                    child: CustomIconWidget(iconData: '${AssetPath.vectorPath}back-arrow.svg'),
+                    child: CustomIconWidget(
+                        iconData: '${AssetPath.vectorPath}back-arrow.svg'),
                   ),
                   Expanded(
                     child: ListView.builder(
@@ -79,19 +90,26 @@ class _UserCompleteProfileLocationProvinceContentState extends State<UserComplet
                         child: CustomElevatedButton(
                           height: 42,
                           width: SizeConfig.screenWidth,
-                          function: () => widget.onSelected(notifier.provinceData[index].stateName ?? ''),
+                          function: () => widget.onSelected(
+                              notifier.provinceData[index].stateName ?? ''),
                           child: CustomTextWidget(
-                            textToDisplay: notifier.provinceData[index].stateName ?? '',
-                            textStyle: Theme.of(context).textTheme.bodyText1,
+                            textToDisplay:
+                                notifier.provinceData[index].stateName ?? '',
+                            textStyle: Theme.of(context).textTheme.bodyLarge,
                           ),
                         ),
                       ),
                     ),
                   ),
-                  notifier.loadMore ? SignUpLoadMoreList(caption: "${notifier.language.loadMore} ${notifier.language.provinceRegion}") : const SizedBox.shrink(),
+                  notifier.loadMore
+                      ? SignUpLoadMoreList(
+                          caption:
+                              "${notifier.language.loadMore} ${notifier.language.provinceRegion}")
+                      : const SizedBox.shrink(),
                   const RotatedBox(
                     quarterTurns: 3,
-                    child: CustomIconWidget(iconData: '${AssetPath.vectorPath}back-arrow.svg'),
+                    child: CustomIconWidget(
+                        iconData: '${AssetPath.vectorPath}back-arrow.svg'),
                   ),
                 ],
               )

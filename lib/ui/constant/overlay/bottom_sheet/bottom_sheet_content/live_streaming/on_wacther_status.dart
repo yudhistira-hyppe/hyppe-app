@@ -24,7 +24,12 @@ class OnWatcherStatus extends StatefulWidget {
   final String? email;
   final String? idMediaStreaming;
   final bool isViewer;
-  const OnWatcherStatus({super.key, this.email, this.idMediaStreaming, this.isViewer = true, this.contextAsal});
+  const OnWatcherStatus(
+      {super.key,
+      this.email,
+      this.idMediaStreaming,
+      this.isViewer = true,
+      this.contextAsal});
 
   @override
   State<OnWatcherStatus> createState() => _OnWatcherStatusState();
@@ -63,7 +68,8 @@ class _OnWatcherStatusState extends State<OnWatcherStatus> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+            const CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}handler.svg"),
             // Text("${widget.contextAsal}"),
             notifier.isloadingProfile
                 ? const Expanded(
@@ -84,7 +90,9 @@ class _OnWatcherStatusState extends State<OnWatcherStatus> {
                         children: [
                           Flexible(
                             child: ItemAccount(
-                              urlImage: notifier.audienceProfile.avatar?.mediaEndpoint ?? '',
+                              urlImage: notifier
+                                      .audienceProfile.avatar?.mediaEndpoint ??
+                                  '',
                               name: notifier.audienceProfile.fullName ?? '',
                               username: notifier.audienceProfile.username ?? '',
                               email: notifier.audienceProfile.email ?? '',
@@ -101,7 +109,8 @@ class _OnWatcherStatusState extends State<OnWatcherStatus> {
                               // Navigator.pop(context);
 
                               if (widget.isViewer) {
-                                if (notifier.audienceProfile.username == viewNotifier.dataStreaming.user?.username) {
+                                if (notifier.audienceProfile.username ==
+                                    viewNotifier.dataStreaming.user?.username) {
                                   Navigator.pop(context);
                                   viewNotifier.reportLive(context);
                                 }
@@ -109,8 +118,10 @@ class _OnWatcherStatusState extends State<OnWatcherStatus> {
                                 Navigator.pop(context);
                                 ShowGeneralDialog.generalDialog(
                                   widget.contextAsal,
-                                  titleText: "${language.delete} ${notifier.audienceProfile.username}? ",
-                                  bodyText: "${language.messageRemoveUser1} ${notifier.audienceProfile.username}${language.messageRemoveUser2}",
+                                  titleText:
+                                      "${language.delete} ${notifier.audienceProfile.username}? ",
+                                  bodyText:
+                                      "${language.messageRemoveUser1} ${notifier.audienceProfile.username}${language.messageRemoveUser2}",
                                   titleButtonPrimary: "${language.removeUser}",
                                   titleButtonSecondary: "${language.cancel}",
                                   isHorizontal: false,
@@ -118,7 +129,8 @@ class _OnWatcherStatusState extends State<OnWatcherStatus> {
                                   functionPrimary: () {
                                     notifier.kickUser(
                                       widget.contextAsal ?? context,
-                                      widget.contextAsal?.mounted ?? context.mounted,
+                                      widget.contextAsal?.mounted ??
+                                          context.mounted,
                                       notifier.audienceProfile.idUser ?? '',
                                       notifier.audienceProfile.username ?? '',
                                     );
@@ -130,11 +142,16 @@ class _OnWatcherStatusState extends State<OnWatcherStatus> {
                             child: Align(
                                 alignment: Alignment.center,
                                 child: widget.isViewer
-                                    ? (notifier.audienceProfile.username == viewNotifier.dataStreaming.user?.username)
+                                    ? (notifier.audienceProfile.username ==
+                                            viewNotifier
+                                                .dataStreaming.user?.username)
                                         ? CircleAvatar(
                                             radius: 18,
-                                            backgroundColor: kHyppeBurem.withOpacity(.2),
-                                            child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}flag.svg"),
+                                            backgroundColor:
+                                                kHyppeBurem.withOpacity(.2),
+                                            child: const CustomIconWidget(
+                                                iconData:
+                                                    "${AssetPath.vectorPath}flag.svg"),
                                           )
                                         : const SizedBox.shrink()
                                     : Container()
@@ -163,19 +180,36 @@ class _OnWatcherStatusState extends State<OnWatcherStatus> {
                           children: [
                             Flexible(
                               child: WatcherStatusItem(
-                                value: System().formatterNumber((notifier.audienceProfile.insight?.posts ?? 0).toInt()),
+                                value: System().formatterNumber(
+                                    (notifier.audienceProfile.insight?.posts ??
+                                            0)
+                                        .toInt()),
                                 title: language.posts ?? '',
                               ),
                             ),
                             Flexible(
                               child: WatcherStatusItem(
-                                value: System().formatterNumber((notifier.audienceProfile.insight?.followers ?? 0).toInt()),
-                                title: notifier.audienceProfile.insight?.followers == 1 ? (language.follower ?? '') : (language.followers ?? ''),
+                                value: System().formatterNumber((notifier
+                                            .audienceProfile
+                                            .insight
+                                            ?.followers ??
+                                        0)
+                                    .toInt()),
+                                title: notifier.audienceProfile.insight
+                                            ?.followers ==
+                                        1
+                                    ? (language.follower ?? '')
+                                    : (language.followers ?? ''),
                               ),
                             ),
                             Flexible(
                               child: WatcherStatusItem(
-                                value: System().formatterNumber((notifier.audienceProfile.insight?.followings ?? 0).toInt()),
+                                value: System().formatterNumber((notifier
+                                            .audienceProfile
+                                            .insight
+                                            ?.followings ??
+                                        0)
+                                    .toInt()),
                                 title: language.following ?? '',
                               ),
                             ),
@@ -187,35 +221,68 @@ class _OnWatcherStatusState extends State<OnWatcherStatus> {
                         width: SizeConfig.screenWidth,
                         height: 42 * SizeConfig.scaleDiagonal,
                         buttonStyle: ButtonStyle(
-                          backgroundColor: (notifier.statusFollowing == StatusFollowing.requested || notifier.statusFollowing == StatusFollowing.following)
+                          backgroundColor: (notifier.statusFollowing ==
+                                      StatusFollowing.requested ||
+                                  notifier.statusFollowing ==
+                                      StatusFollowing.following)
                               ? null
-                              : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                              : MaterialStateProperty.all(
+                                  Theme.of(context).colorScheme.primary),
                         ),
                         function: notifier.isCheckLoading
                             ? null
                             // : (notifier.userName == notifier.audienceProfile.username)
                             //     ? null
                             : () {
-                                if (notifier.statusFollowing == StatusFollowing.none || notifier.statusFollowing == StatusFollowing.rejected) {
-                                  notifier.followUser(context, widget.email, idMediaStreaming: widget.idMediaStreaming).then((value) {
-                                    notifier.audienceProfile.insight?.followers = notifier.audienceProfile.insight!.followers! + 1;
+                                if (notifier.statusFollowing ==
+                                        StatusFollowing.none ||
+                                    notifier.statusFollowing ==
+                                        StatusFollowing.rejected) {
+                                  notifier
+                                      .followUser(context, widget.email,
+                                          idMediaStreaming:
+                                              widget.idMediaStreaming)
+                                      .then((value) {
+                                    notifier.audienceProfile.insight
+                                        ?.followers = notifier.audienceProfile
+                                            .insight!.followers! +
+                                        1;
                                   });
-                                } else if (notifier.statusFollowing == StatusFollowing.following) {
-                                  notifier.followUser(context, widget.email, isUnFollow: true, idMediaStreaming: widget.idMediaStreaming).then((value) {
-                                    notifier.audienceProfile.insight?.followers = notifier.audienceProfile.insight!.followers! - 1;
+                                } else if (notifier.statusFollowing ==
+                                    StatusFollowing.following) {
+                                  notifier
+                                      .followUser(context, widget.email,
+                                          isUnFollow: true,
+                                          idMediaStreaming:
+                                              widget.idMediaStreaming)
+                                      .then((value) {
+                                    notifier.audienceProfile.insight
+                                        ?.followers = notifier.audienceProfile
+                                            .insight!.followers! -
+                                        1;
                                   });
                                 }
                               },
                         child: notifier.isCheckLoading
                             ? const CustomLoading()
                             : CustomTextWidget(
-                                textToDisplay: notifier.statusFollowing == StatusFollowing.following
+                                textToDisplay: notifier.statusFollowing ==
+                                        StatusFollowing.following
                                     ? language.following ?? 'following '
-                                    : notifier.statusFollowing == StatusFollowing.requested
+                                    : notifier.statusFollowing ==
+                                            StatusFollowing.requested
                                         ? language.requested ?? 'requested'
                                         : language.follow ?? 'follow',
-                                textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
-                                      color: (notifier.statusFollowing == StatusFollowing.requested || notifier.statusFollowing == StatusFollowing.following) ? kHyppeGrey : kHyppeLightButtonText,
+                                textStyle: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge
+                                    ?.copyWith(
+                                      color: (notifier.statusFollowing ==
+                                                  StatusFollowing.requested ||
+                                              notifier.statusFollowing ==
+                                                  StatusFollowing.following)
+                                          ? kHyppeGrey
+                                          : kHyppeLightButtonText,
                                     ),
                               ),
                       ),
@@ -249,7 +316,8 @@ class _OnWatcherStatusState extends State<OnWatcherStatus> {
 class WatcherStatusItem extends StatelessWidget {
   final String value;
   final String title;
-  const WatcherStatusItem({super.key, required this.value, required this.title});
+  const WatcherStatusItem(
+      {super.key, required this.value, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -258,12 +326,18 @@ class WatcherStatusItem extends StatelessWidget {
       children: [
         CustomTextWidget(
           textToDisplay: value,
-          textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700),
+          textStyle: context
+              .getTextTheme()
+              .bodyLarge
+              ?.copyWith(fontWeight: FontWeight.w700),
         ),
         fourPx,
         CustomTextWidget(
           textToDisplay: title,
-          textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w400, color: kHyppeBurem),
+          textStyle: context
+              .getTextTheme()
+              .bodyMedium
+              ?.copyWith(fontWeight: FontWeight.w400, color: kHyppeBurem),
         ),
       ],
     );

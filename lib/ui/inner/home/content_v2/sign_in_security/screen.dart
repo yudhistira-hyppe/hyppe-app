@@ -23,7 +23,8 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
   final setPin = SharedPreference().readStorage(SpKeys.setPin);
   @override
   Widget build(BuildContext context) {
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppeHomeSignAndSecurity');
+    FirebaseCrashlytics.instance
+        .setCustomKey('layout', 'HyppeHomeSignAndSecurity');
     SizeConfig().init(context);
     return Consumer<TranslateNotifierV2>(
       builder: (_, notifier, __) => ShowCaseWidget(
@@ -39,7 +40,9 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
         builder: Builder(builder: (context) {
           return Scaffold(
             appBar: AppBar(
-              leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
+              leadingWidth: 50 *
+                  (SizeConfig.screenWidth ?? context.getWidth()) /
+                  SizeWidget.baseWidthXD,
               leading: CustomIconButtonWidget(
                 defaultColor: true,
                 iconData: "${AssetPath.vectorPath}back-arrow.svg",
@@ -48,7 +51,10 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
               titleSpacing: 0,
               title: CustomTextWidget(
                 textToDisplay: notifier.translate.signInAndSecurity ?? '',
-                textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .titleLarge
+                    ?.copyWith(fontSize: 18),
               ),
               centerTitle: false,
             ),
@@ -59,18 +65,22 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SharedPreference().readStorage(SpKeys.isLoginSosmed) == 'socmed'
+                  SharedPreference().readStorage(SpKeys.isLoginSosmed) ==
+                          'socmed'
                       ? Container()
                       : SettingTile(
                           icon: 'lock.svg',
                           onTap: () => Routing().move(Routes.changePassword),
                           caption: '${notifier.translate.password}',
                         ),
-                  SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED
+                  SharedPreference().readStorage(SpKeys.statusVerificationId) ==
+                          VERIFIED
                       ? SettingTile(
                           icon: 'lock-pin.svg',
                           onTap: () => Routing().move(Routes.pinScreen),
-                          caption: setPin == 'true' ? notifier.translate.changePin ?? '' : notifier.translate.setPin ?? '',
+                          caption: setPin == 'true'
+                              ? notifier.translate.changePin ?? ''
+                              : notifier.translate.setPin ?? '',
                         )
                       : Container(),
                   SettingTile(
@@ -78,9 +88,11 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
                     onTap: () {
                       // Routing().move(Routes.verificationIDStep1);
 
-                      switch (SharedPreference().readStorage(SpKeys.statusVerificationId)) {
+                      switch (SharedPreference()
+                          .readStorage(SpKeys.statusVerificationId)) {
                         case REVIEW:
-                          Routing().move(Routes.verificationSupportSuccess, argument: GeneralArgument(isTrue: false));
+                          Routing().move(Routes.verificationSupportSuccess,
+                              argument: GeneralArgument(isTrue: false));
                           break;
                         case VERIFIED:
                           Routing().move(Routes.verifiedScreen);
@@ -91,7 +103,12 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
                       }
                     },
                     caption: '${notifier.translate.idVerification}',
-                    trailing: verificationStatus(context, SharedPreference().readStorage(SpKeys.statusVerificationId) ?? notifier.translate.unverified, notifier), //verified, unverified, review
+                    trailing: verificationStatus(
+                        context,
+                        SharedPreference()
+                                .readStorage(SpKeys.statusVerificationId) ??
+                            notifier.translate.unverified,
+                        notifier), //verified, unverified, review
                   ),
                 ],
               ),
@@ -102,7 +119,8 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
     );
   }
 
-  Widget verificationStatus(BuildContext context, String status, TranslateNotifierV2 notifier) {
+  Widget verificationStatus(
+      BuildContext context, String status, TranslateNotifierV2 notifier) {
     String statusText;
     Color statusColor = const Color(0xffE6094B);
     Color bgColor = const Color(0xffFFE8E5);
@@ -117,7 +135,8 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
         statusText = notifier.translate.unverified ?? 'Unverified';
         break;
       case REVIEW:
-        statusText = notifier.translate.localeDatetime == 'id' ? "Ditinjau" : "Reviews";
+        statusText =
+            notifier.translate.localeDatetime == 'id' ? "Ditinjau" : "Reviews";
         break;
       default:
         statusText = notifier.translate.unverified ?? 'Unverified';
@@ -148,7 +167,10 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
               // const SizedBox(width: 5),
               CustomTextWidget(
                 textToDisplay: statusText,
-                textStyle: Theme.of(context).textTheme.caption?.copyWith(color: statusColor, fontWeight: FontWeight.w700),
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .bodySmall
+                    ?.copyWith(color: statusColor, fontWeight: FontWeight.w700),
               ),
             ],
           ),

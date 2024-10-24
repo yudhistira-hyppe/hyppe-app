@@ -22,12 +22,16 @@ class HyppeDeleteAccoount extends StatelessWidget {
         appBar: AppBar(
           title: CustomTextWidget(
             textToDisplay: notifier.language.deleteAccount ?? 'delete account',
-            textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+            textStyle: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           centerTitle: false,
           titleSpacing: 0,
           leading: IconButton(
-            icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
+            icon: const CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}back-arrow.svg"),
             splashRadius: 1,
             onPressed: () {
               Routing().moveBack();
@@ -48,13 +52,19 @@ class HyppeDeleteAccoount extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CustomTextWidget(
-                          textToDisplay: notifier.language.whyAreYouLeavingHyppe ?? '',
-                          textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontWeight: FontWeight.bold),
+                          textToDisplay:
+                              notifier.language.whyAreYouLeavingHyppe ?? '',
+                          textStyle: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         eightPx,
                         CustomTextWidget(
-                          textToDisplay: notifier.language.wereSorryToSeeYouGo ?? '',
-                          textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(),
+                          textToDisplay:
+                              notifier.language.wereSorryToSeeYouGo ?? '',
+                          textStyle:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(),
                           maxLines: 100,
                           textAlign: TextAlign.start,
                         ),
@@ -67,17 +77,20 @@ class HyppeDeleteAccoount extends StatelessWidget {
                     itemCount: notifier.optionDelete?.length ?? 0,
                     itemBuilder: (context, index) {
                       return RadioListTile(
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 16),
                         groupValue: notifier.optionDelete?[index]['code'],
                         value: notifier.currentOptionDelete,
                         onChanged: (_) {
-                          notifier.currentOptionDelete = notifier.optionDelete?[index]['code'];
+                          notifier.currentOptionDelete =
+                              notifier.optionDelete?[index]['code'];
                         },
                         toggleable: true,
                         title: CustomTextWidget(
                           textAlign: TextAlign.left,
                           textToDisplay: notifier.optionDelete?[index]['title'],
-                          textStyle: Theme.of(context).primaryTextTheme.titleSmall,
+                          textStyle:
+                              Theme.of(context).primaryTextTheme.titleSmall,
                           maxLines: 3,
                         ),
                         controlAffinity: ListTileControlAffinity.trailing,
@@ -96,14 +109,18 @@ class HyppeDeleteAccoount extends StatelessWidget {
                     height: 49 * SizeConfig.scaleDiagonal,
                     child: CustomTextWidget(
                       textToDisplay: notifier.language.next ?? 'Next',
-                      textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                      textStyle: Theme.of(context)
+                          .textTheme
+                          .labelLarge
+                          ?.copyWith(color: kHyppeLightButtonText),
                     ),
                     function: () => notifier.navigateToConfirmDeleteProfile(),
                     buttonStyle: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
                         Theme.of(context).colorScheme.primary,
                       ),
-                      overlayColor: MaterialStateProperty.all(Colors.transparent),
+                      overlayColor:
+                          MaterialStateProperty.all(Colors.transparent),
                     ),
                   ),
                 ),

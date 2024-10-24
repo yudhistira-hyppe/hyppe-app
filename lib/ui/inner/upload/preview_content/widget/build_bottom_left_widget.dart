@@ -8,7 +8,8 @@ import 'package:provider/provider.dart';
 
 class BuildBottomLeftWidget extends StatefulWidget {
   final PageController pageController;
-  const BuildBottomLeftWidget({Key? key, required this.pageController}) : super(key: key);
+  const BuildBottomLeftWidget({Key? key, required this.pageController})
+      : super(key: key);
 
   @override
   State<BuildBottomLeftWidget> createState() => _BuildBottomLeftWidgetState();
@@ -17,7 +18,8 @@ class BuildBottomLeftWidget extends StatefulWidget {
 class _BuildBottomLeftWidgetState extends State<BuildBottomLeftWidget> {
   @override
   void initState() {
-    final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
+    final notifier =
+        Provider.of<PreviewContentNotifier>(context, listen: false);
     Future.delayed(Duration.zero, () {
       print('banyak kontent ${notifier.fileContent?.length}');
       for (var i = 0; i < (notifier.fileContent?.length ?? 0); i++) {
@@ -45,7 +47,10 @@ class _BuildBottomLeftWidgetState extends State<BuildBottomLeftWidget> {
                     physics: const BouncingScrollPhysics(),
                     itemCount: notifier.fileContent?.length,
                     itemBuilder: (context, index) {
-                      final _isImage = System().lookupContentMimeType(notifier.fileContent?[index] ?? '')?.contains('image');
+                      final _isImage = System()
+                          .lookupContentMimeType(
+                              notifier.fileContent?[index] ?? '')
+                          ?.contains('image');
 
                       return GestureDetector(
                           child: Container(
@@ -54,43 +59,57 @@ class _BuildBottomLeftWidgetState extends State<BuildBottomLeftWidget> {
                             margin: const EdgeInsets.symmetric(horizontal: 5.0),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5.0),
-                              border: Border.all(color: const Color(0xff822E6E), width: notifier.indexView == index ? 2.0 : 0.0),
-                              color: Theme.of(context).backgroundColor,
+                              border: Border.all(
+                                  color: const Color(0xff822E6E),
+                                  width:
+                                      notifier.indexView == index ? 2.0 : 0.0),
+                              color:
+                                  Theme.of(context).appBarTheme.backgroundColor,
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(5.0),
                               child: ((_isImage ?? false) || _isImage == null)
                                   ? ColorFiltered(
-                                      colorFilter: ColorFilter.matrix(notifier.filterMatrix(index)),
+                                      colorFilter: ColorFilter.matrix(
+                                          notifier.filterMatrix(index)),
                                       child: Image.file(
-                                        File(notifier.fileContent?[index] ?? ''),
+                                        File(
+                                            notifier.fileContent?[index] ?? ''),
                                         fit: BoxFit.cover,
-                                        frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                                        frameBuilder: (context, child, frame,
+                                            wasSynchronouslyLoaded) {
                                           if (wasSynchronouslyLoaded) {
                                             return child;
                                           }
                                           return AnimatedOpacity(
                                             child: child,
                                             opacity: frame == null ? 0 : 1,
-                                            duration: const Duration(seconds: 1),
+                                            duration:
+                                                const Duration(seconds: 1),
                                             curve: Curves.easeOut,
                                           );
                                         },
                                         filterQuality: FilterQuality.high,
                                       ),
                                     )
-                                  : notifier.thumbNails != null && (notifier.thumbNails?.isNotEmpty ?? false) && notifier.thumbNails?[index] != null
+                                  : notifier.thumbNails != null &&
+                                          (notifier.thumbNails?.isNotEmpty ??
+                                              false) &&
+                                          notifier.thumbNails?[index] != null
                                       ? Image.memory(
                                           notifier.thumbNails![index]!,
-                                          fit: BoxFit.cover, // '${AssetPath.pngPath}content-error.png'
-                                          frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                                          fit: BoxFit
+                                              .cover, // '${AssetPath.pngPath}content-error.png'
+                                          frameBuilder: (context, child, frame,
+                                              wasSynchronouslyLoaded) {
                                             if (wasSynchronouslyLoaded) {
                                               return child;
                                             }
                                             return AnimatedOpacity(
                                               child: child,
                                               opacity: frame == null ? 0 : 1,
-                                              duration: const Duration(seconds: 1),
+                                              duration:
+                                                  const Duration(seconds: 1),
                                               curve: Curves.easeOut,
                                             );
                                           },
@@ -99,11 +118,14 @@ class _BuildBottomLeftWidgetState extends State<BuildBottomLeftWidget> {
                                       : Icon(
                                           Icons.warning_amber_rounded,
                                           size: 40.0 * SizeConfig.scaleDiagonal,
-                                          color: Theme.of(context).colorScheme.primary,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
                                         ),
                             ),
                           ),
-                          onTap: () => notifier.animateToPage(index, widget.pageController));
+                          onTap: () => notifier.animateToPage(
+                              index, widget.pageController));
                     },
                   ),
                 ),

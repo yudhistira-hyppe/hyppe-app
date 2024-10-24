@@ -11,7 +11,8 @@ class MiddleVoucherWidget extends StatelessWidget {
   final TransactionHistoryModel? data;
   final LocalizationModelV2? language;
 
-  const MiddleVoucherWidget({Key? key, this.data, this.language}) : super(key: key);
+  const MiddleVoucherWidget({Key? key, this.data, this.language})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class MiddleVoucherWidget extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 16.0),
           child: CustomTextWidget(
             textToDisplay: language?.voucherDetail ?? '',
-            textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(
+            textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: Theme.of(context).colorScheme.onBackground,
                   fontWeight: FontWeight.bold,
                 ),
@@ -37,14 +38,18 @@ class MiddleVoucherWidget extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           itemCount: data?.detailTransaction?.length,
           itemBuilder: (context, index) {
-            return detailVoucher(context, data?.detailTransaction?[index] ?? DetailTransaction(), data?.iconVoucher ?? '');
+            return detailVoucher(
+                context,
+                data?.detailTransaction?[index] ?? DetailTransaction(),
+                data?.iconVoucher ?? '');
           },
         ),
       ],
     );
   }
 
-  Widget detailVoucher(BuildContext context, DetailTransaction data, String icon) {
+  Widget detailVoucher(
+      BuildContext context, DetailTransaction data, String icon) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Row(
@@ -59,7 +64,8 @@ class MiddleVoucherWidget extends StatelessWidget {
                   height: 90,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
-                    image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                    image: DecorationImage(
+                        image: imageProvider, fit: BoxFit.cover),
                   ),
                 );
               },
@@ -70,7 +76,8 @@ class MiddleVoucherWidget extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                     image: const DecorationImage(
                       fit: BoxFit.contain,
-                      image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                      image:
+                          AssetImage('${AssetPath.pngPath}content-error.png'),
                     ),
                   ),
                 );
@@ -94,15 +101,18 @@ class MiddleVoucherWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomTextWidget(
-                  textToDisplay: "Voucher ${data.totalCredit} ${language?.adsCredit}",
-                  textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                  textToDisplay:
+                      "Voucher ${data.totalCredit} ${language?.adsCredit}",
+                  textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onBackground),
                   maxLines: 3,
                   textAlign: TextAlign.start,
                 ),
                 sixPx,
                 CustomTextWidget(
                   textToDisplay: "${language?.from} Hyppe Business",
-                  textStyle: Theme.of(context).textTheme.caption ?? const TextStyle(),
+                  textStyle: Theme.of(context).textTheme.bodySmall ??
+                      const TextStyle(),
                 ),
                 twelvePx,
               ],

@@ -11,7 +11,8 @@ import 'package:provider/provider.dart';
 class OfflineMode extends StatelessWidget {
   final Function()? function;
   final bool fullscreen;
-  const OfflineMode({Key? key, this.function, this.fullscreen=false}) : super(key: key);
+  const OfflineMode({Key? key, this.function, this.fullscreen = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,23 +32,45 @@ class OfflineMode extends StatelessWidget {
                 CustomTextWidget(
                   textToDisplay: tn.translate.oopsYoureOffline ?? '',
                   maxLines: 2,
-                  textStyle: fullscreen ? const TextStyle(color: kHyppeTextPrimary, fontWeight: FontWeight.bold, fontSize: 16) : const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  textStyle: fullscreen
+                      ? const TextStyle(
+                          color: kHyppeTextPrimary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16)
+                      : const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 eightPx,
                 CustomTextWidget(
-                  textToDisplay: tn.translate.checkYourWiFiConnectionOrInternet ?? '',
+                  textToDisplay:
+                      tn.translate.checkYourWiFiConnectionOrInternet ?? '',
                   maxLines: 2,
-                  textStyle: const TextStyle(color: kHyppeSecondary, fontSize: 16),
+                  textStyle:
+                      const TextStyle(color: kHyppeSecondary, fontSize: 16),
                 ),
                 twentyPx,
                 CustomTextButton(
                   onPressed: () => function?.call(),
-                  style: ButtonStyle(side: MaterialStateProperty.all(BorderSide(color: fullscreen ? kHyppeLightBackground : kHyppePrimary, width: 1.0, style: BorderStyle.solid))),
+                  style: ButtonStyle(
+                      side: MaterialStateProperty.all(BorderSide(
+                          color: fullscreen
+                              ? kHyppeLightBackground
+                              : kHyppePrimary,
+                          width: 1.0,
+                          style: BorderStyle.solid))),
                   child: Padding(
                     padding: const EdgeInsets.only(left: 40.0, right: 40.0),
                     child: CustomTextWidget(
                       textToDisplay: tn.translate.tryAgain ?? '',
-                      textStyle: fullscreen ? Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightBackground) : Theme.of(context).textTheme.button?.copyWith(color: kHyppePrimary),
+                      textStyle: fullscreen
+                          ? Theme.of(context)
+                              .textTheme
+                              .labelLarge
+                              ?.copyWith(color: kHyppeLightBackground)
+                          : Theme.of(context)
+                              .textTheme
+                              .labelLarge
+                              ?.copyWith(color: kHyppePrimary),
                     ),
                   ),
                 ),

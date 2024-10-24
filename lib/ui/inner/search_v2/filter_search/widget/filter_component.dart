@@ -5,7 +5,6 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/search_v2/filter_search/widget/filter_tile.dart';
 
-
 class FilterComponent extends StatelessWidget {
   final String headerCaption;
   final List<FilterTile> tiles;
@@ -27,7 +26,7 @@ class FilterComponent extends StatelessWidget {
       children: [
         CustomTextWidget(
           textToDisplay: headerCaption,
-          textStyle: theme.textTheme.subtitle2,
+          textStyle: theme.textTheme.titleSmall,
         ),
         tenPx,
         ...tiles

@@ -19,13 +19,20 @@ class OnChallangePeriodeBottomSheet extends StatefulWidget {
   final String? idchallenge;
   final bool? isDetail;
   final bool? isWinner;
-  const OnChallangePeriodeBottomSheet({super.key, this.session, this.idchallenge, this.isDetail, this.isWinner});
+  const OnChallangePeriodeBottomSheet(
+      {super.key,
+      this.session,
+      this.idchallenge,
+      this.isDetail,
+      this.isWinner});
 
   @override
-  State<OnChallangePeriodeBottomSheet> createState() => _OnChallangePeriodeBottomSheetState();
+  State<OnChallangePeriodeBottomSheet> createState() =>
+      _OnChallangePeriodeBottomSheetState();
 }
 
-class _OnChallangePeriodeBottomSheetState extends State<OnChallangePeriodeBottomSheet> {
+class _OnChallangePeriodeBottomSheetState
+    extends State<OnChallangePeriodeBottomSheet> {
   int _currentSession = 1;
   @override
   void initState() {
@@ -48,7 +55,9 @@ class _OnChallangePeriodeBottomSheetState extends State<OnChallangePeriodeBottom
           Center(
             child: Padding(
               padding: EdgeInsets.all(8 * SizeConfig.scaleDiagonal),
-              child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg", defaultColor: false),
+              child: const CustomIconWidget(
+                  iconData: "${AssetPath.vectorPath}handler.svg",
+                  defaultColor: false),
             ),
           ),
           Padding(
@@ -68,12 +77,15 @@ class _OnChallangePeriodeBottomSheetState extends State<OnChallangePeriodeBottom
                 sixteenPx,
                 GestureDetector(
                   onTap: () {
-                    ShowBottomSheet.onDatePickerMonth(context, widget.isDetail ?? false);
+                    ShowBottomSheet.onDatePickerMonth(
+                        context, widget.isDetail ?? false);
                   },
                   child: Container(
                     padding: const EdgeInsets.only(bottom: 12),
                     decoration: BoxDecoration(
-                      border: Border(bottom: BorderSide(color: kHyppeBorderTab, width: 2.0)),
+                      border: Border(
+                          bottom:
+                              BorderSide(color: kHyppeBorderTab, width: 2.0)),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -123,21 +135,25 @@ class _OnChallangePeriodeBottomSheetState extends State<OnChallangePeriodeBottom
                           onChanged: (_) {
                             if (mounted) {
                               setState(() {
-                                _currentSession = cn.optionData.detail?[index].session ?? 1;
+                                _currentSession =
+                                    cn.optionData.detail?[index].session ?? 1;
                               });
                             }
                           },
                           toggleable: true,
                           title: CustomTextWidget(
                             textAlign: TextAlign.left,
-                            textToDisplay: "Period ${cn.optionData.detail?[index].session}",
-                            textStyle: Theme.of(context).primaryTextTheme.titleMedium,
+                            textToDisplay:
+                                "Period ${cn.optionData.detail?[index].session}",
+                            textStyle:
+                                Theme.of(context).primaryTextTheme.titleMedium,
                           ),
                           subtitle: CustomTextWidget(
                             textAlign: TextAlign.left,
                             textToDisplay:
                                 "${System().dateFormatter(cn.optionData.detail?[index].startDatetime ?? '', 5)} - ${System().dateFormatter(cn.optionData.detail?[index].endDatetime ?? '', 5)}",
-                            textStyle: Theme.of(context).primaryTextTheme.subtitle2,
+                            textStyle:
+                                Theme.of(context).primaryTextTheme.titleSmall,
                           ),
                           controlAffinity: ListTileControlAffinity.trailing,
                           activeColor: Theme.of(context).colorScheme.primary,

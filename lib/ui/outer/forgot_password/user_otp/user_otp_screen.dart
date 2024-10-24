@@ -60,7 +60,7 @@ class _UserOtpScreenState extends State<UserOtpScreen> {
                 ),
                 automaticallyImplyLeading: false,
                 title: CustomTextWidget(
-                  textStyle: Theme.of(context).textTheme.headline6,
+                  textStyle: Theme.of(context).textTheme.titleLarge,
                   textToDisplay: notifier.language.verificationCode ?? '',
                 ),
               ),

@@ -12,7 +12,10 @@ class TextElement extends StatelessWidget {
       child: CustomTextWidget(
         textToDisplay: caption,
         textOverflow: TextOverflow.visible,
-        textStyle: Theme.of(context).textTheme.headline4!.copyWith(fontWeight: FontWeight.w600),
+        textStyle: Theme.of(context)
+            .textTheme
+            .headlineMedium!
+            .copyWith(fontWeight: FontWeight.w600),
       ),
     );
   }

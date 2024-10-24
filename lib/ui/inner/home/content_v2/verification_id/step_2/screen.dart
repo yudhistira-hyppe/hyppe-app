@@ -36,7 +36,9 @@ class _VerificationIDStep2State extends State<VerificationIDStep2> {
     return Consumer<VerificationIDNotifier>(
       builder: (_, notifier, __) => Scaffold(
         appBar: AppBar(
-          leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
+          leadingWidth: 50 *
+              (SizeConfig.screenWidth ?? context.getWidth()) /
+              SizeWidget.baseWidthXD,
           leading: CustomIconButtonWidget(
             defaultColor: true,
             iconData: "${AssetPath.vectorPath}back-arrow.svg",
@@ -45,7 +47,8 @@ class _VerificationIDStep2State extends State<VerificationIDStep2> {
           titleSpacing: 0,
           title: CustomTextWidget(
             textToDisplay: notifier.language.idVerification ?? '',
-            textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
+            textStyle:
+                Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 18),
           ),
           centerTitle: false,
         ),
@@ -65,7 +68,9 @@ class _VerificationIDStep2State extends State<VerificationIDStep2> {
                     decoration: BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
-                          color: context.isDarkMode() ? Colors.white : Colors.black12,
+                          color: context.isDarkMode()
+                              ? Colors.white
+                              : Colors.black12,
                           width: 0.5,
                         ),
                       ),
@@ -75,7 +80,8 @@ class _VerificationIDStep2State extends State<VerificationIDStep2> {
                       maxLines: 1,
                       keyboardAppearance: Brightness.light,
                       cursorColor: const Color(0xff8A3181),
-                      style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
+                      style: textTheme.bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
                       onChanged: (value) {
                         print("hahaha $value");
                         setState(() {
@@ -84,7 +90,7 @@ class _VerificationIDStep2State extends State<VerificationIDStep2> {
                         print("hahaha $nama");
                       },
                       decoration: InputDecoration(
-                        hintStyle: textTheme.bodyText2,
+                        hintStyle: textTheme.bodyMedium,
                         errorBorder: InputBorder.none,
                         enabledBorder: InputBorder.none,
                         focusedBorder: InputBorder.none,
@@ -98,7 +104,10 @@ class _VerificationIDStep2State extends State<VerificationIDStep2> {
                   CustomTextWidget(
                       textOverflow: TextOverflow.visible,
                       textAlign: TextAlign.left,
-                      textStyle: textTheme.caption?.copyWith(color: context.isDarkMode() ? Colors.white : Colors.black26),
+                      textStyle: textTheme.bodySmall?.copyWith(
+                          color: context.isDarkMode()
+                              ? Colors.white
+                              : Colors.black26),
                       textToDisplay: notifier.language.reaNameNotice ?? '')
                 ],
               ),
@@ -109,20 +118,29 @@ class _VerificationIDStep2State extends State<VerificationIDStep2> {
                 function: () => notifier.submitStep2(context),
                 buttonStyle: nama != ''
                     ? ButtonStyle(
-                        foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                        shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                        overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                        backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                        foregroundColor: MaterialStateProperty.all(
+                            Theme.of(context).colorScheme.primary),
+                        shadowColor: MaterialStateProperty.all(
+                            Theme.of(context).colorScheme.primary),
+                        overlayColor: MaterialStateProperty.all(
+                            Theme.of(context).colorScheme.primary),
+                        backgroundColor: MaterialStateProperty.all(
+                            Theme.of(context).colorScheme.primary),
                       )
                     : ButtonStyle(
-                        foregroundColor: MaterialStateProperty.all(const Color(0xFFCECECE)),
-                        shadowColor: MaterialStateProperty.all(const Color(0xFFCECECE)),
-                        overlayColor: MaterialStateProperty.all(const Color(0xFFCECECE)),
-                        backgroundColor: MaterialStateProperty.all(const Color(0xFFCECECE)),
+                        foregroundColor:
+                            MaterialStateProperty.all(const Color(0xFFCECECE)),
+                        shadowColor:
+                            MaterialStateProperty.all(const Color(0xFFCECECE)),
+                        overlayColor:
+                            MaterialStateProperty.all(const Color(0xFFCECECE)),
+                        backgroundColor:
+                            MaterialStateProperty.all(const Color(0xFFCECECE)),
                       ),
                 child: CustomTextWidget(
                   textToDisplay: notifier.language.continueStep ?? '',
-                  textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                  textStyle: textTheme.labelLarge
+                      ?.copyWith(color: kHyppeLightButtonText),
                 ),
               ),
             ],

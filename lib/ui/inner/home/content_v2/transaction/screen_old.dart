@@ -32,7 +32,8 @@ class Transaction extends StatefulWidget {
 
 class _TransactionState extends State<Transaction> {
   final ScrollController _scrollController = ScrollController();
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'Transaction');
@@ -40,7 +41,8 @@ class _TransactionState extends State<Transaction> {
     _notifier.setSkip(0);
     print('initstate');
     // _notifier.initTransactionHistory(context);
-    _scrollController.addListener(() => _notifier.scrollList(context, _scrollController));
+    _scrollController
+        .addListener(() => _notifier.scrollList(context, _scrollController));
     super.initState();
   }
 
@@ -51,7 +53,9 @@ class _TransactionState extends State<Transaction> {
 
   @override
   void deactivate() {
-    Provider.of<TransactionNotifier>(materialAppKey.currentContext ?? context, listen: false).setIsLoading(false);
+    Provider.of<TransactionNotifier>(materialAppKey.currentContext ?? context,
+            listen: false)
+        .setIsLoading(false);
     super.deactivate();
   }
 
@@ -63,7 +67,7 @@ class _TransactionState extends State<Transaction> {
           appBar: AppBar(
             leading: const BackButton(),
             title: CustomTextWidget(
-              textStyle: theme.textTheme.subtitle1,
+              textStyle: theme.textTheme.titleMedium,
               textToDisplay: '${notifier2.translate.transaction}',
             ),
           ),
@@ -76,7 +80,8 @@ class _TransactionState extends State<Transaction> {
               // await notifier.initTransactionHistory(context);
             },
             child: notifier.isLoading
-                ? const SingleChildScrollView(child: ShimmerTransactionHistory())
+                ? const SingleChildScrollView(
+                    child: ShimmerTransactionHistory())
                 : SingleChildScrollView(
                     controller: _scrollController,
                     physics: const AlwaysScrollableScrollPhysics(),
@@ -84,7 +89,10 @@ class _TransactionState extends State<Transaction> {
                       padding: const EdgeInsets.all(16),
                       child: Column(
                         children: [
-                          TotalBalance(accountBalance: System().numberFormat(amount: notifier.accountBalance?.totalsaldo ?? 0)),
+                          TotalBalance(
+                              accountBalance: System().numberFormat(
+                                  amount: notifier.accountBalance?.totalsaldo ??
+                                      0)),
                           const ButtonTransaction(),
                           sixPx,
                           // Container(
@@ -111,7 +119,7 @@ class _TransactionState extends State<Transaction> {
                           //             sixPx,
                           //             CustomTextWidget(
                           //               textToDisplay: notifier2.translate.transactionInProgress ?? '',
-                          //               textStyle: Theme.of(context).textTheme.caption,
+                          //               textStyle: Theme.of(context).textTheme.bodySmall,
                           //             ),
                           //             Expanded(
                           //               child: Align(
@@ -124,7 +132,7 @@ class _TransactionState extends State<Transaction> {
                           //                   ),
                           //                   child: CustomTextWidget(
                           //                     textToDisplay: "${notifier.countTransactionProgress}",
-                          //                     textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightBackground),
+                          //                     textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(color: kHyppeLightBackground),
                           //                   ),
                           //                 ),
                           //               ),
@@ -138,15 +146,22 @@ class _TransactionState extends State<Transaction> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const CustomTextWidget(textToDisplay: 'Recent Transaction'),
+                              const CustomTextWidget(
+                                  textToDisplay: 'Recent Transaction'),
                               CustomTextButton(
                                 onPressed: () {
-                                  context.read<FilterTransactionNotifier>().getTypeFilter(context);
+                                  context
+                                      .read<FilterTransactionNotifier>()
+                                      .getTypeFilter(context);
                                   Routing().move(Routes.allTransaction);
                                 },
                                 child: CustomTextWidget(
-                                    textToDisplay: notifier2.translate.seeMore ?? '',
-                                    textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
+                                    textToDisplay:
+                                        notifier2.translate.seeMore ?? '',
+                                    textStyle: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
                                           color: kHyppePrimary,
                                           fontWeight: FontWeight.bold,
                                         )),
@@ -158,7 +173,9 @@ class _TransactionState extends State<Transaction> {
                                   textWidget: Column(
                                   children: [
                                     CustomTextWidget(
-                                      textToDisplay: notifier2.translate.youDontHaveAnyTransactionsYet ?? '',
+                                      textToDisplay: notifier2.translate
+                                              .youDontHaveAnyTransactionsYet ??
+                                          '',
                                       maxLines: 4,
                                     ),
                                   ],
@@ -169,38 +186,57 @@ class _TransactionState extends State<Transaction> {
                                   itemCount: notifier.dataTransaction?.length,
                                   itemBuilder: (context, index) {
                                     String title = '';
-                                    switch (notifier.dataTransaction?[index].type) {
+                                    switch (
+                                        notifier.dataTransaction?[index].type) {
                                       case TransactionType.withdrawal:
-                                        title = notifier2.translate.withdrawal ?? '';
+                                        title =
+                                            notifier2.translate.withdrawal ??
+                                                '';
                                         return WithdrawalWidget(
                                           title: title,
                                           language: notifier2.translate,
-                                          data: notifier.dataTransaction?[index],
+                                          data:
+                                              notifier.dataTransaction?[index],
                                         );
                                       case TransactionType.reward:
-                                        title = notifier2.translate.reward ?? '';
+                                        title =
+                                            notifier2.translate.reward ?? '';
                                         return RewardWidget(
                                           title: title,
                                           language: notifier2.translate,
-                                          data: notifier.dataTransaction?[index],
+                                          data:
+                                              notifier.dataTransaction?[index],
                                         );
                                       default:
-                                        if (notifier.dataTransaction?[index].jenis == "VOUCHER") {
+                                        if (notifier.dataTransaction?[index]
+                                                .jenis ==
+                                            "VOUCHER") {
                                           return VoucherWidget(
-                                            data: notifier.dataTransaction?[index],
+                                            data: notifier
+                                                .dataTransaction?[index],
                                             language: notifier2.translate,
                                           );
-                                        } else if (notifier.dataTransaction?[index].jenis == "Disbursement") {
-                                          return WithdrawalWidget(title: title, language: notifier2.translate, data: notifier.dataTransaction?[index]);
+                                        } else if (notifier
+                                                .dataTransaction?[index]
+                                                .jenis ==
+                                            "Disbursement") {
+                                          return WithdrawalWidget(
+                                              title: title,
+                                              language: notifier2.translate,
+                                              data: notifier
+                                                  .dataTransaction?[index]);
                                         } else {
                                           return BuySellWidget(
-                                            data: notifier.dataTransaction?[index],
+                                            data: notifier
+                                                .dataTransaction?[index],
                                             language: notifier2.translate,
                                           );
                                         }
                                     }
                                   }),
-                          notifier.isScrollLoading ? const CustomLoading() : const SizedBox()
+                          notifier.isScrollLoading
+                              ? const CustomLoading()
+                              : const SizedBox()
                         ],
                       ),
                     ),

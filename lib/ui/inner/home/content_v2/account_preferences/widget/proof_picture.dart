@@ -25,7 +25,9 @@ class ProofPicture extends StatelessWidget {
     return Selector<SelfProfileNotifier, UserInfoModel>(
       selector: (context, user) => user.user,
       builder: (context, user, child) {
-        bool isIDVerified = SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED;
+        bool isIDVerified =
+            SharedPreference().readStorage(SpKeys.statusVerificationId) ==
+                VERIFIED;
         return isIDVerified
             ? SizedBox(
                 width: double.infinity,
@@ -34,12 +36,16 @@ class ProofPicture extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomTextWidget(
-                      textToDisplay: notifier.language.idVerification ?? 'Verification ID',
-                      textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.bold),
+                      textToDisplay:
+                          notifier.language.idVerification ?? 'Verification ID',
+                      textStyle: Theme.of(context)
+                          .textTheme
+                          .bodyLarge!
+                          .copyWith(fontWeight: FontWeight.bold),
                     ),
                     // eightPx,
                     // CustomTextWidget(
-                    //   textStyle: Theme.of(context).textTheme.bodyText2,
+                    //   textStyle: Theme.of(context).textTheme.bodyMedium,
                     //   textToDisplay:
                     //       "${notifier.language.pleaseVerifyYourIdToUseHyppeFeatures}",
                     // ),
@@ -53,7 +59,10 @@ class ProofPicture extends StatelessWidget {
                         eightPx,
                         CustomTextWidget(
                           textToDisplay: "${notifier.language.verified}",
-                          textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
+                          textStyle: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                       ],
                     )
@@ -72,7 +81,7 @@ class ProofPicture extends StatelessWidget {
   //       onTap: () => notifier.takeSelfie(context),
   //       child: CustomTextWidget(
   //         textToDisplay: "Veriyfing...",
-  //         textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
+  //         textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
   //               fontWeight: FontWeight.bold,
   //               color: Theme.of(context).colorScheme.primary,
   //             ),
@@ -90,7 +99,7 @@ class ProofPicture extends StatelessWidget {
   //           textToDisplay: "${notifier.language.verified}",
   //           textStyle: Theme.of(context)
   //               .textTheme
-  //               .bodyText2
+  //               .bodyMedium
   //               ?.copyWith(fontWeight: FontWeight.bold),
   //         ),
   //       ],

@@ -22,7 +22,8 @@ class VerificationIDStep4 extends StatefulWidget {
   State<VerificationIDStep4> createState() => _VerificationIDStep4State();
 }
 
-class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAware {
+class _VerificationIDStep4State extends State<VerificationIDStep4>
+    with RouteAware {
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationIDStep4');
@@ -34,13 +35,15 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
   @override
   void dispose() {
     CustomRouteObserver.routeObserver.unsubscribe(this);
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: SystemUiOverlay.values);
     super.dispose();
   }
 
   @override
   void didChangeDependencies() {
-    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    CustomRouteObserver.routeObserver
+        .subscribe(this, ModalRoute.of(context) as PageRoute);
     super.didChangeDependencies();
   }
 
@@ -56,7 +59,8 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
         },
         child: Scaffold(
             body: CameraDevicesPage(
-          onCameraNotifierUpdate: (cameraNotifier) => notifier.cameraDevicesNotifier = cameraNotifier,
+          onCameraNotifierUpdate: (cameraNotifier) =>
+              notifier.cameraDevicesNotifier = cameraNotifier,
           backCamera: true,
           additionalViews: <Widget>[
             Align(
@@ -69,7 +73,10 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Theme.of(context).colorScheme.background.withOpacity(0.44),
+                      Theme.of(context)
+                          .colorScheme
+                          .background
+                          .withOpacity(0.44),
                       Colors.transparent,
                     ],
                   ),
@@ -87,10 +94,15 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    CustomTextButton(onPressed: () => notifier.retryTakeIdCard(), child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg", defaultColor: false)),
+                    CustomTextButton(
+                        onPressed: () => notifier.retryTakeIdCard(),
+                        child: const CustomIconWidget(
+                            iconData: "${AssetPath.vectorPath}close.svg",
+                            defaultColor: false)),
                     CustomTextWidget(
                       textToDisplay: notifier.language.idVerification ?? '',
-                      textStyle: textTheme.subtitle1?.copyWith(color: Colors.white),
+                      textStyle:
+                          textTheme.titleMedium?.copyWith(color: Colors.white),
                     ),
                   ],
                 ),
@@ -135,7 +147,10 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
             // ),
             Align(
               alignment: const Alignment(0.0, 0.6),
-              child: CustomTextWidget(textToDisplay: notifier.language.cameraTakeIdCardInfo ?? '', textStyle: textTheme.subtitle1?.copyWith(color: Colors.white)),
+              child: CustomTextWidget(
+                  textToDisplay: notifier.language.cameraTakeIdCardInfo ?? '',
+                  textStyle:
+                      textTheme.titleMedium?.copyWith(color: Colors.white)),
             ),
           ],
         )
@@ -176,7 +191,7 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
             //                   CustomTextButton(onPressed: () => notifier.retryTakeIdCard(), child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg", defaultColor: false)),
             //                   CustomTextWidget(
             //                     textToDisplay: notifier.language.idVerification ?? '',
-            //                     textStyle: textTheme.subtitle1?.copyWith(color: Colors.white),
+            //                     textStyle: textTheme.titleMedium?.copyWith(color: Colors.white),
             //                   ),
             //                 ],
             //               ),
@@ -220,7 +235,7 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
             //           ),
             //           Align(
             //             alignment: const Alignment(0.0, 0.6),
-            //             child: CustomTextWidget(textToDisplay: notifier.language.cameraTakeIdCardInfo ?? '', textStyle: textTheme.subtitle1?.copyWith(color: Colors.white)),
+            //             child: CustomTextWidget(textToDisplay: notifier.language.cameraTakeIdCardInfo ?? '', textStyle: textTheme.titleMedium?.copyWith(color: Colors.white)),
             //           )
             //         ],
             //       )
@@ -259,7 +274,7 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
             //                   CustomTextButton(onPressed: () => notifier.retryTakeIdCard(), child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg", defaultColor: false)),
             //                   CustomTextWidget(
             //                     textToDisplay: notifier.language.idVerification ?? '',
-            //                     textStyle: textTheme.subtitle1?.copyWith(color: Colors.white),
+            //                     textStyle: textTheme.titleMedium?.copyWith(color: Colors.white),
             //                   ),
             //                 ],
             //               ),
@@ -303,7 +318,7 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
             //           ),
             //           Align(
             //             alignment: const Alignment(0.0, 0.6),
-            //             child: CustomTextWidget(textToDisplay: notifier.language.cameraTakeIdCardInfo ?? '', textStyle: textTheme.subtitle1?.copyWith(color: Colors.white)),
+            //             child: CustomTextWidget(textToDisplay: notifier.language.cameraTakeIdCardInfo ?? '', textStyle: textTheme.titleMedium?.copyWith(color: Colors.white)),
             //           )
             //         ],
             //       ),
@@ -316,12 +331,15 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
 class OverlayWithRectangleClipping extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(backgroundColor: Colors.transparent, body: _getCustomPaintOverlay(context));
+    return Scaffold(
+        backgroundColor: Colors.transparent,
+        body: _getCustomPaintOverlay(context));
   }
 
   //CustomPainter that helps us in doing this
   CustomPaint _getCustomPaintOverlay(BuildContext context) {
-    return CustomPaint(size: MediaQuery.of(context).size, painter: RectanglePainter());
+    return CustomPaint(
+        size: MediaQuery.of(context).size, painter: RectanglePainter());
   }
 }
 
@@ -339,7 +357,10 @@ class RectanglePainter extends CustomPainter {
           Path()
             ..addRRect(
               RRect.fromRectAndRadius(
-                Rect.fromCenter(center: Offset(size.width * 0.5, size.height * 0.5), width: size.width * 0.90, height: size.height * 0.25),
+                Rect.fromCenter(
+                    center: Offset(size.width * 0.5, size.height * 0.5),
+                    width: size.width * 0.90,
+                    height: size.height * 0.25),
                 Radius.circular(15),
               ),
             )

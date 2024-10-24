@@ -16,7 +16,10 @@ class LinkCopied extends StatelessWidget {
       height: 35,
       width: size.width * 0.9,
       alignment: Alignment.center,
-      child: CustomTextWidget(textToDisplay: 'Link Copied', textStyle: theme.textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w500)),
+      child: CustomTextWidget(
+          textToDisplay: 'Link Copied',
+          textStyle:
+              theme.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w500)),
     );
   }
 }

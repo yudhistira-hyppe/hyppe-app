@@ -30,9 +30,12 @@ class ContentItem extends StatelessWidget {
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'ContentItem');
     final notifier = context.watch<DiarySeeAllNotifier>();
-    final error = context.select((ErrorService value) => value.getError(ErrorType.diary));
+    final error =
+        context.select((ErrorService value) => value.getError(ErrorType.diary));
 
-    return context.read<ErrorService>().isInitialError(error, notifier.diaryData)
+    return context
+            .read<ErrorService>()
+            .isInitialError(error, notifier.diaryData)
         ? CustomErrorWidget(
             errorType: ErrorType.diary,
             function: () => notifier.initialDiary(context, reload: true),
@@ -53,7 +56,8 @@ class ContentItem extends StatelessWidget {
                     itemCount: notifier.itemCount,
                     scrollDirection: Axis.vertical,
                     controller: notifier.scrollController,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       mainAxisSpacing: 10,
                       crossAxisSpacing: 10,
@@ -63,20 +67,26 @@ class ContentItem extends StatelessWidget {
                     itemBuilder: (context, index) {
                       if (notifier.diaryData == null) {
                         return const CustomLoading();
-                      } else if (index == notifier.diaryData?.length && notifier.hasNext) {
+                      } else if (index == notifier.diaryData?.length &&
+                          notifier.hasNext) {
                         return const CustomLoading();
                       }
 
                       final data = notifier.diaryData?[index];
                       return InkWell(
-                        onTap: () => notifier.navigateToShortVideoPlayer(context, index),
+                        onTap: () =>
+                            notifier.navigateToShortVideoPlayer(context, index),
                         child: Stack(
                           children: [
                             CustomBaseCacheImage(
-                              imageUrl: (data?.isApsara ?? false) ? (data?.mediaThumbEndPoint ?? '') : data?.fullThumbPath ?? '',
-                              imageBuilder: (context, imageProvider) => Container(
+                              imageUrl: (data?.isApsara ?? false)
+                                  ? (data?.mediaThumbEndPoint ?? '')
+                                  : data?.fullThumbPath ?? '',
+                              imageBuilder: (context, imageProvider) =>
+                                  Container(
                                 alignment: Alignment.bottomLeft,
-                                margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 4.0),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8.0),
                                   image: DecorationImage(
@@ -86,7 +96,8 @@ class ContentItem extends StatelessWidget {
                                 ),
                                 child: data?.reportedStatus == 'BLURRED'
                                     ? ClipRRect(
-                                        borderRadius: BorderRadius.circular(8.0),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
                                         child: BackdropFilter(
                                           filter: ImageFilter.blur(
                                             sigmaX: 30.0,
@@ -94,12 +105,16 @@ class ContentItem extends StatelessWidget {
                                           ),
                                           child: Container(
                                             alignment: Alignment.center,
-                                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
                                             child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
                                               children: const [
                                                 CustomIconWidget(
-                                                  iconData: "${AssetPath.vectorPath}eye-off.svg",
+                                                  iconData:
+                                                      "${AssetPath.vectorPath}eye-off.svg",
                                                   defaultColor: false,
                                                   height: 40,
                                                   color: Colors.white,
@@ -111,38 +126,52 @@ class ContentItem extends StatelessWidget {
                                       )
                                     : CustomBalloonWidget(
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             const CustomIconWidget(
                                               defaultColor: false,
                                               color: kHyppeLightButtonText,
-                                              iconData: '${AssetPath.vectorPath}like.svg',
+                                              iconData:
+                                                  '${AssetPath.vectorPath}like.svg',
                                             ),
                                             fourPx,
                                             CustomTextWidget(
-                                              textToDisplay: System().formatterNumber(data?.insight?.likes ?? 0),
-                                              textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
+                                              textToDisplay: System()
+                                                  .formatterNumber(
+                                                      data?.insight?.likes ??
+                                                          0),
+                                              textStyle: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall
+                                                  ?.copyWith(
+                                                      color:
+                                                          kHyppeLightButtonText),
                                             ),
                                           ],
                                         ),
                                       ),
                               ),
                               errorWidget: (context, url, error) => Container(
-                                margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 4.0),
                                 decoration: BoxDecoration(
                                   image: const DecorationImage(
                                     fit: BoxFit.cover,
-                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                    image: AssetImage(
+                                        '${AssetPath.pngPath}content-error.png'),
                                   ),
                                   borderRadius: BorderRadius.circular(8.0),
                                 ),
                               ),
                               emptyWidget: Container(
-                                margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 4.0),
                                 decoration: BoxDecoration(
                                   image: const DecorationImage(
                                     fit: BoxFit.cover,
-                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                    image: AssetImage(
+                                        '${AssetPath.pngPath}content-error.png'),
                                   ),
                                   borderRadius: BorderRadius.circular(8.0),
                                 ),
@@ -152,9 +181,11 @@ class ContentItem extends StatelessWidget {
                                 ? const Align(
                                     alignment: Alignment.topRight,
                                     child: Padding(
-                                      padding: EdgeInsets.only(top: 3, right: 6.0),
+                                      padding:
+                                          EdgeInsets.only(top: 3, right: 6.0),
                                       child: CustomIconWidget(
-                                        iconData: "${AssetPath.vectorPath}sale.svg",
+                                        iconData:
+                                            "${AssetPath.vectorPath}sale.svg",
                                         height: 22,
                                         defaultColor: false,
                                       ),

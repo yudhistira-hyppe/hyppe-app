@@ -47,7 +47,8 @@ class _PelanggaranDetailState extends State<PelanggaranDetail> {
   @override
   Widget build(BuildContext context) {
     initializeDateFormatting('id', null);
-    final translate = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
+    final translate =
+        Provider.of<TranslateNotifierV2>(context, listen: false).translate;
     return Consumer<AppealStreamNotifier>(
       builder: (_, notifier, __) => Scaffold(
         appBar: AppBar(
@@ -55,8 +56,13 @@ class _PelanggaranDetailState extends State<PelanggaranDetail> {
             color: kHyppeTextLightPrimary,
           ),
           title: CustomTextWidget(
-            textStyle: Theme.of(context).textTheme.subtitle1?.copyWith(color: kHyppeTextLightPrimary),
-            textToDisplay: translate.localeDatetime == 'id' ? 'Detail Pelanggaran' : 'Violation Detail',
+            textStyle: Theme.of(context)
+                .textTheme
+                .titleMedium
+                ?.copyWith(color: kHyppeTextLightPrimary),
+            textToDisplay: translate.localeDatetime == 'id'
+                ? 'Detail Pelanggaran'
+                : 'Violation Detail',
           ),
         ),
         body: notifier.isloading
@@ -95,7 +101,9 @@ class _PelanggaranDetailState extends State<PelanggaranDetail> {
                 Routes.communityGuidelines,
                 argument: GeneralArgument(
                   id: guidlineLive,
-                  title: translate.localeDatetime == 'id' ? 'Panduan Komunitas' : 'Community Guidelines',
+                  title: translate.localeDatetime == 'id'
+                      ? 'Panduan Komunitas'
+                      : 'Community Guidelines',
                 ),
               );
             },
@@ -108,12 +116,19 @@ class _PelanggaranDetailState extends State<PelanggaranDetail> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CustomTextWidget(
-                          textToDisplay: translate.localeDatetime == 'id' ? 'Pelanggaran Pedoman Komunitas' : 'Community Guidelines Violation',
-                          textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                          textToDisplay: translate.localeDatetime == 'id'
+                              ? 'Pelanggaran Pedoman Komunitas'
+                              : 'Community Guidelines Violation',
+                          textStyle: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              color: kHyppeTextLightPrimary),
                         ),
                         eightPx,
                         CustomTextWidget(
-                          textToDisplay: translate.localeDatetime == 'id' ? 'Temukan Pedoman Komunitas kami' : 'Discover our Community Guidelines in the Hyppe app.',
+                          textToDisplay: translate.localeDatetime == 'id'
+                              ? 'Temukan Pedoman Komunitas kami'
+                              : 'Discover our Community Guidelines in the Hyppe app.',
                           textStyle: const TextStyle(color: kHyppeBurem),
                         ),
                       ],
@@ -136,12 +151,16 @@ class _PelanggaranDetailState extends State<PelanggaranDetail> {
           ),
           twentyPx,
           textTwo(
-            translate.localeDatetime == 'id' ? 'Waktu Pelanggaran' : 'Time of Violation',
+            translate.localeDatetime == 'id'
+                ? 'Waktu Pelanggaran'
+                : 'Time of Violation',
             "${System().dateFormatter(widget.data?.streamBannedDate ?? notifier.dataBanned.streamBannedDate ?? '2024-01-01', 9)}  WIB",
           ),
           twentyPx,
           textTwo(
-            translate.localeDatetime == 'id' ? 'Jumlah Pelanggaran' : 'Number of Violations',
+            translate.localeDatetime == 'id'
+                ? 'Jumlah Pelanggaran'
+                : 'Number of Violations',
             '${widget.data?.streamBannedMax ?? notifier.dataBanned.streamBannedMax ?? '-'} kali',
           ),
         ],
@@ -155,7 +174,8 @@ class _PelanggaranDetailState extends State<PelanggaranDetail> {
       children: [
         CustomTextWidget(
           textToDisplay: text1,
-          textStyle: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700),
+          textStyle: const TextStyle(
+              color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700),
         ),
         CustomTextWidget(
           textToDisplay: text2,
@@ -168,7 +188,9 @@ class _PelanggaranDetailState extends State<PelanggaranDetail> {
   Widget bottomDetail(BuildContext context, LocalizationModelV2 translate) {
     return ButtonChallangeWidget(
       bgColor: kHyppePrimary,
-      text: translate.localeDatetime == 'id' ? 'Ajukan Permohonan Banding' : 'Submit an Appeal',
+      text: translate.localeDatetime == 'id'
+          ? 'Ajukan Permohonan Banding'
+          : 'Submit an Appeal',
       textColors: Colors.white,
       function: () {
         Navigator.push(

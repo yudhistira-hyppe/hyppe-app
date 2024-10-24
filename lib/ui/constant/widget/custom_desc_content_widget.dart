@@ -37,29 +37,29 @@ class CustomDescContent extends StatefulWidget {
   final GestureDragStartCallback? onLongPressStart;
   final GestureDragEndCallback? onLongPressEnd;
 
-  CustomDescContent({
-    Key? key,
-    required this.desc,
-    this.trimLines = 2,
-    this.trimLength = 240,
-    this.textAlign,
-    this.callback,
-    this.callbackIsMore,
-    this.hrefStyle,
-    this.normStyle,
-    this.expandStyle,
-    this.seeMore,
-    this.seeLess,
-    this.textOverflow,
-    this.isReplace = false,
-    this.delimiter = '\u2026 ',
-    this.beforeGone,
-    this.afterGone,
-    this.isPlay,
-    this.isloading,
-    this.onLongPressStart,
-    this.onLongPressEnd
-  }) : super(key: key);
+  CustomDescContent(
+      {Key? key,
+      required this.desc,
+      this.trimLines = 2,
+      this.trimLength = 240,
+      this.textAlign,
+      this.callback,
+      this.callbackIsMore,
+      this.hrefStyle,
+      this.normStyle,
+      this.expandStyle,
+      this.seeMore,
+      this.seeLess,
+      this.textOverflow,
+      this.isReplace = false,
+      this.delimiter = '\u2026 ',
+      this.beforeGone,
+      this.afterGone,
+      this.isPlay,
+      this.isloading,
+      this.onLongPressStart,
+      this.onLongPressEnd})
+      : super(key: key);
 
   @override
   State<CustomDescContent> createState() => _CustomDescContentState();
@@ -139,15 +139,20 @@ class _CustomDescContentState extends State<CustomDescContent> {
       effectiveTextStyle = defaultTextStyle.style.merge(widget.normStyle);
     }
 
-    final textAlign = widget.textAlign ?? defaultTextStyle.textAlign ?? TextAlign.start;
+    final textAlign =
+        widget.textAlign ?? defaultTextStyle.textAlign ?? TextAlign.start;
     final textDirection = Directionality.of(context);
     final textScaleFactor = MediaQuery.textScaleFactorOf(context);
 
     final colorClickableText = Theme.of(context).colorScheme.surface;
-    final _defaultMoreLessStyle = widget.expandStyle ?? effectiveTextStyle?.copyWith(color: colorClickableText);
+    final _defaultMoreLessStyle = widget.expandStyle ??
+        effectiveTextStyle?.copyWith(color: colorClickableText);
     final _defaultDelimiterStyle = widget.normStyle ?? effectiveTextStyle;
 
-    final link = TextSpan(text: _readMore ? widget.seeMore : widget.seeLess, style: _defaultMoreLessStyle, recognizer: TapGestureRecognizer()..onTap = _onSeeMore);
+    final link = TextSpan(
+        text: _readMore ? widget.seeMore : widget.seeLess,
+        style: _defaultMoreLessStyle,
+        recognizer: TapGestureRecognizer()..onTap = _onSeeMore);
 
     final _delimiter = TextSpan(
         text: _readMore
@@ -197,7 +202,9 @@ class _CustomDescContentState extends State<CustomDescContent> {
         if (linkSize.width < maxWidth) {
           final readMoreSize = linkSize.width + delimiterSize.width;
           final pos = textPainter.getPositionForOffset(Offset(
-            textDirection == TextDirection.rtl ? readMoreSize : textSize.width - readMoreSize,
+            textDirection == TextDirection.rtl
+                ? readMoreSize
+                : textSize.width - readMoreSize,
             textSize.height,
           ));
           endIndex = textPainter.getOffsetBefore(pos.offset) ?? 0;
@@ -215,7 +222,8 @@ class _CustomDescContentState extends State<CustomDescContent> {
             children: collectDescItems(
               context,
               lastIndex: endIndex,
-              getDescItems(lastIndex: endIndex, linkLongerThanLine: linkLongerThanLine),
+              getDescItems(
+                  lastIndex: endIndex, linkLongerThanLine: linkLongerThanLine),
               spanTrim: link,
             ),
           );
@@ -230,7 +238,11 @@ class _CustomDescContentState extends State<CustomDescContent> {
         } else {
           var textSpan = TextSpan(
             style: effectiveTextStyle,
-            children: collectDescItems(context, lastIndex: null, getDescItems(lastIndex: null, linkLongerThanLine: linkLongerThanLine)),
+            children: collectDescItems(
+                context,
+                lastIndex: null,
+                getDescItems(
+                    lastIndex: null, linkLongerThanLine: linkLongerThanLine)),
           );
           return Text.rich(
             textSpan,
@@ -247,12 +259,17 @@ class _CustomDescContentState extends State<CustomDescContent> {
     return result;
   }
 
-  List<TextSpan> collectDescItems(BuildContext context, List<ItemDesc> items, {int? lastIndex, TextSpan? spanTrim}) {
+  List<TextSpan> collectDescItems(BuildContext context, List<ItemDesc> items,
+      {int? lastIndex, TextSpan? spanTrim}) {
     final callback = widget.callback;
     List<TextSpan> results = [];
-    bool isSeeLess = items.where((element) => element.type == CaptionType.seeMore).toList().isNotEmpty;
+    bool isSeeLess = items
+        .where((element) => element.type == CaptionType.seeMore)
+        .toList()
+        .isNotEmpty;
     for (var item in items) {
-      if (item.type == CaptionType.seeMore || item.type == CaptionType.seeLess) {
+      if (item.type == CaptionType.seeMore ||
+          item.type == CaptionType.seeLess) {
         if (spanTrim != null) {
           results.add(spanTrim);
         }
@@ -277,9 +294,15 @@ class _CustomDescContentState extends State<CustomDescContent> {
         }
         results.add(TextSpan(
             text: fixdesc,
-            style: item.type == CaptionType.mention || item.type == CaptionType.hashtag
-                ? (widget.hrefStyle ?? Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.primary))
-                : (widget.normStyle ?? Theme.of(context).textTheme.bodyText2!.copyWith()),
+            style: item.type == CaptionType.mention ||
+                    item.type == CaptionType.hashtag
+                ? (widget.hrefStyle ??
+                    Theme.of(context)
+                        .textTheme
+                        .bodyMedium!
+                        .copyWith(color: Theme.of(context).colorScheme.primary))
+                : (widget.normStyle ??
+                    Theme.of(context).textTheme.bodyMedium!.copyWith()),
             recognizer: item.type == CaptionType.normal
                 ? null
                 : (TapGestureRecognizer()
@@ -292,16 +315,28 @@ class _CustomDescContentState extends State<CustomDescContent> {
                         if (callback != null) {
                           callback(true);
                         }
-                        var fixKeyword = item.desc[0] == '#' ? item.desc.substring(1, item.desc.length) : item.desc;
+                        var fixKeyword = item.desc[0] == '#'
+                            ? item.desc.substring(1, item.desc.length)
+                            : item.desc;
                         fixKeyword = fixKeyword.replaceAll(',', '');
                         globalAliPlayer?.pause();
                         if (widget.isReplace) {
-                          await Routing().moveReplacement(Routes.hashtagDetail, argument: HashtagArgument(isTitle: false, hashtag: Tags(tag: fixKeyword, id: fixKeyword), fromRoute: true));
+                          await Routing().moveReplacement(Routes.hashtagDetail,
+                              argument: HashtagArgument(
+                                  isTitle: false,
+                                  hashtag:
+                                      Tags(tag: fixKeyword, id: fixKeyword),
+                                  fromRoute: true));
                         } else {
                           if (widget.afterGone != null) {
                             widget.beforeGone!();
                           }
-                          await Routing().move(Routes.hashtagDetail, argument: HashtagArgument(isTitle: false, hashtag: Tags(tag: fixKeyword, id: fixKeyword), fromRoute: true));
+                          await Routing().move(Routes.hashtagDetail,
+                              argument: HashtagArgument(
+                                  isTitle: false,
+                                  hashtag:
+                                      Tags(tag: fixKeyword, id: fixKeyword),
+                                  fromRoute: true));
                           if (widget.afterGone != null) {
                             widget.afterGone!();
                           }
@@ -313,8 +348,14 @@ class _CustomDescContentState extends State<CustomDescContent> {
                         if (callback != null) {
                           callback(true);
                         }
-                        final fixUsername = item.desc[0] == '@' ? item.desc.substring(1, item.desc.length) : item.desc;
-                        await materialAppKey.currentContext!.read<NotificationNotifier>().checkAndNavigateToProfile(context, fixUsername, isReplace: widget.isReplace, isPlay: widget.isPlay ?? true);
+                        final fixUsername = item.desc[0] == '@'
+                            ? item.desc.substring(1, item.desc.length)
+                            : item.desc;
+                        await materialAppKey.currentContext!
+                            .read<NotificationNotifier>()
+                            .checkAndNavigateToProfile(context, fixUsername,
+                                isReplace: widget.isReplace,
+                                isPlay: widget.isPlay ?? true);
                       }
                       setState(() {
                         isClicked = false;
@@ -326,10 +367,12 @@ class _CustomDescContentState extends State<CustomDescContent> {
     return results;
   }
 
-  List<ItemDesc> getDescItems({int? lastIndex, required bool linkLongerThanLine}) {
+  List<ItemDesc> getDescItems(
+      {int? lastIndex, required bool linkLongerThanLine}) {
     var fixDesc = _readMore
         ? lastIndex != null
-            ? desc.substring(0, lastIndex + 1) + (linkLongerThanLine ? _kLineSeparator : '')
+            ? desc.substring(0, lastIndex + 1) +
+                (linkLongerThanLine ? _kLineSeparator : '')
             : desc
         : desc;
     fixDesc = fixDesc.replaceAll('\n@', '\n @');
@@ -348,14 +391,17 @@ class _CustomDescContentState extends State<CustomDescContent> {
         final firstChar = splitDesc[i].substring(0, 1);
         if (firstChar == '@' && splitDesc[i].length > 1) {
           if (tempDesc.isNotEmpty) {
-            descItems.add(ItemDesc(desc: '$tempDesc ', type: CaptionType.normal));
+            descItems
+                .add(ItemDesc(desc: '$tempDesc ', type: CaptionType.normal));
             tempDesc = '';
           }
           // print('hit prepare username: ${splitDesc[i].substring(0, 1)} , ${splitDesc[i].substring(1, splitDesc[i].length)}');
           if (splitDesc[i].contains("@GuestHyppe")) {
-            descItems.add(ItemDesc(desc: '${splitDesc[i]} ', type: CaptionType.normal));
+            descItems.add(
+                ItemDesc(desc: '${splitDesc[i]} ', type: CaptionType.normal));
           } else {
-            descItems.add(ItemDesc(desc: '${splitDesc[i]} ', type: CaptionType.mention));
+            descItems.add(
+                ItemDesc(desc: '${splitDesc[i]} ', type: CaptionType.mention));
           }
         } else if (firstChar == '#' && splitDesc[i].length > 1) {
           final lenght = splitDesc[i].length;
@@ -365,26 +411,32 @@ class _CustomDescContentState extends State<CustomDescContent> {
           if (!isSpecialChar) {
             tempDesc = '$tempDesc ${splitDesc[i]}';
             if (i == (splitDesc.length - 1)) {
-              descItems.add(ItemDesc(desc: getWithoutSpaces(tempDesc), type: CaptionType.normal));
+              descItems.add(ItemDesc(
+                  desc: getWithoutSpaces(tempDesc), type: CaptionType.normal));
             }
           } else {
             if (tempDesc.isNotEmpty) {
-              descItems.add(ItemDesc(desc: '$tempDesc ', type: CaptionType.normal));
+              descItems
+                  .add(ItemDesc(desc: '$tempDesc ', type: CaptionType.normal));
               tempDesc = '';
             }
-            descItems.add(ItemDesc(desc: '${splitDesc[i]} ', type: CaptionType.hashtag));
+            descItems.add(
+                ItemDesc(desc: '${splitDesc[i]} ', type: CaptionType.hashtag));
           }
         } else {
           tempDesc = '$tempDesc ${splitDesc[i]}';
           if (i == (splitDesc.length - 1)) {
-            descItems.add(ItemDesc(desc: getWithoutSpaces(tempDesc), type: CaptionType.normal));
+            descItems.add(ItemDesc(
+                desc: getWithoutSpaces(tempDesc), type: CaptionType.normal));
           }
         }
       }
     }
 
     if (widget.seeMore != null && widget.seeLess != null) {
-      descItems.add(ItemDesc(desc: _readMore ? (widget.seeMore ?? '') : (widget.seeLess ?? ''), type: _readMore ? CaptionType.seeMore : CaptionType.seeLess));
+      descItems.add(ItemDesc(
+          desc: _readMore ? (widget.seeMore ?? '') : (widget.seeLess ?? ''),
+          type: _readMore ? CaptionType.seeMore : CaptionType.seeLess));
     }
 
     ///only for check the results

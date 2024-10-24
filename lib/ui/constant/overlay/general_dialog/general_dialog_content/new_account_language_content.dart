@@ -14,7 +14,8 @@ import 'package:provider/provider.dart';
 
 class NewAccountLanguageContent extends StatefulWidget {
   @override
-  State<NewAccountLanguageContent> createState() => _NewAccountLanguageContentState();
+  State<NewAccountLanguageContent> createState() =>
+      _NewAccountLanguageContentState();
 }
 
 class _NewAccountLanguageContentState extends State<NewAccountLanguageContent> {
@@ -25,7 +26,8 @@ class _NewAccountLanguageContentState extends State<NewAccountLanguageContent> {
     final notifier = context.read<TranslateNotifierV2>();
     notifier.getListOfLanguage(context);
     _scroll.addListener(() {
-      if (_scroll.offset >= _scroll.position.maxScrollExtent && !_scroll.position.outOfRange) {
+      if (_scroll.offset >= _scroll.position.maxScrollExtent &&
+          !_scroll.position.outOfRange) {
         notifier.loadMore = !notifier.loadMore;
         notifier.getListOfLanguage(context);
       }
@@ -36,9 +38,11 @@ class _NewAccountLanguageContentState extends State<NewAccountLanguageContent> {
   @override
   Widget build(BuildContext context) {
     final notifier = context.watch<TranslateNotifierV2>();
-    final error = context.select((ErrorService value) => value.getError(ErrorType.getLanguage));
+    final error = context
+        .select((ErrorService value) => value.getError(ErrorType.getLanguage));
 
-    if (context.read<ErrorService>().isInitialError(error, notifier.listLanguage.isEmpty ? null : notifier.listLanguage)) {
+    if (context.read<ErrorService>().isInitialError(
+        error, notifier.listLanguage.isEmpty ? null : notifier.listLanguage)) {
       return Center(
         child: SizedBox(
           height: SizeConfig.screenHeight! * 0.8,
@@ -59,7 +63,8 @@ class _NewAccountLanguageContentState extends State<NewAccountLanguageContent> {
                 children: [
                   const RotatedBox(
                     quarterTurns: 1,
-                    child: CustomIconWidget(iconData: '${AssetPath.vectorPath}back-arrow.svg'),
+                    child: CustomIconWidget(
+                        iconData: '${AssetPath.vectorPath}back-arrow.svg'),
                   ),
                   Expanded(
                     child: ListView.builder(
@@ -77,17 +82,23 @@ class _NewAccountLanguageContentState extends State<NewAccountLanguageContent> {
                           },
                           buttonStyle: const ButtonStyle(),
                           child: CustomTextWidget(
-                            textToDisplay: notifier.listLanguage[index].lang ?? '',
-                            textStyle: Theme.of(context).textTheme.bodyText1,
+                            textToDisplay:
+                                notifier.listLanguage[index].lang ?? '',
+                            textStyle: Theme.of(context).textTheme.bodyLarge,
                           ),
                         ),
                       ),
                     ),
                   ),
-                  notifier.loadMore ? SignUpLoadMoreList(caption: "${notifier.translate.loadMore} ${notifier.translate.language}") : const SizedBox.shrink(),
+                  notifier.loadMore
+                      ? SignUpLoadMoreList(
+                          caption:
+                              "${notifier.translate.loadMore} ${notifier.translate.language}")
+                      : const SizedBox.shrink(),
                   const RotatedBox(
                     quarterTurns: 3,
-                    child: CustomIconWidget(iconData: '${AssetPath.vectorPath}back-arrow.svg'),
+                    child: CustomIconWidget(
+                        iconData: '${AssetPath.vectorPath}back-arrow.svg'),
                   ),
                 ],
               )

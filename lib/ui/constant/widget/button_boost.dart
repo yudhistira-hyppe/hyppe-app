@@ -24,7 +24,14 @@ class ButtonBoost extends StatefulWidget {
   final bool onDetail;
   final Function? startState;
   final Function? afterState;
-  const ButtonBoost({Key? key, this.contentData, this.marginBool = false, this.startState, this.afterState, this.onDetail = true}) : super(key: key);
+  const ButtonBoost(
+      {Key? key,
+      this.contentData,
+      this.marginBool = false,
+      this.startState,
+      this.afterState,
+      this.onDetail = true})
+      : super(key: key);
   @override
   State<ButtonBoost> createState() => _ButtonBoostState();
 }
@@ -35,7 +42,8 @@ class _ButtonBoostState extends State<ButtonBoost> {
   @override
   Widget build(BuildContext context) {
     final isKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
-    final language = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
+    final language =
+        Provider.of<TranslateNotifierV2>(context, listen: false).translate;
     return Container(
       margin: EdgeInsets.all(widget.marginBool ? 0.0 : 16),
       decoration: BoxDecoration(
@@ -52,13 +60,17 @@ class _ButtonBoostState extends State<ButtonBoost> {
           color: Colors.transparent,
           borderRadius: BorderRadius.circular(8),
           child: InkWell(
-            onTap: isKyc == VERIFIED && (widget.contentData?.statusBoost != 'AKAN DATANG')
+            onTap: isKyc == VERIFIED &&
+                    (widget.contentData?.statusBoost != 'AKAN DATANG')
                 ? () async {
                     bool isPanding = false;
                     setState(() {
                       isLoading = true;
                     });
-                    await Provider.of<TransactionNotifier>(context, listen: false).checkTransPanding(context).then((value) {
+                    await Provider.of<TransactionNotifier>(context,
+                            listen: false)
+                        .checkTransPanding(context)
+                        .then((value) {
                       isPanding = value;
 
                       setState(() {
@@ -83,28 +95,40 @@ class _ButtonBoostState extends State<ButtonBoost> {
                       return;
                     }
 
-                    final notifier = Provider.of<PreUploadContentNotifier>(context, listen: false);
+                    final notifier = Provider.of<PreUploadContentNotifier>(
+                        context,
+                        listen: false);
                     notifier.editData = widget.contentData;
                     notifier.isEdit = true;
                     notifier.isUpdate = true;
-                    notifier.captionController.text = widget.contentData?.description ?? "";
-                    notifier.tagsController.text = widget.contentData?.tags?.join(",") ?? '';
-                    notifier.featureType = System().getFeatureTypeV2(widget.contentData?.postType ?? '');
+                    notifier.captionController.text =
+                        widget.contentData?.description ?? "";
+                    notifier.tagsController.text =
+                        widget.contentData?.tags?.join(",") ?? '';
+                    notifier.featureType = System()
+                        .getFeatureTypeV2(widget.contentData?.postType ?? '');
 
                     notifier.thumbNail = widget.contentData?.fullThumbPath;
-                    notifier.allowComment = widget.contentData?.allowComments ?? false;
+                    notifier.allowComment =
+                        widget.contentData?.allowComments ?? false;
                     notifier.certified = widget.contentData?.certified ?? false;
-                    notifier.ownershipEULA = widget.contentData?.certified ?? false;
+                    notifier.ownershipEULA =
+                        widget.contentData?.certified ?? false;
 
                     if (widget.contentData?.location != '') {
-                      notifier.locationName = widget.contentData?.location ?? '';
+                      notifier.locationName =
+                          widget.contentData?.location ?? '';
                     } else {
-                      notifier.locationName = notifier.language.addLocation ?? '';
+                      notifier.locationName =
+                          notifier.language.addLocation ?? '';
                     }
-                    notifier.privacyTitle = widget.contentData?.visibility ?? '';
+                    notifier.privacyTitle =
+                        widget.contentData?.visibility ?? '';
 
-                    notifier.privacyValue = widget.contentData?.visibility ?? '';
-                    final _isoCodeCache = SharedPreference().readStorage(SpKeys.isoCode);
+                    notifier.privacyValue =
+                        widget.contentData?.visibility ?? '';
+                    final _isoCodeCache =
+                        SharedPreference().readStorage(SpKeys.isoCode);
 
                     if (_isoCodeCache == 'id') {
                       switch (widget.contentData?.visibility ?? '') {
@@ -120,7 +144,8 @@ class _ButtonBoostState extends State<ButtonBoost> {
                         default:
                       }
                     } else {
-                      notifier.privacyValue = widget.contentData?.visibility ?? '';
+                      notifier.privacyValue =
+                          widget.contentData?.visibility ?? '';
                     }
 
                     notifier.interestData = [];
@@ -136,13 +161,21 @@ class _ButtonBoostState extends State<ButtonBoost> {
                       }).toList();
                     }
                     notifier.userTagDataReal = [];
-                    notifier.userTagDataReal.addAll(widget.contentData?.tagPeople ?? []);
+                    notifier.userTagDataReal
+                        .addAll(widget.contentData?.tagPeople ?? []);
 
-                    notifier.toSell = widget.contentData?.saleAmount != null && (widget.contentData?.saleAmount ?? 0) > 0 ? true : false;
-                    notifier.includeTotalViews = widget.contentData?.saleView ?? false;
-                    notifier.includeTotalLikes = widget.contentData?.saleLike ?? false;
+                    notifier.toSell = widget.contentData?.saleAmount != null &&
+                            (widget.contentData?.saleAmount ?? 0) > 0
+                        ? true
+                        : false;
+                    notifier.includeTotalViews =
+                        widget.contentData?.saleView ?? false;
+                    notifier.includeTotalLikes =
+                        widget.contentData?.saleLike ?? false;
                     notifier.certified = widget.contentData?.certified ?? false;
-                    notifier.priceController.text = widget.contentData?.saleAmount?.toInt().toString() ?? '';
+                    notifier.priceController.text =
+                        widget.contentData?.saleAmount?.toInt().toString() ??
+                            '';
 
                     if (widget.startState != null) {
                       widget.startState!();
@@ -152,7 +185,10 @@ class _ButtonBoostState extends State<ButtonBoost> {
                     await Routing()
                         .move(
                       Routes.preUploadContent,
-                      argument: UpdateContentsArgument(onEdit: true, contentData: widget.contentData, content: ''),
+                      argument: UpdateContentsArgument(
+                          onEdit: true,
+                          contentData: widget.contentData,
+                          content: ''),
                     )
                         .whenComplete(() {
                       if (widget.afterState != null) {
@@ -167,7 +203,10 @@ class _ButtonBoostState extends State<ButtonBoost> {
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 8),
               decoration: BoxDecoration(
-                color: isKyc == VERIFIED && (widget.contentData?.statusBoost != 'AKAN DATANG') ? kHyppePrimary : kHyppeLightInactive1,
+                color: isKyc == VERIFIED &&
+                        (widget.contentData?.statusBoost != 'AKAN DATANG')
+                    ? kHyppePrimary
+                    : kHyppeLightInactive1,
                 borderRadius: BorderRadius.circular(8),
               ),
               width: SizeConfig.screenWidth,
@@ -178,7 +217,12 @@ class _ButtonBoostState extends State<ButtonBoost> {
                   : Center(
                       child: Text(
                         language.postBoost ?? 'Boost Post',
-                        style: Theme.of(context).primaryTextTheme.subtitle2?.copyWith(color: Colors.white, fontWeight: FontWeight.w700),
+                        style: Theme.of(context)
+                            .primaryTextTheme
+                            .titleSmall
+                            ?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700),
                         textAlign: TextAlign.center,
                       ),
                     ),

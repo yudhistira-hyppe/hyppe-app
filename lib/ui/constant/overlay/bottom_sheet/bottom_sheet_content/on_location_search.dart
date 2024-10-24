@@ -22,10 +22,12 @@ class OnLocationSearchBottomSheet extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<OnLocationSearchBottomSheet> createState() => _OnLocationSearchBottomSheetState();
+  State<OnLocationSearchBottomSheet> createState() =>
+      _OnLocationSearchBottomSheetState();
 }
 
-class _OnLocationSearchBottomSheetState extends State<OnLocationSearchBottomSheet> {
+class _OnLocationSearchBottomSheetState
+    extends State<OnLocationSearchBottomSheet> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -44,7 +46,8 @@ class _OnLocationSearchBottomSheetState extends State<OnLocationSearchBottomShee
               )),
           title: CustomTextWidget(
             textToDisplay: notifier.language.selectLocation ?? '',
-            textStyle: textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
+            textStyle:
+                textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
           ),
           backgroundColor: Colors.transparent,
         ),
@@ -57,31 +60,48 @@ class _OnLocationSearchBottomSheetState extends State<OnLocationSearchBottomShee
             children: [
               CustomSearchBar(
                 hintText: notifier.language.search,
-                contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: 16 * SizeConfig.scaleDiagonal),
                 controller: notifier.location,
                 withShadow: true,
-                onChanged: (val) => notifier.searchLocation(context, input: val),
+                onChanged: (val) =>
+                    notifier.searchLocation(context, input: val),
               ),
               Expanded(
                 child: notifier.modelGoogleMapPlace != null
                     ? ListView.builder(
                         shrinkWrap: true,
-                        itemCount: notifier.modelGoogleMapPlace?.predictions?.length,
+                        itemCount:
+                            notifier.modelGoogleMapPlace?.predictions?.length,
                         itemBuilder: (context, index) {
                           return ListTile(
                             onTap: () {
                               // widget.onSave;
                               Routing().moveBack();
-                              notifier.locationName = notifier.modelGoogleMapPlace?.predictions?[index].description ?? '';
+                              notifier.locationName = notifier
+                                      .modelGoogleMapPlace
+                                      ?.predictions?[index]
+                                      .description ??
+                                  '';
                             },
                             title: CustomTextWidget(
                               textAlign: TextAlign.start,
-                              textToDisplay: notifier.modelGoogleMapPlace?.predictions?[index].structuredFormatting?.mainText ?? '',
+                              textToDisplay: notifier
+                                      .modelGoogleMapPlace
+                                      ?.predictions?[index]
+                                      .structuredFormatting
+                                      ?.mainText ??
+                                  '',
                             ),
                             subtitle: CustomTextWidget(
                               textAlign: TextAlign.start,
                               maxLines: 2,
-                              textToDisplay: notifier.modelGoogleMapPlace?.predictions?[index].structuredFormatting?.secondaryText ?? '',
+                              textToDisplay: notifier
+                                      .modelGoogleMapPlace
+                                      ?.predictions?[index]
+                                      .structuredFormatting
+                                      ?.secondaryText ??
+                                  '',
                             ),
                           );
                         },

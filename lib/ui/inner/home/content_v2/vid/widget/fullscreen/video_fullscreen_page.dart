@@ -85,11 +85,15 @@ class VideoFullscreenPage extends StatefulWidget {
   State<VideoFullscreenPage> createState() => _VideoFullscreenPageState();
 }
 
-class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFirstLayoutMixin, SingleTickerProviderStateMixin {
-  final GlobalKey<ScaffoldState> _scaffoldKeyPlayer = GlobalKey<ScaffoldState>();
+class _VideoFullscreenPageState extends State<VideoFullscreenPage>
+    with AfterFirstLayoutMixin, SingleTickerProviderStateMixin {
+  final GlobalKey<ScaffoldState> _scaffoldKeyPlayer =
+      GlobalKey<ScaffoldState>();
 
   PageController controller = PageController();
-  late final AnimationController animatedController = AnimationController(vsync: this, duration: const Duration(seconds: 2))..repeat();
+  late final AnimationController animatedController =
+      AnimationController(vsync: this, duration: const Duration(seconds: 2))
+        ..repeat();
 
   int seekValue = 0;
   bool isMute = false;
@@ -131,7 +135,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
   void landscape() async {
     widget.fAliplayer?.pause();
     Future.delayed(const Duration(seconds: 1), () {
-      final notifier = (Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
+      final notifier = (Routing.navigatorKey.currentContext ?? context)
+          .read<VideoNotifier>();
       final isShowing = notifier.isShowingAds;
       if (!isShowing) {
         widget.fAliplayer?.play();
@@ -162,7 +167,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
     lang = context.read<TranslateNotifierV2>().translate;
     email = SharedPreference().readStorage(SpKeys.email);
     super.initState();
-    if ((widget.data.metadata?.height ?? 0) < (widget.data.metadata?.width ?? 0)) {
+    if ((widget.data.metadata?.height ?? 0) <
+        (widget.data.metadata?.width ?? 0)) {
       orientation = Orientation.landscape;
       // beforePosition = orientation;
     } else {
@@ -284,14 +290,16 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
         isScrolled = true;
       });
       final _notifier = context.read<PreviewVidNotifier>();
-      if (isOnPageTurning && controller.page == controller.page?.roundToDouble()) {
+      if (isOnPageTurning &&
+          controller.page == controller.page?.roundToDouble()) {
         _notifier.pageIndex = controller.page?.toInt() ?? 0;
         setState(() {
           // current = _controller.page.toInt();
           isOnPageTurning = false;
         });
       } else if (!isOnPageTurning) {
-        if (((_notifier.pageIndex.toDouble()) - (controller.page ?? 0)).abs() > 0.1) {
+        if (((_notifier.pageIndex.toDouble()) - (controller.page ?? 0)).abs() >
+            0.1) {
           setState(() {
             isOnPageTurning = true;
           });
@@ -308,12 +316,16 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
   }
 
   _pauseScreen() async {
-    (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().removeWakelock();
+    (Routing.navigatorKey.currentContext ?? context)
+        .read<HomeNotifier>()
+        .removeWakelock();
   }
 
   _initializeTimer() async {
     if (widget.enableWakelock) {
-      (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initWakelockTimer(onShowInactivityWarning: _handleInactivity);
+      (Routing.navigatorKey.currentContext ?? context)
+          .read<HomeNotifier>()
+          .initWakelockTimer(onShowInactivityWarning: _handleInactivity);
     }
   }
 
@@ -331,7 +343,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
       textColor: kHyppeTextLightPrimary,
       textButtonColor: kHyppePrimary,
       iconSvg: 'close.svg',
-      textButton: context.read<TranslateNotifierV2>().translate.stringContinue ?? '',
+      textButton:
+          context.read<TranslateNotifierV2>().translate.stringContinue ?? '',
       onClose: () {
         context.read<MainNotifier>().isInactiveState = false;
         widget.fAliplayer?.play();
@@ -356,7 +369,9 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
     HomeNotifier hn = context.read<HomeNotifier>();
     PreviewVidNotifier vn = context.read<PreviewVidNotifier>();
 
-    await hn.initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {
+    await hn
+        .initNewHome(context, mounted, isreload: false, isgetMore: true)
+        .then((value) {
       setState(() {
         vn.vidData?.forEach((e) {
           print(e.description);
@@ -380,9 +395,12 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
 
   whileDispose() async {
     widget.fAliplayer?.pause();
-    final notifier = (Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
-    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
-    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    final notifier =
+        (Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
+    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: SystemUiOverlay.values);
+    await SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     if (!notifier.isShowingAds) {
       widget.fAliplayer?.play();
     }
@@ -397,7 +415,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
       orientation = Orientation.portrait;
     }
 
-    print('start step -> height: $height width: $width orientation: $lastOrientation');
+    print(
+        'start step -> height: $height width: $width orientation: $lastOrientation');
 
     if (lastOrientation != orientation) {
       setState(() {
@@ -412,7 +431,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
         print('step 2');
       } else {
         // await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
-        await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+        await SystemChrome.setPreferredOrientations(
+            [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
         print('step 3');
       }
       Future.delayed(const Duration(milliseconds: 1000), () {
@@ -425,13 +445,15 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
 
   void nextPage() {
     Future.delayed(Duration(milliseconds: 500), () {
-      controller.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.ease);
+      controller.nextPage(
+          duration: const Duration(milliseconds: 500), curve: Curves.ease);
     });
   }
 
   void previousPage() {
     Future.delayed(Duration(milliseconds: 500), () {
-      controller.previousPage(duration: const Duration(milliseconds: 500), curve: Curves.ease);
+      controller.previousPage(
+          duration: const Duration(milliseconds: 500), curve: Curves.ease);
     });
   }
 
@@ -459,8 +481,18 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
 
               widget.data.isLoading = true;
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
-                SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+                Navigator.pop(
+                    context,
+                    VideoIndicator(
+                        videoDuration: _videoDuration,
+                        seekValue: changevalue,
+                        positionText: _currentPositionText,
+                        showTipsWidget: _showTipsWidget,
+                        isMute: isMute));
+                SystemChrome.setPreferredOrientations([
+                  DeviceOrientation.portraitUp,
+                  DeviceOrientation.portraitDown
+                ]);
               });
             }
           },
@@ -479,9 +511,11 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                       onPageChanged: (value) {
                         curentIndex = value;
                         notifier.currIndex = value;
-                        scrollPage(vidData?[value].metadata?.height, vidData?[value].metadata?.width);
+                        scrollPage(vidData?[value].metadata?.height,
+                            vidData?[value].metadata?.width);
                         if (value > 1) {
-                          if ((vidData?[value - 1].metadata?.height ?? 0) < (vidData?[value - 1].metadata?.width ?? 0)) {
+                          if ((vidData?[value - 1].metadata?.height ?? 0) <
+                              (vidData?[value - 1].metadata?.width ?? 0)) {
                             beforePosition = Orientation.landscape;
                           } else {
                             beforePosition = Orientation.portrait;
@@ -500,7 +534,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                             color: Colors.black,
                           );
                         }
-                        "================== isPause $isPause $isScrolled".logger();
+                        "================== isPause $isPause $isScrolled"
+                            .logger();
                         if (isScrolled) {
                           // return Container(
                           //   height: MediaQuery.of(context).size.height,
@@ -509,7 +544,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                           // );
                           print('view ads: 1');
                           print('aliyun : onStateChanged');
-                          final isAds = vidData?[index].inBetweenAds != null && vidData?[index].postID == null;
+                          final isAds = vidData?[index].inBetweenAds != null &&
+                              vidData?[index].postID == null;
 
                           return isloadingRotate
                               ? Container(
@@ -521,26 +557,40 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                   ),
                                 )
                               : isAds
-                                  ? context.getAdsInBetween(vidData, index, (info) {}, () {
-                                      context.read<PreviewVidNotifier>().setInBetweenAds(index, null);
-                                    }, (player, id) {}, isfull: true, isVideo: true, orientation: beforePosition, isScroll: true)
-                                  : OrientationBuilder(builder: (context, orientation) {
+                                  ? context.getAdsInBetween(
+                                      vidData, index, (info) {}, () {
+                                      context
+                                          .read<PreviewVidNotifier>()
+                                          .setInBetweenAds(index, null);
+                                    }, (player, id) {},
+                                      isfull: true,
+                                      isVideo: true,
+                                      orientation: beforePosition,
+                                      isScroll: true)
+                                  : OrientationBuilder(
+                                      builder: (context, orientation) {
                                       final player = VidPlayerPage(
                                         // vidData: notifier.vidData,
                                         fromFullScreen: true,
                                         orientation: orientation,
-                                        playMode: (vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
+                                        playMode:
+                                            (vidData?[index].isApsara ?? false)
+                                                ? ModeTypeAliPLayer.auth
+                                                : ModeTypeAliPLayer.url,
                                         dataSourceMap: map,
                                         data: vidData?[index],
-                                        height: MediaQuery.of(context).size.height,
-                                        width: MediaQuery.of(context).size.width,
+                                        height:
+                                            MediaQuery.of(context).size.height,
+                                        width:
+                                            MediaQuery.of(context).size.width,
                                         inLanding: widget.isLanding,
                                         fromDeeplink: false,
                                         clearPostId: widget.clearPostId,
                                         clearing: true,
                                         isAutoPlay: true,
                                         functionFullTriger: (value) {
-                                          print('===========hahhahahahaa===========');
+                                          print(
+                                              '===========hahhahahahaa===========');
                                         },
                                         isPlaying: !isPause,
                                         onPlay: (exec) {},
@@ -557,7 +607,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                         // fAliplayer: notifier.vidData?[index].fAliplayer,
                                         // fAliplayerAds: notifier.vidData?[index].fAliplayerAds,
                                       );
-                                      if (orientation == Orientation.landscape) {
+                                      if (orientation ==
+                                          Orientation.landscape) {
                                         return Container(
                                           width: context.getWidth(),
                                           height: context.getHeight(),
@@ -567,7 +618,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                       return player;
                                     });
                         } else {
-                          print('view ads: 2 ${notifier.isShowingAds} ${notifier.hasShowedAds}');
+                          print(
+                              'view ads: 2 ${notifier.isShowingAds} ${notifier.hasShowedAds}');
                           return GestureDetector(
                             onTap: () {
                               onTapCtrl = true;
@@ -586,7 +638,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                       child: Container(
                                         width: context.getWidth(),
                                         height: SizeConfig.screenHeight,
-                                        decoration: const BoxDecoration(color: Colors.black),
+                                        decoration: const BoxDecoration(
+                                            color: Colors.black),
                                         child: widget.aliPlayerView,
                                       ),
                                     ),
@@ -607,11 +660,20 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                       width: context.getWidth(),
                                       height: SizeConfig.screenHeight,
                                       // padding: EdgeInsets.only(bottom: 25.0),
-                                      child: Offstage(offstage: false, child: _buildContentWidget(context, orientation)),
+                                      child: Offstage(
+                                          offstage: false,
+                                          child: _buildContentWidget(
+                                              context, orientation)),
                                     ),
                                   Align(
                                     alignment: Alignment.topCenter,
-                                    child: _buildController(Colors.transparent, Colors.white, 100, context.getWidth(), SizeConfig.screenHeight! * 0.8, orientation),
+                                    child: _buildController(
+                                        Colors.transparent,
+                                        Colors.white,
+                                        100,
+                                        context.getWidth(),
+                                        SizeConfig.screenHeight! * 0.8,
+                                        orientation),
                                   ),
                                   // if (Platform.isIOS)
                                   AnimatedOpacity(
@@ -619,34 +681,47 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                     duration: const Duration(milliseconds: 500),
                                     onEnd: _onPlayerHide,
                                     child: Container(
-                                      height: orientation == Orientation.portrait ? kToolbarHeight * 2 : kToolbarHeight * 1.4,
-                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 18.0),
+                                      height:
+                                          orientation == Orientation.portrait
+                                              ? kToolbarHeight * 2
+                                              : kToolbarHeight * 1.4,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 18.0),
                                       child: CustomAppBar(
                                           orientation: orientation,
                                           data: widget.data,
                                           currentPosition: _currentPosition,
-                                          currentPositionText: _currentPositionText,
+                                          currentPositionText:
+                                              _currentPositionText,
                                           email: email,
                                           lang: lang!,
                                           videoDuration: _videoDuration,
                                           showTipsWidget: _showTipsWidget,
                                           isMute: isMute,
                                           onTapOnProfileImage: () async {
-                                            var res = await System().navigateToProfile(context, widget.data.email ?? '');
+                                            var res = await System()
+                                                .navigateToProfile(context,
+                                                    widget.data.email ?? '');
                                             widget.fAliplayer?.pause();
                                             isPause = true;
                                             setState(() {});
                                             print('data result $res');
                                             // if (mounted){
-                                            if ((widget.data.metadata?.height ?? 0) < (widget.data.metadata?.width ?? 0)) {
+                                            if ((widget.data.metadata?.height ??
+                                                    0) <
+                                                (widget.data.metadata?.width ??
+                                                    0)) {
                                               print('Landscape VidPlayerPage');
-                                              SystemChrome.setPreferredOrientations([
+                                              SystemChrome
+                                                  .setPreferredOrientations([
                                                 DeviceOrientation.landscapeLeft,
-                                                DeviceOrientation.landscapeRight,
+                                                DeviceOrientation
+                                                    .landscapeRight,
                                               ]);
                                             } else {
                                               print('Portrait VidPlayerPage');
-                                              SystemChrome.setPreferredOrientations([
+                                              SystemChrome
+                                                  .setPreferredOrientations([
                                                 DeviceOrientation.portraitUp,
                                                 DeviceOrientation.portraitDown,
                                               ]);
@@ -654,13 +729,27 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                             // }
                                           },
                                           onTap: () {
-                                            context.handleActionIsGuest(() async {
+                                            context
+                                                .handleActionIsGuest(() async {
                                               if (widget.data.email != email) {
                                                 // FlutterAliplayer? fAliplayer
-                                                context.read<PreviewPicNotifier>().reportContent(context, widget.data, fAliplayer: widget.data.fAliplayer, onCompleted: () async {
+                                                context
+                                                    .read<PreviewPicNotifier>()
+                                                    .reportContent(
+                                                        context, widget.data,
+                                                        fAliplayer: widget
+                                                            .data.fAliplayer,
+                                                        onCompleted: () async {
                                                   imageCache.clear();
                                                   imageCache.clearLiveImages();
-                                                  await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
+                                                  await (Routing.navigatorKey
+                                                              .currentContext ??
+                                                          context)
+                                                      .read<HomeNotifier>()
+                                                      .initNewHome(
+                                                          context, mounted,
+                                                          isreload: true,
+                                                          forceIndex: 2);
                                                 });
                                                 isPause = true;
                                                 setState(() {});
@@ -672,16 +761,25 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                                 widget.data.fAliplayer?.pause();
                                                 isPause = true;
                                                 setState(() {});
-                                                await ShowBottomSheet().onShowOptionContent(
+                                                await ShowBottomSheet()
+                                                    .onShowOptionContent(
                                                   context,
                                                   contentData: widget.data,
                                                   captionTitle: hyppeVid,
                                                   onDetail: false,
                                                   isShare: widget.data.isShared,
                                                   onUpdate: () {
-                                                    (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
+                                                    (Routing.navigatorKey
+                                                                .currentContext ??
+                                                            context)
+                                                        .read<HomeNotifier>()
+                                                        .initNewHome(
+                                                            context, mounted,
+                                                            isreload: true,
+                                                            forceIndex: 2);
                                                   },
-                                                  fAliplayer: widget.data.fAliplayer,
+                                                  fAliplayer:
+                                                      widget.data.fAliplayer,
                                                 );
                                               }
                                             });
@@ -696,31 +794,40 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                       color: Colors.transparent,
                                       child: Column(
                                         mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
                                           const CircularProgressIndicator(),
                                           sixPx,
                                           Text(
                                             "$_loadingPercent%",
-                                            style: TextStyle(color: Colors.white),
+                                            style:
+                                                TextStyle(color: Colors.white),
                                           ),
                                         ],
                                       ),
                                     ),
-                                  if (notifier.isShowingAds && !notifier.hasShowedAds)
+                                  if (notifier.isShowingAds &&
+                                      !notifier.hasShowedAds)
                                     Container(
                                       width: context.getWidth(),
                                       height: SizeConfig.screenHeight,
-                                      decoration: const BoxDecoration(color: Colors.black),
+                                      decoration: const BoxDecoration(
+                                          color: Colors.black),
                                       child: notifier.adsAliPlayerView,
                                     ),
-                                  if (notifier.isShowingAds && !notifier.hasShowedAds)
+                                  if (notifier.isShowingAds &&
+                                      !notifier.hasShowedAds)
                                     SizedBox(
                                       width: context.getWidth(),
                                       height: SizeConfig.screenHeight,
                                       // padding: EdgeInsets.only(bottom: 25.0),
-                                      child: Offstage(offstage: false, child: _adsBuildContentWidget(context, Orientation.portrait, notifier)),
+                                      child: Offstage(
+                                          offstage: false,
+                                          child: _adsBuildContentWidget(context,
+                                              Orientation.portrait, notifier)),
                                     ),
                                   checkDetail(context, notifier),
                                 ],
@@ -745,7 +852,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                           Container(
                             width: context.getWidth(),
                             height: SizeConfig.screenHeight,
-                            decoration: const BoxDecoration(color: Colors.black),
+                            decoration:
+                                const BoxDecoration(color: Colors.black),
                             child: widget.aliPlayerView,
                           ),
                           if (!_showTipsWidget)
@@ -753,11 +861,20 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                               width: context.getWidth(),
                               height: SizeConfig.screenHeight,
                               // padding: EdgeInsets.only(bottom: 25.0),
-                              child: Offstage(offstage: false, child: _buildContentWidget(context, orientation)),
+                              child: Offstage(
+                                  offstage: false,
+                                  child: _buildContentWidget(
+                                      context, orientation)),
                             ),
                           Align(
                             alignment: Alignment.topCenter,
-                            child: _buildController(Colors.transparent, Colors.white, 100, context.getWidth(), SizeConfig.screenHeight! * 0.8, orientation),
+                            child: _buildController(
+                                Colors.transparent,
+                                Colors.white,
+                                100,
+                                context.getWidth(),
+                                SizeConfig.screenHeight! * 0.8,
+                                orientation),
                           ),
                           // if (Platform.isIOS)
                           Align(
@@ -773,12 +890,24 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                   }
                                   widget.data.isLoading = true;
                                   setState(() {});
-                                  Navigator.pop(context,
-                                      VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
+                                  Navigator.pop(
+                                      context,
+                                      VideoIndicator(
+                                          videoDuration: _videoDuration,
+                                          seekValue: changevalue,
+                                          positionText: _currentPositionText,
+                                          showTipsWidget: _showTipsWidget,
+                                          isMute: isMute));
                                 },
-                                padding:
-                                    orientation == Orientation.portrait ? const EdgeInsets.symmetric(horizontal: 8.0, vertical: 42.0) : const EdgeInsets.symmetric(horizontal: 46.0, vertical: 8.0),
-                                icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg", defaultColor: false),
+                                padding: orientation == Orientation.portrait
+                                    ? const EdgeInsets.symmetric(
+                                        horizontal: 8.0, vertical: 42.0)
+                                    : const EdgeInsets.symmetric(
+                                        horizontal: 46.0, vertical: 8.0),
+                                icon: const CustomIconWidget(
+                                    iconData:
+                                        "${AssetPath.vectorPath}close.svg",
+                                    defaultColor: false),
                               ),
                             ),
                           ),
@@ -806,7 +935,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                             Container(
                               width: context.getWidth(),
                               height: SizeConfig.screenHeight,
-                              decoration: const BoxDecoration(color: Colors.black),
+                              decoration:
+                                  const BoxDecoration(color: Colors.black),
                               child: notifier.adsAliPlayerView,
                             ),
                           if (notifier.isShowingAds && !notifier.hasShowedAds)
@@ -814,7 +944,10 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                               width: context.getWidth(),
                               height: SizeConfig.screenHeight,
                               // padding: EdgeInsets.only(bottom: 25.0),
-                              child: Offstage(offstage: false, child: _adsBuildContentWidget(context, Orientation.portrait, notifier)),
+                              child: Offstage(
+                                  offstage: false,
+                                  child: _adsBuildContentWidget(
+                                      context, Orientation.portrait, notifier)),
                             ),
                           checkDetail(context, notifier),
                         ],
@@ -848,9 +981,14 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
   }
 
   Widget checkDetail(BuildContext context, VideoNotifier notifier) {
-    print('checkDetail: ${notifier.isShowingAds} ${!notifier.hasShowedAds} ${notifier.mapInContentAds[widget.data.postID]?.adsId} ${notifier.tempAdsData?.adsId}');
+    print(
+        'checkDetail: ${notifier.isShowingAds} ${!notifier.hasShowedAds} ${notifier.mapInContentAds[widget.data.postID]?.adsId} ${notifier.tempAdsData?.adsId}');
     if (notifier.isShowingAds && !notifier.hasShowedAds) {
-      return detailAdsWidget(context, notifier.mapInContentAds[widget.data.postID] ?? (notifier.tempAdsData ?? AdsData()), notifier);
+      return detailAdsWidget(
+          context,
+          notifier.mapInContentAds[widget.data.postID] ??
+              (notifier.tempAdsData ?? AdsData()),
+          notifier);
     } else {
       return const SizedBox.shrink();
     }
@@ -858,9 +996,11 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
 
   double heightSkip = 0;
   bool loadLaunch = false;
-  Widget detailAdsWidget(BuildContext context, AdsData data, VideoNotifier notifier) {
+  Widget detailAdsWidget(
+      BuildContext context, AdsData data, VideoNotifier notifier) {
     final isPortrait = orientation == Orientation.portrait;
-    final width = isPortrait ? context.getWidth() * 2 / 3 : context.getWidth() * 2 / 5;
+    final width =
+        isPortrait ? context.getWidth() * 2 / 3 : context.getWidth() * 2 / 5;
     final bottom = isPortrait ? 80.0 : 50.0;
     return Positioned(
       bottom: bottom,
@@ -892,7 +1032,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                         width: 24,
                         height: 24,
                         decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(Radius.circular(12)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(12)),
                           image: DecorationImage(
                             fit: BoxFit.cover,
                             image: imageProvider,
@@ -904,26 +1045,38 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                       if (url.isNotEmpty && url.withHttp()) {
                         return ClipRRect(
                             borderRadius: BorderRadius.circular(18),
-                            child: Image.network(url, width: 36, height: 36, fit: BoxFit.cover, loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                            child: Image.network(url,
+                                width: 36, height: 36, fit: BoxFit.cover,
+                                loadingBuilder: (BuildContext context,
+                                    Widget child,
+                                    ImageChunkEvent? loadingProgress) {
                               if (loadingProgress == null) return child;
                               return Center(
                                 child: SizedBox(
                                   width: 20,
                                   height: 20,
                                   child: CircularProgressIndicator(
-                                    value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                                    value: loadingProgress.expectedTotalBytes !=
+                                            null
+                                        ? loadingProgress
+                                                .cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes!
+                                        : null,
                                   ),
                                 ),
                               );
-                            }, errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                            }, errorBuilder: (BuildContext context,
+                                    Object exception, StackTrace? stackTrace) {
                               return Container(
                                 width: 36,
                                 height: 36,
                                 decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(18)),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(18)),
                                   image: DecorationImage(
                                     fit: BoxFit.cover,
-                                    image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
+                                    image: AssetImage(
+                                        '${AssetPath.pngPath}profile-error.jpg'),
                                   ),
                                 ),
                               );
@@ -936,7 +1089,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                           borderRadius: BorderRadius.all(Radius.circular(12)),
                           image: DecorationImage(
                             fit: BoxFit.cover,
-                            image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
+                            image: AssetImage(
+                                '${AssetPath.pngPath}profile-error.jpg'),
                           ),
                         ),
                       );
@@ -948,7 +1102,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                         borderRadius: BorderRadius.all(Radius.circular(12)),
                         image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
+                          image: AssetImage(
+                              '${AssetPath.pngPath}profile-error.jpg'),
                         ),
                       ),
                     ),
@@ -961,7 +1116,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                       children: [
                         CustomTextWidget(
                           textToDisplay: data.fullName ?? '',
-                          textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w700, color: Colors.black),
+                          textStyle: context.getTextTheme().bodySmall?.copyWith(
+                              fontWeight: FontWeight.w700, color: Colors.black),
                         ),
                         fourPx,
                         Row(
@@ -969,13 +1125,18 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                           children: [
                             CustomTextWidget(
                               textToDisplay: 'Ad ·',
-                              textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w700, color: Colors.black),
+                              textStyle: context
+                                  .getTextTheme()
+                                  .bodySmall
+                                  ?.copyWith(
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black),
                             ),
                             Expanded(
                                 child: CustomTextWidget(
                               textAlign: TextAlign.start,
                               textToDisplay: ' ${data.adsUrlLink}',
-                              textStyle: context.getTextTheme().caption,
+                              textStyle: context.getTextTheme().bodySmall,
                               maxLines: 1,
                               textOverflow: TextOverflow.ellipsis,
                             )),
@@ -988,7 +1149,12 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                     color: Colors.transparent,
                     child: Ink(
                       width: 120,
-                      decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(5)), color: notifier.secondsSkip <= 0 ? KHyppeButtonAds : context.getColorScheme().secondary),
+                      decoration: BoxDecoration(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(5)),
+                          color: notifier.secondsSkip <= 0
+                              ? KHyppeButtonAds
+                              : context.getColorScheme().secondary),
                       child: InkWell(
                         splashColor: context.getColorScheme().secondary,
                         onTap: () async {
@@ -996,12 +1162,15 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                             final secondsVideo = data.duration?.round() ?? 10;
                             if (!loadLaunch) {
                               if (data.adsUrlLink?.isEmail() ?? false) {
-                                final email = data.adsUrlLink!.replaceAll('email:', '');
+                                final email =
+                                    data.adsUrlLink!.replaceAll('email:', '');
                                 setState(() {
                                   loadLaunch = true;
                                 });
                                 print('second close ads: $secondsVideo');
-                                System().adsView(data, secondsVideo, isClick: true).whenComplete(() {
+                                System()
+                                    .adsView(data, secondsVideo, isClick: true)
+                                    .whenComplete(() {
                                   notifier.adsAliplayer?.stop();
                                   notifier.adsCurrentPosition = 0;
                                   notifier.adsCurrentPositionText = 0;
@@ -1009,8 +1178,11 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                   notifier.tempAdsData = null;
                                   notifier.isShowingAds = false;
                                   widget.onClose();
-                                  Future.delayed(const Duration(milliseconds: 800), () {
-                                    Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+                                  Future.delayed(
+                                      const Duration(milliseconds: 800), () {
+                                    Routing().move(Routes.otherProfile,
+                                        argument: OtherProfileArgument(
+                                            senderEmail: email));
                                   });
                                   setState(() {
                                     loadLaunch = false;
@@ -1019,14 +1191,18 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                               } else {
                                 if ((data.adsUrlLink ?? '').withHttp()) {
                                   try {
-                                    final uri = Uri.parse(data.adsUrlLink ?? '');
+                                    final uri =
+                                        Uri.parse(data.adsUrlLink ?? '');
                                     print('bottomAdsLayout ${data.adsUrlLink}');
                                     if (await canLaunchUrl(uri)) {
                                       setState(() {
                                         loadLaunch = true;
                                       });
                                       print('second close ads: $secondsVideo');
-                                      System().adsView(data, secondsVideo, isClick: true).whenComplete(() async {
+                                      System()
+                                          .adsView(data, secondsVideo,
+                                              isClick: true)
+                                          .whenComplete(() async {
                                         notifier.adsAliplayer?.stop();
                                         notifier.adsCurrentPosition = 0;
                                         notifier.adsCurrentPositionText = 0;
@@ -1049,7 +1225,10 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                     });
                                     print('second close ads: $secondsVideo');
                                     // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                                    System().adsView(data, secondsVideo, isClick: true).whenComplete(() {
+                                    System()
+                                        .adsView(data, secondsVideo,
+                                            isClick: true)
+                                        .whenComplete(() {
                                       notifier.adsAliplayer?.stop();
                                       notifier.adsCurrentPosition = 0;
                                       notifier.adsCurrentPositionText = 0;
@@ -1057,7 +1236,9 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                       notifier.tempAdsData = null;
                                       notifier.isShowingAds = false;
                                       widget.onClose();
-                                      System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+                                      System().goToWebScreen(
+                                          data.adsUrlLink ?? '',
+                                          isPop: true);
                                     });
                                   } finally {
                                     setState(() {
@@ -1099,7 +1280,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
     );
   }
 
-  _adsBuildContentWidget(BuildContext context, Orientation orientation, VideoNotifier notifier) {
+  _adsBuildContentWidget(
+      BuildContext context, Orientation orientation, VideoNotifier notifier) {
     // print('ORIENTATION: CHANGING ORIENTATION');
     return SafeArea(
       child: notifier.adsCurrentPosition <= 0
@@ -1121,7 +1303,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                             notifier.adsCurrentPosition = 0;
                             notifier.adsCurrentPositionText = 0;
                             if (_currentPosition > 0) {
-                              await widget.fAliplayer?.seekTo(_currentPosition - 1, FlutterAvpdef.ACCURATE);
+                              await widget.fAliplayer?.seekTo(
+                                  _currentPosition - 1, FlutterAvpdef.ACCURATE);
                             }
                             widget.onClose();
                             notifier.loadVideo = true;
@@ -1151,18 +1334,28 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                 },
                                 child: Container(
                                   color: Colors.black.withOpacity(0.5),
-                                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 8, horizontal: 12),
                                   child: Builder(builder: (context) {
-                                    final language = context.read<TranslateNotifierV2>().translate;
-                                    final locale = SharedPreference().readStorage(SpKeys.isoCode);
+                                    final language = context
+                                        .read<TranslateNotifierV2>()
+                                        .translate;
+                                    final locale = SharedPreference()
+                                        .readStorage(SpKeys.isoCode);
                                     final isIndo = locale == 'id';
                                     return notifier.secondsSkip <= 0
                                         ? Row(
                                             children: [
                                               Expanded(
                                                   child: CustomTextWidget(
-                                                textToDisplay: language.skipAds ?? 'Skip Ads',
-                                                textStyle: context.getTextTheme().caption?.copyWith(color: Colors.white),
+                                                textToDisplay:
+                                                    language.skipAds ??
+                                                        'Skip Ads',
+                                                textStyle: context
+                                                    .getTextTheme()
+                                                    .bodySmall
+                                                    ?.copyWith(
+                                                        color: Colors.white),
                                                 maxLines: 2,
                                               )),
                                               const Icon(
@@ -1172,8 +1365,13 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                             ],
                                           )
                                         : CustomTextWidget(
-                                            textToDisplay: isIndo ? '${language.skipMessage} ${notifier.secondsSkip} ${language.second}' : "${language.skipMessage} ${notifier.secondsSkip}",
-                                            textStyle: context.getTextTheme().overline?.copyWith(color: Colors.white),
+                                            textToDisplay: isIndo
+                                                ? '${language.skipMessage} ${notifier.secondsSkip} ${language.second}'
+                                                : "${language.skipMessage} ${notifier.secondsSkip}",
+                                            textStyle: context
+                                                .getTextTheme()
+                                                .labelSmall
+                                                ?.copyWith(color: Colors.white),
                                             maxLines: 2,
                                           );
                                   }),
@@ -1189,7 +1387,9 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                     return Container(
                                       height: heightSkip,
                                       decoration: BoxDecoration(
-                                        image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
+                                        image: DecorationImage(
+                                            image: imageProvider,
+                                            fit: BoxFit.contain),
                                       ),
                                     );
                                   },
@@ -1199,7 +1399,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                       decoration: const BoxDecoration(
                                         image: DecorationImage(
                                           fit: BoxFit.contain,
-                                          image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                          image: AssetImage(
+                                              '${AssetPath.pngPath}content-error.png'),
                                         ),
                                       ),
                                     );
@@ -1209,7 +1410,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                     decoration: const BoxDecoration(
                                       image: DecorationImage(
                                         fit: BoxFit.contain,
-                                        image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                        image: AssetImage(
+                                            '${AssetPath.pngPath}content-error.png'),
                                       ),
                                     ),
                                   ),
@@ -1226,8 +1428,10 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                     children: [
                       sixPx,
                       Text(
-                        System.getTimeformatByMs(notifier.adsCurrentPositionText),
-                        style: const TextStyle(color: Colors.white, fontSize: 11),
+                        System.getTimeformatByMs(
+                            notifier.adsCurrentPositionText),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 11),
                       ),
                       sixPx,
                       Expanded(
@@ -1235,11 +1439,13 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                           data: SliderTheme.of(context).copyWith(
                             overlayShape: SliderComponentShape.noThumb,
                             activeTrackColor: const Color(0xAA7d7d7d),
-                            inactiveTrackColor: const Color.fromARGB(170, 156, 155, 155),
+                            inactiveTrackColor:
+                                const Color.fromARGB(170, 156, 155, 155),
                             // trackShape: RectangularSliderTrackShape(),
                             trackHeight: 3.0,
                             thumbColor: Colors.purple,
-                            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8.0),
+                            thumbShape: const RoundSliderThumbShape(
+                                enabledThumbRadius: 8.0),
                           ),
                           child: Slider(
                               min: 0,
@@ -1262,7 +1468,9 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                         child: Padding(
                           padding: const EdgeInsets.only(right: 2.0),
                           child: CustomIconWidget(
-                            iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
+                            iconData: isMute
+                                ? '${AssetPath.vectorPath}sound-off.svg'
+                                : '${AssetPath.vectorPath}sound-on.svg',
                             defaultColor: false,
                             height: 24,
                           ),
@@ -1278,12 +1486,20 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                           widget.data.isLoading = true;
                           setState(() {});
                           Navigator.pop(
-                              context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
+                              context,
+                              VideoIndicator(
+                                  videoDuration: _videoDuration,
+                                  seekValue: changevalue,
+                                  positionText: _currentPositionText,
+                                  showTipsWidget: _showTipsWidget,
+                                  isMute: isMute));
                         },
                         child: Padding(
                           padding: const EdgeInsets.only(right: 12.0),
                           child: Icon(
-                            orientation == Orientation.portrait ? Icons.fullscreen : Icons.fullscreen_exit,
+                            orientation == Orientation.portrait
+                                ? Icons.fullscreen
+                                : Icons.fullscreen_exit,
                             color: Colors.white,
                           ),
                         ),
@@ -1310,7 +1526,10 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                   gradient: LinearGradient(
                     end: const Alignment(0.0, -1),
                     begin: const Alignment(0.0, 1),
-                    colors: [const Color(0x8A000000), Colors.black12.withOpacity(0.0)],
+                    colors: [
+                      const Color(0x8A000000),
+                      Colors.black12.withOpacity(0.0)
+                    ],
                   ),
                 )
               : null,
@@ -1324,34 +1543,54 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                   child: Column(
                     children: [
                       Consumer<LikeNotifier>(
-                          builder: (context, likeNotifier, child) => buttonVideoRight(
-                              onFunctionTap: () {
-                                likeNotifier.likePost(context, widget.data);
-                              },
-                              iconData: '${AssetPath.vectorPath}${(widget.data.insight?.isPostLiked ?? false) ? 'liked.svg' : 'love-shadow.svg'}',
-                              value: widget.data.insight!.likes! > 0 ? '${widget.data.insight?.likes}' : '${lang?.like}',
-                              liked: widget.data.insight?.isPostLiked ?? false)),
+                          builder: (context, likeNotifier, child) =>
+                              buttonVideoRight(
+                                  onFunctionTap: () {
+                                    likeNotifier.likePost(context, widget.data);
+                                  },
+                                  iconData:
+                                      '${AssetPath.vectorPath}${(widget.data.insight?.isPostLiked ?? false) ? 'liked.svg' : 'love-shadow.svg'}',
+                                  value: widget.data.insight!.likes! > 0
+                                      ? '${widget.data.insight?.likes}'
+                                      : '${lang?.like}',
+                                  liked: widget.data.insight?.isPostLiked ??
+                                      false)),
                       if (widget.data.allowComments ?? false)
                         buttonVideoRight(
                           onFunctionTap: () {
-                            Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: widget.data.postID ?? '', fromFront: true, data: widget.data, pageDetail: true, giftActication: widget.data.giftActivation));
+                            Routing().move(Routes.commentsDetail,
+                                argument: CommentsArgument(
+                                    postID: widget.data.postID ?? '',
+                                    fromFront: true,
+                                    data: widget.data,
+                                    pageDetail: true,
+                                    giftActication:
+                                        widget.data.giftActivation));
                           },
                           iconData: '${AssetPath.vectorPath}comment-shadow.svg',
-                          value: widget.data.comments! > 0 ? widget.data.comments.toString() : lang?.comments ?? '',
+                          value: widget.data.comments! > 0
+                              ? widget.data.comments.toString()
+                              : lang?.comments ?? '',
                         ),
                       if (widget.data.isShared ?? false)
                         buttonVideoRight(
                             onFunctionTap: () {
                               widget.fAliplayer?.pause();
-                              context.read<VidDetailNotifier>().createdDynamicLink(context, data: widget.data);
+                              context
+                                  .read<VidDetailNotifier>()
+                                  .createdDynamicLink(context,
+                                      data: widget.data);
                             },
                             iconData: '${AssetPath.vectorPath}share-shadow.svg',
                             value: lang!.share ?? 'Share'),
-                      if ((widget.data.saleAmount ?? 0) > 0 && email != widget.data.email)
+                      if ((widget.data.saleAmount ?? 0) > 0 &&
+                          email != widget.data.email)
                         buttonVideoRight(
                             onFunctionTap: () async {
                               widget.data.fAliplayer?.pause();
-                              await ShowBottomSheet.onBuyContent(context, data: widget.data, fAliplayer: widget.data.fAliplayer);
+                              await ShowBottomSheet.onBuyContent(context,
+                                  data: widget.data,
+                                  fAliplayer: widget.data.fAliplayer);
                             },
                             iconData: '${AssetPath.vectorPath}cart-shadow.svg',
                             value: lang!.buy ?? 'Buy'),
@@ -1363,7 +1602,9 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                 Positioned(
                   bottom: 0,
                   left: 0,
-                  right: orientation == Orientation.landscape ? SizeConfig.screenHeight! * .2 : SizeConfig.screenHeight! * .07,
+                  right: orientation == Orientation.landscape
+                      ? SizeConfig.screenHeight! * .2
+                      : SizeConfig.screenHeight! * .07,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -1372,19 +1613,30 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                         child: Row(
                           children: [
                             Visibility(
-                              visible: widget.data.tagPeople?.isNotEmpty ?? false,
+                              visible:
+                                  widget.data.tagPeople?.isNotEmpty ?? false,
                               child: Container(
-                                decoration: BoxDecoration(color: kHyppeBackground.withOpacity(.4), borderRadius: BorderRadius.circular(8.0)),
-                                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+                                decoration: BoxDecoration(
+                                    color: kHyppeBackground.withOpacity(.4),
+                                    borderRadius: BorderRadius.circular(8.0)),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 4, vertical: 6),
                                 margin: const EdgeInsets.only(right: 12.0),
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 4.0),
                                   child: GestureDetector(
                                     onTap: () {
                                       widget.fAliplayer?.pause();
                                       context
                                           .read<PicDetailNotifier>()
-                                          .showUserTag(context, widget.data.tagPeople, widget.data.postID, title: lang!.inThisVideo, fAliplayer: widget.fAliplayer, orientation: orientation);
+                                          .showUserTag(
+                                              context,
+                                              widget.data.tagPeople,
+                                              widget.data.postID,
+                                              title: lang!.inThisVideo,
+                                              fAliplayer: widget.fAliplayer,
+                                              orientation: orientation);
                                       setState(() {
                                         isPause = true;
                                       });
@@ -1392,7 +1644,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                     child: Row(
                                       children: [
                                         const CustomIconWidget(
-                                          iconData: '${AssetPath.vectorPath}tag-people-light.svg',
+                                          iconData:
+                                              '${AssetPath.vectorPath}tag-people-light.svg',
                                           defaultColor: false,
                                           height: 18,
                                         ),
@@ -1401,7 +1654,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                         ),
                                         Text(
                                           '${widget.data.tagPeople!.length} ${lang!.people}',
-                                          style: const TextStyle(color: kHyppeTextPrimary),
+                                          style: const TextStyle(
+                                              color: kHyppeTextPrimary),
                                         )
                                       ],
                                     ),
@@ -1413,7 +1667,9 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                               visible: widget.data.location != '',
                               child: Container(
                                 // width: SizeConfig.screenWidth! * .18,
-                                decoration: BoxDecoration(color: kHyppeBackground.withOpacity(.4), borderRadius: BorderRadius.circular(8.0)),
+                                decoration: BoxDecoration(
+                                    color: kHyppeBackground.withOpacity(.4),
+                                    borderRadius: BorderRadius.circular(8.0)),
                                 padding: const EdgeInsets.symmetric(
                                   vertical: 6,
                                 ),
@@ -1429,7 +1685,12 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                       ),
                       Container(
                         constraints: BoxConstraints(
-                            maxWidth: orientation == Orientation.landscape ? SizeConfig.screenWidth! * .29 : SizeConfig.screenWidth!, maxHeight: isShowMore ? 52 : SizeConfig.screenHeight! * .1),
+                            maxWidth: orientation == Orientation.landscape
+                                ? SizeConfig.screenWidth! * .29
+                                : SizeConfig.screenWidth!,
+                            maxHeight: isShowMore
+                                ? 52
+                                : SizeConfig.screenHeight! * .1),
                         margin: const EdgeInsets.symmetric(horizontal: 4.0),
                         padding: const EdgeInsets.only(left: 8.0, bottom: 12.0),
                         child: SingleChildScrollView(
@@ -1443,36 +1704,59 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                 isShowMore = val;
                               });
                             },
-                            seeLess: ' ${lang?.less}', // ${notifier2.translate.seeLess}',
-                            seeMore: ' ${lang?.more}', //${notifier2.translate.seeMoreContent}',
-                            normStyle: const TextStyle(fontSize: 14, color: kHyppeTextPrimary),
-                            hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                            expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppeTextPrimary, fontWeight: FontWeight.bold),
+                            seeLess:
+                                ' ${lang?.less}', // ${notifier2.translate.seeLess}',
+                            seeMore:
+                                ' ${lang?.more}', //${notifier2.translate.seeMoreContent}',
+                            normStyle: const TextStyle(
+                                fontSize: 14, color: kHyppeTextPrimary),
+                            hrefStyle: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(color: kHyppePrimary),
+                            expandStyle: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(
+                                    color: kHyppeTextPrimary,
+                                    fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
-                      SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
+                      SharedPreference().readStorage(
+                                      SpKeys.statusVerificationId) ==
+                                  VERIFIED &&
                               (widget.data.boosted.isEmpty) &&
-                              (widget.data.reportedStatus != 'OWNED' && widget.data.reportedStatus != 'BLURRED' && widget.data.reportedStatus2 != 'BLURRED') &&
-                              widget.data.email == SharedPreference().readStorage(SpKeys.email)
+                              (widget.data.reportedStatus != 'OWNED' &&
+                                  widget.data.reportedStatus != 'BLURRED' &&
+                                  widget.data.reportedStatus2 != 'BLURRED') &&
+                              widget.data.email ==
+                                  SharedPreference().readStorage(SpKeys.email)
                           ? Container(
-                              width: orientation == Orientation.landscape ? SizeConfig.screenWidth! * .28 : SizeConfig.screenWidth!,
+                              width: orientation == Orientation.landscape
+                                  ? SizeConfig.screenWidth! * .28
+                                  : SizeConfig.screenWidth!,
                               margin: const EdgeInsets.only(bottom: 16),
-                              padding: const EdgeInsets.only(top: 12, left: 8.0, right: 8.0),
+                              padding: const EdgeInsets.only(
+                                  top: 12, left: 8.0, right: 8.0),
                               child: ButtonBoost(
                                 onDetail: false,
                                 marginBool: true,
                                 contentData: widget.data,
                                 startState: () {
-                                  SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                                  SharedPreference()
+                                      .writeStorage(SpKeys.isShowPopAds, true);
                                 },
                                 afterState: () {
-                                  SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                                  SharedPreference()
+                                      .writeStorage(SpKeys.isShowPopAds, false);
                                 },
                               ),
                             )
                           : Container(),
-                      if (widget.data.email == email && (widget.data.boostCount ?? 0) >= 0 && (widget.data.boosted.isNotEmpty))
+                      if (widget.data.email == email &&
+                          (widget.data.boostCount ?? 0) >= 0 &&
+                          (widget.data.boosted.isNotEmpty))
                         Container(
                           padding: const EdgeInsets.all(10),
                           margin: const EdgeInsets.only(bottom: 10, left: 18.0),
@@ -1493,8 +1777,12 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                               Padding(
                                 padding: const EdgeInsets.only(left: 13),
                                 child: CustomTextWidget(
-                                  textToDisplay: "${widget.data.boostJangkauan ?? '0'} ${lang?.reach}",
-                                  textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                                  textToDisplay:
+                                      "${widget.data.boostJangkauan ?? '0'} ${lang?.reach}",
+                                  textStyle: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700,
+                                      color: kHyppeTextLightPrimary),
                                 ),
                               )
                             ],
@@ -1509,7 +1797,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                               child: Text(
                                 "${System.getTimeformatByMs(_currentPositionText)}/${System.getTimeformatByMs(_videoDuration)}",
                                 textAlign: TextAlign.end,
-                                style: const TextStyle(color: Colors.white, fontSize: 11),
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 11),
                               ),
                             ),
                           ),
@@ -1520,17 +1809,22 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                 Expanded(
                                   child: SliderTheme(
                                     data: SliderTheme.of(context).copyWith(
-                                      overlayShape: SliderComponentShape.noThumb,
+                                      overlayShape:
+                                          SliderComponentShape.noThumb,
                                       activeTrackColor: const Color(0xAA7d7d7d),
-                                      inactiveTrackColor: const Color.fromARGB(170, 156, 155, 155),
+                                      inactiveTrackColor: const Color.fromARGB(
+                                          170, 156, 155, 155),
                                       // trackShape: RectangularSliderTrackShape(),
                                       trackHeight: 3.0,
                                       thumbColor: Colors.purple,
-                                      thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8.0),
+                                      thumbShape: const RoundSliderThumbShape(
+                                          enabledThumbRadius: 8.0),
                                     ),
                                     child: Slider(
                                         min: 0,
-                                        max: _videoDuration == 0 ? 1 : _videoDuration.toDouble(),
+                                        max: _videoDuration == 0
+                                            ? 1
+                                            : _videoDuration.toDouble(),
                                         value: _currentPosition.toDouble(),
                                         activeColor: Colors.purple,
                                         // trackColor: Color(0xAA7d7d7d),
@@ -1543,7 +1837,9 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                         onChangeEnd: (value) {
                                           _inSeek = false;
                                           setState(() {
-                                            if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
+                                            if (_currentPlayerState ==
+                                                    FlutterAvpdef.completion &&
+                                                _showTipsWidget) {
                                               setState(() {
                                                 _showTipsWidget = false;
                                               });
@@ -1552,12 +1848,16 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                           // isActiveAds
                                           //     ? fAliplayerAds?.seekTo(value.ceil(), GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE)
                                           //     : fAliplayer?.seekTo(value.ceil(), GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
-                                          widget.fAliplayer?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE);
+                                          widget.fAliplayer?.seekTo(
+                                              value.ceil(),
+                                              FlutterAvpdef.ACCURATE);
                                         },
                                         onChanged: (value) {
                                           print('on change');
 
-                                          widget.fAliplayer?.requestBitmapAtPosition(value.ceil());
+                                          widget.fAliplayer
+                                              ?.requestBitmapAtPosition(
+                                                  value.ceil());
 
                                           setState(() {
                                             _currentPosition = value.ceil();
@@ -1605,48 +1905,71 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                           ),
                         ],
                       ),
-                      if (widget.data.music?.musicTitle != '' && widget.data.music?.musicTitle != null)
+                      if (widget.data.music?.musicTitle != '' &&
+                          widget.data.music?.musicTitle != null)
                         SizedBox(
                           height: 42,
                           width: SizeConfig.screenWidth,
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 0.0, left: 8.0, right: 12.0),
+                            padding: const EdgeInsets.only(
+                                top: 0.0, left: 8.0, right: 12.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 const CustomIconWidget(
-                                  iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                  iconData:
+                                      "${AssetPath.vectorPath}music_stroke_black.svg",
                                   defaultColor: false,
                                   color: kHyppeLightBackground,
                                   height: 18,
                                 ),
                                 SizedBox(
                                   width: SizeConfig.screenWidth! * .55,
-                                  child: _textSize(widget.data.music?.musicTitle ?? '', const TextStyle(fontWeight: FontWeight.bold)).width > SizeConfig.screenWidth! * .56
+                                  child: _textSize(
+                                                  widget.data.music
+                                                          ?.musicTitle ??
+                                                      '',
+                                                  const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold))
+                                              .width >
+                                          SizeConfig.screenWidth! * .56
                                       ? Marquee(
-                                          text: '  ${widget.data.music?.musicTitle ?? ''}',
-                                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),
+                                          text:
+                                              '  ${widget.data.music?.musicTitle ?? ''}',
+                                          style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400,
+                                              color: Colors.white),
                                         )
                                       : CustomTextWidget(
-                                          textToDisplay: " ${widget.data.music?.musicTitle ?? ''}",
+                                          textToDisplay:
+                                              " ${widget.data.music?.musicTitle ?? ''}",
                                           maxLines: 1,
-                                          textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700),
+                                          textStyle: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w700),
                                           textAlign: TextAlign.left,
                                         ),
                                 ),
                                 CircleAvatar(
                                   radius: 18,
-                                  backgroundColor: kHyppeSurface.withOpacity(.9),
+                                  backgroundColor:
+                                      kHyppeSurface.withOpacity(.9),
                                   child: CustomBaseCacheImage(
-                                    imageUrl: widget.data.music?.apsaraThumnailUrl ?? '',
+                                    imageUrl:
+                                        widget.data.music?.apsaraThumnailUrl ??
+                                            '',
                                     imageBuilder: (_, imageProvider) {
                                       return Container(
                                         width: 48,
                                         height: 48,
                                         decoration: BoxDecoration(
                                           color: kDefaultIconDarkColor,
-                                          borderRadius: const BorderRadius.all(Radius.circular(24)),
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(24)),
                                           image: DecorationImage(
                                             fit: BoxFit.cover,
                                             image: imageProvider,
@@ -1656,7 +1979,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                     },
                                     errorWidget: (_, __, ___) {
                                       return const CustomIconWidget(
-                                        iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                        iconData:
+                                            "${AssetPath.vectorPath}music_stroke_black.svg",
                                         defaultColor: false,
                                         color: kHyppeLightIcon,
                                         height: 18,
@@ -1666,12 +1990,15 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                       animation: animatedController,
                                       builder: (_, child) {
                                         return Transform.rotate(
-                                          angle: animatedController.value * 2 * -math.pi,
+                                          angle: animatedController.value *
+                                              2 *
+                                              -math.pi,
                                           child: child,
                                         );
                                       },
                                       child: const CustomIconWidget(
-                                        iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                                        iconData:
+                                            "${AssetPath.vectorPath}music_stroke_black.svg",
                                         defaultColor: false,
                                         color: kHyppeLightIcon,
                                         height: 18,
@@ -1717,7 +2044,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
       onEnd: _onPlayerHide,
       child: Center(
         child: Container(
-          width: orientation == Orientation.landscape ? width * .35 : width * .8,
+          width:
+              orientation == Orientation.landscape ? width * .35 : width * .8,
           decoration: BoxDecoration(
             color: backgroundColor,
           ),
@@ -1775,7 +2103,9 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
         }
       },
       child: CustomIconWidget(
-        iconData: isPause ? "${AssetPath.vectorPath}play3.svg" : "${AssetPath.vectorPath}pause3.svg",
+        iconData: isPause
+            ? "${AssetPath.vectorPath}play3.svg"
+            : "${AssetPath.vectorPath}pause3.svg",
         defaultColor: false,
       ),
       // Icon(
@@ -1834,7 +2164,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
         });
         _inSeek = false;
         setState(() {
-          if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
+          if (_currentPlayerState == FlutterAvpdef.completion &&
+              _showTipsWidget) {
             setState(() {
               _showTipsWidget = false;
             });
@@ -1871,7 +2202,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
         });
         _inSeek = false;
         setState(() {
-          if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
+          if (_currentPlayerState == FlutterAvpdef.completion &&
+              _showTipsWidget) {
             setState(() {
               _showTipsWidget = false;
             });
@@ -1887,7 +2219,11 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
     );
   }
 
-  Widget buttonVideoRight({Function()? onFunctionTap, required String iconData, required String value, bool liked = false}) {
+  Widget buttonVideoRight(
+      {Function()? onFunctionTap,
+      required String iconData,
+      required String value,
+      bool liked = false}) {
     return InkResponse(
       onTap: onFunctionTap,
       child: Padding(
@@ -1912,10 +2248,20 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
               transform: Matrix4.translationValues(0.0, -5.0, 0.0),
               child: Text(
                 value,
-                style: const TextStyle(shadows: [
-                  Shadow(offset: Offset(0.0, 1.0), blurRadius: 2.0, color: Colors.black54),
-                  Shadow(offset: Offset(0.0, 1.0), blurRadius: 8.0, color: Colors.black54),
-                ], color: kHyppePrimaryTransparent, fontWeight: FontWeight.w500, fontSize: 12),
+                style: const TextStyle(
+                    shadows: [
+                      Shadow(
+                          offset: Offset(0.0, 1.0),
+                          blurRadius: 2.0,
+                          color: Colors.black54),
+                      Shadow(
+                          offset: Offset(0.0, 1.0),
+                          blurRadius: 8.0,
+                          color: Colors.black54),
+                    ],
+                    color: kHyppePrimaryTransparent,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12),
               ),
             ),
           ],
@@ -1925,7 +2271,11 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
   }
 
   Size _textSize(String text, TextStyle style) {
-    final TextPainter textPainter = TextPainter(text: TextSpan(text: text, style: style), maxLines: 1, textDirection: TextDirection.ltr)..layout(minWidth: 0, maxWidth: double.infinity);
+    final TextPainter textPainter = TextPainter(
+        text: TextSpan(text: text, style: style),
+        maxLines: 1,
+        textDirection: TextDirection.ltr)
+      ..layout(minWidth: 0, maxWidth: double.infinity);
     return textPainter.size;
   }
 
@@ -1945,7 +2295,9 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
               width: 4.0,
             ),
             SizedBox(
-              width: widget.data.tagPeople?.isNotEmpty ?? false ? SizeConfig.screenWidth! * .4 : SizeConfig.screenWidth! * .65,
+              width: widget.data.tagPeople?.isNotEmpty ?? false
+                  ? SizeConfig.screenWidth! * .4
+                  : SizeConfig.screenWidth! * .65,
               child: Text(
                 '${widget.data.location}',
                 maxLines: 1,
@@ -1970,7 +2322,9 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
               width: 4.0,
             ),
             SizedBox(
-              width: widget.data.tagPeople?.isNotEmpty ?? false ? SizeConfig.screenWidth! * .13 : SizeConfig.screenWidth! * .22,
+              width: widget.data.tagPeople?.isNotEmpty ?? false
+                  ? SizeConfig.screenWidth! * .13
+                  : SizeConfig.screenWidth! * .22,
               child: Text(
                 '${widget.data.location}',
                 maxLines: 1,
@@ -1990,5 +2344,10 @@ class VideoIndicator {
   final int? positionText;
   final bool? showTipsWidget;
   final bool? isMute;
-  VideoIndicator({required this.videoDuration, required this.seekValue, required this.positionText, this.showTipsWidget = false, required this.isMute});
+  VideoIndicator(
+      {required this.videoDuration,
+      required this.seekValue,
+      required this.positionText,
+      this.showTipsWidget = false,
+      required this.isMute});
 }

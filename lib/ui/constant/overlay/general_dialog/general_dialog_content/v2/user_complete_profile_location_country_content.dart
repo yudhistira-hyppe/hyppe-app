@@ -14,12 +14,16 @@ import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 
 class UserCompleteProfileLocationCountryContent extends StatefulWidget {
   final Function(String) onSelected;
-  const UserCompleteProfileLocationCountryContent({Key? key, required this.onSelected}) : super(key: key);
+  const UserCompleteProfileLocationCountryContent(
+      {Key? key, required this.onSelected})
+      : super(key: key);
   @override
-  _UserCompleteProfileLocationCountryContentState createState() => _UserCompleteProfileLocationCountryContentState();
+  _UserCompleteProfileLocationCountryContentState createState() =>
+      _UserCompleteProfileLocationCountryContentState();
 }
 
-class _UserCompleteProfileLocationCountryContentState extends State<UserCompleteProfileLocationCountryContent> {
+class _UserCompleteProfileLocationCountryContentState
+    extends State<UserCompleteProfileLocationCountryContent> {
   final ScrollController _scroll = ScrollController();
 
   @override
@@ -28,7 +32,8 @@ class _UserCompleteProfileLocationCountryContentState extends State<UserComplete
     notifier.countryData.clear();
     notifier.initCountry(context, reload: true);
     _scroll.addListener(() {
-      if (_scroll.offset >= _scroll.position.maxScrollExtent && !_scroll.position.outOfRange) {
+      if (_scroll.offset >= _scroll.position.maxScrollExtent &&
+          !_scroll.position.outOfRange) {
         if (notifier.hasNext) {
           notifier.loadMore = !notifier.loadMore;
           notifier.page++;
@@ -42,9 +47,11 @@ class _UserCompleteProfileLocationCountryContentState extends State<UserComplete
   @override
   Widget build(BuildContext context) {
     final notifier = context.watch<UserCompleteProfileNotifier>();
-    final error = context.select((ErrorService value) => value.getError(ErrorType.getCountry));
+    final error = context
+        .select((ErrorService value) => value.getError(ErrorType.getCountry));
 
-    if (context.read<ErrorService>().isInitialError(error, notifier.countryData.isEmpty ? null : notifier.countryData.isEmpty)) {
+    if (context.read<ErrorService>().isInitialError(error,
+        notifier.countryData.isEmpty ? null : notifier.countryData.isEmpty)) {
       return Center(
         child: SizedBox(
           height: SizeConfig.screenHeight! * 0.8,
@@ -57,7 +64,7 @@ class _UserCompleteProfileLocationCountryContentState extends State<UserComplete
     }
 
     return SizedBox(
-      height: SizeConfig.screenHeight!  * 0.8,
+      height: SizeConfig.screenHeight! * 0.8,
       width: SizeConfig.screenWidth,
       child: Center(
         child: notifier.countryData.isNotEmpty
@@ -65,7 +72,8 @@ class _UserCompleteProfileLocationCountryContentState extends State<UserComplete
                 children: [
                   const RotatedBox(
                     quarterTurns: 1,
-                    child: CustomIconWidget(iconData: '${AssetPath.vectorPath}back-arrow.svg'),
+                    child: CustomIconWidget(
+                        iconData: '${AssetPath.vectorPath}back-arrow.svg'),
                   ),
                   Expanded(
                     child: ListView.builder(
@@ -78,19 +86,26 @@ class _UserCompleteProfileLocationCountryContentState extends State<UserComplete
                         child: CustomElevatedButton(
                           height: 42,
                           width: SizeConfig.screenWidth,
-                          function: () => widget.onSelected(notifier.countryData[index].country ?? ''),
+                          function: () => widget.onSelected(
+                              notifier.countryData[index].country ?? ''),
                           child: CustomTextWidget(
-                            textToDisplay: notifier.countryData[index].country ?? '',
-                            textStyle: Theme.of(context).textTheme.bodyText1,
+                            textToDisplay:
+                                notifier.countryData[index].country ?? '',
+                            textStyle: Theme.of(context).textTheme.bodyLarge,
                           ),
                         ),
                       ),
                     ),
                   ),
-                  notifier.loadMore ? SignUpLoadMoreList(caption: "${notifier.language.loadMore} ${notifier.language.country}") : const SizedBox.shrink(),
+                  notifier.loadMore
+                      ? SignUpLoadMoreList(
+                          caption:
+                              "${notifier.language.loadMore} ${notifier.language.country}")
+                      : const SizedBox.shrink(),
                   const RotatedBox(
                     quarterTurns: 3,
-                    child: CustomIconWidget(iconData: '${AssetPath.vectorPath}back-arrow.svg'),
+                    child: CustomIconWidget(
+                        iconData: '${AssetPath.vectorPath}back-arrow.svg'),
                   ),
                 ],
               )

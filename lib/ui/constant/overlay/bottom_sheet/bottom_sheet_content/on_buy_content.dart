@@ -46,7 +46,7 @@ import 'package:provider/provider.dart';
 //                     ),
 //                     CustomTextWidget(
 //                       textToDisplay: System().currencyFormat(amount: data?.saleAmount?.toInt()),
-//                       textStyle: Theme.of(context).textTheme.subtitle1,
+//                       textStyle: Theme.of(context).textTheme.titleMedium,
 //                     ),
 //                   ],
 //                 ),
@@ -60,7 +60,7 @@ import 'package:provider/provider.dart';
 //                     ),
 //                     CustomTextWidget(
 //                       textToDisplay: (data?.saleView ?? false) ? notifier.translate.yes ?? '' : notifier.translate.no ?? '',
-//                       textStyle: Theme.of(context).textTheme.subtitle1,
+//                       textStyle: Theme.of(context).textTheme.titleMedium,
 //                     ),
 //                   ],
 //                 ),
@@ -75,7 +75,7 @@ import 'package:provider/provider.dart';
 //                     CustomTextWidget(
 //                       // textToDisplay: f.format(data?.saleLike),
 //                       textToDisplay: (data?.saleLike ?? false) ? notifier.translate.yes ?? 'yes' : notifier.translate.no ?? 'no',
-//                       textStyle: Theme.of(context).textTheme.subtitle1,
+//                       textStyle: Theme.of(context).textTheme.titleMedium,
 //                     ),
 //                   ],
 //                 ),
@@ -84,7 +84,7 @@ import 'package:provider/provider.dart';
 //             CustomElevatedButton(
 //               child: CustomTextWidget(
 //                 textToDisplay: notifier.translate.buy ?? 'buy',
-//                 textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+//                 textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(color: kHyppeLightButtonText),
 //               ),
 //               width: double.infinity,
 //               height: 50 * SizeConfig.scaleDiagonal,
@@ -99,10 +99,10 @@ import 'package:provider/provider.dart';
 //   }
 // }
 
-
 class OnBuyContentBottomSheet extends StatelessWidget {
   final ContentData? data;
-  const OnBuyContentBottomSheet({Key? key, required this.data}) : super(key: key);
+  const OnBuyContentBottomSheet({Key? key, required this.data})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -111,12 +111,15 @@ class OnBuyContentBottomSheet extends StatelessWidget {
 
     return Consumer<TranslateNotifierV2>(
       builder: (_, notifier, __) => Padding(
-        padding: EdgeInsets.symmetric(vertical: 8 * SizeConfig.scaleDiagonal, horizontal: 16 * SizeConfig.scaleDiagonal),
+        padding: EdgeInsets.symmetric(
+            vertical: 8 * SizeConfig.scaleDiagonal,
+            horizontal: 16 * SizeConfig.scaleDiagonal),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+            const CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}handler.svg"),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -129,7 +132,8 @@ class OnBuyContentBottomSheet extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomTextWidget(
-                      textToDisplay: notifier.translate.originalContent ?? "Original Content",
+                      textToDisplay: notifier.translate.originalContent ??
+                          "Original Content",
                       textStyle: Theme.of(context).textTheme.bodyMedium,
                     ),
                     Row(
@@ -144,9 +148,10 @@ class OnBuyContentBottomSheet extends StatelessWidget {
                         ),
                         //Convert Rp to Coin
                         CustomTextWidget(
-                          textToDisplay: System().numberFormat(amount: data?.saleAmount?.toInt()),
+                          textToDisplay: System()
+                              .numberFormat(amount: data?.saleAmount?.toInt()),
                           // textToDisplay: System().numberFormat(amount: (data!.saleAmount! ~/ 1000).toInt()),
-                          textStyle: Theme.of(context).textTheme.subtitle1,
+                          textStyle: Theme.of(context).textTheme.titleMedium,
                         ),
                       ],
                     ),
@@ -157,12 +162,15 @@ class OnBuyContentBottomSheet extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomTextWidget(
-                      textToDisplay: notifier.translate.totalViews ?? "Total Views",
+                      textToDisplay:
+                          notifier.translate.totalViews ?? "Total Views",
                       textStyle: Theme.of(context).textTheme.bodyMedium,
                     ),
                     CustomTextWidget(
-                      textToDisplay: (data?.saleView ?? false) ? notifier.translate.yes ?? '' : notifier.translate.no ?? '',
-                      textStyle: Theme.of(context).textTheme.subtitle1,
+                      textToDisplay: (data?.saleView ?? false)
+                          ? notifier.translate.yes ?? ''
+                          : notifier.translate.no ?? '',
+                      textStyle: Theme.of(context).textTheme.titleMedium,
                     ),
                   ],
                 ),
@@ -171,13 +179,16 @@ class OnBuyContentBottomSheet extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomTextWidget(
-                      textToDisplay: notifier.translate.totalLikes ?? "Total Likes",
+                      textToDisplay:
+                          notifier.translate.totalLikes ?? "Total Likes",
                       textStyle: Theme.of(context).textTheme.bodyMedium,
                     ),
                     CustomTextWidget(
                       // textToDisplay: f.format(data?.saleLike),
-                      textToDisplay: (data?.saleLike ?? false) ? notifier.translate.yes ?? 'yes' : notifier.translate.no ?? 'no',
-                      textStyle: Theme.of(context).textTheme.subtitle1,
+                      textToDisplay: (data?.saleLike ?? false)
+                          ? notifier.translate.yes ?? 'yes'
+                          : notifier.translate.no ?? 'no',
+                      textStyle: Theme.of(context).textTheme.titleMedium,
                     ),
                   ],
                 ),
@@ -186,13 +197,20 @@ class OnBuyContentBottomSheet extends StatelessWidget {
             CustomElevatedButton(
               child: CustomTextWidget(
                 textToDisplay: notifier.translate.buy ?? 'buy',
-                textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: kHyppeLightButtonText),
               ),
               width: double.infinity,
               height: 50 * SizeConfig.scaleDiagonal,
-              function: () => Routing().move(Routes.reviewBuyContent, argument: data),
+              function: () =>
+                  Routing().move(Routes.reviewBuyContent, argument: data),
               buttonStyle: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary), overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary)),
+                  backgroundColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primary),
+                  overlayColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primary)),
             ),
           ],
         ),

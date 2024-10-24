@@ -66,7 +66,8 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
                       onPressed: () => notifier.onBack(),
                     ),
                     title: InkWell(
-                      onTap: () => System().navigateToProfile(context, notifier.argument.emailReceiver),
+                      onTap: () => System().navigateToProfile(
+                          context, notifier.argument.emailReceiver),
                       child: Row(
                         children: [
                           StoryColorValidator(
@@ -86,20 +87,21 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
                           sixteenPx,
                           CustomRichTextWidget(
                             textSpan: TextSpan(
-                              style: Theme.of(context).textTheme.subtitle2,
+                              style: Theme.of(context).textTheme.titleSmall,
                               text: "${notifier.argument.usernameReceiver}\n",
                               children: <TextSpan>[
                                 TextSpan(
                                   text: notifier.argument.fullnameReceiver,
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: Theme.of(context).colorScheme.secondary,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
                                   ),
                                 )
                               ],
                             ),
                             textAlign: TextAlign.start,
-                            textStyle: Theme.of(context).textTheme.overline,
+                            textStyle: Theme.of(context).textTheme.labelSmall,
                           ),
                         ],
                       ),

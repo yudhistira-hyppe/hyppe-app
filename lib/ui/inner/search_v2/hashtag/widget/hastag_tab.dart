@@ -10,7 +10,8 @@ class HashtagTab extends StatelessWidget {
   final bool isActive;
   final HyppeType type;
   final Function(HyppeType)? onTap;
-  const HashtagTab({Key? key, required this.isActive, required this.type, this.onTap})
+  const HashtagTab(
+      {Key? key, required this.isActive, required this.type, this.onTap})
       : super(key: key);
 
   @override
@@ -38,7 +39,7 @@ class HashtagTab extends StatelessWidget {
     //             height: 52,
     //             child: CustomTextWidget(
     //               textToDisplay: System().getTitleHyppe(type),
-    //               textStyle: context.getTextTheme().bodyText2?.copyWith(
+    //               textStyle: context.getTextTheme().bodyMedium?.copyWith(
     //                   color: isActive
     //                       ? context.getColorScheme().primary
     //                       : context.getColorScheme().secondary,
@@ -68,45 +69,30 @@ class HashtagTab extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isActive
                     ? context.getColorScheme().primary
-                    : context
-                    .getColorScheme()
-                    .background,
-                borderRadius: const BorderRadius.all(
-                    Radius.circular(18)),
+                    : context.getColorScheme().background,
+                borderRadius: const BorderRadius.all(Radius.circular(18)),
               ),
               child: InkWell(
                 onTap: () {
-                  if(onTap != null){
+                  if (onTap != null) {
                     onTap!(type);
                   }
                 },
-                borderRadius: const BorderRadius.all(
-                    Radius.circular(18)),
-                splashColor:
-                context.getColorScheme().primary,
+                borderRadius: const BorderRadius.all(Radius.circular(18)),
+                splashColor: context.getColorScheme().primary,
                 child: Container(
                   alignment: Alignment.center,
                   height: 36,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: const BoxDecoration(
-                      borderRadius:
-                      BorderRadius.all(
-                          Radius.circular(18)),),
+                    borderRadius: BorderRadius.all(Radius.circular(18)),
+                  ),
                   child: CustomTextWidget(
-                    textToDisplay:
-                    System().getTitleHyppe(type),
-                    textStyle: context
-                        .getTextTheme()
-                        .bodyText2
-                        ?.copyWith(
+                    textToDisplay: System().getTitleHyppe(type),
+                    textStyle: context.getTextTheme().bodyMedium?.copyWith(
                         color: isActive
-                            ? context
-                            .getColorScheme()
-                            .background
-                            : context
-                            .getColorScheme()
-                            .secondary),
+                            ? context.getColorScheme().background
+                            : context.getColorScheme().secondary),
                   ),
                 ),
               ),

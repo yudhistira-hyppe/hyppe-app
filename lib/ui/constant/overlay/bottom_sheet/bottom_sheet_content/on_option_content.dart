@@ -49,7 +49,8 @@ class OnShowOptionContent extends StatefulWidget {
   State<OnShowOptionContent> createState() => _OnShowOptionContentState();
 }
 
-class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralMixin {
+class _OnShowOptionContentState extends State<OnShowOptionContent>
+    with GeneralMixin {
   final _routing = Routing();
   final _system = System();
   final _language = TranslateNotifierV2();
@@ -66,14 +67,19 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
     context.read<HomeNotifier>().onDeleteSelfPostContent(
           context,
           postID: widget.contentData.postID ?? '',
-          email: widget.contentData.email??'',
+          email: widget.contentData.email ?? '',
           content: widget.captionTitle,
         );
-    ShowBottomSheet().onShowColouredSheet(context, _language.translate.yourContentHadSuccessfullyDeleted ?? '', color: kHyppeTextSuccess, maxLines: 2);
+    ShowBottomSheet().onShowColouredSheet(
+        context, _language.translate.yourContentHadSuccessfullyDeleted ?? '',
+        color: kHyppeTextSuccess, maxLines: 2);
     // _showMessage('${_language.translate.yourContentHadSuccessfullyDeleted}');
   }
 
-  void _handleLink(BuildContext context, {required bool copiedToClipboard, required String description, required ContentData data}) async {
+  void _handleLink(BuildContext context,
+      {required bool copiedToClipboard,
+      required String description,
+      required ContentData data}) async {
     late String _routes;
 
     if (description == hyppeVid) {
@@ -142,12 +148,16 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+                const CustomIconWidget(
+                    iconData: "${AssetPath.vectorPath}handler.svg"),
                 sixteenPx,
                 CustomTextWidget(
                   textToDisplay: widget.captionTitle,
                   // '$captionTitle ${contentData?.content.length == 1 ? contentData?.content.length : contentIndex} of ${contentData?.content.length}',
-                  textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
+                  textStyle: Theme.of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -156,51 +166,71 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             children: [
-              if (widget.contentData.reportedStatus != 'OWNED' && widget.isShare && widget.contentData.visibility == 'PUBLIC')
+              if (widget.contentData.reportedStatus != 'OWNED' &&
+                  widget.isShare &&
+                  widget.contentData.visibility == 'PUBLIC')
                 _tileComponent(
                   moveBack: true,
                   caption: '${TranslateNotifierV2().translate.copyLink}',
                   icon: 'copy-link.svg',
-                  onTap: () => _handleLink(context, copiedToClipboard: true, description: widget.captionTitle, data: widget.contentData),
+                  onTap: () => _handleLink(context,
+                      copiedToClipboard: true,
+                      description: widget.captionTitle,
+                      data: widget.contentData),
                 ),
-              if (widget.contentData.reportedStatus != 'OWNED' && widget.isShare && widget.contentData.visibility == 'PUBLIC')
+              if (widget.contentData.reportedStatus != 'OWNED' &&
+                  widget.isShare &&
+                  widget.contentData.visibility == 'PUBLIC')
                 _tileComponent(
                   moveBack: false,
                   caption: '${TranslateNotifierV2().translate.share}',
                   icon: 'share.svg',
-                  onTap: () => _handleLink(context, copiedToClipboard: false, description: widget.captionTitle, data: widget.contentData),
+                  onTap: () => _handleLink(context,
+                      copiedToClipboard: false,
+                      description: widget.captionTitle,
+                      data: widget.contentData),
                 ),
-              if (_system.getFeatureTypeV2(widget.contentData.postType ?? '') != FeatureType.story) ...[
+              if (_system.getFeatureTypeV2(widget.contentData.postType ?? '') !=
+                  FeatureType.story) ...[
                 _tileComponent(
                   moveBack: false,
                   caption: '${TranslateNotifierV2().translate.edit}',
                   icon: 'edit-content.svg',
                   onTap: () {
-                    final notifier = Provider.of<PreUploadContentNotifier>(context, listen: false);
+                    final notifier = Provider.of<PreUploadContentNotifier>(
+                        context,
+                        listen: false);
                     notifier.hastagChallange = "";
                     notifier.editData = widget.contentData;
                     notifier.isEdit = true;
                     notifier.isUpdate = true;
-                    notifier.captionController.text = widget.contentData.description ?? "";
-                    notifier.tagsController.text = widget.contentData.tags?.join(",") ?? '';
-                    notifier.featureType = _system.getFeatureTypeV2(widget.contentData.postType ?? '');
+                    notifier.captionController.text =
+                        widget.contentData.description ?? "";
+                    notifier.tagsController.text =
+                        widget.contentData.tags?.join(",") ?? '';
+                    notifier.featureType = _system
+                        .getFeatureTypeV2(widget.contentData.postType ?? '');
 
                     notifier.thumbNail = widget.contentData.fullThumbPath;
-                    notifier.allowComment = widget.contentData.allowComments ?? true;
+                    notifier.allowComment =
+                        widget.contentData.allowComments ?? true;
                     notifier.certified = widget.contentData.certified ?? false;
-                    notifier.ownershipEULA = widget.contentData.certified ?? false;
+                    notifier.ownershipEULA =
+                        widget.contentData.certified ?? false;
                     notifier.isShared = widget.contentData.isShared ?? true;
 
                     if (widget.contentData.location != '') {
                       notifier.locationName = widget.contentData.location ?? '';
                     } else {
-                      notifier.locationName = notifier.language.addLocation ?? '';
+                      notifier.locationName =
+                          notifier.language.addLocation ?? '';
                     }
 
                     notifier.privacyTitle = widget.contentData.visibility ?? '';
 
                     notifier.privacyValue = widget.contentData.visibility ?? '';
-                    final _isoCodeCache = SharedPreference().readStorage(SpKeys.isoCode);
+                    final _isoCodeCache =
+                        SharedPreference().readStorage(SpKeys.isoCode);
 
                     if (_isoCodeCache == 'id') {
                       switch (widget.contentData.visibility ?? '') {
@@ -216,7 +246,8 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                         default:
                       }
                     } else {
-                      notifier.privacyValue = widget.contentData.visibility ?? '';
+                      notifier.privacyValue =
+                          widget.contentData.visibility ?? '';
                     }
 
                     notifier.interestData = [];
@@ -232,13 +263,20 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                       }).toList();
                     }
                     notifier.userTagDataReal = [];
-                    notifier.userTagDataReal.addAll(widget.contentData.tagPeople ?? []);
+                    notifier.userTagDataReal
+                        .addAll(widget.contentData.tagPeople ?? []);
 
-                    notifier.toSell = widget.contentData.saleAmount != null && (widget.contentData.saleAmount ?? 0) > 0 ? true : false;
-                    notifier.includeTotalViews = widget.contentData.saleView ?? false;
-                    notifier.includeTotalLikes = widget.contentData.saleLike ?? false;
+                    notifier.toSell = widget.contentData.saleAmount != null &&
+                            (widget.contentData.saleAmount ?? 0) > 0
+                        ? true
+                        : false;
+                    notifier.includeTotalViews =
+                        widget.contentData.saleView ?? false;
+                    notifier.includeTotalLikes =
+                        widget.contentData.saleLike ?? false;
                     notifier.certified = widget.contentData.certified ?? false;
-                    notifier.priceController.text = widget.contentData.saleAmount?.toInt().toString() ?? '';
+                    notifier.priceController.text =
+                        widget.contentData.saleAmount?.toInt().toString() ?? '';
 
                     _routing
                         .move(Routes.preUploadContent,
@@ -256,8 +294,13 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                 caption: '${TranslateNotifierV2().translate.delete}',
                 icon: 'delete.svg',
                 onTap: () async {
-                  ShowGeneralDialog.deleteContentDialog(context, widget.captionTitle.replaceAll('Hyppe', ''), () async {
-                    await deletePostByID(context, postID: widget.contentData.postID ?? '', postType: widget.contentData.postType ?? '').then((value) {
+                  ShowGeneralDialog.deleteContentDialog(
+                      context, widget.captionTitle.replaceAll('Hyppe', ''),
+                      () async {
+                    await deletePostByID(context,
+                            postID: widget.contentData.postID ?? '',
+                            postType: widget.contentData.postType ?? '')
+                        .then((value) {
                       if (value) _handleDelete(context);
                     });
                     widget.fAliplayer?.stop();

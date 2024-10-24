@@ -24,7 +24,9 @@ class DescFaceVerification extends StatelessWidget {
     return Consumer<VerificationIDNotifier>(
       builder: (_, notifier, __) => Scaffold(
         appBar: AppBar(
-          leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
+          leadingWidth: 50 *
+              (SizeConfig.screenWidth ?? context.getWidth()) /
+              SizeWidget.baseWidthXD,
           leading: CustomIconButtonWidget(
             defaultColor: true,
             iconData: "${AssetPath.vectorPath}back-arrow.svg",
@@ -32,8 +34,11 @@ class DescFaceVerification extends StatelessWidget {
           ),
           titleSpacing: 0,
           title: CustomTextWidget(
-            textToDisplay: System().bodyMultiLang(bodyEn: 'Face Verification', bodyId: 'Verifikasi Wajah') ?? '',
-            textStyle: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 18),
+            textToDisplay: System().bodyMultiLang(
+                    bodyEn: 'Face Verification', bodyId: 'Verifikasi Wajah') ??
+                '',
+            textStyle:
+                Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 18),
           ),
           centerTitle: false,
         ),
@@ -46,8 +51,11 @@ class DescFaceVerification extends StatelessWidget {
                 twentyFourPx,
                 Center(
                   child: Text(
-                    System().bodyMultiLang(bodyEn: 'Selfie Photo', bodyId: 'Foto Selfie') ?? '',
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                    System().bodyMultiLang(
+                            bodyEn: 'Selfie Photo', bodyId: 'Foto Selfie') ??
+                        '',
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.w700),
                   ),
                 ),
                 twentyFourPx,
@@ -61,21 +69,40 @@ class DescFaceVerification extends StatelessWidget {
                   height: 40,
                 ),
                 unorderedList(
-                  System().bodyMultiLang(bodyEn: 'Photos taken directly from the phone`s camera.', bodyId: 'Foto diambil langsung dari kamera ponsel.') ?? '',
-                ),
-                unorderedList(
-                  System().bodyMultiLang(bodyEn: 'Take photos without facial accessories.', bodyId: 'Ambil foto tanpa aksesoris wajah.') ?? '',
-                ),
-                unorderedList(
                   System().bodyMultiLang(
-                          bodyEn: 'Make sure the photo is taken facing forward with sufficient lighting.', bodyId: 'Pastikan foto diambil menghadap ke depan dengan pencahayaan yang cukup.') ??
+                          bodyEn:
+                              'Photos taken directly from the phone`s camera.',
+                          bodyId:
+                              'Foto diambil langsung dari kamera ponsel.') ??
                       '',
                 ),
                 unorderedList(
-                  System().bodyMultiLang(bodyEn: 'Do not move during the selfie.', bodyId: 'Jangan bergerak saat selfie.') ?? '',
+                  System().bodyMultiLang(
+                          bodyEn: 'Take photos without facial accessories.',
+                          bodyId: 'Ambil foto tanpa aksesoris wajah.') ??
+                      '',
                 ),
                 unorderedList(
-                  System().bodyMultiLang(bodyEn: 'Make sure the photo is taken without flash and is not cropped.', bodyId: 'Pastikan foto diambil tanpa flash dan tidak terpotong.') ?? '',
+                  System().bodyMultiLang(
+                          bodyEn:
+                              'Make sure the photo is taken facing forward with sufficient lighting.',
+                          bodyId:
+                              'Pastikan foto diambil menghadap ke depan dengan pencahayaan yang cukup.') ??
+                      '',
+                ),
+                unorderedList(
+                  System().bodyMultiLang(
+                          bodyEn: 'Do not move during the selfie.',
+                          bodyId: 'Jangan bergerak saat selfie.') ??
+                      '',
+                ),
+                unorderedList(
+                  System().bodyMultiLang(
+                          bodyEn:
+                              'Make sure the photo is taken without flash and is not cropped.',
+                          bodyId:
+                              'Pastikan foto diambil tanpa flash dan tidak terpotong.') ??
+                      '',
                 ),
                 Text(notifier.language.uploadIdCardNotice8 ?? ''),
               ],
@@ -83,21 +110,27 @@ class DescFaceVerification extends StatelessWidget {
           ),
         ),
         floatingActionButton: Container(
-          color: Theme.of(context).backgroundColor,
+          color: Theme.of(context).appBarTheme.backgroundColor,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           child: CustomElevatedButton(
             width: SizeConfig.screenWidth,
             height: 44.0 * SizeConfig.scaleDiagonal,
-            function: () => Routing().moveAndPop(Routes.cameraSelfieVerification),
+            function: () =>
+                Routing().moveAndPop(Routes.cameraSelfieVerification),
             buttonStyle: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-              shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-              overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-              backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+              foregroundColor: MaterialStateProperty.all(
+                  Theme.of(context).colorScheme.primary),
+              shadowColor: MaterialStateProperty.all(
+                  Theme.of(context).colorScheme.primary),
+              overlayColor: MaterialStateProperty.all(
+                  Theme.of(context).colorScheme.primary),
+              backgroundColor: MaterialStateProperty.all(
+                  Theme.of(context).colorScheme.primary),
             ),
             child: CustomTextWidget(
               textToDisplay: notifier.language.openCamera ?? '',
-              textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+              textStyle:
+                  textTheme.labelLarge?.copyWith(color: kHyppeLightButtonText),
             ),
           ),
         ),

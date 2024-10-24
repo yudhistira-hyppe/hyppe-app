@@ -9,7 +9,14 @@ class TwoColumnWidget extends StatelessWidget {
   final TextStyle? textStyle1;
   final Widget? widget;
   final Function? function;
-  const TwoColumnWidget(this.text1, {Key? key, this.text2, this.textStyle, this.textStyle1, this.widget = const SizedBox(), this.function}) : super(key: key);
+  const TwoColumnWidget(this.text1,
+      {Key? key,
+      this.text2,
+      this.textStyle,
+      this.textStyle1,
+      this.widget = const SizedBox(),
+      this.function})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +28,9 @@ class TwoColumnWidget extends StatelessWidget {
         children: [
           CustomTextWidget(
             textToDisplay: text1 ?? '',
-            textStyle: textStyle1 ?? Theme.of(context).textTheme.caption ?? const TextStyle(),
+            textStyle: textStyle1 ??
+                Theme.of(context).textTheme.bodySmall ??
+                const TextStyle(),
             textAlign: TextAlign.start,
           ),
           InkWell(
@@ -31,7 +40,9 @@ class TwoColumnWidget extends StatelessWidget {
                 widget ?? Container(),
                 CustomTextWidget(
                   textToDisplay: text2 ?? '',
-                  textStyle: textStyle ?? Theme.of(context).textTheme.caption ?? const TextStyle(),
+                  textStyle: textStyle ??
+                      Theme.of(context).textTheme.bodySmall ??
+                      const TextStyle(),
                 ),
               ],
             ),

@@ -24,7 +24,6 @@ class UserItem extends StatefulWidget {
 }
 
 class _UserItemState extends State<UserItem> {
-
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'UserItem');
@@ -48,9 +47,11 @@ class _UserItemState extends State<UserItem> {
               width: 50,
               height: 50,
               following: true,
-              imageUrl: System().showUserPicture(widget.data?.senderOrReceiverInfo?.avatar?.mediaEndpoint),
+              imageUrl: System().showUserPicture(
+                  widget.data?.senderOrReceiverInfo?.avatar?.mediaEndpoint),
               badge: widget.data?.senderOrReceiverInfo?.urluserBadge,
-              onTap: () => System().navigateToProfile(context, widget.data?.senderOrReceiverInfo?.email ?? ''),
+              onTap: () => System().navigateToProfile(
+                  context, widget.data?.senderOrReceiverInfo?.email ?? ''),
             ),
             sixteenPx,
             Expanded(
@@ -62,14 +63,25 @@ class _UserItemState extends State<UserItem> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomTextWidget(
-                        textToDisplay: widget.data?.senderOrReceiverInfo?.username ?? '',
-                        textStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.bold),
+                        textToDisplay:
+                            widget.data?.senderOrReceiverInfo?.username ?? '',
+                        textStyle: Theme.of(context)
+                            .textTheme
+                            .titleSmall
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       fourPx,
                       CustomTextWidget(
                         maxLines: 1,
-                        textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
-                        textToDisplay: widget.data?.senderOrReceiverInfo?.fullName ?? widget.data?.senderOrReceiverInfo?.username.camelCase ?? '',
+                        textStyle: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                        textToDisplay:
+                            widget.data?.senderOrReceiverInfo?.fullName ??
+                                widget.data?.senderOrReceiverInfo?.username
+                                    .camelCase ??
+                                '',
                       )
                     ],
                   ),

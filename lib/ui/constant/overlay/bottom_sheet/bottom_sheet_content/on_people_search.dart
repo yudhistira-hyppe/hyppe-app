@@ -29,14 +29,15 @@ class OnSearchPeopleBottomSheet extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<OnSearchPeopleBottomSheet> createState() => _OnSearchPeopleBottomSheetState();
+  State<OnSearchPeopleBottomSheet> createState() =>
+      _OnSearchPeopleBottomSheetState();
 }
 
 class _OnSearchPeopleBottomSheetState extends State<OnSearchPeopleBottomSheet> {
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   String? lastInputValue;
-  
+
   @override
   void initState() {
     // _scrollController.addListener(() => _notifier.scrollListPeopleListener(
@@ -71,8 +72,9 @@ class _OnSearchPeopleBottomSheetState extends State<OnSearchPeopleBottomSheet> {
               color: Theme.of(context).colorScheme.onSurface,
             )),
         title: CustomTextWidget(
-          textToDisplay: widget.language?.tagPeople??'Tag People',
-          textStyle: textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
+          textToDisplay: widget.language?.tagPeople ?? 'Tag People',
+          textStyle:
+              textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.transparent,
       ),
@@ -84,17 +86,19 @@ class _OnSearchPeopleBottomSheetState extends State<OnSearchPeopleBottomSheet> {
             children: [
               CustomSearchBar(
                   hintText: notifier.language.search,
-                  contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
+                  contentPadding: EdgeInsets.symmetric(
+                      vertical: 16 * SizeConfig.scaleDiagonal),
                   controller: _controller,
                   withShadow: true,
-
                   onChanged: (val) {
                     if (lastInputValue != val) {
                       lastInputValue = val;
                       notifier.startSearch = 0;
-                      Future.delayed(const Duration(milliseconds: 500), () async {
+                      Future.delayed(const Duration(milliseconds: 500),
+                          () async {
                         if (val == _controller.text) {
-                          notifier.searchPeople(context, input: _controller.text, tagPeople: true);
+                          notifier.searchPeople(context,
+                              input: _controller.text, tagPeople: true);
                         }
                       });
                     }
@@ -114,10 +118,13 @@ class _OnSearchPeopleBottomSheetState extends State<OnSearchPeopleBottomSheet> {
                                 return Column(
                                   children: [
                                     ListTile(
-                                      onTap: () => notifier.inserTagPeople(index),
+                                      onTap: () =>
+                                          notifier.inserTagPeople(index),
                                       contentPadding: EdgeInsets.zero,
-                                      title: Text("@${notifier.searchTagPeolpleData[index].username}"),
-                                      subtitle: Text("${notifier.searchTagPeolpleData[index].fullName}"),
+                                      title: Text(
+                                          "@${notifier.searchTagPeolpleData[index].username}"),
+                                      subtitle: Text(
+                                          "${notifier.searchTagPeolpleData[index].fullName}"),
                                       leading: StoryColorValidator(
                                         haveStory: false,
                                         featureType: FeatureType.pic,
@@ -125,8 +132,14 @@ class _OnSearchPeopleBottomSheetState extends State<OnSearchPeopleBottomSheet> {
                                           width: 50,
                                           height: 50,
                                           onTap: () {},
-                                          imageUrl: System().showUserPicture(notifier.searchTagPeolpleData[index].avatar?.mediaEndpoint),
-                                          badge: notifier.searchTagPeolpleData[index].urluserBadge,
+                                          imageUrl: System().showUserPicture(
+                                              notifier
+                                                  .searchTagPeolpleData[index]
+                                                  .avatar
+                                                  ?.mediaEndpoint),
+                                          badge: notifier
+                                              .searchTagPeolpleData[index]
+                                              .urluserBadge,
                                           following: true,
                                           onFollow: () {},
                                         ),
@@ -149,7 +162,9 @@ class _OnSearchPeopleBottomSheetState extends State<OnSearchPeopleBottomSheet> {
                   return true;
                 },
               ),
-              notifier.isLoadingLoadMore == true ? const SizedBox(height: 30, child: CustomLoading()) : const SizedBox(),
+              notifier.isLoadingLoadMore == true
+                  ? const SizedBox(height: 30, child: CustomLoading())
+                  : const SizedBox(),
             ],
           ),
         ),

@@ -36,7 +36,8 @@ class _PinScreenState extends State<PinScreen> {
       builder: (_, notifier, notifier2, __) => Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
+            icon: const CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}back-arrow.svg"),
             splashRadius: 1,
             onPressed: () {
               Routing().moveBack();
@@ -51,8 +52,13 @@ class _PinScreenState extends State<PinScreen> {
           ),
           titleSpacing: 0,
           title: CustomTextWidget(
-            textToDisplay: setPin == 'true' ? notifier2.translate.changePin ?? 'Change Pin' : 'Set New Pin',
-            textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 18 * SizeConfig.scaleDiagonal),
+            textToDisplay: setPin == 'true'
+                ? notifier2.translate.changePin ?? 'Change Pin'
+                : 'Set New Pin',
+            textStyle: Theme.of(context)
+                .textTheme
+                .bodyLarge!
+                .copyWith(fontSize: 18 * SizeConfig.scaleDiagonal),
           ),
           centerTitle: false,
         ),
@@ -69,15 +75,23 @@ class _PinScreenState extends State<PinScreen> {
                 ),
               ),
               CustomTextWidget(
-                textToDisplay: setPin == 'true' && !notifier.checkPin ? notifier2.translate.enterYourCurrentPin ?? 'Enter Your Current Pin' : notifier2.translate.enterNewPin ?? 'Eneter New Pin',
+                textToDisplay: setPin == 'true' && !notifier.checkPin
+                    ? notifier2.translate.enterYourCurrentPin ??
+                        'Enter Your Current Pin'
+                    : notifier2.translate.enterNewPin ?? 'Eneter New Pin',
                 textStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onBackground,
                     ),
               ),
               sixPx,
-              CustomTextWidget(textToDisplay: notifier2.translate.enterYour6DigitHyppePin ?? ''),
+              CustomTextWidget(
+                  textToDisplay:
+                      notifier2.translate.enterYour6DigitHyppePin ?? ''),
               twelvePx,
-              CustomRectangleInput(setPin == 'true' && !notifier.checkPin ? notifier.pin3Controller : notifier.pin1Controller, onChanged: (value) {
+              CustomRectangleInput(
+                  setPin == 'true' && !notifier.checkPin
+                      ? notifier.pin3Controller
+                      : notifier.pin1Controller, onChanged: (value) {
                 if (setPin == 'true' && !notifier.checkPin) {
                   notifier.pinCurentCheking(context, value);
                 } else {
@@ -88,9 +102,15 @@ class _PinScreenState extends State<PinScreen> {
                   ? GestureDetector(
                       onTap: () => notifier.forgotPin(context),
                       child: CustomTextWidget(
-                        textToDisplay: notifier2.translate.forgotPin ?? 'Forgot Pin',
+                        textToDisplay:
+                            notifier2.translate.forgotPin ?? 'Forgot Pin',
                         maxLines: 3,
-                        textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
+                        textStyle: Theme.of(context)
+                            .textTheme
+                            .bodyLarge!
+                            .copyWith(
+                                color: kHyppePrimary,
+                                fontWeight: FontWeight.bold),
                       ),
                     )
                   : Container(),

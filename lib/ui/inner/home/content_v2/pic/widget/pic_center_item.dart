@@ -41,7 +41,8 @@ class PicCenterItem extends StatelessWidget {
   final EdgeInsets? margin;
   final LocalizationModelV2? lang;
 
-  const PicCenterItem({Key? key, this.onTap, this.data, this.margin, this.lang}) : super(key: key);
+  const PicCenterItem({Key? key, this.onTap, this.data, this.margin, this.lang})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -78,8 +79,10 @@ class PicCenterItem extends StatelessWidget {
                   featureType: FeatureType.other,
                   // isCelebrity: vidData?.privacy?.isCelebrity,
                   isCelebrity: false,
-                  imageUrl: '${System().showUserPicture(data?.avatar?.mediaEndpoint)}',
-                  onTapOnProfileImage: () => System().navigateToProfile(context, data?.email ?? ''),
+                  imageUrl:
+                      '${System().showUserPicture(data?.avatar?.mediaEndpoint)}',
+                  onTapOnProfileImage: () =>
+                      System().navigateToProfile(context, data?.email ?? ''),
                   createdAt: '2022-02-02',
                   musicName: data?.music?.musicTitle ?? '',
                   location: data?.location ?? '',
@@ -93,7 +96,9 @@ class PicCenterItem extends StatelessWidget {
                   child: GestureDetector(
                     onTap: () {
                       if (data?.insight?.isloadingFollow != true) {
-                        picNot.followUser(context, data!, isUnFollow: data?.following, isloading: data!.insight!.isloadingFollow!);
+                        picNot.followUser(context, data!,
+                            isUnFollow: data?.following,
+                            isloading: data!.insight!.isloadingFollow!);
                       }
                     },
                     child: data!.insight!.isloadingFollow!
@@ -106,17 +111,26 @@ class PicCenterItem extends StatelessWidget {
                             ),
                           )
                         : Text(
-                            (data?.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
-                            style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                            (data?.following ?? false)
+                                ? (lang?.following ?? '')
+                                : (lang?.follow ?? ''),
+                            style: TextStyle(
+                                color: kHyppePrimary,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: "Lato"),
                           ),
                   ),
                 ),
               ),
               GestureDetector(
                 onTap: () {
-                  context.handleActionIsGuest(() async  {
-                    if (data?.email != SharedPreference().readStorage(SpKeys.email)) {
-                      context.read<PreviewPicNotifier>().reportContent(context, data!, onCompleted: (){});
+                  context.handleActionIsGuest(() async {
+                    if (data?.email !=
+                        SharedPreference().readStorage(SpKeys.email)) {
+                      context
+                          .read<PreviewPicNotifier>()
+                          .reportContent(context, data!, onCompleted: () {});
                     } else {
                       ShowBottomSheet().onShowOptionContent(
                         context,
@@ -128,7 +142,6 @@ class PicCenterItem extends StatelessWidget {
                       );
                     }
                   });
-
                 },
                 child: const Icon(
                   Icons.more_vert,
@@ -145,14 +158,17 @@ class PicCenterItem extends StatelessWidget {
                 memCacheHeight: 100,
                 widthPlaceHolder: 80,
                 heightPlaceHolder: 80,
-                imageUrl: (data?.isApsara ?? false) ? (data?.mediaThumbEndPoint ?? "") : data?.fullThumbPath ?? '',
+                imageUrl: (data?.isApsara ?? false)
+                    ? (data?.mediaThumbEndPoint ?? "")
+                    : data?.fullThumbPath ?? '',
                 imageBuilder: (context, imageProvider) => Stack(
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(20), // Image border
                       child: data?.reportedStatus == 'BLURRED'
                           ? ImageFiltered(
-                              imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                              imageFilter:
+                                  ImageFilter.blur(sigmaX: 30, sigmaY: 30),
                               child: Image(
                                 image: imageProvider,
                               ),
@@ -171,7 +187,8 @@ class PicCenterItem extends StatelessWidget {
                     height: 186,
                     decoration: BoxDecoration(
                       image: const DecorationImage(
-                        image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                        image:
+                            AssetImage('${AssetPath.pngPath}content-error.png'),
                         fit: BoxFit.cover,
                       ),
                       borderRadius: BorderRadius.circular(8.0),
@@ -186,7 +203,8 @@ class PicCenterItem extends StatelessWidget {
                   height: 186,
                   decoration: BoxDecoration(
                     image: const DecorationImage(
-                      image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                      image:
+                          AssetImage('${AssetPath.pngPath}content-error.png'),
                       fit: BoxFit.cover,
                     ),
                     borderRadius: BorderRadius.circular(8.0),
@@ -216,8 +234,11 @@ class PicCenterItem extends StatelessWidget {
                       : InkWell(
                           child: CustomIconWidget(
                             defaultColor: false,
-                            color: (data?.insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
-                            iconData: '${AssetPath.vectorPath}${(data?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                            color: (data?.insight?.isPostLiked ?? false)
+                                ? kHyppeRed
+                                : kHyppeTextLightPrimary,
+                            iconData:
+                                '${AssetPath.vectorPath}${(data?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
                             height: 18,
                           ),
                           onTap: () {
@@ -233,7 +254,12 @@ class PicCenterItem extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 21.0),
                   child: GestureDetector(
                     onTap: () {
-                      Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: data?.postID ?? '', fromFront: true, data: data ?? ContentData(), giftActication: data?.giftActivation));
+                      Routing().move(Routes.commentsDetail,
+                          argument: CommentsArgument(
+                              postID: data?.postID ?? '',
+                              fromFront: true,
+                              data: data ?? ContentData(),
+                              giftActication: data?.giftActivation));
                     },
                     child: const CustomIconWidget(
                       defaultColor: false,
@@ -248,7 +274,9 @@ class PicCenterItem extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 21.0),
                   child: GestureDetector(
                     onTap: () {
-                      context.read<PicDetailNotifier>().createdDynamicLink(context, data: data);
+                      context
+                          .read<PicDetailNotifier>()
+                          .createdDynamicLink(context, data: data);
                     },
                     child: const CustomIconWidget(
                       defaultColor: false,
@@ -262,10 +290,9 @@ class PicCenterItem extends StatelessWidget {
                 Expanded(
                   child: GestureDetector(
                     onTap: () async {
-                      await context.handleActionIsGuest(() async  {
+                      await context.handleActionIsGuest(() async {
                         await ShowBottomSheet.onBuyContent(context, data: data);
                       });
-
                     },
                     child: const Align(
                       alignment: Alignment.centerRight,
@@ -283,34 +310,54 @@ class PicCenterItem extends StatelessWidget {
           twelvePx,
           GestureDetector(
             onTap: () {
-              Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: data?.postID ?? '', fromFront: true, data: data ?? ContentData(), giftActication: data?.giftActivation));
+              Routing().move(Routes.commentsDetail,
+                  argument: CommentsArgument(
+                      postID: data?.postID ?? '',
+                      fromFront: true,
+                      data: data ?? ContentData(),
+                      giftActication: data?.giftActivation));
             },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomNewDescContent(
                   // desc: "${data?.description}",
-                  email: data?.email??'',
+                  email: data?.email ?? '',
                   username: data?.username ?? '',
                   desc: "${data?.description}",
                   trimLines: 2,
                   textAlign: TextAlign.start,
-                  seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
-                  seeMore: '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
-                  normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                  hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                  expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                  seeLess:
+                      ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
+                  seeMore:
+                      '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                  normStyle: const TextStyle(
+                      fontSize: 12, color: kHyppeTextLightPrimary),
+                  hrefStyle: Theme.of(context)
+                      .textTheme
+                      .titleSmall
+                      ?.copyWith(color: kHyppePrimary),
+                  expandStyle: Theme.of(context)
+                      .textTheme
+                      .titleSmall
+                      ?.copyWith(color: Theme.of(context).colorScheme.primary),
                 ),
                 (data?.comment?.length ?? 0) > 2
                     ? GestureDetector(
                         onTap: () {
-                          Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: data?.postID ?? '', fromFront: true, data: data ?? ContentData(), giftActication: data?.giftActivation));
+                          Routing().move(Routes.commentsDetail,
+                              argument: CommentsArgument(
+                                  postID: data?.postID ?? '',
+                                  fromFront: true,
+                                  data: data ?? ContentData(),
+                                  giftActication: data?.giftActivation));
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4.0),
                           child: Text(
                             "Lihat semua ${data?.comment?.length} komentar",
-                            style: const TextStyle(fontSize: 12, color: kHyppeBurem),
+                            style: const TextStyle(
+                                fontSize: 12, color: kHyppeBurem),
                           ),
                         ),
                       )
@@ -325,16 +372,30 @@ class PicCenterItem extends StatelessWidget {
                           itemBuilder: (context, index) {
                             return CustomNewDescContent(
                               // desc: "${data?.description}",
-                              email: data?.comment?[index].sender??'',
-                              username: data?.comment?[index].userComment?.username ?? '',
+                              email: data?.comment?[index].sender ?? '',
+                              username:
+                                  data?.comment?[index].userComment?.username ??
+                                      '',
                               desc: data?.comment?[index].txtMessages ?? '',
                               trimLines: 2,
                               textAlign: TextAlign.start,
-                              seeLess: ' seeLess', // ${notifier2.translate.seeLess}',
-                              seeMore: '  Selengkapnya ', //${notifier2.translate.seeMoreContent}',
-                              normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                              hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                              expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                              seeLess:
+                                  ' seeLess', // ${notifier2.translate.seeLess}',
+                              seeMore:
+                                  '  Selengkapnya ', //${notifier2.translate.seeMoreContent}',
+                              normStyle: const TextStyle(
+                                  fontSize: 12, color: kHyppeTextLightPrimary),
+                              hrefStyle: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall
+                                  ?.copyWith(color: kHyppePrimary),
+                              expandStyle: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall
+                                  ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
                             );
                           },
                         ),
@@ -347,7 +408,9 @@ class PicCenterItem extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 4.0),
             child: Text(
               "${System().readTimestamp(
-                DateTime.parse(System().dateTimeRemoveT(data?.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+                DateTime.parse(System().dateTimeRemoveT(
+                        data?.createdAt ?? DateTime.now().toString()))
+                    .millisecondsSinceEpoch,
                 context,
                 fullCaption: true,
               )}",
@@ -369,7 +432,9 @@ class PicCenterItem extends StatelessWidget {
             left: 12,
             child: GestureDetector(
               onTap: () {
-                context.read<PicDetailNotifier>().showUserTag(context, data?.tagPeople, data?.postID);
+                context
+                    .read<PicDetailNotifier>()
+                    .showUserTag(context, data?.tagPeople, data?.postID);
               },
               child: const CustomIconWidget(
                 iconData: '${AssetPath.vectorPath}tag_people.svg',
@@ -409,8 +474,15 @@ class PicCenterItem extends StatelessWidget {
                       defaultColor: false,
                       height: 30,
                     ),
-                    Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                    Text("HyppePic ${transnot.translate.contentContainsSensitiveMaterial}",
+                    Text(
+                        transnot.translate.sensitiveContent ??
+                            'Sensitive Content',
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600)),
+                    Text(
+                        "HyppePic ${transnot.translate.contentContainsSensitiveMaterial}",
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           color: Colors.white,
@@ -418,29 +490,38 @@ class PicCenterItem extends StatelessWidget {
                         )),
                     data?.email == SharedPreference().readStorage(SpKeys.email)
                         ? GestureDetector(
-                            onTap: ()async{
-                              System().checkConnections().then((value){
-                                if(value){
+                            onTap: () async {
+                              System().checkConnections().then((value) {
+                                if (value) {
                                   Routing().move(Routes.appeal, argument: data);
                                 }
                               });
-
                             },
                             child: Container(
                                 padding: const EdgeInsets.all(8),
                                 margin: const EdgeInsets.all(18),
-                                decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
-                                child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.white),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Text(
+                                    transnot.translate.appealThisWarning ??
+                                        'Appeal This Warning',
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600))),
                           )
                         : const SizedBox(),
                     const Spacer(),
                     GestureDetector(
                       onTap: () {
-                        context.read<ReportNotifier>().seeContent(context, data ?? ContentData(), hyppePic);
+                        context.read<ReportNotifier>().seeContent(
+                            context, data ?? ContentData(), hyppePic);
                       },
                       child: Container(
                         padding: const EdgeInsets.only(top: 8),
-                        margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
+                        margin: const EdgeInsets.only(
+                            bottom: 20, right: 8, left: 8),
                         width: SizeConfig.screenWidth,
                         decoration: const BoxDecoration(
                           border: Border(
@@ -452,7 +533,10 @@ class PicCenterItem extends StatelessWidget {
                         ),
                         child: Text(
                           "${transnot.translate.see} HyppePic",
-                          style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600),
                           textAlign: TextAlign.center,
                         ),
                       ),

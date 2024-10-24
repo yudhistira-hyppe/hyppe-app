@@ -24,7 +24,10 @@ class SignUpLoadMoreList extends StatelessWidget {
           const CustomLoading(),
           CustomTextWidget(
             textToDisplay: caption,
-            textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
+            textStyle: Theme.of(context)
+                .textTheme
+                .bodySmall
+                ?.copyWith(color: kHyppeLightButtonText),
           ),
         ],
       ),

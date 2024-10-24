@@ -46,7 +46,8 @@ class _OnReactStreamingState extends State<OnReactStreaming> {
       builder: (_, notifier, __) => Container(
         height: double.infinity,
         width: double.infinity,
-        padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 12),
+        padding:
+            const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 12),
         decoration: BoxDecoration(
           color: context.getColorScheme().background,
           borderRadius: const BorderRadius.only(
@@ -58,18 +59,25 @@ class _OnReactStreamingState extends State<OnReactStreaming> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+            const CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}handler.svg"),
             sixteenPx,
             CustomTextWidget(
-              textToDisplay: language.howWasYourLiveExperience ?? "Bagaimana pengalaman siaran Live-mu?",
-              textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700),
+              textToDisplay: language.howWasYourLiveExperience ??
+                  "Bagaimana pengalaman siaran Live-mu?",
+              textStyle: context
+                  .getTextTheme()
+                  .bodyLarge
+                  ?.copyWith(fontWeight: FontWeight.w700),
             ),
             sixteenPx,
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ReactStreamItem(
-                    svg: reactStream == ReactStream.bad ? '${AssetPath.vectorPath}bad_active.svg' : '${AssetPath.vectorPath}bad_outline.svg',
+                    svg: reactStream == ReactStream.bad
+                        ? '${AssetPath.vectorPath}bad_active.svg'
+                        : '${AssetPath.vectorPath}bad_outline.svg',
                     desc: (language.poor ?? 'Buruk'),
                     onTap: () {
                       setState(() {
@@ -78,7 +86,9 @@ class _OnReactStreamingState extends State<OnReactStreaming> {
                       });
                     }),
                 ReactStreamItem(
-                    svg: reactStream == ReactStream.neutral ? '${AssetPath.vectorPath}neutral_active.svg' : '${AssetPath.vectorPath}neutral_outline.svg',
+                    svg: reactStream == ReactStream.neutral
+                        ? '${AssetPath.vectorPath}neutral_active.svg'
+                        : '${AssetPath.vectorPath}neutral_outline.svg',
                     desc: (language.neutral ?? 'Netral'),
                     onTap: () {
                       setState(() {
@@ -87,7 +97,9 @@ class _OnReactStreamingState extends State<OnReactStreaming> {
                       });
                     }),
                 ReactStreamItem(
-                    svg: reactStream == ReactStream.good ? '${AssetPath.vectorPath}good_active.svg' : '${AssetPath.vectorPath}good_outline.svg',
+                    svg: reactStream == ReactStream.good
+                        ? '${AssetPath.vectorPath}good_active.svg'
+                        : '${AssetPath.vectorPath}good_outline.svg',
                     desc: (language.good ?? 'Baik'),
                     onTap: () {
                       setState(() {
@@ -118,20 +130,27 @@ class _OnReactStreamingState extends State<OnReactStreaming> {
                   });
                 },
                 decoration: InputDecoration(
-                  hintText: language.letUsKnowIfYouHaveAnyQuestionsOrFeedback ?? "Beri tahu kami jika kamu memiliki pertanyaan, saran, ataupun masukan ",
-                  contentPadding: const EdgeInsets.only(left: 5, top: 5, right: 5),
+                  hintText: language.letUsKnowIfYouHaveAnyQuestionsOrFeedback ??
+                      "Beri tahu kami jika kamu memiliki pertanyaan, saran, ataupun masukan ",
+                  contentPadding:
+                      const EdgeInsets.only(left: 5, top: 5, right: 5),
                   hintMaxLines: 3,
-                  hintStyle: const TextStyle(fontSize: 14, color: kHyppeBurem, fontWeight: FontWeight.normal),
+                  hintStyle: const TextStyle(
+                      fontSize: 14,
+                      color: kHyppeBurem,
+                      fontWeight: FontWeight.normal),
                   border: InputBorder.none,
                   filled: true,
                   // focusedBorder: InputBorder.none,
                   focusedBorder: OutlineInputBorder(
                     borderRadius: const BorderRadius.all(Radius.circular(5)),
-                    borderSide: BorderSide(width: 2, color: context.getColorScheme().primary),
+                    borderSide: BorderSide(
+                        width: 2, color: context.getColorScheme().primary),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: const BorderRadius.all(Radius.circular(5)),
-                    borderSide: BorderSide(width: 1, color: context.getColorScheme().secondary),
+                    borderSide: BorderSide(
+                        width: 1, color: context.getColorScheme().secondary),
                   ),
                   errorBorder: InputBorder.none,
                   disabledBorder: InputBorder.none,
@@ -144,7 +163,10 @@ class _OnReactStreamingState extends State<OnReactStreaming> {
               margin: EdgeInsets.zero,
               onTap: () {
                 if (!notifier.isloading) {
-                  notifier.sendScoreLive(context, mounted, desc: controller.text, score: nilai).then((value) {
+                  notifier
+                      .sendScoreLive(context, mounted,
+                          desc: controller.text, score: nilai)
+                      .then((value) {
                     Navigator.pop(context, reactStream);
                   });
                 }
@@ -163,13 +185,18 @@ class _OnReactStreamingState extends State<OnReactStreaming> {
                     : CustomTextWidget(
                         textToDisplay: language.send ?? '',
                         textAlign: TextAlign.center,
-                        textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.white),
+                        textStyle: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white),
                       ),
               ),
             ),
             sixteenPx,
             CustomTextWidget(
-              textToDisplay: language.yourFeedbackIsValuableToHyppeForEnhancingYourPersonalizedExperience ?? 'Tanggapanmu sangat berarti untuk Hyppe dapat meningkatkan  pengalamanmu secara personal.',
+              textToDisplay: language
+                      .yourFeedbackIsValuableToHyppeForEnhancingYourPersonalizedExperience ??
+                  'Tanggapanmu sangat berarti untuk Hyppe dapat meningkatkan  pengalamanmu secara personal.',
               maxLines: 2,
               textAlign: TextAlign.center,
               textStyle: const TextStyle(

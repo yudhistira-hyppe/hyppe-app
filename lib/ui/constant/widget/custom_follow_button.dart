@@ -41,7 +41,7 @@ class CustomFollowButton extends StatelessWidget {
       return InkWell(
         // onTap: _isAbleToClick ? onPressed : null,
         onTap: () async {
-          await context.handleActionIsGuest(() async  {
+          await context.handleActionIsGuest(() async {
             if (_isAbleToClick) {
               onPressed();
             }
@@ -53,7 +53,9 @@ class CustomFollowButton extends StatelessWidget {
               ? const CustomLoading()
               : CustomTextWidget(
                   textToDisplay: title,
-                  textStyle: Theme.of(context).textTheme.button?.copyWith(color: Theme.of(context).colorScheme.primary, fontSize: 12),
+                  textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 12),
                 ),
           // width: 50.0 * SizeConfig.scaleDiagonal,
         ),

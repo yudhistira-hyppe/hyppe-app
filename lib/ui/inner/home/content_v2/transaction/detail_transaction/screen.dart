@@ -42,28 +42,38 @@ class DetailTransaction extends StatelessWidget {
                 titleColor = kHyppeTextLightPrimary;
                 blockColor = kHyppeSoftYellow;
                 title = "Voucher";
-                bodyWidget = MiddleVoucherWidget(data: notifier.dataTransactionDetail, language: notifier2.translate);
+                bodyWidget = MiddleVoucherWidget(
+                    data: notifier.dataTransactionDetail,
+                    language: notifier2.translate);
               } else {
-                bodyWidget = MiddleBuySellDetailWidget(data: notifier.dataTransactionDetail, language: notifier2.translate);
+                bodyWidget = MiddleBuySellDetailWidget(
+                    data: notifier.dataTransactionDetail,
+                    language: notifier2.translate);
               }
               break;
             case TransactionType.reward:
               titleColor = kHyppeGrey;
               blockColor = kHyppeGreyLight;
               title = notifier2.translate.reward ?? '';
-              bodyWidget = MiddleBuySellDetailWidget(data: notifier.dataTransactionDetail, language: notifier2.translate);
+              bodyWidget = MiddleBuySellDetailWidget(
+                  data: notifier.dataTransactionDetail,
+                  language: notifier2.translate);
               break;
             case TransactionType.withdrawal:
               titleColor = kHyppeCyan;
               blockColor = kHyppeCyanLight;
               title = notifier2.translate.withdrawal ?? '';
-              bodyWidget = MiddleWithdrawalDetailWidget(data: notifier.dataTransactionDetail, language: notifier2.translate);
+              bodyWidget = MiddleWithdrawalDetailWidget(
+                  data: notifier.dataTransactionDetail,
+                  language: notifier2.translate);
               break;
             default:
               titleColor = kHyppeGreen;
               blockColor = kHyppeGreenLight;
               title = notifier2.translate.soldOut ?? 'Sold Out';
-              bodyWidget = MiddleBuySellDetailWidget(data: notifier.dataTransactionDetail, language: notifier2.translate);
+              bodyWidget = MiddleBuySellDetailWidget(
+                  data: notifier.dataTransactionDetail,
+                  language: notifier2.translate);
               if (notifier.dataTransactionDetail?.jenis == 'BOOST_CONTENT') {
                 titleColor = kHyppeJingga;
                 blockColor = kHyppeJinggaLight;
@@ -75,7 +85,7 @@ class DetailTransaction extends StatelessWidget {
             appBar: AppBar(
               leading: const BackButton(),
               title: CustomTextWidget(
-                textStyle: Theme.of(context).textTheme.subtitle1,
+                textStyle: Theme.of(context).textTheme.titleMedium,
                 textToDisplay: '${notifier2.translate.detailTransaction}',
               ),
             ),
@@ -85,33 +95,50 @@ class DetailTransaction extends StatelessWidget {
                   : Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 11, vertical: 5),
                         margin: const EdgeInsets.only(bottom: 12),
                         decoration: BoxDecoration(
                           color: Theme.of(context).colorScheme.background,
                           borderRadius: BorderRadius.circular(5),
-                          boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+                          boxShadow: [
+                            BoxShadow(
+                                color: Color.fromRGBO(0, 0, 0, 0.06),
+                                blurRadius: 2)
+                          ],
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             twelvePx,
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 5),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 11, vertical: 5),
                               margin: const EdgeInsets.only(bottom: 12),
                               decoration: BoxDecoration(
                                 color: blockColor,
                                 borderRadius: BorderRadius.circular(5),
-                                boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Color.fromRGBO(0, 0, 0, 0.06),
+                                      blurRadius: 2)
+                                ],
                               ),
                               child: CustomTextWidget(
                                 textToDisplay: title,
-                                textStyle: Theme.of(context).textTheme.button?.copyWith(color: titleColor),
+                                textStyle: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge
+                                    ?.copyWith(color: titleColor),
                               ),
                             ),
-                            TopDetailWidget(data: notifier.dataTransactionDetail, language: notifier2.translate),
+                            TopDetailWidget(
+                                data: notifier.dataTransactionDetail,
+                                language: notifier2.translate),
                             bodyWidget,
-                            BottomDetailWidget(data: notifier.dataTransactionDetail, language: notifier2.translate),
+                            BottomDetailWidget(
+                                data: notifier.dataTransactionDetail,
+                                language: notifier2.translate),
                           ],
                         ),
                       ),

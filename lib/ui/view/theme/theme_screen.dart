@@ -27,8 +27,12 @@ class _ThemeScreenState extends State<ThemeScreen> {
   Map<String, bool> themes = {};
 
   void _initThemes() {
-    _currentThemeState = SharedPreference().readStorage(SpKeys.themeData) ?? false;
-    themes = {"${_language.translate.dark}": true, "${_language.translate.light}": false};
+    _currentThemeState =
+        SharedPreference().readStorage(SpKeys.themeData) ?? false;
+    themes = {
+      "${_language.translate.dark}": true,
+      "${_language.translate.light}": false
+    };
   }
 
   @override
@@ -47,7 +51,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
         leading: const BackButton(),
         title: CustomTextWidget(
           textToDisplay: "${_language.translate.theme}",
-          textStyle: theme.textTheme.subtitle1,
+          textStyle: theme.textTheme.titleMedium,
         ),
       ),
       body: Consumer<HyppeNotifier>(
@@ -61,15 +65,17 @@ class _ThemeScreenState extends State<ThemeScreen> {
                 value: _currentThemeState,
                 onChanged: (_) {
                   _currentThemeState = themes.values.toList()[index];
-                  notifier.themeData = _currentThemeState ? hyppeDarkTheme() : hyppeLightTheme();
-                  SharedPreference().writeStorage(SpKeys.themeData, _currentThemeState);
+                  notifier.themeData =
+                      _currentThemeState ? hyppeDarkTheme() : hyppeLightTheme();
+                  SharedPreference()
+                      .writeStorage(SpKeys.themeData, _currentThemeState);
                   System().systemUIOverlayTheme();
                 },
                 toggleable: true,
                 title: CustomTextWidget(
                   textAlign: TextAlign.left,
                   textToDisplay: themes.keys.toList()[index],
-                  textStyle: Theme.of(context).primaryTextTheme.bodyText1,
+                  textStyle: Theme.of(context).primaryTextTheme.bodyLarge,
                 ),
                 controlAffinity: ListTileControlAffinity.trailing,
                 activeColor: Theme.of(context).colorScheme.primary,

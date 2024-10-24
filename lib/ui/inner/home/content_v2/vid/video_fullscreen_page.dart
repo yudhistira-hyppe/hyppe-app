@@ -1796,11 +1796,11 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                                     fontSize: 14, color: kHyppeTextPrimary),
                                 hrefStyle: Theme.of(context)
                                     .textTheme
-                                    .subtitle2
+                                    .titleSmall
                                     ?.copyWith(color: kHyppePrimary),
                                 expandStyle: Theme.of(context)
                                     .textTheme
-                                    .subtitle2
+                                    .titleSmall
                                     ?.copyWith(
                                         color: kHyppeTextPrimary,
                                         fontWeight: FontWeight.bold),
@@ -1809,7 +1809,8 @@ class _VideoFullLandingscreenPageState extends State<VideoFullLandingscreenPage>
                           ),
                           if (data.urlLink != '')
                             Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 12.0),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 12.0),
                               child: RichText(
                                 text: TextSpan(children: [
                                   TextSpan(

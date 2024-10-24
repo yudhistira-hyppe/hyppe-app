@@ -38,7 +38,8 @@ class ViewStreamingScreen extends StatefulWidget {
   State<ViewStreamingScreen> createState() => _ViewStreamingScreenState();
 }
 
-class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsBindingObserver, TickerProviderStateMixin {
+class _ViewStreamingScreenState extends State<ViewStreamingScreen>
+    with WidgetsBindingObserver, TickerProviderStateMixin {
   FocusNode commentFocusNode = FocusNode();
 
   final debouncer = Debouncer(milliseconds: 2000);
@@ -124,17 +125,22 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
   void initState() {
     _showLoading = true;
     super.initState();
-    final notifier = (Routing.navigatorKey.currentContext ?? context).read<ViewStreamingNotifier>();
+    final notifier = (Routing.navigatorKey.currentContext ?? context)
+        .read<ViewStreamingNotifier>();
     notifier.initViewStreaming(widget.args.data);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       commentFocusNode.addListener(() {
         print("Has focus: ${commentFocusNode.hasFocus}");
       });
-      notifier.startViewStreaming(Routing.navigatorKey.currentContext ?? context, mounted, widget.args.data);
+      notifier.startViewStreaming(
+          Routing.navigatorKey.currentContext ?? context,
+          mounted,
+          widget.args.data);
       SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
       // _pageController.addListener(() => notifier.currentPage = _pageController.page);
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: widget.args.data.sId);
+      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(
+          playerId: widget.args.data.sId);
 
       WidgetsBinding.instance.addObserver(this);
       bottomIndex = 0;
@@ -161,7 +167,8 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
 
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
-      fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+      fAliplayer
+          ?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
 
       if (Platform.isAndroid) {
         getExternalStorageDirectories().then((value) {
@@ -185,7 +192,9 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
     });
     fAliplayer?.setOnPrepared((playerId) {
       // Fluttertoast.showToast(msg: "OnPrepared ");
-      fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
+      fAliplayer
+          ?.getPlayerName()
+          .then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
         _videoDuration = value['duration'];
         setState(() {
@@ -242,7 +251,8 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
       }
     });
     fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
-      if (!(context.read<ViewStreamingNotifier>().dataStreaming.pause ?? false)) {
+      if (!(context.read<ViewStreamingNotifier>().dataStreaming.pause ??
+          false)) {
         setState(() {
           _loadingPercent = 0;
           _showLoading = true;
@@ -430,7 +440,8 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
   void dispose() {
     fAliplayer?.stop();
     fAliplayer?.destroy();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: SystemUiOverlay.values);
     WakelockPlus.disable();
     SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
     if (Platform.isIOS) {
@@ -489,7 +500,8 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                         onDoubleTap: () {
                           notifier.likeAddTapScreen();
                           _debouncer.run(() {
-                            notifier.sendLikeTapScreen(context, notifier.streamerData!);
+                            notifier.sendLikeTapScreen(
+                                context, notifier.streamerData!);
                           });
                         },
                         child: Container(
@@ -505,7 +517,8 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                           ),
                         ),
                       ),
-                      if (notifier.dataStreaming.pause ?? false) PauseLiveView(data: widget.args.data),
+                      if (notifier.dataStreaming.pause ?? false)
+                        PauseLiveView(data: widget.args.data),
                       // if (liveIsPause) const PauseLiveView(),
                       Positioned.fill(
                         bottom: -60,
@@ -561,7 +574,8 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                           ),
                         ),
                       ),
-                      if (_showLoading && !(notifier.dataStreaming.pause ?? false))
+                      if (_showLoading &&
+                          !(notifier.dataStreaming.pause ?? false))
                         Positioned.fill(
                           child: Align(
                             alignment: Alignment.center,
@@ -614,7 +628,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                       //               CustomTextWidget(
                       //                 textAlign: TextAlign.left,
                       //                 textToDisplay: widget.args.data.username ?? '',
-                      //                 textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w700, color: Colors.white),
+                      //                 textStyle: context.getTextTheme().bodyMedium?.copyWith(fontWeight: FontWeight.w700, color: Colors.white),
                       //               ),
                       //               fourPx,
                       //               const CustomIconWidget(
@@ -740,7 +754,8 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
           height: double.infinity,
           fit: BoxFit.cover,
           errorBuilder: (context, error, stackTrace) {
-            return Image.asset('${AssetPath.pngPath}profile-error.jpg', fit: BoxFit.fitWidth);
+            return Image.asset('${AssetPath.pngPath}profile-error.jpg',
+                fit: BoxFit.fitWidth);
           },
         )),
       ],

@@ -24,7 +24,7 @@ class UserTemplate extends StatelessWidget {
       children: [
         CustomTextWidget(
           textToDisplay: username,
-          textStyle: context.getTextTheme().caption?.copyWith(
+          textStyle: context.getTextTheme().bodySmall?.copyWith(
                 color: context.getColorScheme().onBackground,
                 fontWeight: FontWeight.w700,
               ),
@@ -48,7 +48,7 @@ class UserTemplate extends StatelessWidget {
               ),
               textStyle: context
                   .getTextTheme()
-                  .caption
+                  .bodySmall
                   ?.copyWith(color: context.getColorScheme().secondary))
       ],
     );

@@ -20,7 +20,8 @@ class ProfileCompletionAction extends StatefulWidget {
 class _ProfileCompletionActionState extends State<ProfileCompletionAction> {
   @override
   void initState() {
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'ProfileCompletionAction');
+    FirebaseCrashlytics.instance
+        .setCustomKey('layout', 'ProfileCompletionAction');
     super.initState();
   }
 
@@ -37,8 +38,9 @@ class _ProfileCompletionActionState extends State<ProfileCompletionAction> {
               textStyle: notifier.somethingChanged(context)
                   ? Theme.of(context)
                       .textTheme
-                      .button?.copyWith(color: kHyppeLightButtonText)
-                  : Theme.of(context).primaryTextTheme.button,
+                      .labelLarge
+                      ?.copyWith(color: kHyppeLightButtonText)
+                  : Theme.of(context).primaryTextTheme.labelLarge,
             ),
             function: () => notifier.onClickCompletionProfile(context),
             buttonStyle: ButtonStyle(
@@ -56,7 +58,7 @@ class _ProfileCompletionActionState extends State<ProfileCompletionAction> {
             height: 49 * SizeConfig.scaleDiagonal,
             child: CustomTextWidget(
               textToDisplay: notifier.language.cancel ?? 'Cancel',
-              textStyle: Theme.of(context).primaryTextTheme.button,
+              textStyle: Theme.of(context).primaryTextTheme.labelLarge,
             ),
             function: () => {Routing().moveBack()},
             buttonStyle: ButtonStyle(

@@ -52,11 +52,12 @@ class ViewerStoriesButton extends StatelessWidget {
             height: 30,
             function: () {
               // storyController.pause();
-              if(pause != null){
+              if (pause != null) {
                 pause!();
               }
 
-              Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data?.postID, 'VIEW', 'Viewer', data?.email);
+              Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(
+                  context, data?.postID, 'VIEW', 'Viewer', data?.email);
               // context.read<StoriesPlaylistNotifier>().forceStop = true;
               // ShowBottomSheet.onShowViewers(context, storyID: data?.story[currentStory].storyID);
             },
@@ -76,8 +77,9 @@ class ViewerStoriesButton extends StatelessWidget {
                 ),
                 eightPx,
                 CustomTextWidget(
-                  textToDisplay: '${_language.seenBy} ${_system.formatterNumber(data?.insight?.views ?? 0)}',
-                  textStyle: theme.textTheme.bodyText1?.copyWith(
+                  textToDisplay:
+                      '${_language.seenBy} ${_system.formatterNumber(data?.insight?.views ?? 0)}',
+                  textStyle: theme.textTheme.bodyLarge?.copyWith(
                     fontWeight: FontWeight.w600,
                     color: kHyppeLightButtonText,
                   ),

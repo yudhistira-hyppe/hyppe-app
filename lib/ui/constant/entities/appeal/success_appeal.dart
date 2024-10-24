@@ -20,13 +20,14 @@ class SuccessAppeal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final translate = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
+    final translate =
+        Provider.of<TranslateNotifierV2>(context, listen: false).translate;
     return Consumer<AppealNotifier>(
       builder: (context, notifier, child) => Scaffold(
         appBar: AppBar(
           leading: const BackButton(),
           title: CustomTextWidget(
-            textStyle: Theme.of(context).textTheme.subtitle1,
+            textStyle: Theme.of(context).textTheme.titleMedium,
             textToDisplay: '${translate.contentViolation}',
           ),
         ),
@@ -44,11 +45,15 @@ class SuccessAppeal extends StatelessWidget {
               twentyPx,
               Text(
                 translate.congrats ?? '',
-                style: Theme.of(context).primaryTextTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
+                style: Theme.of(context)
+                    .primaryTextTheme
+                    .bodyLarge
+                    ?.copyWith(fontWeight: FontWeight.bold),
               ),
               Center(
                   child: Text(
-                translate.weWillSendYouaNotificationasSoonasweHaveanUpdate ?? '',
+                translate.weWillSendYouaNotificationasSoonasweHaveanUpdate ??
+                    '',
                 textAlign: TextAlign.center,
               )),
               twentyPx,
@@ -66,10 +71,16 @@ class SuccessAppeal extends StatelessWidget {
                   onPressed: () {
                     Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
                   },
-                  style: ButtonStyle(backgroundColor: notifier.appealReason == '' ? MaterialStateProperty.all(kHyppeDisabled) : MaterialStateProperty.all(kHyppePrimary)),
+                  style: ButtonStyle(
+                      backgroundColor: notifier.appealReason == ''
+                          ? MaterialStateProperty.all(kHyppeDisabled)
+                          : MaterialStateProperty.all(kHyppePrimary)),
                   child: CustomTextWidget(
                     textToDisplay: translate.backToHome ?? '',
-                    textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .labelLarge
+                        ?.copyWith(color: kHyppeLightButtonText),
                   ),
                 ),
               ),

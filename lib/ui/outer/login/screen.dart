@@ -53,7 +53,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             padding: const EdgeInsets.only(top: 40),
                             child: GestureDetector(
                               onTap: () => notifier.tapBack(),
-                              child: const CustomIconWidget(iconData: '${AssetPath.vectorPath}back-arrow.svg'),
+                              child: const CustomIconWidget(
+                                  iconData:
+                                      '${AssetPath.vectorPath}back-arrow.svg'),
                             ),
                           ),
 
@@ -69,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           //       },
                           //       child: CustomTextWidget(
                           //         textToDisplay: notifier.language.help ?? 'Help',
-                          //         textStyle: Theme.of(context).primaryTextTheme.bodyText1?.copyWith(fontSize: 14),
+                          //         textStyle: Theme.of(context).primaryTextTheme.bodyLarge?.copyWith(fontSize: 14),
                           //       ),
                           //     ),
                           //   ),
@@ -78,7 +80,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     thirtySixPx,
-                    Align(alignment: const Alignment(0.0, -0.85), child: SignInText()),
+                    Align(
+                        alignment: const Alignment(0.0, -0.85),
+                        child: SignInText()),
                     sixtyFourPx,
                     SignInForm(),
                     sixtyFourPx,
@@ -107,7 +111,8 @@ class _LoginScreenState extends State<LoginScreen> {
         //     selector: (_, selector) => selector.baseEnv),
       ),
       onTap: () {
-        if (!FocusScope.of(context).hasPrimaryFocus) FocusScope.of(context).unfocus();
+        if (!FocusScope.of(context).hasPrimaryFocus)
+          FocusScope.of(context).unfocus();
       },
     );
   }

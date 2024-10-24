@@ -40,7 +40,8 @@ class DetailTicketScreen extends StatefulWidget {
   State<DetailTicketScreen> createState() => _DetailTicketScreenState();
 }
 
-class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirstLayoutMixin {
+class _DetailTicketScreenState extends State<DetailTicketScreen>
+    with AfterFirstLayoutMixin {
   @override
   void afterFirstLayout(BuildContext context) {
     if (widget.data.ticketModel != null) {
@@ -52,7 +53,9 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'DetailTicketScreen');
     if (widget.data.ticketModel != null) {
-      context.read<DetailTicketNotifier>().initStateDetailTicket(widget.data.ticketModel!);
+      context
+          .read<DetailTicketNotifier>()
+          .initStateDetailTicket(widget.data.ticketModel!);
     } else {
       context.read<DetailTicketNotifier>().disposeState();
     }
@@ -94,10 +97,15 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                 children: [
                   CustomTextWidget(
                     textToDisplay: dataTicket.ticketNo ?? 'Ticket History',
-                    textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(fontSize: 18),
                   ),
                   eightPx,
-                  _getBadgeTicket(dataTicket.statusEnum ?? TicketStatus.notSolved, notifier.language)
+                  _getBadgeTicket(
+                      dataTicket.statusEnum ?? TicketStatus.notSolved,
+                      notifier.language)
                 ],
               ),
               centerTitle: false,
@@ -111,73 +119,120 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                         child: RefreshIndicator(
                           strokeWidth: 2.0,
                           color: Colors.purple,
-                          onRefresh: () => notifier.getDetailTicket(context, isRefresh: true),
+                          onRefresh: () => notifier.getDetailTicket(context,
+                              isRefresh: true),
                           child: SingleChildScrollView(
                             physics: const AlwaysScrollableScrollPhysics(),
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Container(
-                                  margin: const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 12),
-                                  padding: const EdgeInsets.only(top: 8, bottom: 8),
+                                  margin: const EdgeInsets.only(
+                                      left: 16, right: 16, top: 20, bottom: 12),
+                                  padding:
+                                      const EdgeInsets.only(top: 8, bottom: 8),
                                   width: double.infinity,
                                   decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(8)),
                                     color: kHyppeLightSurface,
                                   ),
                                   child: Column(
                                     children: [
-                                      _contentInfo(textTheme, title: notifier.language.ticket ?? 'Ticket', value: dataTicket.ticketNo ?? ''),
-                                      _contentInfo(textTheme, title: notifier.language.source ?? 'Source', value: dataTicket.sourceName ?? ''),
+                                      _contentInfo(textTheme,
+                                          title: notifier.language.ticket ??
+                                              'Ticket',
+                                          value: dataTicket.ticketNo ?? ''),
+                                      _contentInfo(textTheme,
+                                          title: notifier.language.source ??
+                                              'Source',
+                                          value: dataTicket.sourceName ?? ''),
                                       if (dataTicket.dateTime != null)
                                         Builder(
                                           builder: (context) {
                                             try {
-                                              var fixSplitDateTime = dataTicket.dateTime?.split('T');
-                                              var fixSplitTime = fixSplitDateTime?[1].split(':');
+                                              var fixSplitDateTime = dataTicket
+                                                  .dateTime
+                                                  ?.split('T');
+                                              var fixSplitTime =
+                                                  fixSplitDateTime?[1]
+                                                      .split(':');
                                               return _contentInfo(textTheme,
-                                                  title: notifier.language.submissionTime ?? 'Submission Time',
+                                                  title: notifier.language
+                                                          .submissionTime ??
+                                                      'Submission Time',
                                                   value:
                                                       '${fixSplitDateTime?[0].getDateFormat("yyyy-MM-dd", notifier.language, isToday: true)} ${System().getTimeWIB(fixSplitTime?[0] ?? '00', fixSplitTime?[1] ?? '00')}');
                                             } catch (e) {
-                                              'Error Builder Date fix : $e'.logger();
+                                              'Error Builder Date fix : $e'
+                                                  .logger();
                                               return const SizedBox.shrink();
                                             }
                                           },
                                         ),
-                                      _contentInfo(textTheme, title: notifier.language.operationSystem ?? 'Operation System', value: dataTicket.os ?? (notifier.language.notDefined ?? 'Not Defined')),
-                                      _contentInfo(textTheme, title: notifier.language.category ?? 'Category', value: dataTicket.category ?? ''),
-                                      _contentInfo(textTheme, title: notifier.language.level ?? 'Level', value: dataTicket.levelName ?? ''),
-                                      _contentInfo(textTheme, title: notifier.language.description ?? 'Description', value: dataTicket.body ?? ''),
-                                      _contentInfo(textTheme, title: notifier.language.attachment ?? 'Attachment', value: '${dataTicket.fsSourceUri?.length ?? '0'}')
+                                      _contentInfo(textTheme,
+                                          title: notifier
+                                                  .language.operationSystem ??
+                                              'Operation System',
+                                          value: dataTicket.os ??
+                                              (notifier.language.notDefined ??
+                                                  'Not Defined')),
+                                      _contentInfo(textTheme,
+                                          title: notifier.language.category ??
+                                              'Category',
+                                          value: dataTicket.category ?? ''),
+                                      _contentInfo(textTheme,
+                                          title: notifier.language.level ??
+                                              'Level',
+                                          value: dataTicket.levelName ?? ''),
+                                      _contentInfo(textTheme,
+                                          title:
+                                              notifier.language.description ??
+                                                  'Description',
+                                          value: dataTicket.body ?? ''),
+                                      _contentInfo(textTheme,
+                                          title: notifier.language.attachment ??
+                                              'Attachment',
+                                          value:
+                                              '${dataTicket.fsSourceUri?.length ?? '0'}')
                                     ],
                                   ),
                                 ),
                                 Container(
                                   width: double.infinity,
-                                  padding: const EdgeInsets.only(left: 13, right: 10, top: 10, bottom: 10),
-                                  margin: const EdgeInsets.only(left: 16, right: 16),
+                                  padding: const EdgeInsets.only(
+                                      left: 13, right: 10, top: 10, bottom: 10),
+                                  margin: const EdgeInsets.only(
+                                      left: 16, right: 16),
                                   decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(8)),
                                     color: kHyppeLightSurface,
                                   ),
                                   child: Row(
                                     children: [
                                       const CustomIconWidget(
-                                        iconData: '${AssetPath.vectorPath}info-icon.svg',
+                                        iconData:
+                                            '${AssetPath.vectorPath}info-icon.svg',
                                         defaultColor: false,
                                         color: kHyppeLightSecondary,
                                       ),
                                       twelvePx,
                                       CustomTextWidget(
-                                        textToDisplay: notifier.language.messageTicketHandled ?? '',
-                                        textStyle: const TextStyle(fontWeight: FontWeight.w400, color: kHyppeLightSecondary, fontSize: 12),
+                                        textToDisplay: notifier.language
+                                                .messageTicketHandled ??
+                                            '',
+                                        textStyle: const TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            color: kHyppeLightSecondary,
+                                            fontSize: 12),
                                       )
                                     ],
                                   ),
                                 ),
                                 sixteenPx,
-                                _getListChats(context, dataTicket.detail, notifier),
+                                _getListChats(
+                                    context, dataTicket.detail, notifier),
                               ],
                             ),
                           ),
@@ -200,11 +255,16 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
               title: Row(
                 children: [
                   CustomTextWidget(
-                    textToDisplay: notifier.language.contentAppeal ?? 'Content Appeal',
-                    textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
+                    textToDisplay:
+                        notifier.language.contentAppeal ?? 'Content Appeal',
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(fontSize: 18),
                   ),
                   eightPx,
-                  _getBadgeAppeal(dataAppeal.status ?? AppealStatus.removed, notifier.language)
+                  _getBadgeAppeal(dataAppeal.status ?? AppealStatus.removed,
+                      notifier.language)
                 ],
               ),
               centerTitle: false,
@@ -214,7 +274,8 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                 children: [
                   Container(
                     width: double.infinity,
-                    margin: const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 12),
+                    margin: const EdgeInsets.only(
+                        left: 16, right: 16, top: 20, bottom: 12),
                     padding: const EdgeInsets.only(top: 8, bottom: 8),
                     decoration: const BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -223,7 +284,8 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                     child: Column(
                       children: [
                         Container(
-                          margin: const EdgeInsets.only(bottom: 10, left: 12, right: 12, top: 5),
+                          margin: const EdgeInsets.only(
+                              bottom: 10, left: 12, right: 12, top: 5),
                           child: Stack(
                             children: [
                               Container(
@@ -232,18 +294,22 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                                   children: [
                                     Builder(builder: (context) {
                                       var thumbnail = '';
-                                      final imageInfo = dataAppeal.media?.imageInfo;
-                                      final videoInfo = dataAppeal.media?.videoInfo;
+                                      final imageInfo =
+                                          dataAppeal.media?.imageInfo;
+                                      final videoInfo =
+                                          dataAppeal.media?.videoInfo;
 
                                       String? urlImage;
                                       String? urlVideo;
                                       if (imageInfo != null) {
                                         if (imageInfo.isNotEmpty) {
-                                          urlImage = dataAppeal.media?.imageInfo?.first.url;
+                                          urlImage = dataAppeal
+                                              .media?.imageInfo?.first.url;
                                         }
                                       } else if (videoInfo != null) {
                                         if (videoInfo.isNotEmpty) {
-                                          urlVideo = dataAppeal.media?.videoInfo?.first.coverURL;
+                                          urlVideo = dataAppeal
+                                              .media?.videoInfo?.first.coverURL;
                                         }
                                       }
                                       if (urlImage != null) {
@@ -251,21 +317,31 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                                       } else if (urlVideo != null) {
                                         thumbnail = urlVideo;
                                       } else {
-                                        thumbnail = System().showUserPicture(dataAppeal.mediaThumbEndPoint) ?? '';
+                                        thumbnail = System().showUserPicture(
+                                                dataAppeal
+                                                    .mediaThumbEndPoint) ??
+                                            '';
                                       }
                                       return CustomContentModeratedWidget(
                                         width: 40,
                                         height: 40,
                                         isSale: false,
-                                        isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                                        thumbnail: ImageUrl(widget.data.ticketModel?.idUser, url: thumbnail),
+                                        isSafe:
+                                            true, //notifier.postData.data.listVid[index].isSafe,
+                                        thumbnail: ImageUrl(
+                                            widget.data.ticketModel?.idUser,
+                                            url: thumbnail),
                                       );
                                     }),
                                     tenPx,
                                     CustomTextWidget(
-                                      textToDisplay: dataAppeal.description ?? '',
+                                      textToDisplay:
+                                          dataAppeal.description ?? '',
                                       maxLines: 3,
-                                      textStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.w400, fontSize: 12),
+                                      textStyle: const TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 12),
                                     ),
                                   ],
                                 ),
@@ -282,27 +358,41 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                                     child: InkWell(
                                       onTap: () async {
                                         notifier.isLoadNavigate = true;
-                                        Future.delayed(const Duration(seconds: 1), () {
+                                        Future.delayed(
+                                            const Duration(seconds: 1), () {
                                           notifier.isLoadNavigate = false;
                                         });
-                                        await context.read<NotificationNotifier>().navigateToContent(context, dataAppeal.postType, dataAppeal.postID);
+                                        await context
+                                            .read<NotificationNotifier>()
+                                            .navigateToContent(
+                                                context,
+                                                dataAppeal.postType,
+                                                dataAppeal.postID);
                                       },
                                       child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
                                         children: [
                                           CustomTextWidget(
                                             textAlign: TextAlign.end,
-                                            textToDisplay: notifier.language.seeContent ?? '',
-                                            textStyle: const TextStyle(color: kHyppePrimary, fontWeight: FontWeight.w700, fontSize: 10),
+                                            textToDisplay:
+                                                notifier.language.seeContent ??
+                                                    '',
+                                            textStyle: const TextStyle(
+                                                color: kHyppePrimary,
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 10),
                                           ),
                                           if (notifier.isLoadNavigate) fourPx,
                                           if (notifier.isLoadNavigate)
                                             const SizedBox(
                                                 width: 10,
                                                 height: 10,
-                                                child: CircularProgressIndicator(
+                                                child:
+                                                    CircularProgressIndicator(
                                                   color: kHyppePrimary,
                                                   strokeWidth: 1,
                                                 ))
@@ -315,21 +405,26 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 12),
                           child: SizedBox(
                             height: 1,
                             child: Container(color: Colors.black12),
                           ),
                         ),
-                        _contentInfo(textTheme, title: 'Post ID', value: dataAppeal.postID ?? ''),
+                        _contentInfo(textTheme,
+                            title: 'Post ID', value: dataAppeal.postID ?? ''),
                         if (dataAppeal.createdAt != null)
                           Builder(
                             builder: (context) {
                               try {
-                                var fixSplitDateTime = dataAppeal.createdAt?.split(' ');
-                                var fixSplitTime = fixSplitDateTime?[1].split(':');
+                                var fixSplitDateTime =
+                                    dataAppeal.createdAt?.split(' ');
+                                var fixSplitTime =
+                                    fixSplitDateTime?[1].split(':');
                                 return _contentInfo(textTheme,
-                                    title: notifier.language.postedOn ?? 'Posted On',
+                                    title: notifier.language.postedOn ??
+                                        'Posted On',
                                     value:
                                         '${fixSplitDateTime?[0].getDateFormat("yyyy-MM-dd", notifier.language, isToday: false)} ${System().getTimeWIB(fixSplitTime?[0] ?? '00', fixSplitTime?[1] ?? '00')}');
                               } catch (e) {
@@ -341,10 +436,13 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                         if (dataAppeal.createdAtAppealLast != null)
                           Builder(builder: (context) {
                             try {
-                              var fixSplitDateTime = dataAppeal.createdAt?.split('T');
-                              var fixSplitTime = fixSplitDateTime?[1].split(':');
+                              var fixSplitDateTime =
+                                  dataAppeal.createdAt?.split('T');
+                              var fixSplitTime =
+                                  fixSplitDateTime?[1].split(':');
                               return _contentInfo(textTheme,
-                                  title: notifier.language.submissionTime ?? 'Submission Time',
+                                  title: notifier.language.submissionTime ??
+                                      'Submission Time',
                                   value:
                                       '${fixSplitDateTime?[0].getDateFormat("yyyy-MM-dd", notifier.language, isToday: false)} ${System().getTimeWIB(fixSplitTime?[0] ?? '00', fixSplitTime?[1] ?? '00')}');
                             } catch (e) {
@@ -352,31 +450,55 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                               return const SizedBox.shrink();
                             }
                           }),
-                        _contentInfo(textTheme, title: notifier.language.contentType ?? 'Content Type', value: System().convertTypeContent(dataAppeal.postType ?? '')),
-                        _contentInfo(textTheme, title: notifier.language.sensitiveType ?? 'Sensitive Type', value: dataAppeal.reportedStatus ?? ''),
+                        _contentInfo(textTheme,
+                            title:
+                                notifier.language.contentType ?? 'Content Type',
+                            value: System()
+                                .convertTypeContent(dataAppeal.postType ?? '')),
+                        _contentInfo(textTheme,
+                            title: notifier.language.sensitiveType ??
+                                'Sensitive Type',
+                            value: dataAppeal.reportedStatus ?? ''),
                         Builder(builder: (context) {
                           try {
-                            final item = dataAppeal.reportedUser?.where((element) => element.active == true).toList();
+                            final item = dataAppeal.reportedUser
+                                ?.where((element) => element.active == true)
+                                .toList();
                             if (item != null) {
                               if (item.isNotEmpty) {
-                                return _contentInfo(textTheme, title: notifier.language.reasonOfAppeal ?? 'Reason of Appeal', value: item.first.description ?? '');
+                                return _contentInfo(textTheme,
+                                    title: notifier.language.reasonOfAppeal ??
+                                        'Reason of Appeal',
+                                    value: item.first.description ?? '');
                               } else {
-                                return _contentInfo(textTheme, title: notifier.language.reasonOfAppeal ?? 'Reason of Appeal', value: dataAppeal.reasonLast ?? '');
+                                return _contentInfo(textTheme,
+                                    title: notifier.language.reasonOfAppeal ??
+                                        'Reason of Appeal',
+                                    value: dataAppeal.reasonLast ?? '');
                               }
                             } else {
-                              return _contentInfo(textTheme, title: notifier.language.reasonOfAppeal ?? 'Reason of Appeal', value: dataAppeal.reasonLast ?? '');
+                              return _contentInfo(textTheme,
+                                  title: notifier.language.reasonOfAppeal ??
+                                      'Reason of Appeal',
+                                  value: dataAppeal.reasonLast ?? '');
                             }
                           } catch (e) {
                             return const SizedBox.shrink();
                           }
                         }),
-                        _contentInfo(textTheme, title: notifier.language.issueStatement ?? 'Issue Statement', value: dataAppeal.reportedUserHandle?.first.reason ?? ''),
+                        _contentInfo(textTheme,
+                            title: notifier.language.issueStatement ??
+                                'Issue Statement',
+                            value:
+                                dataAppeal.reportedUserHandle?.first.reason ??
+                                    ''),
                       ],
                     ),
                   ),
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.only(left: 13, right: 10, top: 10, bottom: 10),
+                    padding: const EdgeInsets.only(
+                        left: 13, right: 10, top: 10, bottom: 10),
                     margin: const EdgeInsets.only(left: 16, right: 16),
                     decoration: const BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -391,8 +513,12 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                         ),
                         twelvePx,
                         CustomTextWidget(
-                          textToDisplay: notifier.language.messageTicketHandled ?? '',
-                          textStyle: const TextStyle(fontWeight: FontWeight.w400, color: kHyppeLightSecondary, fontSize: 12),
+                          textToDisplay:
+                              notifier.language.messageTicketHandled ?? '',
+                          textStyle: const TextStyle(
+                              fontWeight: FontWeight.w400,
+                              color: kHyppeLightSecondary,
+                              fontSize: 12),
                         )
                       ],
                     ),
@@ -443,9 +569,12 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 13),
       child: CustomTextWidget(
         textToDisplay: labelProgress,
-        textStyle: TextStyle(color: colorFont, fontWeight: FontWeight.w700, fontSize: 10),
+        textStyle: TextStyle(
+            color: colorFont, fontWeight: FontWeight.w700, fontSize: 10),
       ),
-      decoration: BoxDecoration(color: colorBg, borderRadius: const BorderRadius.all(Radius.circular(4))),
+      decoration: BoxDecoration(
+          color: colorBg,
+          borderRadius: const BorderRadius.all(Radius.circular(4))),
     );
   }
 
@@ -479,13 +608,17 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 13),
       child: CustomTextWidget(
         textToDisplay: labelProgress,
-        textStyle: TextStyle(color: colorFont, fontWeight: FontWeight.w700, fontSize: 10),
+        textStyle: TextStyle(
+            color: colorFont, fontWeight: FontWeight.w700, fontSize: 10),
       ),
-      decoration: BoxDecoration(color: colorBg, borderRadius: const BorderRadius.all(Radius.circular(4))),
+      decoration: BoxDecoration(
+          color: colorBg,
+          borderRadius: const BorderRadius.all(Radius.circular(4))),
     );
   }
 
-  Widget _contentInfo(TextTheme textTheme, {required String title, required String value}) {
+  Widget _contentInfo(TextTheme textTheme,
+      {required String title, required String value}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
       child: Row(
@@ -497,7 +630,8 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
             child: CustomTextWidget(
               textAlign: TextAlign.left,
               textToDisplay: title,
-              textStyle: textTheme.caption?.copyWith(color: Theme.of(context).hintColor),
+              textStyle: textTheme.bodySmall
+                  ?.copyWith(color: Theme.of(context).hintColor),
             ),
           ),
           Expanded(
@@ -505,7 +639,8 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
               textAlign: TextAlign.right,
               maxLines: 3,
               textToDisplay: value,
-              textStyle: textTheme.caption?.copyWith(color: Theme.of(context).hintColor),
+              textStyle: textTheme.bodySmall
+                  ?.copyWith(color: Theme.of(context).hintColor),
             ),
           ),
         ],
@@ -513,7 +648,8 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
     );
   }
 
-  Widget _getListChats(BuildContext context, List<TicketDetail>? chats, DetailTicketNotifier notifier) {
+  Widget _getListChats(BuildContext context, List<TicketDetail>? chats,
+      DetailTicketNotifier notifier) {
     Map<String, List<TicketDetail>?> groupChats = {};
 
     // final email = SharedPreference().readStorage(SpKeys.email);
@@ -546,19 +682,26 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
         return SizedBox(
             height: 300,
             child: Center(
-              child: CustomTextWidget(textToDisplay: notifier.language.dontHaveMessagesYet ?? "Don't have messages yet"),
+              child: CustomTextWidget(
+                  textToDisplay: notifier.language.dontHaveMessagesYet ??
+                      "Don't have messages yet"),
             ));
       }
     } else {
       return SizedBox(
           height: 300,
           child: Center(
-            child: CustomTextWidget(textToDisplay: notifier.language.dontHaveMessagesYet ?? "Don't have messages yet"),
+            child: CustomTextWidget(
+                textToDisplay: notifier.language.dontHaveMessagesYet ??
+                    "Don't have messages yet"),
           ));
     }
   }
 
-  Widget _groupChatsLayout(BuildContext context, Map<String, List<TicketDetail>?> groupChats, DetailTicketNotifier notifier) {
+  Widget _groupChatsLayout(
+      BuildContext context,
+      Map<String, List<TicketDetail>?> groupChats,
+      DetailTicketNotifier notifier) {
     final List<Widget> groups = [];
     final email = SharedPreference().readStorage(SpKeys.email);
     groupChats.forEach((key, value) {
@@ -585,9 +728,17 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                     Align(
                       alignment: Alignment.center,
                       child: Container(
-                        decoration: BoxDecoration(border: Border.all(color: kHyppeSecondary), borderRadius: const BorderRadius.all(Radius.circular(8)), color: kHyppeLightInactive1),
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                        child: CustomTextWidget(textToDisplay: key.getDateFormat("yyyy-MM-dd", notifier.language, isToday: true)),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: kHyppeSecondary),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(8)),
+                            color: kHyppeLightInactive1),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 6),
+                        child: CustomTextWidget(
+                            textToDisplay: key.getDateFormat(
+                                "yyyy-MM-dd", notifier.language,
+                                isToday: true)),
                       ),
                     )
                   ],
@@ -659,7 +810,7 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                     // textToDisplay: chatData.message,
                     textAlign: TextAlign.start,
                     textOverflow: TextOverflow.clip,
-                    textStyle: Theme.of(context).textTheme.bodyText2,
+                    textStyle: Theme.of(context).textTheme.bodyMedium,
                     textToDisplay: chatData.body ?? 'No Message',
                   ),
                   Builder(builder: (context) {
@@ -671,7 +822,10 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                               ? '${times[0]}:${times[1]}'
                               : ''
                           : '',
-                      textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 10),
+                      textStyle: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontSize: 10),
                     );
                   })
                 ],
@@ -719,7 +873,10 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                     // textToDisplay: chatData.message,
                     textAlign: TextAlign.start,
                     textOverflow: TextOverflow.clip,
-                    textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.white),
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(color: Colors.white),
                     textToDisplay: chatData.body ?? 'No Messages',
                   ),
                   Builder(builder: (context) {
@@ -731,7 +888,8 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                               ? '${times[0]}:${times[1]}'
                               : ''
                           : '',
-                      textStyle: const TextStyle(color: Colors.white, fontSize: 10),
+                      textStyle:
+                          const TextStyle(color: Colors.white, fontSize: 10),
                     );
                   }),
                 ],
@@ -746,7 +904,10 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
   Widget _getGridListImages(BuildContext context, List<TicketUrl> urls) {
     final fixList = urls.where((element) {
       '_getGridListImages : ${extensionFromMime(element.localDir)}'.logger();
-      return System().lookupContentMimeType(element.localDir)?.contains('image') ?? false;
+      return System()
+              .lookupContentMimeType(element.localDir)
+              ?.contains('image') ??
+          false;
     }).toList();
     final lenght = fixList.length;
     final List<String> images = [];
@@ -774,7 +935,8 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                   height: 200,
                   isSale: false,
                   isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                  thumbnail: ImageUrl(widget.data.ticketModel?.idUser, url: fixList[0].realUrl),
+                  thumbnail: ImageUrl(widget.data.ticketModel?.idUser,
+                      url: fixList[0].realUrl),
                 );
               } else if (lenght == 2) {
                 return Row(
@@ -789,8 +951,10 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                         width: 100,
                         height: 100,
                         isSale: false,
-                        isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                        thumbnail: ImageUrl(widget.data.ticketModel?.idUser, url: fixList[0].realUrl),
+                        isSafe:
+                            true, //notifier.postData.data.listVid[index].isSafe,
+                        thumbnail: ImageUrl(widget.data.ticketModel?.idUser,
+                            url: fixList[0].realUrl),
                       ),
                     ),
                     tenPx,
@@ -802,8 +966,10 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                         width: 100,
                         height: 100,
                         isSale: false,
-                        isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                        thumbnail: ImageUrl(widget.data.ticketModel?.idUser, url: fixList[1].realUrl),
+                        isSafe:
+                            true, //notifier.postData.data.listVid[index].isSafe,
+                        thumbnail: ImageUrl(widget.data.ticketModel?.idUser,
+                            url: fixList[1].realUrl),
                       ),
                     ),
                   ],
@@ -825,8 +991,10 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                             width: 100,
                             height: 100,
                             isSale: false,
-                            isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                            thumbnail: ImageUrl(widget.data.ticketModel?.idUser, url: fixList[0].realUrl),
+                            isSafe:
+                                true, //notifier.postData.data.listVid[index].isSafe,
+                            thumbnail: ImageUrl(widget.data.ticketModel?.idUser,
+                                url: fixList[0].realUrl),
                           ),
                         ),
                         tenPx,
@@ -838,8 +1006,10 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                             width: 100,
                             height: 100,
                             isSale: false,
-                            isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                            thumbnail: ImageUrl(widget.data.ticketModel?.idUser, url: fixList[1].realUrl),
+                            isSafe:
+                                true, //notifier.postData.data.listVid[index].isSafe,
+                            thumbnail: ImageUrl(widget.data.ticketModel?.idUser,
+                                url: fixList[1].realUrl),
                           ),
                         ),
                       ],
@@ -857,8 +1027,10 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                             width: 100,
                             height: 100,
                             isSale: false,
-                            isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                            thumbnail: ImageUrl(widget.data.ticketModel?.idUser, url: fixList[2].realUrl),
+                            isSafe:
+                                true, //notifier.postData.data.listVid[index].isSafe,
+                            thumbnail: ImageUrl(widget.data.ticketModel?.idUser,
+                                url: fixList[2].realUrl),
                           ),
                         ),
                         tenPx,
@@ -887,8 +1059,10 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                             width: 100,
                             height: 100,
                             isSale: false,
-                            isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                            thumbnail: ImageUrl(widget.data.ticketModel?.idUser, url: fixList[0].realUrl),
+                            isSafe:
+                                true, //notifier.postData.data.listVid[index].isSafe,
+                            thumbnail: ImageUrl(widget.data.ticketModel?.idUser,
+                                url: fixList[0].realUrl),
                           ),
                         ),
                         tenPx,
@@ -900,8 +1074,10 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                             width: 100,
                             height: 100,
                             isSale: false,
-                            isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                            thumbnail: ImageUrl(widget.data.ticketModel?.idUser, url: fixList[1].realUrl),
+                            isSafe:
+                                true, //notifier.postData.data.listVid[index].isSafe,
+                            thumbnail: ImageUrl(widget.data.ticketModel?.idUser,
+                                url: fixList[1].realUrl),
                           ),
                         ),
                       ],
@@ -919,8 +1095,10 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                             width: 100,
                             height: 100,
                             isSale: false,
-                            isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                            thumbnail: ImageUrl(widget.data.ticketModel?.idUser, url: fixList[2].realUrl),
+                            isSafe:
+                                true, //notifier.postData.data.listVid[index].isSafe,
+                            thumbnail: ImageUrl(widget.data.ticketModel?.idUser,
+                                url: fixList[2].realUrl),
                           ),
                         ),
                         tenPx,
@@ -932,8 +1110,10 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                             width: 100,
                             height: 100,
                             isSale: false,
-                            isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                            thumbnail: ImageUrl(widget.data.ticketModel?.idUser, url: fixList[3].realUrl),
+                            isSafe:
+                                true, //notifier.postData.data.listVid[index].isSafe,
+                            thumbnail: ImageUrl(widget.data.ticketModel?.idUser,
+                                url: fixList[3].realUrl),
                           ),
                         ),
                       ],
@@ -968,28 +1148,36 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: notifier.files?.map((e) {
-                          final isImage = System().lookupContentMimeType(e.path)?.startsWith('image') ?? false;
+                          final isImage = System()
+                                  .lookupContentMimeType(e.path)
+                                  ?.startsWith('image') ??
+                              false;
                           return Stack(
                             children: [
                               Container(
                                 alignment: Alignment.center,
                                 width: 100,
                                 height: 100,
-                                margin: const EdgeInsets.only(left: 5, right: 5, top: 16),
+                                margin: const EdgeInsets.only(
+                                    left: 5, right: 5, top: 16),
                                 padding: EdgeInsets.all(isImage ? 0 : 16),
-                                decoration:
-                                    BoxDecoration(color: kHyppeBgSensitive.withOpacity(0.4), borderRadius: const BorderRadius.all(Radius.circular(8)), border: Border.all(color: kHyppeLightSecondary)),
+                                decoration: BoxDecoration(
+                                    color: kHyppeBgSensitive.withOpacity(0.4),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(8)),
+                                    border: Border.all(
+                                        color: kHyppeLightSecondary)),
                                 child: isImage
                                     ? ClipRRect(
-                                  borderRadius: const BorderRadius.all(Radius.circular(8)),
-                                  child: Image.file(
-                                    e,
-                                    fit: BoxFit.cover,
-                                    width: 100,
-                                    height: 100,
-                                  ),
-
-                                )
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(8)),
+                                        child: Image.file(
+                                          e,
+                                          fit: BoxFit.cover,
+                                          width: 100,
+                                          height: 100,
+                                        ),
+                                      )
                                     : Text('${e.path.split('/').last}'),
                               ),
                               Positioned(
@@ -997,13 +1185,15 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                                   right: 0,
                                   child: GestureDetector(
                                       onTap: () {
-                                        final index = notifier.files?.indexOf(e);
+                                        final index =
+                                            notifier.files?.indexOf(e);
                                         if (index != null) {
                                           notifier.removeFiles(index);
                                         }
                                       },
                                       child: const CustomIconWidget(
-                                        iconData: '${AssetPath.vectorPath}remove.svg',
+                                        iconData:
+                                            '${AssetPath.vectorPath}remove.svg',
                                         defaultColor: false,
                                         color: Colors.red,
                                       )))
@@ -1019,7 +1209,9 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                     child: Container(
                       padding: const EdgeInsets.all(6),
                       margin: const EdgeInsets.all(16),
-                      decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(100)), color: Colors.red),
+                      decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(100)),
+                          color: Colors.red),
                       child: const CustomIconWidget(
                         width: 50,
                         height: 50,
@@ -1044,17 +1236,22 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
               keyboardAppearance: Brightness.dark,
               controller: notifier.commentController,
               textInputAction: TextInputAction.unspecified,
-              style: Theme.of(context).textTheme.bodyText2,
+              style: Theme.of(context).textTheme.bodyMedium,
               autofocus: true,
               decoration: InputDecoration(
                   filled: true,
                   fillColor: Theme.of(context).colorScheme.background,
                   hintText: "${notifier.language.typeAMessage}...",
-                  hintStyle: const TextStyle(color: Color(0xffBABABA), fontSize: 14),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
-                  focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
+                  hintStyle:
+                      const TextStyle(color: Color(0xffBABABA), fontSize: 14),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25)),
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25)),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25)),
                   suffixIcon: Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -1063,18 +1260,24 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                           onTap: () {
                             notifier.onTapOnFrameLocalMedia(context);
                           },
-                          child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}galery_icon.svg")),
-                      notifier.commentController.text.isNotEmpty ? tenPx : twelvePx,
+                          child: const CustomIconWidget(
+                              iconData:
+                                  "${AssetPath.vectorPath}galery_icon.svg")),
+                      notifier.commentController.text.isNotEmpty
+                          ? tenPx
+                          : twelvePx,
                       if (notifier.commentController.text.isNotEmpty)
                         GestureDetector(
                             onTap: () async {
                               notifier.inputNode.unfocus();
-                              await notifier.sendComment(context, notifier.commentController.text);
+                              await notifier.sendComment(
+                                  context, notifier.commentController.text);
                             },
                             child: const CustomIconWidget(
                               height: 24,
                               width: 24,
-                              iconData: "${AssetPath.vectorPath}logo-purple.svg",
+                              iconData:
+                                  "${AssetPath.vectorPath}logo-purple.svg",
                               defaultColor: false,
                               color: kHyppePrimary,
                             )),
@@ -1099,7 +1302,8 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
         mainAxisSize: MainAxisSize.max,
         children: [
           Container(
-            margin: const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 12),
+            margin:
+                const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 12),
             padding: const EdgeInsets.only(top: 8, bottom: 8),
             width: double.infinity,
             decoration: const BoxDecoration(

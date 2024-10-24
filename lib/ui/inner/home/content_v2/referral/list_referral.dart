@@ -21,7 +21,9 @@ class ListReferralUser extends StatelessWidget {
     return Consumer<ReferralNotifier>(
       builder: (_, notifier, __) => Scaffold(
           appBar: AppBar(
-            leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
+            leadingWidth: 50 *
+                (SizeConfig.screenWidth ?? context.getWidth()) /
+                SizeWidget.baseWidthXD,
             leading: CustomIconButtonWidget(
               defaultColor: true,
               iconData: "${AssetPath.vectorPath}back-arrow.svg",
@@ -30,7 +32,10 @@ class ListReferralUser extends StatelessWidget {
             titleSpacing: 0,
             title: CustomTextWidget(
               textToDisplay: '${notifier.language.linkYourReferral}',
-              textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
+              textStyle: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(fontSize: 18),
             ),
             centerTitle: false,
           ),
@@ -42,9 +47,12 @@ class ListReferralUser extends StatelessWidget {
                   children: [
                     const Text(
                       'Telah Digunakan Oleh ',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
                     ),
-                    Text('(${arguments.modelReferral?.data} kali)', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400)),
+                    Text('(${arguments.modelReferral?.data} kali)',
+                        style: const TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.w400)),
                   ],
                 ),
                 const SizedBox(
@@ -63,7 +71,8 @@ class ListReferralUser extends StatelessWidget {
                             height: 40,
                             child: Text(
                               '${listUser?.children}',
-                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w400),
                             ),
                           ),
                           Divider(

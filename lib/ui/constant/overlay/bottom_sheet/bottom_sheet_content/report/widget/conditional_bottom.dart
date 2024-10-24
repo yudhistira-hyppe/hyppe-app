@@ -7,11 +7,13 @@ import 'package:provider/provider.dart';
 Widget conditionalBottom(context) {
   SizeConfig().init(context);
   final notifier = Provider.of<ReportNotifier>(context);
-  if (notifier.reportType == ReportType.post && notifier.reportAction == ReportAction.report) {
+  if (notifier.reportType == ReportType.post &&
+      notifier.reportAction == ReportAction.report) {
     return const SizedBox.shrink();
   }
 
-  if (notifier.reportType == ReportType.post && notifier.reportAction == ReportAction.hide) {
+  if (notifier.reportType == ReportType.post &&
+      notifier.reportAction == ReportAction.hide) {
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
@@ -20,7 +22,7 @@ Widget conditionalBottom(context) {
             // CustomTextWidget(
             //     maxLines: 2,
             //     textAlign: TextAlign.left,
-            //     textStyle: Theme.of(context).textTheme.subtitle2?.apply(color: kHyppeSecondary),
+            //     textStyle: Theme.of(context).textTheme.titleSmall?.apply(color: kHyppeSecondary),
             //     textToDisplay: notifier.language.ifYouThinkGoesAgainstOurMediaSocialCommunityPolicies ?? ''),
             // GestureDetector(
             //     onTap: () {
@@ -37,7 +39,7 @@ Widget conditionalBottom(context) {
             //       child: CustomTextWidget(
             //           textAlign: TextAlign.left,
             //           textToDisplay: notifier.language.reportThisPost ?? '',
-            //           textStyle: Theme.of(context).textTheme.button?.apply(color: kHyppeUploadIcon)),
+            //           textStyle: Theme.of(context).textTheme.labelLarge?.apply(color: kHyppeUploadIcon)),
             //     )),
           ],
         ));

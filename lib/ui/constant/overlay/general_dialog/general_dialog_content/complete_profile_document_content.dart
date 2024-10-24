@@ -48,7 +48,7 @@
 //                       child: CustomTextWidget(
 //                         textToDisplay:
 //                             notifier.listDocument[index].documentName,
-//                         textStyle: Theme.of(context).textTheme.bodyText1,
+//                         textStyle: Theme.of(context).textTheme.bodyLarge,
 //                       ),
 //                     ),
 //                   ),

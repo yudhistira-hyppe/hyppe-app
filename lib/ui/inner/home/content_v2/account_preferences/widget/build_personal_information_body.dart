@@ -13,7 +13,8 @@ import 'package:provider/provider.dart';
 class BuildPersonalInformationBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'BuildPersonalInformationBody');
+    FirebaseCrashlytics.instance
+        .setCustomKey('layout', 'BuildPersonalInformationBody');
     return Consumer<AccountPreferencesNotifier>(
       builder: (_, notifier, __) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 16.0),
@@ -24,14 +25,17 @@ class BuildPersonalInformationBody extends StatelessWidget {
                 const Align(
                   alignment: Alignment(0.975, 1),
                   heightFactor: 2.25,
-                  child: CustomIconWidget(iconData: "${AssetPath.vectorPath}calendar.svg"),
+                  child: CustomIconWidget(
+                      iconData: "${AssetPath.vectorPath}calendar.svg"),
                 ),
                 TextInputAccountPreferences(
                   controller: notifier.dobController,
                   labelText: notifier.language.dateOfBirth,
                   hintText: notifier.language.dateOfBirth,
                   readOnly: true,
-                  onTap: () => ShowGeneralDialog.accountPreferencesBirthDropDown(context),
+                  onTap: () =>
+                      ShowGeneralDialog.accountPreferencesBirthDropDown(
+                          context),
                 ),
               ],
             ),
@@ -40,7 +44,8 @@ class BuildPersonalInformationBody extends StatelessWidget {
                 const Align(
                   alignment: Alignment(0.975, 1),
                   heightFactor: 2.25,
-                  child: CustomIconWidget(iconData: "${AssetPath.vectorPath}phone.svg"),
+                  child: CustomIconWidget(
+                      iconData: "${AssetPath.vectorPath}phone.svg"),
                 ),
                 TextInputAccountPreferences(
                   hintText: notifier.language.phoneNumber,
@@ -60,7 +65,8 @@ class BuildPersonalInformationBody extends StatelessWidget {
                   heightFactor: 2.25,
                   child: RotatedBox(
                     quarterTurns: -45,
-                    child: CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
+                    child: CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}back-arrow.svg"),
                   ),
                 ),
                 TextInputAccountPreferences(
@@ -79,7 +85,8 @@ class BuildPersonalInformationBody extends StatelessWidget {
                   heightFactor: 2.25,
                   child: RotatedBox(
                     quarterTurns: -45,
-                    child: CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
+                    child: CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}back-arrow.svg"),
                   ),
                 ),
                 TextInputAccountPreferences(
@@ -87,7 +94,10 @@ class BuildPersonalInformationBody extends StatelessWidget {
                   labelText: "${notifier.language.country}*",
                   hintText: notifier.language.country,
                   readOnly: true,
-                  onTap: () => ShowGeneralDialog.userCompleteProfileLocationCountryDropDown(context, onSelected: (value) => notifier.locationCountryListSelected(value)),
+                  onTap: () => ShowGeneralDialog
+                      .userCompleteProfileLocationCountryDropDown(context,
+                          onSelected: (value) =>
+                              notifier.locationCountryListSelected(value)),
                 ),
               ],
             ),
@@ -98,7 +108,8 @@ class BuildPersonalInformationBody extends StatelessWidget {
                   heightFactor: 2.25,
                   child: RotatedBox(
                     quarterTurns: -45,
-                    child: CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
+                    child: CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}back-arrow.svg"),
                   ),
                 ),
                 TextInputAccountPreferences(
@@ -108,10 +119,12 @@ class BuildPersonalInformationBody extends StatelessWidget {
                   readOnly: true,
                   onTap: notifier.countryController.text.isEmpty
                       ? () => print("Please choose country first")
-                      : () => ShowGeneralDialog.userCompleteProfileLocationProvinceDropDown(
+                      : () => ShowGeneralDialog
+                              .userCompleteProfileLocationProvinceDropDown(
                             context,
                             country: notifier.countryController.text,
-                            onSelected: (value) => notifier.locationProvinceListSelected(value),
+                            onSelected: (value) =>
+                                notifier.locationProvinceListSelected(value),
                           ),
                 ),
               ],
@@ -123,7 +136,8 @@ class BuildPersonalInformationBody extends StatelessWidget {
                   heightFactor: 2.25,
                   child: RotatedBox(
                     quarterTurns: -45,
-                    child: CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
+                    child: CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}back-arrow.svg"),
                   ),
                 ),
                 TextInputAccountPreferences(
@@ -133,10 +147,12 @@ class BuildPersonalInformationBody extends StatelessWidget {
                   readOnly: true,
                   onTap: notifier.areaController.text.isEmpty
                       ? () => print("Please choose province first")
-                      : () => ShowGeneralDialog.userCompleteProfileLocationCityDropDown(
+                      : () => ShowGeneralDialog
+                              .userCompleteProfileLocationCityDropDown(
                             context,
                             province: notifier.areaController.text,
-                            onSelected: (value) => notifier.locationCityListSelected(value),
+                            onSelected: (value) =>
+                                notifier.locationCityListSelected(value),
                           ),
                 ),
               ],
@@ -145,7 +161,10 @@ class BuildPersonalInformationBody extends StatelessWidget {
             ListTile(
               contentPadding: EdgeInsets.zero,
               minLeadingWidth: 10,
-              shape: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).iconTheme.color ?? Colors.white, width: 0.2)),
+              shape: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Theme.of(context).iconTheme.color ?? Colors.white,
+                      width: 0.2)),
               onTap: () {
                 notifier.getListDeleteOption();
                 notifier.navigateToDeleteProfile();
@@ -155,7 +174,7 @@ class BuildPersonalInformationBody extends StatelessWidget {
               ),
               title: CustomTextWidget(
                 textToDisplay: notifier.language.deleteAccount ?? '',
-                textStyle: Theme.of(context).textTheme.bodyText1,
+                textStyle: Theme.of(context).textTheme.bodyLarge,
                 textAlign: TextAlign.start,
               ),
             )

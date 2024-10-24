@@ -25,12 +25,17 @@ class OnShowIDVerificationBottomSheet extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: [
             fivePx,
-            const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+            const CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}handler.svg"),
             twentyEightPx,
-            const CustomIconWidget(iconData: "${AssetPath.vectorPath}verification-need-new.svg", defaultColor: false,),
+            const CustomIconWidget(
+              iconData: "${AssetPath.vectorPath}verification-need-new.svg",
+              defaultColor: false,
+            ),
             twentyEightPx,
             CustomTextWidget(
-              textToDisplay: notifier.language.verifyId ?? 'Verifikasi Identitas',
+              textToDisplay:
+                  notifier.language.verifyId ?? 'Verifikasi Identitas',
               textStyle: Theme.of(context).textTheme.titleMedium,
             ),
             fourteenPx,
@@ -47,7 +52,14 @@ class OnShowIDVerificationBottomSheet extends StatelessWidget {
                           maxLines: 20,
                           textAlign: TextAlign.start,
                           textOverflow: TextOverflow.clip,
-                          textSpan: TextSpan(text: notifier.language.needVerifyIdDescriptions ?? '', style: Theme.of(context).textTheme.caption?.copyWith(height: 1.6)),
+                          textSpan: TextSpan(
+                              text:
+                                  notifier.language.needVerifyIdDescriptions ??
+                                      '',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(height: 1.6)),
                         ),
                       ),
                     ],
@@ -62,8 +74,12 @@ class OnShowIDVerificationBottomSheet extends StatelessWidget {
                           textAlign: TextAlign.start,
                           textOverflow: TextOverflow.clip,
                           textSpan: TextSpan(
-                            text: notifier.language.needVerifyIdDescriptions2 ?? '',
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(height: 1.6),
+                            text: notifier.language.needVerifyIdDescriptions2 ??
+                                '',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.copyWith(height: 1.6),
                           ),
                         ),
                       ),
@@ -89,17 +105,27 @@ class OnShowIDVerificationBottomSheet extends StatelessWidget {
                 notifier.validateIdCard();
               },
               buttonStyle: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary), overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary)),
+                  backgroundColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primary),
+                  overlayColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primary)),
               child: CustomTextWidget(
-                textToDisplay: notifier.language.verifyNow ?? 'Verifikasi Sekarang',
-                textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(color: kHyppeLightButtonText),
+                textToDisplay:
+                    notifier.language.verifyNow ?? 'Verifikasi Sekarang',
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: kHyppeLightButtonText),
               ),
             ),
             CustomElevatedButton(
               width: double.infinity,
               height: 50 * SizeConfig.scaleDiagonal,
               function: () => Routing().moveBack(),
-              buttonStyle: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.transparent), overlayColor: MaterialStateProperty.all(Colors.transparent)),
+              buttonStyle: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(Colors.transparent),
+                  overlayColor: MaterialStateProperty.all(Colors.transparent)),
               child: CustomTextWidget(
                 textToDisplay: notifier.language.cancel ?? 'cancel',
                 textStyle: Theme.of(context).textTheme.labelLarge,

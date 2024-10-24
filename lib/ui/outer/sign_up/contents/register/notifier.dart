@@ -115,7 +115,8 @@ class RegisterNotifier with ChangeNotifier {
   }
 
   Widget passwordSuffixIcon(BuildContext context) => CustomIconButtonWidget(
-        iconData: "${AssetPath.vectorPath}${hidePassword ? "eye-off" : "eye"}.svg",
+        iconData:
+            "${AssetPath.vectorPath}${hidePassword ? "eye-off" : "eye"}.svg",
         defaultColor: true,
         onPressed: () => hidePassword = !hidePassword,
       );
@@ -145,7 +146,8 @@ class RegisterNotifier with ChangeNotifier {
   bool _validationRegister() {
     bool state1 = password.isNotEmpty;
     bool state2 = _system.atLeastEightCharacter(text: password);
-    bool state3 = _system.atLeastContainOneCharacterAndOneNumber(text: password);
+    bool state3 =
+        _system.atLeastContainOneCharacterAndOneNumber(text: password);
     bool state4 = _system.specialCharPass(password);
     return state1 && state2 && state3 && state4;
   }
@@ -160,9 +162,13 @@ class RegisterNotifier with ChangeNotifier {
 
   TextStyle nextTextColor(BuildContext context) {
     if (_validationRegister()) {
-      return Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText) ?? const TextStyle();
+      return Theme.of(context)
+              .textTheme
+              .labelLarge
+              ?.copyWith(color: kHyppeLightButtonText) ??
+          const TextStyle();
     } else {
-      return Theme.of(context).primaryTextTheme.button ?? const TextStyle();
+      return Theme.of(context).primaryTextTheme.labelLarge ?? const TextStyle();
     }
   }
 
@@ -190,7 +196,8 @@ class RegisterNotifier with ChangeNotifier {
             sizeIcon: 15,
           );
           return;
-        } else if (!_system.atLeastContainOneCharacterAndOneNumber(text: password)) {
+        } else if (!_system.atLeastContainOneCharacterAndOneNumber(
+            text: password)) {
           ShowBottomSheet().onShowColouredSheet(
             context,
             language.incorrectPassword ?? 'Incorrect Password',
@@ -206,7 +213,9 @@ class RegisterNotifier with ChangeNotifier {
             bool connection = await System().checkConnections();
             if (connection) {
               email = email.toLowerCase();
-              final signUpPinNotifier = Provider.of<SignUpPinNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
+              final signUpPinNotifier = Provider.of<SignUpPinNotifier>(
+                  Routing.navigatorKey.currentContext ?? context,
+                  listen: false);
 
               // initialize Fcm service if not
               await FcmService().initializeFcmIfNot();
@@ -217,7 +226,8 @@ class RegisterNotifier with ChangeNotifier {
               String platForm = Platform.isAndroid ? "android" : "ios";
               String deviceId = SharedPreference().readStorage(SpKeys.fcmToken);
               String lang = SharedPreference().readStorage(SpKeys.isoCode);
-              String referral = SharedPreference().readStorage(SpKeys.referralFrom) ?? '';
+              String referral =
+                  SharedPreference().readStorage(SpKeys.referralFrom) ?? '';
 
               final notifier = UserBloc();
               await notifier.signUpBlocV2(
@@ -235,9 +245,13 @@ class RegisterNotifier with ChangeNotifier {
 
               final fetch = notifier.userFetch;
               if (fetch.userState == UserState.signUpSuccess) {
-                final SignUpResponse _result = SignUpResponse.fromJson(fetch.data);
-                if (_result.insight == null && _result.isEmailVerified == "false") {
-                  await ShowBottomSheet().onShowColouredSheet(Routing.navigatorKey.currentContext ?? context, language.emailVerification ?? '',
+                final SignUpResponse _result =
+                    SignUpResponse.fromJson(fetch.data);
+                if (_result.insight == null &&
+                    _result.isEmailVerified == "false") {
+                  await ShowBottomSheet().onShowColouredSheet(
+                      Routing.navigatorKey.currentContext ?? context,
+                      language.emailVerification ?? '',
                       subCaption: language.emailHasRegistered,
                       maxLines: 3,
                       borderRadius: 8,
@@ -245,10 +259,14 @@ class RegisterNotifier with ChangeNotifier {
                       color: kHyppeTextLightPrimary,
                       isArrow: true,
                       iconColor: kHyppeBorder,
-                      padding: const EdgeInsets.only(left: 16, right: 20, top: 12, bottom: 12),
-                      margin: const EdgeInsets.only(left: 16, right: 16, bottom: 25),
-                      iconSvg: "${AssetPath.vectorPath}info_white.svg", function: () {
-                    SharedPreference().writeStorage(SpKeys.email, _result.email);
+                      padding: const EdgeInsets.only(
+                          left: 16, right: 20, top: 12, bottom: 12),
+                      margin: const EdgeInsets.only(
+                          left: 16, right: 16, bottom: 25),
+                      iconSvg: "${AssetPath.vectorPath}info_white.svg",
+                      function: () {
+                    SharedPreference()
+                        .writeStorage(SpKeys.email, _result.email);
                     SharedPreference().writeStorage(SpKeys.isUserInOTP, true);
                     SharedPreference().removeValue(SpKeys.referralFrom);
                     // signUpPinNotifier.userToken = fetch.data['token'];
@@ -265,10 +283,13 @@ class RegisterNotifier with ChangeNotifier {
                     notifyListeners();
                     Routing().move(
                       Routes.signUpPin,
-                      argument: VerifyPageArgument(redirect: VerifyPageRedirection.toSignUpV2, email: tempEmail),
+                      argument: VerifyPageArgument(
+                          redirect: VerifyPageRedirection.toSignUpV2,
+                          email: tempEmail),
                     );
                   });
-                } else if (_result.insight != null && _result.isEmailVerified == "false") {
+                } else if (_result.insight != null &&
+                    _result.isEmailVerified == "false") {
                   SharedPreference().writeStorage(SpKeys.email, _result.email);
                   SharedPreference().writeStorage(SpKeys.isUserInOTP, true);
                   // signUpPinNotifier.userToken = fetch.data['token'];
@@ -286,7 +307,9 @@ class RegisterNotifier with ChangeNotifier {
                   loading = false;
                   Routing().move(
                     Routes.signUpPin,
-                    argument: VerifyPageArgument(redirect: VerifyPageRedirection.toSignUpV2, email: tempEmail),
+                    argument: VerifyPageArgument(
+                        redirect: VerifyPageRedirection.toSignUpV2,
+                        email: tempEmail),
                   );
                 } else {
                   await ShowBottomSheet().onShowColouredSheet(
@@ -297,7 +320,8 @@ class RegisterNotifier with ChangeNotifier {
                     sizeIcon: 20,
                     color: kHyppeTextLightPrimary,
                     iconColor: kHyppeBorder,
-                    padding: EdgeInsets.only(left: 16, right: 20, top: 12, bottom: 12),
+                    padding: EdgeInsets.only(
+                        left: 16, right: 20, top: 12, bottom: 12),
                     margin: EdgeInsets.only(left: 16, right: 16, bottom: 25),
                   );
                 }
@@ -314,7 +338,8 @@ class RegisterNotifier with ChangeNotifier {
                 // );
               }
             } else {
-              ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+              ShowBottomSheet.onNoInternetConnection(context,
+                  tryAgainButton: () {
                 Routing().moveBack();
                 nextButton(context);
               });
@@ -351,7 +376,8 @@ class RegisterNotifier with ChangeNotifier {
       latlng: coordinate,
     );
     final fetch = notifier.googleMapPlaceFetch;
-    if (fetch.googleMapPlaceState == GoogleMapPlaceState.getGoogleMapPlaceBlocSuccess) {
+    if (fetch.googleMapPlaceState ==
+        GoogleMapPlaceState.getGoogleMapPlaceBlocSuccess) {
       if (fetch.data is LocationResponse) {
         location = location;
         print('Location response: ${location?.toJson()}');

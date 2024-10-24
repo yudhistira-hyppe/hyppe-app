@@ -47,13 +47,15 @@ import '../../../home/notifier_v2.dart';
 
 class VidScrollScreen extends StatefulWidget {
   final String interestKey;
-  const VidScrollScreen({Key? key, required this.interestKey}) : super(key: key);
+  const VidScrollScreen({Key? key, required this.interestKey})
+      : super(key: key);
 
   @override
   State<VidScrollScreen> createState() => _VidScrollScreenState();
 }
 
-class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
+class _VidScrollScreenState extends State<VidScrollScreen>
+    with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
   bool isPrepare = false;
   bool isPlay = false;
   bool isPause = false;
@@ -99,7 +101,8 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
 
   @override
   void didChangeDependencies() {
-    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    CustomRouteObserver.routeObserver
+        .subscribe(this, ModalRoute.of(context) as PageRoute);
     super.didChangeDependencies();
   }
 
@@ -173,13 +176,15 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
           children: [
             (vidData != null)
                 ? Flexible(
-                    child: NotificationListener<OverscrollIndicatorNotification>(
+                    child:
+                        NotificationListener<OverscrollIndicatorNotification>(
                       onNotification: (overscroll) {
                         overscroll.disallowIndicator();
                         return false;
                       },
                       child: Column(
-                        children: List.generate(vidData.length, (index) => itemVid(vidNotifier, index, vidData)),
+                        children: List.generate(vidData.length,
+                            (index) => itemVid(vidNotifier, index, vidData)),
                       ),
                     ),
                   )
@@ -196,7 +201,8 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
     );
   }
 
-  Widget itemVid(SearchNotifier notifier, int index, List<ContentData> vidData) {
+  Widget itemVid(
+      SearchNotifier notifier, int index, List<ContentData> vidData) {
     var map = {
       DataSourceRelated.vidKey: vidData[index].apsaraId,
       DataSourceRelated.regionKey: DataSourceRelated.defaultRegion,
@@ -231,8 +237,10 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                   featureType: FeatureType.other,
                   // isCelebrity: vidnotifier.diaryData?[index].privacy?.isCelebrity,
                   isCelebrity: false,
-                  imageUrl: '${System().showUserPicture(vidData[index].avatar?.mediaEndpoint)}',
-                  onTapOnProfileImage: () => System().navigateToProfile(context, vidData[index].email ?? ''),
+                  imageUrl:
+                      '${System().showUserPicture(vidData[index].avatar?.mediaEndpoint)}',
+                  onTapOnProfileImage: () => System()
+                      .navigateToProfile(context, vidData[index].email ?? ''),
                   createdAt: '2022-02-02',
                   musicName: vidData[index].music?.musicTitle ?? '',
                   location: vidData[index].location ?? '',
@@ -240,7 +248,8 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                   badge: vidData[index].urluserBadge,
                 ),
               ),
-              if (vidData[index].email != email && (vidData[index].isNewFollowing ?? false))
+              if (vidData[index].email != email &&
+                  (vidData[index].isNewFollowing ?? false))
                 Consumer<PreviewPicNotifier>(
                   builder: (context, picNot, child) => Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -248,7 +257,11 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                       onTap: () {
                         context.handleActionIsGuest(() {
                           if (vidData[index].insight?.isloadingFollow != true) {
-                            picNot.followUser(context, vidData[index], isUnFollow: vidData[index].following, isloading: vidData[index].insight!.isloadingFollow ?? false);
+                            picNot.followUser(context, vidData[index],
+                                isUnFollow: vidData[index].following,
+                                isloading:
+                                    vidData[index].insight!.isloadingFollow ??
+                                        false);
                           }
                         });
                       },
@@ -262,8 +275,14 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                               ),
                             )
                           : Text(
-                              (vidData[index].following ?? false) ? (notifier.language.following ?? '') : (notifier.language.follow ?? ''),
-                              style: const TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                              (vidData[index].following ?? false)
+                                  ? (notifier.language.following ?? '')
+                                  : (notifier.language.follow ?? ''),
+                              style: const TextStyle(
+                                  color: kHyppePrimary,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: "Lato"),
                             ),
                     ),
                   ),
@@ -273,7 +292,11 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                   context.handleActionIsGuest(() async {
                     if (vidData[index].email != email) {
                       // FlutterAliplayer? fAliplayer
-                      context.read<PreviewPicNotifier>().reportContent(context, vidData[index], fAliplayer: vidData[index].fAliplayer, onCompleted: () {}, key: widget.interestKey);
+                      context.read<PreviewPicNotifier>().reportContent(
+                          context, vidData[index],
+                          fAliplayer: vidData[index].fAliplayer,
+                          onCompleted: () {},
+                          key: widget.interestKey);
                     } else {
                       if (_curIdx != -1) {
                         print('Vid Landing Page: pause $_curIdx');
@@ -309,7 +332,8 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                   Future.delayed(const Duration(milliseconds: 400), () {
                     try {
                       if (_curIdx != -1) {
-                        print('Vid Landing Page: pause $_curIdx ${vidData[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
+                        print(
+                            'Vid Landing Page: pause $_curIdx ${vidData[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
                         if (vidData[_curIdx].fAliplayer != null) {
                           vidData[_curIdx].fAliplayer?.pause();
                         } else {
@@ -335,7 +359,9 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                     child: Builder(builder: (context) {
                       return VidPlayerPage(
                         orientation: Orientation.portrait,
-                        playMode: (vidData[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
+                        playMode: (vidData[index].isApsara ?? false)
+                            ? ModeTypeAliPLayer.auth
+                            : ModeTypeAliPLayer.url,
                         dataSourceMap: map,
                         data: vidData[index],
                         height: MediaQuery.of(context).size.width * 9.0 / 16.0,
@@ -348,7 +374,8 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                           try {
                             if (_curIdx != -1) {
                               if (_curIdx != index) {
-                                print('Vid Landing Page: stop $_curIdx ${vidData[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
+                                print(
+                                    'Vid Landing Page: stop $_curIdx ${vidData[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
                                 if (vidData[_curIdx].fAliplayer != null) {
                                   vidData[_curIdx].fAliplayer?.stop();
                                 } else {
@@ -377,7 +404,8 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                             vidData[index].fAliplayer = main;
                             dataAli[index] = main;
                           });
-                          print('Vid Player1: after $index ${globalAliPlayer} : ${vidData[index].fAliplayer}');
+                          print(
+                              'Vid Player1: after $index ${globalAliPlayer} : ${vidData[index].fAliplayer}');
                         },
 
                         // fAliplayer: vidData?[index].fAliplayer,
@@ -390,16 +418,23 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                       notifier.checkConnection();
                     },
                     child: Container(
-                        decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                        decoration: BoxDecoration(
+                            color: kHyppeNotConnect,
+                            borderRadius: BorderRadius.circular(16)),
                         width: SizeConfig.screenWidth,
                         height: 250,
                         alignment: Alignment.center,
-                        child: CustomTextWidget(textToDisplay: notifier.language.couldntLoadVideo ?? 'Error')),
+                        child: CustomTextWidget(
+                            textToDisplay:
+                                notifier.language.couldntLoadVideo ?? 'Error')),
                   ),
           ),
-          SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
+          SharedPreference().readStorage(SpKeys.statusVerificationId) ==
+                      VERIFIED &&
                   (vidData[index].boosted.isEmpty) &&
-                  (vidData[index].reportedStatus != 'OWNED' && vidData[index].reportedStatus != 'BLURRED' && vidData[index].reportedStatus2 != 'BLURRED') &&
+                  (vidData[index].reportedStatus != 'OWNED' &&
+                      vidData[index].reportedStatus != 'BLURRED' &&
+                      vidData[index].reportedStatus2 != 'BLURRED') &&
                   vidData[index].email == email
               ? Container(
                   width: double.infinity,
@@ -409,24 +444,31 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                     marginBool: true,
                     contentData: vidData[index],
                     startState: () {
-                      SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                      SharedPreference()
+                          .writeStorage(SpKeys.isShowPopAds, true);
                     },
                     afterState: () {
-                      SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                      SharedPreference()
+                          .writeStorage(SpKeys.isShowPopAds, false);
                     },
                   ),
                 )
               : Container(),
-          vidData[index].email == SharedPreference().readStorage(SpKeys.email) && (vidData[index].reportedStatus == 'OWNED')
+          vidData[index].email ==
+                      SharedPreference().readStorage(SpKeys.email) &&
+                  (vidData[index].reportedStatus == 'OWNED')
               ? Padding(
                   padding: const EdgeInsets.only(bottom: 11.0),
                   child: ContentViolationWidget(
                     data: vidData[index],
-                    text: notifier.language.thisHyppeVidisSubjectToModeration ?? '',
+                    text: notifier.language.thisHyppeVidisSubjectToModeration ??
+                        '',
                   ),
                 )
               : Container(),
-          if (vidData[index].email == email && (vidData[index].boostCount ?? 0) >= 0 && (vidData[index].boosted.isNotEmpty))
+          if (vidData[index].email == email &&
+              (vidData[index].boostCount ?? 0) >= 0 &&
+              (vidData[index].boosted.isNotEmpty))
             Container(
               padding: const EdgeInsets.all(10),
               margin: EdgeInsets.only(bottom: 10),
@@ -447,7 +489,10 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                     padding: const EdgeInsets.only(left: 13),
                     child: Text(
                       "${vidData[index].boostJangkauan ?? '0'} ${notifier.language.reach}",
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          color: kHyppeTextLightPrimary),
                     ),
                   )
                 ],
@@ -474,12 +519,17 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                             : InkWell(
                                 child: CustomIconWidget(
                                   defaultColor: false,
-                                  color: (vidData[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
-                                  iconData: '${AssetPath.vectorPath}${(vidData[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                  color: (vidData[index].insight?.isPostLiked ??
+                                          false)
+                                      ? kHyppeRed
+                                      : kHyppeTextLightPrimary,
+                                  iconData:
+                                      '${AssetPath.vectorPath}${(vidData[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
                                   height: 28,
                                 ),
                                 onTap: () {
-                                  likeNotifier.likePost(context, vidData[index]);
+                                  likeNotifier.likePost(
+                                      context, vidData[index]);
                                 },
                               ),
                       ),
@@ -512,7 +562,10 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                         padding: const EdgeInsets.only(left: 21.0),
                         child: GestureDetector(
                           onTap: () {
-                            context.read<VidDetailNotifier>().createdDynamicLink(context, data: vidData[index]);
+                            context
+                                .read<VidDetailNotifier>()
+                                .createdDynamicLink(context,
+                                    data: vidData[index]);
                           },
                           child: const CustomIconWidget(
                             defaultColor: false,
@@ -522,13 +575,16 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                           ),
                         ),
                       ),
-                    if ((vidData[index].saleAmount ?? 0) > 0 && email != vidData[index].email)
+                    if ((vidData[index].saleAmount ?? 0) > 0 &&
+                        email != vidData[index].email)
                       Expanded(
                         child: GestureDetector(
                           onTap: () async {
                             await context.handleActionIsGuest(() async {
                               vidData[index].fAliplayer?.pause();
-                              await ShowBottomSheet.onBuyContent(context, data: vidData[index], fAliplayer: vidData[index].fAliplayer);
+                              await ShowBottomSheet.onBuyContent(context,
+                                  data: vidData[index],
+                                  fAliplayer: vidData[index].fAliplayer);
                             });
                           },
                           child: const Align(
@@ -550,15 +606,24 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                   children: [
                     Text(
                       "${vidData[index].insight?.likes}  ${notifier.language.like}",
-                      style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                      style: const TextStyle(
+                          color: kHyppeTextLightPrimary,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14),
                     ),
                     const Text(
                       " . ",
-                      style: TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.bold, fontSize: 20),
+                      style: TextStyle(
+                          color: kHyppeTextLightPrimary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20),
                     ),
                     Text(
                       " ${System().formatterNumber(vidData[index].insight?.views)}  ${notifier.language.views}",
-                      style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                      style: const TextStyle(
+                          color: kHyppeTextLightPrimary,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14),
                     ),
                   ],
                 ),
@@ -572,11 +637,20 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
             desc: "${vidData[index].description}",
             trimLines: 2,
             textAlign: TextAlign.start,
-            seeLess: ' ${notifier.language.seeLess}', // ${notifier2.translate.seeLess}',
-            seeMore: '  ${notifier.language.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
-            normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-            hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-            expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+            seeLess:
+                ' ${notifier.language.seeLess}', // ${notifier2.translate.seeLess}',
+            seeMore:
+                '  ${notifier.language.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+            normStyle:
+                const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
+            hrefStyle: Theme.of(context)
+                .textTheme
+                .titleSmall
+                ?.copyWith(color: kHyppePrimary),
+            expandStyle: Theme.of(context)
+                .textTheme
+                .titleSmall
+                ?.copyWith(color: Theme.of(context).colorScheme.primary),
           ),
           if (vidData[index].allowComments ?? true)
             GestureDetector(
@@ -605,22 +679,40 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                   child: ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: (vidData[index].comment?.length ?? 0) >= 2 ? 2 : 1,
+                    itemCount:
+                        (vidData[index].comment?.length ?? 0) >= 2 ? 2 : 1,
                     itemBuilder: (context, indexComment) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 6.0),
                         child: CustomNewDescContent(
                           // desc: "${vidData?.description}",
                           // email: vidData[index].comment?[indexComment].userComment?.email ?? '',
-                          username: vidData[index].comment?[indexComment].userComment?.username ?? '',
-                          desc: vidData[index].comment?[indexComment].txtMessages ?? '',
+                          username: vidData[index]
+                                  .comment?[indexComment]
+                                  .userComment
+                                  ?.username ??
+                              '',
+                          desc: vidData[index]
+                                  .comment?[indexComment]
+                                  .txtMessages ??
+                              '',
                           trimLines: 2,
                           textAlign: TextAlign.start,
-                          seeLess: ' ${notifier.language.seeLess}', // ${notifier2.translate.seeLess}',
-                          seeMore: ' ${notifier.language.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
-                          normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                          hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                          expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                          seeLess:
+                              ' ${notifier.language.seeLess}', // ${notifier2.translate.seeLess}',
+                          seeMore:
+                              ' ${notifier.language.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                          normStyle: const TextStyle(
+                              fontSize: 12, color: kHyppeTextLightPrimary),
+                          hrefStyle: Theme.of(context)
+                              .textTheme
+                              .titleSmall
+                              ?.copyWith(color: kHyppePrimary),
+                          expandStyle: Theme.of(context)
+                              .textTheme
+                              .titleSmall
+                              ?.copyWith(
+                                  color: Theme.of(context).colorScheme.primary),
                         ),
                       );
                     },
@@ -643,7 +735,8 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
     );
   }
 
-  Widget blurContentWidget(BuildContext context, LocalizationModelV2 lang, ContentData data) {
+  Widget blurContentWidget(
+      BuildContext context, LocalizationModelV2 lang, ContentData data) {
     return data.reportedStatus == 'BLURRED'
         ? Positioned.fill(
             child: Align(
@@ -659,7 +752,11 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                         defaultColor: false,
                         height: 30,
                       ),
-                      Text(lang.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                      Text(lang.sensitiveContent ?? 'Sensitive Content',
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600)),
                       Text("HyppeVid ${lang.contentContainsSensitiveMaterial}",
                           textAlign: TextAlign.center,
                           style: const TextStyle(
@@ -675,7 +772,8 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                         },
                         child: Container(
                           padding: const EdgeInsets.only(top: 8),
-                          margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
+                          margin: const EdgeInsets.only(
+                              bottom: 20, right: 8, left: 8),
                           width: SizeConfig.screenWidth,
                           decoration: const BoxDecoration(
                             border: Border(
@@ -687,7 +785,10 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                           ),
                           child: Text(
                             "${lang.see} HyppeVid",
-                            style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600),
                             textAlign: TextAlign.center,
                           ),
                         ),

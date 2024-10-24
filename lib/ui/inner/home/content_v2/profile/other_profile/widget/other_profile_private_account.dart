@@ -10,18 +10,30 @@ import 'package:provider/provider.dart';
 class OtherProfilePrivateAccount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'OtherProfilePrivateAccount');
+    FirebaseCrashlytics.instance
+        .setCustomKey('layout', 'OtherProfilePrivateAccount');
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.49,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const CustomIconWidget(iconData: "${AssetPath.vectorPath}private.svg"),
+          const CustomIconWidget(
+              iconData: "${AssetPath.vectorPath}private.svg"),
           SizedBox(height: 6 * SizeConfig.scaleDiagonal),
-          CustomTextWidget(textToDisplay: context.read<TranslateNotifierV2>().translate.privateAccount ?? '', textStyle: Theme.of(context).textTheme.bodyText2),
           CustomTextWidget(
-            textToDisplay: context.read<TranslateNotifierV2>().translate.followThisAccountToSeeTheirContents ?? '',
+              textToDisplay: context
+                      .read<TranslateNotifierV2>()
+                      .translate
+                      .privateAccount ??
+                  '',
+              textStyle: Theme.of(context).textTheme.bodyMedium),
+          CustomTextWidget(
+            textToDisplay: context
+                    .read<TranslateNotifierV2>()
+                    .translate
+                    .followThisAccountToSeeTheirContents ??
+                '',
             textStyle: TextStyle(
               fontSize: 12,
               color: Theme.of(context).colorScheme.secondary,

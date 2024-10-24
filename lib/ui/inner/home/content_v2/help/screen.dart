@@ -48,7 +48,7 @@ class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin {
         appBar: AppBar(
           leading: const BackButton(),
           title: CustomTextWidget(
-            textStyle: Theme.of(context).textTheme.subtitle1,
+            textStyle: Theme.of(context).textTheme.titleMedium,
             textToDisplay: '${notifier.translate.help}',
           ),
         ),
@@ -59,11 +59,15 @@ class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin {
             children: [
               CustomTextWidget(
                 textToDisplay: notifier.translate.helloCanIhelpyou ?? '',
-                textStyle: Theme.of(context).primaryTextTheme.bodyText1?.copyWith(fontWeight: FontWeight.bold),
+                textStyle: Theme.of(context)
+                    .primaryTextTheme
+                    .bodyLarge
+                    ?.copyWith(fontWeight: FontWeight.bold),
               ),
               CustomSearchBar(
                 hintText: notifier.translate.searchtopic,
-                contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: 16 * SizeConfig.scaleDiagonal),
                 onSubmitted: (value) {
                   notifier.getListOfFAQ(context, category: value);
                 },
@@ -71,7 +75,9 @@ class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin {
               if (!notifier.isLoading)
                 GestureDetector(
                   onTap: () async {
-                    Routing().move(Routes.ticketHistory, argument: TicketArgument(values: notifier.onProgressTicket));
+                    Routing().move(Routes.ticketHistory,
+                        argument:
+                            TicketArgument(values: notifier.onProgressTicket));
                   },
                   child: Container(
                     padding: const EdgeInsets.all(11),
@@ -89,8 +95,10 @@ class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin {
                         ),
                         tenPx,
                         CustomTextWidget(
-                          textToDisplay: notifier.translate.yourTicketIssue ?? '',
-                          textStyle: Theme.of(context).primaryTextTheme.caption,
+                          textToDisplay:
+                              notifier.translate.yourTicketIssue ?? '',
+                          textStyle:
+                              Theme.of(context).primaryTextTheme.bodySmall,
                           textAlign: TextAlign.start,
                         ),
                         const Spacer(),
@@ -103,8 +111,10 @@ class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin {
                 ),
               twentyFourPx,
               CustomTextWidget(
-                textToDisplay: notifier.translate.frequentlyAskedQuestions ?? '',
-                textStyle: Theme.of(context).primaryTextTheme.bodyText1?.copyWith(),
+                textToDisplay:
+                    notifier.translate.frequentlyAskedQuestions ?? '',
+                textStyle:
+                    Theme.of(context).primaryTextTheme.bodyLarge?.copyWith(),
               ),
               eightPx,
               Expanded(
@@ -114,22 +124,33 @@ class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin {
                           ? ListView.builder(
                               itemCount: notifier.listFAQ.length,
                               itemBuilder: (context, index) {
-                                for (var data in notifier.listFAQ[index].detail) {
+                                for (var data
+                                    in notifier.listFAQ[index].detail) {
                                   print('data details : ${data.toJson()}');
                                 }
 
                                 return GestureDetector(
                                     onTap: () {
-                                      Routing().move(Routes.faqDetail, argument: FAQArgument(details: notifier.listFAQ[index].detail));
+                                      Routing().move(Routes.faqDetail,
+                                          argument: FAQArgument(
+                                              details: notifier
+                                                  .listFAQ[index].detail));
                                     },
-                                    child: Container(width: double.infinity, margin: const EdgeInsets.only(top: 10, bottom: 10, right: 10), child: Text(notifier.listFAQ[index].kategori ?? '')));
+                                    child: Container(
+                                        width: double.infinity,
+                                        margin: const EdgeInsets.only(
+                                            top: 10, bottom: 10, right: 10),
+                                        child: Text(
+                                            notifier.listFAQ[index].kategori ??
+                                                '')));
                               })
                           : const NoResultFound()
                       : ListView.builder(
                           itemCount: 8,
                           itemBuilder: (context, index) {
                             return Container(
-                                margin: const EdgeInsets.only(bottom: 10, right: 10),
+                                margin: const EdgeInsets.only(
+                                    bottom: 10, right: 10),
                                 child: const CustomShimmer(
                                   width: double.infinity,
                                   height: 25,
@@ -147,7 +168,9 @@ class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin {
                       color: Colors.black.withOpacity(0.12),
                     ),
                     borderRadius: BorderRadius.circular(16),
-                    color: context.isDarkMode() ? Colors.black12 : const Color(0xffFBFBFB),
+                    color: context.isDarkMode()
+                        ? Colors.black12
+                        : const Color(0xffFBFBFB),
                   ),
                   child: Row(
                     children: [
@@ -157,33 +180,54 @@ class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin {
                       ),
                       fortyPx,
                       Expanded(
-                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          CustomTextWidget(
-                            textToDisplay: notifier.translate.stillNeedsHelp ?? '',
-                            maxLines: 2,
-                            textAlign: TextAlign.start,
-                          ),
-                          (notifier.onProgressTicket.length < 10 && !System().isGuest())
-                              ? CustomTextButton(
-                                  onPressed: () {
-                                    // notifier.navigateToBankAccount();
-                                    Routing().moveAndPop(Routes.supportTicket);
-                                  },
-                                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary)),
-                                  child: CustomTextWidget(
-                                    textToDisplay: notifier.translate.submitTicketIssue ?? '',
-                                    textStyle: Theme.of(context).textTheme.button?.copyWith(color: Colors.white),
-                                  ),
-                                )
-                              : CustomTextButton(
-                                  onPressed: () {},
-                                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppeLightInactive1)),
-                                  child: CustomTextWidget(
-                                    textToDisplay: notifier.translate.submitTicketIssue ?? '',
-                                    textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeGrey),
-                                  ),
-                                ),
-                        ]),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CustomTextWidget(
+                                textToDisplay:
+                                    notifier.translate.stillNeedsHelp ?? '',
+                                maxLines: 2,
+                                textAlign: TextAlign.start,
+                              ),
+                              (notifier.onProgressTicket.length < 10 &&
+                                      !System().isGuest())
+                                  ? CustomTextButton(
+                                      onPressed: () {
+                                        // notifier.navigateToBankAccount();
+                                        Routing()
+                                            .moveAndPop(Routes.supportTicket);
+                                      },
+                                      style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  kHyppePrimary)),
+                                      child: CustomTextWidget(
+                                        textToDisplay: notifier
+                                                .translate.submitTicketIssue ??
+                                            '',
+                                        textStyle: Theme.of(context)
+                                            .textTheme
+                                            .labelLarge
+                                            ?.copyWith(color: Colors.white),
+                                      ),
+                                    )
+                                  : CustomTextButton(
+                                      onPressed: () {},
+                                      style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  kHyppeLightInactive1)),
+                                      child: CustomTextWidget(
+                                        textToDisplay: notifier
+                                                .translate.submitTicketIssue ??
+                                            '',
+                                        textStyle: Theme.of(context)
+                                            .textTheme
+                                            .labelLarge
+                                            ?.copyWith(color: kHyppeGrey),
+                                      ),
+                                    ),
+                            ]),
                       ),
                     ],
                   ),

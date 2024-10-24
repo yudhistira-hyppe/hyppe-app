@@ -68,7 +68,8 @@ class _OnListWatchersState extends State<OnListWatchers> {
                     alignment: Alignment.center,
                     child: CustomTextWidget(
                       textToDisplay: language.viewerList ?? 'List Penonton',
-                      textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                      textStyle: const TextStyle(
+                          fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                   )
                 ],
@@ -88,7 +89,8 @@ class _OnListWatchersState extends State<OnListWatchers> {
     );
   }
 
-  Widget watcherItem(ViewersLiveModel watcher, int index, LocalizationModelV2 language, StreamerNotifier notifier) {
+  Widget watcherItem(ViewersLiveModel watcher, int index,
+      LocalizationModelV2 language, StreamerNotifier notifier) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -98,7 +100,8 @@ class _OnListWatchersState extends State<OnListWatchers> {
         children: [
           CustomTextWidget(
             textToDisplay: '${index + 1}',
-            textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            textStyle:
+                const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
           ),
           sixteenPx,
           Flexible(
@@ -108,7 +111,8 @@ class _OnListWatchersState extends State<OnListWatchers> {
                   width: 36,
                   height: 36,
                   following: true,
-                  imageUrl: System().showUserPicture(watcher.avatar?.mediaEndpoint),
+                  imageUrl:
+                      System().showUserPicture(watcher.avatar?.mediaEndpoint),
                 ),
                 twelvePx,
                 Expanded(
@@ -122,15 +126,21 @@ class _OnListWatchersState extends State<OnListWatchers> {
                           CustomTextWidget(
                             textAlign: TextAlign.left,
                             textToDisplay: watcher.username ?? '',
-                            textStyle: context.getTextTheme().bodyText2?.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                ),
+                            textStyle:
+                                context.getTextTheme().bodyMedium?.copyWith(
+                                      fontWeight: FontWeight.w700,
+                                    ),
                           ),
                           fourPx,
                           CustomTextWidget(
                             textAlign: TextAlign.left,
                             textToDisplay: watcher.fullName ?? '',
-                            textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w400, color: kHyppeBurem),
+                            textStyle: context
+                                .getTextTheme()
+                                .bodySmall
+                                ?.copyWith(
+                                    fontWeight: FontWeight.w400,
+                                    color: kHyppeBurem),
                           ),
                         ],
                       ),
@@ -141,21 +151,35 @@ class _OnListWatchersState extends State<OnListWatchers> {
                         buttonStyle: ButtonStyle(
                           backgroundColor: (watcher.following ?? false)
                               ? null
-                              : (notifier.userName == notifier.audienceProfile.username)
+                              : (notifier.userName ==
+                                      notifier.audienceProfile.username)
                                   ? null
-                                  : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                  : MaterialStateProperty.all(
+                                      Theme.of(context).colorScheme.primary),
                         ),
                         function: notifier.isCheckLoading
                             ? null
-                            : (notifier.userName == notifier.audienceProfile.username)
+                            : (notifier.userName ==
+                                    notifier.audienceProfile.username)
                                 ? null
                                 : () {
-                                    if (notifier.statusFollowing == StatusFollowing.none || notifier.statusFollowing == StatusFollowing.rejected) {
-                                      notifier.followUser(context, watcher.email, idMediaStreaming: watcher.sId).then((value) {
+                                    if (notifier.statusFollowing ==
+                                            StatusFollowing.none ||
+                                        notifier.statusFollowing ==
+                                            StatusFollowing.rejected) {
+                                      notifier
+                                          .followUser(context, watcher.email,
+                                              idMediaStreaming: watcher.sId)
+                                          .then((value) {
                                         watcher.following = true;
                                       });
-                                    } else if (notifier.statusFollowing == StatusFollowing.following) {
-                                      notifier.followUser(context, watcher.email, isUnFollow: true, idMediaStreaming: watcher.sId).then((value) {
+                                    } else if (notifier.statusFollowing ==
+                                        StatusFollowing.following) {
+                                      notifier
+                                          .followUser(context, watcher.email,
+                                              isUnFollow: true,
+                                              idMediaStreaming: watcher.sId)
+                                          .then((value) {
                                         watcher.following = false;
                                       });
                                     }
@@ -163,9 +187,16 @@ class _OnListWatchersState extends State<OnListWatchers> {
                         child: notifier.isCheckLoading
                             ? const CustomLoading()
                             : CustomTextWidget(
-                                textToDisplay: (watcher.following ?? false) ? language.following ?? 'following' : language.follow ?? 'follow',
-                                textStyle: Theme.of(context).textTheme.labelMedium?.copyWith(
-                                      color: (watcher.following ?? false) ? kHyppeGrey : kHyppeLightButtonText,
+                                textToDisplay: (watcher.following ?? false)
+                                    ? language.following ?? 'following'
+                                    : language.follow ?? 'follow',
+                                textStyle: Theme.of(context)
+                                    .textTheme
+                                    .labelMedium
+                                    ?.copyWith(
+                                      color: (watcher.following ?? false)
+                                          ? kHyppeGrey
+                                          : kHyppeLightButtonText,
                                     ),
                               ),
                       ),

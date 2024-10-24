@@ -21,13 +21,16 @@ class VerificationIDStepSupportingDocsPreview extends StatefulWidget {
   const VerificationIDStepSupportingDocsPreview({Key? key}) : super(key: key);
 
   @override
-  State<VerificationIDStepSupportingDocsPreview> createState() => _VerificationIDStepSupportingDocsPreviewState();
+  State<VerificationIDStepSupportingDocsPreview> createState() =>
+      _VerificationIDStepSupportingDocsPreviewState();
 }
 
-class _VerificationIDStepSupportingDocsPreviewState extends State<VerificationIDStepSupportingDocsPreview> {
+class _VerificationIDStepSupportingDocsPreviewState
+    extends State<VerificationIDStepSupportingDocsPreview> {
   @override
   void initState() {
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationIDStepSupportingDocsPreview');
+    FirebaseCrashlytics.instance
+        .setCustomKey('layout', 'VerificationIDStepSupportingDocsPreview');
     super.initState();
   }
 
@@ -43,7 +46,9 @@ class _VerificationIDStepSupportingDocsPreviewState extends State<VerificationID
         },
         child: Scaffold(
           appBar: AppBar(
-            leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
+            leadingWidth: 50 *
+                (SizeConfig.screenWidth ?? context.getWidth()) /
+                SizeWidget.baseWidthXD,
             leading: CustomIconButtonWidget(
               defaultColor: true,
               iconData: "${AssetPath.vectorPath}back-arrow.svg",
@@ -52,7 +57,10 @@ class _VerificationIDStepSupportingDocsPreviewState extends State<VerificationID
             titleSpacing: 0,
             title: CustomTextWidget(
               textToDisplay: notifier.language.supportDoc ?? '',
-              textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
+              textStyle: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(fontSize: 18),
             ),
             centerTitle: false,
             // actions: [
@@ -72,31 +80,42 @@ class _VerificationIDStepSupportingDocsPreviewState extends State<VerificationID
                 itemCount: notifier.pickedSupportingDocs?.length ?? 0,
                 itemBuilder: (context, index) {
                   var subtitle = '';
-                  var lenght = System.getFileSizeDescription(notifier.pickedSupportingDocs?[index].lengthSync() ?? 0);
+                  var lenght = System.getFileSizeDescription(
+                      notifier.pickedSupportingDocs?[index].lengthSync() ?? 0);
                   subtitle = lenght;
 
                   return FutureBuilder(
-                      future: getDate(notifier.pickedSupportingDocs?[index] ?? File('')),
+                      future: getDate(
+                          notifier.pickedSupportingDocs?[index] ?? File('')),
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
                         return ListTile(
-                          title: Text(basename(notifier.pickedSupportingDocs?[index].path ?? '')),
+                          title: Text(basename(
+                              notifier.pickedSupportingDocs?[index].path ??
+                                  '')),
                           subtitle: Padding(
                             padding: const EdgeInsets.only(top: 8.0),
                             child: Text("$subtitle / ${snapshot.data}"),
                           ),
-                          leading: notifier.pickedSupportingDocs?[index] != null ? Image.file(notifier.pickedSupportingDocs![index]) : null,
+                          leading: notifier.pickedSupportingDocs?[index] != null
+                              ? Image.file(
+                                  notifier.pickedSupportingDocs![index])
+                              : null,
                           trailing: GestureDetector(
                             onTap: () {
                               setState(() {
                                 notifier.pickedSupportingDocs?.removeAt(index);
                               });
-                              if (notifier.pickedSupportingDocs?.isEmpty ?? [].isEmpty) {
+                              if (notifier.pickedSupportingDocs?.isEmpty ??
+                                  [].isEmpty) {
                                 notifier.retryCameraSupport(context);
                               }
                             },
                             child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                                decoration: BoxDecoration(border: Border.all(color: kHyppePrimary), borderRadius: BorderRadius.circular(8)),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 3),
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: kHyppePrimary),
+                                    borderRadius: BorderRadius.circular(8)),
                                 child: Text(
                                   notifier.language.delete ?? '',
                                   style: const TextStyle(color: kHyppePrimary),
@@ -122,7 +141,8 @@ class _VerificationIDStepSupportingDocsPreviewState extends State<VerificationID
                     children: [
                       Text(
                         notifier.language.addDocument ?? 'Add Document',
-                        style: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: kHyppePrimary, fontWeight: FontWeight.bold),
                       ),
                       const Icon(
                         Icons.add,
@@ -134,7 +154,8 @@ class _VerificationIDStepSupportingDocsPreviewState extends State<VerificationID
               )
             ],
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
           floatingActionButton: Container(
             color: kHyppeLightBackground,
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
@@ -148,10 +169,14 @@ class _VerificationIDStepSupportingDocsPreviewState extends State<VerificationID
                 // }
               },
               buttonStyle: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                foregroundColor: MaterialStateProperty.all(
+                    Theme.of(context).colorScheme.primary),
+                shadowColor: MaterialStateProperty.all(
+                    Theme.of(context).colorScheme.primary),
+                overlayColor: MaterialStateProperty.all(
+                    Theme.of(context).colorScheme.primary),
+                backgroundColor: MaterialStateProperty.all(
+                    Theme.of(context).colorScheme.primary),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -162,13 +187,15 @@ class _VerificationIDStepSupportingDocsPreviewState extends State<VerificationID
                       padding: const EdgeInsets.all(5),
                       height: 30,
                       width: 30,
-                      child: const CircularProgressIndicator(color: Colors.white),
+                      child:
+                          const CircularProgressIndicator(color: Colors.white),
                     ),
                   const SizedBox(width: 10),
                   CustomTextWidget(
                     // textToDisplay: notifier.language.upload ?? '',
                     textToDisplay: notifier.language.next ?? '',
-                    textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                    textStyle: textTheme.labelLarge
+                        ?.copyWith(color: kHyppeLightButtonText),
                   ),
                 ],
               ),

@@ -51,16 +51,22 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
         },
         child: Scaffold(
           appBar: AppBar(
-            leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
+            leadingWidth: 50 *
+                (SizeConfig.screenWidth ?? context.getWidth()) /
+                SizeWidget.baseWidthXD,
             leading: CustomIconButtonWidget(
               defaultColor: true,
               iconData: "${AssetPath.vectorPath}back-arrow.svg",
-              onPressed: () => Routing().moveAndRemoveUntil(Routes.lobby, Routes.lobby),
+              onPressed: () =>
+                  Routing().moveAndRemoveUntil(Routes.lobby, Routes.lobby),
             ),
             titleSpacing: 0,
             title: CustomTextWidget(
               textToDisplay: notifier.language.payment ?? '',
-              textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
+              textStyle: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(fontSize: 18),
             ),
             centerTitle: false,
           ),
@@ -71,33 +77,50 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
                     child: CircularProgressIndicator(),
                   )
                 : SingleChildScrollView(
-                    padding: const EdgeInsets.only(top: 24, left: 16, right: 16),
+                    padding:
+                        const EdgeInsets.only(top: 24, left: 16, right: 16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CustomTextWidget(textToDisplay: notifier.language.paymentBefore ?? '', textStyle: textTheme.bodyMedium),
+                        CustomTextWidget(
+                            textToDisplay:
+                                notifier.language.paymentBefore ?? '',
+                            textStyle: textTheme.bodyMedium),
                         const SizedBox(height: 5),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             CustomTextWidget(
                               // textToDisplay: "Saturday, 15 Jul 2022 01:50 WIB",
-                              textToDisplay:
-                                  DateFormat('EEEE, dd MMM yyyy HH:mm', notifier.language.localeDatetime).format(DateTime.parse(notifier.paymentMethodNotifier.postResponse?.expiredtimeva ?? '')),
+                              textToDisplay: DateFormat(
+                                      'EEEE, dd MMM yyyy HH:mm',
+                                      notifier.language.localeDatetime)
+                                  .format(DateTime.parse(notifier
+                                          .paymentMethodNotifier
+                                          .postResponse
+                                          ?.expiredtimeva ??
+                                      '')),
                               textStyle: textTheme.bodyMedium,
                             ),
                             TweenAnimationBuilder<Duration>(
                                 duration: const Duration(minutes: 15),
-                                tween: Tween(begin: const Duration(minutes: 15), end: Duration.zero),
+                                tween: Tween(
+                                    begin: const Duration(minutes: 15),
+                                    end: Duration.zero),
                                 onEnd: () {
                                   // notifier.backHome();
                                 },
-                                builder: (BuildContext context, Duration value, Widget? child) {
+                                builder: (BuildContext context, Duration value,
+                                    Widget? child) {
                                   final minutes = value.inMinutes;
                                   final seconds = value.inSeconds % 60;
                                   return CustomTextWidget(
-                                    textToDisplay: '( ${minutes < 10 ? '0' : ''}$minutes: ${seconds < 10 ? '0' : ''}$seconds )',
-                                    textStyle: textTheme.bodyLarge?.copyWith(color: const Color.fromRGBO(201, 29, 29, 1), fontWeight: FontWeight.bold),
+                                    textToDisplay:
+                                        '( ${minutes < 10 ? '0' : ''}$minutes: ${seconds < 10 ? '0' : ''}$seconds )',
+                                    textStyle: textTheme.bodyLarge?.copyWith(
+                                        color: const Color.fromRGBO(
+                                            201, 29, 29, 1),
+                                        fontWeight: FontWeight.bold),
                                   );
                                 }),
                             // CustomTextWidget(
@@ -145,28 +168,61 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              CustomTextWidget(textToDisplay: notifier.paymentMethodNotifier.postResponse?.bank ?? '', textStyle: textTheme.bodyMedium),
-                              Image(width: 77 * SizeConfig.scaleDiagonal, image: NetworkImage(notifier.bankData?.bankIcon ?? ''))
+                              CustomTextWidget(
+                                  textToDisplay: notifier.paymentMethodNotifier
+                                          .postResponse?.bank ??
+                                      '',
+                                  textStyle: textTheme.bodyMedium),
+                              Image(
+                                  width: 77 * SizeConfig.scaleDiagonal,
+                                  image: NetworkImage(
+                                      notifier.bankData?.bankIcon ?? ''))
                             ],
                           ),
                         ),
                         Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                            decoration: BoxDecoration(color: Theme.of(context).appBarTheme.backgroundColor, borderRadius: const BorderRadius.all(Radius.circular(8))),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 8),
+                            decoration: BoxDecoration(
+                                color: Theme.of(context)
+                                    .appBarTheme
+                                    .backgroundColor,
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(8))),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(notifier.paymentMethodNotifier.postResponse?.nova ?? ''),
+                                Text(notifier.paymentMethodNotifier.postResponse
+                                        ?.nova ??
+                                    ''),
                                 GestureDetector(
                                   onTap: () {
-                                    Clipboard.setData(ClipboardData(text: notifier.paymentMethodNotifier.postResponse?.nova ?? ''));
-                                    ShowBottomSheet().onShowColouredSheet(_, notifier.language.vaCopyToClipboard ?? '', maxLines: 2, color: kHyppeTextLightPrimary);
+                                    Clipboard.setData(ClipboardData(
+                                        text: notifier.paymentMethodNotifier
+                                                .postResponse?.nova ??
+                                            ''));
+                                    ShowBottomSheet().onShowColouredSheet(
+                                        _,
+                                        notifier.language.vaCopyToClipboard ??
+                                            '',
+                                        maxLines: 2,
+                                        color: kHyppeTextLightPrimary);
                                     // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(notifier.language.vaCopyToClipboard ?? '')));
                                   },
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 8),
-                                    decoration: BoxDecoration(color: Theme.of(context).colorScheme.primary, borderRadius: const BorderRadius.all(Radius.circular(50))),
-                                    child: CustomTextWidget(textToDisplay: notifier.language.copy ?? 'copy', textStyle: textTheme.titleSmall?.copyWith(color: Colors.white)),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 22, vertical: 8),
+                                    decoration: BoxDecoration(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(50))),
+                                    child: CustomTextWidget(
+                                        textToDisplay:
+                                            notifier.language.copy ?? 'copy',
+                                        textStyle: textTheme.titleSmall
+                                            ?.copyWith(color: Colors.white)),
                                   ),
                                 ),
                               ],
@@ -174,47 +230,76 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
                         const SizedBox(
                           height: 16,
                         ),
-                        CustomTextWidget(textToDisplay: notifier.language.totalPayment ?? 'total payment', textStyle: textTheme.bodyMedium?.copyWith(color: const Color.fromRGBO(115, 115, 115, 1))),
+                        CustomTextWidget(
+                            textToDisplay: notifier.language.totalPayment ??
+                                'total payment',
+                            textStyle: textTheme.bodyMedium?.copyWith(
+                                color: const Color.fromRGBO(115, 115, 115, 1))),
                         const SizedBox(
                           height: 5,
                         ),
-                        CustomTextWidget(textToDisplay: System().currencyFormat(amount: notifier.paymentMethodNotifier.postResponse?.totalamount), textStyle: textTheme.titleMedium),
+                        CustomTextWidget(
+                            textToDisplay: System().currencyFormat(
+                                amount: notifier.paymentMethodNotifier
+                                    .postResponse?.totalamount),
+                            textStyle: textTheme.titleMedium),
                         const SizedBox(
                           height: 32,
                         ),
-                        CustomTextWidget(textToDisplay: notifier.language.seePaymentInstruction ?? '', textStyle: textTheme.bodyMedium?.copyWith(color: const Color.fromRGBO(115, 115, 115, 1))),
-                        expansionLists(context, textTheme, 'Via ATM', notifier.bankData?.atm ?? ''),
-                        expansionLists(context, textTheme, 'Via m-Banking', notifier.bankData?.mobileBanking ?? ''),
-                        expansionLists(context, textTheme, 'Via Internet Banking', notifier.bankData?.internetBanking ?? ''),
+                        CustomTextWidget(
+                            textToDisplay:
+                                notifier.language.seePaymentInstruction ?? '',
+                            textStyle: textTheme.bodyMedium?.copyWith(
+                                color: const Color.fromRGBO(115, 115, 115, 1))),
+                        expansionLists(context, textTheme, 'Via ATM',
+                            notifier.bankData?.atm ?? ''),
+                        expansionLists(context, textTheme, 'Via m-Banking',
+                            notifier.bankData?.mobileBanking ?? ''),
+                        expansionLists(
+                            context,
+                            textTheme,
+                            'Via Internet Banking',
+                            notifier.bankData?.internetBanking ?? ''),
                         Container(
                           padding: const EdgeInsets.symmetric(vertical: 20),
-                          color: Theme.of(context).backgroundColor,
+                          color: Theme.of(context).appBarTheme.backgroundColor,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               CustomElevatedButton(
                                 width: SizeConfig.screenWidth,
                                 height: 44.0 * SizeConfig.scaleDiagonal,
-                                function: () => Routing().moveAndRemoveUntil(Routes.lobby, Routes.lobby),
+                                function: () => Routing().moveAndRemoveUntil(
+                                    Routes.lobby, Routes.lobby),
                                 child: CustomTextWidget(
-                                  textToDisplay: notifier.language.backToHome ?? '',
-                                  textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                                  textToDisplay:
+                                      notifier.language.backToHome ?? '',
+                                  textStyle: textTheme.labelLarge
+                                      ?.copyWith(color: kHyppeLightButtonText),
                                 ),
                                 buttonStyle: ButtonStyle(
-                                  foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                                  shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                                  overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                  foregroundColor: MaterialStateProperty.all(
+                                      Theme.of(context).colorScheme.primary),
+                                  shadowColor: MaterialStateProperty.all(
+                                      Theme.of(context).colorScheme.primary),
+                                  overlayColor: MaterialStateProperty.all(
+                                      Theme.of(context).colorScheme.primary),
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Theme.of(context).colorScheme.primary),
                                 ),
                               ),
                               const SizedBox(height: 10),
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 16),
                                 child: GestureDetector(
-                                  onTap: () => Routing().move(Routes.transaction),
+                                  onTap: () =>
+                                      Routing().move(Routes.transaction),
                                   child: Text(
                                     notifier.language.checkPaymentStatus ?? '',
-                                    style: textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primary),
+                                    style: textTheme.titleMedium?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
                                   ),
                                 ),
                               )
@@ -230,7 +315,8 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
     );
   }
 
-  Widget expansionLists(BuildContext context, TextTheme textTheme, String title, String body) {
+  Widget expansionLists(
+      BuildContext context, TextTheme textTheme, String title, String body) {
     if (body == '') {
       return Container();
     } else {
@@ -246,11 +332,19 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
         children: <Widget>[
           Container(
             padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(color: Theme.of(context).appBarTheme.backgroundColor, borderRadius: const BorderRadius.all(Radius.circular(8))),
+            decoration: BoxDecoration(
+                color: Theme.of(context).appBarTheme.backgroundColor,
+                borderRadius: const BorderRadius.all(Radius.circular(8))),
             child: Html(
                 data: body,
-                style: {"a": Style(color: kHyppePrimary, textDecoration: TextDecoration.underline, textDecorationThickness: 0)},
-                onLinkTap: (String? url, Map<String, String> attributes, element) async {
+                style: {
+                  "a": Style(
+                      color: kHyppePrimary,
+                      textDecoration: TextDecoration.underline,
+                      textDecorationThickness: 0)
+                },
+                onLinkTap: (String? url, Map<String, String> attributes,
+                    element) async {
                   try {
                     if (await canLaunchUrl(Uri.parse(url ?? ''))) {
                       await launchUrl(

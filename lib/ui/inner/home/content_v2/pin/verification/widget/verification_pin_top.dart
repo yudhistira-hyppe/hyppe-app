@@ -22,7 +22,6 @@ class VerificationPinTop extends StatefulWidget {
 }
 
 class _VerificationPinTopState extends State<VerificationPinTop> {
-
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationPinTop');
@@ -47,7 +46,7 @@ class _VerificationPinTopState extends State<VerificationPinTop> {
               children: [
                 Expanded(
                   child: CustomTextWidget(
-                    textStyle: Theme.of(context).textTheme.bodyText2,
+                    textStyle: Theme.of(context).textTheme.bodyMedium,
                     textToDisplay: "${notifier2.translate.pinTopText2} $email",
                     maxLines: 9,
                   ),
@@ -62,7 +61,8 @@ class _VerificationPinTopState extends State<VerificationPinTop> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CustomTextWidget(
-                textStyle: Theme.of(context).textTheme.caption?.copyWith(color: context.isDarkMode() ? Colors.white : Colors.black),
+                textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: context.isDarkMode() ? Colors.white : Colors.black),
                 textToDisplay: notifier2.translate.didntReceiveTheCode ?? '',
               ),
               fourPx,
@@ -83,22 +83,32 @@ class _VerificationPinTopState extends State<VerificationPinTop> {
                 textAlign: TextAlign.center,
                 text: TextSpan(children: [
                   TextSpan(
-                    text: "${notifier2.translate.thisPageWillAutomaticallyCloseIn}",
-                    style: Theme.of(context).textTheme.bodyText1,
+                    text:
+                        "${notifier2.translate.thisPageWillAutomaticallyCloseIn}",
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
                   WidgetSpan(
                     child: TweenAnimationBuilder<Duration>(
                         duration: const Duration(minutes: 10),
-                        tween: Tween(begin: const Duration(minutes: 10), end: Duration.zero),
+                        tween: Tween(
+                            begin: const Duration(minutes: 10),
+                            end: Duration.zero),
                         onEnd: () {
                           notifier.backHome();
                         },
-                        builder: (BuildContext context, Duration value, Widget? child) {
+                        builder: (BuildContext context, Duration value,
+                            Widget? child) {
                           final minutes = value.inMinutes;
                           final seconds = value.inSeconds % 60;
                           return CustomTextWidget(
-                            textToDisplay: ' ${minutes < 10 ? '0' : ''}$minutes: ${seconds < 10 ? '0' : ''}$seconds',
-                            textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
+                            textToDisplay:
+                                ' ${minutes < 10 ? '0' : ''}$minutes: ${seconds < 10 ? '0' : ''}$seconds',
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(
+                                    color: kHyppePrimary,
+                                    fontWeight: FontWeight.bold),
                           );
                         }),
                   ),

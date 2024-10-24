@@ -23,13 +23,15 @@ import '../../../constant/widget/icon_button_widget.dart';
 
 class DetailHashtagScreen extends StatefulWidget {
   final HashtagArgument argument;
-  const DetailHashtagScreen({Key? key, required this.argument}) : super(key: key);
+  const DetailHashtagScreen({Key? key, required this.argument})
+      : super(key: key);
 
   @override
   State<DetailHashtagScreen> createState() => _DetailHashtagScreenState();
 }
 
-class _DetailHashtagScreenState extends State<DetailHashtagScreen> with RouteAware, AfterFirstLayoutMixin {
+class _DetailHashtagScreenState extends State<DetailHashtagScreen>
+    with RouteAware, AfterFirstLayoutMixin {
   final ScrollController _scrollController = ScrollController();
   // final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
   double heightTab = 0;
@@ -69,7 +71,8 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen> with RouteAwa
 
   @override
   void didChangeDependencies() {
-    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    CustomRouteObserver.routeObserver
+        .subscribe(this, ModalRoute.of(context) as PageRoute);
     super.didChangeDependencies();
   }
 
@@ -130,8 +133,14 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen> with RouteAwa
           ),
           titleSpacing: 0,
           title: CustomTextWidget(
-            textToDisplay: widget.argument.isTitle ? (context.read<SearchNotifier>().language.popularHashtag ?? 'Popular Hashtag') : ('#${widget.argument.hashtag.tag}'),
-            textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700),
+            textToDisplay: widget.argument.isTitle
+                ? (context.read<SearchNotifier>().language.popularHashtag ??
+                    'Popular Hashtag')
+                : ('#${widget.argument.hashtag.tag}'),
+            textStyle: context
+                .getTextTheme()
+                .bodyLarge
+                ?.copyWith(fontWeight: FontWeight.w700),
           ),
         ),
         body: SafeArea(
@@ -139,7 +148,10 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen> with RouteAwa
               ? OfflineMode(
                   function: () {
                     notifier.checkConnection();
-                    notifier.getDetailHashtag(context, widget.argument.hashtag.tag?.replaceAll(' ', '') ?? ' ');
+                    notifier.getDetailHashtag(
+                        context,
+                        widget.argument.hashtag.tag?.replaceAll(' ', '') ??
+                            ' ');
                   },
                 )
               : Stack(
@@ -156,7 +168,8 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen> with RouteAwa
                               }
                             },
                             child: Container(
-                              padding: const EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 12),
+                              padding: const EdgeInsets.only(
+                                  left: 16, top: 16, right: 16, bottom: 12),
                               child: Column(
                                 children: [
                                   !notifier.loadTagDetail
@@ -167,12 +180,17 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen> with RouteAwa
                                                 imageUrl: notifier.tagImageMain,
                                                 memCacheWidth: 70,
                                                 memCacheHeight: 70,
-                                                imageBuilder: (_, imageProvider) {
+                                                imageBuilder:
+                                                    (_, imageProvider) {
                                                   return Container(
                                                     width: 56,
                                                     height: 56,
                                                     decoration: BoxDecoration(
-                                                      borderRadius: const BorderRadius.all(Radius.circular(28)),
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                              .all(
+                                                              Radius.circular(
+                                                                  28)),
                                                       image: DecorationImage(
                                                         fit: BoxFit.contain,
                                                         image: imageProvider,
@@ -187,7 +205,8 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen> with RouteAwa
                                                     decoration: BoxDecoration(
                                                       image: DecorationImage(
                                                         fit: BoxFit.contain,
-                                                        image: const AssetImage('${AssetPath.pngPath}default_hashtag.png'),
+                                                        image: const AssetImage(
+                                                            '${AssetPath.pngPath}default_hashtag.png'),
                                                       ),
                                                     ),
                                                   );
@@ -198,7 +217,8 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen> with RouteAwa
                                                   decoration: BoxDecoration(
                                                     image: DecorationImage(
                                                       fit: BoxFit.contain,
-                                                      image: const AssetImage('${AssetPath.pngPath}default_hashtag.png'),
+                                                      image: const AssetImage(
+                                                          '${AssetPath.pngPath}default_hashtag.png'),
                                                     ),
                                                   ),
                                                 ),
@@ -207,18 +227,31 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen> with RouteAwa
                                             twelvePx,
                                             Expanded(
                                               child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   CustomTextWidget(
-                                                    textToDisplay: '#${widget.argument.hashtag.tag}',
-                                                    textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700, color: context.getColorScheme().onBackground),
+                                                    textToDisplay:
+                                                        '#${widget.argument.hashtag.tag}',
+                                                    textStyle: context
+                                                        .getTextTheme()
+                                                        .bodyLarge
+                                                        ?.copyWith(
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                            color: context
+                                                                .getColorScheme()
+                                                                .onBackground),
                                                     textAlign: TextAlign.start,
                                                   ),
                                                   fourPx,
                                                   Text(
                                                     "${notifier.countTag} ${notifier.language.posts}",
-                                                    style: const TextStyle(fontSize: 12, color: kHyppeGrey),
+                                                    style: const TextStyle(
+                                                        fontSize: 12,
+                                                        color: kHyppeGrey),
                                                   )
                                                 ],
                                               ),
@@ -226,9 +259,11 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen> with RouteAwa
                                           ],
                                         )
                                       : Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 16),
                                           child: Row(
-                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
                                             children: [
                                               CustomShimmer(
                                                 height: 50,

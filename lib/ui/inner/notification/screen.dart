@@ -19,7 +19,8 @@ class NotificationScreen extends StatefulWidget {
   _NotificationScreenState createState() => _NotificationScreenState();
 }
 
-class _NotificationScreenState extends State<NotificationScreen> with AfterFirstLayoutMixin {
+class _NotificationScreenState extends State<NotificationScreen>
+    with AfterFirstLayoutMixin {
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'NotificationScreen');
@@ -38,7 +39,8 @@ class _NotificationScreenState extends State<NotificationScreen> with AfterFirst
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    final error = context.select((ErrorService value) => value.getError(ErrorType.notification));
+    final error = context
+        .select((ErrorService value) => value.getError(ErrorType.notification));
 
     return Consumer<NotificationNotifier>(
       builder: (_, notifier, __) => WillPopScope(
@@ -54,8 +56,12 @@ class _NotificationScreenState extends State<NotificationScreen> with AfterFirst
                 padding: EdgeInsets.only(left: 15 * SizeConfig.scaleDiagonal),
                 width: SizeConfig.screenWidth,
                 child: CustomTextWidget(
-                  textToDisplay: notifier.language.notification ?? 'notification',
-                  textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontWeight: FontWeight.bold),
+                  textToDisplay:
+                      notifier.language.notification ?? 'notification',
+                  textStyle: Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(fontWeight: FontWeight.bold),
                 ),
                 alignment: Alignment.centerLeft,
               ),
@@ -73,9 +79,13 @@ class _NotificationScreenState extends State<NotificationScreen> with AfterFirst
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) => GestureDetector(
                     onTap: () {
-                      notifier.screen = notifier.listScreen.keys.elementAt(index);
-                      notifier.pageIndex = notifier.listScreen.keys.toList().indexOf(notifier.screen ?? Container());
-                      notifier.getNotifications(context, reload: true, eventTypes: notifier.eventType(index));
+                      notifier.screen =
+                          notifier.listScreen.keys.elementAt(index);
+                      notifier.pageIndex = notifier.listScreen.keys
+                          .toList()
+                          .indexOf(notifier.screen ?? Container());
+                      notifier.getNotifications(context,
+                          reload: true, eventTypes: notifier.eventType(index));
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -83,40 +93,63 @@ class _NotificationScreenState extends State<NotificationScreen> with AfterFirst
                         border: Border(
                           bottom: BorderSide(
                             width: 2,
-                            color: notifier.listScreen.keys.elementAt(index) == notifier.screen ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.background,
+                            color: notifier.listScreen.keys.elementAt(index) ==
+                                    notifier.screen
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(context).colorScheme.background,
                           ),
                         ),
                       ),
                       child: Padding(
                         padding: EdgeInsets.only(
                           top: 14 * SizeConfig.scaleDiagonal,
-                          left: (index == 0 ? 23 : 15) * SizeConfig.scaleDiagonal,
-                          right: (index == 0 ? 23 : 15) * SizeConfig.scaleDiagonal,
+                          left:
+                              (index == 0 ? 23 : 15) * SizeConfig.scaleDiagonal,
+                          right:
+                              (index == 0 ? 23 : 15) * SizeConfig.scaleDiagonal,
                         ),
                         child: CustomTextWidget(
-                          textToDisplay: notifier.listScreen.values.elementAt(index),
-                          textStyle: Theme.of(context).textTheme.subtitle2!.apply(
-                                color: index == notifier.pageIndex ? null : Theme.of(context).bottomNavigationBarTheme.unselectedItemColor,
-                              ),
+                          textToDisplay:
+                              notifier.listScreen.values.elementAt(index),
+                          textStyle:
+                              Theme.of(context).textTheme.titleSmall!.apply(
+                                    color: index == notifier.pageIndex
+                                        ? null
+                                        : Theme.of(context)
+                                            .bottomNavigationBarTheme
+                                            .unselectedItemColor,
+                                  ),
                         ),
                       ),
                     ),
                   ),
                 ),
               ),
-              if (notifier.loadingForObject(NotificationNotifier.refreshKey)) LinearProgressIndicator(color: Theme.of(context).colorScheme.primary, backgroundColor: Colors.grey),
+              if (notifier.loadingForObject(NotificationNotifier.refreshKey))
+                LinearProgressIndicator(
+                    color: Theme.of(context).colorScheme.primary,
+                    backgroundColor: Colors.grey),
               context.read<ErrorService>().isInitialError(error, notifier.data)
                   ? CustomErrorWidget(
                       errorType: ErrorType.notification,
-                      function: () => notifier.getNotifications(context, reload: true),
+                      function: () =>
+                          notifier.getNotifications(context, reload: true),
                     )
                   : Expanded(
                       child: AnimatedSwitcher(
                         duration: const Duration(milliseconds: 250),
                         transitionBuilder: (child, animation) {
-                          animation = CurvedAnimation(parent: animation, curve: Curves.easeOut, reverseCurve: Curves.easeIn);
+                          animation = CurvedAnimation(
+                              parent: animation,
+                              curve: Curves.easeOut,
+                              reverseCurve: Curves.easeIn);
 
-                          return SlideTransition(position: Tween<Offset>(begin: const Offset(0.0, 1.0), end: const Offset(0.0, 0.0)).animate(animation), child: child);
+                          return SlideTransition(
+                              position: Tween<Offset>(
+                                      begin: const Offset(0.0, 1.0),
+                                      end: const Offset(0.0, 0.0))
+                                  .animate(animation),
+                              child: child);
                         },
                         child: notifier.screen ?? Container(),
                       ),

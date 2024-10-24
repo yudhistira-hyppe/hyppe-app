@@ -12,22 +12,29 @@ import 'package:hyppe/core/constants/size_config.dart';
 Widget conditionalHeader(context) {
   SizeConfig().init(context);
   final notifier = Provider.of<ReportNotifier>(context);
-  if (notifier.reportType == ReportType.post && notifier.reportAction == ReportAction.report) {
+  if (notifier.reportType == ReportType.post &&
+      notifier.reportAction == ReportAction.report) {
     return const SizedBox.shrink();
   }
 
-  if (notifier.reportType == ReportType.post && notifier.reportAction == ReportAction.hide) {
+  if (notifier.reportType == ReportType.post &&
+      notifier.reportAction == ReportAction.hide) {
     return Consumer<TranslateNotifierV2>(
       builder: (_, notifier, __) => ListTile(
         title: CustomTextWidget(
           textToDisplay: notifier.translate.tellUsWhyYouDontWantToSeeThis ?? '',
-          textStyle: Theme.of(context).textTheme.bodyText2,
+          textStyle: Theme.of(context).textTheme.bodyMedium,
           textAlign: TextAlign.start,
           textOverflow: TextOverflow.clip,
         ),
         subtitle: CustomTextWidget(
-          textToDisplay: notifier.translate.yourFeedbackWillHelpUsToImproveYourExperience ?? '',
-          textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeSecondary),
+          textToDisplay: notifier
+                  .translate.yourFeedbackWillHelpUsToImproveYourExperience ??
+              '',
+          textStyle: Theme.of(context)
+              .textTheme
+              .bodySmall
+              ?.copyWith(color: kHyppeSecondary),
           textAlign: TextAlign.start,
           textOverflow: TextOverflow.clip,
         ),
@@ -36,14 +43,15 @@ Widget conditionalHeader(context) {
     );
   }
 
-  if (notifier.reportType == ReportType.profile && notifier.reportAction == ReportAction.block) {
+  if (notifier.reportType == ReportType.profile &&
+      notifier.reportAction == ReportAction.block) {
     // return Consumer<ProfileNotifier>(
     //   builder: (_, notifier, __) => Column(
     //     crossAxisAlignment: CrossAxisAlignment.start,
     //     children: [
     //       CustomTextWidget(
     //         textToDisplay: "${notifier.language.blockSubject} ${notifier.peopleProfile.profileOverviewData.userOverviewData.username}?",
-    //         textStyle: Theme.of(context).textTheme.subtitle1,
+    //         textStyle: Theme.of(context).textTheme.titleMedium,
     //       ),
     //       twentyPx,
     //       SizedBox(
@@ -51,7 +59,7 @@ Widget conditionalHeader(context) {
     //         child: CustomTextWidget(
     //             textAlign: TextAlign.left,
     //             textOverflow: TextOverflow.visible,
-    //             textStyle: Theme.of(context).textTheme.bodyText2.apply(color: kHyppeSecondary),
+    //             textStyle: Theme.of(context).textTheme.bodyMedium.apply(color: kHyppeSecondary),
     //             textToDisplay: notifier.language.blockBody),
     //       ),
     //     ],
@@ -63,7 +71,7 @@ Widget conditionalHeader(context) {
         children: [
           CustomTextWidget(
             textToDisplay: "${notifier.translate.blockSubject} dummy_user?",
-            textStyle: Theme.of(context).textTheme.subtitle1,
+            textStyle: Theme.of(context).textTheme.titleMedium,
           ),
           twentyPx,
           SizedBox(
@@ -71,7 +79,10 @@ Widget conditionalHeader(context) {
             child: CustomTextWidget(
                 textAlign: TextAlign.left,
                 textOverflow: TextOverflow.visible,
-                textStyle: Theme.of(context).textTheme.bodyText2!.apply(color: kHyppeSecondary),
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .apply(color: kHyppeSecondary),
                 textToDisplay: notifier.translate.blockBody ?? ''),
           ),
         ],
@@ -79,16 +90,23 @@ Widget conditionalHeader(context) {
     );
   }
 
-  if (notifier.reportType == ReportType.profile && notifier.reportAction == ReportAction.report) {
+  if (notifier.reportType == ReportType.profile &&
+      notifier.reportAction == ReportAction.report) {
     return Consumer<TranslateNotifierV2>(
-      builder: (_, notifier, __) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      builder: (_, notifier, __) =>
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         SizedBox(
           width: (SizeConfig.screenWidth ?? context.getWidth()) * 0.9,
           child: CustomTextWidget(
               textAlign: TextAlign.left,
               textOverflow: TextOverflow.clip,
-              textStyle: Theme.of(context).textTheme.bodyText2?.apply(color: kHyppeSecondary),
-              textToDisplay: notifier.translate.reportToContentOnThisProfileOrThatThisAccount ?? ''),
+              textStyle: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.apply(color: kHyppeSecondary),
+              textToDisplay: notifier.translate
+                      .reportToContentOnThisProfileOrThatThisAccount ??
+                  ''),
         ),
         twentyPx,
         SizedBox(
@@ -96,10 +114,17 @@ Widget conditionalHeader(context) {
             child: CustomTextWidget(
                 textAlign: TextAlign.left,
                 textOverflow: TextOverflow.clip,
-                textStyle: Theme.of(context).textTheme.bodyText2?.apply(color: kHyppeSecondary),
-                textToDisplay: notifier.translate.noteToReportActivityByThisMemberGoToTheSpecific ?? '')),
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.apply(color: kHyppeSecondary),
+                textToDisplay: notifier.translate
+                        .noteToReportActivityByThisMemberGoToTheSpecific ??
+                    '')),
         twentyPx,
-        CustomTextWidget(textToDisplay: notifier.translate.tellUsALittleMore ?? '', textStyle: Theme.of(context).textTheme.subtitle1)
+        CustomTextWidget(
+            textToDisplay: notifier.translate.tellUsALittleMore ?? '',
+            textStyle: Theme.of(context).textTheme.titleMedium)
       ]),
     );
   }

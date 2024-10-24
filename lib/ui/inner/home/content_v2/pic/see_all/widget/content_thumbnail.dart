@@ -19,7 +19,8 @@ class ContentThumbnail extends StatelessWidget {
   final ContentData? picData;
   final Function() fn;
 
-  const ContentThumbnail({Key? key, this.picData, required this.fn}) : super(key: key);
+  const ContentThumbnail({Key? key, this.picData, required this.fn})
+      : super(key: key);
 
   static final _system = System();
 
@@ -40,7 +41,9 @@ class ContentThumbnail extends StatelessWidget {
             child: Center(
               child: CustomThumbImage(
                 boxFit: BoxFit.cover,
-                imageUrl: (picData?.isApsara ?? false) ? picData?.mediaThumbEndPoint : '${picData?.fullThumbPath}',
+                imageUrl: (picData?.isApsara ?? false)
+                    ? picData?.mediaThumbEndPoint
+                    : '${picData?.fullThumbPath}',
               ),
             ),
           ),
@@ -65,8 +68,12 @@ class ContentThumbnail extends StatelessWidget {
                       ),
                       fourPx,
                       CustomTextWidget(
-                        textToDisplay: _system.formatterNumber(picData?.insight?.likes),
-                        textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
+                        textToDisplay:
+                            _system.formatterNumber(picData?.insight?.likes),
+                        textStyle: Theme.of(context)
+                            .textTheme
+                            .bodySmall
+                            ?.copyWith(color: kHyppeLightButtonText),
                       )
                     ],
                   ),

@@ -58,13 +58,19 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 class LandingDiaryPageTest extends StatefulWidget {
   final ScrollController? scrollController;
-  const LandingDiaryPageTest({Key? key, this.scrollController}) : super(key: key);
+  const LandingDiaryPageTest({Key? key, this.scrollController})
+      : super(key: key);
 
   @override
   _LandingDiaryPageTestState createState() => _LandingDiaryPageTestState();
 }
 
-class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with WidgetsBindingObserver, TickerProviderStateMixin, WidgetsBindingObserver, RouteAware {
+class _LandingDiaryPageTestState extends State<LandingDiaryPageTest>
+    with
+        WidgetsBindingObserver,
+        TickerProviderStateMixin,
+        WidgetsBindingObserver,
+        RouteAware {
   // FlutterAliplayer? fAliplayer;
   FlutterAliListPlayer? fAliListPlayer;
   bool isPrepare = false;
@@ -103,7 +109,9 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
       "id": '1111',
       "description":
           "Big Buck Bunny tells the story of a giant rabbit with a heart bigger than himself. When one sunny day three rodents rudely harass him, something snaps... and the rabbit ain't no bunny anymore! In the typical cartoon tradition he prepares the nasty rodents a comical revenge.\n\nLicensed under the Creative Commons Attribution license\nhttp://www.bigbuckbunny.org",
-      "sources": ["http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"],
+      "sources": [
+        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      ],
       "subtitle": "By Blender Foundation",
       "thumb": "images/BigBuckBunny.jpg",
       "title": "Big Buck Bunny"
@@ -111,7 +119,9 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
     {
       "id": '2222',
       "description": "The first Blender Open Movie from 2006",
-      "sources": ["http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"],
+      "sources": [
+        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+      ],
       "subtitle": "By Blender Foundation",
       "thumb": "images/ElephantsDream.jpg",
       "title": "Elephant Dream"
@@ -120,7 +130,9 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
       "id": '3333',
       "description":
           "HBO GO now works with Chromecast -- the easiest way to enjoy online video on your TV. For when you want to settle into your Iron Throne to watch the latest episodes. For 35.\nLearn how to use Chromecast with HBO GO and more at google.com/chromecast.",
-      "sources": ["http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"],
+      "sources": [
+        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+      ],
       "subtitle": "By Google",
       "thumb": "images/ForBiggerBlazes.jpg",
       "title": "For Bigger Blazes"
@@ -129,15 +141,20 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
       "id": '44444',
       "description":
           "Introducing Chromecast. The easiest way to enjoy online video and music on your TV—for when Batman's escapes aren't quite big enough. For 35. Learn how to use Chromecast with Google Play Movies and more at google.com/chromecast.",
-      "sources": ["http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"],
+      "sources": [
+        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"
+      ],
       "subtitle": "By Google",
       "thumb": "images/ForBiggerEscapes.jpg",
       "title": "For Bigger Escape"
     },
     {
       "id": '55555',
-      "description": "Introducing Chromecast. The easiest way to enjoy online video and music on your TV. For 35.  Find out more at google.com/chromecast.",
-      "sources": ["http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"],
+      "description":
+          "Introducing Chromecast. The easiest way to enjoy online video and music on your TV. For 35.  Find out more at google.com/chromecast.",
+      "sources": [
+        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
+      ],
       "subtitle": "By Google",
       "thumb": "images/ForBiggerFun.jpg",
       "title": "For Bigger Fun"
@@ -145,7 +162,9 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
     {
       "description":
           "Introducing Chromecast. The easiest way to enjoy online video and music on your TV—for the times that call for bigger joyrides. For 35. Learn how to use Chromecast with YouTube and more at google.com/chromecast.",
-      "sources": ["http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4"],
+      "sources": [
+        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4"
+      ],
       "subtitle": "By Google",
       "thumb": "images/ForBiggerJoyrides.jpg",
       "title": "For Bigger Joyrides"
@@ -154,7 +173,9 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
       "id": '66666',
       "description":
           "Introducing Chromecast. The easiest way to enjoy online video and music on your TV—for when you want to make Buster's big meltdowns even bigger. For 35. Learn how to use Chromecast with Netflix and more at google.com/chromecast.",
-      "sources": ["http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4"],
+      "sources": [
+        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4"
+      ],
       "subtitle": "By Google",
       "thumb": "images/ForBiggerMeltdowns.jpg",
       "title": "For Bigger Meltdowns"
@@ -163,7 +184,9 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
       "id": '777777',
       "description":
           "Sintel is an independently produced short film, initiated by the Blender Foundation as a means to further improve and validate the free/open source 3D creation suite Blender. With initial funding provided by 1000s of donations via the internet community, it has again proven to be a viable development model for both open 3D technology as for independent animation film.\nThis 15 minute film has been realized in the studio of the Amsterdam Blender Institute, by an international team of artists and developers. In addition to that, several crucial technical and creative targets have been realized online, by developers and artists and teams all over the world.\nwww.sintel.org",
-      "sources": ["http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4"],
+      "sources": [
+        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4"
+      ],
       "subtitle": "By Blender Foundation",
       "thumb": "images/Sintel.jpg",
       "title": "Sintel"
@@ -172,7 +195,9 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
       "id": '888888',
       "description":
           "Smoking Tire takes the all-new Subaru Outback to the highest point we can find in hopes our customer-appreciation Balloon Launch will get some free T-shirts into the hands of our viewers.",
-      "sources": ["http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4"],
+      "sources": [
+        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4"
+      ],
       "subtitle": "By Garage419",
       "thumb": "images/SubaruOutbackOnStreetAndDirt.jpg",
       "title": "Subaru Outback On Street And Dirt"
@@ -181,7 +206,9 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
       "id": '999999',
       "description":
           "Tears of Steel was realized with crowd-funding by users of the open source 3D creation tool Blender. Target was to improve and test a complete open and free pipeline for visual effects in film - and to make a compelling sci-fi film in Amsterdam, the Netherlands.  The film itself, and all raw material used for making it, have been released under the Creatieve Commons 3.0 Attribution license. Visit the tearsofsteel.org website to find out more about this, or to purchase the 4-DVD box with a lot of extras.  (CC) Blender Foundation - http://www.tearsofsteel.org",
-      "sources": ["http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4"],
+      "sources": [
+        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4"
+      ],
       "subtitle": "By Blender Foundation",
       "thumb": "images/TearsOfSteel.jpg",
       "title": "Tears of Steel"
@@ -190,7 +217,9 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
       "id": '1212121',
       "description":
           "The Smoking Tire heads out to Adams Motorsports Park in Riverside, CA to test the most requested car of 2010, the Volkswagen GTI. Will it beat the Mazdaspeed3's standard-setting lap time? Watch and see...",
-      "sources": ["http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4"],
+      "sources": [
+        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4"
+      ],
       "subtitle": "By Garage419",
       "thumb": "images/VolkswagenGTIReview.jpg",
       "title": "Volkswagen GTI Review"
@@ -199,7 +228,9 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
       "id": '1313131',
       "description":
           "The Smoking Tire is going on the 2010 Bullrun Live Rally in a 2011 Shelby GT500, and posting a video from the road every single day! The only place to watch them is by subscribing to The Smoking Tire or watching at BlackMagicShine.com",
-      "sources": ["http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4"],
+      "sources": [
+        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4"
+      ],
       "subtitle": "By Garage419",
       "thumb": "images/WeAreGoingOnBullrun.jpg",
       "title": "We Are Going On Bullrun"
@@ -208,7 +239,9 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
       "id": '14141414',
       "description":
           "The Smoking Tire meets up with Chris and Jorge from CarsForAGrand.com to see just how far 1,000 can go when looking for a car.The Smoking Tire meets up with Chris and Jorge from CarsForAGrand.com to see just how far 1,000 can go when looking for a car.",
-      "sources": ["http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4"],
+      "sources": [
+        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4"
+      ],
       "subtitle": "By Garage419",
       "thumb": "images/WhatCarCanYouGetForAGrand.jpg",
       "title": "What care can you get for a grand?"
@@ -235,9 +268,12 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
 
     //scroll
     if (mounted) {
-      var notifierMain = Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>();
+      var notifierMain = Routing.navigatorKey.currentState?.overlay?.context
+          .read<MainNotifier>();
       notifierMain?.globalKey?.currentState?.innerController.addListener(() {
-        var offset = notifierMain.globalKey?.currentState?.innerController.position.pixels ?? 0;
+        var offset = notifierMain
+                .globalKey?.currentState?.innerController.position.pixels ??
+            0;
         if (mounted) {
           toPosition(offset);
         }
@@ -249,7 +285,8 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
   }
 
   initAliplayerList() {
-    fAliListPlayer = FlutterAliPlayerFactory.createAliListPlayer(playerId: 'aliListPlayer');
+    fAliListPlayer =
+        FlutterAliPlayerFactory.createAliListPlayer(playerId: 'aliListPlayer');
     fAliListPlayer?.setAutoPlay(true);
     // fAliListPlayer?.pause();
     fAliListPlayer?.setLoop(true);
@@ -304,7 +341,8 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
     print(notifier.diaryData?.length);
     try {
       for (var element in videos) {
-        fAliListPlayer?.addUrlSource(url: element['sources'][0], uid: element['id']);
+        fAliListPlayer?.addUrlSource(
+            url: element['sources'][0], uid: element['id']);
       }
       // notifier.diaryData?.forEach((element) {
       //   if (element.isApsara ?? false) {
@@ -533,7 +571,8 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
       homeClick = false;
       for (var i = 0; i <= _curIdx; i++) {
         if (i == _curIdx) {
-          totItemHeightParam += (notifier.diaryData?[i].height ?? 0.0) * 30 / 100;
+          totItemHeightParam +=
+              (notifier.diaryData?[i].height ?? 0.0) * 30 / 100;
         } else {
           totItemHeightParam += notifier.diaryData?[i].height ?? 0.0;
         }
@@ -541,13 +580,16 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
       }
       if (offset >= totItemHeightParam) {
         var position = totItemHeight;
-        if (mounted) widget.scrollController?.animateTo(position, duration: const Duration(milliseconds: 200), curve: Curves.ease);
+        if (mounted)
+          widget.scrollController?.animateTo(position,
+              duration: const Duration(milliseconds: 200), curve: Curves.ease);
       }
     } else {
       if (!homeClick) {
         for (var i = 0; i < _curIdx; i++) {
           if (i == _curIdx - 1) {
-            totItemHeightParam += (notifier.diaryData?[i].height ?? 0.0) * 75 / 100;
+            totItemHeightParam +=
+                (notifier.diaryData?[i].height ?? 0.0) * 75 / 100;
           } else if (i == _curIdx) {
           } else {
             totItemHeightParam += notifier.diaryData?[i].height ?? 0.0;
@@ -560,7 +602,10 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
 
         if (offset <= totItemHeightParam) {
           var position = totItemHeight;
-          if (mounted) widget.scrollController?.animateTo(position, duration: const Duration(milliseconds: 200), curve: Curves.ease);
+          if (mounted)
+            widget.scrollController?.animateTo(position,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.ease);
         }
       }
     }
@@ -612,7 +657,9 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
     // fAliListPlayer?.stop();
     try {
       print(videos[_curIdx]['id']);
-      fAliListPlayer!.moveTo(uid: videos[_curIdx]['id']).whenComplete(() => print("completeeee"));
+      fAliListPlayer!
+          .moveTo(uid: videos[_curIdx]['id'])
+          .whenComplete(() => print("completeeee"));
       print(videos[_curIdx]['id']);
     } catch (e) {
       print("sdasdasdasdasd $e");
@@ -809,7 +856,11 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
     if (context.getAdsCount() == 3 && adsNotifier.adsData != null) {
       // fAliplayer?.pause();
       _pauseScreen();
-      System().adsPopUp(context, adsNotifier.adsData?.data ?? AdsData(), adsNotifier.adsData?.data?.apsaraAuth ?? '', isInAppAds: false).whenComplete(() {
+      System()
+          .adsPopUp(context, adsNotifier.adsData?.data ?? AdsData(),
+              adsNotifier.adsData?.data?.apsaraAuth ?? '',
+              isInAppAds: false)
+          .whenComplete(() {
         // fAliplayer?.play();
         _initializeTimer();
       });
@@ -817,11 +868,15 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
   }
 
   _pauseScreen() async {
-    (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().removeWakelock();
+    (Routing.navigatorKey.currentContext ?? context)
+        .read<HomeNotifier>()
+        .removeWakelock();
   }
 
   void _initializeTimer() async {
-    (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initWakelockTimer(onShowInactivityWarning: _handleInactivity);
+    (Routing.navigatorKey.currentContext ?? context)
+        .read<HomeNotifier>()
+        .initWakelockTimer(onShowInactivityWarning: _handleInactivity);
   }
 
   void _handleInactivity() {
@@ -837,7 +892,8 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
       textColor: kHyppeTextLightPrimary,
       textButtonColor: kHyppePrimary,
       iconSvg: 'close.svg',
-      textButton: context.read<TranslateNotifierV2>().translate.stringContinue ?? '',
+      textButton:
+          context.read<TranslateNotifierV2>().translate.stringContinue ?? '',
       onClose: () {
         context.read<MainNotifier>().isInactiveState = false;
         fAliListPlayer?.play();
@@ -849,7 +905,8 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
 
   @override
   void didChangeDependencies() {
-    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    CustomRouteObserver.routeObserver
+        .subscribe(this, ModalRoute.of(context) as PageRoute);
     super.didChangeDependencies();
   }
 
@@ -944,7 +1001,8 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
     SizeConfig().init(context);
     context.select((ErrorService value) => value.getError(ErrorType.pic));
     // AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
-    return Consumer2<PreviewDiaryNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
+    return Consumer2<PreviewDiaryNotifier, HomeNotifier>(
+        builder: (_, notifier, home, __) {
       return Container(
         width: SizeConfig.screenWidth,
         height: SizeWidget.barHyppePic,
@@ -957,16 +1015,23 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                   ? ListView.builder(
                       itemBuilder: (context, index) {
                         return CustomShimmer(
-                          width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                          width: (MediaQuery.of(context).size.width -
+                                  11.5 -
+                                  11.5 -
+                                  9) /
+                              2,
                           height: 168,
                           radius: 8,
-                          margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                          padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 4.5, vertical: 10),
+                          padding: const EdgeInsets.only(
+                              left: 8.0, right: 8.0, top: 8.0),
                         );
                       },
                       itemCount: 5,
                     )
-                  : notifier.diaryData != null && (notifier.diaryData?.isEmpty ?? true)
+                  : notifier.diaryData != null &&
+                          (notifier.diaryData?.isEmpty ?? true)
                       ? const NoResultFound()
                       : NotificationListener<OverscrollIndicatorNotification>(
                           onNotification: (overscroll) {
@@ -980,22 +1045,31 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: notifier.diaryData?.length,
-                            padding: const EdgeInsets.symmetric(horizontal: 11.5),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 11.5),
                             itemBuilder: (context, index) {
-                              if (notifier.diaryData == null || home.isLoadingDiary) {
+                              if (notifier.diaryData == null ||
+                                  home.isLoadingDiary) {
                                 // fAliplayer?.pause();
                                 fAliListPlayer?.pause();
 
                                 // _lastCurIndex = -1;
                                 _lastCurPostId = '';
                                 return CustomShimmer(
-                                  width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                                  width: (MediaQuery.of(context).size.width -
+                                          11.5 -
+                                          11.5 -
+                                          9) /
+                                      2,
                                   height: 168,
                                   radius: 8,
-                                  margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                                  padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 4.5, vertical: 10),
+                                  padding: const EdgeInsets.only(
+                                      left: 8.0, right: 8.0, top: 8.0),
                                 );
-                              } else if (index == notifier.diaryData?.length && notifier.hasNext) {
+                              } else if (index == notifier.diaryData?.length &&
+                                  notifier.hasNext) {
                                 return UnconstrainedBox(
                                   child: Container(
                                     alignment: Alignment.center,
@@ -1006,7 +1080,8 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                                 );
                               }
                               // if (_curIdx == 0 && notifier.diaryData?[0].reportedStatus == 'BLURRED') {
-                              if (notifier.diaryData?[0].reportedStatus == 'BLURRED') {
+                              if (notifier.diaryData?[0].reportedStatus ==
+                                  'BLURRED') {
                                 isPlay = false;
                                 // fAliplayer?.stop();
                                 fAliListPlayer?.stop();
@@ -1023,7 +1098,8 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
     });
   }
 
-  Widget itemDiary(BuildContext context, PreviewDiaryNotifier notifier, int index, HomeNotifier homeNotifier) {
+  Widget itemDiary(BuildContext context, PreviewDiaryNotifier notifier,
+      int index, HomeNotifier homeNotifier) {
     var data = notifier.diaryData?[index];
     return WidgetSize(
       onChange: (Size size) {
@@ -1036,7 +1112,8 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
               borderRadius: BorderRadius.circular(16),
               color: Colors.white,
             ),
-            padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
+            padding:
+                const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
             margin: const EdgeInsets.only(bottom: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1064,8 +1141,10 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                         featureType: FeatureType.other,
                         // isCelebrity: viddata?.privacy?.isCelebrity,
                         isCelebrity: false,
-                        imageUrl: '${System().showUserPicture(data?.avatar?.mediaEndpoint)}',
-                        onTapOnProfileImage: () => System().navigateToProfile(context, data?.email ?? ''),
+                        imageUrl:
+                            '${System().showUserPicture(data?.avatar?.mediaEndpoint)}',
+                        onTapOnProfileImage: () => System()
+                            .navigateToProfile(context, data?.email ?? ''),
                         createdAt: '2022-02-02',
                         musicName: data?.music?.musicTitle ?? '',
                         location: data?.location ?? '',
@@ -1079,12 +1158,16 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: GestureDetector(
                             onTap: () {
-                              context.handleActionIsGuest(()  {
+                              context.handleActionIsGuest(() {
                                 if (data?.insight?.isloadingFollow != true) {
-                                  picNot.followUser(context, data ?? ContentData(), isUnFollow: data?.following, isloading: data?.insight?.isloadingFollow ?? false);
+                                  picNot.followUser(
+                                      context, data ?? ContentData(),
+                                      isUnFollow: data?.following,
+                                      isloading:
+                                          data?.insight?.isloadingFollow ??
+                                              false);
                                 }
                               });
-
                             },
                             child: data?.insight?.isloadingFollow ?? false
                                 ? Container(
@@ -1096,8 +1179,14 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                                     ),
                                   )
                                 : Text(
-                                    (data?.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
-                                    style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                                    (data?.following ?? false)
+                                        ? (lang?.following ?? '')
+                                        : (lang?.follow ?? ''),
+                                    style: TextStyle(
+                                        color: kHyppePrimary,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w700,
+                                        fontFamily: "Lato"),
                                   ),
                           ),
                         ),
@@ -1106,17 +1195,22 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                       onTap: () async {
                         fAliListPlayer?.setMuted(true);
                         fAliListPlayer?.pause();
-                        await context.handleActionIsGuest(() async  {
+                        await context.handleActionIsGuest(() async {
                           if (data?.email != email) {
                             // FlutterAliplayer? fAliplayer
-                            context.read<PreviewPicNotifier>().reportContent(context, data ?? ContentData(), fAliplayer: fAliListPlayer, onCompleted: () async {
+                            context.read<PreviewPicNotifier>().reportContent(
+                                context, data ?? ContentData(),
+                                fAliplayer: fAliListPlayer,
+                                onCompleted: () async {
                               imageCache.clear();
                               imageCache.clearLiveImages();
-                              await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 1);
+                              await (Routing.navigatorKey.currentContext ??
+                                      context)
+                                  .read<HomeNotifier>()
+                                  .initNewHome(context, mounted,
+                                      isreload: true, forceIndex: 1);
                             });
                           } else {
-
-
                             // fAliplayer?.setMuted(true);
                             // fAliplayer?.pause();
                             ShowBottomSheet().onShowOptionContent(
@@ -1126,13 +1220,15 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                               onDetail: false,
                               isShare: data?.isShared,
                               onUpdate: () {
-                                (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 1);
+                                (Routing.navigatorKey.currentContext ?? context)
+                                    .read<HomeNotifier>()
+                                    .initNewHome(context, mounted,
+                                        isreload: true, forceIndex: 1);
                               },
                               fAliplayer: fAliListPlayer,
                             );
                           }
                         });
-
                       },
                       child: const Icon(
                         Icons.more_vert,
@@ -1154,34 +1250,49 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
 
                       _curPostId = data?.postID ?? index.toString();
                       // if (_lastCurIndex != _curIdx) {
-                      final indexList = notifier.diaryData?.indexWhere((element) => element.postID == _curPostId);
+                      final indexList = notifier.diaryData?.indexWhere(
+                          (element) => element.postID == _curPostId);
                       // final latIndexList = notifier.diaryData?.indexWhere((element) => element.postID == _lastCurPostId);
                       if (_lastCurPostId != _curPostId) {
                         if (mounted) {
                           setState(() {
                             Future.delayed(Duration(milliseconds: 400), () {
-                              itemHeight = notifier.diaryData?[indexList ?? 0].height ?? 0;
+                              itemHeight =
+                                  notifier.diaryData?[indexList ?? 0].height ??
+                                      0;
                             });
                           });
                         }
                         Future.delayed(const Duration(milliseconds: 700), () {
-                          start(Routing.navigatorKey.currentContext ?? context, data ?? ContentData());
-                          System().increaseViewCount2(Routing.navigatorKey.currentContext ?? context, data ?? ContentData(), check: false);
+                          start(Routing.navigatorKey.currentContext ?? context,
+                              data ?? ContentData());
+                          System().increaseViewCount2(
+                              Routing.navigatorKey.currentContext ?? context,
+                              data ?? ContentData(),
+                              check: false);
                         });
                         if (data?.certified ?? false) {
-                          System().block(Routing.navigatorKey.currentContext ?? context);
+                          System().block(
+                              Routing.navigatorKey.currentContext ?? context);
                         } else {
                           System().disposeBlock();
                         }
 
-                        if (indexList == (notifier.diaryData?.length ?? 0) - 1) {
-                          Future.delayed(const Duration(milliseconds: 1000), () async {
-                            await context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {
+                        if (indexList ==
+                            (notifier.diaryData?.length ?? 0) - 1) {
+                          Future.delayed(const Duration(milliseconds: 1000),
+                              () async {
+                            await context
+                                .read<HomeNotifier>()
+                                .initNewHome(context, mounted,
+                                    isreload: false, isgetMore: true)
+                                .then((value) {
                               // notifier.getTemp(indexList, latIndexList, indexList);
                             });
                           });
                         } else {
-                          Future.delayed(const Duration(milliseconds: 2000), () {
+                          Future.delayed(const Duration(milliseconds: 2000),
+                              () {
                             // notifier.getTemp(indexList, latIndexList, indexList);
                           });
                         }
@@ -1205,14 +1316,18 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                           // _curIdx == index
                           _curPostId == (data?.postID ?? index.toString())
                               ? ClipRRect(
-                                  borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(16.0)),
                                   child: AliPlayerView(
                                     onCreated: onViewPlayerCreated,
                                     x: 0,
                                     y: 0,
-                                    height: MediaQuery.of(context).size.width * 9.0 / 16.0,
+                                    height: MediaQuery.of(context).size.width *
+                                        9.0 /
+                                        16.0,
                                     width: MediaQuery.of(context).size.width,
-                                    aliPlayerViewType: AliPlayerViewTypeForAndroid.surfaceview,
+                                    aliPlayerViewType:
+                                        AliPlayerViewTypeForAndroid.surfaceview,
                                   ),
                                 )
                               : Container(),
@@ -1230,7 +1345,8 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                                       fAliListPlayer?.setMuted(isMute);
                                     },
                                     onDoubleTap: () {
-                                      final _likeNotifier = context.read<LikeNotifier>();
+                                      final _likeNotifier =
+                                          context.read<LikeNotifier>();
                                       if (data != null) {
                                         _likeNotifier.likePost(context, data);
                                       }
@@ -1248,7 +1364,10 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                                       homeNotifier.checkConnection();
                                     },
                                     child: Container(
-                                      decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                      decoration: BoxDecoration(
+                                          color: kHyppeNotConnect,
+                                          borderRadius:
+                                              BorderRadius.circular(16)),
                                       width: SizeConfig.screenWidth,
                                       height: SizeConfig.screenHeight,
                                       alignment: Alignment.center,
@@ -1256,7 +1375,9 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                                       child: data?.reportedStatus == 'BLURRED'
                                           ? Container()
                                           : CustomTextWidget(
-                                              textToDisplay: lang?.couldntLoadVideo ?? 'Error',
+                                              textToDisplay:
+                                                  lang?.couldntLoadVideo ??
+                                                      'Error',
                                               maxLines: 3,
                                             ),
                                     ),
@@ -1270,12 +1391,18 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                                   widthPlaceHolder: 80,
                                   heightPlaceHolder: 80,
                                   placeHolderWidget: Container(),
-                                  imageUrl: (data?.isApsara ?? false) ? (data?.mediaThumbEndPoint ?? "") : data?.fullThumbPath ?? '',
-                                  imageBuilder: (context, imageProvider) => data?.reportedStatus == 'BLURRED'
+                                  imageUrl: (data?.isApsara ?? false)
+                                      ? (data?.mediaThumbEndPoint ?? "")
+                                      : data?.fullThumbPath ?? '',
+                                  imageBuilder: (context, imageProvider) => data
+                                              ?.reportedStatus ==
+                                          'BLURRED'
                                       ? ClipRRect(
-                                          borderRadius: BorderRadius.circular(20), // Image border
+                                          borderRadius: BorderRadius.circular(
+                                              20), // Image border
                                           child: ImageFiltered(
-                                            imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                            imageFilter: ImageFilter.blur(
+                                                sigmaX: 30, sigmaY: 30),
                                             child: AspectRatio(
                                               aspectRatio: 9 / 16,
                                               child: Image(
@@ -1298,7 +1425,8 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                                                 image: imageProvider,
                                                 fit: BoxFit.cover,
                                               ),
-                                              borderRadius: BorderRadius.circular(16.0),
+                                              borderRadius:
+                                                  BorderRadius.circular(16.0),
                                             ),
                                           ),
                                         ),
@@ -1308,13 +1436,22 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                                         homeNotifier.checkConnection();
                                       },
                                       child: Container(
-                                          decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                          decoration: BoxDecoration(
+                                              color: kHyppeNotConnect,
+                                              borderRadius:
+                                                  BorderRadius.circular(16)),
                                           width: SizeConfig.screenWidth,
-                                          height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              16.0 /
+                                              9.0,
                                           alignment: Alignment.center,
                                           padding: EdgeInsets.all(20),
                                           child: CustomTextWidget(
-                                            textToDisplay: lang?.couldntLoadVideo ?? 'Error',
+                                            textToDisplay:
+                                                lang?.couldntLoadVideo ??
+                                                    'Error',
                                             maxLines: 3,
                                           )),
                                     );
@@ -1324,13 +1461,20 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                                       homeNotifier.checkConnection();
                                     },
                                     child: Container(
-                                        decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                        decoration: BoxDecoration(
+                                            color: kHyppeNotConnect,
+                                            borderRadius:
+                                                BorderRadius.circular(16)),
                                         width: SizeConfig.screenWidth,
-                                        height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                                        height:
+                                            MediaQuery.of(context).size.width *
+                                                16.0 /
+                                                9.0,
                                         alignment: Alignment.center,
                                         padding: EdgeInsets.all(20),
                                         child: CustomTextWidget(
-                                          textToDisplay: lang?.couldntLoadVideo ?? 'Error',
+                                          textToDisplay:
+                                              lang?.couldntLoadVideo ?? 'Error',
                                           maxLines: 3,
                                         )),
                                   ),
@@ -1343,16 +1487,20 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                                   ),
                                 )
                               : const SizedBox.shrink(),
-                          _buildBody(context, SizeConfig.screenWidth, data ?? ContentData()),
+                          _buildBody(context, SizeConfig.screenWidth,
+                              data ?? ContentData()),
                           blurContentWidget(context, data ?? ContentData()),
                         ],
                       ),
                     ),
                   ),
                 ),
-                SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
+                SharedPreference().readStorage(SpKeys.statusVerificationId) ==
+                            VERIFIED &&
                         (data?.boosted.isEmpty ?? [].isEmpty) &&
-                        (data?.reportedStatus != 'OWNED' && data?.reportedStatus != 'BLURRED' && data?.reportedStatus2 != 'BLURRED') &&
+                        (data?.reportedStatus != 'OWNED' &&
+                            data?.reportedStatus != 'BLURRED' &&
+                            data?.reportedStatus2 != 'BLURRED') &&
                         data?.email == email
                     ? Container(
                         width: double.infinity,
@@ -1362,15 +1510,19 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                           marginBool: true,
                           contentData: data,
                           startState: () {
-                            SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                            SharedPreference()
+                                .writeStorage(SpKeys.isShowPopAds, true);
                           },
                           afterState: () {
-                            SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                            SharedPreference()
+                                .writeStorage(SpKeys.isShowPopAds, false);
                           },
                         ),
                       )
                     : Container(),
-                if (data?.email == email && (data?.boostCount ?? 0) >= 0 && (data?.boosted.isNotEmpty ?? [].isEmpty))
+                if (data?.email == email &&
+                    (data?.boostCount ?? 0) >= 0 &&
+                    (data?.boosted.isNotEmpty ?? [].isEmpty))
                   Container(
                     padding: const EdgeInsets.all(10),
                     margin: EdgeInsets.only(bottom: 10),
@@ -1391,7 +1543,10 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                           padding: const EdgeInsets.only(left: 13),
                           child: Text(
                             "${data?.boostJangkauan ?? '0'} ${lang?.reach}",
-                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                                color: kHyppeTextLightPrimary),
                           ),
                         )
                       ],
@@ -1420,13 +1575,18 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                                     : InkWell(
                                         child: CustomIconWidget(
                                           defaultColor: false,
-                                          color: (data?.insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
-                                          iconData: '${AssetPath.vectorPath}${(data?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                          color: (data?.insight?.isPostLiked ??
+                                                  false)
+                                              ? kHyppeRed
+                                              : kHyppeTextLightPrimary,
+                                          iconData:
+                                              '${AssetPath.vectorPath}${(data?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
                                           height: 28,
                                         ),
                                         onTap: () {
                                           if (data != null) {
-                                            likeNotifier.likePost(context, data);
+                                            likeNotifier.likePost(
+                                                context, data);
                                           }
                                         },
                                       ),
@@ -1438,12 +1598,17 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                               padding: const EdgeInsets.only(left: 21.0),
                               child: GestureDetector(
                                 onTap: () {
-                                  Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: data?.postID ?? '', fromFront: true, data: data ?? ContentData()));
+                                  Routing().move(Routes.commentsDetail,
+                                      argument: CommentsArgument(
+                                          postID: data?.postID ?? '',
+                                          fromFront: true,
+                                          data: data ?? ContentData()));
                                 },
                                 child: const CustomIconWidget(
                                   defaultColor: false,
                                   color: kHyppeTextLightPrimary,
-                                  iconData: '${AssetPath.vectorPath}comment2.svg',
+                                  iconData:
+                                      '${AssetPath.vectorPath}comment2.svg',
                                   height: 24,
                                 ),
                               ),
@@ -1453,7 +1618,9 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                               padding: EdgeInsets.only(left: 21.0),
                               child: GestureDetector(
                                 onTap: () {
-                                  context.read<DiariesPlaylistNotifier>().createdDynamicLink(context, data: data);
+                                  context
+                                      .read<DiariesPlaylistNotifier>()
+                                      .createdDynamicLink(context, data: data);
                                 },
                                 child: CustomIconWidget(
                                   defaultColor: false,
@@ -1463,13 +1630,15 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                                 ),
                               ),
                             ),
-                          if ((data?.saleAmount ?? 0) > 0 && email != data?.email)
+                          if ((data?.saleAmount ?? 0) > 0 &&
+                              email != data?.email)
                             Expanded(
                               child: GestureDetector(
                                 onTap: () async {
-                                  await context.handleActionIsGuest(() async  {
+                                  await context.handleActionIsGuest(() async {
                                     fAliListPlayer?.pause();
-                                    await ShowBottomSheet.onBuyContent(context, data: data, fAliplayer: fAliListPlayer);
+                                    await ShowBottomSheet.onBuyContent(context,
+                                        data: data, fAliplayer: fAliListPlayer);
                                   });
 
                                   // fAliplayer?.play();
@@ -1490,7 +1659,10 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                       twelvePx,
                       Text(
                         "${data?.insight?.likes}  ${lang?.like}",
-                        style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                        style: const TextStyle(
+                            color: kHyppeTextLightPrimary,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 14),
                       ),
                     ],
                   ),
@@ -1498,20 +1670,33 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                 twelvePx,
                 CustomNewDescContent(
                   // desc: "${data?.description}",
-                  email: data?.email??'',
+                  email: data?.email ?? '',
                   username: data?.username ?? '',
                   desc: "${data?.description}",
                   trimLines: 3,
                   textAlign: TextAlign.start,
-                  seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
-                  seeMore: '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
-                  normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                  hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                  expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                  seeLess:
+                      ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
+                  seeMore:
+                      '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                  normStyle: const TextStyle(
+                      fontSize: 12, color: kHyppeTextLightPrimary),
+                  hrefStyle: Theme.of(context)
+                      .textTheme
+                      .titleSmall
+                      ?.copyWith(color: kHyppePrimary),
+                  expandStyle: Theme.of(context)
+                      .textTheme
+                      .titleSmall
+                      ?.copyWith(color: Theme.of(context).colorScheme.primary),
                 ),
                 GestureDetector(
                   onTap: () {
-                    Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: data?.postID ?? '', fromFront: true, data: data ?? ContentData()));
+                    Routing().move(Routes.commentsDetail,
+                        argument: CommentsArgument(
+                            postID: data?.postID ?? '',
+                            fromFront: true,
+                            data: data ?? ContentData()));
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -1534,15 +1719,32 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                               child: CustomNewDescContent(
                                 // desc: "${data??.description}",
                                 email: data?.comment?[indexComment].sender,
-                                username: data?.comment?[indexComment].userComment?.username ?? '',
-                                desc: data?.comment?[indexComment].txtMessages ?? '',
+                                username: data?.comment?[indexComment]
+                                        .userComment?.username ??
+                                    '',
+                                desc:
+                                    data?.comment?[indexComment].txtMessages ??
+                                        '',
                                 trimLines: 3,
                                 textAlign: TextAlign.start,
-                                seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
-                                seeMore: ' ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
-                                normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                                hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                                expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                                seeLess:
+                                    ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
+                                seeMore:
+                                    ' ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                                normStyle: const TextStyle(
+                                    fontSize: 12,
+                                    color: kHyppeTextLightPrimary),
+                                hrefStyle: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall
+                                    ?.copyWith(color: kHyppePrimary),
+                                expandStyle: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall
+                                    ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
                               ),
                             );
                           },
@@ -1553,7 +1755,9 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                   padding: EdgeInsets.symmetric(vertical: 4.0),
                   child: Text(
                     "${System().readTimestamp(
-                      DateTime.parse(System().dateTimeRemoveT(data?.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+                      DateTime.parse(System().dateTimeRemoveT(
+                              data?.createdAt ?? DateTime.now().toString()))
+                          .millisecondsSinceEpoch,
                       context,
                       fullCaption: true,
                     )}",
@@ -1615,7 +1819,9 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
               child: GestureDetector(
                 onTap: () {
                   fAliListPlayer?.pause();
-                  context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID, fAliplayer: fAliListPlayer);
+                  context.read<PicDetailNotifier>().showUserTag(
+                      context, data.tagPeople, data.postID,
+                      fAliplayer: fAliListPlayer);
                 },
                 child: const CustomIconWidget(
                   iconData: '${AssetPath.vectorPath}tag_people.svg',
@@ -1638,7 +1844,9 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: CustomIconWidget(
-                  iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
+                  iconData: isMute
+                      ? '${AssetPath.vectorPath}sound-off.svg'
+                      : '${AssetPath.vectorPath}sound-on.svg',
                   defaultColor: false,
                   height: 24,
                 ),
@@ -1667,8 +1875,15 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                         defaultColor: false,
                         height: 30,
                       ),
-                      Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                      Text("HyppeDiary ${transnot.translate.contentContainsSensitiveMaterial}",
+                      Text(
+                          transnot.translate.sensitiveContent ??
+                              'Sensitive Content',
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600)),
+                      Text(
+                          "HyppeDiary ${transnot.translate.contentContainsSensitiveMaterial}",
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Colors.white,
@@ -1689,7 +1904,9 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                         onTap: () {
                           data.reportedStatus = '';
                           start(context, data);
-                          context.read<ReportNotifier>().seeContent(context, data, hyppeDiary);
+                          context
+                              .read<ReportNotifier>()
+                              .seeContent(context, data, hyppeDiary);
                           fAliListPlayer?.prepare();
                           fAliListPlayer?.play();
                         },
@@ -1706,7 +1923,10 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                           ),
                           child: Text(
                             "${transnot.translate.see} HyppeDiary",
-                            style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600),
                             textAlign: TextAlign.center,
                           ),
                         ),

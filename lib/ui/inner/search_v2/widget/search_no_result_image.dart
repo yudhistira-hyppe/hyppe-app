@@ -11,7 +11,8 @@ import '../../../../core/models/collection/localization_v2/localization_model.da
 class SearchNoResultImage extends StatelessWidget {
   final LocalizationModelV2 locale;
   final String keyword;
-  const SearchNoResultImage({Key? key, required this.locale, required this.keyword})
+  const SearchNoResultImage(
+      {Key? key, required this.locale, required this.keyword})
       : super(key: key);
 
   @override
@@ -37,7 +38,7 @@ class SearchNoResultImage extends StatelessWidget {
             textAlign: TextAlign.center,
             maxLines: 1,
             textToDisplay: '${locale.noResultsFor} "$keyword"',
-            textStyle: context.getTextTheme().bodyText1?.copyWith(
+            textStyle: context.getTextTheme().bodyLarge?.copyWith(
                 fontWeight: FontWeight.w700,
                 color: context.getColorScheme().onBackground),
           ),
@@ -46,7 +47,7 @@ class SearchNoResultImage extends StatelessWidget {
             textAlign: TextAlign.center,
             maxLines: 2,
             textToDisplay: '${locale.messageNoResult}',
-            textStyle: context.getTextTheme().bodyText1,
+            textStyle: context.getTextTheme().bodyLarge,
           ),
         ],
       ),

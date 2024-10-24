@@ -19,13 +19,17 @@ import 'package:provider/provider.dart';
 class OnShowShareLiveBottomSheet extends StatefulWidget {
   final ScrollController scrollController;
   final bool isViewer;
-  const OnShowShareLiveBottomSheet({Key? key, required this.scrollController, this.isViewer = false}) : super(key: key);
+  const OnShowShareLiveBottomSheet(
+      {Key? key, required this.scrollController, this.isViewer = false})
+      : super(key: key);
 
   @override
-  State<OnShowShareLiveBottomSheet> createState() => _OnShowShareLiveBottomSheetState();
+  State<OnShowShareLiveBottomSheet> createState() =>
+      _OnShowShareLiveBottomSheetState();
 }
 
-class _OnShowShareLiveBottomSheetState extends State<OnShowShareLiveBottomSheet> {
+class _OnShowShareLiveBottomSheetState
+    extends State<OnShowShareLiveBottomSheet> {
   final FocusNode _focus = FocusNode();
   final _debouncer = Debouncer(milliseconds: 600);
 
@@ -38,7 +42,9 @@ class _OnShowShareLiveBottomSheetState extends State<OnShowShareLiveBottomSheet>
     super.initState();
     _focus.addListener(_onFocusChange);
     widget.scrollController.addListener(() {
-      context.read<StreamerNotifier>().loadMore(context, widget.scrollController);
+      context
+          .read<StreamerNotifier>()
+          .loadMore(context, widget.scrollController);
     });
   }
 
@@ -57,13 +63,17 @@ class _OnShowShareLiveBottomSheetState extends State<OnShowShareLiveBottomSheet>
   Widget build(BuildContext context) {
     var trans = context.read<TranslateNotifierV2>().translate;
 
-    return Consumer2<StreamerNotifier, ViewStreamingNotifier>(builder: (_, notifier, viewNotifier, __) {
+    return Consumer2<StreamerNotifier, ViewStreamingNotifier>(
+        builder: (_, notifier, viewNotifier, __) {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 8 * SizeConfig.scaleDiagonal),
-            child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg", defaultColor: false),
+            padding:
+                EdgeInsets.symmetric(vertical: 8 * SizeConfig.scaleDiagonal),
+            child: const CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}handler.svg",
+                defaultColor: false),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 16.0, right: 16),
@@ -75,14 +85,24 @@ class _OnShowShareLiveBottomSheetState extends State<OnShowShareLiveBottomSheet>
                   GestureDetector(
                     onTap: () async {
                       if (widget.isViewer) {
-                        await context.read<ViewStreamingNotifier>().createLinkStream(context, copiedToClipboard: true, description: 'Link Streamer');
+                        await context
+                            .read<ViewStreamingNotifier>()
+                            .createLinkStream(context,
+                                copiedToClipboard: true,
+                                description: 'Link Streamer');
                       } else {
-                        await notifier.createLinkStream(context, copiedToClipboard: true, description: 'Link Streamer');
+                        await notifier.createLinkStream(context,
+                            copiedToClipboard: true,
+                            description: 'Link Streamer');
                       }
                       Routing().moveBack();
                     },
                     child: _iconButton(
-                      child: const CustomIconWidget(height: 23, iconData: "${AssetPath.vectorPath}link.svg", color: kHyppeTextLightPrimary, defaultColor: false),
+                      child: const CustomIconWidget(
+                          height: 23,
+                          iconData: "${AssetPath.vectorPath}link.svg",
+                          color: kHyppeTextLightPrimary,
+                          defaultColor: false),
                     ),
                   ),
                 if (!_focus.hasFocus) sixPx,
@@ -90,14 +110,23 @@ class _OnShowShareLiveBottomSheetState extends State<OnShowShareLiveBottomSheet>
                   GestureDetector(
                     onTap: () async {
                       if (widget.isViewer) {
-                        await context.read<ViewStreamingNotifier>().createLinkStream(context, copiedToClipboard: false, description: 'Link Streamer');
+                        await context
+                            .read<ViewStreamingNotifier>()
+                            .createLinkStream(context,
+                                copiedToClipboard: false,
+                                description: 'Link Streamer');
                       } else {
-                        await notifier.createLinkStream(context, copiedToClipboard: false, description: 'Link Streame');
+                        await notifier.createLinkStream(context,
+                            copiedToClipboard: false,
+                            description: 'Link Streame');
                       }
                       Routing().moveBack();
                     },
                     child: _iconButton(
-                      child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}share2.svg", color: kHyppeTextLightPrimary, defaultColor: false),
+                      child: const CustomIconWidget(
+                          iconData: "${AssetPath.vectorPath}share2.svg",
+                          color: kHyppeTextLightPrimary,
+                          defaultColor: false),
                     ),
                   ),
               ],
@@ -107,14 +136,22 @@ class _OnShowShareLiveBottomSheetState extends State<OnShowShareLiveBottomSheet>
           // Text("${notifier.shareUsers.length}"),
           if (notifier.shareUsers.isNotEmpty)
             Container(
-              decoration: BoxDecoration(color: Colors.white, boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10)]),
+              decoration: BoxDecoration(color: Colors.white, boxShadow: [
+                BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10)
+              ]),
               child: Column(
                 children: [
                   TextFormField(
                     controller: notifier.messageShareCtrl,
-                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w400, fontSize: 16),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.w400, fontSize: 16),
                     decoration: InputDecoration(
-                        hintStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppeBurem),
+                        hintStyle: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(color: kHyppeBurem),
                         hintText: trans.pleaseEnterMessage,
                         contentPadding: const EdgeInsets.only(left: 16),
                         border: InputBorder.none,
@@ -129,10 +166,15 @@ class _OnShowShareLiveBottomSheetState extends State<OnShowShareLiveBottomSheet>
                     maxLines: 1,
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 16, right: 16, top: 12, bottom: MediaQuery.of(context).viewInsets.bottom + 16),
+                    padding: EdgeInsets.only(
+                        left: 16,
+                        right: 16,
+                        top: 12,
+                        bottom: MediaQuery.of(context).viewInsets.bottom + 16),
                     child: ButtonChallangeWidget(
                       function: () {
-                        notifier.sendShareMassage(context, isViewer: widget.isViewer);
+                        notifier.sendShareMassage(context,
+                            isViewer: widget.isViewer);
                       },
                       text: 'Kirim Secara Terpisah',
                       bgColor: kHyppePrimary,
@@ -185,7 +227,10 @@ class _OnShowShareLiveBottomSheetState extends State<OnShowShareLiveBottomSheet>
         child: TextFormField(
           controller: searchUserCtrl,
           focusNode: _focus,
-          style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w400, fontSize: 16),
+          style: Theme.of(context)
+              .textTheme
+              .bodyMedium
+              ?.copyWith(fontWeight: FontWeight.w400, fontSize: 16),
           decoration: InputDecoration(
               prefixIcon: CustomIconButtonWidget(
                 height: 24,
@@ -202,7 +247,9 @@ class _OnShowShareLiveBottomSheetState extends State<OnShowShareLiveBottomSheet>
                       defaultColor: false,
                       onPressed: () {
                         searchUserCtrl.text = '';
-                        context.read<StreamerNotifier>().getUserShare(context, mounted);
+                        context
+                            .read<StreamerNotifier>()
+                            .getUserShare(context, mounted);
                       },
                       iconData: "${AssetPath.vectorPath}close-solid.svg",
                     )
@@ -210,7 +257,10 @@ class _OnShowShareLiveBottomSheetState extends State<OnShowShareLiveBottomSheet>
                       height: 24,
                       width: 10,
                     ),
-              hintStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppeBurem),
+              hintStyle: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(color: kHyppeBurem),
               hintText: 'Cari',
               contentPadding: EdgeInsets.only(top: 12),
               border: InputBorder.none,
@@ -237,7 +287,11 @@ class _OnShowShareLiveBottomSheetState extends State<OnShowShareLiveBottomSheet>
         return Expanded(
           child: notifier.isloadingUserShare
               ? Padding(
-                  padding: EdgeInsets.only(left: 16, right: 16, top: 12, bottom: MediaQuery.of(context).viewInsets.bottom + 16),
+                  padding: EdgeInsets.only(
+                      left: 16,
+                      right: 16,
+                      top: 12,
+                      bottom: MediaQuery.of(context).viewInsets.bottom + 16),
                   child: const CustomLoading(
                     size: 6,
                   ),
@@ -266,7 +320,8 @@ class _OnShowShareLiveBottomSheetState extends State<OnShowShareLiveBottomSheet>
                                   forStory: false,
                                   width: 36 * SizeConfig.scaleDiagonal,
                                   height: 36 * SizeConfig.scaleDiagonal,
-                                  imageUrl: System().showUserPicture(data.avatar?.mediaEndpoint),
+                                  imageUrl: System().showUserPicture(
+                                      data.avatar?.mediaEndpoint),
                                   // badge: notifier.user.profile?.urluserBadge,
                                   allwaysUseBadgePadding: false,
                                 ),
@@ -277,14 +332,20 @@ class _OnShowShareLiveBottomSheetState extends State<OnShowShareLiveBottomSheet>
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
-                                        Text(data.username ?? '', style: const TextStyle(fontSize: 16, color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700)),
+                                        Text(data.username ?? '',
+                                            style: const TextStyle(
+                                                fontSize: 16,
+                                                color: kHyppeTextLightPrimary,
+                                                fontWeight: FontWeight.w700)),
                                         if (data.isVerified ?? false)
                                           const Padding(
                                             padding: EdgeInsets.only(left: 3.0),
                                             child: CustomIconWidget(
-                                              iconData: "${AssetPath.vectorPath}ic_verified.svg",
+                                              iconData:
+                                                  "${AssetPath.vectorPath}ic_verified.svg",
                                               defaultColor: false,
                                             ),
                                           ),
@@ -292,7 +353,8 @@ class _OnShowShareLiveBottomSheetState extends State<OnShowShareLiveBottomSheet>
                                     ),
                                     Text(
                                       data.fullName ?? '',
-                                      style: const TextStyle(color: Color(0xff9b9b9b)),
+                                      style: const TextStyle(
+                                          color: Color(0xff9b9b9b)),
                                     ),
                                   ],
                                 ),
@@ -301,7 +363,8 @@ class _OnShowShareLiveBottomSheetState extends State<OnShowShareLiveBottomSheet>
                                 scale: 1.2,
                                 child: Checkbox(
                                     value: data.isSelected ?? false,
-                                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    materialTapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
                                     onChanged: (value) {
                                       setState(() {
                                         data.isSelected = value;
@@ -314,9 +377,13 @@ class _OnShowShareLiveBottomSheetState extends State<OnShowShareLiveBottomSheet>
                                       }
                                     },
                                     checkColor: Colors.white,
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-                                    fillColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-                                      if (states.contains(MaterialState.disabled)) {
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(4)),
+                                    fillColor:
+                                        MaterialStateProperty.resolveWith<
+                                            Color>((Set<MaterialState> states) {
+                                      if (states
+                                          .contains(MaterialState.disabled)) {
                                         return Colors.orange.withOpacity(.32);
                                       }
                                       if (!(data.isSelected ?? false)) {

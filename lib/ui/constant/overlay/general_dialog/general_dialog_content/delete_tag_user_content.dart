@@ -12,13 +12,20 @@ class DeleteTagUserContentDialog extends StatefulWidget {
   final String contentTitle;
   final String? postId;
   final Function function;
-  const DeleteTagUserContentDialog({Key? key, required this.contentTitle, required this.function, this.postId}) : super(key: key);
+  const DeleteTagUserContentDialog(
+      {Key? key,
+      required this.contentTitle,
+      required this.function,
+      this.postId})
+      : super(key: key);
 
   @override
-  _DeleteTagUserContentDialogState createState() => _DeleteTagUserContentDialogState();
+  _DeleteTagUserContentDialogState createState() =>
+      _DeleteTagUserContentDialogState();
 }
 
-class _DeleteTagUserContentDialogState extends State<DeleteTagUserContentDialog> with GeneralMixin {
+class _DeleteTagUserContentDialogState extends State<DeleteTagUserContentDialog>
+    with GeneralMixin {
   final _routing = Routing();
 
   bool _isLoading = false;
@@ -29,7 +36,9 @@ class _DeleteTagUserContentDialogState extends State<DeleteTagUserContentDialog>
     final size = MediaQuery.of(context).size;
     final _language = context.watch<TranslateNotifierV2>().translate;
     return Container(
-      decoration: BoxDecoration(color: theme.colorScheme.surface, borderRadius: BorderRadius.circular(8.0)),
+      decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(8.0)),
       height: 183,
       width: size.width * 0.9,
       child: Column(
@@ -37,14 +46,17 @@ class _DeleteTagUserContentDialogState extends State<DeleteTagUserContentDialog>
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           CustomTextWidget(
-            textToDisplay: '${_language.removeMeFromPost} ${widget.contentTitle}',
-            textStyle: theme.textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w600),
+            textToDisplay:
+                '${_language.removeMeFromPost} ${widget.contentTitle}',
+            textStyle: theme.textTheme.titleMedium
+                ?.copyWith(fontWeight: FontWeight.w600),
           ),
           CustomTextWidget(
             maxLines: 3,
             textOverflow: TextOverflow.visible,
-            textToDisplay: _language.afterthatThisTagWillBePermanentlyRemoved ?? '',
-            textStyle: theme.textTheme.bodyText1,
+            textToDisplay:
+                _language.afterthatThisTagWillBePermanentlyRemoved ?? '',
+            textStyle: theme.textTheme.bodyLarge,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -88,9 +100,16 @@ class _DeleteTagUserContentDialogState extends State<DeleteTagUserContentDialog>
     );
   }
 
-  Widget _buildButton({required ThemeData theme, required String caption, required Function function, required Color color, Color? textColor}) {
+  Widget _buildButton(
+      {required ThemeData theme,
+      required String caption,
+      required Function function,
+      required Color color,
+      Color? textColor}) {
     return CustomElevatedButton(
-      child: CustomTextWidget(textToDisplay: caption, textStyle: theme.textTheme.button?.copyWith(color: textColor)),
+      child: CustomTextWidget(
+          textToDisplay: caption,
+          textStyle: theme.textTheme.labelLarge?.copyWith(color: textColor)),
       width: 120,
       height: 42,
       function: () {

@@ -24,7 +24,8 @@ class OnInterestListBottomSheet extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<OnInterestListBottomSheet> createState() => _OnInterestListBottomSheetState();
+  State<OnInterestListBottomSheet> createState() =>
+      _OnInterestListBottomSheetState();
 }
 
 class _OnInterestListBottomSheetState extends State<OnInterestListBottomSheet> {
@@ -52,18 +53,19 @@ class _OnInterestListBottomSheetState extends State<OnInterestListBottomSheet> {
           elevation: 0,
           centerTitle: false,
           leading: GestureDetector(
-              onTap: (){
-                widget.onSave();
-                notifier.removeTempInterestList(isSaved: false);
-              },
-              child: Icon(
-                Icons.clear_rounded,
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
+            onTap: () {
+              widget.onSave();
+              notifier.removeTempInterestList(isSaved: false);
+            },
+            child: Icon(
+              Icons.clear_rounded,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
           ),
           title: CustomTextWidget(
             textToDisplay: '${lang?.categories} ',
-            textStyle: textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
+            textStyle:
+                textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
           ),
           backgroundColor: Colors.transparent,
         ),
@@ -81,13 +83,16 @@ class _OnInterestListBottomSheetState extends State<OnInterestListBottomSheet> {
                     itemCount: notifier.interestList.length,
                     itemBuilder: (context, index) {
                       return ListTile(
-                        onTap: () => notifier.insertInterestList(context, index),
+                        onTap: () =>
+                            notifier.insertInterestList(context, index),
                         title: CustomTextWidget(
                           textAlign: TextAlign.left,
-                          textToDisplay: notifier.interestList[index].interestName ?? '',
+                          textToDisplay:
+                              notifier.interestList[index].interestName ?? '',
                           // textStyle: Theme.of(context).primaryTextTheme.titleMedium,
                         ),
-                        trailing: notifier.pickedInterestList(notifier.interestList[index].id)
+                        trailing: notifier.pickedInterestList(
+                                notifier.interestList[index].id)
                             ? const Icon(
                                 Icons.check_box,
                                 color: kHyppePrimary,
@@ -102,19 +107,23 @@ class _OnInterestListBottomSheetState extends State<OnInterestListBottomSheet> {
                   CustomElevatedButton(
                     width: 375.0 * SizeConfig.scaleDiagonal,
                     height: 44.0 * SizeConfig.scaleDiagonal,
-                    function: (){
+                    function: () {
                       widget.onSave();
                       notifier.removeTempInterestList(isSaved: true);
                     },
                     buttonStyle: ButtonStyle(
-                      foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                      shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                      overlayColor: MaterialStateProperty.all(kHyppeLightExtended4),
+                      foregroundColor: MaterialStateProperty.all(
+                          Theme.of(context).colorScheme.primary),
+                      shadowColor: MaterialStateProperty.all(
+                          Theme.of(context).colorScheme.primary),
+                      overlayColor:
+                          MaterialStateProperty.all(kHyppeLightExtended4),
                       backgroundColor: MaterialStateProperty.all(kHyppePrimary),
                     ),
                     child: CustomTextWidget(
                       textToDisplay: notifier.language.save ?? 'save',
-                      textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                      textStyle: textTheme.labelLarge
+                          ?.copyWith(color: kHyppeLightButtonText),
                     ),
                   ),
                 ],

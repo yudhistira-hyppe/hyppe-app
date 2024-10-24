@@ -16,21 +16,27 @@ import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 class UserCompleteProfileLocationCityContent extends StatefulWidget {
   final String province;
   final Function(String) onSelected;
-  const UserCompleteProfileLocationCityContent({Key? key, required this.onSelected, required this.province}) : super(key: key);
+  const UserCompleteProfileLocationCityContent(
+      {Key? key, required this.onSelected, required this.province})
+      : super(key: key);
   @override
-  _UserCompleteProfileLocationCityContentState createState() => _UserCompleteProfileLocationCityContentState();
+  _UserCompleteProfileLocationCityContentState createState() =>
+      _UserCompleteProfileLocationCityContentState();
 }
 
-class _UserCompleteProfileLocationCityContentState extends State<UserCompleteProfileLocationCityContent> {
+class _UserCompleteProfileLocationCityContentState
+    extends State<UserCompleteProfileLocationCityContent> {
   final ScrollController _scroll = ScrollController();
   @override
   void initState() {
-    final notifier = Provider.of<UserCompleteProfileNotifier>(context, listen: false);
+    final notifier =
+        Provider.of<UserCompleteProfileNotifier>(context, listen: false);
     notifier.cityData.clear();
     notifier.initPageLength();
     notifier.initCity(context, province: widget.province, reload: true);
     _scroll.addListener(() {
-      if (_scroll.offset >= _scroll.position.maxScrollExtent && !_scroll.position.outOfRange) {
+      if (_scroll.offset >= _scroll.position.maxScrollExtent &&
+          !_scroll.position.outOfRange) {
         if (notifier.hasNext) {
           notifier.loadMore = !notifier.loadMore;
           notifier.page++;
@@ -44,16 +50,19 @@ class _UserCompleteProfileLocationCityContentState extends State<UserCompletePro
   @override
   Widget build(BuildContext context) {
     final notifier = context.watch<UserCompleteProfileNotifier>();
-    final error = context.select((ErrorService value) => value.getError(ErrorType.getCities));
+    final error = context
+        .select((ErrorService value) => value.getError(ErrorType.getCities));
 
     '${notifier.cityData.isNotEmpty}'.logger();
 
-    if (context.read<ErrorService>().isInitialError(error, notifier.cityData.isEmpty ? null : notifier.cityData.isEmpty)) {
+    if (context.read<ErrorService>().isInitialError(
+        error, notifier.cityData.isEmpty ? null : notifier.cityData.isEmpty)) {
       return Center(
         child: SizedBox(
           height: SizeConfig.screenHeight! * 0.8,
           child: CustomErrorWidget(
-            function: () => notifier.initCity(context, province: widget.province, reload: true),
+            function: () => notifier.initCity(context,
+                province: widget.province, reload: true),
             errorType: ErrorType.getCities,
           ),
         ),
@@ -69,7 +78,8 @@ class _UserCompleteProfileLocationCityContentState extends State<UserCompletePro
                 children: [
                   const RotatedBox(
                     quarterTurns: 1,
-                    child: CustomIconWidget(iconData: '${AssetPath.vectorPath}back-arrow.svg'),
+                    child: CustomIconWidget(
+                        iconData: '${AssetPath.vectorPath}back-arrow.svg'),
                   ),
                   Expanded(
                     child: ListView.builder(
@@ -82,21 +92,26 @@ class _UserCompleteProfileLocationCityContentState extends State<UserCompletePro
                         child: CustomElevatedButton(
                           height: 42,
                           width: SizeConfig.screenWidth,
-                          function: () => widget.onSelected(notifier.cityData[index].cityName ?? ''),
+                          function: () => widget.onSelected(
+                              notifier.cityData[index].cityName ?? ''),
                           child: CustomTextWidget(
-                            textToDisplay: notifier.cityData[index].cityName ?? '',
-                            textStyle: Theme.of(context).textTheme.bodyText1,
+                            textToDisplay:
+                                notifier.cityData[index].cityName ?? '',
+                            textStyle: Theme.of(context).textTheme.bodyLarge,
                           ),
                         ),
                       ),
                     ),
                   ),
                   notifier.loadMore
-                      ? SignUpLoadMoreList(caption: "${notifier.language.loadMore} ${notifier.language.locationInThisCountryRegion}")
+                      ? SignUpLoadMoreList(
+                          caption:
+                              "${notifier.language.loadMore} ${notifier.language.locationInThisCountryRegion}")
                       : const SizedBox.shrink(),
                   const RotatedBox(
                     quarterTurns: 3,
-                    child: CustomIconWidget(iconData: '${AssetPath.vectorPath}back-arrow.svg'),
+                    child: CustomIconWidget(
+                        iconData: '${AssetPath.vectorPath}back-arrow.svg'),
                   ),
                 ],
               )

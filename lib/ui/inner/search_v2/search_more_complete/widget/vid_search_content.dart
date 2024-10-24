@@ -23,7 +23,9 @@ class VidSearchContent extends StatefulWidget {
   final List<ContentData>? content;
   final FeatureType? featureType;
   final int? selecIndex;
-  const VidSearchContent({Key? key, this.content, this.featureType, this.title, this.selecIndex}) : super(key: key);
+  const VidSearchContent(
+      {Key? key, this.content, this.featureType, this.title, this.selecIndex})
+      : super(key: key);
 
   @override
   _VidSearchContentState createState() => _VidSearchContentState();
@@ -42,12 +44,14 @@ class _VidSearchContentState extends State<VidSearchContent> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    final error = context.select((ErrorService value) => value.getError(ErrorType.pic));
+    final error =
+        context.select((ErrorService value) => value.getError(ErrorType.pic));
     final _themes = Theme.of(context);
     return Consumer<SearchNotifier>(
       builder: (_, notifier, __) => Container(
         width: SizeConfig.screenWidth,
-        height: widget.content.isNotNullAndEmpty() ? SizeWidget.barHyppePic : 50,
+        height:
+            widget.content.isNotNullAndEmpty() ? SizeWidget.barHyppePic : 50,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
@@ -56,12 +60,16 @@ class _VidSearchContentState extends State<VidSearchContent> {
               maxLines: 1,
               textAlign: TextAlign.left,
               textToDisplay: widget.title ?? '',
-              textStyle: _themes.textTheme.bodyText1?.copyWith(color: _themes.colorScheme.onBackground, fontWeight: FontWeight.w700),
+              textStyle: _themes.textTheme.bodyLarge?.copyWith(
+                  color: _themes.colorScheme.onBackground,
+                  fontWeight: FontWeight.w700),
             ),
             sixPx,
             widget.content.isNotNullAndEmpty()
                 ? Expanded(
-                    child: context.read<ErrorService>().isInitialError(error, widget.content)
+                    child: context
+                            .read<ErrorService>()
+                            .isInitialError(error, widget.content)
                         ? CustomErrorWidget(
                             errorType: ErrorType.pic,
                             // function: () => notifier.initialPic(context, reload: true),
@@ -69,7 +77,8 @@ class _VidSearchContentState extends State<VidSearchContent> {
                         : NotificationListener<ScrollNotification>(
                             onNotification: (ScrollNotification scrollInfo) {
                               if (scrollInfo is ScrollStartNotification) {
-                                Future.delayed(const Duration(milliseconds: 100), () {
+                                Future.delayed(
+                                    const Duration(milliseconds: 100), () {
                                   // notifier.initialPic(context);
                                 });
                               }
@@ -84,11 +93,17 @@ class _VidSearchContentState extends State<VidSearchContent> {
                               itemBuilder: (context, index) {
                                 if (widget.content == null) {
                                   return CustomShimmer(
-                                    width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                                    width: (MediaQuery.of(context).size.width -
+                                            11.5 -
+                                            11.5 -
+                                            9) /
+                                        2,
                                     height: 168,
                                     radius: 8,
-                                    margin: const EdgeInsets.symmetric(horizontal: 4.5),
-                                    padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 4.5),
+                                    padding: const EdgeInsets.only(
+                                        left: 8.0, right: 8.0, top: 8.0),
                                   );
                                   // } else if (index == widget.content?.length && notifier.hasNext) {
                                 } else if (index == widget.content?.length) {
@@ -105,9 +120,13 @@ class _VidSearchContentState extends State<VidSearchContent> {
                                 return ThumbnailContentSearch(
                                   data: widget.content?[index] ?? ContentData(),
                                   onTap: () {
-                                    context.read<ReportNotifier>().inPosition = contentPosition.search;
-                                    notifier.navigateToSeeAllScreen2(context, widget.content ?? [], index, widget.selecIndex ?? 0);
-
+                                    context.read<ReportNotifier>().inPosition =
+                                        contentPosition.search;
+                                    notifier.navigateToSeeAllScreen2(
+                                        context,
+                                        widget.content ?? [],
+                                        index,
+                                        widget.selecIndex ?? 0);
                                   },
                                   margin: EdgeInsets.only(right: 11),
                                 );
@@ -115,7 +134,9 @@ class _VidSearchContentState extends State<VidSearchContent> {
                             ),
                           ),
                   )
-                : SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text),
+                : SearchNoResult(
+                    locale: notifier.language,
+                    keyword: notifier.searchController.text),
           ],
         ),
       ),
